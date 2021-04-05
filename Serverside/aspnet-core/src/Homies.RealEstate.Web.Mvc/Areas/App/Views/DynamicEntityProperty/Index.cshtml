@@ -1,0 +1,48 @@
+﻿@using Homies.RealEstate.Authorization
+@using Homies.RealEstate.Web.Areas.App.Startup
+@using Homies.RealEstate.Web.TagHelpers
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.DynamicProperties;
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Areas/App/Views/_Bundles/dynamic-entity-properties-index.js" asp-append-version="true"></script>
+}
+
+@{
+    var breadcrumbs = new List<BreadcrumbItem>()
+    {
+        new BreadcrumbItem(Url.Action("Index", "DynamicProperty", new {Area = "App"}), @L("DynamicPropertyManagement")),
+        new BreadcrumbItem(L("DynamicEntityProperties")),
+    };
+}
+<input type="hidden" value="@ViewBag.EntityFullName" name="entity-full-name"/>
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@ViewBag.EntityFullName" breadcrumbs="breadcrumbs">
+        @if (IsGranted(AppPermissions.Pages_Administration_DynamicEntityProperties_Create))
+        {
+            <button id="CreateNewDynamicEntityProperty" class="btn btn-primary">
+                <i class="fa fa-plus"></i> @L("AddNewDynamicEntityProperty")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b" id="portlet-entity-list">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <table id="DynamicEntityPropertiesTable" class="display table table-separate table-head-custom dataTable no-footer dtr-inline dt-responsive nowrap">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>@L("DynamicProperty")</th>
+                            <th style="width:100px">@L("Actions")</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿@section Styles {
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/Notifications/Index.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script abp-src="/view-resources/Areas/App/Views/Notifications/Index.js" asp-append-version="true"></script>
+}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Notifications")">
+        <button class="btn btn-success" id="btnOpenNotificationSettingsModal"><i class="la la-cog"></i> @L("NotificationSettings")</button>
+        <button class="btn btn-primary" id="btnSetAllNotificationsAsRead"><i class="la la-check"></i> @L("SetAllAsRead")</button>
+    </abp-page-subheader>
+    
+    <div class="@(await GetContainerClass()) d-flex flex-column-fluid">
+            <div class="container">
+                <div class="col-12">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-body">
+                            <div class="form">
+                                <div class="row align-items-center mb-4">
+                                    <div class="row align-items-center col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input id="StartEndRange" type="text" placeholder="@L("DateRange")" class="form-control date-range-picker" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <select id="TargetValueFilterSelectionCombobox" class="form-control bs-select">
+                                                    <option value="">@L("All")</option>
+                                                    <option value="UNREAD">@L("Unread")</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-right">
+                                        <button id="DeleteAllNotificationsButton" class="btn btn-danger"><i class="la la-times"></i> @L("DeleteListedNotifications")</button>
+                                        <button id="RefreshNotificationTableButton" class="btn btn-primary"><i class="la la-refresh"></i> @L("Refresh")</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                        <table id="NotificationsTable" class="display table table-separate table-head-custom no-footer dtr-inline dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th style="width: 50px;text-align:center">@L("Actions")</th>
+                                    <th style="width: 50px;text-align:center">@L("Severity")</th>
+                                    <th>@L("Notification")</th>
+                                    <th style="width: 100px;text-align:center">@L("CreationTime")</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

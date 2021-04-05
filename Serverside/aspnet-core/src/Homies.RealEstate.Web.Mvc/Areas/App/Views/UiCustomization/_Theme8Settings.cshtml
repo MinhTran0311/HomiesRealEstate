@@ -1,0 +1,65 @@
+﻿@model Homies.RealEstate.Configuration.Dto.ThemeSettingsDto
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a href="#Theme8Layout" class="nav-link active" data-toggle="tab" role="tab">
+            @L("UiCustomization_Layout")
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#Theme8Header" class="nav-link" data-toggle="tab" role="tab">
+            @L("UiCustomization_Header")
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#Theme8Menu" class="nav-link" data-toggle="tab" role="tab">
+            @L("UiCustomization_Menu")
+        </a>
+    </li>
+</ul>
+<div class="tab-content m-5">
+    <div id="Theme8Layout" class="tab-pane active">
+        <input type="hidden" name="Theme" value="theme8" />
+        <form class="LayoutSettingsForm">
+            <h5 class="margin-bottom-20">@L("UiCustomization_LayoutType")</h5>
+            <div class="form-group">
+                @Html.DropDownList("LayoutType", new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem {Text = L("UiCustomization_Fluid"), Value = "fluid"},
+                    new SelectListItem {Text = L("UiCustomization_Fixed"), Value = "fixed"}
+                }, "Value", "Text", Model.Layout.LayoutType), new {@class = "form-control w-25", id = "LayoutType"})
+            </div>
+        </form>
+    </div>
+    <div id="Theme8Header" class="tab-pane">
+        <form class="HeaderSettingsForm">
+            <h5 class="margin-bottom-20">@L("UiCustomization_Desktop")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="DesktopFixedHeader" value="true" @(Model.Header.DesktopFixedHeader ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_DesktopFixedHeader")
+                </label>
+            </div>
+            <h5 class="margin-bottom-20">@L("UiCustomization_Mobile")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="MobileFixedHeader" value="true" @(Model.Header.MobileFixedHeader ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_MobileFixedHeader")
+                </label>
+            </div>
+        </form>
+    </div>
+    <div id="Theme8Menu" class="tab-pane">
+        <form class="MenuSettingsForm">
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="SearchActive" value="true" @(Model.Menu.SearchActive ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("ShowMenuSearchInput")
+                </label>
+            </div>
+        </form>
+    </div>
+</div>

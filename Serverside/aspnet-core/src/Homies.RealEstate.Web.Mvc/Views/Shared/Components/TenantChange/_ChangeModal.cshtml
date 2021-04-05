@@ -1,0 +1,54 @@
+﻿@using Abp.MultiTenancy
+@using Homies.RealEstate.Web.Areas.App.Models.Common.Modals
+@using Homies.RealEstate.Web.Views.Shared.Components.TenantChange
+@model ChangeModalViewModel
+@{
+    Layout = null;
+}
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("ChangeTenant")))
+
+<div class="modal-body">
+
+    <form name="TenantChangeForm" role="form" novalidate class="form-validation">
+
+        <div class="form-group row text-left mb-0">
+            <label class="col-4 col-form-label">@L("SwitchToTenant")</label>
+            <div class="col">
+                <span class="switch switch-icon">
+                    <label>
+                        <input id="SwitchToTenant"
+                               name="SwitchToTenant"
+                               type="checkbox"
+                               @(string.IsNullOrEmpty(Model.TenancyName) ? "" : "checked='checked'")
+                               value="@(string.IsNullOrEmpty(Model.TenancyName) ? "false" : "true")">
+                        <span></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row mb-0">
+            <label class="col-4 col-form-label">
+                <label>@L("TenancyName")</label>
+            </label>
+            <label class="col">
+                <input class="form-control"
+                       type="text"
+                       id="TenancyName"
+                       name="TenancyName"
+                       required
+                       @(string.IsNullOrEmpty(Model.TenancyName) ? "disabled" : "")
+                       maxlength="@AbpTenantBase.MaxTenancyNameLength"
+                       value="@Model.TenancyName">
+                <span id="TenancyNameRequired" class="form-text text-danger text-left d-none">
+                    @L("TenancyNameRequired")
+                </span>
+            </label>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-light-primary font-weight-bold close-button" data-dismiss="modal">@L("Cancel")</button>
+    <button type="button" class="btn btn-primary font-weight-bold save-button"><i class="fa fa-arrow-circle-right"></i> <span>@(string.IsNullOrEmpty(Model.TenancyName) ? L("SwitchToTheHost") : L("SwitchToTheTenant"))</span></button>
+</div>

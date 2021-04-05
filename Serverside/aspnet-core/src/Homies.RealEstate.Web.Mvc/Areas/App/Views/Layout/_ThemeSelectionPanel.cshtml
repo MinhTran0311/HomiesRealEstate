@@ -1,0 +1,53 @@
+﻿@using Abp.Extensions
+@using Microsoft.AspNetCore.Html
+@using Homies.RealEstate
+@using Homies.RealEstate.Configuration
+@{
+    var activeTheme = await SettingManager.GetSettingValueAsync(AppSettings.UiManagement.Theme);
+}
+
+<!-- begin::Quick Sidebar -->
+<div id="kt_demo_panel" class="offcanvas offcanvas-right p-10">
+    <div class="offcanvas-header d-flex align-items-center justify-content-between pb-7">
+        <h4 class="font-weight-bold m-0">@L("SelectATheme")</h4>
+        <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_demo_panel_close">
+            <i class="ki ki-close icon-xs text-muted"></i>
+        </a>
+    </div>
+    <div class="offcanvas-content">
+        <div class="offcanvas-wrapper mb-5 scroll-pull scroll">
+            @RenderThemeSelection(AppConsts.ThemeDefault, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme2, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme3, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme4, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme5, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme6, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme7, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme8, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme9, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme10, activeTheme)
+            @RenderThemeSelection(AppConsts.Theme11, activeTheme)
+        </div>
+    </div>
+</div>
+<!-- end::Quick Sidebar -->
+
+@functions {
+
+    private IHtmlContent RenderThemeSelection(string theme, string activeTheme)
+    {
+        var image = ApplicationPath + "Common/Images/metronic-themes/" + theme + ".png";
+        var activeClass = activeTheme == theme ? "offcanvas-demo-active" : "";
+        var html = "<div class=\"overlay rounded-lg mb-8 offcanvas-demo theme-selection-link " + activeClass + "\" data-theme=\"" + theme + "\">" +
+                   "<div class=\"overlay-wrapper rounded-lg\">" +
+                    "<img src=\"" + image + "\" alt=\"" + theme + "\" class=\"w-100\">" +
+                   "</div>" +
+                   "<div class=\"overlay-layer\">" +
+                   "<button class=\"btn font-weight-bold btn-light btn-shadow ml-2\">" + L("Theme_" + theme.ToPascalCase()) + "</button>" +
+                   "</div>" +
+                   "</div>";
+
+        return Html.Raw(html);
+    }
+
+}

@@ -1,0 +1,137 @@
+﻿@using Homies.RealEstate.Editions
+@using Homies.RealEstate.MultiTenancy.Payments
+@using Homies.RealEstate.Web.Areas.App.Models.Editions
+@using Homies.RealEstate.Web.Areas.App.Startup
+@model SubscriptionDashboardViewModel
+@{
+    ViewBag.CurrentPageName = AppPageNames.Tenant.SubscriptionManagement;
+    var tenant = Model.LoginInformations.Tenant;
+    var tenantEdition = Model.LoginInformations.Tenant.Edition;
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Areas/App/Views/SubscriptionManagement/Index.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("Subscription")"></abp-page-subheader>
+    
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+                        <div class="card-body">
+                            <div id="SettingsTabPanel" class="tabbable-line">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a href="#SubscriptionManagementInformationTab" class="nav-link active" data-toggle="tab" role="tab">
+                                            @L("SubscriptionInformation")
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#SubscriptionManagementPaymentHistoryTab" data-toggle="tab" role="tab" class="nav-link">
+                                            @L("PaymentHistory")
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content m-5">
+                                    <div class="tab-pane active" id="SubscriptionManagementInformationTab">
+                                        <form class="form">
+                                            <div class="form-group row">
+                                                <label class="col-md-4 control-label font-weight-bold text-right">@L("Edition")</label>
+                                                <div class="col-md-8">
+                                                    <p class="form-control-static">
+                                                    @tenantEdition.DisplayName
+        
+                                                    @if (tenantEdition.IsFree)
+                                                    {
+                                                        <span class="label label-success label-inline">@L("Free")</span>
+                                                    }
+                                                    else if (tenant.IsInTrialPeriod)
+                                                    {
+                                                        <span class="label label-warning label-inline">@L("Trial")</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-4 control-label font-weight-bold text-right">@L("SubscriptionStartDate")</label>
+                                                <div class="col-md-8">
+                                                    <p class="form-control-static">@tenant.CreationTime.ToString("d")</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-4 control-label font-weight-bold text-right">@L("SubscriptionEndDate")</label>
+                                                <div class="col-md-8">
+                                                    <p class="form-control-static">
+                                                        <span>@tenant.SubscriptionDateString</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-4 control-label"></label>
+                                                <div class="col-md-8">
+                                                    @if (!Model.LoginInformations.Tenant.HasRecurringSubscription() && !tenantEdition.IsFree && !tenant.IsInTrialPeriod)
+                                                    {
+                                                        <a id="btnExtend" href="@Url.Action("Extend", "Payment", new {area = "", upgradeEditionId = tenant.Edition.Id, editionPaymentType = EditionPaymentType.Extend})" class="btn btn-info">
+                                                            @L("Extend")
+                                                        </a>
+                                                    }
+                                                    @if (tenant.IsInTrialPeriod)
+                                                    {
+                                                        <a href="@Url.Action("Buy", "Payment", new {area = "", editionId = tenant.Edition.Id, editionPaymentType = (int) EditionPaymentType.BuyNow, tenantId = AbpSession.TenantId})" class="btn btn-info">
+                                                            @L("BuyNow")
+                                                        </a>
+                                                    }
+                                                    else if (!tenantEdition.IsHighestEdition)
+                                                    {
+                                                        <a href="@Url.Action("SelectEdition", "TenantRegistration", new {area = "", editionPaymentType = EditionPaymentType.Upgrade})" class="btn btn-warning">
+                                                            @L("Upgrade")
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+        
+                                            <div class="form-group row @(Model.LoginInformations.Tenant.SubscriptionPaymentType == SubscriptionPaymentType.RecurringAutomatic ? "" : "d-none")">
+                                                <label class="col-md-4 control-label"></label>
+                                                <div class="col-md-8">
+                                                    <a id="btnDisableRecurringPayments" href="javascript:;" class="btn btn-secondary">
+                                                        @L("DisableRecurringPayments")
+                                                    </a>
+                                                </div>
+                                            </div>
+        
+                                            <div class="form-group row @(Model.LoginInformations.Tenant.SubscriptionPaymentType == SubscriptionPaymentType.RecurringManual ? "" : "d-none")">
+                                                <label class="col-md-4 control-label"></label>
+                                                <div class="col-md-8">
+                                                    <a id="btnEnableRecurringPayments" href="javascript:;" class="btn btn-info">
+                                                        @L("EnableRecurringPayments")
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div id="SubscriptionManagementPaymentHistoryTab" class="tab-pane">
+                                        <table id="PaymentHistoryTable" class="display table table-separate table-head-custom no-footer dtr-inline dt-responsive nowrap">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>@L("Invoice")</th>
+                                                <th>@L("ProcessTime")</th>
+                                                <th>@L("Edition")</th>
+                                                <th>@L("Gateway")</th>
+                                                <th>@L("Amount")</th>
+                                                <th>@L("Status")</th>
+                                                <th>@L("Period")</th>
+                                                <th>@L("DayCount")</th>
+                                                <th>@L("ExternalPaymentId")</th>
+                                                <th>@L("InvoiceNo")</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+</div>

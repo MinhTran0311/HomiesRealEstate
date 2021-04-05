@@ -1,0 +1,53 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Models.Layout
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppMenu
+@using Homies.RealEstate.Web.Navigation
+@model MenuViewModel
+@{
+    Layout = null;
+    var theme = await GetTheme();
+    var orderedMenuItems = Model.Menu.Items.OrderByCustom().ToList();
+}
+
+<div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+    <div class="@(await GetContainerClass())">
+        <div id="kt_header_menu" class="header-menu header-menu-left header-menu-mobile header-menu-layout-default">
+                <ul class="menu-nav"
+                    role="menubar"
+                    aria-label="@L("TopMenu")">
+                    @if (theme.BaseSettings.Menu.SearchActive)
+                    {
+                        <li class="menu-item menu-item-open menu-item-here menu-item-submenu menuSearchItem searchMenuTop searchMenuContainerSelect2" aria-haspopup="true">
+                            <select class="form-control searchMenuSelect2" aria-describedby="basic-addon2">
+                                <option value="">@L("SearchMenuItems")</option>
+                            </select>
+                        </li>
+                    }
+                    @for (var i = 0; i < Model.Menu.Items.Count; i++)
+                    {
+                        var menuItem = orderedMenuItems[i];
+                        if (!menuItem.IsVisible)
+                        {
+                            continue;
+                        }
+                        @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                        {
+                            MenuItem = menuItem,
+                            MenuItemIndex = i,
+                            ItemDepth = 0,
+                            RootLevel = true,
+                            CurrentPageName = Model.CurrentPageName,
+                            IsTabMenuUsed = theme.IsTabMenuUsed
+                        })
+                    }
+                    @if (theme.BaseSettings.Menu.SearchActive)
+                    {
+                        <li class="menu-item  menu-item-open menu-item-here menu-item-submenu menuSearchItem searchMenuBottom searchMenuContainerSelect2" aria-haspopup="true">
+                            <select class="form-control searchMenuSelect2" aria-describedby="basic-addon2">
+                                <option value="">@L("SearchMenuItems")</option>
+                            </select>
+                        </li>
+                    }
+                </ul>
+            </div>
+    </div>
+</div>

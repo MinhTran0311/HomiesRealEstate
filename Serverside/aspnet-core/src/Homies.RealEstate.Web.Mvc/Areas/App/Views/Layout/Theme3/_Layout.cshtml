@@ -1,0 +1,105 @@
+﻿@using Abp.Web.Mvc.Alerts
+@using Homies.RealEstate.Localization
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppActiveUserDelegationsCombobox
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppChatToggler
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppLanguageSwitch
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppLogo
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppMenu
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppQuickThemeSelect
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppRecentNotifications
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppSubscriptionBar
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppUserMenu
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Themes.Theme3.Components.AppTheme3Brand
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Themes.Theme3.Components.AppTheme3Footer
+
+@inject IAlertManager AlertManager
+@{
+    Layout = "~/Areas/App/Views/Layout/_Layout.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="@(ApplicationPath)metronic/themes/theme3/css/style.bundle@(CultureHelper.IsRtl ? ".rtl" : "").css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/Common/Styles/Themes/theme3/metronic-customize.css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/fonts/fonts-montserrat.css" asp-append-version="true"/>
+    @await RenderSectionAsync("Styles", false)
+}
+
+@section Scripts{
+    <script abp-src="/metronic/themes/theme3/js/settings.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<div id="kt_header_mobile" class="header-mobile ">
+    <a href="@Url.Action("Index", "Home", new {area = string.Empty})">
+        @await Component.InvokeAsync(typeof(AppLogoViewComponent), new {logoSkin = "light-sm"})
+    </a>
+    <div class="d-flex align-items-center">
+        <button class="btn p-0 burger-icon burger-icon-left" id="kt_aside_mobile_toggle">
+            <span></span>
+        </button>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+        <div class="aside aside-left d-flex aside-fixed" id="kt_aside">
+            <div class="aside-primary d-flex flex-column align-items-center flex-row-auto">
+                <div class="aside-brand d-flex flex-column align-items-center flex-column-auto py-5 py-lg-12">
+                    @await Component.InvokeAsync(typeof(AppTheme3BrandViewComponent))
+                    <div class="aside-nav d-flex flex-column align-items-center flex-column-fluid py-5 scroll scroll-pull ps ps--active-y">
+                        <div class="aside-nav d-flex flex-column align-items-center flex-column-fluid py-5 scroll scroll-pull">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="aside-footer d-flex flex-column align-items-center flex-column-auto py-4 py-lg-10">
+                    @await Component.InvokeAsync(typeof(AppActiveUserDelegationsComboboxViewComponent))
+                    @await Component.InvokeAsync(typeof(AppQuickThemeSelectViewComponent), new {cssClass = "btn btn-icon btn-clean btn-lg mb-1"})
+                    @await Component.InvokeAsync(typeof(AppLanguageSwitchViewComponent), new {cssClass = "btn btn-icon btn-clean btn-lg mb-1"})
+                    @await Component.InvokeAsync(typeof(AppRecentNotificationsViewComponent), new {cssClass = "btn btn-icon btn-clean btn-lg mb-1"})
+                    @await Component.InvokeAsync(typeof(AppChatTogglerViewComponent), new {cssClass = "btn btn-icon btn-clean btn-lg mb-1"})
+                    @await Component.InvokeAsync(typeof(AppUserMenuViewComponent), new {togglerCssClass = "", textCssClass = "", symbolCssClass = "", symbolTextCssClas = "", renderOnlyIcon = true})
+                    <span class="aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm" id="kt_aside_toggle" data-toggle="tooltip" data-placement="right" data-container="body" data-boundary="window" title="" data-original-title="Toggle Aside">
+                        <i class="ki ki-bold-arrow-back icon-sm"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="aside-secondary d-flex flex-row-fluid">
+                <div class="aside-workspace scroll scroll-push my-2">
+                    <div class="tab-pane p-3 px-lg-7 py-lg-5 fade show active" id="kt_aside_tab_1">
+                        @await Component.InvokeAsync(typeof(AppMenuViewComponent), new {currentPageName = ViewBag.CurrentPageName, isLeftMenuUsed = true})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <div class="subscription-warning ml-5 mt-5">
+            @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))
+        </div>
+        @if (AlertManager.Alerts.Any())
+        {
+            <div id="AbpPageAlerts">
+                @foreach (var alertMessage in AlertManager.Alerts)
+                {
+                    <div class="alert alert-@alertMessage.Type.ToString().ToLower()" role="alert">
+                        <div class="alert-text">
+                            <h4 class="alert-heading">
+                                @alertMessage.Title
+                                @if (alertMessage.Dismissible)
+                                {
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                }
+                            </h4>
+                            <p>@alertMessage.Text</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @RenderBody()
+        @await Component.InvokeAsync(typeof(AppTheme3FooterViewComponent))
+    </div>
+</div>

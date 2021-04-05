@@ -1,0 +1,12 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Models.Common.Modals
+@model List<string>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("AddNewDynamicEntityProperty")))
+
+<div class="modal-body">
+    <div class="form-group col-12">
+        @Html.DropDownList("entityFullName", new SelectList(Model), L("SelectAnEntity"), new {@class = "form-control"})
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

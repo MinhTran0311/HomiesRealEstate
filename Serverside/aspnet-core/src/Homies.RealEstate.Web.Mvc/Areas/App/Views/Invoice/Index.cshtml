@@ -1,0 +1,120 @@
+﻿@using Homies.RealEstate
+@using Homies.RealEstate.Localization
+@using Homies.RealEstate.Web.Areas.App.Models.Accounting
+@model InvoiceViewModel
+
+@section styles{
+    <style type="text/css">
+        .header-fixed.subheader-fixed.subheader-enabled .wrapper{
+            padding-top:65px;
+        }
+    </style>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="d-flex flex-column-fluid">
+        <div class="container-fluid">
+            <div class="card card-custom overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="row justify-content-center py-8 px-8 py-md-27 px-md-0">
+                        <div class="col-md-9">
+                            <div class="d-flex justify-content-between pb-10 pb-md-20 flex-column flex-md-row">
+                                <h1 class="display-4 font-weight-boldest mb-10">@L("Invoice")</h1>
+                                <div class="d-flex flex-column align-items-md-end px-0">
+                                    <!--begin::Logo-->
+                                    <a href="#" class="mb-5">
+                                        <img src="@(ApplicationPath)Common/Images/app-logo-on-light.svg" alt=""/>
+                                    </a>
+                                    <!--end::Logo-->
+                                    <span class="d-flex flex-column align-items-md-end opacity-70">
+                                        <span>@Model.Invoice.HostLegalName</span>
+                                        @foreach (var line in Model.Invoice.HostAddress)
+                                        {
+                                            <span>@line</span>
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="border-bottom w-100"></div>
+                            <div class="d-flex justify-content-between pt-6">
+                                <div class="d-flex flex-column flex-root">
+                                    <span class="font-weight-bolder mb-2">@L("Date")</span>
+                                    <span class="opacity-70">@Model.Invoice.InvoiceDate.ToString("yyyy-MM-dd")</span>
+                                </div>
+                                <div class="d-flex flex-column flex-root">
+                                    <span class="font-weight-bolder mb-2">@L("Invoice")</span>
+                                    <span class="opacity-70">#@Model.Invoice.InvoiceNo</span>
+                                </div>
+                                <div class="d-flex flex-column flex-root">
+                                    <span class="font-weight-bolder mb-2">@L("InvoiceTo")</span>
+                                    <span class="opacity-70">
+                                        @Model.Invoice.TenantLegalName
+                                        @foreach (var line in Model.Invoice.TenantAddress)
+                                        {
+                                            <br/>
+                                            @line
+                                        }
+                                        <br/>@L("Tax/VatNo"): @Model.Invoice.TenantTaxNo
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="pl-0 font-weight-bold text-muted text-uppercase">#</th>
+                                        <th class="text-right font-weight-bold text-muted text-uppercase">@L("Edition")</th>
+                                        <th class="text-right font-weight-bold text-muted text-uppercase">@L("Amount")</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="pl-0 pt-7">1</td>
+                                        <td class="pl-0 pt-7">@Model.Invoice.EditionDisplayName</td>
+                                        <td class="text-right pl-0 pt-7">@RealEstateConsts.CurrencySign@Model.Invoice.Amount </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center bg-gray-100 py-8 px-8 py-md-10 px-md-0">
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="pl-0 font-weight-bold text-muted  text-uppercase">&nbsp;</th>
+                                        <th class="font-weight-bold text-muted text-uppercase">&nbsp;</th>
+                                        <th class="font-weight-bold text-muted text-uppercase">&nbsp;</th>
+                                        <th class="text-right pr-0 font-weight-bold text-muted text-uppercase">@L("Total")</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="font-weight-bolder">
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td class="text-danger text-right font-size-h3 font-weight-boldest">@RealEstateConsts.CurrencySign@Model.Invoice.Amount.ToString("N2")</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center py-8 px-8 py-md-10 px-md-0">
+                        <div class="col-md-9">
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary font-weight-bold" onclick="window.print();">@L("Print")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

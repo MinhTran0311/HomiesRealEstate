@@ -1,0 +1,42 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Models.Common.Modals
+@model Homies.RealEstate.Web.Areas.App.Models.Webhooks.CreateOrEditWebhookSubscriptionViewModel
+
+<script>
+    var createOrEditIsEdit = @Html.Raw(Model.WebhookSubscription.Id==default?"false":"true");
+    var createOrEditHeaders = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.WebhookSubscription.Headers, Newtonsoft.Json.Formatting.Indented));
+</script>
+<link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/WebhookSubscriptions/_CreateOrEditModal.css" asp-append-version="true" />
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml",
+    new ModalHeaderViewModel(Model.WebhookSubscription.Id == default ? L("AddNewWebhookSubscription") : L("EditWebhookSubscription")))
+
+<div class="modal-body">
+    @if (Model.WebhookSubscription.Id != default)
+    {
+        <input type="hidden" name="Id" value="@Model.WebhookSubscription.Id" />
+    }
+
+    <div class="form-group col-12">
+        <label for="webhookUri">@L("WebhookEndpoint")</label>
+        <input id="webhookEndpointURL" type="text" name="webhookUri" class="form-control" value="@Model.WebhookSubscription.WebhookUri">
+    </div>
+
+    <div class="form-group col-12">
+        <label for="webhookUri">@L("WebhookEvents")</label>
+        @Html.DropDownList(
+            "Webhooks",
+            Model.AvailableWebhookEvents.Items.Select(e => new SelectListItem(e.Name, e.Description, Model.WebhookSubscription.Webhooks.Contains(e.Name)))
+            , new { @class = "form-control select2 col-12", multiple = "multiple", style = "width: 100%;" }
+            )
+    </div>
+
+    <hr />
+    <div class="form-group col-12">
+        <label for="webhookUri">@L("AdditionalWebhookHeaders")</label>
+        <div id="additional-header-list">
+           
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

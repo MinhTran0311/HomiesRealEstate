@@ -1,0 +1,28 @@
+﻿@model Homies.RealEstate.Web.Areas.App.Models.Layout.LanguageSwitchViewModel
+@if (Model.Languages.Count > 1)
+{
+    <div class="dropdown dropdown-language" aria-haspopup="true">
+        <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" aria-expanded="false">
+            <div class="@Model.CssClass">
+                <i class="@Model.CurrentLanguage.Icon" aria-label="@Model.CurrentLanguage.Icon"></i>
+            </div>
+        </div>
+        <div class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right" aria-label="@L("Languages")">
+            <ul class="navi navi-hover py-4">
+                @foreach (var languageInfo in Model.Languages.Where(language => language.Name != Model.CurrentLanguage.Name))
+                {
+                    <li class="navi-item">
+                        <a href="@Url.Action("ChangeCulture", "AbpLocalization", new {area = "", cultureName = languageInfo.Name, returnUrl = Context.Request.Path + Context.Request.QueryString})" class="navi-link">
+                            <span class="symbol symbol-20 mr-3">
+                                <i class="@languageInfo.Icon"></i>
+                            </span>
+                            <span class="navi-text">
+                                @languageInfo.DisplayName
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}

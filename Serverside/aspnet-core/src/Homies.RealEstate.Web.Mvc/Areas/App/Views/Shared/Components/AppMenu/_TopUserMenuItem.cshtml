@@ -1,0 +1,104 @@
+﻿@using Abp.Collections.Extensions
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppMenu
+@using Homies.RealEstate.Web.Navigation
+@model UserMenuItemViewModel
+@{
+    Layout = null;
+    var theme = await GetTheme();
+    var orderedChildMenuItems = Model.MenuItem.Items.OrderByCustom().ToList();
+}
+
+@if (Model.MenuItem.Items.IsNullOrEmpty())
+{
+    <li class="menu-item menu-item-submenu menu-item-rel @GetActiveLinkClass(Model)" aria-haspopup="true">
+        <a href="@Model.MenuItem.CalculateUrl(ApplicationPath)" class="menu-link">
+            @if (!Model.RootLevel)
+            {
+                <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                </i>
+            }
+            <span class="menu-text">@Model.MenuItem.DisplayName</span>
+        </a>
+    </li>
+}
+else
+{
+    <li class="menu-item menu-item-submenu menu-item-open-dropdown @GetMenuItemClass(Model) @GetActiveMenuClass(Model)" data-menu-toggle="click" aria-haspopup="true">
+        <a href="javascript:;" class="menu-link menu-toggle">
+            <span class="menu-text">@Model.MenuItem.DisplayName</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="menu-submenu menu-submenu-classic @GetSubMenuClass(Model)">
+            <ul class="menu-subnav">
+                @for (var i = 0; i < Model.MenuItem.Items.Count; i++)
+                {
+                    var childMenuItem = orderedChildMenuItems[i];
+                    if (!childMenuItem.IsVisible)
+                    {
+                        continue;
+                    }
+                    @await Html.PartialAsync("Components/AppMenu/_TopUserMenuItem", new UserMenuItemViewModel
+                    {
+                        MenuItem = childMenuItem,
+                        MenuItemIndex = i,
+                        CurrentPageName = Model.CurrentPageName,
+                        RootLevel = false
+                    })
+                }
+            </ul>
+        </div>
+    </li>
+}
+
+@functions
+{
+    public static string GetActiveLinkClass(UserMenuItemViewModel model)
+    {
+        var activeClass = " ";
+        if (!model.MenuItem.IsMenuActive(model.CurrentPageName))
+        {
+            return activeClass;
+        }
+
+        activeClass += "menu-item-active ";
+
+        return activeClass;
+    }
+
+    public static string GetActiveMenuClass(UserMenuItemViewModel model)
+    {
+        if (!model.MenuItem.IsMenuActive(model.CurrentPageName))
+        {
+            return "";
+        }
+
+        return "menu-item-here menu-item-active ";
+    }
+
+    public static string GetMenuItemClass(UserMenuItemViewModel model)
+    {
+        var menuItemClass = " ";
+        if (model.RootLevel)
+        {
+            menuItemClass += "menu-item-rel ";
+        }
+
+        return menuItemClass;
+    }
+
+    public static string GetSubMenuClass(UserMenuItemViewModel model)
+    {
+        var menuItemClass = " ";
+        if (model.RootLevel)
+        {
+            menuItemClass += "menu-submenu-left ";
+        }
+        else
+        {
+            menuItemClass += "menu-submenu-right ";
+        }
+
+        return menuItemClass;
+    }
+}

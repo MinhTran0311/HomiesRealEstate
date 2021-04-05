@@ -1,0 +1,116 @@
+﻿@model Homies.RealEstate.Configuration.Dto.ThemeSettingsDto
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a href="#DefaultHeader" class="nav-link active" data-toggle="tab" role="tab">
+            @L("UiCustomization_Header")
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#DefaultMenu" class="nav-link" data-toggle="tab" role="tab">
+            @L("UiCustomization_Menu")
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#DefaultFooter" class="nav-link" data-toggle="tab" role="tab">
+            @L("UiCustomization_Footer")
+        </a>
+    </li>
+</ul>
+<div class="tab-content m-5">
+    <div id="DefaultHeader" class="tab-pane active">
+        <input type="hidden" name="Theme" value="default"/>
+        <form class="HeaderSettingsForm">
+            <h5 class="mb-2">@L("UiCustomization_HeaderSkin")</h5>
+            <div class="form-group">
+                @Html.DropDownList("HeaderSkin", new SelectList(new List<SelectListItem> {new SelectListItem {Text = L("UiCustomization_Light"), Value = "light"}, new SelectListItem {Text = L("UiCustomization_Dark"), Value = "dark"}}, "Value", "Text", Model.Header.HeaderSkin), new {@class = "form-control w-25", id = "HeaderSkin"})
+            </div>
+            <h5 class="mb-2">@L("UiCustomization_Desktop")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="DesktopFixedHeader" value="true" @(Model.Header.DesktopFixedHeader ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_DesktopFixedHeader")
+                </label>
+            </div>
+            <h5 class="mb-2">@L("UiCustomization_Mobile")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="MobileFixedHeader" value="true" @(Model.Header.MobileFixedHeader ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_MobileFixedHeader")
+                </label>
+            </div>
+        </form>
+        <form class="SubHeaderSettingsForm">
+            <h5 class="mb-2">@L("UiCustomization_SubHeader")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="FixedSubHeader" value="true" @(Model.SubHeader.FixedSubHeader ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_FixedSubHeader")
+                </label>
+            </div>
+        </form>
+    </div>
+    <div id="DefaultMenu" class="tab-pane">
+        <form class="MenuSettingsForm">
+            <h5 class="mb-2">@L("UiCustomization_MenuSkin")</h5>
+            <div class="form-group">
+                @Html.DropDownList("AsideSkin", new SelectList(new List<SelectListItem> {new SelectListItem {Text = L("UiCustomization_Light"), Value = "light"}, new SelectListItem {Text = L("UiCustomization_Dark"), Value = "dark"}}, "Value", "Text", Model.Menu.AsideSkin), new {@class = "form-control w-25", id = "AsideSkin"})
+            </div>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="FixedAside" value="true" @(Model.Menu.FixedAside ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_FixedMenu")
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="AllowAsideMinimizing" value="true" @(Model.Menu.AllowAsideMinimizing ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_AllowAsideMinimizing")
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="DefaultMinimizedAside" value="true" @(Model.Menu.DefaultMinimizedAside ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_DefaultMinimizedAside")
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="HoverableAside" value="true" @(Model.Menu.HoverableAside ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_HoverableAside")
+                </label>
+            </div>
+            <h5 class="mb-2">@L("UiCustomization_SubmenuToggle")</h5>
+            <div class="form-group">
+                @Html.DropDownList("SubmenuToggle", new SelectList(new List<SelectListItem> {new SelectListItem {Text = L("UiCustomization_SubmenuToggle_Accordion"), Value = "false"}, new SelectListItem {Text = L("UiCustomization_SubmenuToggle_Dropdown"), Value = "true"}}, "Value", "Text", Model.Menu.SubmenuToggle), new {@class = "form-control w-25", id = "SubmenuToggle"})
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="SearchActive" value="true" @(Model.Menu.SearchActive ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("ShowMenuSearchInput")
+                </label>
+            </div>
+        </form>
+    </div>
+    <div id="DefaultFooter" class="tab-pane">
+        <form class="FooterSettingsForm">
+            <h5 class="mb-2">@L("UiCustomization_Footer")</h5>
+            <div class="form-group">
+                <label class="checkbox checkbox-outline col-lg-12">
+                    <input type="checkbox" name="FixedFooter" value="true" @(Model.Footer.FixedFooter ? "checked=\"checked\"" : "")>
+                    <span></span>
+                    @L("UiCustomization_FixedFooter")
+                </label>
+            </div>
+        </form>
+    </div>
+</div>

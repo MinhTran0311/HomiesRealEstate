@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "Homies.RealEstate.Migrator": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "ASPNETCORE_Docker_Enabled": "true",
+        "ConnectionStrings__Default": "Server=mssqlDb;Database=RealEstateDb;User=sa;Password=Super_Encrypted_Passw0rd!"
+      }
+    }
+  }
+}
