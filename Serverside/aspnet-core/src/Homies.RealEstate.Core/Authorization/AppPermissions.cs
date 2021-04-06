@@ -6,6 +6,16 @@
     /// </summary>
     public static class AppPermissions
     {
+        public const string Pages_GoiBaiDangs = "Pages.GoiBaiDangs";
+        public const string Pages_GoiBaiDangs_Create = "Pages.GoiBaiDangs.Create";
+        public const string Pages_GoiBaiDangs_Edit = "Pages.GoiBaiDangs.Edit";
+        public const string Pages_GoiBaiDangs_Delete = "Pages.GoiBaiDangs.Delete";
+
+        public const string Pages_BaiDangs = "Pages.BaiDangs";
+        public const string Pages_BaiDangs_Create = "Pages.BaiDangs.Create";
+        public const string Pages_BaiDangs_Edit = "Pages.BaiDangs.Edit";
+        public const string Pages_BaiDangs_Delete = "Pages.BaiDangs.Delete";
+
         public const string Pages_ChiTietDanhMucs = "Pages.ChiTietDanhMucs";
         public const string Pages_ChiTietDanhMucs_Create = "Pages.ChiTietDanhMucs.Create";
         public const string Pages_ChiTietDanhMucs_Edit = "Pages.ChiTietDanhMucs.Edit";

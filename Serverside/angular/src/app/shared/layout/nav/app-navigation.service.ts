@@ -35,6 +35,10 @@ export class AppNavigationService {
             new AppMenuItem('DanhMucs', 'Pages.DanhMucs', 'flaticon-more', '/app/main/server/danhMucs'),
             
             new AppMenuItem('ChiTietDanhMucs', 'Pages.ChiTietDanhMucs', 'flaticon-more', '/app/main/server/chiTietDanhMucs'),
+            
+            new AppMenuItem('BaiDangs', 'Pages.BaiDangs', 'flaticon-more', '/app/main/server/baiDangs'),
+            
+            new AppMenuItem('GoiBaiDangs', 'Pages.GoiBaiDangs', 'flaticon-more', '/app/main/server/goiBaiDangs'),
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [], [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),

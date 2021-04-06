@@ -49,6 +49,10 @@ namespace Homies.RealEstate
     {
         public static void CreateMappings(IMapperConfigurationExpression configuration)
         {
+            configuration.CreateMap<CreateOrEditGoiBaiDangDto, GoiBaiDang>().ReverseMap();
+            configuration.CreateMap<GoiBaiDangDto, GoiBaiDang>().ReverseMap();
+            configuration.CreateMap<CreateOrEditBaiDangDto, BaiDang>().ReverseMap();
+            configuration.CreateMap<BaiDangDto, BaiDang>().ReverseMap();
             configuration.CreateMap<CreateOrEditChiTietDanhMucDto, ChiTietDanhMuc>().ReverseMap();
             configuration.CreateMap<ChiTietDanhMucDto, ChiTietDanhMuc>().ReverseMap();
             configuration.CreateMap<CreateOrEditDanhMucDto, DanhMuc>().ReverseMap();

@@ -3,14 +3,16 @@ using System;
 using Homies.RealEstate.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Homies.RealEstate.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    partial class RealEstateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210406095653_Regenerated_BaiDang1177")]
+    partial class Regenerated_BaiDang1177
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2056,41 +2058,6 @@ namespace Homies.RealEstate.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DanhMucs");
-                });
-
-            modelBuilder.Entity("Homies.RealEstate.Server.GoiBaiDang", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("DoUuTien")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MoTa")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4");
-
-                    b.Property<double>("Phi")
-                        .HasColumnType("double");
-
-                    b.Property<string>("TenGoi")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
-
-                    b.Property<int>("ThoiGianToiThieu")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TrangThai")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GoiBaiDangs");
                 });
 
             modelBuilder.Entity("Homies.RealEstate.Server.Huyen", b =>

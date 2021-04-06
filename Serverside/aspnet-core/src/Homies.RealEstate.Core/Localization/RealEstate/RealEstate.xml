@@ -1,6 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <localizationDictionary culture="en">
-  <texts>    <text name="ChiTietDanhMuc">Chi tiet danh muc</text>
+  <texts>    <text name="GoiBaiDang">Goi bai dang</text>
+    <text name="Homies.RealEstate.Server.GoiBaiDang">GoiBaiDang</text>
+    <text name="TenGoi">Ten goi</text>
+    <text name="Phi">Phi</text>
+    <text name="DoUuTien">Do uu tien</text>
+    <text name="ThoiGianToiThieu">Thoi gian toi thieu</text>
+    <text name="GoiBaiDangsHeaderInfo">Goi bai dangs header info</text>
+    <text name="CreateNewGoiBaiDang">Create new goi bai dang</text>
+    <text name="EditGoiBaiDang">Edit goi bai dang</text>
+    <text name="DeleteGoiBaiDang">Delete goi bai dang</text>
+    <text name="GoiBaiDangs">Goi bai dangs</text>
+    <text name="BaiDang">Bai dang</text>
+    <text name="Homies.RealEstate.Server.BaiDang">BaiDang</text>
+    <text name="TagLoaiBaiDang">Tag loai bai dang</text>
+    <text name="ThoiDiemDang">Thoi diem dang</text>
+    <text name="ThoiHan">Thoi han</text>
+    <text name="DiaChi">Dia chi</text>
+    <text name="MoTa">Mo ta</text>
+    <text name="ToaDoX">Toa do x</text>
+    <text name="ToaDoY">Toa do y</text>
+    <text name="LuotXem">Luot xem</text>
+    <text name="LuotYeuThich">Luot yeu thich</text>
+    <text name="DiemBaiDang">Diem bai dang</text>
+    <text name="TagTimKiem">Tag tim kiem</text>
+    <text name="TieuDe">Tieu de</text>
+    <text name="BaiDangsHeaderInfo">Bai dangs header info</text>
+    <text name="CreateNewBaiDang">Create new bai dang</text>
+    <text name="EditBaiDang">Edit bai dang</text>
+    <text name="DeleteBaiDang">Delete bai dang</text>
+    <text name="BaiDangs">Bai dangs</text>
+    <text name="PickUser">Pick user</text>
+    <text name="XaTenXa">Xa ten xa</text>
+    <text name="PickXa">Pick xa</text>
+    <text name="ThoiDiemDangRange">Thoi diem dang range</text>
+    <text name="ThoiHanRange">Thoi han range</text>
+    <text name="ChiTietDanhMuc">Chi tiet danh muc</text>
     <text name="Homies.RealEstate.Server.ChiTietDanhMuc">ChiTietDanhMuc</text>
     <text name="GhiChu">Ghi chu</text>
     <text name="ChiTietDanhMucsHeaderInfo">Chi tiet danh mucs header info</text>
