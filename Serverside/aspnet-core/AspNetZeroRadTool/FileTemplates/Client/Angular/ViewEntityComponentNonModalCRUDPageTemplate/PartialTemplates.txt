@@ -1,4 +1,4 @@
-﻿{
+{
 	"enumTemplates":[
 		{
 			"placeholder" : "{{Enum_Import_Before_V060600_Here}}",

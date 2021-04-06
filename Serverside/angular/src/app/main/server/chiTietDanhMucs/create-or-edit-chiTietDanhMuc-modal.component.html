@@ -1,0 +1,112 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #chiTietDanhMucForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="chiTietDanhMuc.id">{{ l("EditChiTietDanhMuc") }}</span>
+                        <span *ngIf="!chiTietDanhMuc.id">{{ l("CreateNewChiTietDanhMuc") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="ThuocTinhTenThuocTinh">{{ l("ThuocTinh") }}</label>
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                id="ThuocTinhTenThuocTinh"
+                                name="thuocTinhTenThuocTinh"
+                                [(ngModel)]="thuocTinhTenThuocTinh"
+                                type="text"
+                                disabled
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectThuocTinhModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setThuocTinhIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="chiTietDanhMuc.thuocTinhId" [(ngModel)]="chiTietDanhMuc.thuocTinhId" type="text" hidden />
+
+                    <div class="form-group m-form__group">
+                        <label for="DanhMucTenDanhMuc">{{ l("DanhMuc") }}</label>
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                id="DanhMucTenDanhMuc"
+                                name="danhMucTenDanhMuc"
+                                [(ngModel)]="danhMucTenDanhMuc"
+                                type="text"
+                                disabled
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectDanhMucModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setDanhMucIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="chiTietDanhMuc.danhMucId" [(ngModel)]="chiTietDanhMuc.danhMucId" type="text" hidden />
+
+                    <div class="form-group">
+                        <label for="ChiTietDanhMuc_GhiChu">{{ l("GhiChu") }}</label>
+                        <input
+                            type="text"
+                            #ChiTietDanhMuc_GhiChu="ngModel"
+                            id="ChiTietDanhMuc_GhiChu"
+                            class="form-control"
+                            [(ngModel)]="chiTietDanhMuc.ghiChu"
+                            name="GhiChu"
+                            minlength="1"
+                            maxlength="50"
+                        />
+                        <validation-messages [formCtrl]="ChiTietDanhMuc_GhiChu"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!chiTietDanhMucForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <chiTietDanhMucThuocTinhLookupTableModal
+        #chiTietDanhMucThuocTinhLookupTableModal
+        (modalSave)="getNewThuocTinhId()"
+    ></chiTietDanhMucThuocTinhLookupTableModal>
+    <chiTietDanhMucDanhMucLookupTableModal
+        #chiTietDanhMucDanhMucLookupTableModal
+        (modalSave)="getNewDanhMucId()"
+    ></chiTietDanhMucDanhMucLookupTableModal>
+</div>

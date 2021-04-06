@@ -1,4 +1,5 @@
-﻿using Abp.IdentityServer4vNext;
+﻿using Homies.RealEstate.Server;
+using Abp.IdentityServer4vNext;
 using Abp.Zero.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Homies.RealEstate.Authorization.Delegation;
@@ -16,6 +17,20 @@ namespace Homies.RealEstate.EntityFrameworkCore
 {
     public class RealEstateDbContext : AbpZeroDbContext<Tenant, Role, User, RealEstateDbContext>, IAbpPersistedGrantDbContext
     {
+        public virtual DbSet<ChiTietDanhMuc> ChiTietDanhMucs { get; set; }
+
+        public virtual DbSet<DanhMuc> DanhMucs { get; set; }
+
+        public virtual DbSet<ThuocTinh> ThuocTinhs { get; set; }
+
+        public virtual DbSet<ThamSo> ThamSos { get; set; }
+
+        public virtual DbSet<Xa> Xas { get; set; }
+
+        public virtual DbSet<Huyen> Huyens { get; set; }
+
+        public virtual DbSet<Tinh> Tinhs { get; set; }
+
         /* Define an IDbSet for each entity of the application */
 
         public virtual DbSet<BinaryObject> BinaryObjects { get; set; }

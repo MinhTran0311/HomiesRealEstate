@@ -1,0 +1,85 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #thamSoForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="thamSo.id">{{ l("EditThamSo") }}</span>
+                        <span *ngIf="!thamSo.id">{{ l("CreateNewThamSo") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ThamSo_TenThamSo">{{ l("TenThamSo") }} *</label>
+                        <input
+                            type="text"
+                            #ThamSo_TenThamSo="ngModel"
+                            id="ThamSo_TenThamSo"
+                            class="form-control"
+                            [(ngModel)]="thamSo.tenThamSo"
+                            name="TenThamSo"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThamSo_TenThamSo"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ThamSo_KieuDuLieu">{{ l("KieuDuLieu") }} *</label>
+                        <input
+                            type="text"
+                            #ThamSo_KieuDuLieu="ngModel"
+                            id="ThamSo_KieuDuLieu"
+                            class="form-control"
+                            [(ngModel)]="thamSo.kieuDuLieu"
+                            name="KieuDuLieu"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThamSo_KieuDuLieu"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ThamSo_GiaTri">{{ l("GiaTri") }} *</label>
+                        <input
+                            type="text"
+                            #ThamSo_GiaTri="ngModel"
+                            id="ThamSo_GiaTri"
+                            class="form-control"
+                            [(ngModel)]="thamSo.giaTri"
+                            name="GiaTri"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThamSo_GiaTri"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!thamSoForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

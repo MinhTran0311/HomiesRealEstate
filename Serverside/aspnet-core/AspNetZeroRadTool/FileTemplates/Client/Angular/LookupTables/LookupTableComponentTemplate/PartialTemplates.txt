@@ -1,4 +1,4 @@
-﻿{
+{
 "conditionalTemplates":[
 		{
 			"placeholder": "{{TurboTable_Import_Here}}",

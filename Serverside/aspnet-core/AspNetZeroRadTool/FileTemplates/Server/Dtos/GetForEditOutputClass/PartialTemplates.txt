@@ -1,4 +1,4 @@
-﻿{
+{
 "navigationPropertyTemplates":[
 		{
 			"placeholder" : "{{NP_Looped_Display_Property_Here}}",

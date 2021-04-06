@@ -6,6 +6,41 @@
     /// </summary>
     public static class AppPermissions
     {
+        public const string Pages_ChiTietDanhMucs = "Pages.ChiTietDanhMucs";
+        public const string Pages_ChiTietDanhMucs_Create = "Pages.ChiTietDanhMucs.Create";
+        public const string Pages_ChiTietDanhMucs_Edit = "Pages.ChiTietDanhMucs.Edit";
+        public const string Pages_ChiTietDanhMucs_Delete = "Pages.ChiTietDanhMucs.Delete";
+
+        public const string Pages_DanhMucs = "Pages.DanhMucs";
+        public const string Pages_DanhMucs_Create = "Pages.DanhMucs.Create";
+        public const string Pages_DanhMucs_Edit = "Pages.DanhMucs.Edit";
+        public const string Pages_DanhMucs_Delete = "Pages.DanhMucs.Delete";
+
+        public const string Pages_ThuocTinhs = "Pages.ThuocTinhs";
+        public const string Pages_ThuocTinhs_Create = "Pages.ThuocTinhs.Create";
+        public const string Pages_ThuocTinhs_Edit = "Pages.ThuocTinhs.Edit";
+        public const string Pages_ThuocTinhs_Delete = "Pages.ThuocTinhs.Delete";
+
+        public const string Pages_ThamSos = "Pages.ThamSos";
+        public const string Pages_ThamSos_Create = "Pages.ThamSos.Create";
+        public const string Pages_ThamSos_Edit = "Pages.ThamSos.Edit";
+        public const string Pages_ThamSos_Delete = "Pages.ThamSos.Delete";
+
+        public const string Pages_Xas = "Pages.Xas";
+        public const string Pages_Xas_Create = "Pages.Xas.Create";
+        public const string Pages_Xas_Edit = "Pages.Xas.Edit";
+        public const string Pages_Xas_Delete = "Pages.Xas.Delete";
+
+        public const string Pages_Huyens = "Pages.Huyens";
+        public const string Pages_Huyens_Create = "Pages.Huyens.Create";
+        public const string Pages_Huyens_Edit = "Pages.Huyens.Edit";
+        public const string Pages_Huyens_Delete = "Pages.Huyens.Delete";
+
+        public const string Pages_Tinhs = "Pages.Tinhs";
+        public const string Pages_Tinhs_Create = "Pages.Tinhs.Create";
+        public const string Pages_Tinhs_Edit = "Pages.Tinhs.Edit";
+        public const string Pages_Tinhs_Delete = "Pages.Tinhs.Delete";
+
         //COMMON PERMISSIONS (FOR BOTH OF TENANTS AND HOST)
 
         public const string Pages = "Pages";

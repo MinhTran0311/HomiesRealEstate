@@ -1,4 +1,4 @@
-﻿{
+{
 "navigationPropertyTemplates":[
 		{
 			"placeholder" : "{{NP_Modal_Init_Here}}",

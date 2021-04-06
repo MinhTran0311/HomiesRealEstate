@@ -1,4 +1,4 @@
-﻿{
+{
     "conditionalTemplates":[
         {
             "placeholder": "{{Master_Detail_Child_Base_Property_Here}}",

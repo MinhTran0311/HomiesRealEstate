@@ -1,4 +1,6 @@
-﻿using Abp.Application.Editions;
+﻿using Homies.RealEstate.Server.Dtos;
+using Homies.RealEstate.Server;
+using Abp.Application.Editions;
 using Abp.Application.Features;
 using Abp.Auditing;
 using Abp.Authorization;
@@ -47,6 +49,20 @@ namespace Homies.RealEstate
     {
         public static void CreateMappings(IMapperConfigurationExpression configuration)
         {
+            configuration.CreateMap<CreateOrEditChiTietDanhMucDto, ChiTietDanhMuc>().ReverseMap();
+            configuration.CreateMap<ChiTietDanhMucDto, ChiTietDanhMuc>().ReverseMap();
+            configuration.CreateMap<CreateOrEditDanhMucDto, DanhMuc>().ReverseMap();
+            configuration.CreateMap<DanhMucDto, DanhMuc>().ReverseMap();
+            configuration.CreateMap<CreateOrEditThuocTinhDto, ThuocTinh>().ReverseMap();
+            configuration.CreateMap<ThuocTinhDto, ThuocTinh>().ReverseMap();
+            configuration.CreateMap<CreateOrEditThamSoDto, ThamSo>().ReverseMap();
+            configuration.CreateMap<ThamSoDto, ThamSo>().ReverseMap();
+            configuration.CreateMap<CreateOrEditXaDto, Xa>().ReverseMap();
+            configuration.CreateMap<XaDto, Xa>().ReverseMap();
+            configuration.CreateMap<CreateOrEditHuyenDto, Huyen>().ReverseMap();
+            configuration.CreateMap<HuyenDto, Huyen>().ReverseMap();
+            configuration.CreateMap<CreateOrEditTinhDto, Tinh>().ReverseMap();
+            configuration.CreateMap<TinhDto, Tinh>().ReverseMap();
             //Inputs
             configuration.CreateMap<CheckboxInputType, FeatureInputTypeDto>();
             configuration.CreateMap<SingleLineStringInputType, FeatureInputTypeDto>();
@@ -75,8 +91,6 @@ namespace Homies.RealEstate
             configuration.CreateMap<Role, RoleListDto>();
             configuration.CreateMap<UserRole, UserListRoleDto>();
 
-            
-
             //Edition
             configuration.CreateMap<EditionEditDto, SubscribableEdition>().ReverseMap();
             configuration.CreateMap<EditionCreateDto, SubscribableEdition>();
@@ -89,7 +103,6 @@ namespace Homies.RealEstate
             configuration.CreateMap<Edition, EditionEditDto>();
             configuration.CreateMap<Edition, SubscribableEdition>();
             configuration.CreateMap<Edition, EditionSelectDto>();
-
 
             //Payment
             configuration.CreateMap<SubscriptionPaymentDto, SubscriptionPayment>().ReverseMap();
@@ -158,7 +171,7 @@ namespace Homies.RealEstate
             configuration.CreateMap<DynamicEntityPropertyDto, DynamicEntityProperty>();
 
             configuration.CreateMap<DynamicEntityPropertyValue, DynamicEntityPropertyValueDto>().ReverseMap();
-            
+
             //User Delegations
             configuration.CreateMap<CreateUserDelegationDto, UserDelegation>();
 

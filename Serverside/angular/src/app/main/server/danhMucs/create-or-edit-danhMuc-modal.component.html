@@ -1,0 +1,90 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #danhMucForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="danhMuc.id">{{ l("EditDanhMuc") }}</span>
+                        <span *ngIf="!danhMuc.id">{{ l("CreateNewDanhMuc") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="DanhMuc_TenDanhMuc">{{ l("TenDanhMuc") }} *</label>
+                        <input
+                            type="text"
+                            #DanhMuc_TenDanhMuc="ngModel"
+                            id="DanhMuc_TenDanhMuc"
+                            class="form-control"
+                            [(ngModel)]="danhMuc.tenDanhMuc"
+                            name="TenDanhMuc"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="DanhMuc_TenDanhMuc"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DanhMuc_Tag">{{ l("Tag") }}</label>
+                        <input type="text" #DanhMuc_Tag="ngModel" id="DanhMuc_Tag" class="form-control" [(ngModel)]="danhMuc.tag" name="Tag" />
+                        <validation-messages [formCtrl]="DanhMuc_Tag"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DanhMuc_TrangThai">{{ l("TrangThai") }} *</label>
+                        <input
+                            type="text"
+                            #DanhMuc_TrangThai="ngModel"
+                            id="DanhMuc_TrangThai"
+                            class="form-control"
+                            [(ngModel)]="danhMuc.trangThai"
+                            name="TrangThai"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="DanhMuc_TrangThai"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DanhMuc_DanhMucCha">{{ l("DanhMucCha") }}</label>
+                        <input
+                            type="number"
+                            #DanhMuc_DanhMucCha="ngModel"
+                            id="DanhMuc_DanhMucCha"
+                            class="form-control"
+                            [(ngModel)]="danhMuc.danhMucCha"
+                            name="DanhMucCha"
+                        />
+                        <validation-messages [formCtrl]="DanhMuc_DanhMucCha"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!danhMucForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿{
+{
     "conditionalTemplates":[
         {
             "placeholder": "{{Portlet_Class_Here}}",
@@ -29,16 +29,6 @@
             "placeholder": "{{Form_Class_Here}}",
             "condition": "{{Project_Version_Here}} >= 090000",
             "content": "form"
-        },
-        {
-            "placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
-            "condition": "{{Project_Version_Here}} < 101000",
-            "content": "ui-column-title"
-        },
-        {
-            "placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
-            "condition": "{{Project_Version_Here}} >= 101000",
-            "content": "p-column-title"
         }
     ]
 }

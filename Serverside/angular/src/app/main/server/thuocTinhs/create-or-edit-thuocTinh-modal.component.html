@@ -1,0 +1,87 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #thuocTinhForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="thuocTinh.id">{{ l("EditThuocTinh") }}</span>
+                        <span *ngIf="!thuocTinh.id">{{ l("CreateNewThuocTinh") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ThuocTinh_TenThuocTinh">{{ l("TenThuocTinh") }} *</label>
+                        <input
+                            type="text"
+                            #ThuocTinh_TenThuocTinh="ngModel"
+                            id="ThuocTinh_TenThuocTinh"
+                            class="form-control"
+                            [(ngModel)]="thuocTinh.tenThuocTinh"
+                            name="TenThuocTinh"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThuocTinh_TenThuocTinh"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ThuocTinh_KieuDuLieu">{{ l("KieuDuLieu") }} *</label>
+                        <input
+                            type="text"
+                            #ThuocTinh_KieuDuLieu="ngModel"
+                            id="ThuocTinh_KieuDuLieu"
+                            class="form-control"
+                            [(ngModel)]="thuocTinh.kieuDuLieu"
+                            name="KieuDuLieu"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThuocTinh_KieuDuLieu"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ThuocTinh_TrangThai">{{ l("TrangThai") }} *</label>
+                        <input
+                            type="text"
+                            #ThuocTinh_TrangThai="ngModel"
+                            id="ThuocTinh_TrangThai"
+                            class="form-control"
+                            [(ngModel)]="thuocTinh.trangThai"
+                            name="TrangThai"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ThuocTinh_TrangThai"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!thuocTinhForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

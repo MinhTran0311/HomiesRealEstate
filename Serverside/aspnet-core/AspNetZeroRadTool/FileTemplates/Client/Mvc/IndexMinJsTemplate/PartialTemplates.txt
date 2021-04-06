@@ -1,4 +1,4 @@
-﻿{
+{
 "propertyTemplates":[
 		{
 			"placeholder" : "{{Property_Looped_Template_Here}}",
@@ -29,7 +29,7 @@
 					"type" : "DateTime",
 					"content" : ",
 					min{{Property_Name_Here}}Filter:  getDateFilter($('#{{Master_Detail_Child_Prefix_Here}}Min{{Property_Name_Here}}FilterId')),
-					max{{Property_Name_Here}}Filter:  getMaxDateFilter($('#{{Master_Detail_Child_Prefix_Here}}Max{{Property_Name_Here}}FilterId'))"
+					max{{Property_Name_Here}}Filter:  getDateFilter($('#{{Master_Detail_Child_Prefix_Here}}Max{{Property_Name_Here}}FilterId'))"
 					},
 					{
 					"type" : "default",
@@ -113,7 +113,6 @@
 			"content": "
 						{
                                 text: app.localize('View'),
-                                iconStyle: 'far fa-eye mr-2',
                                 action: function (data) {
                                     _view{{Entity_Name_Here}}Modal.open({ id: data.record.{{entity_Name_Here}}.id });
                                 }
@@ -125,7 +124,6 @@
 			"content": "
 						{
                                 text: app.localize('View'),
-                                iconStyle: 'far fa-eye mr-2',
                                 action: function (data) {
                                     window.location=\"/{{App_Area_Name_Here}}/{{Entity_Name_Plural_Here}}/View{{Entity_Name_Here}}/\" + data.record.{{entity_Name_Here}}.id;
                                 }
@@ -171,7 +169,6 @@
 			"content": "
                         {
                             text: app.localize('History'),
-                            iconStyle: 'fas fa-history mr-2',
                             visible: function () {
                                 return entityHistoryIsEnabled();
                             },
@@ -265,14 +262,12 @@
 	],
 "navigationPropertyOneToManyTableTemplates": [
          {
-             "placeholder": "{{NP_Looped_One_To_Many_Table_Column_Def_Here}}",
+             "placeholder": "{{NP_Looped_One_To_Many_Table_Coloumn_Def_Here}}",
              "content": "
                 ,{
                     className: 'details-control',
                     targets: {{Combined_Loop_Index}},
                     orderable: false,
-                    autoWidth: false,
-                    visible: abp.auth.hasPermission('{{NP_OneToMany_Permission_Value_Here}}'),
                     render: function () {
                         return `<button class=\"btn btn-primary btn-xs Edit_{{NP_OneTwoMany_EntityName_Here}}_{{NP_OneTwoMany_ForeignPropertyName_Here}}\">${app.localize(\"Edit{{NP_OneTwoMany_EntityName_Here}}\")}</button>`;
                     }

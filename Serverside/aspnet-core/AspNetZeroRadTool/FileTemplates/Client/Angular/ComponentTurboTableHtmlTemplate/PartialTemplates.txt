@@ -1,4 +1,4 @@
-﻿{
+{
 "propertyTemplates":[
 		{
 			"placeholder" : "{{Property_Looped_Header_Template_Here}}",
@@ -21,7 +21,7 @@
 					{
 					"type" : "enum",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
 										{{l({{Enum_Localization_Before_060600}} {{property_Type_Here}}[record.{{entity_Name_Here}}.{{property_Name_Here}}])}}
                                     </td>
 "
@@ -29,7 +29,7 @@
 					{
 					"type" : "bool",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
                                         <div *ngIf=\"record.{{entity_Name_Here}}.{{property_Name_Here}}\" class=\"text-center\"><i class=\"fa fa-check-circle {{Font_Success_Class_Here}}\" title=\"True\"></i></div>
 										<div *ngIf=\"!record.{{entity_Name_Here}}.{{property_Name_Here}}\" class=\"text-center\"><i class=\"fa fa-times-circle\" title=\"False\"></i></div>
                                     </td>
@@ -38,7 +38,7 @@
 					{
 					"type" : "DateTime",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
                                         <span *ngIf=\"record.{{entity_Name_Here}}.{{property_Name_Here}}\">
 											{{record.{{entity_Name_Here}}.{{property_Name_Here}} | {{Datetime_Format_Pipe_Here}} }}
                                         </span>
@@ -49,7 +49,7 @@
 					{
 					"type" : "default",
 					"content" : "                                    <td style=\"width:150px\">
-											<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
+											<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
 											{{record.{{entity_Name_Here}}.{{property_Name_Here}}}}
 										</td>
 "
@@ -141,7 +141,7 @@
 					{
 					"relation" : "single",
 					"content" : "                                    <td style=\"width:150px\">
-												<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
+												<span class=\"ui-column-title\"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
 												{{record.{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}}}
 											</td>
 "
@@ -404,16 +404,6 @@
              "placeholder": "{{Datetime_Format_Pipe_Here}}",
              "condition": "{{Project_Version_Here}} < 100000",
              "content": " momentFormat:\'L\'"
-        },
-        {
-        	"placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
-        	"condition": "{{Project_Version_Here}} < 101000",
-        	"content": "ui-column-title"
-        },
-        {
-        	"placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
-        	"condition": "{{Project_Version_Here}} >= 101000",
-        	"content": "p-column-title"
         }
 	],
      "navigationPropertyOneToManyTableTemplates": [

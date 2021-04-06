@@ -1929,6 +1929,167 @@ namespace Homies.RealEstate.Migrations
                     b.ToTable("AbpTenants");
                 });
 
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietDanhMuc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DanhMucId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GhiChu")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
+
+                    b.Property<int?>("ThuocTinhId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DanhMucId");
+
+                    b.HasIndex("ThuocTinhId");
+
+                    b.ToTable("ChiTietDanhMucs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.DanhMuc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DanhMucCha")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tag")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TenDanhMuc")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DanhMucs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.Huyen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenHuyen")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<int?>("TinhId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TinhId");
+
+                    b.ToTable("Huyens");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ThamSo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("GiaTri")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("KieuDuLieu")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TenThamSo")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ThamSos");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ThuocTinh", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("KieuDuLieu")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TenThuocTinh")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ThuocTinhs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.Tinh", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenTinh")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tinhs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.Xa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HuyenId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenXa")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HuyenId");
+
+                    b.ToTable("Xas");
+                });
+
             modelBuilder.Entity("Homies.RealEstate.Storage.BinaryObject", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2245,6 +2406,39 @@ namespace Homies.RealEstate.Migrations
                     b.Navigation("Edition");
 
                     b.Navigation("LastModifierUser");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietDanhMuc", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.DanhMuc", "DanhMucFk")
+                        .WithMany()
+                        .HasForeignKey("DanhMucId");
+
+                    b.HasOne("Homies.RealEstate.Server.ThuocTinh", "ThuocTinhFk")
+                        .WithMany()
+                        .HasForeignKey("ThuocTinhId");
+
+                    b.Navigation("DanhMucFk");
+
+                    b.Navigation("ThuocTinhFk");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.Huyen", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.Tinh", "TinhFk")
+                        .WithMany()
+                        .HasForeignKey("TinhId");
+
+                    b.Navigation("TinhFk");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.Xa", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.Huyen", "HuyenFk")
+                        .WithMany()
+                        .HasForeignKey("HuyenId");
+
+                    b.Navigation("HuyenFk");
                 });
 
             modelBuilder.Entity("Abp.Application.Features.EditionFeatureSetting", b =>

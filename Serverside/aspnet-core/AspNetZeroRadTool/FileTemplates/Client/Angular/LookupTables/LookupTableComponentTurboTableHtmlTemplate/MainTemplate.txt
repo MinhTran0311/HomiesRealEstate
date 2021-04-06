@@ -60,7 +60,7 @@
                                                 </div>
 											</td>
 											<td style="width:150px">
-												<span class="{{PrimeNG_Column_Title_Class_Here}}"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
+												<span class="ui-column-title"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
 												{{record.displayName}}
 											</td>
 										</tr>
