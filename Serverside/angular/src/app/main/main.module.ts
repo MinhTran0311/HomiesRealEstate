@@ -2,6 +2,26 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppCommonModule } from '@app/shared/common/app-common.module';
+import { LichSuGiaoDichsComponent } from './server/lichSuGiaoDichs/lichSuGiaoDichs.component';
+import { ViewLichSuGiaoDichModalComponent } from './server/lichSuGiaoDichs/view-lichSuGiaoDich-modal.component';
+import { CreateOrEditLichSuGiaoDichModalComponent } from './server/lichSuGiaoDichs/create-or-edit-lichSuGiaoDich-modal.component';
+import { LichSuGiaoDichUserLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-user-lookup-table-modal.component';
+import { LichSuGiaoDichChiTietHoaDonBaiDangLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-chiTietHoaDonBaiDang-lookup-table-modal.component';
+import { LichSuGiaoDichUserLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-user-lookup-table-modal.component';
+
+import { ChiTietBaiDangsComponent } from './server/chiTietBaiDangs/chiTietBaiDangs.component';
+import { ViewChiTietBaiDangModalComponent } from './server/chiTietBaiDangs/view-chiTietBaiDang-modal.component';
+import { CreateOrEditChiTietBaiDangModalComponent } from './server/chiTietBaiDangs/create-or-edit-chiTietBaiDang-modal.component';
+import { ChiTietBaiDangThuocTinhLookupTableModalComponent } from './server/chiTietBaiDangs/chiTietBaiDang-thuocTinh-lookup-table-modal.component';
+import { ChiTietBaiDangBaiDangLookupTableModalComponent } from './server/chiTietBaiDangs/chiTietBaiDang-baiDang-lookup-table-modal.component';
+
+import { ChiTietHoaDonBaiDangsComponent } from './server/chiTietHoaDonBaiDangs/chiTietHoaDonBaiDangs.component';
+import { ViewChiTietHoaDonBaiDangModalComponent } from './server/chiTietHoaDonBaiDangs/view-chiTietHoaDonBaiDang-modal.component';
+import { CreateOrEditChiTietHoaDonBaiDangModalComponent } from './server/chiTietHoaDonBaiDangs/create-or-edit-chiTietHoaDonBaiDang-modal.component';
+import { ChiTietHoaDonBaiDangBaiDangLookupTableModalComponent } from './server/chiTietHoaDonBaiDangs/chiTietHoaDonBaiDang-baiDang-lookup-table-modal.component';
+import { ChiTietHoaDonBaiDangGoiBaiDangLookupTableModalComponent } from './server/chiTietHoaDonBaiDangs/chiTietHoaDonBaiDang-goiBaiDang-lookup-table-modal.component';
+import { ChiTietHoaDonBaiDangUserLookupTableModalComponent } from './server/chiTietHoaDonBaiDangs/chiTietHoaDonBaiDang-user-lookup-table-modal.component';
+
 import { BaiGhimYeuThichsComponent } from './server/baiGhimYeuThichs/baiGhimYeuThichs.component';
 import { ViewBaiGhimYeuThichModalComponent } from './server/baiGhimYeuThichs/view-baiGhimYeuThich-modal.component';
 import { CreateOrEditBaiGhimYeuThichModalComponent } from './server/baiGhimYeuThichs/create-or-edit-baiGhimYeuThich-modal.component';
@@ -99,6 +119,26 @@ NgxBootstrapDatePickerConfigService.registerNgxBootstrapDatePickerLocales();
         PopoverModule.forRoot()
     ],
     declarations: [
+		LichSuGiaoDichsComponent,
+
+		ViewLichSuGiaoDichModalComponent,
+		CreateOrEditLichSuGiaoDichModalComponent,
+    LichSuGiaoDichUserLookupTableModalComponent,
+    LichSuGiaoDichChiTietHoaDonBaiDangLookupTableModalComponent,
+    LichSuGiaoDichUserLookupTableModalComponent,
+		ChiTietBaiDangsComponent,
+
+		ViewChiTietBaiDangModalComponent,
+		CreateOrEditChiTietBaiDangModalComponent,
+    ChiTietBaiDangThuocTinhLookupTableModalComponent,
+    ChiTietBaiDangBaiDangLookupTableModalComponent,
+		ChiTietHoaDonBaiDangsComponent,
+
+		ViewChiTietHoaDonBaiDangModalComponent,
+		CreateOrEditChiTietHoaDonBaiDangModalComponent,
+    ChiTietHoaDonBaiDangBaiDangLookupTableModalComponent,
+    ChiTietHoaDonBaiDangGoiBaiDangLookupTableModalComponent,
+    ChiTietHoaDonBaiDangUserLookupTableModalComponent,
 		BaiGhimYeuThichsComponent,
 
 		ViewBaiGhimYeuThichModalComponent,

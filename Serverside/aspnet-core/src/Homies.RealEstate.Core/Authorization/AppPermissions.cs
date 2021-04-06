@@ -6,6 +6,31 @@
     /// </summary>
     public static class AppPermissions
     {
+        public const string Pages_LichSuGiaoDichs = "Pages.LichSuGiaoDichs";
+        public const string Pages_LichSuGiaoDichs_Create = "Pages.LichSuGiaoDichs.Create";
+        public const string Pages_LichSuGiaoDichs_Edit = "Pages.LichSuGiaoDichs.Edit";
+        public const string Pages_LichSuGiaoDichs_Delete = "Pages.LichSuGiaoDichs.Delete";
+
+        public const string Pages_ChiTietBaiDangs = "Pages.ChiTietBaiDangs";
+        public const string Pages_ChiTietBaiDangs_Create = "Pages.ChiTietBaiDangs.Create";
+        public const string Pages_ChiTietBaiDangs_Edit = "Pages.ChiTietBaiDangs.Edit";
+        public const string Pages_ChiTietBaiDangs_Delete = "Pages.ChiTietBaiDangs.Delete";
+
+        public const string Pages_ChiTietHoaDonBaiDangs = "Pages.ChiTietHoaDonBaiDangs";
+        public const string Pages_ChiTietHoaDonBaiDangs_Create = "Pages.ChiTietHoaDonBaiDangs.Create";
+        public const string Pages_ChiTietHoaDonBaiDangs_Edit = "Pages.ChiTietHoaDonBaiDangs.Edit";
+        public const string Pages_ChiTietHoaDonBaiDangs_Delete = "Pages.ChiTietHoaDonBaiDangs.Delete";
+
+        public const string Pages_BaiGhimYeuThichs = "Pages.BaiGhimYeuThichs";
+        public const string Pages_BaiGhimYeuThichs_Create = "Pages.BaiGhimYeuThichs.Create";
+        public const string Pages_BaiGhimYeuThichs_Edit = "Pages.BaiGhimYeuThichs.Edit";
+        public const string Pages_BaiGhimYeuThichs_Delete = "Pages.BaiGhimYeuThichs.Delete";
+
+        public const string Pages_HinhAnhs = "Pages.HinhAnhs";
+        public const string Pages_HinhAnhs_Create = "Pages.HinhAnhs.Create";
+        public const string Pages_HinhAnhs_Edit = "Pages.HinhAnhs.Edit";
+        public const string Pages_HinhAnhs_Delete = "Pages.HinhAnhs.Delete";
+
         public const string Pages_GoiBaiDangs = "Pages.GoiBaiDangs";
         public const string Pages_GoiBaiDangs_Create = "Pages.GoiBaiDangs.Create";
         public const string Pages_GoiBaiDangs_Edit = "Pages.GoiBaiDangs.Edit";

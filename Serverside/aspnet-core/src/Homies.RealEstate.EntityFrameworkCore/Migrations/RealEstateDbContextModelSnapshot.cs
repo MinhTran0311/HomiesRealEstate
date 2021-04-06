@@ -2006,6 +2006,60 @@ namespace Homies.RealEstate.Migrations
                     b.ToTable("BaiDangs");
                 });
 
+            modelBuilder.Entity("Homies.RealEstate.Server.BaiGhimYeuThich", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BaiDangId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ThoiGian")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25) CHARACTER SET utf8mb4");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaiDangId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BaiGhimYeuThichs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietBaiDang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BaiDangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GiaTri")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int?>("ThuocTinhId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaiDangId");
+
+                    b.HasIndex("ThuocTinhId");
+
+                    b.ToTable("ChiTietBaiDangs");
+                });
+
             modelBuilder.Entity("Homies.RealEstate.Server.ChiTietDanhMuc", b =>
                 {
                     b.Property<int>("Id")
@@ -2029,6 +2083,49 @@ namespace Homies.RealEstate.Migrations
                     b.HasIndex("ThuocTinhId");
 
                     b.ToTable("ChiTietDanhMucs");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietHoaDonBaiDang", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("BaiDangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GhiChu")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
+
+                    b.Property<double>("GiaGoi")
+                        .HasColumnType("double");
+
+                    b.Property<int?>("GoiBaiDangId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoNgayMua")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ThoiDiem")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double>("TongTien")
+                        .HasColumnType("double");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaiDangId");
+
+                    b.HasIndex("GoiBaiDangId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChiTietHoaDonBaiDangs");
                 });
 
             modelBuilder.Entity("Homies.RealEstate.Server.DanhMuc", b =>
@@ -2093,6 +2190,26 @@ namespace Homies.RealEstate.Migrations
                     b.ToTable("GoiBaiDangs");
                 });
 
+            modelBuilder.Entity("Homies.RealEstate.Server.HinhAnh", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BaiDangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DuongDan")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaiDangId");
+
+                    b.ToTable("HinhAnhs");
+                });
+
             modelBuilder.Entity("Homies.RealEstate.Server.Huyen", b =>
                 {
                     b.Property<int>("Id")
@@ -2112,6 +2229,43 @@ namespace Homies.RealEstate.Migrations
                     b.HasIndex("TinhId");
 
                     b.ToTable("Huyens");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.LichSuGiaoDich", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("ChiTietHoaDonBaiDangId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("GhiChu")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4");
+
+                    b.Property<long?>("KiemDuyetVienId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("SoTien")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime>("ThoiDiem")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChiTietHoaDonBaiDangId");
+
+                    b.HasIndex("KiemDuyetVienId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LichSuGiaoDichs");
                 });
 
             modelBuilder.Entity("Homies.RealEstate.Server.ThamSo", b =>
@@ -2541,6 +2695,36 @@ namespace Homies.RealEstate.Migrations
                     b.Navigation("XaFk");
                 });
 
+            modelBuilder.Entity("Homies.RealEstate.Server.BaiGhimYeuThich", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.BaiDang", "BaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("BaiDangId");
+
+                    b.HasOne("Homies.RealEstate.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("BaiDangFk");
+
+                    b.Navigation("UserFk");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietBaiDang", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.BaiDang", "BaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("BaiDangId");
+
+                    b.HasOne("Homies.RealEstate.Server.ThuocTinh", "ThuocTinhFk")
+                        .WithMany()
+                        .HasForeignKey("ThuocTinhId");
+
+                    b.Navigation("BaiDangFk");
+
+                    b.Navigation("ThuocTinhFk");
+                });
+
             modelBuilder.Entity("Homies.RealEstate.Server.ChiTietDanhMuc", b =>
                 {
                     b.HasOne("Homies.RealEstate.Server.DanhMuc", "DanhMucFk")
@@ -2556,6 +2740,36 @@ namespace Homies.RealEstate.Migrations
                     b.Navigation("ThuocTinhFk");
                 });
 
+            modelBuilder.Entity("Homies.RealEstate.Server.ChiTietHoaDonBaiDang", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.BaiDang", "BaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("BaiDangId");
+
+                    b.HasOne("Homies.RealEstate.Server.GoiBaiDang", "GoiBaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("GoiBaiDangId");
+
+                    b.HasOne("Homies.RealEstate.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("BaiDangFk");
+
+                    b.Navigation("GoiBaiDangFk");
+
+                    b.Navigation("UserFk");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.HinhAnh", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.BaiDang", "BaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("BaiDangId");
+
+                    b.Navigation("BaiDangFk");
+                });
+
             modelBuilder.Entity("Homies.RealEstate.Server.Huyen", b =>
                 {
                     b.HasOne("Homies.RealEstate.Server.Tinh", "TinhFk")
@@ -2563,6 +2777,27 @@ namespace Homies.RealEstate.Migrations
                         .HasForeignKey("TinhId");
 
                     b.Navigation("TinhFk");
+                });
+
+            modelBuilder.Entity("Homies.RealEstate.Server.LichSuGiaoDich", b =>
+                {
+                    b.HasOne("Homies.RealEstate.Server.ChiTietHoaDonBaiDang", "ChiTietHoaDonBaiDangFk")
+                        .WithMany()
+                        .HasForeignKey("ChiTietHoaDonBaiDangId");
+
+                    b.HasOne("Homies.RealEstate.Authorization.Users.User", "KiemDuyetVienFk")
+                        .WithMany()
+                        .HasForeignKey("KiemDuyetVienId");
+
+                    b.HasOne("Homies.RealEstate.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ChiTietHoaDonBaiDangFk");
+
+                    b.Navigation("KiemDuyetVienFk");
+
+                    b.Navigation("UserFk");
                 });
 
             modelBuilder.Entity("Homies.RealEstate.Server.Xa", b =>

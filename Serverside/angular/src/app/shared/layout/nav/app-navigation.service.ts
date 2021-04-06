@@ -39,6 +39,16 @@ export class AppNavigationService {
             new AppMenuItem('BaiDangs', 'Pages.BaiDangs', 'flaticon-more', '/app/main/server/baiDangs'),
             
             new AppMenuItem('GoiBaiDangs', 'Pages.GoiBaiDangs', 'flaticon-more', '/app/main/server/goiBaiDangs'),
+            
+            new AppMenuItem('HinhAnhs', 'Pages.HinhAnhs', 'flaticon-more', '/app/main/server/hinhAnhs'),
+            
+            new AppMenuItem('BaiGhimYeuThichs', 'Pages.BaiGhimYeuThichs', 'flaticon-more', '/app/main/server/baiGhimYeuThichs'),
+            
+            new AppMenuItem('ChiTietHoaDonBaiDangs', 'Pages.ChiTietHoaDonBaiDangs', 'flaticon-more', '/app/main/server/chiTietHoaDonBaiDangs'),
+            
+            new AppMenuItem('ChiTietBaiDangs', 'Pages.ChiTietBaiDangs', 'flaticon-more', '/app/main/server/chiTietBaiDangs'),
+            
+            new AppMenuItem('LichSuGiaoDichs', 'Pages.LichSuGiaoDichs', 'flaticon-more', '/app/main/server/lichSuGiaoDichs'),
              new AppMenuItem('Administration', '', 'flaticon-interface-8', '', [], [
                 new AppMenuItem('OrganizationUnits', 'Pages.Administration.OrganizationUnits', 'flaticon-map', '/app/admin/organization-units'),
                 new AppMenuItem('Roles', 'Pages.Administration.Roles', 'flaticon-suitcase', '/app/admin/roles'),

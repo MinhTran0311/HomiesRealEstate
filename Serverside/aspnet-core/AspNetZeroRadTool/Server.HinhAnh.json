@@ -21,7 +21,7 @@
   },
   "Properties": [
     {
-      "Name": "HinhAnh",
+      "Name": "DuongDan",
       "Type": "string",
       "MaxLength": -1,
       "MinLength": -1,

@@ -17,6 +17,16 @@ namespace Homies.RealEstate.EntityFrameworkCore
 {
     public class RealEstateDbContext : AbpZeroDbContext<Tenant, Role, User, RealEstateDbContext>, IAbpPersistedGrantDbContext
     {
+        public virtual DbSet<LichSuGiaoDich> LichSuGiaoDichs { get; set; }
+
+        public virtual DbSet<ChiTietBaiDang> ChiTietBaiDangs { get; set; }
+
+        public virtual DbSet<ChiTietHoaDonBaiDang> ChiTietHoaDonBaiDangs { get; set; }
+
+        public virtual DbSet<BaiGhimYeuThich> BaiGhimYeuThichs { get; set; }
+
+        public virtual DbSet<HinhAnh> HinhAnhs { get; set; }
+
         public virtual DbSet<GoiBaiDang> GoiBaiDangs { get; set; }
 
         public virtual DbSet<BaiDang> BaiDangs { get; set; }

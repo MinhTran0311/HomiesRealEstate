@@ -30,6 +30,31 @@ namespace Homies.RealEstate.Authorization
 
             var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
 
+            var lichSuGiaoDichs = pages.CreateChildPermission(AppPermissions.Pages_LichSuGiaoDichs, L("LichSuGiaoDichs"));
+            lichSuGiaoDichs.CreateChildPermission(AppPermissions.Pages_LichSuGiaoDichs_Create, L("CreateNewLichSuGiaoDich"));
+            lichSuGiaoDichs.CreateChildPermission(AppPermissions.Pages_LichSuGiaoDichs_Edit, L("EditLichSuGiaoDich"));
+            lichSuGiaoDichs.CreateChildPermission(AppPermissions.Pages_LichSuGiaoDichs_Delete, L("DeleteLichSuGiaoDich"));
+
+            var chiTietBaiDangs = pages.CreateChildPermission(AppPermissions.Pages_ChiTietBaiDangs, L("ChiTietBaiDangs"));
+            chiTietBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietBaiDangs_Create, L("CreateNewChiTietBaiDang"));
+            chiTietBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietBaiDangs_Edit, L("EditChiTietBaiDang"));
+            chiTietBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietBaiDangs_Delete, L("DeleteChiTietBaiDang"));
+
+            var chiTietHoaDonBaiDangs = pages.CreateChildPermission(AppPermissions.Pages_ChiTietHoaDonBaiDangs, L("ChiTietHoaDonBaiDangs"));
+            chiTietHoaDonBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietHoaDonBaiDangs_Create, L("CreateNewChiTietHoaDonBaiDang"));
+            chiTietHoaDonBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietHoaDonBaiDangs_Edit, L("EditChiTietHoaDonBaiDang"));
+            chiTietHoaDonBaiDangs.CreateChildPermission(AppPermissions.Pages_ChiTietHoaDonBaiDangs_Delete, L("DeleteChiTietHoaDonBaiDang"));
+
+            var baiGhimYeuThichs = pages.CreateChildPermission(AppPermissions.Pages_BaiGhimYeuThichs, L("BaiGhimYeuThichs"));
+            baiGhimYeuThichs.CreateChildPermission(AppPermissions.Pages_BaiGhimYeuThichs_Create, L("CreateNewBaiGhimYeuThich"));
+            baiGhimYeuThichs.CreateChildPermission(AppPermissions.Pages_BaiGhimYeuThichs_Edit, L("EditBaiGhimYeuThich"));
+            baiGhimYeuThichs.CreateChildPermission(AppPermissions.Pages_BaiGhimYeuThichs_Delete, L("DeleteBaiGhimYeuThich"));
+
+            var hinhAnhs = pages.CreateChildPermission(AppPermissions.Pages_HinhAnhs, L("HinhAnhs"));
+            hinhAnhs.CreateChildPermission(AppPermissions.Pages_HinhAnhs_Create, L("CreateNewHinhAnh"));
+            hinhAnhs.CreateChildPermission(AppPermissions.Pages_HinhAnhs_Edit, L("EditHinhAnh"));
+            hinhAnhs.CreateChildPermission(AppPermissions.Pages_HinhAnhs_Delete, L("DeleteHinhAnh"));
+
             var goiBaiDangs = pages.CreateChildPermission(AppPermissions.Pages_GoiBaiDangs, L("GoiBaiDangs"));
             goiBaiDangs.CreateChildPermission(AppPermissions.Pages_GoiBaiDangs_Create, L("CreateNewGoiBaiDang"));
             goiBaiDangs.CreateChildPermission(AppPermissions.Pages_GoiBaiDangs_Edit, L("EditGoiBaiDang"));

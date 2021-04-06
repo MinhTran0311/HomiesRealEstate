@@ -1,5 +1,8 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { LichSuGiaoDichsComponent } from './server/lichSuGiaoDichs/lichSuGiaoDichs.component';
+import { ChiTietBaiDangsComponent } from './server/chiTietBaiDangs/chiTietBaiDangs.component';
+import { ChiTietHoaDonBaiDangsComponent } from './server/chiTietHoaDonBaiDangs/chiTietHoaDonBaiDangs.component';
 import { BaiGhimYeuThichsComponent } from './server/baiGhimYeuThichs/baiGhimYeuThichs.component';
 import { HinhAnhsComponent } from './server/hinhAnhs/hinhAnhs.component';
 import { GoiBaiDangsComponent } from './server/goiBaiDangs/goiBaiDangs.component';
@@ -19,6 +22,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
             {
                 path: '',
                 children: [
+                    { path: 'server/lichSuGiaoDichs', component: LichSuGiaoDichsComponent, data: { permission: 'Pages.LichSuGiaoDichs' }  },
+                    { path: 'server/chiTietBaiDangs', component: ChiTietBaiDangsComponent, data: { permission: 'Pages.ChiTietBaiDangs' }  },
+                    { path: 'server/chiTietHoaDonBaiDangs', component: ChiTietHoaDonBaiDangsComponent, data: { permission: 'Pages.ChiTietHoaDonBaiDangs' }  },
                     { path: 'server/baiGhimYeuThichs', component: BaiGhimYeuThichsComponent, data: { permission: 'Pages.BaiGhimYeuThichs' }  },
                     { path: 'server/hinhAnhs', component: HinhAnhsComponent, data: { permission: 'Pages.HinhAnhs' }  },
                     { path: 'server/goiBaiDangs', component: GoiBaiDangsComponent, data: { permission: 'Pages.GoiBaiDangs' }  },
