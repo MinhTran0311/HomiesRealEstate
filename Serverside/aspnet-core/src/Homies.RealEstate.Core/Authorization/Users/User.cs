@@ -24,6 +24,10 @@ namespace Homies.RealEstate.Authorization.Users
 
         public List<UserOrganizationUnit> OrganizationUnits { get; set; }
 
+        public string Gender { get; set; }
+
+        public double Wallet { get; set; }
+
         //Can add application specific user properties here
 
         public User()
