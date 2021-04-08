@@ -4,7 +4,9 @@ import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/token/authToken.dart';
 import 'package:sembast/sembast.dart';
+import 'network/apis/authToken/authToken_api.dart';
 
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
@@ -15,12 +17,14 @@ class Repository {
 
   // api objects
   final PostApi _postApi;
+  final AuthTokenApi _authTokenApi;
+
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -70,8 +74,14 @@ class Repository {
 
 
   // Login:---------------------------------------------------------------------
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String username, String password) async {
     return await Future.delayed(Duration(seconds: 2), ()=> true);
+  }
+
+  Future<AuthToken> authrizing(String username, String password) async {
+    //return await Future.delayed(Duration(seconds: 2), ()=> true);
+    return await _authTokenApi.getToken(username, password)
+        .catchError((error) => throw error);
   }
 
   Future<void> saveIsLoggedIn(bool value) =>

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boilerplate/stores/token/authToken_store.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
-
+  authTokenStore _authTokenStore;
   //focus node:-----------------------------------------------------------------
   FocusNode _passwordFocusNode;
 
@@ -44,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _authTokenStore = Provider.of<authTokenStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
   }
 
@@ -76,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _store.success
+              return _authTokenStore.loggedIn
                   ? navigate(context)
                   : _showErrorMessage(_store.errorStore.errorMessage);
             },
@@ -129,7 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context) {
         return TextFieldWidget(
           hint: AppLocalizations.of(context).translate('login_et_user_email'),
-          inputType: TextInputType.emailAddress,
           icon: Icons.person,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
           textController: _userEmailController,
@@ -192,7 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
       onPressed: () async {
         if (_store.canLogin) {
           DeviceUtils.hideKeyboard(context);
-          _store.login();
+          //_store.login();
+          _authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
           _showErrorMessage('Please fill in all fields');
         }
