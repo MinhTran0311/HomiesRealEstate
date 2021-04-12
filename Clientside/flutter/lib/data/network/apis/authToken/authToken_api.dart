@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-
+import '';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:dio/dio.dart';
-
+import 'dart:developer';
 class AuthTokenApi {
   // dio instance
   final DioClient _dioClient;
@@ -18,25 +18,25 @@ class AuthTokenApi {
   AuthTokenApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<AuthToken> getToken(String username, String password) async {
+  Future<AuthToken> getToken(String Username, String Password) async {
     try {
       final res = await _dioClient.post(
         "https://homies.exscanner.edu.vn/api/TokenAuth/Authenticate",
         data: {
-          "userNameOrEmailAddress": username,
-          "password": password,
+          "userNameOrEmailAddress": Username,
+          "password": Password,
         },
         options: Options(
           headers: {
-            "Content-Type": "application/json",
             "Abp.TenantId": 1,
           }
-        )
+        ),
       );
-      final Map<String, dynamic> data = json.decode(res.body);
-      return AuthToken.fromMap(data);
-    } catch (e) {
-      print(e.toString());
+      //final Map<String, dynamic> data = json.decode(res.body);
+      AuthToken a = AuthToken.fromMap(res);
+      print(res);
+      return a;
+    } on DioError catch (e) {
       throw e;
     }
   }

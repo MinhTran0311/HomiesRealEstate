@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class AuthToken {
-  String accessToken=null;
+  String accessToken;
   String encryptedAccessToken;
   int expireInSeconds;
   int userId;

@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(appComponent.getRepository());
   final LanguageStore _languageStore = LanguageStore(appComponent.getRepository());
   final UserStore _userStore = UserStore(appComponent.getRepository());
-  final  authTokenStore _tokenStore = authTokenStore(appComponent.getRepository());
+  final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,8 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
-        Provider<authTokenStore>(create: (_) => _tokenStore),
+        Provider<AuthTokenStore>(create: (_) => _authTokenStore),
+
       ],
       child: Observer(
         name: 'global-observer',

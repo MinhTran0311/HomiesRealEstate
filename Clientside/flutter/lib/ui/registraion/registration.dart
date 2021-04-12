@@ -21,13 +21,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegistrationScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -58,7 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
-      appBar: EmptyAppBar(),
+      appBar: AppBar(
+        title: Text("Đăng ký")),
       body: _buildBody(),
     );
   }
@@ -81,17 +83,17 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
-            ? Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildLeftSide(),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildRightSide(),
-                  ),
-                ],
+              ? Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: _buildLeftSide(),
+              ),
+              Expanded(
+                flex: 1,
+                child: _buildRightSide(),
+              ),
+            ],
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
@@ -136,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _buildUserIdField(),
             _buildPasswordField(),
             _buildForgotPasswordButton(),
-            _buildSignInButton(),
+            //_buildSignInButton(),
             _buildSignUpButton(),
             _buildContinueAsGuestButton(),
           ],

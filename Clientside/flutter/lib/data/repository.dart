@@ -7,7 +7,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:sembast/sembast.dart';
 import 'network/apis/authToken/authToken_api.dart';
-
+import 'dart:developer';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 
@@ -78,10 +78,12 @@ class Repository {
     return await Future.delayed(Duration(seconds: 2), ()=> true);
   }
 
-  Future<AuthToken> authrizing(String username, String password) async {
+  Future<AuthToken> authorizing(String username, String password) async {
     //return await Future.delayed(Duration(seconds: 2), ()=> true);
     return await _authTokenApi.getToken(username, password)
-        .catchError((error) => throw error);
+        .catchError((error) {
+          throw error;
+    });
   }
 
   Future<void> saveIsLoggedIn(bool value) =>

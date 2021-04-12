@@ -6,11 +6,12 @@ import 'package:dio/src/dio.dart' as _i5;
 import '../../data/network/dio_client.dart' as _i6;
 import '../../data/network/rest_client.dart' as _i7;
 import '../../data/network/apis/posts/post_api.dart' as _i8;
-import '../../data/local/datasources/post/post_datasource.dart' as _i9;
-import '../../data/repository.dart' as _i10;
-import 'dart:async' as _i11;
-import '../modules/netwok_module.dart' as _i12;
-import '../../main.dart' as _i13;
+import '../../data/network/apis/authToken/authToken_api.dart' as _i9;
+import '../../data/local/datasources/post/post_datasource.dart' as _i10;
+import '../../data/repository.dart' as _i11;
+import 'dart:async' as _i12;
+import '../modules/netwok_module.dart' as _i13;
+import '../../main.dart' as _i14;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);
@@ -29,12 +30,14 @@ class AppComponent$Injector implements _i1.AppComponent {
 
   _i8.PostApi _singletonPostApi;
 
-  _i9.PostDataSource _singletonPostDataSource;
+  _i9.AuthTokenApi _singletonAuthTokenApi;
 
-  _i10.Repository _singletonRepository;
+  _i10.PostDataSource _singletonPostDataSource;
 
-  static _i11.Future<_i1.AppComponent> create(
-      _i12.NetworkModule _,
+  _i11.Repository _singletonRepository;
+
+  static _i12.Future<_i1.AppComponent> create(
+      _i13.NetworkModule _,
       _i2.LocalModule localModule,
       _i3.PreferenceModule preferenceModule) async {
     final injector = AppComponent$Injector._(localModule, preferenceModule);
@@ -42,10 +45,13 @@ class AppComponent$Injector implements _i1.AppComponent {
     return injector;
   }
 
-  _i13.MyApp _createMyApp() => _i13.MyApp();
-  _i10.Repository _createRepository() =>
-      _singletonRepository ??= _localModule.provideRepository(_createPostApi(),
-          _createSharedPreferenceHelper(), _createPostDataSource());
+  _i14.MyApp _createMyApp() => _i14.MyApp();
+  _i11.Repository _createRepository() =>
+      _singletonRepository ??= _localModule.provideRepository(
+          _createPostApi(),
+          _createAuthTokenApi(),
+          _createSharedPreferenceHelper(),
+          _createPostDataSource());
   _i8.PostApi _createPostApi() => _singletonPostApi ??=
       _localModule.providePostApi(_createDioClient(), _createRestClient());
   _i6.DioClient _createDioClient() =>
@@ -57,10 +63,12 @@ class AppComponent$Injector implements _i1.AppComponent {
           _preferenceModule.provideSharedPreferenceHelper();
   _i7.RestClient _createRestClient() =>
       _singletonRestClient ??= _localModule.provideRestClient();
-  _i9.PostDataSource _createPostDataSource() =>
+  _i9.AuthTokenApi _createAuthTokenApi() => _singletonAuthTokenApi ??=
+      _localModule.provideAuthTokenApi(_createDioClient(), _createRestClient());
+  _i10.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();
   @override
-  _i13.MyApp get app => _createMyApp();
+  _i14.MyApp get app => _createMyApp();
   @override
-  _i10.Repository getRepository() => _createRepository();
+  _i11.Repository getRepository() => _createRepository();
 }
