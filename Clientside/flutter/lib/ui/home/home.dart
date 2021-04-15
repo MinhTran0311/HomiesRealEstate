@@ -1,8 +1,10 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/token/authToken_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -22,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   PostStore _postStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
+  AuthTokenStore _authTokenStore;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _postStore = Provider.of<PostStore>(context);
-
+    _authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts();
@@ -87,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
+          _authTokenStore.loggedIn=false;
           Navigator.of(context).pushReplacementNamed(Routes.login);
         });
       },

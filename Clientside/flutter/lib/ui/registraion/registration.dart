@@ -30,8 +30,12 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   //text controllers:-----------------------------------------------------------
-  TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _userEmailController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
@@ -60,7 +64,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        title: Text("Đăng ký")),
+        title: Text(
+          "Đăng ký",
+          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
+
       body: _buildBody(),
     );
   }
@@ -133,45 +143,103 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            //SizedBox(height: 24.0),
+            _buildSurnameField(),
             SizedBox(height: 24.0),
-            _buildUserIdField(),
+            _buildNameField(),
+            SizedBox(height: 24.0),
+            _buildUserNameField(),
+            SizedBox(height: 24.0),
             _buildPasswordField(),
-            _buildForgotPasswordButton(),
-            //_buildSignInButton(),
+            SizedBox(height: 24.0),
+            _buildPhoneNumber(),
+            SizedBox(height: 24.0),
+            _buildUserEmail(),
+            SizedBox(height: 24.0),
             _buildSignUpButton(),
-            _buildContinueAsGuestButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserIdField() {
+  Widget _buildSurnameField() {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Tên đăng nhập'),
+          hint: ('Họ'),
           hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
           iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _userEmailController,
+          textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setUserId(_userEmailController.text);
-          },
-          onFieldSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_passwordFocusNode);
-          },
           errorText: _store.formErrorStore.userEmail,
         );
       },
     );
   }
+  Widget _buildNameField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Tên'),
+          hintColor: Colors.white,
+          icon: Icons.person_add,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _nameController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
 
+          errorText: _store.formErrorStore.userEmail,
+        );
+      },
+    );
+  }
+  Widget _buildUserNameField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Tên đăng nhập'),
+
+          hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _userNameController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+
+          errorText: _store.formErrorStore.userEmail,
+        );
+      },
+    );
+  }
+  Widget _buildPhoneNumber() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Số điện thoại'),
+          hintColor: Colors.white,
+          icon: Icons.phone,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _phoneNumberController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+
+          errorText: _store.formErrorStore.userEmail,
+        );
+      },
+    );
+  }
   Widget _buildPasswordField() {
     return Observer(
       builder: (context) {
@@ -180,7 +248,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           hint: ('Mật khẩu'),
           hintColor: Colors.white,
           isObscure: true,
-          padding: EdgeInsets.only(top: 16.0),
           icon: Icons.vpn_key,
           iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
           textController: _passwordController,
@@ -193,46 +260,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
     );
   }
-
-  Widget _buildForgotPasswordButton() {
-    return Align(
-      alignment: FractionalOffset.centerRight,
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
-        child: Text(
-          "Quên mật khẩu?",
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
-
-  Widget _buildSignInButton() {
-    return RoundedButtonWidget(
-      buttonText: ('Đăng nhập'),
-      buttonColor: Colors.orangeAccent,
-      textColor: Colors.white,
-      onPressed: () async {
-        log("Login clicked");
-        if (_store.canLogin) {
-          DeviceUtils.hideKeyboard(context);
-          _authTokenStore.authLogIn(_store.userEmail,_store.password);
-          //_authTokenStore.authLogIn(_store.userEmail, _store.password);
-        } else {
-          _showErrorMessage('Please fill in all fields');
-        }
+  Widget _buildUserEmail() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Email'),
+          hintColor: Colors.white,
+          icon: Icons.email_rounded,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _userEmailController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorText: _store.formErrorStore.userEmail,
+        );
       },
     );
   }
-
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Đăng ký'),
-      buttonColor: Colors.grey,
+      buttonColor: Colors.black87,
       textColor: Colors.white,
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
@@ -244,32 +293,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _buildContinueAsGuestButton() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 54,vertical: 8),
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-            SizedBox(width: 5,),
-            Text(
-              "Tiếp tục với tư cách khách",
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
-            ),
-          ],
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
 
   Widget navigate(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {

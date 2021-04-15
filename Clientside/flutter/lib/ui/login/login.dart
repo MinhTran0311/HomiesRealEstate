@@ -230,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Đăng ký'),
-      buttonColor: Colors.grey,
+      buttonColor: Colors.black87,
       textColor: Colors.white,
       onPressed: () {
         SharedPreferences.getInstance().then((preference) {
