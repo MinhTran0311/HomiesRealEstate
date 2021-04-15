@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
@@ -78,6 +79,10 @@ class NetworkModule extends PreferenceModule {
   @singleton
   PostApi providePostApi(DioClient dioClient, RestClient restClient) =>
       PostApi(dioClient, restClient);
+  @provide
+  @singleton
+  AuthTokenApi provideAuthTokenApi(DioClient dioClient, RestClient restClient)=>
+      AuthTokenApi(dioClient, restClient);
 // Api Providers End:---------------------------------------------------------
 
 }

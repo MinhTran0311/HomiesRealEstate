@@ -78,10 +78,11 @@ abstract class _FormStore with Store {
   @action
   void validateUserEmail(String value) {
     if (value.isEmpty) {
-      formErrorStore.userEmail = "Email can't be empty";
-    } else if (!isEmail(value)) {
-      formErrorStore.userEmail = 'Please enter a valid email address';
-    } else {
+      formErrorStore.userEmail = "Chưa điền tên đăng nhập";
+    //} else if (!isEmail(value)) {
+    //  formErrorStore.userEmail = 'Please enter a valid email address';
+    }
+    else {
       formErrorStore.userEmail = null;
     }
   }
@@ -89,9 +90,9 @@ abstract class _FormStore with Store {
   @action
   void validatePassword(String value) {
     if (value.isEmpty) {
-      formErrorStore.password = "Password can't be empty";
+      formErrorStore.password = "Chưa điền mật khẩu";
     } else if (value.length < 6) {
-      formErrorStore.password = "Password must be at-least 6 characters long";
+      formErrorStore.password = "Mật khẩu phải có ít nhất 6 kí tự";
     } else {
       formErrorStore.password = null;
     }
@@ -100,9 +101,9 @@ abstract class _FormStore with Store {
   @action
   void validateConfirmPassword(String value) {
     if (value.isEmpty) {
-      formErrorStore.confirmPassword = "Confirm password can't be empty";
+      formErrorStore.confirmPassword = "Chưa điền mật khẩu xác nhận";
     } else if (value != password) {
-      formErrorStore.confirmPassword = "Password doen't match";
+      formErrorStore.confirmPassword = "Mật khẩu chưa đúng";
     } else {
       formErrorStore.confirmPassword = null;
     }
@@ -124,8 +125,8 @@ abstract class _FormStore with Store {
       loading = false;
       success = false;
       errorStore.errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
-          ? "Username and password doesn't match"
-          : "Something went wrong, please check your internet connection and try again";
+          ? "Tên đăng nhập và mật khẩu không đúng"
+          : "Đã có lỗi xảy ra, hãy kiểm tra lại kết nối mạng và thử lại";
       print(e);
     });
   }

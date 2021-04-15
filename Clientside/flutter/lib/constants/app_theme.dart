@@ -24,9 +24,11 @@ import 'package:boilerplate/constants/font_family.dart';
  */
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData themeData = new ThemeData(
-    fontFamily: FontFamily.productSans,
+    textTheme: GoogleFonts.mavenProTextTheme(),
+    fontFamily: FontFamily.marven,
     brightness: Brightness.light,
     primarySwatch: MaterialColor(AppColors.orange[500].value, AppColors.orange),
     primaryColor: AppColors.orange[500],
@@ -36,7 +38,8 @@ final ThemeData themeData = new ThemeData(
 );
 
 final ThemeData themeDataDark = ThemeData(
-  fontFamily: FontFamily.productSans,
+  textTheme: GoogleFonts.mavenProTextTheme(),
+  fontFamily: FontFamily.marven,
   brightness: Brightness.dark,
   primaryColor: AppColors.orange[500],
   primaryColorBrightness: Brightness.dark,
