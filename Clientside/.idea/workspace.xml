@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="50324c06-d8eb-4553-b8d0-ca5eac7f9fb6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/flutter/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter/pubspec.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="50324c06-d8eb-4553-b8d0-ca5eac7f9fb6" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,7 +20,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/flutter" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
