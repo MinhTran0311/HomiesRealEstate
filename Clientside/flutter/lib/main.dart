@@ -5,6 +5,7 @@ import 'package:boilerplate/di/modules/local_module.dart';
 import 'package:boilerplate/di/modules/netwok_module.dart';
 import 'package:boilerplate/di/modules/preference_module.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
   final LanguageStore _languageStore = LanguageStore(appComponent.getRepository());
   final UserStore _userStore = UserStore(appComponent.getRepository());
   final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
+  //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
-
+        //Provider<FormStore>(create: (_) => _formStore),
       ],
       child: Observer(
         name: 'global-observer',

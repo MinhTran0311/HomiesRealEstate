@@ -34,7 +34,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
@@ -44,7 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   FocusNode _passwordFocusNode;
 
   //stores:---------------------------------------------------------------------
-  final _store = FormStore();
+  final FormStore _store = new FormStore();
 
   @override
   void initState() {
@@ -55,6 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    //_store = Provider.of<FormStore>(context);
     _authTokenStore = Provider.of<AuthTokenStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
   }
@@ -107,15 +108,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _authTokenStore.loggedIn
+              return _store.regist_success
                   ? navigate(context)
-                  : _showErrorMessage(_authTokenStore.errorStore.errorMessage);
+                  : _showErrorMessage(_store.errorStore.errorMessage);
             },
           ),
           Observer(
             builder: (context) {
               return Visibility(
-                visible: _store.loading,
+                visible: _store.regist_loading,
                 child: CustomProgressIndicatorWidget(),
               );
             },
@@ -153,7 +154,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             SizedBox(height: 24.0),
             _buildPasswordField(),
             SizedBox(height: 24.0),
-            _buildPhoneNumber(),
+            _buildConfirmPasswordField(),
             SizedBox(height: 24.0),
             _buildUserEmail(),
             SizedBox(height: 24.0),
@@ -163,7 +164,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
-
+//#region build TextFieldWidget
   Widget _buildSurnameField() {
     return Observer(
       builder: (context) {
@@ -177,7 +178,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          errorText: _store.formErrorStore.userEmail,
+          onChanged: (value) {
+            _store.setSurname(_surnameController.text);
+          },
+          errorText: _store.formErrorStore.surname,
         );
       },
     );
@@ -195,8 +199,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _nameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-
-          errorText: _store.formErrorStore.userEmail,
+          onChanged: (value) {
+            _store.setName(_nameController.text);
+          },
+          errorText: _store.formErrorStore.name,
         );
       },
     );
@@ -207,7 +213,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
-
           hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
@@ -215,31 +220,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-
-          errorText: _store.formErrorStore.userEmail,
+          onChanged: (value) {
+            _store.setUserId(_userNameController.text);
+          },
+          errorText: _store.formErrorStore.username,
         );
       },
     );
   }
-  Widget _buildPhoneNumber() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Số điện thoại'),
-          hintColor: Colors.white,
-          icon: Icons.phone,
-          inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _phoneNumberController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
 
-          errorText: _store.formErrorStore.userEmail,
-        );
-      },
-    );
-  }
   Widget _buildPasswordField() {
     return Observer(
       builder: (context) {
@@ -260,6 +249,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
     );
   }
+
+  Widget _buildConfirmPasswordField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Nhập lại mật khẩu'),
+          hintColor: Colors.white,
+          isObscure: true,
+          icon: Icons.vpn_key,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _confirmPasswordController,
+          autoFocus: false,
+          errorText: _store.formErrorStore.confirmPassword,
+          onChanged: (value) {
+            _store.setConfirmPassword(_confirmPasswordController.text);
+          },
+        );
+      },
+    );
+  }
+
+
   Widget _buildUserEmail() {
     return Observer(
       builder: (context) {
@@ -273,6 +285,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
+          onChanged: (value) {
+            _store.setUserEmail(_userEmailController.text);
+          },
           errorText: _store.formErrorStore.userEmail,
         );
       },
@@ -284,24 +299,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       buttonColor: Colors.black87,
       textColor: Colors.white,
       onPressed: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
+        //SharedPreferences.getInstance().then((preference) {
+         // preference.setBool(Preferences.is_logged_in, false);
           //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
-          Navigator.pushNamed(context, '/signup');
-        });
+          _store.register();
+        //});
       },
     );
   }
-
+//endregion
 
   Widget navigate(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, true);
+      prefs.setBool(Preferences.is_logged_in, false);
     });
-    log("zxmnczxmcnm,xcnzxm,");
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
+      Navigator.of(context).pop();
     });
 
     return Container();
@@ -326,8 +339,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
-    _userEmailController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _userNameController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _userEmailController.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }

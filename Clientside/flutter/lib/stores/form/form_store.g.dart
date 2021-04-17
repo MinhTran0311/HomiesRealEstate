@@ -30,18 +30,48 @@ mixin _$FormStore on _FormStore, Store {
           name: '_FormStore.canForgetPassword'))
       .value;
 
-  final _$userEmailAtom = Atom(name: '_FormStore.userEmail');
+  final _$surnameAtom = Atom(name: '_FormStore.surname');
 
   @override
-  String get userEmail {
-    _$userEmailAtom.reportRead();
-    return super.userEmail;
+  String get surname {
+    _$surnameAtom.reportRead();
+    return super.surname;
   }
 
   @override
-  set userEmail(String value) {
-    _$userEmailAtom.reportWrite(value, super.userEmail, () {
-      super.userEmail = value;
+  set surname(String value) {
+    _$surnameAtom.reportWrite(value, super.surname, () {
+      super.surname = value;
+    });
+  }
+
+  final _$nameAtom = Atom(name: '_FormStore.name');
+
+  @override
+  String get name {
+    _$nameAtom.reportRead();
+    return super.name;
+  }
+
+  @override
+  set name(String value) {
+    _$nameAtom.reportWrite(value, super.name, () {
+      super.name = value;
+    });
+  }
+
+  final _$usernameAtom = Atom(name: '_FormStore.username');
+
+  @override
+  String get username {
+    _$usernameAtom.reportRead();
+    return super.username;
+  }
+
+  @override
+  set username(String value) {
+    _$usernameAtom.reportWrite(value, super.username, () {
+      super.username = value;
     });
   }
 
@@ -75,6 +105,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$userEmailAtom = Atom(name: '_FormStore.userEmail');
+
+  @override
+  String get userEmail {
+    _$userEmailAtom.reportRead();
+    return super.userEmail;
+  }
+
+  @override
+  set userEmail(String value) {
+    _$userEmailAtom.reportWrite(value, super.userEmail, () {
+      super.userEmail = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_FormStore.success');
 
   @override
@@ -90,6 +135,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$regist_successAtom = Atom(name: '_FormStore.regist_success');
+
+  @override
+  bool get regist_success {
+    _$regist_successAtom.reportRead();
+    return super.regist_success;
+  }
+
+  @override
+  set regist_success(bool value) {
+    _$regist_successAtom.reportWrite(value, super.regist_success, () {
+      super.regist_success = value;
+    });
+  }
+
   final _$loadingAtom = Atom(name: '_FormStore.loading');
 
   @override
@@ -102,6 +162,21 @@ mixin _$FormStore on _FormStore, Store {
   set loading(bool value) {
     _$loadingAtom.reportWrite(value, super.loading, () {
       super.loading = value;
+    });
+  }
+
+  final _$fetchRegistFutureAtom = Atom(name: '_FormStore.fetchRegistFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchRegistFuture {
+    _$fetchRegistFutureAtom.reportRead();
+    return super.fetchRegistFuture;
+  }
+
+  @override
+  set fetchRegistFuture(ObservableFuture<dynamic> value) {
+    _$fetchRegistFutureAtom.reportWrite(value, super.fetchRegistFuture, () {
+      super.fetchRegistFuture = value;
     });
   }
 
@@ -147,6 +222,39 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  void setSurname(String value) {
+    final _$actionInfo =
+        _$_FormStoreActionController.startAction(name: '_FormStore.setSurname');
+    try {
+      return super.setSurname(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setName(String value) {
+    final _$actionInfo =
+        _$_FormStoreActionController.startAction(name: '_FormStore.setName');
+    try {
+      return super.setName(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setUserEmail(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setUserEmail');
+    try {
+      return super.setUserEmail(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setPassword(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.setPassword');
@@ -169,11 +277,33 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
-  void validateUserEmail(String value) {
+  void validateSurname(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
-        name: '_FormStore.validateUserEmail');
+        name: '_FormStore.validateSurname');
     try {
-      return super.validateUserEmail(value);
+      return super.validateSurname(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateName(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateName');
+    try {
+      return super.validateName(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateUsername(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateUsername');
+    try {
+      return super.validateUsername(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }
@@ -202,13 +332,29 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  void validateUserEmail(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateUserEmail');
+    try {
+      return super.validateUserEmail(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-userEmail: ${userEmail},
+surname: ${surname},
+name: ${name},
+username: ${username},
 password: ${password},
 confirmPassword: ${confirmPassword},
+userEmail: ${userEmail},
 success: ${success},
+regist_success: ${regist_success},
 loading: ${loading},
+fetchRegistFuture: ${fetchRegistFuture},
 canLogin: ${canLogin},
 canRegister: ${canRegister},
 canForgetPassword: ${canForgetPassword}
@@ -239,18 +385,48 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
               name: '_FormErrorStore.hasErrorInForgotPassword'))
       .value;
 
-  final _$userEmailAtom = Atom(name: '_FormErrorStore.userEmail');
+  final _$surnameAtom = Atom(name: '_FormErrorStore.surname');
 
   @override
-  String get userEmail {
-    _$userEmailAtom.reportRead();
-    return super.userEmail;
+  String get surname {
+    _$surnameAtom.reportRead();
+    return super.surname;
   }
 
   @override
-  set userEmail(String value) {
-    _$userEmailAtom.reportWrite(value, super.userEmail, () {
-      super.userEmail = value;
+  set surname(String value) {
+    _$surnameAtom.reportWrite(value, super.surname, () {
+      super.surname = value;
+    });
+  }
+
+  final _$nameAtom = Atom(name: '_FormErrorStore.name');
+
+  @override
+  String get name {
+    _$nameAtom.reportRead();
+    return super.name;
+  }
+
+  @override
+  set name(String value) {
+    _$nameAtom.reportWrite(value, super.name, () {
+      super.name = value;
+    });
+  }
+
+  final _$usernameAtom = Atom(name: '_FormErrorStore.username');
+
+  @override
+  String get username {
+    _$usernameAtom.reportRead();
+    return super.username;
+  }
+
+  @override
+  set username(String value) {
+    _$usernameAtom.reportWrite(value, super.username, () {
+      super.username = value;
     });
   }
 
@@ -284,12 +460,30 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
     });
   }
 
+  final _$userEmailAtom = Atom(name: '_FormErrorStore.userEmail');
+
+  @override
+  String get userEmail {
+    _$userEmailAtom.reportRead();
+    return super.userEmail;
+  }
+
+  @override
+  set userEmail(String value) {
+    _$userEmailAtom.reportWrite(value, super.userEmail, () {
+      super.userEmail = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-userEmail: ${userEmail},
+surname: ${surname},
+name: ${name},
+username: ${username},
 password: ${password},
 confirmPassword: ${confirmPassword},
+userEmail: ${userEmail},
 hasErrorsInLogin: ${hasErrorsInLogin},
 hasErrorsInRegister: ${hasErrorsInRegister},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
