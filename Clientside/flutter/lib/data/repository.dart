@@ -5,11 +5,13 @@ import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
+import 'package:boilerplate/models/user/user_list.dart';
 import 'package:sembast/sembast.dart';
 import 'network/apis/authToken/authToken_api.dart';
 import 'dart:developer';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
+import 'network/apis/users/user_api.dart';
 
 class Repository {
   // data source object
@@ -18,13 +20,14 @@ class Repository {
   // api objects
   final PostApi _postApi;
   final AuthTokenApi _authTokenApi;
+  final UserApi _userApi;
 
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._userApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -39,6 +42,14 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+
+  //User: ----------------------------------------------------------------------
+  Future<UserList> getAllUsers() async {
+    return await _userApi.getAllUsers().then((usersList) {
+      return usersList;
+      }).catchError((error) => throw error);
+  }
+
 
   Future<List<Post>> findPostById(int id) {
     //creating filter
