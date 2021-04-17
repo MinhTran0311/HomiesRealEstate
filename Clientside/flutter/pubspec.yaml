@@ -15,9 +15,12 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
   
 dependencies:
+  circular_profile_avatar: ^1.0.8
+
   flutter:
     sdk: flutter
 
+  image_picker: ^0.6.7+6
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
@@ -59,7 +62,7 @@ dependencies:
   # This package provides internationalization and localization facilities, including message
   # translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: ^0.16.1
-
+  google_fonts: ^1.0.0
   # Dependency injection
   inject:
     git:

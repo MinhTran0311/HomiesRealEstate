@@ -9,6 +9,7 @@ import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/stores/token/authToken_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/ui/splash/splash.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
   final PostStore _postStore = PostStore(appComponent.getRepository());
   final LanguageStore _languageStore = LanguageStore(appComponent.getRepository());
   final UserStore _userStore = UserStore(appComponent.getRepository());
+  final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,8 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<PostStore>(create: (_) => _postStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
+        Provider<AuthTokenStore>(create: (_) => _authTokenStore),
+
       ],
       child: Observer(
         name: 'global-observer',

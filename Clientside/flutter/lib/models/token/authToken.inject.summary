@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/models/token/authToken.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final IconData icon;
@@ -16,6 +17,7 @@ class TextFieldWidget extends StatelessWidget {
   final ValueChanged onChanged;
   final bool autoFocus;
   final TextInputAction inputAction;
+  final double inputFontsize;
 
   const TextFieldWidget({
     Key key,
@@ -34,6 +36,7 @@ class TextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.autoFocus = false,
     this.inputAction,
+    this.inputFontsize=20,
   }) : super(key: key);
 
   @override
@@ -50,11 +53,11 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         maxLength: 25,
         keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.body1,
+        style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.white),
         decoration: InputDecoration(
             hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.body1.copyWith(color: hintColor),
+            hintStyle: GoogleFonts.mavenPro(fontSize: (this.inputFontsize-3),color: Colors.white),
+                //Theme.of(context).textTheme.body1.copyWith(color: hintColor),
             errorText: errorText,
             counterText: '',
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
