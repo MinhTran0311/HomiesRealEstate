@@ -4,6 +4,7 @@ import 'ui/home/home.dart';
 import 'ui/login/login.dart';
 import 'ui/splash/splash.dart';
 import 'ui/registraion/registration.dart';
+import 'ui/homepage/homepage.dart';
 
 class Routes {
   Routes._();
@@ -17,7 +18,7 @@ class Routes {
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
     login: (BuildContext context) => LoginScreen(),
-    home: (BuildContext context) => HomeScreen(),
+    home: (BuildContext context) => HomePageScreen(),
     signup: (BuildContext context) => RegistrationScreen(),
   };
 }
