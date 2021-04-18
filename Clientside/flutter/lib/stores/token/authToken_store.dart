@@ -47,9 +47,9 @@ abstract class _AuthTokenStore with Store{
       this.authToken = newauthToken;
       if (authToken.accessToken!=null){
         loggedIn=true;
-        SharedPreferences.getInstance().then((preference) {
-          preference.setString(Preferences.access_token, this.authToken.accessToken);});
-        Preferences.access_token = this.authToken.accessToken;
+        // SharedPreferences.getInstance().then((preference) {
+        //   preference.setString(Preferences.access_token, this.authToken.accessToken);});
+        // Preferences.access_token = this.authToken.accessToken;
       }
       else {
         loggedIn = false;

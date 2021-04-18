@@ -9,11 +9,11 @@ import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/network/apis/authToken/authToken_api.dart' as _i9;
 import '../../data/network/apis/users/user_api.dart' as _i10;
 import '../../data/local/datasources/post/post_datasource.dart' as _i11;
-import '../../data/network/apis/registration/registration_api.dart' as _i11;
-import '../../data/repository.dart' as _i12;
-import 'dart:async' as _i13;
-import '../modules/netwok_module.dart' as _i14;
-import '../../main.dart' as _i15;
+import '../../data/network/apis/registration/registration_api.dart' as _i12;
+import '../../data/repository.dart' as _i13;
+import 'dart:async' as _i14;
+import '../modules/netwok_module.dart' as _i15;
+import '../../main.dart' as _i16;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);
@@ -37,12 +37,13 @@ class AppComponent$Injector implements _i1.AppComponent {
   _i10.UserApi _singletonUserApi;
 
   _i11.PostDataSource _singletonPostDataSource;
-  _i11.RegistrationApi _singletonRegistrationApi;
 
-  _i12.Repository _singletonRepository;
+  _i12.RegistrationApi _singletonRegistrationApi;
 
-  static _i13.Future<_i1.AppComponent> create(
-      _i14.NetworkModule _,
+  _i13.Repository _singletonRepository;
+
+  static _i14.Future<_i1.AppComponent> create(
+      _i15.NetworkModule _,
       _i2.LocalModule localModule,
       _i3.PreferenceModule preferenceModule) async {
     final injector = AppComponent$Injector._(localModule, preferenceModule);
@@ -50,8 +51,8 @@ class AppComponent$Injector implements _i1.AppComponent {
     return injector;
   }
 
-  _i15.MyApp _createMyApp() => _i15.MyApp();
-  _i12.Repository _createRepository() =>
+  _i16.MyApp _createMyApp() => _i16.MyApp();
+  _i13.Repository _createRepository() =>
       _singletonRepository ??= _localModule.provideRepository(
           _createPostApi(),
           _createAuthTokenApi(),
@@ -76,11 +77,11 @@ class AppComponent$Injector implements _i1.AppComponent {
       _localModule.provideUserApi(_createDioClient(), _createRestClient());
   _i11.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();
-  _i11.RegistrationApi _createRegistrationApi() =>
+  _i12.RegistrationApi _createRegistrationApi() =>
       _singletonRegistrationApi ??= _localModule.provideRegistrationApi(
           _createDioClient(), _createRestClient());
   @override
-  _i15.MyApp get app => _createMyApp();
+  _i16.MyApp get app => _createMyApp();
   @override
-  _i12.Repository getRepository() => _createRepository();
+  _i13.Repository getRepository() => _createRepository();
 }

@@ -1,9 +1,11 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
 
 import '../../main.dart';
@@ -237,6 +239,9 @@ abstract class _FormStore with Store {
       this.authToken = newauthToken;
       if (authToken.accessToken!=null){
         loggedIn = true;
+        SharedPreferences.getInstance().then((preference) {
+          preference.setString(Preferences.access_token, this.authToken.accessToken);});
+        Preferences.access_token = this.authToken.accessToken;
       }
       else {
         loggedIn = false;
