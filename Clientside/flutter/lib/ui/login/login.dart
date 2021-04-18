@@ -29,17 +29,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   //text controllers:-----------------------------------------------------------
-  TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
-  AuthTokenStore _authTokenStore;
   //focus node:-----------------------------------------------------------------
   FocusNode _passwordFocusNode;
 
   //stores:---------------------------------------------------------------------
-  final _store = FormStore();
+  final FormStore _store = new FormStore();
 
   @override
   void initState() {
@@ -50,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _authTokenStore = Provider.of<AuthTokenStore>(context);
+    //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
   }
 
@@ -59,7 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       primary: true,
       appBar: EmptyAppBar(),
-      body: _buildBody(),
+      body: Stack(
+        children: <Widget>[
+          _handleErrorMessage(),
+          _buildBody(),
+        ]
+      )
     );
   }
 
@@ -95,9 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _authTokenStore.loggedIn
+              return _store.loggedIn
                   ? navigate(context)
-                  : _showErrorMessage(_authTokenStore.errorStore.errorMessage);
+                  : _showErrorMessage(_store.errorStore.errorMessage);
             },
           ),
           Observer(
@@ -155,16 +159,16 @@ class _LoginScreenState extends State<LoginScreen> {
           icon: Icons.person,
           inputType: TextInputType.text,
           iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _userEmailController,
+          textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
           onChanged: (value) {
-            _store.setUserId(_userEmailController.text);
+            _store.setUserId(_userNameController.text);
           },
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_passwordFocusNode);
           },
-          errorText: _store.formErrorStore.userEmail,
+          errorText: _store.formErrorStore.username,
         );
       },
     );
@@ -218,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
         log("Login clicked");
         if (_store.canLogin) {
           DeviceUtils.hideKeyboard(context);
-          _authTokenStore.authLogIn(_store.userEmail,_store.password);
+          _store.authLogIn(_userNameController.text,_passwordController.text);
           //_authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
           _showErrorMessage('Please fill in all fields');
@@ -281,6 +285,17 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container();
   }
 
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_store.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_store.errorStore.errorMessage);
+        }
+        return SizedBox.shrink();
+      },
+    );
+  }
+
   // General Methods:-----------------------------------------------------------
   _showErrorMessage( String message) {
     Future.delayed(Duration(milliseconds: 0), () {
@@ -288,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
         FlushbarHelper.createError(
           message: message,
           title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 5),
         )..show(context);
       }
     });
@@ -300,7 +315,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
-    _userEmailController.dispose();
+    _userNameController.dispose();
     _passwordController.dispose();
     _passwordFocusNode.dispose();
     super.dispose();

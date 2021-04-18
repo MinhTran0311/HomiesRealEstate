@@ -5,6 +5,7 @@ import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
+import 'package:boilerplate/data/network/apis/registration/registration_api.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/utils/encryption/xxtea.dart';
@@ -82,6 +83,7 @@ class LocalModule extends NetworkModule {
     UserApi userApi,
     SharedPreferenceHelper preferenceHelper,
     PostDataSource postDataSource,
+    RegistrationApi registrationApi,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, userApi);
+      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi);
 }

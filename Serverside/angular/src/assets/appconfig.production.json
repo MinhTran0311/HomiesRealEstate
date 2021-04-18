@@ -1,6 +1,6 @@
 ﻿{
-  "remoteServiceBaseUrl": "https://localhost:44301",
-  "appBaseUrl": "http://localhost:4200",
+  "remoteServiceBaseUrl": "https://homies.exscanner.edu.vn/",
+  "appBaseUrl": "https://admin.homies.exscanner.edu.vn/",
   "localeMappings": {
     "angular": [
       {

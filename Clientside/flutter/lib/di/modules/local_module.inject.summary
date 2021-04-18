@@ -128,6 +128,11 @@
             "injectedType": {
               "lookupKey": {
                 "root": "asset:boilerplate/lib/data/network/apis/users/user_api.dart#UserApi",
+            "name": "provideRegistrationApi",
+            "kind": "method",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:boilerplate/lib/data/network/apis/registration/registration_api.dart#RegistrationApi",
                 "qualifier": null
               },
               "isProvider": false
@@ -251,6 +256,13 @@
               {
                 "lookupKey": {
                   "root": "asset:boilerplate/lib/data/local/datasources/post/post_datasource.dart#PostDataSource",
+                  "qualifier": null
+                },
+                "isProvider": false
+              },
+              {
+                "lookupKey": {
+                  "root": "asset:boilerplate/lib/data/network/apis/registration/registration_api.dart#RegistrationApi",
                   "qualifier": null
                 },
                 "isProvider": false

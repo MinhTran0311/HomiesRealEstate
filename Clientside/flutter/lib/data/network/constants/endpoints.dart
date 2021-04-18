@@ -8,7 +8,7 @@ class Endpoints {
   static const String homiesUrl = "https://homies.exscanner.edu.vn/api";
 
   // receiveTimeout
-  static const int receiveTimeout = 5000;
+  static const int receiveTimeout = 7000;
 
   // connectTimeout
   static const int connectionTimeout = 6000;

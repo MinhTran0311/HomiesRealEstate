@@ -34,9 +34,8 @@ class AuthTokenApi {
       );
       //final Map<String, dynamic> data = json.decode(res.body);
       AuthToken a = AuthToken.fromMap(res);
-      print(res);
       return a;
-    } on DioError catch (e) {
+    } catch (e) {
       throw e;
     }
   }

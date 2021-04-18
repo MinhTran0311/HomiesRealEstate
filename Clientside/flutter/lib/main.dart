@@ -6,6 +6,7 @@ import 'package:boilerplate/di/modules/netwok_module.dart';
 import 'package:boilerplate/di/modules/preference_module.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -55,6 +56,8 @@ class MyApp extends StatelessWidget {
   final UserStore _userStore = UserStore(appComponent.getRepository());
   final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
   final UserManagementStore _userManagementStore = UserManagementStore(appComponent.getRepository());
+  //final FormStore _formStore = FormStore(appComponent.getRepository());
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -65,6 +68,7 @@ class MyApp extends StatelessWidget {
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
 
+        //Provider<FormStore>(create: (_) => _formStore),
       ],
       child: Observer(
         name: 'global-observer',

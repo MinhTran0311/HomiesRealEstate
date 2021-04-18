@@ -10,7 +10,7 @@ import { ViewXaModalComponent } from "./view-xa-modal.component";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/public_api";
+import { LazyLoadEvent } from "primeng/api/public_api";
 import { FileDownloadService } from "@shared/utils/file-download.service";
 import { filter as _filter } from "lodash-es";
 import { DateTime } from "luxon";

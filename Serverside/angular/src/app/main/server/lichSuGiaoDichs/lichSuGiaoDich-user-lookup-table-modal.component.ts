@@ -4,7 +4,7 @@ import { LichSuGiaoDichsServiceProxy, LichSuGiaoDichUserLookupTableDto } from "@
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/public_api";
+import { LazyLoadEvent } from "primeng/api/public_api";
 @Component({
     selector: "lichSuGiaoDichUserLookupTableModal",
     styleUrls: ["./lichSuGiaoDich-user-lookup-table-modal.component.less"],

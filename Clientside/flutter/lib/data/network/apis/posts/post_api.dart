@@ -21,7 +21,6 @@ class PostApi {
       final res = await _dioClient.get(Endpoints.getPosts);
       return PostList.fromJson(res);
     } catch (e) {
-      print(e.toString());
       throw e;
     }
   }
