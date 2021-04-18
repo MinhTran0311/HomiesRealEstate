@@ -23,30 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2d7158b-b0eb-4024-87f8-d9dd0c66d2f2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/constants/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/constants/strings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/authToken/authToken_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/authToken/authToken_api.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/constants/endpoints.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/constants/endpoints.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/constants/preferences.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/constants/preferences.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/shared_preference_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/shared_preference_helper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/components/app_component.inject.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/components/app_component.inject.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.inject.summary" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.inject.summary" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.inject.summary" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.inject.summary" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/form/form_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/form/form_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/form/form_store.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/form/form_store.g.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/token/authToken_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/token/authToken_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/login/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/login/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/registraion/registration.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/registraion/registration.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/rounded_button_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/rounded_button_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/textfield_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/textfield_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +48,7 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
@@ -127,33 +104,33 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="498" y="202" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1618745676743" />
-    <state x="100" y="100" width="1336" height="624" key="AVDManager" timestamp="1618745761786">
+    <state x="100" y="100" width="1336" height="624" key="AVDManager" timestamp="1618754889722">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="100" y="100" width="1336" height="624" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1618745761785" />
+    <state x="100" y="100" width="1336" height="624" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1618754889722" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1618745756423">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1618745756423" />
-    <state width="1476" height="165" key="GridCell.Tab.0.bottom" timestamp="1618753655937">
+    <state width="1476" height="207" key="GridCell.Tab.0.bottom" timestamp="1618754889474">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="165" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1618753655937" />
-    <state width="1476" height="165" key="GridCell.Tab.0.center" timestamp="1618753655936">
+    <state width="1476" height="207" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1618754889474" />
+    <state width="1476" height="207" key="GridCell.Tab.0.center" timestamp="1618754889474">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="165" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1618753655936" />
-    <state width="1476" height="165" key="GridCell.Tab.0.left" timestamp="1618753655936">
+    <state width="1476" height="207" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1618754889474" />
+    <state width="1476" height="207" key="GridCell.Tab.0.left" timestamp="1618754889474">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="165" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1618753655936" />
-    <state width="1476" height="165" key="GridCell.Tab.0.right" timestamp="1618753655936">
+    <state width="1476" height="207" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1618754889474" />
+    <state width="1476" height="207" key="GridCell.Tab.0.right" timestamp="1618754889474">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1476" height="165" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1618753655936" />
-    <state x="277" y="57" key="SettingsEditor" timestamp="1618745761430">
+    <state width="1476" height="207" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1618754889474" />
+    <state x="277" y="57" key="SettingsEditor" timestamp="1618754435270">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1618745761430" />
+    <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1618754435270" />
   </component>
 </project>
