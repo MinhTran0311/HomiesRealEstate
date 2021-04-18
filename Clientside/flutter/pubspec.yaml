@@ -13,7 +13,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
-  
+
 dependencies:
   circular_profile_avatar: ^1.0.8
 
@@ -63,6 +63,7 @@ dependencies:
   # translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
   intl: ^0.16.1
   google_fonts: ^1.0.0
+  curved_navigation_bar: ^0.3.2
   # Dependency injection
   inject:
     git:

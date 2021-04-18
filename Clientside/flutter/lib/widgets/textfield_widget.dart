@@ -53,7 +53,7 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         maxLength: 25,
         keyboardType: this.inputType,
-        style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.white),
+        style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.black),
         decoration: InputDecoration(
             hintText: this.hint,
             hintStyle: GoogleFonts.mavenPro(fontSize: (this.inputFontsize-3),color: Colors.white),

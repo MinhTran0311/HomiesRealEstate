@@ -10,6 +10,7 @@ import 'network/apis/authToken/authToken_api.dart';
 import 'dart:developer';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
+import 'network/apis/registration/registration_api.dart';
 
 class Repository {
   // data source object
@@ -18,13 +19,13 @@ class Repository {
   // api objects
   final PostApi _postApi;
   final AuthTokenApi _authTokenApi;
-
+  final RegistrationApi _registrationApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -72,6 +73,14 @@ class Repository {
       .then((id) => id)
       .catchError((error) => throw error);
 
+
+  //registration
+  Future<dynamic> registing(String surname, String name, String username, String password, String email) async
+  {
+    return await _registrationApi.regist(surname, name, username, password, email).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
 
   // Login:---------------------------------------------------------------------
   Future<bool> login(String username, String password) async {
