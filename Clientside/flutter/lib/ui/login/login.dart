@@ -34,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
-  AuthTokenStore _authTokenStore;
   //focus node:-----------------------------------------------------------------
   FocusNode _passwordFocusNode;
 
@@ -51,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     //_store = Provider.of<FormStore>(context);
-    _authTokenStore = Provider.of<AuthTokenStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
   }
 
@@ -101,9 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _authTokenStore.loggedIn
+              return _store.loggedIn
                   ? navigate(context)
-                  : _showErrorMessage(_authTokenStore.errorStore.errorMessage);
+                  : _showErrorMessage(_store.errorStore.errorMessage);
             },
           ),
           Observer(
@@ -224,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
         log("Login clicked");
         if (_store.canLogin) {
           DeviceUtils.hideKeyboard(context);
-          _authTokenStore.authLogIn(_userNameController.text,_passwordController.text);
+          _store.authLogIn(_userNameController.text,_passwordController.text);
           //_authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
           _showErrorMessage('Please fill in all fields');
@@ -290,8 +288,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
-        if (_authTokenStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_authTokenStore.errorStore.errorMessage);
+        if (_store.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_store.errorStore.errorMessage);
         }
         return SizedBox.shrink();
       },

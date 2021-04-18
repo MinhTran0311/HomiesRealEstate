@@ -150,13 +150,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             SizedBox(height: 24.0),
             _buildNameField(),
             SizedBox(height: 24.0),
+            _buildUserEmail(),
+            SizedBox(height: 24.0),
             _buildUserNameField(),
             SizedBox(height: 24.0),
             _buildPasswordField(),
             SizedBox(height: 24.0),
             _buildConfirmPasswordField(),
-            SizedBox(height: 24.0),
-            _buildUserEmail(),
             SizedBox(height: 24.0),
             _buildSignUpButton(),
           ],
@@ -299,10 +299,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       buttonColor: Colors.black87,
       textColor: Colors.white,
       onPressed: () {
-        //SharedPreferences.getInstance().then((preference) {
-         // preference.setBool(Preferences.is_logged_in, false);
+        if(_store.canRegister) {
+          DeviceUtils.hideKeyboard(context);
+
+          //SharedPreferences.getInstance().then((preference) {
+          // preference.setBool(Preferences.is_logged_in, false);
           //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
           _store.register();
+        }
+        else{
+          _showErrorMessage('Please fill in all fields');
+        }
         //});
       },
     );

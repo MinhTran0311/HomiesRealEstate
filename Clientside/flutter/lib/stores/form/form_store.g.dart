@@ -9,6 +9,12 @@ part of 'form_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FormStore on _FormStore, Store {
+  Computed<bool> _$loadingComputed;
+
+  @override
+  bool get loading => (_$loadingComputed ??=
+          Computed<bool>(() => super.loading, name: '_FormStore.loading'))
+      .value;
   Computed<bool> _$canLoginComputed;
 
   @override
@@ -120,6 +126,51 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchTokenFutureAtom = Atom(name: '_FormStore.fetchTokenFuture');
+
+  @override
+  ObservableFuture<AuthToken> get fetchTokenFuture {
+    _$fetchTokenFutureAtom.reportRead();
+    return super.fetchTokenFuture;
+  }
+
+  @override
+  set fetchTokenFuture(ObservableFuture<AuthToken> value) {
+    _$fetchTokenFutureAtom.reportWrite(value, super.fetchTokenFuture, () {
+      super.fetchTokenFuture = value;
+    });
+  }
+
+  final _$authTokenAtom = Atom(name: '_FormStore.authToken');
+
+  @override
+  AuthToken get authToken {
+    _$authTokenAtom.reportRead();
+    return super.authToken;
+  }
+
+  @override
+  set authToken(AuthToken value) {
+    _$authTokenAtom.reportWrite(value, super.authToken, () {
+      super.authToken = value;
+    });
+  }
+
+  final _$loggedInAtom = Atom(name: '_FormStore.loggedIn');
+
+  @override
+  bool get loggedIn {
+    _$loggedInAtom.reportRead();
+    return super.loggedIn;
+  }
+
+  @override
+  set loggedIn(bool value) {
+    _$loggedInAtom.reportWrite(value, super.loggedIn, () {
+      super.loggedIn = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_FormStore.success');
 
   @override
@@ -150,21 +201,6 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
-  final _$loadingAtom = Atom(name: '_FormStore.loading');
-
-  @override
-  bool get loading {
-    _$loadingAtom.reportRead();
-    return super.loading;
-  }
-
-  @override
-  set loading(bool value) {
-    _$loadingAtom.reportWrite(value, super.loading, () {
-      super.loading = value;
-    });
-  }
-
   final _$fetchRegistFutureAtom = Atom(name: '_FormStore.fetchRegistFuture');
 
   @override
@@ -187,25 +223,12 @@ mixin _$FormStore on _FormStore, Store {
     return _$registerAsyncAction.run(() => super.register());
   }
 
-  final _$loginAsyncAction = AsyncAction('_FormStore.login');
+  final _$authLogInAsyncAction = AsyncAction('_FormStore.authLogIn');
 
   @override
-  Future<dynamic> login() {
-    return _$loginAsyncAction.run(() => super.login());
-  }
-
-  final _$forgotPasswordAsyncAction = AsyncAction('_FormStore.forgotPassword');
-
-  @override
-  Future<dynamic> forgotPassword() {
-    return _$forgotPasswordAsyncAction.run(() => super.forgotPassword());
-  }
-
-  final _$logoutAsyncAction = AsyncAction('_FormStore.logout');
-
-  @override
-  Future<dynamic> logout() {
-    return _$logoutAsyncAction.run(() => super.logout());
+  Future<dynamic> authLogIn(String username, String password) {
+    return _$authLogInAsyncAction
+        .run(() => super.authLogIn(username, password));
   }
 
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
@@ -351,10 +374,13 @@ username: ${username},
 password: ${password},
 confirmPassword: ${confirmPassword},
 userEmail: ${userEmail},
+fetchTokenFuture: ${fetchTokenFuture},
+authToken: ${authToken},
+loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
-loading: ${loading},
 fetchRegistFuture: ${fetchRegistFuture},
+loading: ${loading},
 canLogin: ${canLogin},
 canRegister: ${canRegister},
 canForgetPassword: ${canForgetPassword}

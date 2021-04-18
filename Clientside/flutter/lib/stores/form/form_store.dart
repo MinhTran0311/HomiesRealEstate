@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
@@ -55,14 +56,25 @@ abstract class _FormStore with Store {
   @observable
   String userEmail = '';
 
+  static ObservableFuture<AuthToken> emptyAuthResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<AuthToken> fetchTokenFuture = ObservableFuture<AuthToken>(emptyAuthResponse);
+
+  @observable
+  AuthToken authToken;
+
+  @observable
+  bool loggedIn = false;
+
+
+
 
   @observable
   bool success = false;
   @observable
   bool regist_success = false;
 
-  @observable
-  bool loading = false;
 
   static ObservableFuture<dynamic> emptyRegistResponse = ObservableFuture.value(null);
 
@@ -70,6 +82,8 @@ abstract class _FormStore with Store {
   ObservableFuture<dynamic> fetchRegistFuture = ObservableFuture<dynamic>(emptyRegistResponse);
 
   //#region computed
+  @computed
+  bool get loading => fetchTokenFuture.status == FutureStatus.pending;
   @computed
   bool get canLogin =>
       !formErrorStore.hasErrorsInLogin && username.isNotEmpty && password.isNotEmpty;
@@ -188,7 +202,6 @@ abstract class _FormStore with Store {
 
   @action
   Future register() async {
-    loading = true;
     final futrue = _repository.registing(surname, name, username, password, userEmail);
     fetchRegistFuture = ObservableFuture(futrue);
 
@@ -199,10 +212,9 @@ abstract class _FormStore with Store {
       else{
         regist_success = false;
       }
-      loading = false;
+
     }).catchError((error){
       regist_success = false;
-      loading = false;
       if (error is DioError) {
         if (error.response.data!=null)
           errorStore.errorMessage = error.response.data["error"]["message"];
@@ -217,31 +229,63 @@ abstract class _FormStore with Store {
   }
 
   @action
-  Future login() async {
-    loading = true;
+  Future<dynamic> authLogIn (String username, String password) async {
+    final future = _repository.authorizing(username, password);
+    fetchTokenFuture = ObservableFuture(future);
 
-    Future.delayed(Duration(milliseconds: 2000)).then((future) {
-      loading = false;
-      success = true;
-    }).catchError((e) {
-      loading = false;
-      success = false;
-      errorStore.errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
-          ? "Tên đăng nhập và mật khẩu không đúng"
-          : "Đã có lỗi xảy ra, hãy kiểm tra lại kết nối mạng và thử lại";
-      print(e);
+    future.then((newauthToken){
+      this.authToken = newauthToken;
+      if (authToken.accessToken!=null){
+        loggedIn = true;
+      }
+      else {
+        loggedIn = false;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
     });
   }
 
-  @action
-  Future forgotPassword() async {
-    loading = true;
-  }
-
-  @action
-  Future logout() async {
-    loading = true;
-  }
+  // @action
+  // Future login() async {
+  //   loading = true;
+  //
+  //   Future.delayed(Duration(milliseconds: 2000)).then((future) {
+  //     loading = false;
+  //     success = true;
+  //   }).catchError((e) {
+  //     loading = false;
+  //     success = false;
+  //     errorStore.errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
+  //         ? "Tên đăng nhập và mật khẩu không đúng"
+  //         : "Đã có lỗi xảy ra, hãy kiểm tra lại kết nối mạng và thử lại";
+  //     print(e);
+  //   });
+  // }
+  //
+  // @action
+  // Future forgotPassword() async {
+  //   loading = true;
+  // }
+  //
+  // @action
+  // Future logout() async {
+  //   loading = true;
+  // }
 
   // general methods:-----------------------------------------------------------
   void dispose() {
