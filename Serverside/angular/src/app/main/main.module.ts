@@ -7,7 +7,7 @@ import { ViewLichSuGiaoDichModalComponent } from './server/lichSuGiaoDichs/view-
 import { CreateOrEditLichSuGiaoDichModalComponent } from './server/lichSuGiaoDichs/create-or-edit-lichSuGiaoDich-modal.component';
 import { LichSuGiaoDichUserLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-user-lookup-table-modal.component';
 import { LichSuGiaoDichChiTietHoaDonBaiDangLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-chiTietHoaDonBaiDang-lookup-table-modal.component';
-import { LichSuGiaoDichUserLookupTableModalComponent } from './server/lichSuGiaoDichs/lichSuGiaoDich-user-lookup-table-modal.component';
+
 
 import { ChiTietBaiDangsComponent } from './server/chiTietBaiDangs/chiTietBaiDangs.component';
 import { ViewChiTietBaiDangModalComponent } from './server/chiTietBaiDangs/view-chiTietBaiDang-modal.component';

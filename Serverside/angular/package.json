@@ -5,7 +5,7 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "publish": "gulp build && ng build --prod",
+    "publish": "gulp build && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --prod",
     "start": "gulp buildDev && ng serve --host 0.0.0.0 --port 4200",
     "hmr": "gulp buildDev && ng serve --host 0.0.0.0 --port 4200 --hmr",
     "test": "gulp buildDev && ng test",

@@ -4,7 +4,7 @@ import { ChiTietHoaDonBaiDangsServiceProxy, ChiTietHoaDonBaiDangGoiBaiDangLookup
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/public_api";
+import { LazyLoadEvent } from "primeng/api/public_api";
 @Component({
     selector: "chiTietHoaDonBaiDangGoiBaiDangLookupTableModal",
     styleUrls: ["./chiTietHoaDonBaiDang-goiBaiDang-lookup-table-modal.component.less"],
