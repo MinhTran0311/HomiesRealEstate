@@ -64,6 +64,7 @@ dependencies:
   intl: ^0.16.1
   google_fonts: ^1.0.0
   curved_navigation_bar: ^0.3.2
+  google_maps_flutter: ^1.2.0
   # Dependency injection
   inject:
     git:

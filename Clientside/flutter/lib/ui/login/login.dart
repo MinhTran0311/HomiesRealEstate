@@ -273,7 +273,6 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool(Preferences.is_logged_in, true);
     });
-    log("zxmnczxmcnm,xcnzxm,");
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.home, (Route<dynamic> route) => false);

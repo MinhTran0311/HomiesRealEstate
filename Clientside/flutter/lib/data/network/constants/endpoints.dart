@@ -6,6 +6,7 @@ class Endpoints {
 
   //base url Homies
   static const String homiesUrl = "https://homies.exscanner.edu.vn/api";
+
   // receiveTimeout
   static const int receiveTimeout = 5000;
 
@@ -16,5 +17,5 @@ class Endpoints {
   static const String getPosts = baseUrl + "/posts";
 
   //get all users
-  static const String getAllUsers= homiesUrl + "/services/app/User/GetUsers";
+  static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
 }

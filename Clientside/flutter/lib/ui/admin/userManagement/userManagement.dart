@@ -22,8 +22,8 @@ class UserManagementScreen extends StatefulWidget {
 class _UserManagementScreenState extends State<UserManagementScreen> {
   //stores:---------------------------------------------------------------------
   UserManagementStore _userManagementStore;
-  // ThemeStore _themeStore;
-  // LanguageStore _languageStore;
+  ThemeStore _themeStore;
+  LanguageStore _languageStore;
 
   @override
   void initState() {
@@ -35,8 +35,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     super.didChangeDependencies();
 
     // initializing stores
-    // _languageStore = Provider.of<LanguageStore>(context);
-    // _themeStore = Provider.of<ThemeStore>(context);
+    _languageStore = Provider.of<LanguageStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
     _userManagementStore = Provider.of<UserManagementStore>(context);
 
     // check to see if already called api
@@ -48,40 +48,67 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
       body: _buildBody(),
     );
   }
 
-  // app bar methods:-----------------------------------------------------------
-  Widget _buildAppBar() {
-    return AppBar(
-      title: Text(AppLocalizations.of(context).translate('home_tv_posts')),
-      actions: _buildActions(context),
-    );
-  }
 
-  List<Widget> _buildActions(BuildContext context) {
-    return <Widget>[
-      // _buildLanguageButton(),
-      // _buildThemeButton(),
-      _buildLogoutButton(),
-    ];
-  }
 
-  Widget _buildLogoutButton() {
-    return IconButton(
-      onPressed: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          Navigator.of(context).pushReplacementNamed(Routes.login);
-        });
-      },
-      icon: Icon(
-        Icons.power_settings_new,
-      ),
-    );
-  }
+  // // app bar methods:-----------------------------------------------------------
+  // Widget _buildAppBar() {
+  //   return AppBar(
+  //     title: Text(AppLocalizations.of(context).translate('TestUsers')),
+  //     actions: _buildActions(context),
+  //   );
+  // }
+  //
+  // List<Widget> _buildActions(BuildContext context) {
+  //   return <Widget>[
+  //     // _buildLanguageButton(),
+  //     // _buildThemeButton(),
+  //     _buildLogoutButton(),
+  //   ];
+  // }
+  //
+  // Widget _buildThemeButton() {
+  //   return Observer(
+  //     builder: (context) {
+  //       return IconButton(
+  //         onPressed: () {
+  //           _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
+  //         },
+  //         icon: Icon(
+  //           _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  // Widget _buildLanguageButton() {
+  //   return IconButton(
+  //     onPressed: () {
+  //       _buildLanguageDialog();
+  //     },
+  //     icon: Icon(
+  //       Icons.language,
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _buildLogoutButton() {
+  //   return IconButton(
+  //     onPressed: () {
+  //       SharedPreferences.getInstance().then((preference) {
+  //         preference.setBool(Preferences.is_logged_in, false);
+  //         Navigator.of(context).pushReplacementNamed(Routes.login);
+  //       });
+  //     },
+  //     icon: Icon(
+  //       Icons.power_settings_new,
+  //     ),
+  //   );
+  // }
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
@@ -116,7 +143,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     )
         : Center(
       child: Text(
-        AppLocalizations.of(context).translate('home_tv_no_post_found'),
+        // AppLocalizations.of(context).translate('home_tv_no_post_found'),
+        "Không tìm thấy người dùng nào!",
       ),
     );
   }
@@ -166,5 +194,60 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     });
 
     return SizedBox.shrink();
+  }
+
+  _buildLanguageDialog() {
+    _showDialog<String>(
+      context: context,
+      child: MaterialDialog(
+        borderRadius: 5.0,
+        enableFullWidth: true,
+        title: Text(
+          AppLocalizations.of(context).translate('home_tv_choose_language'),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+          ),
+        ),
+        headerColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        closeButtonColor: Colors.white,
+        enableCloseButton: true,
+        enableBackButton: false,
+        onCloseButtonClicked: () {
+          Navigator.of(context).pop();
+        },
+        children: _languageStore.supportedLanguages
+            .map(
+              (object) => ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.all(0.0),
+            title: Text(
+              object.language,
+              style: TextStyle(
+                color: _languageStore.locale == object.locale
+                    ? Theme.of(context).primaryColor
+                    : _themeStore.darkMode ? Colors.white : Colors.black,
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+              // change user language based on selected locale
+              _languageStore.changeLanguage(object.locale);
+            },
+          ),
+        )
+            .toList(),
+      ),
+    );
+  }
+
+  _showDialog<T>({BuildContext context, Widget child}) {
+    showDialog<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then<void>((T value) {
+      // The value passed to Navigator.pop() or null.
+    });
   }
 }

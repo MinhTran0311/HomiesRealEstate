@@ -5,6 +5,7 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -49,7 +50,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           children: <Widget>[
             HomeScreen(),
             //Container(color: Colors.white,),
-            Container(color: Colors.white,),
+            UserManagementScreen(),
             Container(color: Colors.white,),
             Container(color: Colors.white,),
           ],

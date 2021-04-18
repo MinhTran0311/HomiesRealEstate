@@ -38,7 +38,6 @@ class Repository {
       postsList.posts.forEach((post) {
         _postDataSource.insert(post);
       });
-
       return postsList;
     }).catchError((error) => throw error);
   }
@@ -46,6 +45,7 @@ class Repository {
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
     return await _userApi.getAllUsers().then((usersList) {
+      // log('dataUserTest: $usersList');
       return usersList;
       }).catchError((error) => throw error);
   }

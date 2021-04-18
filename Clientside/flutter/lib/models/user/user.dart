@@ -9,7 +9,7 @@ class User {
   bool isActive;
   bool isEmailConfirmed;
   String creationTime;
-  List<String> permissions;
+  // List<String> permissions;
 
   User({
     this.id,
@@ -22,7 +22,7 @@ class User {
     this.isActive,
     this.isEmailConfirmed,
     this.creationTime,
-    this.permissions,
+    // this.permissions,
   });
 
   factory User.fromMap(Map<String, dynamic> json) => User(
@@ -36,8 +36,23 @@ class User {
     isActive: json["isActive"],
     isEmailConfirmed: json["isEmailConfirmed"],
     creationTime: json["creationTime"],
-    permissions: json["roles"],
+    // permissions: json["roles"],
   );
+
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //     id: json["id"],
+  //     name: json["name"],
+  //     surName: json["surname"],
+  //     userName: json["userName"],
+  //     email: json["emailAddress"],
+  //     phoneNumber: json["phoneNumber"],
+  //     profilePictureID: json["profilePictureId"],
+  //     isActive: json["isActive"],
+  //     isEmailConfirmed: json["isEmailConfirmed"],
+  //     creationTime: json["creationTime"],
+  //   );
+  // }
 
   Map<String, dynamic> toMap() => {
     "id": id,
@@ -50,6 +65,6 @@ class User {
     "isActive": isActive,
     "isEmailConfirmed": isEmailConfirmed,
     "creationTime": creationTime,
-    "roles": permissions,
+    // "roles": permissions,
   };
 }
