@@ -15,6 +15,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
 
 class HomePageScreen extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             HomeScreen(),
             //Container(color: Colors.white,),
             UserManagementScreen(),
-            Container(color: Colors.white,),
+            MapsScreen(),
             Container(color: Colors.white,),
           ],
         ),
