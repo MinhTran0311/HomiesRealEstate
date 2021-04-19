@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -53,16 +54,30 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Item selectedTown;
   Item selectedVil;
   DateTime selectedDate1st = DateTime.now();
+  DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
   _selectDate1st(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: selectedDate1st,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      firstDate: DateTime.now(),
+      lastDate: (DateTime.now().add(Duration(days: 10))),
     );
     if (picked != null && picked != selectedDate1st)
       setState(() {
         selectedDate1st = picked;
+        selectedDatefl = selectedDate1st.add(const Duration(days: 1));
+      });
+  }
+  _selectDatefl(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDatefl,
+      firstDate: selectedDate1st.add(const Duration(days: 1)),
+      lastDate: selectedDate1st.add(const Duration(days: 30)),
+    );
+    if (picked != null && picked != selectedDatefl)
+      setState(() {
+        selectedDatefl = picked;
       });
   }
 
@@ -153,6 +168,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
+        // Icon: Icons.app_registration,
         title: Text(
           "Đăng tin bất động sản",
           style: Theme.of(context).textTheme.button.copyWith(
@@ -160,6 +176,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
               fontSize: 23,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.0),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.app_registration),
+          onPressed: () {
+            // Do something.
+          },
         ),
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -235,8 +257,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-            //SizedBox(height: 24.0),
+            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            SizedBox(height: 24.0),
             _buildTileField(),
             SizedBox(height: 24.0),
             _buildTypeField(),
@@ -256,6 +278,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
             _buildPriceField(),
             SizedBox(height: 24.0),
             _buildStartdateField(),
+            SizedBox(height: 24.0),
+            _buildEnddateField(),
             SizedBox(height: 24.0),
             _buildUpButton(),
           ],
@@ -279,12 +303,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
           textController: _TileController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-          },
+          onChanged: (value) {},
         );
       },
     );
   }
+
   Widget _buildTypeField() {
     return Observer(
       builder: (context) {
@@ -321,6 +345,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildTypeTypeField() {
     return Observer(
       builder: (context) {
@@ -357,6 +382,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildCityField() {
     return Observer(
       builder: (context) {
@@ -393,6 +419,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildTownField() {
     return Observer(
       builder: (context) {
@@ -429,6 +456,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildVilField() {
     return Observer(
       builder: (context) {
@@ -465,6 +493,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildAcreageField() {
     return Observer(
       builder: (context) {
@@ -472,19 +501,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
           inputFontsize: 22,
           hint: ('Diện tích'),
           hintColor: Colors.white,
-          icon: Icons.textsms_rounded,
+          icon: Icons.api_outlined,
           inputType: TextInputType.text,
           // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
           iconColor: Colors.white,
           textController: _AcreageController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-          },
+          onChanged: (value) {},
         );
       },
     );
   }
+
   Widget _buildPriceField() {
     return Observer(
       builder: (context) {
@@ -492,8 +521,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
           inputFontsize: 22,
           hint: ('Giá'),
           hintColor: Colors.white,
-          icon: Icons.textsms_rounded,
-          inputType: TextInputType.text,
+          icon: Icons.money,
+          inputType: TextInputType.numberWithOptions(decimal: false),
 //          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
           iconColor: Colors.white,
           textController: _PriceController,
@@ -507,11 +536,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _buildStartdateField() {
     return Observer(
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -527,9 +557,40 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 child: Text(
                   'Chọn ngày bắt đầu',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                color: Colors.black45,
+                color: Colors.black87,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEnddateField() {
+    return Observer(
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                "${selectedDatefl.toLocal()}".split(' ')[0],
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              RaisedButton(
+                onPressed: () => _selectDatefl(context),
+                child: Text(
+                  'Chọn ngày kết thúc',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                color: Colors.black87,
               ),
             ],
           ),
@@ -598,7 +659,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createError(
           message: message,
-          title: AppLocalizations.of(context).translate('không được để trống'),
+          title: AppLocalizations.of(context).translate('home_tv_error'),
           duration: Duration(seconds: 3),
         )..show(context);
       }
