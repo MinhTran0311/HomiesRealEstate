@@ -70,6 +70,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
         automaticallyImplyLeading: false,
         centerTitle: true,
+        backgroundColor: Colors.amber,
       ),
 
       body: _buildBody(),
