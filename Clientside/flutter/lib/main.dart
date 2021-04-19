@@ -17,6 +17,7 @@ import 'package:boilerplate/ui/homepage/homepage.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/ui/splash/splash.dart';
+import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +93,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _authTokenStore.loggedIn ? HomePageScreen() : LoginScreen(),
+            home: _authTokenStore.loggedIn ? HomePageScreen() : NewpostScreen(),
           );
         },
       ),
