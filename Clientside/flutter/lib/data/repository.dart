@@ -36,7 +36,6 @@ class Repository {
       postsList.posts.forEach((post) {
         _postDataSource.insert(post);
       });
-
       return postsList;
     }).catchError((error) => throw error);
   }
