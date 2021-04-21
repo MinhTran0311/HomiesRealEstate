@@ -15,6 +15,7 @@ environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  flutter_circular_chart: ^0.1.0
   circular_profile_avatar: ^1.0.8
 
   flutter:

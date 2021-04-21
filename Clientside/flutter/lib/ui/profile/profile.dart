@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class ProfileScreen extends StatefulWidget{
 }
 
 class _ProfileScreenState extends State<ProfileScreen>{
-  String _pathAvatar= "http://i.pravatar.cc/300";
+  String _pathAvatar= "assets/images/img_login.jpg";
   String _FullName="Phạm Quốc Đạt";
   String _profession="Nhà môi giới";
   String _Sodu = "1.000.000";
@@ -26,10 +27,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
   String _Phone = "0352565635";
   String _Email = "datpham1610@gmail.com";
   String _Address = "KTX Khu A, ĐHQG-HCM";
-
   File _image;
   final picker = ImagePicker();
-
+  int selected = 0;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -44,11 +44,15 @@ class _ProfileScreenState extends State<ProfileScreen>{
   }
 
 
+
   @override
   void initState() {
     super.initState();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   // Future getImage() async{
   //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -61,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
     @override
     Widget build(BuildContext context) {
       return Scaffold(
-          // appBar: _buildAppBar(),
+          appBar: _buildAppBar(),
           body: _buildBody()
       );
     }
@@ -75,20 +79,64 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     );
   }
-
+  bool _first =true;
   Widget _buildBody() {
     return Container(
       color: Colors.orange,
       width: double.infinity,
       height:  double.infinity,
       child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             _buildUserInformation(),
             // Account(Phone: _Phone,Email: _Email,Address: _Address,),
-            MenuItem(),
+            // MenuItem(),
+            // ExpansionPanelList(
+            //   animationDuration: Duration(seconds: 1),
+            //   dividerColor: Colors.white,
+            //   elevation: 1,
+            //   expandedHeaderPadding: EdgeInsets.all(8),
+            //   children: [
+            //     ExpansionPanel(
+            //         headerBuilder: (context,isopen){
+            //           return CardItem(text: "Tài khoản của tôi",
+            //               icon: Icons.account_circle_outlined,
+            //               press: (){});
+            //         },
+            //         body: Text("hello"),
+            //       canTapOnHeader: true,
+            //
+            //     )
+            //   ],
+            // )
+            AnimatedCrossFade(
+                secondChild: SelectItem(selected),
+                firstChild: MenuItem(),
+                crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                duration: const Duration(seconds: 1),
+            )
           ]
       ),
     );
+  }
+
+  Widget SelectItem(int selected){
+    switch(selected) {
+      case 0: {
+        return Account(Phone: _Phone,Email: _Email,Address: _Address,);
+      }
+      break;
+
+      case 1: {
+        return ReportPage(title: "Doanh Thu",);
+      }
+      break;
+
+      default: {
+        return ReportPage();
+      }
+      break;
+    }
   }
 
   Widget MenuItem(){
@@ -110,12 +158,20 @@ class _ProfileScreenState extends State<ProfileScreen>{
         CardItem(text: "Tài Khoản của tôi",
             icon: Icons.account_circle_outlined,
             press: (){
-
-
+              setState(() {
+              _first=!_first;
+              selected = 0;
+              });
           },
         ),
         CardItem(text: "Ví tiền của tôi", icon: Icons.account_balance_wallet_outlined, press: (){}),
-        CardItem(text: "Báo cáo thống kê", icon: Icons.article_outlined, press: (){}),
+        CardItem(text: "Báo cáo thống kê", icon: Icons.article_outlined,
+            press: (){
+              setState(() {
+                _first=!_first;
+                selected = 1;
+              });
+            }),
         CardItem(text: "Cài đặt", icon: Icons.settings_outlined, press: (){}),
         CardItem(text: "Trợ giúp", icon: Icons.info_outline, press: (){}),
         ],
@@ -290,34 +346,34 @@ class _ProfileScreenState extends State<ProfileScreen>{
   }
 
 
-    Widget _buildCardItem(IconData i, String t){
-    return   Container(
-      child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-          child: FlatButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              onPressed: (){},
-              color: Colors.grey[200],
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(i,size: 30,color: Colors.orange,),
-                  SizedBox(width: 40,),
-                  Expanded(
-                    child: Text(t,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
-                      )
-                    ),
-                  ),
-                  Icon(Icons.arrow_forward_ios)
-                ],
-              )
-          ),
-        ),
-    );
-    }
+    // Widget _buildCardItem(IconData i, String t){
+    // return   Container(
+    //   child: Padding(
+    //       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+    //       child: FlatButton(
+    //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    //           onPressed: (){},
+    //           color: Colors.grey[200],
+    //           padding: EdgeInsets.all(20),
+    //           child: Row(
+    //             children: [
+    //               Icon(i,size: 30,color: Colors.orange,),
+    //               SizedBox(width: 40,),
+    //               Expanded(
+    //                 child: Text(t,
+    //                   style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     fontSize: 20
+    //                   )
+    //                 ),
+    //               ),
+    //               Icon(Icons.arrow_forward_ios)
+    //             ],
+    //           )
+    //       ),
+    //     ),
+    // );
+    // }
 }
 class CardItem extends StatelessWidget{
   const CardItem({
@@ -362,4 +418,8 @@ class CardItem extends StatelessWidget{
         ),
       ),
     );
-  }}
+  }
+}
+
+
+
