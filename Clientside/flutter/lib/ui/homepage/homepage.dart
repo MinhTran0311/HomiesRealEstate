@@ -54,6 +54,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             UserManagementScreen(),
             MapsScreen(),
             Container(color: Colors.white,),
+            Container(color: Colors.white,),
           ],
         ),
       ),
@@ -61,15 +62,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
         backgroundColor: Colors.white,
         color: Colors.amber,
         items: <Widget>[
-          Icon(Icons.home, size: 30,color: Colors.white,),
           Icon(Icons.home, size: 30,color: Colors.black87,),
-          Icon(Icons.compare_arrows, size: 30),
-          Icon(Icons.compare_arrows, size: 30),
+          Icon(Icons.location_pin, size: 30,color: Colors.black87,),
+          Icon(Icons.notifications, size: 30, color: Colors.black87,),
+          Icon(Icons.person, size: 30, color: Colors.black87,),
+          Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
         ],
         height: 60,
         index: _currentIndex,
         onTap: (index) {
-          setState(() => _currentIndex = index);
+          setState(() {
+            _currentIndex = index;
+          });
           _pageController.jumpToPage(index);
         },
       ),

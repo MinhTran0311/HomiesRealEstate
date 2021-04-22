@@ -13,15 +13,32 @@ class Account extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            color: Colors.white,
-            height: 360,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-              child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
+        border: Border.all(color: Colors.white,width: 10.0),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black26,
+        //     spreadRadius: 5,
+        //     blurRadius: 7,
+        //     offset: Offset(2, 3), // changes position of shadow
+        //   ),
+        // ],
+      ),
+      child:Information(),
+
+    );
+  }
+  Widget Information(){
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          color: Colors.white,
+          height: 200,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+            child: Container(
                 width: 200,
                 height: 200,
                 // color: Colors.grey[400],
@@ -39,38 +56,41 @@ class Account extends StatelessWidget{
                 ),
 
                 child:
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0,top: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Giới thiệu",
-                            style: TextStyle(
-                              fontFamily: FontFamily.roboto,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 24
-                            ),
-                          ),
-                          TextIcon(icon: Icons.phone, text: Phone),
-                          TextIcon(icon: Icons.mail, text: Email),
-                          TextIcon(icon: Icons.location_on, text: Address)
-                        ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0,top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Giới thiệu",
+                        style: TextStyle(
+                            fontFamily: FontFamily.roboto,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 24
+                        ),
                       ),
-                    )
-              ),
+                      TextIcon(icon: Icons.phone, text: Phone),
+                      TextIcon(icon: Icons.mail, text: Email),
+                      TextIcon(icon: Icons.location_on, text: Address)
+                    ],
+                  ),
+                )
             ),
           ),
-          Container(
+        ),
+
+        Container(
             color: Colors.white,
-              padding: const EdgeInsets.only(left: 30),
-              child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia Tháng 3 Năm 2021")
-          )
-        ],
-      ),
+            padding: const EdgeInsets.only(left: 30, top: 10,bottom: 160),
+            child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia Tháng 3 Năm 2021")
+        ),
+
+      ],
     );
   }
 }
+
+
 class TextIcon extends StatelessWidget{
   const TextIcon({
     Key key,
@@ -98,3 +118,4 @@ class TextIcon extends StatelessWidget{
     );
   }
 }
+

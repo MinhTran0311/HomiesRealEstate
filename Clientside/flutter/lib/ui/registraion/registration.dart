@@ -70,6 +70,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
         automaticallyImplyLeading: false,
         centerTitle: true,
+        backgroundColor: Colors.amber,
       ),
 
       body: _buildBody(),
@@ -108,9 +109,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _store.regist_success
-                  ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
+              if (_store.regist_success) {
+                _showSuccssfullMesssage("Đăng ký thành công");
+                return navigate(context);
+              } else {
+                return _showErrorMessage(_store.errorStore.errorMessage);
+              }
             },
           ),
           Observer(
@@ -328,20 +332,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   // General Methods:-----------------------------------------------------------
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
 
-    return SizedBox.shrink();
-  }
 
+    _showErrorMessage( String message) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        if (message != null && message.isNotEmpty) {
+          FlushbarHelper.createError(
+            message: message,
+            title: AppLocalizations.of(context).translate('home_tv_error'),
+            duration: Duration(seconds: 5),
+          )..show(context);
+        }
+      });
+
+      return SizedBox.shrink();
+    }
+    _showSuccssfullMesssage(String message) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        if (message != null && message.isNotEmpty) {
+          FlushbarHelper.createSuccess(
+            message: message,
+            title: "Thông báo",
+            duration: Duration(seconds: 5),
+          )
+            ..show(context);
+        }
+        return SizedBox.shrink();
+      });
+    }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {
