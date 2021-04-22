@@ -25,6 +25,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   ThemeStore _themeStore;
   LanguageStore _languageStore;
 
+  _onClickItemUsers(var userSelected) {
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +52,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      primary: true,
+      appBar: AppBar(
+        title: Text(
+          "Danh sách người dùng",
+          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
+
       body: _buildBody(),
     );
   }
@@ -152,7 +165,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildListItem(int position) {
     return ListTile(
       dense: true,
-      leading: Icon(Icons.cloud_circle),
+      leading: Icon(Icons.people_alt, size: 30, color: Colors.black,),
       title: Text(
         '${_userManagementStore.userList.users[position].name}',
         maxLines: 1,
@@ -161,11 +174,12 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         style: Theme.of(context).textTheme.title,
       ),
       subtitle: Text(
-        '${_userManagementStore.userList.users[position].phoneNumber}',
+        '${_userManagementStore.userList.users[position].permissions}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         softWrap: false,
       ),
+      onTap: _onClickItemUsers(_userManagementStore.userList.users[position]),
     );
   }
 
