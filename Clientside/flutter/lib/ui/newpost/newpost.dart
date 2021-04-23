@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/app_theme.dart';
+
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -34,53 +35,27 @@ class Item {
   final String name;
   final Icon icon;
 }
+class Item1 {
+  const Item1(this.name);
+  final String name;
+}
 
 class _NewpostScreenState extends State<NewpostScreen> {
-  //text controllers:-----------------------------------------------------------
+  //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _DescribeController = TextEditingController();
 
-  //stores:---------------------------------------------------------------------
-  ThemeStore _themeStore;
-  //focus node:-----------------------------------------------------------------
-
-  //stores:---------------------------------------------------------------------
+  //endregion
   final FormStore _store = new FormStore();
+  //region Item
   Item selectedType;
   Item selectedTypeType;
   Item selectedCity;
   Item selectedTown;
   Item selectedVil;
-  DateTime selectedDate1st = DateTime.now();
-  DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
-  _selectDate1st(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate1st,
-      firstDate: DateTime.now(),
-      lastDate: (DateTime.now().add(Duration(days: 10))),
-    );
-    if (picked != null && picked != selectedDate1st)
-      setState(() {
-        selectedDate1st = picked;
-        selectedDatefl = selectedDate1st.add(const Duration(days: 1));
-      });
-  }
-  _selectDatefl(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDatefl,
-      firstDate: selectedDate1st.add(const Duration(days: 1)),
-      lastDate: selectedDate1st.add(const Duration(days: 30)),
-    );
-    if (picked != null && picked != selectedDatefl)
-      setState(() {
-        selectedDatefl = picked;
-      });
-  }
-
   List<Item> type = <Item>[
     const Item(
         'Bán',
@@ -163,6 +138,38 @@ class _NewpostScreenState extends State<NewpostScreen> {
           color: const Color(0xFF167F67),
         )),
   ];
+//endregion
+  //region Time
+  DateTime selectedDate1st = DateTime.now();
+  DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
+
+  _selectDate1st(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate1st,
+      firstDate: DateTime.now(),
+      lastDate: (DateTime.now().add(Duration(days: 10))),
+    );
+    if (picked != null && picked != selectedDate1st)
+      setState(() {
+        selectedDate1st = picked;
+        selectedDatefl = selectedDate1st.add(const Duration(days: 1));
+      });
+  }
+  _selectDatefl(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDatefl,
+      firstDate: selectedDate1st.add(const Duration(days: 1)),
+      lastDate: selectedDate1st.add(const Duration(days: 30)),
+    );
+    if (picked != null && picked != selectedDatefl)
+      setState(() {
+        selectedDatefl = picked;
+      });
+  }
+
+//endregion
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,8 +196,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       body: _buildBody(),
     );
   }
-
-  // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Material(
       child: Stack(
@@ -238,7 +243,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       ),
     );
   }
-
   Widget _buildLeftSide() {
     return SizedBox.expand(
       child: Image.asset(
@@ -247,7 +251,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       ),
     );
   }
-
   Widget _buildRightSide() {
     return SingleChildScrollView(
       child: Padding(
@@ -281,13 +284,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildEnddateField(),
             SizedBox(height: 24.0),
+            _builddDscribeField(),
+            SizedBox(height: 24.0),
             _buildUpButton(),
           ],
         ),
       ),
     );
   }
-
 //#region build TextFieldWidget
   Widget _buildTileField() {
     return Observer(
@@ -426,7 +430,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Padding(
           padding: const EdgeInsets.only(left: 30.0, right: 10.0),
           child: DropdownButton<Item>(
-            hint: Text("Chọn quận/huyện"),
+            hint:Text("Chọn quận/huyện"),
             value: selectedTown,
             //icon:Icons.attach_file ,
             onChanged: (Item Value) {
@@ -456,7 +460,36 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+  List<Item1> town1 = <Item1>[
+    const Item1(
+        'Hồ Chí Minh'
+        ),
+    const Item1(
+        'Hà Nội'
+  )
+  ];
+  Widget _buildTownField2() {
+    return Observer(
+      builder: (context) {
+        //var town1;
+        return Padding(
+          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
+          child:DropdownSearch<Item1>(
+            hint:"Chọn quận/huyện",
+            //value: selectedTown,
+            onChanged: (Item1 value) {
+              setState(() {var selectedTown1 = value ;});
+            },
+            items: town1.map((Item1 type) {
 
+              return DropdownMenuItem(type.name)}
+              ),
+
+    ),
+  }
+  );
+    );
+  }
   Widget _buildVilField() {
     return Observer(
       builder: (context) {
@@ -502,7 +535,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           hint: ('Diện tích'),
           hintColor: Colors.white,
           icon: Icons.api_outlined,
-          inputType: TextInputType.text,
+          inputType: TextInputType.numberWithOptions(decimal: false,signed: false),
           // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
           iconColor: Colors.white,
           textController: _AcreageController,
@@ -598,7 +631,25 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-
+  Widget _builddDscribeField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Mô tả'),
+          hintColor: Colors.white,
+          icon: Icons.textsms_rounded,
+          inputType: TextInputType.text,
+          //  iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.white,
+          textController: _DescribeController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          onChanged: (value) {},
+        );
+      },
+    );
+  }
   Widget _buildUserEmail() {
     return Observer(
       builder: (context) {
