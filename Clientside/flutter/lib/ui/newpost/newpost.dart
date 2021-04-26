@@ -1,17 +1,12 @@
-import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:async';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:boilerplate/constants/app_theme.dart';
-
 import 'package:boilerplate/constants/assets.dart';
-import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
-import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
-import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -19,12 +14,10 @@ import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:boilerplate/stores/token/authToken_store.dart';
-
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'add_image.dart';
 class NewpostScreen extends StatefulWidget {
   @override
   _NewpostScreenState createState() => _NewpostScreenState();
@@ -35,9 +28,18 @@ class Item {
   final String name;
   final Icon icon;
 }
-class Item1 {
-  const Item1(this.name);
-  final String name;
+class UploadImage {
+  List<String> images;
+
+  UploadImage({this.images});
+
+  factory UploadImage.fromJson(Map<String, dynamic> json) {
+    return UploadImage(images: parseImage(json['images']));
+  }
+
+  static List<String> parseImage(json) {
+    return new List<String>.from(json);
+  }
 }
 
 class _NewpostScreenState extends State<NewpostScreen> {
@@ -140,6 +142,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   ];
 //endregion
   //region Time
+  //region Time
   DateTime selectedDate1st = DateTime.now();
   DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
 
@@ -156,6 +159,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         selectedDatefl = selectedDate1st.add(const Duration(days: 1));
       });
   }
+
   _selectDatefl(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
@@ -196,6 +200,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       body: _buildBody(),
     );
   }
+
   Widget _buildBody() {
     return Material(
       child: Stack(
@@ -243,6 +248,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       ),
     );
   }
+
   Widget _buildLeftSide() {
     return SizedBox.expand(
       child: Image.asset(
@@ -251,6 +257,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       ),
     );
   }
+
   Widget _buildRightSide() {
     return SingleChildScrollView(
       child: Padding(
@@ -270,9 +277,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             // _buildUserEmail(),
             // SizedBox(height: 24.0),
-            _buildCityField(),
+            _buildTownField2(),
             SizedBox(height: 24.0),
-            _buildTownField(),
+            _buildCityField(),
             SizedBox(height: 24.0),
             _buildVilField(),
             SizedBox(height: 24.0),
@@ -286,12 +293,15 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _builddDscribeField(),
             SizedBox(height: 24.0),
+            _buildImagepick(),
+            SizedBox(height: 24.0),
             _buildUpButton(),
           ],
         ),
       ),
     );
   }
+
 //#region build TextFieldWidget
   Widget _buildTileField() {
     return Observer(
@@ -394,6 +404,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           padding: const EdgeInsets.only(left: 30.0, right: 10.0),
           child: DropdownButton<Item>(
             hint: Text("Chọn tỉnh/thành phố"),
+
             value: selectedCity,
             //icon:Icons.attach_file ,
             onChanged: (Item Value) {
@@ -401,6 +412,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 selectedCity = Value;
               });
             },
+
             items: city.map((Item type) {
               return DropdownMenuItem<Item>(
                 value: type,
@@ -430,7 +442,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Padding(
           padding: const EdgeInsets.only(left: 30.0, right: 10.0),
           child: DropdownButton<Item>(
-            hint:Text("Chọn quận/huyện"),
+            hint: Text("Chọn quận/huyện"),
             value: selectedTown,
             //icon:Icons.attach_file ,
             onChanged: (Item Value) {
@@ -460,36 +472,57 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-  List<Item1> town1 = <Item1>[
-    const Item1(
-        'Hồ Chí Minh'
-        ),
-    const Item1(
-        'Hà Nội'
-  )
-  ];
+
   Widget _buildTownField2() {
-    return Observer(
-      builder: (context) {
-        //var town1;
-        return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
-          child:DropdownSearch<Item1>(
-            hint:"Chọn quận/huyện",
-            //value: selectedTown,
-            onChanged: (Item1 value) {
-              setState(() {var selectedTown1 = value ;});
-            },
-            items: town1.map((Item1 type) {
-
-              return DropdownMenuItem(type.name)}
+    return Observer(builder: (context) {
+      //var town1;
+      return Padding(
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        child: DropdownSearch<String>(
+          //mode: Mode.BOTTOM_SHEET,
+          items: [
+            "Brazil",
+            "Italia",
+            "Tunisia",
+            'Canada',
+            'Zraoua',
+            'France',
+            'Belgique'
+          ],
+          hint: "Chọn tỉnh/thành phố",
+          onChanged: print,
+          selectedItem: null,
+          showSearchBox: true,
+          searchBoxDecoration: InputDecoration(
+            //border: OutlineInputBorder(),
+            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+            labelText: "Tìm tỉnh/thành phố",
+          ),
+          popupTitle: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
+            ),
+            child: Center(
+              child: Text(
+                'Tỉnh/thành phố',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
 
-    ),
-  }
-  );
-    );
-  }
   Widget _buildVilField() {
     return Observer(
       builder: (context) {
@@ -535,7 +568,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
           hint: ('Diện tích'),
           hintColor: Colors.white,
           icon: Icons.api_outlined,
-          inputType: TextInputType.numberWithOptions(decimal: false,signed: false),
+          inputType:
+              TextInputType.numberWithOptions(decimal: false, signed: false),
           // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
           iconColor: Colors.white,
           textController: _AcreageController,
@@ -631,6 +665,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
   Widget _builddDscribeField() {
     return Observer(
       builder: (context) {
@@ -650,6 +685,23 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
+
+  Widget _buildImagepick()
+  {
+    return Observer(builder: (context)
+    {
+      return FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddImage()));
+        },
+      );
+    },
+    );
+
+  }
+
   Widget _buildUserEmail() {
     return Observer(
       builder: (context) {
