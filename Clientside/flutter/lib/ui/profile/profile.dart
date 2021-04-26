@@ -3,9 +3,13 @@
 import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/models/user/user.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
+import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -20,7 +24,9 @@ class ProfileScreen extends StatefulWidget{
 
 class _ProfileScreenState extends State<ProfileScreen>{
   String _pathAvatar= "assets/images/img_login.jpg";
-  String _FullName="Phạm Quốc Đạt";
+  String _SurName ="Phạm Quốc";
+  String _Name ="Đạt";
+  String _FullName="Trần Tuấn Minh";
   String _profession="Nhà môi giới";
   String _Sodu = "1.000.000";
   String _Baidadang = "125";
@@ -30,6 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
   File _image;
   final picker = ImagePicker();
   int selected = 0;
+  UserStore userstore;
+
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -43,11 +51,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
     });
   }
 
-
-
   @override
   void initState() {
     super.initState();
+    _FullName = _SurName+" "+ _Name;
+
   }
   @override
   void dispose() {
@@ -74,12 +82,40 @@ class _ProfileScreenState extends State<ProfileScreen>{
   Widget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      title: Center(
-          child: Text("Cá nhân")),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 40,
+            width: 20,
+            child: Stack(
+              fit: StackFit.expand,
+              overflow: Overflow.visible,
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  child: IconButton(icon: Icon(Icons.arrow_back_ios),
+                      onPressed: (){setState(() {
+                        _selectedIndex =0;
+                      });}),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 130,
+          ),
+          Center(
+              child: Text("Cá nhân")),
+        ],
+      ),
 
     );
   }
   bool _first =true;
+  int _selectedIndex=0;
   Widget _buildBody() {
     return Container(
       color: Colors.orange,
@@ -109,38 +145,49 @@ class _ProfileScreenState extends State<ProfileScreen>{
             //     )
             //   ],
             // )
-            AnimatedCrossFade(
-                secondChild: SelectItem(selected),
-                firstChild: MenuItem(),
-                crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                duration: const Duration(seconds: 1),
-            )
+
+            IndexedStack(
+              children: [
+                MenuItem(),
+                AccountPage(Phone: _Phone,Email: _Email,Address: _Address,SurName: _SurName,Name: _Name,),
+                WalletPage(),
+                ReportPage(title: "Doanh Thu",)
+              ],
+              index: _selectedIndex,
+            ),
+            // AnimatedCrossFade(
+            //     secondChild: SelectItem(selected),
+            //     firstChild: MenuItem(),
+            //     crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            //     duration: const Duration(seconds: 1),
+            // )
           ]
       ),
     );
   }
 
-  Widget SelectItem(int selected){
-    switch(selected) {
-      case 0: {
-        return Account(Phone: _Phone,Email: _Email,Address: _Address,);
-      }
-      break;
-
-      case 1: {
-        return ReportPage(title: "Doanh Thu",);
-      }
-      break;
-
-      default: {
-        return ReportPage();
-      }
-      break;
-    }
-  }
+  // Widget SelectItem(int selected){
+  //   switch(selected) {
+  //     case 0: {
+  //       return Account(Phone: _Phone,Email: _Email,Address: _Address,);
+  //     }
+  //     break;
+  //
+  //     case 1: {
+  //       return ReportPage(title: "Doanh Thu",);
+  //     }
+  //     break;
+  //
+  //     default: {
+  //       return ReportPage();
+  //     }
+  //     break;
+  //   }
+  // }
 
   Widget MenuItem(){
     return Container(
+
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
         border: Border.all(color: Colors.white,width: 10.0),
@@ -155,25 +202,66 @@ class _ProfileScreenState extends State<ProfileScreen>{
       ),
       child: Column(
         children: <Widget>[
-        CardItem(text: "Tài Khoản của tôi",
+          Container(height: 10,color: Colors.white,),
+        CardItem(
+            text: "Tài Khoản của tôi",
             icon: Icons.account_circle_outlined,
+            colorbackgroud: Colors.grey[200],
+            colortext: Colors.black,
+            coloricon: Colors.orange,
             press: (){
               setState(() {
-              _first=!_first;
-              selected = 0;
+              // _first=!_first;
+              // selected = 0;
+              _selectedIndex =1;
               });
           },
         ),
-        CardItem(text: "Ví tiền của tôi", icon: Icons.account_balance_wallet_outlined, press: (){}),
-        CardItem(text: "Báo cáo thống kê", icon: Icons.article_outlined,
+        CardItem(
+            text: "Ví tiền của tôi",
+            icon: Icons.account_balance_wallet_outlined,
+            colorbackgroud: Colors.grey[200],
+            colortext: Colors.black,
+          coloricon: Colors.orange,
             press: (){
               setState(() {
-                _first=!_first;
-                selected = 1;
+                // _first=!_first;
+                // selected = 1;
+                _selectedIndex =2;
               });
-            }),
-        CardItem(text: "Cài đặt", icon: Icons.settings_outlined, press: (){}),
-        CardItem(text: "Trợ giúp", icon: Icons.info_outline, press: (){}),
+            },
+        ),
+        CardItem(
+            text: "Báo cáo thống kê",
+            icon: Icons.article_outlined,
+            colorbackgroud: Colors.grey[200],
+            colortext: Colors.black,
+          coloricon: Colors.orange,
+            press: (){
+              setState(() {
+                // _first=!_first;
+                // selected = 1;
+                _selectedIndex =3;
+              });
+            },
+        ),
+        CardItem(
+            text: "Cài đặt",
+            icon: Icons.settings_outlined,
+            colorbackgroud: Colors.grey[200],
+            colortext: Colors.black,
+            coloricon: Colors.orange,
+            press: (){}
+            ),
+        CardItem(
+            text: "Trợ giúp",
+            icon: Icons.info_outline,
+            colorbackgroud: Colors.grey[200],
+            colortext: Colors.black,
+          coloricon: Colors.orange,
+            press: (){},
+        ),
+          // Container(height: 20,color: Colors.white,),
         ],
       ),
     );
@@ -197,6 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
         padding: const EdgeInsets.only(top: 30,left: 30),
         child: Column(
           children: [
+
             Row(
               children: <Widget>[
                 Column(
@@ -380,12 +469,18 @@ class CardItem extends StatelessWidget{
     Key key,
     @required this.text,
     @required this.icon,
-    @required this.press
+    @required this.press,
+    @required this.colorbackgroud,
+    @required this.colortext,
+    @required this.coloricon,
   }) : super(key: key);
 
     final String text;
     final IconData icon;
     final VoidCallback press;
+    final Color colorbackgroud;
+    final Color colortext;
+    final Color coloricon;
 
 
   @override
@@ -397,22 +492,23 @@ class CardItem extends StatelessWidget{
         child: FlatButton(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             onPressed: press,
-            color: Colors.grey[200],
+            color: colorbackgroud,
             padding: EdgeInsets.all(20),
             child: Row(
               children: [
-                Icon(icon,size: 30,color: Colors.orange,),
+                Icon(icon,size: 30,color: coloricon,),
                 SizedBox(width: 40,),
                 Expanded(
                   child: Text(text,
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 20,
-                          fontFamily: FontFamily.roboto
+                          fontFamily: FontFamily.roboto,
+                          color: colortext
                       )
                   ),
                 ),
-                Icon(Icons.arrow_forward_ios)
+                Icon(Icons.arrow_forward_ios,color: colortext,)
               ],
             )
         ),
