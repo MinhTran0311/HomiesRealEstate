@@ -51,8 +51,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
           children: <Widget>[
             HomeScreen(),
             //Container(color: Colors.white,),
-            UserManagementScreen(),
             MapsScreen(),
+            UserManagementScreen(),
             Container(color: Colors.white,),
             Container(color: Colors.white,),
           ],

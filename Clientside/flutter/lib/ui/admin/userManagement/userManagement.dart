@@ -130,9 +130,41 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        title: Text(
-          "Quản lý người dùng",
-          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+        title: Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: Colors.white,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text("Quản lý người dùng",
+                    style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+                ),
+              ),
+              Expanded(
+                // flex: 2,
+                child: Container(
+                  alignment: Alignment.topRight,
+                  child: Icon(
+                    Icons.person_add_alt_1,
+                    size: 28,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -193,7 +225,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
+        Padding(padding: EdgeInsets.only(top: 20,left: 24,right: 24, bottom: 16),
           child: TextField(
             style: TextStyle(
               fontSize: 28,
@@ -202,11 +234,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
               fontWeight: FontWeight.bold,
             ),
             decoration: InputDecoration(
-                hintText: "Search",
+                hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
-                  fontSize: 28,
+                  fontSize: 25,
                   color: Colors.grey[400],
-
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.red[400]),
@@ -301,25 +332,201 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   Widget _buildListItem(User user, int position) {
-    return ListTile(
-      dense: true,
-      leading: Icon(Icons.people_alt, size: 30, color: Colors.black,),
-      title: Text(
-        '${user.name}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-        style: Theme.of(context).textTheme.title,
+    // return ListTile(
+    //   dense: true,
+    //   leading: Icon(Icons.people_alt, size: 30, color: Colors.black,),
+    //   title: Text(
+    //     '${user.name}',
+    //     maxLines: 1,
+    //     overflow: TextOverflow.ellipsis,
+    //     softWrap: false,
+    //     style: Theme.of(context).textTheme.title,
+    //   ),
+    //   subtitle: Text(
+    //     '${user.permissions}',
+    //     maxLines: 1,
+    //     overflow: TextOverflow.ellipsis,
+    //     softWrap: false,
+    //   ),
+    //   // onTap: _onClickItemUsers(user),
+    // );
+    return Container(
+      child: Card(
+        margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          height: 160,
+          color: Color.fromRGBO(242, 242, 242, 1),
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                      child: Text(
+                        '${user.name}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: Icon(
+                      Icons.menu_outlined,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person_outline_outlined,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            '${user.permissions}',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 20),
+                        //   // child: ,
+                        // ),
+                        Text(
+                          'Kích hoạt: ',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        user.isActive ? Container(
+                              child: Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: Colors.green,)
+                            ) : Container(
+                            child: Icon(
+                              Icons.not_interested_outlined,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    // alignment: Alignment.topRight,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.mail_outline,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              '${user.email}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            )
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    // alignment: Alignment.topRight,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.mark_email_read_outlined,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            'Xác nhận email: ',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        user.isEmailConfirmed ? Container(
+                            child: Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: Colors.green,)
+                        ) : Container(
+                          child: Icon(
+                            Icons.not_interested_outlined,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
-      subtitle: Text(
-        '${user.permissions}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-      ),
-      // onTap: _onClickItemUsers(user),
+
     );
-    // return Ge
   }
 
   Widget _handleErrorMessage() {
