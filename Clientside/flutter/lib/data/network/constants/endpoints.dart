@@ -20,4 +20,6 @@ class Endpoints {
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
+  //getAllRole
+  static const String getAllRole = homiesUrl + "/services/app/Role/GetRoles";
 }

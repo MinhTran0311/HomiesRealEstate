@@ -4,14 +4,17 @@ import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/role/role.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/models/user/user_list.dart';
+import 'package:boilerplate/models/role/role_list.dart';
 import 'package:sembast/sembast.dart';
 import 'network/apis/authToken/authToken_api.dart';
 import 'dart:developer';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
 import 'network/apis/users/user_api.dart';
+import 'network/apis/roles/role_api.dart';
 import 'network/apis/registration/registration_api.dart';
 
 class Repository {
@@ -22,6 +25,7 @@ class Repository {
   final PostApi _postApi;
   final AuthTokenApi _authTokenApi;
   final UserApi _userApi;
+  final RoleApi _roleApi;
 
   final RegistrationApi _registrationApi;
 
@@ -29,7 +33,7 @@ class Repository {
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -50,6 +54,12 @@ class Repository {
       // log('dataUserTest: $usersList');
       return usersList;
       }).catchError((error) => throw error);
+  }
+
+  Future<RoleList> getAllRoles() async {
+    return await _roleApi.getAllRoles().then((roleList) {
+      return roleList;
+    }).catchError((error) => throw error);
   }
 
 

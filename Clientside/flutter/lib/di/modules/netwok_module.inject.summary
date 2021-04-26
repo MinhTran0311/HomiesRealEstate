@@ -207,6 +207,35 @@
                 "isProvider": false
               }
             ]
+          },
+          {
+            "name": "provideRoleApi",
+            "kind": "method",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:boilerplate/lib/data/network/apis/roles/role_api.dart#RoleApi",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            "singleton": true,
+            "asynchronous": false,
+            "dependencies": [
+              {
+                "lookupKey": {
+                  "root": "asset:boilerplate/lib/data/network/dio_client.dart#DioClient",
+                  "qualifier": null
+                },
+                "isProvider": false
+              },
+              {
+                "lookupKey": {
+                  "root": "asset:boilerplate/lib/data/network/rest_client.dart#RestClient",
+                  "qualifier": null
+                },
+                "isProvider": false
+              }
+            ]
           }
         ]
       }

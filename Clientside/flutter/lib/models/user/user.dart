@@ -9,7 +9,8 @@ class User {
   bool isActive;
   bool isEmailConfirmed;
   String creationTime;
-  List<String> permissions;
+  List<dynamic> permissionsList;
+  String permissions;
 
   User({
     this.id,
@@ -22,10 +23,11 @@ class User {
     this.isActive,
     this.isEmailConfirmed,
     this.creationTime,
+    this.permissionsList,
     this.permissions,
   });
 
-  factory User.fromMap(Map<String, dynamic> json, List<String> roleName) => User(
+  factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
     id: json["id"],
     name: json["name"],
     surName: json["surname"],
@@ -36,7 +38,8 @@ class User {
     isActive: json["isActive"],
     isEmailConfirmed: json["isEmailConfirmed"],
     creationTime: json["creationTime"],
-    permissions: roleName,
+    permissions: rolesName,
+    permissionsList: json["roles"],
   );
 
   // factory User.fromJson(Map<String, dynamic> json) {
@@ -65,6 +68,6 @@ class User {
     "isActive": isActive,
     "isEmailConfirmed": isEmailConfirmed,
     "creationTime": creationTime,
-    "roles": permissions,
+    "roles": permissionsList,
   };
 }

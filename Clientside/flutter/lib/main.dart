@@ -24,6 +24,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
 
 // global instance for app component
 AppComponent appComponent;
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
   final UserStore _userStore = UserStore(appComponent.getRepository());
   final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
   final UserManagementStore _userManagementStore = UserManagementStore(appComponent.getRepository());
+  final RoleManagementStore _roleManagementStore = RoleManagementStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
@@ -67,6 +69,7 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
+        Provider<RoleManagementStore>(create: (_) => _roleManagementStore),
 
         //Provider<FormStore>(create: (_) => _formStore),
       ],

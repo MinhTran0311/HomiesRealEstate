@@ -20,14 +20,18 @@ class UserList {
 
   factory UserList.fromJson(Map<String, dynamic> json) {
     List<User> users = List<User>();
-    List<String> rolesName = List<String>();
+    String rolesName;
     if(json["result"]["totalCount"] > 0) {
       for (int i=0; i<json["result"]["items"].length; i++) {
-        users.add(User.fromMap(json["result"]["items"][i], rolesName));
         if (json["result"]["items"][i]["roles"].length > 0) {
+          rolesName = "";
           for (int j=0; j<json["result"]["items"][i]["roles"].length; j++) {
-            rolesName.add(json["result"]["items"][i]["roles"]["roleName"]);
+            if (j > 0) {
+              rolesName = rolesName + ", ";
+            }
+            rolesName = rolesName + json["result"]["items"][i]["roles"][j]["roleName"];
           }
+          users.add(User.fromMap(json["result"]["items"][i], rolesName.toString()));
         }
       }
       return UserList(
@@ -35,5 +39,4 @@ class UserList {
       );
     }
   }
-  // Map<String, dynamic> data = new Map<String, dynamic>.from(json.decode(response.body));
 }
