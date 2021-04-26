@@ -5,6 +5,7 @@ import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ThemeStore _themeStore;
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
-
+  UserStore userStore;
   @override
   void initState() {
     super.initState();
@@ -41,11 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _postStore = Provider.of<PostStore>(context);
+    userStore = Provider.of<UserStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts();
     }
+    if (!userStore.loading) {
+      userStore.getCurrenUser();
+    }
+
   }
 
   @override

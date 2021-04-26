@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:intl/intl.dart';
 
@@ -31,7 +32,6 @@ class _WalletPageState extends State<WalletPage>{
   String moneysend = "15 000";
   String datetimesend =DateFormat('dd/MM/yyyy').format(DateTime.now());
   int _selectedIndex=0;
-  lichsugiadich lichsugiaodich;
   final Ctlmoneysend = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -105,9 +105,19 @@ class _WalletPageState extends State<WalletPage>{
               width: double.infinity,
               child: Column(
                 children: [
-
-                  Text('Số tiền'),
-                  buildSurnameField(moneysend,Ctlmoneysend),
+                  Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
+                  Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
+                  TextFormField(
+                      controller: Ctlmoneysend,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      decoration: InputDecoration(
+                          hintText: "1500000",
+                          icon: Icon(Icons.attach_money,color: Colors.amber,)
+                      )
+                  ),
 
                 ],
               ),

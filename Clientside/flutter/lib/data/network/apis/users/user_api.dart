@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:dio/dio.dart';
 
@@ -29,6 +30,24 @@ class UserApi {
         ),);
       log("Get All Success");
       return UserList.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
+  Future<CurrenUserForEditdyo> getCurrenUser() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getCurrenUser,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All Success");
+      return CurrenUserForEditdyo.fromMap(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;

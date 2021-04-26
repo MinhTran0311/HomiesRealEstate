@@ -3,7 +3,9 @@
 import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/user.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import 'account/account.dart';
 
@@ -36,8 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
   File _image;
   final picker = ImagePicker();
   int selected = 0;
-  UserStore userstore;
-
+  UserStore _userstore;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -51,10 +53,30 @@ class _ProfileScreenState extends State<ProfileScreen>{
     });
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _userstore = Provider.of<UserStore>(context);
+
+    if (!_userstore.loading) {
+      _userstore.getCurrenUser();
+
+      if(_userstore.user!=null){
+        print("Duong"+_userstore.user.name);
+        _FullName = _userstore.user.name + " " +_userstore.user.surname;
+      }
+
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
-    _FullName = _SurName+" "+ _Name;
+
+    // ifuserstore.loading
 
   }
   @override
@@ -96,10 +118,10 @@ class _ProfileScreenState extends State<ProfileScreen>{
                 Positioned(
                   left: 0,
                   top: 0,
-                  child: IconButton(icon: Icon(Icons.arrow_back_ios),
+                  child: _selectedIndex !=0 ? IconButton(icon: Icon(Icons.arrow_back_ios),
                       onPressed: (){setState(() {
                         _selectedIndex =0;
-                      });}),
+                      });}):Container(),
                 )
               ],
             ),

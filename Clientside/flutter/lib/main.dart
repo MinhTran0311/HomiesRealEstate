@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
+        Provider<UserStore>(create: (_) => _userStore),
 
         //Provider<FormStore>(create: (_) => _formStore),
       ],

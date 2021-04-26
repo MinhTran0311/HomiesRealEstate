@@ -53,6 +53,11 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  final _$getUserAsyncAction = AsyncAction('_UserStore.getCurrenUser');
+  @override
+  Future<dynamic> getCurrenUser() {
+    return _$getUserAsyncAction.run(() => super.getCurrenUser());
+  }
   @override
   String toString() {
     return '''

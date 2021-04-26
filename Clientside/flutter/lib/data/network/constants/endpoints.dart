@@ -18,6 +18,10 @@ class Endpoints {
 
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
+  //get all users
+  static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
+  //get all lichsugiaodich
+  static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
 }
