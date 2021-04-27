@@ -1,0 +1,39 @@
+﻿@import "../mobile-header.less";
+@import "../cookie-consent.less";
+
+.unread-chat-message-count {
+    position: absolute;
+    top: 0px;
+}
+
+.unread-notification-count {
+    position: absolute;
+    top: 0px;
+    left: 22px;
+}
+
+#kt_header {
+    .topbar-item {
+        margin-right: .75rem !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .searchMenuTop {
+        display: block !important;
+    }
+
+    .searchMenuBottom {
+        display: none !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .searchMenuTop {    
+        display: none !important;
+    }
+
+    .searchMenuBottom {
+        display: block !important;
+    }
+}

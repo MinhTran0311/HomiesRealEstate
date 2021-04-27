@@ -1,0 +1,8 @@
+﻿<div class="header-logo">
+    <a routerLink="/" target="_blank">
+        <img alt="Logo" *ngIf="!appSession.tenant || !appSession.tenant.logoId" src="/assets/common/images/app-logo-on-dark.svg" class="logo-default max-h-40px" height="38">
+        <img alt="Logo" *ngIf="!appSession.tenant || !appSession.tenant.logoId" src="/assets/common/images/app-logo-on-light.svg" class="logo-sticky max-h-40px" height="38">
+        <img alt="Logo" *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=' + currentTheme.baseSettings.menu.asideSkin + '&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" class="logo-default max-h-40px" height="38">
+        <img alt="Logo" *ngIf="appSession.tenant && appSession.tenant.logoId" [src]="remoteServiceBaseUrl + '/TenantCustomization/GetTenantLogo?skin=' + currentTheme.baseSettings.menu.asideSkin + '&tenantId=' + appSession.tenant.id + '&id=' + appSession.tenant.logoId" class="logo-sticky max-h-40px" height="38">
+    </a>
+</div>

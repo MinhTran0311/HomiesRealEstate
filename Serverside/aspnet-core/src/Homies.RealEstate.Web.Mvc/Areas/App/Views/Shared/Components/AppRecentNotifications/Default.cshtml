@@ -1,0 +1,77 @@
+﻿@model Homies.RealEstate.Web.Areas.App.Models.Layout.RecentNotificationsViewModel
+@{
+    var theme = await GetTheme();
+}
+<div class="dropdown" id="header_notification_bar">
+</div>
+<script id="headerNotificationBarTemplate" type="x-tmpl-mustache">
+    <div class="topbar-item" data-toggle="dropdown" data-offset="30px,0px" aria-expanded="true">
+        <button class="@Model.CssClass">
+            {{#unreadCount}}
+            <i class="flaticon-alert-2 unread-notification"></i>
+            <span class="label label-warning unread-notification-count">
+                {{unreadCount}}
+            </span>
+            {{/unreadCount}}
+            {{^unreadCount}}
+            <i class="flaticon-alarm"></i>
+            {{/unreadCount}}
+        </button>
+    </div>
+    <div class="dropdown-menu p-0 m-0 dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-lg">
+        <div class="d-flex flex-column pt-12 bgi-size-cover bgi-no-repeat rounded-top" style="background: url(@(ApplicationPath)metronic/themes/@theme.BaseSettings.Theme/images/bg/bg-1.jpg); background-size: cover; min-height: 100px;">
+            <h4 class="d-flex flex-center rounded-top">
+                <span class="text-white">@L("Notifications")</span>
+                <span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">{{unreadCount}} @L("New")</span>
+            </h4>
+        </div>
+        <div>
+            <div class="row m-4">
+                <div class="text-left col-md-8">
+                    {{#unreadCount}}
+                    <a href="" id="setAllNotificationsAsReadLink">@L("SetAllAsRead")</a>
+                    {{/unreadCount}}
+                </div>
+                <div class="text-right col-md-4">
+                    <a id="openNotificationSettingsModalLink" class="text-right" href="">@L("Settings")</a>
+                </div>
+            </div>
+            <hr />
+            <div class="navi navi-hover scroll my-4 ps" data-scroll="true" data-height="300" data-mobile-height="200" style="height: 300px; overflow: hidden;">
+                {{#notifications}}
+                <a class="navi-item {{#url}}user-notification-item-clickable{{/url}} {{#isUnread}}user-notification-item-unread{{/isUnread}}" data-url="{{url}}">
+                    <div class="navi-link">
+                        <div class="navi-icon mr-2">
+                            <i class="{{icon}} {{iconFontClass}}"></i>
+                        </div>
+                        <div class="navi-text">
+                            <div class="font-weight-bold">
+                                {{text}}
+                            </div>
+                            <div class="text-muted">
+                                {{timeAgo}}
+                            </div>
+                            {{#isUnread}}
+                            <span data-notification-id="{{userNotificationId}}" class="btn btn-link-success set-notification-as-read">
+                                @L("SetAsRead")
+                            </span>
+                            {{/isUnread}}
+                        </div>
+                    </div>
+                </a>
+                {{/notifications}}
+                {{^notifications.length}}
+                <span class="notification-empty-text p-3">
+                    @L("ThereAreNoNotifications")
+                </span>
+                {{/notifications.length}}
+            </div>
+            {{#notifications.length}}
+            <hr />
+            <div class="m-4">
+                <div class="text-center"><a href="@Url.Action("Index", "Notifications", new {area = "App"})">@L("SeeAllNotifications")</a></div>
+            </div>
+            {{/notifications.length}}
+        </div>
+    </div>
+</script>

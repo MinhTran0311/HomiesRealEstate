@@ -1,0 +1,35 @@
+﻿@using Abp.MultiTenancy
+@using Homies.RealEstate.Authorization
+@using Homies.RealEstate.Editions
+@using Homies.RealEstate.MultiTenancy.Payments
+@model Homies.RealEstate.Web.Areas.App.Models.Layout.HeaderViewModel
+@{
+    Layout = null;
+}
+@if (AbpSession.MultiTenancySide != MultiTenancySides.Host)
+{
+    if (IsGranted(AppPermissions.Pages_Administration_Tenant_SubscriptionManagement) &&
+        Model.LoginInformations.Tenant.SubscriptionPaymentType != SubscriptionPaymentType.RecurringAutomatic &&
+        (Model.LoginInformations.Tenant.IsInTrialPeriod || Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon(Model.SubscriptionExpireNotifyDayCount)))
+    {
+        if (Model.LoginInformations.Tenant.IsInTrialPeriod && !Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon(Model.SubscriptionExpireNotifyDayCount))
+        {
+            <a href="@Url.Action("Buy", "Payment", new { area = "", editionId = Model.LoginInformations.Tenant.Edition.Id, editionPaymentType = EditionPaymentType.BuyNow })">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @Html.Raw(L("TrialSubscriptionNotification", "<strong>" + Model.LoginInformations.Tenant.Edition.DisplayName + "</strong>", L("ClickHere")))
+                </span>
+            </a>
+        }
+        if (Model.LoginInformations.Tenant.SubscriptionIsExpiringSoon(Model.SubscriptionExpireNotifyDayCount))
+        {
+            <a href="@Url.Action("Index", "SubscriptionManagement", new {area = "App"})">
+                <span class="glowing">
+                    <i class="fa fa-exclamation-triangle"></i> @L(Model.LoginInformations.Tenant.IsInTrialPeriod ?
+                        "TrialExpireNotification" :
+                        "SubscriptionExpireNotification",
+                        Model.LoginInformations.Tenant.GetSubscriptionExpiringDayCount())
+                </span>
+            </a>
+        }
+    }
+}

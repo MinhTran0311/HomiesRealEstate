@@ -1,0 +1,13 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Models.Layout
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppLogo
+@model HeaderViewModel
+@{
+    Layout = null;
+}
+
+<div class="header-logo">
+    <a href="@Url.Action("Index", "Home", new {area = string.Empty})" class="brand-logo">
+        @await Component.InvokeAsync(typeof(AppLogoViewComponent), new {logoClass = "logo-default max-h-40px"})
+        @await Component.InvokeAsync(typeof(AppLogoViewComponent), new {logoSkin = "light", logoClass = "logo-sticky max-h-40px"})
+    </a>
+</div>

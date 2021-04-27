@@ -5,6 +5,7 @@ import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:sembast/sembast.dart';
 import 'network/apis/authToken/authToken_api.dart';
@@ -51,7 +52,12 @@ class Repository {
       return usersList;
       }).catchError((error) => throw error);
   }
-
+  Future<CurrenUserForEditdyo> getCurrenUser() async {
+    return await _userApi.getCurrenUser().then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
 
   Future<List<Post>> findPostById(int id) {
     //creating filter

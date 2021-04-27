@@ -2,6 +2,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
 part 'post_store.g.dart';
@@ -44,7 +45,18 @@ abstract class _PostStore with Store {
     future.then((postList) {
       this.postList = postList;
     }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
+      if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
     });
   }
 }

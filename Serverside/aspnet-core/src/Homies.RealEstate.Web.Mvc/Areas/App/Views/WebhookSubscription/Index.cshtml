@@ -1,0 +1,48 @@
+﻿@using Homies.RealEstate.Authorization
+@using Homies.RealEstate.Web.Areas.App.Startup
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.WebhookSubscriptions;
+}
+
+@section Styles
+{
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/WebhookSubscriptions/Index.css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/Common/_KeyValueListManager.css" asp-append-version="true"/>
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Areas/App/Views/_Bundles/webhook-subscription-list.js" asp-append-version="true"></script>
+    <script abp-src="/view-resources/Areas/App/Views/Common/_KeyValueListManager.js" asp-append-version="true"></script>
+}
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <abp-page-subheader title="@L("WebhookSubscriptions")" description="@L("WebhookSubscriptionsInfo")">
+        @if (IsGranted(AppPermissions.Pages_Administration_WebhookSubscription_Create))
+        {
+            <button id="CreateNewWebhookSubscription" class="btn btn-primary">
+                <i class="fa fa-plus"></i> @L("AddNewWebhookSubscription")
+            </button>
+        }
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+        <div class="card card-custom gutter-b">
+                        <div class="card-body">
+                            <div class="align-items-center">
+                                <table id="SubscriptionTable" class="display table table-separate no-footer dtr-inline dt-responsive nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="width:100px;"></th>
+                                        <th>@L("WebhookEndpoint")</th>
+                                        <th>@L("WebhookEvents")</th>
+                                        <th>@L("IsActive")</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+</div>

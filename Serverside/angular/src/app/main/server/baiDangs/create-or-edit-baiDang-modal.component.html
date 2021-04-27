@@ -1,0 +1,291 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #baiDangForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="baiDang.id">{{ l("EditBaiDang") }}</span>
+                        <span *ngIf="!baiDang.id">{{ l("CreateNewBaiDang") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="UserName">{{ l("User") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="UserName" name="userName" [(ngModel)]="userName" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectUserModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setUserIdNull()"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="baiDang.userId" [(ngModel)]="baiDang.userId" type="text" hidden />
+
+                    <div class="form-group m-form__group">
+                        <label for="DanhMucTenDanhMuc">{{ l("DanhMuc") }}</label>
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                id="DanhMucTenDanhMuc"
+                                name="danhMucTenDanhMuc"
+                                [(ngModel)]="danhMucTenDanhMuc"
+                                type="text"
+                                disabled
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectDanhMucModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setDanhMucIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="baiDang.danhMucId" [(ngModel)]="baiDang.danhMucId" type="text" hidden />
+
+                    <div class="form-group m-form__group">
+                        <label for="XaTenXa">{{ l("Xa") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="XaTenXa" name="xaTenXa" [(ngModel)]="xaTenXa" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectXaModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setXaIdNull()"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="baiDang.xaId" [(ngModel)]="baiDang.xaId" type="text" hidden />
+
+                    <div class="form-group">
+                        <label for="BaiDang_TagLoaiBaiDang">{{ l("TagLoaiBaiDang") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_TagLoaiBaiDang="ngModel"
+                            id="BaiDang_TagLoaiBaiDang"
+                            class="form-control"
+                            [(ngModel)]="baiDang.tagLoaiBaiDang"
+                            name="TagLoaiBaiDang"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_TagLoaiBaiDang"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_ThoiDiemDang">{{ l("ThoiDiemDang") }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #BaiDang_ThoiDiemDang
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="baiDang.thoiDiemDang"
+                            id="BaiDang_ThoiDiemDang"
+                            name="BaiDang_ThoiDiemDang"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_ThoiDiemDang"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_ThoiHan">{{ l("ThoiHan") }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #BaiDang_ThoiHan
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="baiDang.thoiHan"
+                            id="BaiDang_ThoiHan"
+                            name="BaiDang_ThoiHan"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_ThoiHan"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_DiaChi">{{ l("DiaChi") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_DiaChi="ngModel"
+                            id="BaiDang_DiaChi"
+                            class="form-control"
+                            [(ngModel)]="baiDang.diaChi"
+                            name="DiaChi"
+                            minlength="1"
+                            maxlength="100"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_DiaChi"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_MoTa">{{ l("MoTa") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_MoTa="ngModel"
+                            id="BaiDang_MoTa"
+                            class="form-control"
+                            [(ngModel)]="baiDang.moTa"
+                            name="MoTa"
+                            minlength="1"
+                            maxlength="1000"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_MoTa"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_ToaDoX">{{ l("ToaDoX") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_ToaDoX="ngModel"
+                            id="BaiDang_ToaDoX"
+                            class="form-control"
+                            [(ngModel)]="baiDang.toaDoX"
+                            name="ToaDoX"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_ToaDoX"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_ToaDoY">{{ l("ToaDoY") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_ToaDoY="ngModel"
+                            id="BaiDang_ToaDoY"
+                            class="form-control"
+                            [(ngModel)]="baiDang.toaDoY"
+                            name="ToaDoY"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_ToaDoY"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_LuotXem">{{ l("LuotXem") }}</label>
+                        <input
+                            type="number"
+                            #BaiDang_LuotXem="ngModel"
+                            id="BaiDang_LuotXem"
+                            class="form-control"
+                            [(ngModel)]="baiDang.luotXem"
+                            name="LuotXem"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_LuotXem"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_LuotYeuThich">{{ l("LuotYeuThich") }}</label>
+                        <input
+                            type="number"
+                            #BaiDang_LuotYeuThich="ngModel"
+                            id="BaiDang_LuotYeuThich"
+                            class="form-control"
+                            [(ngModel)]="baiDang.luotYeuThich"
+                            name="LuotYeuThich"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_LuotYeuThich"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_DiemBaiDang">{{ l("DiemBaiDang") }}</label>
+                        <input
+                            type="number"
+                            #BaiDang_DiemBaiDang="ngModel"
+                            id="BaiDang_DiemBaiDang"
+                            class="form-control"
+                            [(ngModel)]="baiDang.diemBaiDang"
+                            name="DiemBaiDang"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_DiemBaiDang"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_TrangThai">{{ l("TrangThai") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_TrangThai="ngModel"
+                            id="BaiDang_TrangThai"
+                            class="form-control"
+                            [(ngModel)]="baiDang.trangThai"
+                            name="TrangThai"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_TrangThai"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_TagTimKiem">{{ l("TagTimKiem") }}</label>
+                        <input
+                            type="text"
+                            #BaiDang_TagTimKiem="ngModel"
+                            id="BaiDang_TagTimKiem"
+                            class="form-control"
+                            [(ngModel)]="baiDang.tagTimKiem"
+                            name="TagTimKiem"
+                        />
+                        <validation-messages [formCtrl]="BaiDang_TagTimKiem"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="BaiDang_TieuDe">{{ l("TieuDe") }} *</label>
+                        <input
+                            type="text"
+                            #BaiDang_TieuDe="ngModel"
+                            id="BaiDang_TieuDe"
+                            class="form-control"
+                            [(ngModel)]="baiDang.tieuDe"
+                            name="TieuDe"
+                            minlength="1"
+                            maxlength="50"
+                            required
+                        />
+                        <validation-messages [formCtrl]="BaiDang_TieuDe"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!baiDangForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <baiDangUserLookupTableModal #baiDangUserLookupTableModal (modalSave)="getNewUserId()"></baiDangUserLookupTableModal>
+    <baiDangDanhMucLookupTableModal #baiDangDanhMucLookupTableModal (modalSave)="getNewDanhMucId()"></baiDangDanhMucLookupTableModal>
+    <baiDangXaLookupTableModal #baiDangXaLookupTableModal (modalSave)="getNewXaId()"></baiDangXaLookupTableModal>
+</div>

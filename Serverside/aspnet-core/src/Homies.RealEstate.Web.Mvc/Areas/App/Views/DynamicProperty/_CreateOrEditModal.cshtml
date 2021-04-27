@@ -1,0 +1,43 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Models.Common.Modals
+@model Homies.RealEstate.Web.Areas.App.Models.DynamicProperty.CreateOrEditDynamicPropertyViewModel
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(Model.DynamicPropertyDto.Id == default ? @L("AddNewDynamicProperty") : (@L("EditDynamicProperty") + " - " + Model.DynamicPropertyDto.PropertyName)))
+
+<div class="modal-body">
+    @if (Model.DynamicPropertyDto.Id != default)
+    {
+        <input type="hidden" name="Id" value="@Model.DynamicPropertyDto.Id"/>
+    }
+
+    <div class="form-group col-12">
+        <label for="propertyName">@L("PropertyName")</label>
+        <input id="propertyName" type="text" name="propertyName" class="form-control" value="@Model.DynamicPropertyDto.PropertyName">
+    </div>
+
+    <div class="form-group col-12">
+        <label for="displayName">@L("DisplayName")</label>
+        <input id="displayName" type="text" name="displayName" class="form-control" value="@Model.DynamicPropertyDto.DisplayName">
+    </div>
+
+
+    <div class="form-group col-12">
+        <label for="inputType">@L("InputType")</label>
+        @Html.DropDownList("inputType", new SelectList(Model.AllowedInputTypes, Model.DynamicPropertyDto.InputType), new {@class = "form-control"})
+    </div>
+
+    <div class="form-group col-12">
+        <label for="permission">@L("Permission")</label>
+        <div class="form-group mb-2">
+            <div class="input-group">
+                <input type="text" class="form-control" name="permission" disabled="disabled" placeholder="@L("SelectAPermission")" value="@Model.DynamicPropertyDto.Permission">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="FilterByPermissionsButton">
+                        <i class="fa fa-hand-pointer" style="color: white"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalFooterWithSaveAndCancel.cshtml")

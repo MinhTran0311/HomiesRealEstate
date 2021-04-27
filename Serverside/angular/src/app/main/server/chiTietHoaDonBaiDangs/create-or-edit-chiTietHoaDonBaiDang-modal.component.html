@@ -1,0 +1,195 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #chiTietHoaDonBaiDangForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="chiTietHoaDonBaiDang.id">{{ l("EditChiTietHoaDonBaiDang") }}</span>
+                        <span *ngIf="!chiTietHoaDonBaiDang.id">{{ l("CreateNewChiTietHoaDonBaiDang") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="BaiDangTieuDe">{{ l("BaiDang") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="BaiDangTieuDe" name="baiDangTieuDe" [(ngModel)]="baiDangTieuDe" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectBaiDangModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setBaiDangIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input
+                        class="form-control"
+                        name="chiTietHoaDonBaiDang.baiDangId"
+                        [(ngModel)]="chiTietHoaDonBaiDang.baiDangId"
+                        type="text"
+                        hidden
+                    />
+
+                    <div class="form-group m-form__group">
+                        <label for="GoiBaiDangTenGoi">{{ l("GoiBaiDang") }}</label>
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                id="GoiBaiDangTenGoi"
+                                name="goiBaiDangTenGoi"
+                                [(ngModel)]="goiBaiDangTenGoi"
+                                type="text"
+                                disabled
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectGoiBaiDangModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setGoiBaiDangIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input
+                        class="form-control"
+                        name="chiTietHoaDonBaiDang.goiBaiDangId"
+                        [(ngModel)]="chiTietHoaDonBaiDang.goiBaiDangId"
+                        type="text"
+                        hidden
+                    />
+
+                    <div class="form-group m-form__group">
+                        <label for="UserName">{{ l("User") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="UserName" name="userName" [(ngModel)]="userName" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectUserModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setUserIdNull()"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="chiTietHoaDonBaiDang.userId" [(ngModel)]="chiTietHoaDonBaiDang.userId" type="text" hidden />
+
+                    <div class="form-group">
+                        <label for="ChiTietHoaDonBaiDang_ThoiDiem">{{ l("ThoiDiem") }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #ChiTietHoaDonBaiDang_ThoiDiem
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="chiTietHoaDonBaiDang.thoiDiem"
+                            id="ChiTietHoaDonBaiDang_ThoiDiem"
+                            name="ChiTietHoaDonBaiDang_ThoiDiem"
+                        />
+                        <validation-messages [formCtrl]="ChiTietHoaDonBaiDang_ThoiDiem"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChiTietHoaDonBaiDang_GiaGoi">{{ l("GiaGoi") }}</label>
+                        <input
+                            type="number"
+                            #ChiTietHoaDonBaiDang_GiaGoi="ngModel"
+                            id="ChiTietHoaDonBaiDang_GiaGoi"
+                            class="form-control"
+                            [(ngModel)]="chiTietHoaDonBaiDang.giaGoi"
+                            name="GiaGoi"
+                        />
+                        <validation-messages [formCtrl]="ChiTietHoaDonBaiDang_GiaGoi"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChiTietHoaDonBaiDang_SoNgayMua">{{ l("SoNgayMua") }}</label>
+                        <input
+                            type="number"
+                            #ChiTietHoaDonBaiDang_SoNgayMua="ngModel"
+                            id="ChiTietHoaDonBaiDang_SoNgayMua"
+                            class="form-control"
+                            [(ngModel)]="chiTietHoaDonBaiDang.soNgayMua"
+                            name="SoNgayMua"
+                            min="1"
+                            max="365"
+                        />
+                        <validation-messages [formCtrl]="ChiTietHoaDonBaiDang_SoNgayMua"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChiTietHoaDonBaiDang_TongTien">{{ l("TongTien") }}</label>
+                        <input
+                            type="number"
+                            #ChiTietHoaDonBaiDang_TongTien="ngModel"
+                            id="ChiTietHoaDonBaiDang_TongTien"
+                            class="form-control"
+                            [(ngModel)]="chiTietHoaDonBaiDang.tongTien"
+                            name="TongTien"
+                        />
+                        <validation-messages [formCtrl]="ChiTietHoaDonBaiDang_TongTien"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChiTietHoaDonBaiDang_GhiChu">{{ l("GhiChu") }} *</label>
+                        <input
+                            type="text"
+                            #ChiTietHoaDonBaiDang_GhiChu="ngModel"
+                            id="ChiTietHoaDonBaiDang_GhiChu"
+                            class="form-control"
+                            [(ngModel)]="chiTietHoaDonBaiDang.ghiChu"
+                            name="GhiChu"
+                            minlength="1"
+                            maxlength="50"
+                            required
+                        />
+                        <validation-messages [formCtrl]="ChiTietHoaDonBaiDang_GhiChu"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!chiTietHoaDonBaiDangForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <chiTietHoaDonBaiDangBaiDangLookupTableModal
+        #chiTietHoaDonBaiDangBaiDangLookupTableModal
+        (modalSave)="getNewBaiDangId()"
+    ></chiTietHoaDonBaiDangBaiDangLookupTableModal>
+    <chiTietHoaDonBaiDangGoiBaiDangLookupTableModal
+        #chiTietHoaDonBaiDangGoiBaiDangLookupTableModal
+        (modalSave)="getNewGoiBaiDangId()"
+    ></chiTietHoaDonBaiDangGoiBaiDangLookupTableModal>
+    <chiTietHoaDonBaiDangUserLookupTableModal
+        #chiTietHoaDonBaiDangUserLookupTableModal
+        (modalSave)="getNewUserId()"
+    ></chiTietHoaDonBaiDangUserLookupTableModal>
+</div>

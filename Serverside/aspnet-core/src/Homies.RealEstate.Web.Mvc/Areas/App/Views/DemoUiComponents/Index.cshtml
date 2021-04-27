@@ -1,0 +1,52 @@
+﻿@using Homies.RealEstate.Web.Areas.App.Startup
+@{
+    ViewBag.CurrentPageName = AppPageNames.Common.DemoUiComponents;
+}
+
+@section Styles
+{
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/demo-ui-components.css" asp-append-version="true"/>
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Areas/App/Views/_Bundles/demo-ui-components.js" asp-append-version="true"></script>
+}
+
+<div class="content  d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <abp-page-subheader title="@L("DemoUiComponents")">
+    </abp-page-subheader>
+
+    <div class="@(await GetContainerClass())">
+
+        <div class="card card-custom gutter-b">
+            <div class="card-body">
+                <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                    <div class="alert-text">
+                        @L("DemoUiComponents_Info")<br/>
+                        <a href="https://keenthemes.com/metronic/" class="alert-link" target="_blank">@L("DemoUiComponents_Info_Metronic_Link_Text")</a>
+                    </div>
+                    <div class="alert-close">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">
+                                <i class="ki ki-close"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                @await Html.PartialAsync("_DateAndTimePickers")
+
+                @await Html.PartialAsync("_FileUpload")
+
+                @await Html.PartialAsync("_Selections")
+
+                @await Html.PartialAsync("_InputMask")
+
+                @await Html.PartialAsync("_Editor")
+
+            </div>
+        </div>
+    </div>
+</div>

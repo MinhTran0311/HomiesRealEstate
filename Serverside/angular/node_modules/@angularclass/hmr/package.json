@@ -1,0 +1,37 @@
+{
+  "name": "@angularclass/hmr",
+  "version": "3.0.0",
+  "description": "angular-hmr: Hot Module Replacement for Webpack and Angular",
+  "main": "dist/index.js",
+  "sideEffects": false,
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc || true",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickJS/angular-hmr.git"
+  },
+  "author": "PatrickJS <github@gdi2290.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/PatrickJS/angular-hmr/issues"
+  },
+  "homepage": "https://github.com/PatrickJS/angular-hmr#readme",
+  "devDependencies": {
+    "@angular/core": "~10.0.14",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.2",
+    "tslib": "^2.0.1",
+    "typescript": "^3.9.5",
+    "zone.js": "^0.11.1",
+    "webpack": "4.44.1"
+  },
+  "dependencies": {}
+}

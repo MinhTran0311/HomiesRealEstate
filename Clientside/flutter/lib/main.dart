@@ -17,7 +17,6 @@ import 'package:boilerplate/ui/homepage/homepage.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/ui/splash/splash.dart';
-import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,6 +67,7 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
+        Provider<UserStore>(create: (_) => _userStore),
 
         //Provider<FormStore>(create: (_) => _formStore),
       ],
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
               // Built-in localization of basic text for Cupertino widgets
               GlobalCupertinoLocalizations.delegate,
             ],
-            home: _authTokenStore.loggedIn ? HomePageScreen() : NewpostScreen(),
+            home: _authTokenStore.loggedIn ? HomePageScreen() : LoginScreen(),
           );
         },
       ),

@@ -1,28 +1,92 @@
 class Post {
+  String userName;
+  String danhMuc;
+  String tenXa;
+  String tagLoaiBaidang;
+  String thoiDiemDang;
+  String thoiHan;
+  String diaChi;
+  String moTa;
+  String toaDoX;
+  String toaDoY;
+  int luotXem;
+  int luotYeuThich;
+  num diemBaiDang;
+  String trangThai;
+  String tagTimKiem;
+  String tieuDe;
   int userId;
+  int danhMucId;
+  int xaId;
   int id;
-  String title;
-  String body;
 
   Post({
+    this.userName,
+    this.danhMuc,
+    this.tenXa,
+    this.tagLoaiBaidang,
+    this.thoiDiemDang,
+    this.thoiHan,
+    this.diaChi,
+    this.moTa,
+    this.toaDoX,
+    this.toaDoY,
+    this.luotXem,
+    this.luotYeuThich,
+    this.diemBaiDang,
+    this.trangThai,
+    this.tagTimKiem,
+    this.tieuDe,
     this.userId,
+    this.danhMucId,
+    this.xaId,
     this.id,
-    this.title,
-    this.body,
   });
 
   factory Post.fromMap(Map<String, dynamic> json) => Post(
-        userId: json["userId"],
-        id: json["id"],
-        title: json["title"],
-        body: json["body"],
+    userName: json["userName"],
+    danhMuc: json["danhMucTenDanhMuc"],
+    tenXa: json["xaTenXa"],
+    tagLoaiBaidang: json["baiDang"]["tagLoaiBaiDang"],
+    thoiDiemDang: json["baiDang"]["thoiDiemDang"],
+    thoiHan: json["baiDang"]["thoiHan"],
+    diaChi: json["baiDang"]["diaChi"],
+    moTa: json["baiDang"]["moTa"],
+    toaDoX: json["baiDang"]["toaDoX"],
+    toaDoY: json["baiDang"]["toaDoY"],
+    luotXem: json["baiDang"]["luotXem"],
+    luotYeuThich: json["baiDang"]["luotYeuThich"],
+    diemBaiDang: json["baiDang"]["diemBaiDang"],
+    trangThai: json["baiDang"]["trangThai"],
+    tagTimKiem: json["baiDang"]["tagTimKiem"],
+    tieuDe: json["baiDang"]["tieuDe"],
+    userId: json["baiDang"]["userId"],
+    danhMucId: json["baiDang"]["danhMucId"],
+    xaId: json["baiDang"]["xaId"],
+    id: json["baiDang"]["id"],
       );
 
   Map<String, dynamic> toMap() => {
-        "userId": userId,
-        "id": id,
-        "title": title,
-        "body": body,
+    "userName": userName,
+    "danhMucTenDanhMuc": danhMuc,
+    "xaTenXa": tenXa,
+    "tagLoaiBaiDang": tagLoaiBaidang,
+    "thoiDiemDang": thoiDiemDang,
+    "thoiHan": thoiHan,
+    "diaChi": diaChi,
+    "moTa": moTa,
+    "toaDoX": toaDoX,
+    "toaDoY": toaDoY,
+    "luotXem": luotXem,
+    "luotYeuThich": luotYeuThich,
+    "diemBaiDang": diemBaiDang,
+    "trangThai": trangThai,
+    "tagTimKiem": tagTimKiem,
+    "tieuDe": tieuDe,
+    "userId": userId,
+    "danhMucId": danhMucId,
+    "xaId": xaId,
+    "id": id,
       };
   
 }

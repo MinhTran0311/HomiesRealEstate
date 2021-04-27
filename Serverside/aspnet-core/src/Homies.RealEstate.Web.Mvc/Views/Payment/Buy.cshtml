@@ -1,0 +1,110 @@
+﻿@using System.Globalization
+@using Homies.RealEstate
+@using Homies.RealEstate.Localization
+@using Homies.RealEstate.MultiTenancy.Payments;
+@model Homies.RealEstate.Web.Models.Payment.BuyEditionViewModel
+
+@{
+    Layout = "~/Views/Account/_Layout.cshtml";
+    ViewBag.DisableTenantChange = true;
+}
+
+@section Scripts
+{
+    <script abp-src="/view-resources/Views/Payment/Buy.js" asp-append-version="true"></script>
+}
+
+@section Styles
+{
+    <link abp-href="/view-resources/Views/Payment/Payment.css" rel="stylesheet" type="text/css" asp-append-version="true"/>
+    <link href="/metronic/common/css/login-1@(CultureHelper.IsRtl ? ".rtl" : "").css" rel="stylesheet"/>
+}
+
+<div class="login-form">
+    <div class="pb-13 pt-lg-0 pt-5">
+        <h3 class="font-weight-bolder text-dark font-size-h4 font-size-h1-lg">@L("PaymentInfo")</h3>
+        <p class="text-muted font-weight-bold font-size-h4">(@Model.Edition.DisplayName @L("Edition"))</p>
+    </div>
+    <div>
+        <input type="hidden" name="EditionId" value="@Model.Edition.Id"/>
+        <input type="hidden" name="EditionPaymentType" value="@Model.EditionPaymentType"/>
+        <input type="hidden" name="SubscriptionStartType" value="@Model.SubscriptionStartType"/>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">
+                <i class="fa fa-exclamation-triangle"></i> @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <div class="radio-inline">
+            @if (Model.Edition.DailyPrice.HasValue && Model.Edition.DailyPrice.Value > 0)
+            {
+                <label class="radio mb-5">
+                    <input class="form-control" type="radio" name="PaymentPeriodType"
+                           data-day-count="@((int) PaymentPeriodType.Daily)"
+                           data-payment-period-type-amount="@(Model.Edition.DailyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
+                           value="@PaymentPeriodType.Daily"/>
+                    <span></span>
+                    @L("DailyPrice"): @RealEstateConsts.CurrencySign@Model.Edition.DailyPrice.Value.ToString("N2")
+                </label>
+            }
+            @if (Model.Edition.WeeklyPrice.HasValue && Model.Edition.WeeklyPrice.Value > 0)
+            {
+                <label class="radio mb-5">
+                    <input class="form-control" type="radio" name="PaymentPeriodType"
+                           data-day-count="@((int) PaymentPeriodType.Weekly)"
+                           data-payment-period-type-amount="@(Model.Edition.WeeklyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
+                           value="@PaymentPeriodType.Weekly"/>
+                    <span></span>
+                    @L("WeeklyPrice"): @RealEstateConsts.CurrencySign@Model.Edition.WeeklyPrice.Value.ToString("N2")
+                </label>
+            }
+            @if (Model.Edition.MonthlyPrice.HasValue && Model.Edition.MonthlyPrice.Value > 0)
+            {
+                <label class="radio mb-5">
+                    <input class="form-control" type="radio" name="PaymentPeriodType"
+                           data-day-count="@((int) PaymentPeriodType.Monthly)"
+                           data-payment-period-type-amount="@(Model.Edition.MonthlyPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
+                           value="@PaymentPeriodType.Monthly"/>
+                    <span></span>
+                    @L("MonthlyPrice"): @RealEstateConsts.CurrencySign@Model.Edition.MonthlyPrice.Value.ToString("N2")
+                </label>
+            }
+
+            @if (Model.Edition.AnnualPrice.HasValue && Model.Edition.AnnualPrice.Value > 0)
+            {
+                <label class="radio mb-5">
+                    <input class="form-control" type="radio" name="PaymentPeriodType"
+                           data-day-count="@((int) PaymentPeriodType.Annual)"
+                           data-payment-period-type-amount="@(Model.Edition.AnnualPrice.Value.ToString("0.00", CultureInfo.InvariantCulture))"
+                           value="@PaymentPeriodType.Annual"/>
+                    <span></span>
+                    @L("AnnualPrice"): @RealEstateConsts.CurrencySign@Model.Edition.AnnualPrice.Value.ToString("N2")
+                </label>
+            }
+        </div>
+
+    </div>
+
+    <hr/>
+
+    @if (Model.PaymentGateways.Any(gateway => gateway.SupportsRecurringPayments))
+    {
+        <div class="form-group">
+            <label class="checkbox checkbox-outline">
+                <input class="form-control" type="checkbox" name="RecurringPaymentEnabled" value="true"/> 
+                <span></span>
+                @L("AutomaticallyBillMyAccount")
+            </label>
+        </div>
+    }
+
+    @foreach (var paymentGateway in Model.PaymentGateways)
+    {
+        <div class="form-group">
+            <button data-gateway="@paymentGateway.GatewayType" data-supports-subscription="@paymentGateway.SupportsRecurringPayments.ToString().ToLower()" class="btn btn-success btn-block checkout">@L("CheckoutWith" + paymentGateway.GatewayType)</button>
+        </div>
+    }
+
+</div>

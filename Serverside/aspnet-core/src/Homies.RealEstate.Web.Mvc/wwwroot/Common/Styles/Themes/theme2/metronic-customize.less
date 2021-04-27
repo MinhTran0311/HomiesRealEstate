@@ -1,0 +1,105 @@
+﻿@import "../mobile-header.less";
+@import "../cookie-consent.less";
+
+body {
+  background-image: url(/metronic/themes/theme2/images/bg/bg-10.jpg);
+}
+
+.unread-chat-message-count {
+  position: absolute;
+  top: 18px;
+}
+
+.subscription-warning, .mobile-subscription-warning {
+  background-color: transparent;
+
+  span, i {
+    color: white;
+  }
+}
+
+.unread-notification-count {
+  position: absolute;
+  top: 18px;
+  left: 25px;
+}
+
+.searchMenuContainerSelect2 {
+  width: 250px
+}
+
+.searchMenuContainerSelect2 span.select2-selection.select2-selection--single:before {
+  content: "\f2eb";
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  display: inline-block;
+  font: normal normal normal 16px/1 "LineAwesome";
+  font-size: inherit;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+}
+
+.searchMenuContainerSelect2 .select2-selection__rendered {
+  font-family: "Poppins" !important;
+  border-radius: 5px !important;
+  margin-left: 14px !important;
+  padding-left: 36px !important;
+  height: 40px;
+  line-height: 24px !important;
+}
+
+@media (max-width: 991px) {
+  .searchMenuTop {
+    display: block !important;
+  }
+
+    .searchMenuBottom {
+        display: none !important;
+    }
+    
+    .searchMenuContainerSelect2 {
+        width: calc(100% - 40px) !important;
+    }
+}
+
+@media (min-width: 992px) {
+  .searchMenuTop {
+    display: none !important;
+  }
+
+    .searchMenuBottom {
+        display: block !important;
+    }    
+    
+    .searchMenuContainerSelect2 .select2-selection {
+            background-color: transparent !important;
+            border: 1px solid white !important;
+            color: white !important;
+    }
+    
+    .searchMenuSelect2 {
+        background-color: transparent !important;
+        border: 1px solid white !important;
+        color: white !important;
+    }
+}
+
+.searchMenuContainerSelect2 {
+  margin: 0px;
+  min-width: 200px;
+}
+
+.searchMenuSelect2 {
+  min-width: 200px;
+}
+
+.searchMenuBottom .select2-container {
+  top: 20px;
+}
+
+.searchMenuTop {
+  margin-bottom: 1em !important;
+  margin-left: 25px !important;
+}

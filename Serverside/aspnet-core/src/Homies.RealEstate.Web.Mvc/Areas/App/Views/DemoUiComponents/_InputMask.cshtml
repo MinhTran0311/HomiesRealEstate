@@ -1,0 +1,52 @@
+﻿<div class="card-header">
+    <div class="card-title">
+        <h3 class="card-label">
+            Input Mask
+        </h3>
+    </div>
+</div>
+<div class="card-body">
+    <form role="form" class="form">
+
+        <div class="form-group">
+            <label for="DateInputMask">Date</label>
+            <div class="input-group">
+                <input id="DateInputMask" type="text" class="form-control input-mask" data-inputmask="'alias': 'datetime', 'inputFormat': 'yyyy-mm-dd'">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary test-btn-input-mask" type="button">@L("Submit")</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="NumericInputMaskLength">Numeric with length</label>
+            <div class="input-group">
+                <input id="NumericInputMaskLength" type="text" class="form-control input-mask" data-inputmask="'mask': '9', 'repeat': 10, 'greedy' : false">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary test-btn-input-mask" type="button">@L("Submit")</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="NumericInputMask">Numeric with mask</label>
+            <div class="input-group">
+                <input id="NumericInputMask" type="text" class="form-control input-mask" data-inputmask="'mask': '99-9999999'">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary test-btn-input-mask" type="button">@L("Submit")</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="CurrencyInputMask">Currency</label>
+            <div class="input-group">
+                <input id="CurrencyInputMask" type="text" class="form-control input-mask" data-inputmask="'alias': 'numeric', 'groupSeparator': ',', 'autoGroup': true, 'digits': 2, 'digitsOptional': false, 'prefix': '$ ', 'placeholder': '0'">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary test-btn-input-mask" type="button">@L("Submit")</button>
+                </span>
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,164 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #lichSuGiaoDichForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="lichSuGiaoDich.id">{{ l("EditLichSuGiaoDich") }}</span>
+                        <span *ngIf="!lichSuGiaoDich.id">{{ l("CreateNewLichSuGiaoDich") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="UserName">{{ l("User") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="UserName" name="userName" [(ngModel)]="userName" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectUserModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setUserIdNull()"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="form-control" name="lichSuGiaoDich.userId" [(ngModel)]="lichSuGiaoDich.userId" type="text" hidden />
+
+                    <div class="form-group m-form__group">
+                        <label for="ChiTietHoaDonBaiDangGhiChu">{{ l("ChiTietHoaDonBaiDang") }}</label>
+                        <div class="input-group">
+                            <input
+                                class="form-control"
+                                id="ChiTietHoaDonBaiDangGhiChu"
+                                name="chiTietHoaDonBaiDangGhiChu"
+                                [(ngModel)]="chiTietHoaDonBaiDangGhiChu"
+                                type="text"
+                                disabled
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectChiTietHoaDonBaiDangModal()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setChiTietHoaDonBaiDangIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input
+                        class="form-control"
+                        name="lichSuGiaoDich.chiTietHoaDonBaiDangId"
+                        [(ngModel)]="lichSuGiaoDich.chiTietHoaDonBaiDangId"
+                        type="text"
+                        hidden
+                    />
+
+                    <div class="form-group m-form__group">
+                        <label for="UserName2">{{ l("User") }}</label>
+                        <div class="input-group">
+                            <input class="form-control" id="UserName2" name="userName2" [(ngModel)]="userName2" type="text" disabled />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary blue" (click)="openSelectUserModal2()" type="button">
+                                    <i class="fa fa-search"></i> {{ l("Pick") }}
+                                </button>
+                            </div>
+                            <div class="input-group-prepend">
+                                <button class="btn btn-danger btn-icon" type="button" (click)="setKiemDuyetVienIdNull()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input
+                        class="form-control"
+                        name="lichSuGiaoDich.kiemDuyetVienId"
+                        [(ngModel)]="lichSuGiaoDich.kiemDuyetVienId"
+                        type="text"
+                        hidden
+                    />
+
+                    <div class="form-group">
+                        <label for="LichSuGiaoDich_SoTien">{{ l("SoTien") }}</label>
+                        <input
+                            type="number"
+                            #LichSuGiaoDich_SoTien="ngModel"
+                            id="LichSuGiaoDich_SoTien"
+                            class="form-control"
+                            [(ngModel)]="lichSuGiaoDich.soTien"
+                            name="SoTien"
+                        />
+                        <validation-messages [formCtrl]="LichSuGiaoDich_SoTien"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LichSuGiaoDich_ThoiDiem">{{ l("ThoiDiem") }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #LichSuGiaoDich_ThoiDiem
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="lichSuGiaoDich.thoiDiem"
+                            id="LichSuGiaoDich_ThoiDiem"
+                            name="LichSuGiaoDich_ThoiDiem"
+                        />
+                        <validation-messages [formCtrl]="LichSuGiaoDich_ThoiDiem"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LichSuGiaoDich_GhiChu">{{ l("GhiChu") }} *</label>
+                        <input
+                            type="text"
+                            #LichSuGiaoDich_GhiChu="ngModel"
+                            id="LichSuGiaoDich_GhiChu"
+                            class="form-control"
+                            [(ngModel)]="lichSuGiaoDich.ghiChu"
+                            name="GhiChu"
+                            minlength="1"
+                            maxlength="50"
+                            required
+                        />
+                        <validation-messages [formCtrl]="LichSuGiaoDich_GhiChu"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!lichSuGiaoDichForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <lichSuGiaoDichUserLookupTableModal #lichSuGiaoDichUserLookupTableModal (modalSave)="getNewUserId()"></lichSuGiaoDichUserLookupTableModal>
+    <lichSuGiaoDichChiTietHoaDonBaiDangLookupTableModal
+        #lichSuGiaoDichChiTietHoaDonBaiDangLookupTableModal
+        (modalSave)="getNewChiTietHoaDonBaiDangId()"
+    ></lichSuGiaoDichChiTietHoaDonBaiDangLookupTableModal>
+    <lichSuGiaoDichUserLookupTableModal
+        #lichSuGiaoDichUserLookupTableModal2
+        (modalSave)="getNewKiemDuyetVienId()"
+    ></lichSuGiaoDichUserLookupTableModal>
+</div>

@@ -1,0 +1,134 @@
+﻿@using System.Threading.Tasks
+@using Abp.AspNetZeroCore.Timing
+@using Abp.Configuration.Startup
+@using Abp.Timing
+@using Abp.Web.Security.AntiForgery
+@using Homies.RealEstate.Timing
+@using Homies.RealEstate.UiCustomization.Dto
+@using Homies.RealEstate.Url
+@using Homies.RealEstate.Web.Resources
+@using CultureHelper = Homies.RealEstate.Localization.CultureHelper
+@inject ScriptPaths ScriptPaths
+@inject AppTimes AppTimes
+@inject IAbpAntiForgeryManager AbpAntiForgeryManager
+@inject IMultiTenancyConfig MultiTenancyConfig
+@inject IWebResourceManager WebResourceManager
+@inject IWebUrlService WebUrlService
+@{
+    Layout = null;
+    AbpAntiForgeryManager.SetCookie(Context);
+    UiCustomizationSettingsDto theme = await GetTheme();
+}
+<!DOCTYPE html>
+<html lang="en" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
+<head>
+    <meta charset="utf-8"/>
+    <title>RealEstate</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    @* Fill these meta tags upon your project specification *@
+    <meta content="RealEstate" name="description"/>
+    <meta content="RealEstate" name="keywords">
+    <meta content="RealEstate" name="author"/>
+
+    <link rel="shortcut icon" href="~/favicon.ico"/>
+
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/vendors.bundle.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="@(ApplicationPath)metronic/themes/default/css/style.bundle@(CultureHelper.IsRtl ? ".rtl" : "").css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/account-layout-libs.css" asp-append-version="true"/>
+
+    <link rel="stylesheet" abp-href="/view-resources/Areas/App/Views/_Bundles/common-styles.css" asp-append-version="true"/>
+
+    @if (CultureHelper.IsRtl)
+    {
+        <link rel="stylesheet" href="/Common/Styles/abp-zero-template-rtl.css" asp-append-version="true"/>
+    }
+
+    <link rel="stylesheet" abp-href="/view-resources/Views/Account/_Layout@(CultureHelper.IsRtl ? "-rtl" : "").css" asp-append-version="true"/>
+
+    @await RenderSectionAsync("Styles", false)
+
+    <script type="text/javascript">
+        @* This is used to get the application's root path from javascript.
+        It's useful if you're running application in a virtual directory under IIS. *@
+        var abp = abp || {}; abp.appPath = '@ApplicationPath';
+    </script>
+
+</head>
+<body class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable">
+<!-- begin:: Page -->
+<div class="d-flex flex-column flex-root">
+    <div class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
+        <!--begin::Aside-->
+        <div class="login-aside d-flex flex-column flex-row-auto" style="background-color: #F2C98A;">
+            <!--begin::Aside Top-->
+            <div class="d-flex flex-column-auto flex-column pt-lg-40 pt-15">
+                <!--begin::Aside header-->
+                <a href="#" class="text-center mb-10">
+                    <vc:account-logo skin="dark"></vc:account-logo>
+                </a>
+                <!--end::Aside header-->
+                <!--begin::Aside title-->
+                <h3 class="font-weight-bolder text-center font-size-h4 font-size-h1-lg" style="color: #986923;">
+                    Base solution for your <br/> next web application.
+                </h3>
+                <!--end::Aside title-->
+            </div>
+            <!--end::Aside Top-->
+            <!--begin::Aside Bottom-->
+            <div class="aside-img d-flex flex-row-fluid bgi-no-repeat bgi-position-y-bottom bgi-position-x-center" style="background-image: url(/metronic/assets/media/svg/illustrations/login-visual-1.svg)"></div>
+            <!--end::Aside Bottom-->
+        </div>
+        <!--begin::Aside-->
+
+        <!--begin::Content-->
+        <div class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto">
+            <div class="d-flex flex-column-fluid flex-center">
+                <!--begin::Signin-->
+                <div class="login-form login-signin">
+                    <div class="pb-13 pt-lg-0 pt-5">
+                        @if (!(ViewBag.DisableTenantChange ?? false) && MultiTenancyConfig.IsEnabled && !WebUrlService.SupportsTenancyNameInUrl)
+                        {
+                            <div class="login__signup-label tenant-change-box">
+                                <vc:tenant-change></vc:tenant-change>
+                            </div>
+                        }
+                    </div>
+                    <!--begin::Form-->
+                    @RenderBody()
+                    <!--end::Form-->
+                </div>
+            </div>
+            <div class="d-flex justify-content-lg-start justify-content-center align-items-end py-7 py-lg-0">
+                <vc:account-languages></vc:account-languages>
+            </div>
+        </div>
+        <!--end::Content-->
+    </div>
+</div>
+<!--begin::Base Scripts -->
+<script abp-src="/view-resources/Areas/App/Views/_Bundles/account-layout-libs.js" asp-append-version="true"></script>
+
+<!-- Dynamic scripts of ABP system (They are created on runtime and can not be bundled) -->
+<script src="~/AbpServiceProxies/GetAll?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+<script src="~/AbpScripts/GetScripts?v=@(AppTimes.StartupTime.Ticks)" type="text/javascript"></script>
+
+<script abp-src="/view-resources/Areas/App/Views/_Bundles/common-scripts.js" asp-append-version="true"></script>
+<script src="~@ScriptPaths.JQuery_Validation_Localization" asp-append-version="true"></script>
+
+@WebResourceManager.RenderScripts()
+
+@await RenderSectionAsync("Scripts", false)
+<script>
+        app.supportsTenancyNameInUrl = @(WebUrlService.SupportsTenancyNameInUrl.ToString().ToLower());
+
+        jQuery(document).ready(function () {
+            if (window.CurrentPage) {
+                CurrentPage.init();
+            }
+        });
+    </script>
+</body>
+</html>

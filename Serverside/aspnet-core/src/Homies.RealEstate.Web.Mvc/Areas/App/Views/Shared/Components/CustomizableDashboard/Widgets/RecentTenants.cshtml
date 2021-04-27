@@ -1,0 +1,47 @@
+﻿@using Homies.RealEstate.Web.Resources
+
+@inject IWebResourceManager WebResourceManager
+@{
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/morris.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/raphael.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.flot.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.waypoints.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.counterup.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/topojson.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.easypiechart.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/chartist.min.js");
+}
+
+
+<div class="card card-custom RecentTenantsContainer recent-tenants h-100">
+    <div class="card-header align-items-center border-0 mt-4">
+        <div class="card-title">
+            <span class="card-icon">
+                <i class="icon-user-follow font-purple-soft"></i>
+            </span>
+            <h3 class="card-label">
+                <span class="font-weight-bolder text-dark">@L("RecentTenants")</span>
+                <small class="sub-title"></small>
+            </h3>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="scroller chart m-scrollable" data-always-visible="1" data-rail-visible="0" data-scrollable="true">
+            <table class="recent-tenants-table display table table-separate table-head-custom no-footer dtr-inline dt-responsive nowrap">
+                <thead>
+                <tr>
+                    <th>@L("TenantName")</th>
+                    <th>@L("CreationTime")</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="scroller-footer">
+            <div class="btn-arrow-link pull-right">
+                <a href="javascript:;" class="see-all-recent-tenants">@L("SeeAllRecords")</a>
+                <i class="icon-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+</div>

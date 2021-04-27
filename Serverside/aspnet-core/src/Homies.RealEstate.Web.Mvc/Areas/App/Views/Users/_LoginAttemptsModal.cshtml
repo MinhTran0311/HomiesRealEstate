@@ -1,0 +1,66 @@
+﻿@using Abp.Timing
+@using Homies.RealEstate.Web.Areas.App.Models.Common.Modals
+@using Homies.RealEstate.Web.Areas.App.Models.Users
+@model UserLoginAttemptModalViewModel
+@await Html.PartialAsync("~/Areas/App/Views/Common/Modals/_ModalHeader.cshtml", new ModalHeaderViewModel(L("LoginAttempts")))
+<div class="modal-body">
+    <form id="loginAttemptsModalForm" class="form-horizontal">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    @foreach (var loginAttempt in Model.LoginAttempts)
+                    {
+                        <div class="alert alert-custom alert-outline-@(loginAttempt.Result == "Success" ?"success":"danger")" role="alert">
+                            <div class="alert__text">
+                                @if (!string.IsNullOrEmpty(loginAttempt.ClientIpAddress))
+                                {
+                                    <div class="row">
+                                        <label class="control-label col-sm-3 text-right">@L("IpAddress")</label>
+                                        <div class="col-sm-9">
+                                            <p class="form-control-static">
+                                                @loginAttempt.ClientIpAddress
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(loginAttempt.ClientName))
+                                {
+                                    <div class="row">
+                                        <label class="control-label col-sm-3 text-right">@L("Client")</label>
+                                        <div class="col-sm-9">
+                                            <p class="form-control-static">
+                                                @loginAttempt.ClientName
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(loginAttempt.BrowserInfo))
+                                {
+                                    <div class="row">
+                                        <label class="control-label col-sm-3 text-right">@L("Browser")</label>
+                                        <div class="col-sm-9">
+                                            <p class="form-control-static">
+                                                @loginAttempt.BrowserInfo
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <label class="control-label col-sm-3 text-right">@L("Time")</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static login-attempt-date" data-date="@loginAttempt.CreationTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")">
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-light-primary font-weight-bold close-button" data-dismiss="modal">@L("Close")</button>
+</div>

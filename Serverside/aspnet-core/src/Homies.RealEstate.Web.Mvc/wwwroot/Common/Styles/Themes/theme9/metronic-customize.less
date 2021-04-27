@@ -1,0 +1,43 @@
+﻿@import "../mobile-header.less";
+@import "../cookie-consent.less";
+
+.unread-chat-message-count {
+    position: absolute;
+    top: 18px;
+}
+
+.unread-notification-count {
+    position: absolute;
+    top: 19px;
+    right: 5px;
+}
+
+@media (max-width: 991px) {
+    .searchMenuTop {
+        display: block !important;
+    }
+
+    .searchMenuBottom {
+        display: none !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .searchMenuTop {    
+        display: none !important;
+    }
+
+    .searchMenuBottom {
+        display: block !important;
+    }
+}
+
+.searchMenuBottom{
+    margin-top: 30px !important;
+}
+
+.subscription-warning{
+    span{
+        color: white !important;
+    }
+}

@@ -1,0 +1,51 @@
+﻿@using Homies.RealEstate.Configuration
+@using Homies.RealEstate.Web.Areas.App.Models.Layout
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppMenu
+@using Homies.RealEstate.Web.Navigation
+@using Abp.Configuration
+@using Abp.Extensions
+@model MenuViewModel
+@{
+    var theme = await GetTheme();
+    var orderedMenuItems = Model.Menu.Items.OrderByCustom().ToList();
+}
+
+
+<nav id="kt_aside_menu"
+     aria-label="@L("LeftMenu")"
+     class="aside-menu @(theme.BaseSettings.Menu.SubmenuToggle == "false" ? "scroll " : "") @(theme.BaseSettings.Menu.SubmenuToggle == "true" ? " aside-menu-dropdown" : "")"
+     data-menu-vertical="1"
+     @(theme.BaseSettings.Menu.SubmenuToggle == "false" ? "data-menu-scroll=1" : "data-menu-scroll=0")
+     @(theme.BaseSettings.Menu.SubmenuToggle == "true" ? "data-menu-dropdown=1" : "data-menu-dropdown=0")
+     data-menu-dropdown-timeout="500"
+     data-menu-dropdown="@(theme.BaseSettings.Menu.FixedAside && theme.BaseSettings.Menu.SubmenuToggle == "Dropdown" ? "1" : "0")">
+
+    <ul class="menu-nav" aria-label="@L("LeftMenu")">
+        @if (theme.BaseSettings.Menu.SearchActive)
+        {
+            <li class="menu-item  menu-item-submenu menuSearchItem" aria-haspopup="true"
+                data-ktmenu-submenu-toggle="hover">
+                <div class="form-group searchMenuContainerSelect2 aside-menu-@Html.Raw(theme.BaseSettings.Menu.AsideSkin)">
+                    <select class="form-control searchMenuSelect2 " aria-describedby="basic-addon2">
+                        <option value="">@L("QuickNav")</option>
+                    </select>
+                </div>
+            </li>
+        }
+        @for (var i = 0; i < Model.Menu.Items.Count; i++)
+        {
+            var menuItem = orderedMenuItems[i];
+            if (!menuItem.IsVisible)
+            {
+                continue;
+            }
+            @await Html.PartialAsync("Components/AppMenu/_UserMenuItem", new UserMenuItemViewModel
+            {
+                MenuItem = menuItem,
+                MenuItemIndex = i,
+                RootLevel = true,
+                CurrentPageName = Model.CurrentPageName
+            })
+        }
+    </ul>
+</nav>

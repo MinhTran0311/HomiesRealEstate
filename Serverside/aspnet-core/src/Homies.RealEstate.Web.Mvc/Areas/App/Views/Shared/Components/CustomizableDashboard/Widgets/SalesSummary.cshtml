@@ -1,0 +1,86 @@
+﻿@using Homies.RealEstate.Web.Resources
+
+@inject IWebResourceManager WebResourceManager
+@{
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/morris.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/raphael.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.flot.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.waypoints.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.counterup.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/topojson.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/jquery.easypiechart.min.js");
+    WebResourceManager.AddScript(ApplicationPath + "view-resources/Areas/App/Views/_Bundles/chartist.min.js");
+}
+
+<div class="card card-custom SalesSummaryContainer h-100">
+    <div class="card-header align-items-center border-0 mt-4">
+        <h3 class="card-title align-items-start flex-column">
+            <span class="font-weight-bolder text-dark">Sales Summary</span>
+        </h3>
+        <div class="card-toolbar">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn m-btn--pill btn-secondary active">
+                    <input type="radio" name="SalesSummaryDateInterval" autocomplete="off" checked="" value="1">
+                    Daily
+                </label>
+                <label class="btn m-btn--pill btn-secondary">
+                    <input type="radio" name="SalesSummaryDateInterval" autocomplete="off" value="1">
+                    Weekly
+                </label>
+                <label class="btn m-btn--pill btn-secondary">
+                    <input type="radio" name="SalesSummaryDateInterval" autocomplete="off" value="1">
+                    Monthly
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row list-separated">
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <h6>
+                    Total Sales
+                </h6>
+                <div>
+                    <span id="totalSales" class="counterup m--font-danger m--font-bolder">...</span> <span class="text-danger text-bold">$</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <h6>
+                    Revenue
+                </h6>
+                <div class="uppercase font-hg font-green-haze">
+                    <span id="revenue" class="counterup m--font-warning m--font-bolder">...</span> <span class="text-warning text-bold">$</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <h6>
+                    Expenses
+                </h6>
+                <div class="uppercase font-hg font-purple">
+                    <span id="expenses" class="counterup m--font-success m--font-bolder">...</span> <span class="text-success text-bold">$</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <h6>
+                    Growth
+                </h6>
+                <div class="uppercase font-hg font-blue-sharp">
+                    <span id="growth" class="counterup m--font-info m--font-bolder">...</span> <span class="text-info text-bold">$</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="salesStatisticsLoading" style="text-align: center;">
+            <div class="kt-blockui" style="display: inline-block; margin-top: 120px;">
+                <span>Loading...</span>
+                <span>
+                    <div class="loader loader-brand "></div>
+                </span>
+            </div>
+        </div>
+
+        <div id="salesStatistics" class="portlet-body-morris-fit morris-chart salesStatisticsChart" style="height: 260px; display: none">
+        </div>
+    </div>
+</div>

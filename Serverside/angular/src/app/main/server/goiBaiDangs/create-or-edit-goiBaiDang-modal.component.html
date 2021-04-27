@@ -1,0 +1,130 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #goiBaiDangForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="goiBaiDang.id">{{ l("EditGoiBaiDang") }}</span>
+                        <span *ngIf="!goiBaiDang.id">{{ l("CreateNewGoiBaiDang") }}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="GoiBaiDang_TenGoi">{{ l("TenGoi") }} *</label>
+                        <input
+                            type="text"
+                            #GoiBaiDang_TenGoi="ngModel"
+                            id="GoiBaiDang_TenGoi"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.tenGoi"
+                            name="TenGoi"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_TenGoi"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GoiBaiDang_Phi">{{ l("Phi") }}</label>
+                        <input
+                            type="number"
+                            #GoiBaiDang_Phi="ngModel"
+                            id="GoiBaiDang_Phi"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.phi"
+                            name="Phi"
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_Phi"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GoiBaiDang_DoUuTien">{{ l("DoUuTien") }}</label>
+                        <input
+                            type="number"
+                            #GoiBaiDang_DoUuTien="ngModel"
+                            id="GoiBaiDang_DoUuTien"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.doUuTien"
+                            name="DoUuTien"
+                            min="1"
+                            max="10"
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_DoUuTien"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GoiBaiDang_ThoiGianToiThieu">{{ l("ThoiGianToiThieu") }}</label>
+                        <input
+                            type="number"
+                            #GoiBaiDang_ThoiGianToiThieu="ngModel"
+                            id="GoiBaiDang_ThoiGianToiThieu"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.thoiGianToiThieu"
+                            name="ThoiGianToiThieu"
+                            min="1"
+                            max="365"
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_ThoiGianToiThieu"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GoiBaiDang_MoTa">{{ l("MoTa") }} *</label>
+                        <input
+                            type="text"
+                            #GoiBaiDang_MoTa="ngModel"
+                            id="GoiBaiDang_MoTa"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.moTa"
+                            name="MoTa"
+                            minlength="1"
+                            maxlength="100"
+                            required
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_MoTa"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="GoiBaiDang_TrangThai">{{ l("TrangThai") }} *</label>
+                        <input
+                            type="text"
+                            #GoiBaiDang_TrangThai="ngModel"
+                            id="GoiBaiDang_TrangThai"
+                            class="form-control"
+                            [(ngModel)]="goiBaiDang.trangThai"
+                            name="TrangThai"
+                            minlength="1"
+                            maxlength="25"
+                            required
+                        />
+                        <validation-messages [formCtrl]="GoiBaiDang_TrangThai"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{ l("Cancel") }}</button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!goiBaiDangForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i> <span>{{ l("Save") }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

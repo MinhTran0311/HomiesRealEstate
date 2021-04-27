@@ -9,6 +9,7 @@ class User {
   bool isActive;
   bool isEmailConfirmed;
   String creationTime;
+
   // List<String> permissions;
 
   User({
@@ -68,3 +69,39 @@ class User {
     // "roles": permissions,
   };
 }
+
+class CurrenUserForEditdyo{
+  String name;
+  String surname;
+  String userName;
+  String emailAddress;
+  String phoneNumber;
+  CurrenUserForEditdyo({
+    this.name,
+    this.emailAddress,
+    this.phoneNumber,
+    this.surname,
+    this.userName
+});
+  factory CurrenUserForEditdyo.fromMap(Map<String, dynamic> json) {
+    print("Duong11");
+    return CurrenUserForEditdyo(
+      name: json["result"]["name"],
+      surname: json["result"]["surname"],
+      userName: json["result"]["userName"],
+      emailAddress: json["result"]["emailAddress"],
+      phoneNumber: json["result"]["phoneNumber"],
+    );
+  }
+}
+// class CurrenUserForEditdyo{
+//   dynamic result;
+//   CurrenUserForEditdyo({
+//     this.result
+// });
+//   factory CurrenUserForEditdyo.fromMap(Map<String, dynamic> json){
+//     return CurrenUserForEditdyo(
+//       result: json["result"],
+//     );
+//   }
+// }

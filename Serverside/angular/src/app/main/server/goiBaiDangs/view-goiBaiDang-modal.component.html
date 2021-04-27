@@ -1,0 +1,54 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{ l("Details") }}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("TenGoi") }} :</h6>
+                        {{ item.goiBaiDang.tenGoi }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("Phi") }} :</h6>
+                        {{ item.goiBaiDang.phi }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("DoUuTien") }} :</h6>
+                        {{ item.goiBaiDang.doUuTien }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("ThoiGianToiThieu") }} :</h6>
+                        {{ item.goiBaiDang.thoiGianToiThieu }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("MoTa") }} :</h6>
+                        {{ item.goiBaiDang.moTa }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l("TrangThai") }} :</h6>
+                        {{ item.goiBaiDang.trangThai }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{ l("Close") }}</button>
+            </div>
+        </div>
+    </div>
+</div>

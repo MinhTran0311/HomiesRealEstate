@@ -1,0 +1,8 @@
+﻿@model Homies.RealEstate.Web.Areas.App.Models.Layout.LogoViewModel
+@{
+    Layout = null;
+    var theme = await GetTheme();
+}
+
+<img alt="Logo" src="@Model.GetLogoUrl(ApplicationPath, theme.IsTopMenuUsed || theme.IsTabMenuUsed ? theme.BaseSettings.Header.HeaderSkin : theme.BaseSettings.Menu.AsideSkin)" height="38"
+     class="@(string.IsNullOrEmpty(Model.LogoClassOverride) ? "header-brand-logo-default" : Model.LogoClassOverride)"/>

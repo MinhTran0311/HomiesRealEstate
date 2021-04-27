@@ -1,4 +1,8 @@
+import 'package:boilerplate/models/user/user.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
+import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../data/repository.dart';
@@ -50,6 +54,8 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
 
+
+
   @observable
   ObservableFuture<bool> loginFuture = emptyLoginResponse;
 
@@ -88,5 +94,48 @@ abstract class _UserStore with Store {
     for (final d in _disposers) {
       d();
     }
+  }
+  @observable
+  CurrenUserForEditdyo user;
+  static ObservableFuture<CurrenUserForEditdyo> emptyUserResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrenUserForEditdyo> fetchUsersFuture =
+  ObservableFuture<CurrenUserForEditdyo>(emptyUserResponse);
+
+  @computed
+  bool get loading => fetchUsersFuture.status == FutureStatus.pending;
+
+  // empty responses:-----------------------------------------------------------
+  static ObservableFuture<CurrenUserForEditdyo> emptyLoginResponses =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<CurrenUserForEditdyo> loginFutures = emptyLoginResponses;
+
+  @computed
+  bool get isLoadings => loginFuture.status == FutureStatus.pending;
+
+  @action
+  Future getCurrenUser() async {
+    final future = _repository.getCurrenUser();
+    fetchUsersFuture = ObservableFuture(future);
+
+    fetchUsersFuture.then((user) {
+      this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
   }
 }

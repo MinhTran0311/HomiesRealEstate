@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'ui/profile/profile.dart';
 import 'ui/home/home.dart';
 import 'ui/login/login.dart';
 import 'ui/splash/splash.dart';
 import 'ui/registraion/registration.dart';
 import 'ui/homepage/homepage.dart';
 import 'ui/admin/userManagement/userManagement.dart';
-import 'ui/newpost/newpost.dart';
-
 class Routes {
   Routes._();
 
@@ -17,8 +16,7 @@ class Routes {
   static const String home = '/home';
   static const String signup = '/signup';
   static const String userManagement = '/userManagement';
-  static const String newpost = '/newpost';
-
+  static const String profile = '/profile';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -26,8 +24,7 @@ class Routes {
     home: (BuildContext context) => HomePageScreen(),
     signup: (BuildContext context) => RegistrationScreen(),
     userManagement: (BuildContext context) => UserManagementScreen(),
-    newpost: (BuildContext context) => NewpostScreen(),
-
+    profile: (BuildContext context) => ProfileScreen(),
   };
 }
 

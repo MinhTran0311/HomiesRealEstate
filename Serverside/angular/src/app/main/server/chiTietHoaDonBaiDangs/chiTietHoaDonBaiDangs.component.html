@@ -1,0 +1,361 @@
+﻿<div [@routerTransition]>
+    <div class="content d-flex flex-column flex-column-fluid">
+        <sub-header [title]="'ChiTietHoaDonBaiDangs' | localize" [description]="'ChiTietHoaDonBaiDangsHeaderInfo' | localize">
+            <div role="actions">
+                <button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{ l("ExportToExcel") }}</button>
+
+                <button *ngIf="isGranted('Pages.ChiTietHoaDonBaiDangs.Create')" (click)="createChiTietHoaDonBaiDang()" class="btn btn-primary blue">
+                    <i class="fa fa-plus"></i> {{ l("CreateNewChiTietHoaDonBaiDang") }}
+                </button>
+            </div>
+        </sub-header>
+
+        <div [class]="containerClass">
+            <div class="card card-custom gutter-b">
+                <div class="card-body">
+                    <form class="form" autocomplete="off">
+                        <div>
+                            <div class="row align-items-center">
+                                <div class="col-xl-12">
+                                    <div class="form-group m-form__group align-items-center">
+                                        <div class="input-group">
+                                            <input
+                                                [(ngModel)]="filterText"
+                                                name="filterText"
+                                                autoFocus
+                                                class="form-control m-input"
+                                                [placeholder]="l('SearchWithThreeDot')"
+                                                type="text"
+                                            />
+                                            <span class="input-group-btn">
+                                                <button (click)="getChiTietHoaDonBaiDangs()" class="btn btn-primary" type="submit">
+                                                    <i class="flaticon-search-1"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" [hidden]="!advancedFiltersAreShown">
+                                <div class="col-md-12">
+                                    <div class="kt-separator kt-separator--border-dashed"></div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="MinThoiDiemFilter">{{ l("ThoiDiemRange") }}</label>
+                                        <div class="input-group">
+                                            <input
+                                                class="form-control m-input"
+                                                id="MinThoiDiemFilter"
+                                                name="MinThoiDiemFilter"
+                                                type="datetime"
+                                                bsDatepicker
+                                                placeholder="{{ l('MinValue') }}"
+                                                [(ngModel)]="minThoiDiemFilter"
+                                            />
+                                            <span style="line-height: 40px; padding: 0 15px 0 15px"> &mdash; </span>
+                                            <input
+                                                class="form-control m-input"
+                                                id="MaxThoiDiemFilter"
+                                                name="MaxThoiDiemFilter"
+                                                type="datetime"
+                                                bsDatepicker
+                                                placeholder="{{ l('MaxValue') }}"
+                                                [(ngModel)]="maxThoiDiemFilter"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="MinGiaGoiFilter">{{ l("MinMax") }} {{ l("GiaGoi") }}</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="MinGiaGoiFilter"
+                                                [(ngModel)]="minGiaGoiFilter"
+                                                placeholder="{{ l('MinValue') }}"
+                                                name="minGiaGoiFilter"
+                                            />
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                [(ngModel)]="maxGiaGoiFilter"
+                                                placeholder="{{ l('MaxValue') }}"
+                                                name="maxGiaGoiFilter"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="MinSoNgayMuaFilter">{{ l("MinMax") }} {{ l("SoNgayMua") }}</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="MinSoNgayMuaFilter"
+                                                [(ngModel)]="minSoNgayMuaFilter"
+                                                placeholder="{{ l('MinValue') }}"
+                                                name="minSoNgayMuaFilter"
+                                            />
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                [(ngModel)]="maxSoNgayMuaFilter"
+                                                placeholder="{{ l('MaxValue') }}"
+                                                name="maxSoNgayMuaFilter"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="MinTongTienFilter">{{ l("MinMax") }} {{ l("TongTien") }}</label>
+                                        <div class="input-group">
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="MinTongTienFilter"
+                                                [(ngModel)]="minTongTienFilter"
+                                                placeholder="{{ l('MinValue') }}"
+                                                name="minTongTienFilter"
+                                            />
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                [(ngModel)]="maxTongTienFilter"
+                                                placeholder="{{ l('MaxValue') }}"
+                                                name="maxTongTienFilter"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="GhiChuFilter">{{ l("GhiChu") }}</label>
+                                        <input type="text" class="form-control" id="GhiChuFilter" name="ghiChuFilter" [(ngModel)]="ghiChuFilter" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="BaiDangTieuDeFilter">({{ l("BaiDang") }}) {{ l("TieuDe") }}</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="BaiDangTieuDeFilter"
+                                            name="baiDangTieuDeFilter"
+                                            [(ngModel)]="baiDangTieuDeFilter"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="GoiBaiDangTenGoiFilter">({{ l("GoiBaiDang") }}) {{ l("TenGoi") }}</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="GoiBaiDangTenGoiFilter"
+                                            name="goiBaiDangTenGoiFilter"
+                                            [(ngModel)]="goiBaiDangTenGoiFilter"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="UserNameFilter">({{ l("User") }}) {{ l("Name") }}</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="UserNameFilter"
+                                            name="userNameFilter"
+                                            [(ngModel)]="userNameFilter"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-12">
+                                    <span
+                                        class="clickable-item text-muted"
+                                        *ngIf="!advancedFiltersAreShown"
+                                        (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
+                                        ><i class="fa fa-angle-down"></i> {{ l("ShowAdvancedFilters") }}</span
+                                    >
+                                    <span
+                                        class="clickable-item text-muted"
+                                        *ngIf="advancedFiltersAreShown"
+                                        (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
+                                        ><i class="fa fa-angle-up"></i> {{ l("HideAdvancedFilters") }}</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row align-items-center">
+                        <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+                            <p-table
+                                #dataTable
+                                (onLazyLoad)="getChiTietHoaDonBaiDangs($event)"
+                                [value]="primengTableHelper.records"
+                                rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
+                                [paginator]="false"
+                                [lazy]="true"
+                                [scrollable]="true"
+                                ScrollWidth="100%"
+                                [responsive]="primengTableHelper.isResponsive"
+                                [resizableColumns]="primengTableHelper.resizableColumns"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th
+                                            style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.ChiTietHoaDonBaiDangs.Edit', 'Pages.ChiTietHoaDonBaiDangs.Delete')"
+                                        >
+                                            {{ l("Actions") }}
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="baiDangFk.tieuDe">
+                                            {{ l("TieuDe") }}
+                                            <p-sortIcon field="baiDangTieuDe"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="goiBaiDangFk.tenGoi">
+                                            {{ l("TenGoi") }}
+                                            <p-sortIcon field="goiBaiDangTenGoi"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="userFk.name">
+                                            {{ l("Name") }}
+                                            <p-sortIcon field="userName"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="thoiDiem">
+                                            {{ l("ThoiDiem") }}
+                                            <p-sortIcon field="chiTietHoaDonBaiDang.thoiDiem"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="giaGoi">
+                                            {{ l("GiaGoi") }}
+                                            <p-sortIcon field="chiTietHoaDonBaiDang.giaGoi"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="soNgayMua">
+                                            {{ l("SoNgayMua") }}
+                                            <p-sortIcon field="chiTietHoaDonBaiDang.soNgayMua"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="tongTien">
+                                            {{ l("TongTien") }}
+                                            <p-sortIcon field="chiTietHoaDonBaiDang.tongTien"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="ghiChu">
+                                            {{ l("GhiChu") }}
+                                            <p-sortIcon field="chiTietHoaDonBaiDang.ghiChu"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
+                                    <tr>
+                                        <td
+                                            style="width: 130px"
+                                            [hidden]="!isGrantedAny('Pages.ChiTietHoaDonBaiDangs.Edit', 'Pages.ChiTietHoaDonBaiDangs.Delete')"
+                                        >
+                                            <div class="btn-group dropdown" dropdown container="body">
+                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                    <i class="fa fa-cog"></i><span class="caret"></span> {{ l("Actions") }}
+                                                </button>
+                                                <ul class="dropdown-menu" *dropdownMenu>
+                                                    <li>
+                                                        <a
+                                                            href="javascript:;"
+                                                            class="dropdown-item"
+                                                            (click)="viewChiTietHoaDonBaiDangModal.show(record)"
+                                                            >{{ l("View") }}</a
+                                                        >
+                                                    </li>
+                                                    <li>
+                                                        <a
+                                                            href="javascript:;"
+                                                            *ngIf="permission.isGranted('Pages.ChiTietHoaDonBaiDangs.Edit')"
+                                                            class="dropdown-item"
+                                                            (click)="createOrEditChiTietHoaDonBaiDangModal.show(record.chiTietHoaDonBaiDang.id)"
+                                                            >{{ l("Edit") }}</a
+                                                        >
+                                                    </li>
+                                                    <li>
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="javascript:;"
+                                                            *ngIf="permission.isGranted('Pages.ChiTietHoaDonBaiDangs.Delete')"
+                                                            (click)="deleteChiTietHoaDonBaiDang(record.chiTietHoaDonBaiDang)"
+                                                            >{{ l("Delete") }}</a
+                                                        >
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("TieuDe") }}</span>
+                                            {{ record.baiDangTieuDe }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("TenGoi") }}</span>
+                                            {{ record.goiBaiDangTenGoi }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("Name") }}</span>
+                                            {{ record.userName }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("ThoiDiem") }}</span>
+                                            <span *ngIf="record.chiTietHoaDonBaiDang.thoiDiem">
+                                                {{ record.chiTietHoaDonBaiDang.thoiDiem | luxonFormat: "F" }}
+                                            </span>
+                                            <span *ngIf="!record.chiTietHoaDonBaiDang.thoiDiem">-</span>
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("GiaGoi") }}</span>
+                                            {{ record.chiTietHoaDonBaiDang.giaGoi }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("SoNgayMua") }}</span>
+                                            {{ record.chiTietHoaDonBaiDang.soNgayMua }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("TongTien") }}</span>
+                                            {{ record.chiTietHoaDonBaiDang.tongTien }}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-column-title"> {{ l("GhiChu") }}</span>
+                                            {{ record.chiTietHoaDonBaiDang.ghiChu }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                                {{ l("NoData") }}
+                            </div>
+                            <div class="primeng-paging-container">
+                                <p-paginator
+                                    [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                    #paginator
+                                    (onPageChange)="getChiTietHoaDonBaiDangs($event)"
+                                    [totalRecords]="primengTableHelper.totalRecordsCount"
+                                    [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                >
+                                </p-paginator>
+                                <span class="total-records-count">
+                                    {{ l("TotalRecordsCount", primengTableHelper.totalRecordsCount) }}
+                                </span>
+                            </div>
+                        </div>
+                        <!--<Primeng-Datatable-End>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <createOrEditChiTietHoaDonBaiDangModal
+            #createOrEditChiTietHoaDonBaiDangModal
+            (modalSave)="getChiTietHoaDonBaiDangs()"
+        ></createOrEditChiTietHoaDonBaiDangModal>
+        <viewChiTietHoaDonBaiDangModal #viewChiTietHoaDonBaiDangModal></viewChiTietHoaDonBaiDangModal>
+    </div>
+</div>

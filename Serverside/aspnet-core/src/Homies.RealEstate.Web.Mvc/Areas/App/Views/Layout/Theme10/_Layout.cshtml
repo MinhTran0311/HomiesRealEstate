@@ -1,0 +1,114 @@
+﻿@using Abp.Web.Mvc.Alerts
+@using Homies.RealEstate.Localization
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppActiveUserDelegationsCombobox
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppChatToggler
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppLanguageSwitch
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppLogo
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppMenu
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppQuickThemeSelect
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppRecentNotifications
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppSubscriptionBar
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Components.AppUserMenu
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Themes.Theme10.Components.AppTheme10Brand
+@using Homies.RealEstate.Web.Areas.App.Views.Shared.Themes.Theme10.Components.AppTheme10Footer
+
+@inject IAlertManager AlertManager
+
+@{
+    Layout = "~/Areas/App/Views/Layout/_Layout.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="@(ApplicationPath)metronic/themes/theme10/css/style.bundle@(CultureHelper.IsRtl ? ".rtl" : "").css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/Common/Styles/Themes/theme10/metronic-customize.css" asp-append-version="true"/>
+    <link rel="stylesheet" abp-href="/fonts/fonts-asap-condensed.css" asp-append-version="true"/>
+    @await RenderSectionAsync("Styles", false)
+}
+
+@section Scripts{
+    <script abp-src="/metronic/themes/theme10/js/settings.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<div id="kt_header_mobile" class="header-mobile  header-mobile-fixed ">
+    <a href="@Url.Action("Index", "Home", new {area = string.Empty})">
+        @await Component.InvokeAsync(typeof(AppLogoViewComponent), new {LogoSkin = "light"})
+    </a>
+    <div class="d-flex align-items-center">
+        <button class="btn p-0 burger-icon burger-icon-left rounded-0" id="kt_header_mobile_toggle">
+            <span></span>
+        </button>
+        <button class="btn btn-hover-text-primary p-0 ml-2" id="kt_aside_mobile_toggle">
+            <span class="svg-icon svg-icon-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                        <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                        <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                    </g>
+                </svg>
+            </span>
+        </button>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+        <div class="aside aside-left d-flex flex-column " id="kt_aside">
+            <div class="aside-brand d-flex flex-column align-items-center flex-column-auto py-9">
+                @await Component.InvokeAsync(typeof(AppTheme10BrandViewComponent))
+            </div>
+            <div class="aside-nav d-flex flex-column align-items-center flex-column-fluid pb-10 scroll ps" style="overflow: hidden;">
+            </div>
+            <div class="aside-footer d-flex flex-column align-items-center flex-column-auto py-8">
+                @await Component.InvokeAsync(typeof(AppActiveUserDelegationsComboboxViewComponent))
+                @await Component.InvokeAsync(typeof(AppQuickThemeSelectViewComponent), new {cssClass = "btn btn-icon btn-lg btn-borderless mb-1 position-relative"})
+                @await Component.InvokeAsync(typeof(AppLanguageSwitchViewComponent), new {cssClass = "btn btn-icon btn-lg btn-borderless mb-1 position-relative"})
+                @await Component.InvokeAsync(typeof(AppRecentNotificationsViewComponent), new {cssClass = "btn btn-icon btn-lg btn-borderless mb-1 position-relative"})
+                @await Component.InvokeAsync(typeof(AppChatTogglerViewComponent), new {cssClass = "btn btn-icon btn-lg btn-borderless mb-1 position-relative"})
+                @await Component.InvokeAsync(typeof(AppUserMenuViewComponent), new {togglerCssClass = "", textCssClass = "", symbolCssClass = "", symbolTextCssClas = "", renderOnlyIcon = true})
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+            <div id="kt_header" class="header  header-fixed ">
+                <div class="header-wrapper rounded-top-xl d-flex flex-grow-1 align-items-center">
+                    <div class="@(await GetContainerClass()) d-flex align-items-center justify-content-end justify-content-lg-between flex-wrap">
+                        @await Component.InvokeAsync(typeof(AppMenuViewComponent), new {currentPageName = ViewBag.CurrentPageName, isLeftMenuUsed = false})
+                        <div class="d-flex align-items-center py-3 py-lg-2">
+                            <div class="d-none d-lg-flex subscription-warning d-print-none">
+                                @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-lg-none p-3 mobile-subscription-warning d-print-none">
+                @await Component.InvokeAsync(typeof(AppSubscriptionBarViewComponent))
+            </div>
+            @if (AlertManager.Alerts.Any())
+            {
+                <div id="AbpPageAlerts">
+                    @foreach (var alertMessage in AlertManager.Alerts)
+                    {
+                        <div class="alert alert-@alertMessage.Type.ToString().ToLower()" role="alert">
+                            <div class="alert-text">
+                                <h4 class="alert-heading">
+                                    @alertMessage.Title
+                                    @if (alertMessage.Dismissible)
+                                    {
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    }
+                                </h4>
+                                <p>@alertMessage.Text</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            @RenderBody()
+            @await Component.InvokeAsync(typeof(AppTheme10FooterViewComponent))
+        </div>
+    </div>
+</div>
