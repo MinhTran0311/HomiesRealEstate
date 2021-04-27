@@ -379,5 +379,14 @@ namespace Homies.RealEstate.Authorization.Users.Profile
 
             return new GetProfilePictureOutput(Convert.ToBase64String(bytes));
         }
+        [AbpAuthorize]
+        public async Task<double> GetCurrentUserWallet()
+        {
+            var user = await GetCurrentUserAsync();
+
+            return user.Wallet;
+        }
+
+
     }
 }

@@ -361,5 +361,60 @@ namespace Homies.RealEstate.Server
                 lookupTableDtoList
             );
         }
+        [AbpAuthorize]
+        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser()
+        {
+            var user = GetCurrentUserAsync();
+            var filteredBaiDangs = _baiDangRepository.GetAll()
+                        .Include(e => e.UserFk)
+                        .Include(e => e.DanhMucFk)
+                        .Include(e => e.XaFk)
+                        .Where(e => e.UserId == user.Id);
+
+
+            var pagedAndFilteredBaiDangs = filteredBaiDangs
+                .OrderBy("id asc");
+
+            var baiDangs = from o in pagedAndFilteredBaiDangs
+                           join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
+                           from s1 in j1.DefaultIfEmpty()
+
+                           join o2 in _lookup_danhMucRepository.GetAll() on o.DanhMucId equals o2.Id into j2
+                           from s2 in j2.DefaultIfEmpty()
+
+                           join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
+                           from s3 in j3.DefaultIfEmpty()
+
+                           select new GetBaiDangForViewDto()
+                           {
+                               BaiDang = new BaiDangDto
+                               {
+                                   TagLoaiBaiDang = o.TagLoaiBaiDang,
+                                   ThoiDiemDang = o.ThoiDiemDang,
+                                   ThoiHan = o.ThoiHan,
+                                   DiaChi = o.DiaChi,
+                                   MoTa = o.MoTa,
+                                   ToaDoX = o.ToaDoX,
+                                   ToaDoY = o.ToaDoY,
+                                   LuotXem = o.LuotXem,
+                                   LuotYeuThich = o.LuotYeuThich,
+                                   DiemBaiDang = o.DiemBaiDang,
+                                   TrangThai = o.TrangThai,
+                                   TagTimKiem = o.TagTimKiem,
+                                   TieuDe = o.TieuDe,
+                                   Id = o.Id
+                               },
+                               UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                               DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
+                           };
+
+            var totalCount = await filteredBaiDangs.CountAsync();
+
+            return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                await baiDangs.ToListAsync()
+            );
+        }
     }
 }

@@ -31,5 +31,7 @@ namespace Homies.RealEstate.Authorization.Users.Profile.Dto
         public string QrCodeSetupImageUrl { get; set; }
 
         public bool IsGoogleAuthenticatorEnabled { get; set; }
+
+
     }
 }
