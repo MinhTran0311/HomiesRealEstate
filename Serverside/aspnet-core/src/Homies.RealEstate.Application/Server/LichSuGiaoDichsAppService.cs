@@ -283,5 +283,74 @@ namespace Homies.RealEstate.Server
                 lookupTableDtoList
             );
         }
+        [AbpAuthorize]
+        public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync()
+        {
+            var user = GetCurrentUserAsync();
+            var filteredLichSuGiaoDichs = _lichSuGiaoDichRepository.GetAll()
+                        .Include(e => e.UserFk)
+                        .Include(e => e.ChiTietHoaDonBaiDangFk)
+                        .Include(e => e.KiemDuyetVienFk)
+                        .Where(e => e.UserId == user.Id);
+
+            var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
+                .OrderBy("id asc");
+
+            var lichSuGiaoDichs = from o in pagedAndFilteredLichSuGiaoDichs
+                                  join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
+                                  from s1 in j1.DefaultIfEmpty()
+
+                                  join o2 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.ChiTietHoaDonBaiDangId equals o2.Id into j2
+                                  from s2 in j2.DefaultIfEmpty()
+
+                                  join o3 in _lookup_userRepository.GetAll() on o.KiemDuyetVienId equals o3.Id into j3
+                                  from s3 in j3.DefaultIfEmpty()
+
+                                  select new GetLichSuGiaoDichForViewDto()
+                                  {
+                                      LichSuGiaoDich = new LichSuGiaoDichDto
+                                      {
+                                          SoTien = o.SoTien,
+                                          ThoiDiem = o.ThoiDiem,
+                                          GhiChu = o.GhiChu,
+                                          Id = o.Id
+                                      },
+                                      UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                                      ChiTietHoaDonBaiDangGhiChu = s2 == null || s2.GhiChu == null ? "" : s2.GhiChu.ToString(),
+                                      UserName2 = s3 == null || s3.Name == null ? "" : s3.Name.ToString()
+                                  };
+
+            var totalCount = await filteredLichSuGiaoDichs.CountAsync();
+
+            return new PagedResultDto<GetLichSuGiaoDichForViewDto>(
+                totalCount,
+                await lichSuGiaoDichs.ToListAsync()
+            );
+        }
+
+        public async Task<String> KiemDuyetGiaoDich(EntityDto<Guid> input)
+        {
+            var currentUser = GetCurrentUserAsync();
+            try
+            {
+                var lsgd = GetLichSuGiaoDichForEdit(input);
+                CreateOrEditLichSuGiaoDichDto lsgdDto = new CreateOrEditLichSuGiaoDichDto();
+                var lichSuGiaoDich = ObjectMapper.Map<CreateOrEditLichSuGiaoDichDto>(lsgd);
+                lichSuGiaoDich.KiemDuyetVienId = currentUser.Id;
+                await Update(lichSuGiaoDich);
+                var user =  await _lookup_userRepository.GetAsync((long)lichSuGiaoDich.UserId);
+                user.Wallet += lichSuGiaoDich.SoTien;
+                await _lookup_userRepository.UpdateAsync(user);
+                return "Thành Công";
+            }catch(Exception e)
+            {
+                return "Thất bại";
+            }
+            
+
+        }
+
+
+        
     }
 }

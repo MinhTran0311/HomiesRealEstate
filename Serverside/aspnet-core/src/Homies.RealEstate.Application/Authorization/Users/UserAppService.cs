@@ -465,5 +465,13 @@ namespace Homies.RealEstate.Authorization.Users
 
             return query;
         }
+
+        [AbpAuthorize]
+        public async Task<double> GetCurrentUserWallet()
+        {
+            var user = await GetCurrentUserAsync();
+
+            return user.Wallet;
+        }
     }
 }
