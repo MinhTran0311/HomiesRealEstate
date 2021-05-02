@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 
 namespace Homies.RealEstate.Authorization.Users.Profile.Dto
@@ -31,6 +32,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile.Dto
         public string QrCodeSetupImageUrl { get; set; }
 
         public bool IsGoogleAuthenticatorEnabled { get; set; }
+
+        public DateTime CreationTime { get; set; }
 
 
     }
