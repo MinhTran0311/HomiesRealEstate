@@ -28,15 +28,16 @@ namespace Homies.RealEstate.Server
         private readonly IRepository<User, long> _lookup_userRepository;
         private readonly IRepository<DanhMuc, int> _lookup_danhMucRepository;
         private readonly IRepository<Xa, int> _lookup_xaRepository;
+        private readonly IRepository<HinhAnh, int> _lookup_hinhAnhRepository;
 
-        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository)
+        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository)
         {
             _baiDangRepository = baiDangRepository;
             _baiDangsExcelExporter = baiDangsExcelExporter;
             _lookup_userRepository = lookup_userRepository;
             _lookup_danhMucRepository = lookup_danhMucRepository;
             _lookup_xaRepository = lookup_xaRepository;
-
+            _lookup_hinhAnhRepository = lookup_hinhAnhRepository;
         }
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAll(GetAllBaiDangsInput input)
@@ -83,6 +84,7 @@ namespace Homies.RealEstate.Server
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
 
+
                            select new GetBaiDangForViewDto()
                            {
                                BaiDang = new BaiDangDto
@@ -104,7 +106,8 @@ namespace Homies.RealEstate.Server
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
+                               FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
                            };
 
             var totalCount = await filteredBaiDangs.CountAsync();

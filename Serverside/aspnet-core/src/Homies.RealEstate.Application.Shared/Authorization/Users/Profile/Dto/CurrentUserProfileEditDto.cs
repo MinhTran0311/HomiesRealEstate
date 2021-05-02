@@ -32,6 +32,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile.Dto
 
         public bool IsGoogleAuthenticatorEnabled { get; set; }
 
+        public string ProfilePicture { get; set; }
+
 
     }
 }

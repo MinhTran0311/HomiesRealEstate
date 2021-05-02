@@ -388,5 +388,15 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         }
 
 
+        [DisableAuditing]
+        public async Task<CurrentUserProfileEditDto> GetUserProfileById(long Id)
+        {
+            var user = await UserManager.GetUserByIdAsync(Id);
+            var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
+            userProfileEditDto.ProfilePicture = GetProfilePictureByUser(Id).Result.ProfilePicture;
+            return userProfileEditDto;
+        }
+
+
     }
 }
