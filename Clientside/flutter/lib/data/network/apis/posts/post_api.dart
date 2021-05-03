@@ -21,7 +21,7 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getPosts() async {
     try {
-      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAll",
+      final res = await _dioClient.get(Endpoints.getAllBaiDang,
         options: Options(
             headers: {
               "Abp.TenantId": 1,

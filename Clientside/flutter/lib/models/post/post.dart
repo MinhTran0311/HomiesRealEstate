@@ -19,6 +19,7 @@ class Post {
   int danhMucId;
   int xaId;
   int id;
+  String featuredImage;
 
   Post({
     this.userName,
@@ -41,6 +42,7 @@ class Post {
     this.danhMucId,
     this.xaId,
     this.id,
+    this.featuredImage
   });
 
   factory Post.fromMap(Map<String, dynamic> json) => Post(
@@ -64,6 +66,7 @@ class Post {
     danhMucId: json["baiDang"]["danhMucId"],
     xaId: json["baiDang"]["xaId"],
     id: json["baiDang"]["id"],
+    featuredImage: json["featuredImage"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -87,6 +90,7 @@ class Post {
     "danhMucId": danhMucId,
     "xaId": xaId,
     "id": id,
+    "featuredImage": featuredImage,
       };
   
 }

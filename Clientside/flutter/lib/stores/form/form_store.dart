@@ -4,6 +4,7 @@ import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
@@ -70,8 +71,6 @@ abstract class _FormStore with Store {
   bool loggedIn = false;
 
 
-
-
   @observable
   bool success = false;
   @observable
@@ -83,12 +82,20 @@ abstract class _FormStore with Store {
   @observable
   ObservableFuture<dynamic> fetchRegistFuture = ObservableFuture<dynamic>(emptyRegistResponse);
 
+
+  static ObservableFuture<dynamic> emptyResetCodeSent = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchResetCodeFuture = ObservableFuture<dynamic>(emptyResetCodeSent);
+
   //#region computed
   @computed
   bool get loading => fetchTokenFuture.status == FutureStatus.pending;
   @computed
   bool get canLogin =>
       !formErrorStore.hasErrorsInLogin && username.isNotEmpty && password.isNotEmpty;
+  @computed
+  bool get canSubmitResetPassword => !formErrorStore.hasErrorsInReset && userEmail.isNotEmpty;
 
   @computed
   bool get canRegister =>
@@ -99,9 +106,8 @@ abstract class _FormStore with Store {
       surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty;
 
   @computed
-  bool get canForgetPassword =>
-      !formErrorStore.hasErrorInForgotPassword && username.isNotEmpty;
-
+  bool get sendingCode => fetchResetCodeFuture.status == FutureStatus.pending;
+  @computed
   bool get regist_loading => fetchRegistFuture.status == FutureStatus.pending;
   //endregion
 
@@ -265,6 +271,37 @@ abstract class _FormStore with Store {
     });
   }
 
+
+  @action
+  Future<dynamic> resetPassword () async {
+    success=false;
+    final future = _repository.resetPassword(this.userEmail);
+    fetchResetCodeFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res){
+        success=true;
+      }
+      else success=false;
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+
   // @action
   // Future login() async {
   //   loading = true;
@@ -326,6 +363,8 @@ abstract class _FormErrorStore with Store {
 
   @computed
   bool get hasErrorsInLogin => username != null || password != null;
+  @computed
+  bool get hasErrorsInReset => userEmail != null;
 
   @computed
   bool get hasErrorsInRegister =>

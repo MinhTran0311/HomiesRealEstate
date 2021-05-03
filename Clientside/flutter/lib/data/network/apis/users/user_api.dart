@@ -53,4 +53,23 @@ class UserApi {
       throw e;
     }
   }
+
+  Future<CurrenUserForEditdyo> getUserOfCurrentDetailPost(String Id) async {
+    try {
+      final res = await _dioClient.get(Endpoints.getUserOfCurrentPost,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: {
+          "Id": Id,
+        },);
+      return CurrenUserForEditdyo.fromMap(res);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

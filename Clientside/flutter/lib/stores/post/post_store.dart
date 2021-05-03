@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -20,6 +21,7 @@ abstract class _PostStore with Store {
   _PostStore(Repository repository) : this._repository = repository;
 
   // store variables:-----------------------------------------------------------
+  // Post observer
   static ObservableFuture<PostList> emptyPostResponse =
       ObservableFuture.value(null);
 
@@ -27,14 +29,30 @@ abstract class _PostStore with Store {
   ObservableFuture<PostList> fetchPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
 
+  // Image observer
+  static ObservableFuture<String> emptyImageResponse =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetchImageFuture =
+      ObservableFuture<String>(emptyImageResponse);
+
+
   @observable
   PostList postList;
+
+  @observable
+  List<String> imageUrlList;
 
   @observable
   bool success = false;
 
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get imageLoading => fetchImageFuture.status == FutureStatus.pending;
+
 
   // actions:-------------------------------------------------------------------
   @action
@@ -43,6 +61,8 @@ abstract class _PostStore with Store {
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
+
+      success = true;
       this.postList = postList;
     }).catchError((error) {
       if (error is DioError) {
@@ -53,10 +73,6 @@ abstract class _PostStore with Store {
         errorStore.errorMessage="Please check your internet connection and try again!";
         throw error;
       }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
     });
   }
 }

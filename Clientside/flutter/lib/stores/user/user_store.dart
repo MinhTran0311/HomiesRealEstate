@@ -54,8 +54,6 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
 
-
-
   @observable
   ObservableFuture<bool> loginFuture = emptyLoginResponse;
 
@@ -132,10 +130,27 @@ abstract class _UserStore with Store {
         errorStore.errorMessage="Please check your internet connection and try again!";
         throw error;
       }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
     });
   }
+
+  @action
+  Future getUserOfCurrentDetailPost() async {
+    final future = _repository.getCurrenUser();
+    fetchUsersFuture = ObservableFuture(future);
+
+    fetchUsersFuture.then((user) {
+      this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
+
 }

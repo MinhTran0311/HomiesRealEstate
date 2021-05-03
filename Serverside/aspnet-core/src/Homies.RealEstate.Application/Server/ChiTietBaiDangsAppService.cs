@@ -63,7 +63,9 @@ namespace Homies.RealEstate.Server
                                       ChiTietBaiDang = new ChiTietBaiDangDto
                                       {
                                           GiaTri = o.GiaTri,
-                                          Id = o.Id
+                                          Id = o.Id,
+                                          ThuocTinhId = o.ThuocTinhId,
+                                          BaiDangId = o.BaiDangId
                                       },
                                       ThuocTinhTenThuocTinh = s1 == null || s1.TenThuocTinh == null ? "" : s1.TenThuocTinh.ToString(),
                                       BaiDangTieuDe = s2 == null || s2.TieuDe == null ? "" : s2.TieuDe.ToString()

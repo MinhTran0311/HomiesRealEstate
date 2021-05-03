@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
@@ -81,9 +82,10 @@ class LocalModule extends NetworkModule {
     PostApi postApi,
     AuthTokenApi authTokenApi,
     UserApi userApi,
+    ImageApi imageApi,
     SharedPreferenceHelper preferenceHelper,
     PostDataSource postDataSource,
     RegistrationApi registrationApi,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi);
+      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, imageApi);
 }

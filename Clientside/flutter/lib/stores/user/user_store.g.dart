@@ -15,6 +15,18 @@ mixin _$UserStore on _UserStore, Store {
   bool get isLoading => (_$isLoadingComputed ??=
           Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
+  Computed<bool> _$loadingComputed;
+
+  @override
+  bool get loading => (_$loadingComputed ??=
+          Computed<bool>(() => super.loading, name: '_UserStore.loading'))
+      .value;
+  Computed<bool> _$isLoadingsComputed;
+
+  @override
+  bool get isLoadings => (_$isLoadingsComputed ??=
+          Computed<bool>(() => super.isLoadings, name: '_UserStore.isLoadings'))
+      .value;
 
   final _$successAtom = Atom(name: '_UserStore.success');
 
@@ -46,6 +58,51 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$userAtom = Atom(name: '_UserStore.user');
+
+  @override
+  CurrenUserForEditdyo get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(CurrenUserForEditdyo value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
+  final _$fetchUsersFutureAtom = Atom(name: '_UserStore.fetchUsersFuture');
+
+  @override
+  ObservableFuture<CurrenUserForEditdyo> get fetchUsersFuture {
+    _$fetchUsersFutureAtom.reportRead();
+    return super.fetchUsersFuture;
+  }
+
+  @override
+  set fetchUsersFuture(ObservableFuture<CurrenUserForEditdyo> value) {
+    _$fetchUsersFutureAtom.reportWrite(value, super.fetchUsersFuture, () {
+      super.fetchUsersFuture = value;
+    });
+  }
+
+  final _$loginFuturesAtom = Atom(name: '_UserStore.loginFutures');
+
+  @override
+  ObservableFuture<CurrenUserForEditdyo> get loginFutures {
+    _$loginFuturesAtom.reportRead();
+    return super.loginFutures;
+  }
+
+  @override
+  set loginFutures(ObservableFuture<CurrenUserForEditdyo> value) {
+    _$loginFuturesAtom.reportWrite(value, super.loginFutures, () {
+      super.loginFutures = value;
+    });
+  }
+
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
@@ -53,17 +110,24 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
-  final _$getUserAsyncAction = AsyncAction('_UserStore.getCurrenUser');
+  final _$getCurrenUserAsyncAction = AsyncAction('_UserStore.getCurrenUser');
+
   @override
   Future<dynamic> getCurrenUser() {
-    return _$getUserAsyncAction.run(() => super.getCurrenUser());
+    return _$getCurrenUserAsyncAction.run(() => super.getCurrenUser());
   }
+
   @override
   String toString() {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
-isLoading: ${isLoading}
+user: ${user},
+fetchUsersFuture: ${fetchUsersFuture},
+loginFutures: ${loginFutures},
+isLoading: ${isLoading},
+loading: ${loading},
+isLoadings: ${isLoadings}
     ''';
   }
 }

@@ -76,12 +76,14 @@ class CurrenUserForEditdyo{
   String userName;
   String emailAddress;
   String phoneNumber;
+  String profilePicture;
   CurrenUserForEditdyo({
     this.name,
     this.emailAddress,
     this.phoneNumber,
     this.surname,
-    this.userName
+    this.userName,
+    this.profilePicture
 });
   factory CurrenUserForEditdyo.fromMap(Map<String, dynamic> json) {
     print("Duong11");
@@ -91,6 +93,7 @@ class CurrenUserForEditdyo{
       userName: json["result"]["userName"],
       emailAddress: json["result"]["emailAddress"],
       phoneNumber: json["result"]["phoneNumber"],
+      profilePicture: json["result"]["profilePicture"],
     );
   }
 }

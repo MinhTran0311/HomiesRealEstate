@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
@@ -23,6 +25,7 @@ class Repository {
   final PostApi _postApi;
   final AuthTokenApi _authTokenApi;
   final UserApi _userApi;
+  final ImageApi _imageApi;
 
   final RegistrationApi _registrationApi;
 
@@ -30,7 +33,7 @@ class Repository {
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi,this._imageApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -58,6 +61,13 @@ class Repository {
       return user;
     }).catchError((error) => throw error);
   }
+
+  Future<CurrenUserForEditdyo> getUserOfCurrentDeatiaiPost() async {
+    return await _userApi.getCurrenUser().then((user) {
+      return user;
+    }).catchError((error) => throw error);
+  }
+
 
   Future<List<Post>> findPostById(int id) {
     //creating filter
@@ -112,6 +122,28 @@ class Repository {
           throw error;
     });
   }
+
+  Future<dynamic> resetPassword(String email) async
+  {
+    return await Future.delayed(Duration(seconds: 2), ()=> true);
+  }
+
+
+  //Image
+  Future<String> postImageToImageBB(String path) async {
+    return await _imageApi.postImage(path)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
+  Future<ImageList> getImagesForDetail(String postId) async {
+    return await _imageApi.getImages(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

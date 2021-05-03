@@ -21,6 +21,13 @@ mixin _$FormStore on _FormStore, Store {
   bool get canLogin => (_$canLoginComputed ??=
           Computed<bool>(() => super.canLogin, name: '_FormStore.canLogin'))
       .value;
+  Computed<bool> _$canSubmitResetPasswordComputed;
+
+  @override
+  bool get canSubmitResetPassword => (_$canSubmitResetPasswordComputed ??=
+          Computed<bool>(() => super.canSubmitResetPassword,
+              name: '_FormStore.canSubmitResetPassword'))
+      .value;
   Computed<bool> _$canRegisterComputed;
 
   @override
@@ -28,13 +35,20 @@ mixin _$FormStore on _FormStore, Store {
       (_$canRegisterComputed ??= Computed<bool>(() => super.canRegister,
               name: '_FormStore.canRegister'))
           .value;
-  Computed<bool> _$canForgetPasswordComputed;
+  Computed<bool> _$sendingCodeComputed;
 
   @override
-  bool get canForgetPassword => (_$canForgetPasswordComputed ??= Computed<bool>(
-          () => super.canForgetPassword,
-          name: '_FormStore.canForgetPassword'))
-      .value;
+  bool get sendingCode =>
+      (_$sendingCodeComputed ??= Computed<bool>(() => super.sendingCode,
+              name: '_FormStore.sendingCode'))
+          .value;
+  Computed<bool> _$regist_loadingComputed;
+
+  @override
+  bool get regist_loading =>
+      (_$regist_loadingComputed ??= Computed<bool>(() => super.regist_loading,
+              name: '_FormStore.regist_loading'))
+          .value;
 
   final _$surnameAtom = Atom(name: '_FormStore.surname');
 
@@ -216,6 +230,23 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchResetCodeFutureAtom =
+      Atom(name: '_FormStore.fetchResetCodeFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchResetCodeFuture {
+    _$fetchResetCodeFutureAtom.reportRead();
+    return super.fetchResetCodeFuture;
+  }
+
+  @override
+  set fetchResetCodeFuture(ObservableFuture<dynamic> value) {
+    _$fetchResetCodeFutureAtom.reportWrite(value, super.fetchResetCodeFuture,
+        () {
+      super.fetchResetCodeFuture = value;
+    });
+  }
+
   final _$registerAsyncAction = AsyncAction('_FormStore.register');
 
   @override
@@ -229,6 +260,13 @@ mixin _$FormStore on _FormStore, Store {
   Future<dynamic> authLogIn(String username, String password) {
     return _$authLogInAsyncAction
         .run(() => super.authLogIn(username, password));
+  }
+
+  final _$resetPasswordAsyncAction = AsyncAction('_FormStore.resetPassword');
+
+  @override
+  Future<dynamic> resetPassword() {
+    return _$resetPasswordAsyncAction.run(() => super.resetPassword());
   }
 
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
@@ -380,10 +418,13 @@ loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
 fetchRegistFuture: ${fetchRegistFuture},
+fetchResetCodeFuture: ${fetchResetCodeFuture},
 loading: ${loading},
 canLogin: ${canLogin},
+canSubmitResetPassword: ${canSubmitResetPassword},
 canRegister: ${canRegister},
-canForgetPassword: ${canForgetPassword}
+sendingCode: ${sendingCode},
+regist_loading: ${regist_loading}
     ''';
   }
 }
@@ -395,6 +436,13 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   bool get hasErrorsInLogin => (_$hasErrorsInLoginComputed ??= Computed<bool>(
           () => super.hasErrorsInLogin,
           name: '_FormErrorStore.hasErrorsInLogin'))
+      .value;
+  Computed<bool> _$hasErrorsInResetComputed;
+
+  @override
+  bool get hasErrorsInReset => (_$hasErrorsInResetComputed ??= Computed<bool>(
+          () => super.hasErrorsInReset,
+          name: '_FormErrorStore.hasErrorsInReset'))
       .value;
   Computed<bool> _$hasErrorsInRegisterComputed;
 
@@ -511,6 +559,7 @@ password: ${password},
 confirmPassword: ${confirmPassword},
 userEmail: ${userEmail},
 hasErrorsInLogin: ${hasErrorsInLogin},
+hasErrorsInReset: ${hasErrorsInReset},
 hasErrorsInRegister: ${hasErrorsInRegister},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
     ''';

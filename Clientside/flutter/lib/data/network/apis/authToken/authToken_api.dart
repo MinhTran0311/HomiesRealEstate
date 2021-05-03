@@ -21,7 +21,7 @@ class AuthTokenApi {
   Future<AuthToken> getToken(String Username, String Password) async {
     try {
       final res = await _dioClient.post(
-        "https://homies.exscanner.edu.vn/api/TokenAuth/Authenticate",
+        Endpoints.login,
         data: {
           "userNameOrEmailAddress": Username,
           "password": Password,
