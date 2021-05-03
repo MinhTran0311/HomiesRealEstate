@@ -36,7 +36,7 @@ class UserApi {
     }
   }
 
-  Future<CurrenUserForEditdyo> getCurrenUser() async {
+  Future<CurrentUserForEditdto> getCurrentUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenUser,
 
@@ -47,13 +47,13 @@ class UserApi {
             }
         ),);
       log("Get All Success");
-      return CurrenUserForEditdyo.fromMap(res);
+      return CurrentUserForEditdto.fromMap(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;
     }
   }
-  Future<CurrenUserForEditdyo> getCurrenWalletUser() async {
+  Future<CurrentUserForEditdto> getCurrentWalletUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenWalletUser,
 
@@ -64,7 +64,7 @@ class UserApi {
             }
         ),);
       log("Get All Success");
-      return CurrenUserForEditdyo.fromMapWallet(res);
+      return CurrentUserForEditdto.fromMapWallet(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;
@@ -72,7 +72,7 @@ class UserApi {
   }
 
 
-  Future<dynamic> updatetCurrenUser(String name,String surname,String phonenumber,String email,String userName) async {
+  Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     try {
       final res = await _dioClient.put(Endpoints.updateCurrenUser,
         data: {

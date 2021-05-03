@@ -63,20 +63,20 @@ class Repository {
       return usersList;
       }).catchError((error) => throw error);
   }
-  Future<CurrenUserForEditdyo> getCurrenUser() async {
-    return await _userApi.getCurrenUser().then((user) {
+  Future<CurrentUserForEditdto> getCurrentUser() async {
+    return await _userApi.getCurrentUser().then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);
   }
   Future<dynamic> getWalletUser() async {
-    return await _userApi.getCurrenWalletUser().then((user) {
+    return await _userApi.getCurrentWalletUser().then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);
   }
-  Future<dynamic> updateCurrenUser(String name,String surname,String phonenumber,String email,String userName) async {
-    return await _userApi.updatetCurrenUser(name,surname,phonenumber,email,userName).then((user) {
+  Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
+    return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName).then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);
