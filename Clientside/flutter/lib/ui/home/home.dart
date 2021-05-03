@@ -3,6 +3,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
+import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
+  // LSGDStore LSGDStore;
   @override
   void initState() {
     super.initState();

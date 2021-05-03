@@ -32,6 +32,7 @@ class _WalletPageState extends State<WalletPage>{
   String moneysend = "15 000";
   String datetimesend =DateFormat('dd/MM/yyyy').format(DateTime.now());
   int _selectedIndex=0;
+  bool naptien = true;
   final Ctlmoneysend = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class _WalletPageState extends State<WalletPage>{
         child: Column(
           children: [
             createTransactionHistory(),
-            CardItem(text: "Tạo lịch sử giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+            CardItem(text: "Tạo giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
               press: (){
                 setState(() {
                   _showMyDialog();
@@ -139,7 +140,7 @@ class _WalletPageState extends State<WalletPage>{
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Tạo lịch sử giao dịch'),
+          title: Text('Tạo giao dịch'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -181,7 +182,7 @@ class _WalletPageState extends State<WalletPage>{
           Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
             style: TextStyle(fontSize: 24,fontFamily: FontFamily.roboto),),
           SizedBox(height: 20,),
-          CardItem(text: "Tạo lịch sử giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+          CardItem(text: "Tạo giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
           press: (){
             setState(() {
               _selectedIndex = 1;
