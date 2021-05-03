@@ -84,6 +84,11 @@ namespace Homies.RealEstate.Server
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
 
+                           join o4 in _lookup_hinhAnhRepository.GetAll() on o.Id equals o4.BaiDangId into j4
+                           from s4 in j4.DefaultIfEmpty()
+
+
+
 
                            select new GetBaiDangForViewDto()
                            {
@@ -107,10 +112,14 @@ namespace Homies.RealEstate.Server
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-                               FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
+                               FeaturedImage = s4.DuongDan
+                               //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
                            };
 
+            baiDangs.Distinct();
             var totalCount = await filteredBaiDangs.CountAsync();
+
+
 
             return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,

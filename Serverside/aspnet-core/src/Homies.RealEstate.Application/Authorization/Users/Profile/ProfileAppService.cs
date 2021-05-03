@@ -396,7 +396,5 @@ namespace Homies.RealEstate.Authorization.Users.Profile
             userProfileEditDto.ProfilePicture = GetProfilePictureByUser(Id).Result.ProfilePicture;
             return userProfileEditDto;
         }
-
-
     }
 }
