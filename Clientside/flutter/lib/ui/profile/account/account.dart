@@ -1,8 +1,10 @@
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
 import '../profile.dart';
 
@@ -14,12 +16,13 @@ class AccountPage extends StatefulWidget {
     @required this.Address,
     @required this.SurName,
     @required this.Name,
+    @required this.creationTime,
   }) : super(key: key);
 
-  final String Phone,Email,Address,SurName,Name;
+  final String Phone,Email,Address,SurName,Name,creationTime;
 
   @override
-  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name);
+  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,creationTime: creationTime);
 }
 
 
@@ -31,9 +34,11 @@ class _AccountPageState extends State<AccountPage>{
     @required this.Address,
     @required this.SurName,
     @required this.Name,
+    @required this.creationTime,
   }) : super();
 
-  String Phone,Email,Address,SurName,Name;
+  String Phone,Email,Address,SurName,Name,creationTime;
+
   final CtlPhone = TextEditingController();
   final CtlEmail = TextEditingController();
   final CtlAddress = TextEditingController();
@@ -41,6 +46,17 @@ class _AccountPageState extends State<AccountPage>{
   final CtlName = TextEditingController();
 
   int _selectedIndex=0;
+  UserStore _userstore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _userstore = Provider.of<UserStore>(context);
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,7 +149,7 @@ class _AccountPageState extends State<AccountPage>{
         Container(
             color: Colors.white,
             padding: const EdgeInsets.only(left: 30, top: 10),
-            child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia Tháng 3 Năm 2021")
+            child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia "+creationTime)
         ),
 
       ],
@@ -152,15 +168,15 @@ class _AccountPageState extends State<AccountPage>{
             child: ListView(
               children: [
                 SizedBox(height: 20,),
-                Text('Họ'),
+                Text('Họ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(SurName,CtlSurName),
-                Text('Tên'),
+                Text('Tên',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(Name,CtlName),
-                Text('Email'),
+                Text('Email',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(Email,CtlEmail),
-                Text('SĐT'),
+                Text('SĐT',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(Phone,CtlPhone),
-                Text('Đại chỉ'),
+                Text('Đại chỉ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(Address,CtlAddress),
 
               ],
@@ -194,11 +210,14 @@ class _AccountPageState extends State<AccountPage>{
   }
 
   void update(){
+
     SurName = CtlSurName.text;
     Name = CtlName.text;
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     Address = CtlAddress.text;
+    _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName);
+    ProfileScreen(SurName: SurName,Name: Name,Phone: Phone,Email: Email,);
   }
 
   Future<void> _showMyDialog() async {
@@ -232,6 +251,7 @@ class _AccountPageState extends State<AccountPage>{
                   update();
                   _selectedIndex =0;
                   Navigator.of(context).pop();
+
                 });
               },
             ),

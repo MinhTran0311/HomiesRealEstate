@@ -30,6 +30,13 @@ class Endpoints {
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
   //# region Post
+
+  //get all users
+  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get all lichsugiaodich
+  static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
+  //get all lichsugiaodich
+  static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
   //post image

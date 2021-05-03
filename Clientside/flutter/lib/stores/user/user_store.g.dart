@@ -110,13 +110,21 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
-  final _$getCurrenUserAsyncAction = AsyncAction('_UserStore.getCurrenUser');
-
+  final _$getUserAsyncAction = AsyncAction('_UserStore.getCurrentUser');
   @override
-  Future<dynamic> getCurrenUser() {
-    return _$getCurrenUserAsyncAction.run(() => super.getCurrenUser());
+  Future<dynamic> getCurrentUser() {
+    return _$getUserAsyncAction.run(() => super.getCurrenUser());
   }
-
+  final _$getUserWalletAsyncAction = AsyncAction('_UserStore.getCurrentWalletUser');
+  @override
+  Future<dynamic> getCurrentWalletUser() {
+    return _$getUserWalletAsyncAction.run(() => super.getCurrentWalletUser());
+  }
+  final _$updateUserAsyncAction = AsyncAction('_UserStore.updateCurrentUser');
+  @override
+  Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) {
+    return _$getUserAsyncAction.run(() => super.updateCurrentUser(name,surname,phonenumber,email,userName));
+  }
   @override
   String toString() {
     return '''

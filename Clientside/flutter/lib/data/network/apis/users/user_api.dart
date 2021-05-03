@@ -12,11 +12,11 @@ import 'package:dio/dio.dart';
 
 class UserApi {
   final DioClient _dioClient;
-  
+
   final RestClient _restClient;
-  
+
   UserApi(this._dioClient, this._restClient);
-  
+
   Future<UserList> getAllUsers() async {
     try {
       final res = await _dioClient.post(Endpoints.getAllUsers,
@@ -36,7 +36,7 @@ class UserApi {
     }
   }
 
-  Future<CurrenUserForEditdyo> getCurrenUser() async {
+  Future<CurrentUserForEditdto> getCurrentUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenUser,
 
@@ -47,29 +47,79 @@ class UserApi {
             }
         ),);
       log("Get All Success");
-      return CurrenUserForEditdyo.fromMap(res);
+      return CurrentUserForEditdto.fromMap(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;
     }
   }
 
-  Future<CurrenUserForEditdyo> getUserOfCurrentDetailPost(String Id) async {
+Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(String Id) async {
+  try {
+    final res = await _dioClient.get(Endpoints.getUserOfCurrentPost,
+    options: Options(
+        headers: {
+          "Abp.TenantId": 1,
+          "Authorization" : "Bearer ${Preferences.access_token}",
+        }
+    <<<<<<< HEAD
+    ),
+    queryParameters: {
+      "Id": Id,
+    },);
+    return CurrentUserForEditdto.fromMap(res);
+    } catch (e) {
+    throw e;
+    }
+  }
+
+  Future<CurrentUserForEditdto> getCurrentWalletUser() async {
     try {
-      final res = await _dioClient.get(Endpoints.getUserOfCurrentPost,
+      final res = await _dioClient.get(Endpoints.getCurrenWalletUser,
 
         options: Options(
             headers: {
               "Abp.TenantId": 1,
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
-        ),
-        queryParameters: {
-          "Id": Id,
-        },);
-      return CurrenUserForEditdyo.fromMap(res);
+        ),);
+      log("Get All Success");
+      return CurrentUserForEditdto.fromMapWallet(res);
     } catch (e) {
+      print("lỗi" + e.toString());
       throw e;
     }
   }
+
+
+  Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
+    try {
+      final res = await _dioClient.put(Endpoints.updateCurrenUser,
+        data: {
+          "name": name,
+          "surname": surname,
+          "emailAddress": email,
+          "phoneNumber":phonenumber,
+          "userName":userName,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+            ),);
+          log("updateUser Success");
+          bool updateUserSuccess = res["success"];
+
+          print(res);
+          return updateUserSuccess;
+        } catch (e) {
+          throw e;
+        }
+        //   return CurrenUserForEditdyo.fromMap(res);
+        // } catch (e) {
+        //   print("lỗi" + e.toString());
+        //   throw e;
+        // }
+    }
 }

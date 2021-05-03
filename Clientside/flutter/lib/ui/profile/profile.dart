@@ -16,27 +16,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'account/account.dart';
 
 class ProfileScreen extends StatefulWidget{
+  ProfileScreen({
+    Key key,
+    @required this.Phone,
+    @required this.Email,
+    @required this.Address,
+    @required this.SurName,
+    @required this.Name,
+  }) : super(key: key);
+
+  final String Phone,Email,Address,SurName,Name;
+
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name);
+
+
+  // @override
+  // _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen>{
-  String _pathAvatar= "assets/images/img_login.jpg";
-  String _SurName ="Phạm Quốc";
-  String _Name ="Đạt";
-  String _FullName="Trần Tuấn Minh";
-  String _profession="Nhà môi giới";
-  String _Sodu = "1.000.000";
-  String _Baidadang = "125";
-  String _Phone = "0352565635";
-  String _Email = "datpham1610@gmail.com";
-  String _Address = "KTX Khu A, ĐHQG-HCM";
-  File _image;
+  _ProfileScreenState({
+    Key key,
+    @required this.Phone,
+    @required this.Email,
+    @required this.Address,
+    @required this.SurName,
+    @required this.Name,
+  }) : super();
+
+
+  String pathAvatar= "assets/images/img_login.jpg";
+  String SurName ="Người";
+  String Name ="Dùng";
+  String FullName="Người Dùng";
+  String profession="Nhà môi giới";
+  String Sodu = "0";
+  String Baidadang = "0";
+  String Phone = "Chưa đăng ký";
+  String Email = "Chưa đăng ký";
+  String Address = "KTX Khu A, ĐHQG-HCM";
+  String creationTime =DateFormat('dd/MM/yyyy').format(DateTime.now());
+  File image;
   final picker = ImagePicker();
   int selected = 0;
   UserStore _userstore;
@@ -45,8 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        _pathAvatar = _image.path;
+        image = File(pickedFile.path);
+        pathAvatar = image.path;
       } else {
         print('No image selected.');
       }
@@ -61,12 +88,22 @@ class _ProfileScreenState extends State<ProfileScreen>{
     _userstore = Provider.of<UserStore>(context);
 
     if (!_userstore.loading) {
-      _userstore.getCurrenUser();
-
+      _userstore.getCurrentUser();
+      _userstore.getCurrentWalletUser();
       if(_userstore.user!=null){
         print("Duong"+_userstore.user.name);
-        _FullName = _userstore.user.name + " " +_userstore.user.surname;
-      }
+        setState(() {
+          SurName = _userstore.user.surname;
+          Name = _userstore.user.name;
+          FullName = SurName + " " +Name;
+          if(_userstore.user.emailAddress!=null)Email = _userstore.user.emailAddress;
+          if(_userstore.user.phoneNumber!=null)Phone = _userstore.user.phoneNumber;
+          if(_userstore.user.wallet!=null)Sodu = _userstore.user.wallet.toString();
+          else Sodu = "0";
+          if(_userstore.user.creationTime!=null)creationTime = _userstore.user.creationTime.substring(8,10)+"/"+ _userstore.user.creationTime.substring(5,7)+"/"+_userstore.user.creationTime.substring(0,4);
+
+        });
+       }
 
     }
 
@@ -104,34 +141,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
   Widget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      title: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 40,
-            width: 20,
-            child: Stack(
-              fit: StackFit.expand,
-              overflow: Overflow.visible,
-              children: [
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  child: _selectedIndex !=0 ? IconButton(icon: Icon(Icons.arrow_back_ios),
-                      onPressed: (){setState(() {
-                        _selectedIndex =0;
-                      });}):Container(),
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 130,
-          ),
-          Center(
-              child: Text("Cá nhân")),
-        ],
+      leading: _selectedIndex !=0 ? IconButton(icon: Icon(Icons.arrow_back_ios),
+          onPressed: (){setState(() {
+            _selectedIndex =0;
+          });}):Container(),
+      title:  Padding(
+        padding: const EdgeInsets.only(left: 100),
+        child: Text("Cá nhân"),
       ),
 
     );
@@ -171,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
             IndexedStack(
               children: [
                 MenuItem(),
-                AccountPage(Phone: _Phone,Email: _Email,Address: _Address,SurName: _SurName,Name: _Name,),
+                AccountPage(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,creationTime: creationTime,),
                 WalletPage(),
                 ReportPage(title: "Doanh Thu",)
               ],
@@ -323,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                               backgroundColor: Colors.white,
                               child: ClipRRect(
                                 borderRadius:BorderRadius.circular(50),
-                                child: Image.asset(_pathAvatar),
+                                child: Image.asset(pathAvatar),
                               )
                           ),
                         // CircularProfileAvatar(
@@ -365,7 +381,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _FullName,
+                        SurName+" "+Name,
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -382,7 +398,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
                           Text(
-                              " "+_profession,
+                              " "+profession,
                               style: TextStyle(
                                   fontSize: 17.0,
                                   // fontWeight: FontWeight.bold,
@@ -407,7 +423,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     children: [
                       Text(
-                        _Sodu,
+                        Sodu,
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -431,7 +447,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     children: [
                       Text(
-                        _Baidadang,
+                        Baidadang,
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
