@@ -53,4 +53,53 @@ class UserApi {
       throw e;
     }
   }
+  Future<CurrenUserForEditdyo> getCurrenWalletUser() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getCurrenWalletUser,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All Success");
+      return CurrenUserForEditdyo.fromMapWallet(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
+
+  Future<dynamic> updatetCurrenUser(String name,String surname,String phonenumber,String email,String userName) async {
+    try {
+      final res = await _dioClient.put(Endpoints.updateCurrenUser,
+        data: {
+          "name": name,
+          "surname": surname,
+          "emailAddress": email,
+          "phoneNumber":phonenumber,
+          "userName":userName,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("updateUser Success");
+      bool updateUserSuccess = res["success"];
+
+      print(res);
+      return updateUserSuccess;
+    } catch (e) {
+      throw e;
+    }
+    //   return CurrenUserForEditdyo.fromMap(res);
+    // } catch (e) {
+    //   print("lỗi" + e.toString());
+    //   throw e;
+    // }
+  }
 }

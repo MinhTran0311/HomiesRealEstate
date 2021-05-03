@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
@@ -44,6 +46,15 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+  // Post: ---------------------------------------------------------------------
+  // Future<listLSGD> getLSGD() async {
+  //   // check to see if posts are present in database, then fetch from database
+  //   // else make a network call to get all posts, store them into database for
+  //   // later use
+  //   return await _userApi.getLSGD().then((lsgdList) {
+  //     return lsgdList;
+  //   }).catchError((error) => throw error);
+  // }
 
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
@@ -54,6 +65,18 @@ class Repository {
   }
   Future<CurrenUserForEditdyo> getCurrenUser() async {
     return await _userApi.getCurrenUser().then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+  Future<dynamic> getWalletUser() async {
+    return await _userApi.getCurrenWalletUser().then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+  Future<dynamic> updateCurrenUser(String name,String surname,String phonenumber,String email,String userName) async {
+    return await _userApi.updatetCurrenUser(name,surname,phonenumber,email,userName).then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);

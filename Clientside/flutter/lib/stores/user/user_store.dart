@@ -138,4 +138,52 @@ abstract class _UserStore with Store {
       //throw error;
     });
   }
+
+  @action
+  Future getCurrenWalletUser() async {
+    final future = _repository.getWalletUser();
+    fetchUsersFuture = ObservableFuture(future);
+
+    fetchUsersFuture.then((user) {
+      this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+  @action
+  Future updateCurrenUser(String name,String surname,String phonenumber,String email,String userName) async {
+    final future = _repository.updateCurrenUser(name, surname, phonenumber, email,userName);
+    fetchUsersFuture = ObservableFuture(future);
+
+    fetchUsersFuture.then((user) {
+      // this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+
+
+
 }
