@@ -88,8 +88,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     _userstore = Provider.of<UserStore>(context);
 
     if (!_userstore.loading) {
-      _userstore.getCurrenUser();
-      _userstore.getCurrenWalletUser();
+      _userstore.getCurrentUser();
+      _userstore.getCurrentWalletUser();
       if(_userstore.user!=null){
         print("Duong"+_userstore.user.name);
         setState(() {
