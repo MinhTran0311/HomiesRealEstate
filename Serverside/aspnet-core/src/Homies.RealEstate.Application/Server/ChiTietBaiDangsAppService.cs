@@ -79,6 +79,45 @@ namespace Homies.RealEstate.Server
             );
         }
 
+        public async Task<PagedResultDto<GetChiTietBaiDangForViewDto>> GetAllChiTietBaiDangByPostId(long postId)
+        {
+
+            var filteredChiTietBaiDangs = _chiTietBaiDangRepository.GetAll()
+                        .Include(e => e.ThuocTinhFk)
+                        .Include(e => e.BaiDangFk)
+                        .Where(e => e.BaiDangFk != null && e.BaiDangFk.Id == postId);
+
+            var pagedAndFilteredChiTietBaiDangs = filteredChiTietBaiDangs
+                .OrderBy("id asc");
+
+            var chiTietBaiDangs = from o in pagedAndFilteredChiTietBaiDangs
+                                  join o1 in _lookup_thuocTinhRepository.GetAll() on o.ThuocTinhId equals o1.Id into j1
+                                  from s1 in j1.DefaultIfEmpty()
+
+                                  join o2 in _lookup_baiDangRepository.GetAll() on o.BaiDangId equals o2.Id into j2
+                                  from s2 in j2.DefaultIfEmpty()
+
+                                  select new GetChiTietBaiDangForViewDto()
+                                  {
+                                      ChiTietBaiDang = new ChiTietBaiDangDto
+                                      {
+                                          GiaTri = o.GiaTri,
+                                          Id = o.Id,
+                                          ThuocTinhId = o.ThuocTinhId,
+                                          BaiDangId = o.BaiDangId
+                                      },
+                                      ThuocTinhTenThuocTinh = s1 == null || s1.TenThuocTinh == null ? "" : s1.TenThuocTinh.ToString(),
+                                      BaiDangTieuDe = s2 == null || s2.TieuDe == null ? "" : s2.TieuDe.ToString()
+                                  };
+
+            var totalCount = await filteredChiTietBaiDangs.CountAsync();
+
+            return new PagedResultDto<GetChiTietBaiDangForViewDto>(
+                totalCount,
+                await chiTietBaiDangs.ToListAsync()
+            );
+        }
+
         public async Task<GetChiTietBaiDangForViewDto> GetChiTietBaiDangForView(int id)
         {
             var chiTietBaiDang = await _chiTietBaiDangRepository.GetAsync(id);
