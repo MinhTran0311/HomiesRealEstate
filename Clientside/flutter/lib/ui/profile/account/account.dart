@@ -127,7 +127,7 @@ class _AccountPageState extends State<AccountPage>{
                       ),
                       TextIcon(icon: Icons.phone, text: Phone),
                       TextIcon(icon: Icons.mail, text: Email),
-                      TextIcon(icon: Icons.location_on, text: Address)
+                      // TextIcon(icon: Icons.location_on, text: Address)
                     ],
                   ),
                 )
@@ -140,7 +140,7 @@ class _AccountPageState extends State<AccountPage>{
               _selectedIndex =1;
               CtlSurName.text = SurName;
               CtlName.text = Name;
-              CtlAddress.text = Address;
+              // CtlAddress.text = Address;
               CtlEmail.text = Email;
               CtlPhone.text = Phone;
             });
@@ -176,8 +176,8 @@ class _AccountPageState extends State<AccountPage>{
                 buildSurnameField(Email,CtlEmail),
                 Text('SĐT',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
                 buildSurnameField(Phone,CtlPhone),
-                Text('Đại chỉ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
-                buildSurnameField(Address,CtlAddress),
+                // Text('Đại chỉ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
+                // buildSurnameField(Address,CtlAddress),
 
               ],
             ),
@@ -216,8 +216,10 @@ class _AccountPageState extends State<AccountPage>{
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     Address = CtlAddress.text;
-    _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName);
-    ProfileScreen(SurName: SurName,Name: Name,Phone: Phone,Email: Email,);
+    if(_userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName)==true){
+      _userstore.getCurrentUser();
+    };
+
   }
 
   Future<void> _showMyDialog() async {
