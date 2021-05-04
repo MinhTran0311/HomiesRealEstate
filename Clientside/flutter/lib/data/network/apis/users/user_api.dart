@@ -12,11 +12,11 @@ import 'package:dio/dio.dart';
 
 class UserApi {
   final DioClient _dioClient;
-  
+
   final RestClient _restClient;
-  
+
   UserApi(this._dioClient, this._restClient);
-  
+
   Future<UserList> getAllUsers() async {
     try {
       final res = await _dioClient.post(Endpoints.getAllUsers,
@@ -53,6 +53,26 @@ class UserApi {
       throw e;
     }
   }
+
+//Minh làm
+Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
+  try {
+    final res = await _dioClient.get(Endpoints.getUserOfCurrentPost,
+    options: Options(
+        headers: {
+          "Abp.TenantId": 1,
+          "Authorization" : "Bearer ${Preferences.access_token}",
+        }
+    ),
+    queryParameters: {
+      "Id": Id,
+    },);
+    return CurrentUserForEditdto.fromMap(res);
+    } catch (e) {
+    throw e;
+    }
+  }
+
   Future<CurrentUserForEditdto> getCurrentWalletUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenWalletUser,
@@ -71,7 +91,6 @@ class UserApi {
     }
   }
 
-
   Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     try {
       final res = await _dioClient.put(Endpoints.updateCurrenUser,
@@ -87,19 +106,19 @@ class UserApi {
               "Abp.TenantId": 1,
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
-        ),);
-      log("updateUser Success");
-      bool updateUserSuccess = res["success"];
+            ),);
+          log("updateUser Success");
+          bool updateUserSuccess = res["success"];
 
-      print(res);
-      return updateUserSuccess;
-    } catch (e) {
-      throw e;
+          print(res);
+          return updateUserSuccess;
+        } catch (e) {
+          throw e;
+        }
+        //   return CurrenUserForEditdyo.fromMap(res);
+        // } catch (e) {
+        //   print("lỗi" + e.toString());
+        //   throw e;
+        // }
     }
-    //   return CurrenUserForEditdyo.fromMap(res);
-    // } catch (e) {
-    //   print("lỗi" + e.toString());
-    //   throw e;
-    // }
-  }
 }

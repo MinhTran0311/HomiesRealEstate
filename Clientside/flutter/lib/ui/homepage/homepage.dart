@@ -18,15 +18,27 @@ import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'TabNavigator.dart';
+
 class HomePageScreen extends StatefulWidget {
   @override
   _HomePageScreenState createState() => _HomePageScreenState();
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-
+  String _currentPage = "HomeScreen";
   int _currentIndex = 0;
   PageController _pageController;
+  int _selectedIndex = 0;
+
+  List<String> pageKeys = ["HomeScreen", "Map", "Notification","Profile","NewPost"];
+  Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    "HomeScreen": GlobalKey<NavigatorState>(),
+    "Map": GlobalKey<NavigatorState>(),
+    "Notification": GlobalKey<NavigatorState>(),
+    "Profile": GlobalKey<NavigatorState>(),
+    "NewPost": GlobalKey<NavigatorState>(),
+  };
 
   @override
   void initState() {
@@ -42,41 +54,95 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _currentIndex = index);
-          },
-          children: <Widget>[
-            HomeScreen(),
-            //Container(color: Colors.white,),
-            UserManagementScreen(),
-            Container(color: Colors.white,),
-            ProfileScreen(),
-            Container(color: Colors.white,),
+    return WillPopScope(
+      onWillPop: () async {
+        final isFirstRouteInCurrentTab =
+        !await _navigatorKeys[_currentPage].currentState.maybePop();
+        if (isFirstRouteInCurrentTab) {
+          if (_currentPage != "HomeScreen") {
+            _selectTab("HomeScreen", 1);
+
+            return false;
+          }
+        }
+        // let system handle back button if we're on the first route
+        return isFirstRouteInCurrentTab;
+      },
+      child: Scaffold(
+        // body: SizedBox.expand(
+        //   child: PageView(
+        //     controller: _pageController,
+        //     onPageChanged: (index) {
+        //       setState(() => _currentIndex = index);
+        //     },
+        //     children: <Widget>[
+        //       _buildOffstageNavigator("HomeScreen"),
+        //       _buildOffstageNavigator("Map"),
+        //       _buildOffstageNavigator("Notification"),
+        //       _buildOffstageNavigator("Profile"),
+        //       _buildOffstageNavigator("NewPost"),
+        //       // HomeScreen(),
+        //       // //Container(color: Colors.white,),
+        //       // UserManagementScreen(),
+        //       // Container(color: Colors.white,),
+        //       // ProfileScreen(),
+        //       // Container(color: Colors.white,),
+        //     ],
+        //   ),
+        // ),
+        body: Stack(
+          children: [
+            _buildOffstageNavigator("HomeScreen"),
+            _buildOffstageNavigator("Map"),
+            _buildOffstageNavigator("Notification"),
+            _buildOffstageNavigator("Profile"),
+            _buildOffstageNavigator("NewPost"),
           ],
         ),
+        bottomNavigationBar: CurvedNavigationBar(
+          height: 60,
+          backgroundColor: Colors.transparent,
+          color: Colors.amber,
+          items: <Widget>[
+            Icon(Icons.home, size: 30,color: Colors.black87,),
+            Icon(Icons.location_pin, size: 30,color: Colors.black87,),
+            Icon(Icons.notifications, size: 30, color: Colors.black87,),
+            Icon(Icons.person, size: 30, color: Colors.black87,),
+            Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
+          ],
+          index: _currentIndex,
+
+          onTap: (index) {
+            setState(() {
+              _selectTab(pageKeys[index], index);
+              _currentIndex = index;
+            });
+            _pageController.jumpToPage(index);
+          },
+        ),
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.white,
-        color: Colors.amber,
-        items: <Widget>[
-          Icon(Icons.home, size: 30,color: Colors.black87,),
-          Icon(Icons.location_pin, size: 30,color: Colors.black87,),
-          Icon(Icons.notifications, size: 30, color: Colors.black87,),
-          Icon(Icons.person, size: 30, color: Colors.black87,),
-          Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
-        ],
-        height: 60,
-        index: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          _pageController.jumpToPage(index);
-        },
+    );
+  }
+
+
+
+  void _selectTab(String tabItem, int index) {
+    if(tabItem == _currentPage ){
+      _navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _currentPage = pageKeys[index];
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage(
+      offstage: _currentPage != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem],
+        tabItem: tabItem,
       ),
     );
   }

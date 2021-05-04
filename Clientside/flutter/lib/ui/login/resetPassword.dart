@@ -19,23 +19,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:boilerplate/stores/token/authToken_store.dart';
 
 
-class LoginScreen extends StatefulWidget {
+class ResetPasswordScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   //text controllers:-----------------------------------------------------------
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
   //focus node:-----------------------------------------------------------------
-  FocusNode _passwordFocusNode;
+  FocusNode _emailFocusNode;
 
   //stores:---------------------------------------------------------------------
   final FormStore _store = new FormStore();
@@ -43,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _passwordFocusNode = FocusNode();
+    _emailFocusNode = FocusNode();
   }
 
   @override
@@ -56,14 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      primary: true,
-      appBar: EmptyAppBar(),
-      body: Stack(
-        children: <Widget>[
-          _handleErrorMessage(),
-          _buildBody(),
-        ]
-      )
+        primary: true,
+        appBar: EmptyAppBar(),
+        body: Stack(
+            children: <Widget>[
+              _handleErrorMessage(),
+              _buildBody(),
+            ]
+        )
     );
   }
 
@@ -85,29 +83,36 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
-            ? Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildLeftSide(),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildRightSide(),
-                  ),
-                ],
+              ? Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: _buildLeftSide(),
+              ),
+              Expanded(
+                flex: 1,
+                child: _buildRightSide(),
+              ),
+            ],
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _store.loggedIn
-                  ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
-            },
+              if (_store.resetPassword_success) {
+                print("Success reset");
+                Future.delayed(Duration(milliseconds: 0), () {
+                  Navigator.of(context).pop();
+                });
+                _showSuccssfullMesssage("Hãy kiểm tra đường dẫn đến trang đặt lại mật khẩu trong email của bạn");
+                return Container(width: 0, height: 0);
+              } else {
+                return _showErrorMessage(_store.errorStore.errorMessage);
+              }
+            }
           ),
           Observer(
             builder: (context) {
               return Visibility(
-                visible: _store.loading,
+                visible: _store.sendingCode,
                 child: CustomProgressIndicatorWidget(),
               );
             },
@@ -137,98 +142,54 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             SizedBox(height: 24.0),
-            _buildUserIdField(),
-            _buildPasswordField(),
-            _buildForgotPasswordButton(),
-            _buildSignInButton(),
-            _buildSignUpButton(),
-            _buildContinueAsGuestButton(),
+            _buildForgotPasswordNoti(),
+            _buildUserEmail(),
+            SizedBox(height: 12,),
+            _buildSubmitButton()
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserIdField() {
+  Widget _buildForgotPasswordNoti() {
+    return Text(
+        "Quên mật khẩu",
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26,color: Colors.white),
+      );
+  }
+
+  Widget _buildUserEmail() {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Tên đăng nhập'),
+          hint: ('Email *'),
           hintColor: Colors.white,
-          icon: Icons.person,
+          icon: Icons.email_rounded,
           inputType: TextInputType.text,
           iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _userNameController,
+          textController: _emailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
           onChanged: (value) {
-            _store.setUserId(_userNameController.text);
+            _store.setUserEmail(_emailController.text);
           },
-          onFieldSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_passwordFocusNode);
-          },
-          errorText: _store.formErrorStore.username,
+          errorText: _store.formErrorStore.userEmail,
         );
       },
     );
   }
 
-  Widget _buildPasswordField() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Mật khẩu'),
-          hintColor: Colors.white,
-          isObscure: true,
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.vpn_key,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _passwordController,
-          focusNode: _passwordFocusNode,
-          errorText: _store.formErrorStore.password,
-          onChanged: (value) {
-            _store.setPassword(_passwordController.text);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildForgotPasswordButton() {
-    return Align(
-      alignment: FractionalOffset.centerRight,
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
-        child: Text(
-          "Quên mật khẩu?",
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
-        ),
-        onPressed: () {
-          SharedPreferences.getInstance().then((preference) {
-            preference.setBool(Preferences.is_logged_in, false);
-            Navigator.pushNamed(context, '/resetPassword');
-          });
-        },
-      ),
-    );
-  }
-
-  Widget _buildSignInButton() {
+  Widget _buildSubmitButton() {
     return RoundedButtonWidget(
-      buttonText: ('Đăng nhập'),
+      buttonText: ('Gửi'),
       buttonColor: Colors.orangeAccent,
       textColor: Colors.white,
       onPressed: () async {
-        log("Login clicked");
-        if (_store.canLogin) {
+        if (_store.canSubmitResetPassword) {
           DeviceUtils.hideKeyboard(context);
-          _store.authLogIn(_userNameController.text,_passwordController.text);
-          //_authTokenStore.authLogIn(_store.userEmail, _store.password);
+          _store.resetPassword();
         } else {
           _showErrorMessage('Please fill in all fields');
         }
@@ -236,55 +197,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSignUpButton() {
-    return RoundedButtonWidget(
-      buttonText: ('Đăng ký'),
-      buttonColor: Colors.black87,
-      textColor: Colors.white,
-      onPressed: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
-          Navigator.pushNamed(context, '/signup');
-        });
-      },
-    );
-  }
 
-  Widget _buildContinueAsGuestButton() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 54,vertical: 8),
-      child: FlatButton(
-        padding: EdgeInsets.all(0.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-            SizedBox(width: 5,),
-            Text(
-              "Tiếp tục với tư cách khách",
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
-            ),
-          ],
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
 
   Widget navigate(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, true);
+      prefs.setBool(Preferences.is_logged_in, false);
     });
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
+      Navigator.of(context).pop();
     });
 
     return Container();
@@ -300,7 +220,19 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-
+    _showSuccssfullMesssage(String message) {
+      Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+        message: message,
+        title: "Thông báo",
+        duration: Duration(seconds: 8),
+      )
+        .show(context);
+      }
+      return SizedBox.shrink();
+      });
+    }
   // General Methods:-----------------------------------------------------------
   _showErrorMessage( String message) {
     Future.delayed(Duration(milliseconds: 0), () {
@@ -320,9 +252,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
-    _userNameController.dispose();
-    _passwordController.dispose();
-    _passwordFocusNode.dispose();
+    _emailController.dispose();
+    _emailFocusNode.dispose();
     super.dispose();
   }
 

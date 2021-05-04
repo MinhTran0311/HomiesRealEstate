@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class Post {
   String userName;
   String danhMuc;
@@ -19,6 +21,9 @@ class Post {
   int danhMucId;
   int xaId;
   int id;
+  String featuredImage;
+  double dienTich;
+  double gia;
 
   Post({
     this.userName,
@@ -41,6 +46,9 @@ class Post {
     this.danhMucId,
     this.xaId,
     this.id,
+    this.featuredImage,
+    this.dienTich,
+    this.gia
   });
 
   factory Post.fromMap(Map<String, dynamic> json) => Post(
@@ -64,6 +72,9 @@ class Post {
     danhMucId: json["baiDang"]["danhMucId"],
     xaId: json["baiDang"]["xaId"],
     id: json["baiDang"]["id"],
+    featuredImage: json["baiDang"]["featuredImage"],
+    dienTich: json["baiDang"]["dienTich"],
+    gia: json["baiDang"]["gia"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -87,6 +98,9 @@ class Post {
     "danhMucId": danhMucId,
     "xaId": xaId,
     "id": id,
+    "featuredImage": featuredImage,
+    "dienTich": dienTich,
+    "gia": gia,
       };
   
 }

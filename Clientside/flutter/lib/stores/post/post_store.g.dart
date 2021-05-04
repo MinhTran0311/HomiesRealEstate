@@ -15,6 +15,13 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
+  Computed<bool> _$imageLoadingComputed;
+
+  @override
+  bool get imageLoading =>
+      (_$imageLoadingComputed ??= Computed<bool>(() => super.imageLoading,
+              name: '_PostStore.imageLoading'))
+          .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -31,6 +38,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchImageFutureAtom = Atom(name: '_PostStore.fetchImageFuture');
+
+  @override
+  ObservableFuture<String> get fetchImageFuture {
+    _$fetchImageFutureAtom.reportRead();
+    return super.fetchImageFuture;
+  }
+
+  @override
+  set fetchImageFuture(ObservableFuture<String> value) {
+    _$fetchImageFutureAtom.reportWrite(value, super.fetchImageFuture, () {
+      super.fetchImageFuture = value;
+    });
+  }
+
   final _$postListAtom = Atom(name: '_PostStore.postList');
 
   @override
@@ -43,6 +65,21 @@ mixin _$PostStore on _PostStore, Store {
   set postList(PostList value) {
     _$postListAtom.reportWrite(value, super.postList, () {
       super.postList = value;
+    });
+  }
+
+  final _$imageUrlListAtom = Atom(name: '_PostStore.imageUrlList');
+
+  @override
+  List<String> get imageUrlList {
+    _$imageUrlListAtom.reportRead();
+    return super.imageUrlList;
+  }
+
+  @override
+  set imageUrlList(List<String> value) {
+    _$imageUrlListAtom.reportWrite(value, super.imageUrlList, () {
+      super.imageUrlList = value;
     });
   }
 
@@ -72,9 +109,12 @@ mixin _$PostStore on _PostStore, Store {
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
+fetchImageFuture: ${fetchImageFuture},
 postList: ${postList},
+imageUrlList: ${imageUrlList},
 success: ${success},
-loading: ${loading}
+loading: ${loading},
+imageLoading: ${imageLoading}
     ''';
   }
 }

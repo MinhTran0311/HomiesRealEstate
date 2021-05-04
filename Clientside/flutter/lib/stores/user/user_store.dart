@@ -54,8 +54,6 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
 
-
-
   @observable
   ObservableFuture<bool> loginFuture = emptyLoginResponse;
 
@@ -132,35 +130,32 @@ abstract class _UserStore with Store {
         errorStore.errorMessage="Please check your internet connection and try again!";
         throw error;
       }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
     });
   }
 
   @action
   Future getCurrentWalletUser() async {
-    final future = _repository.getWalletUser();
-    fetchUsersFuture = ObservableFuture(future);
+      final future = _repository.getWalletUser();
+      fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
-      this.user = user;
-    }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
-        throw error;
-      }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
-    });
-  }
+      fetchUsersFuture.then((user) {
+        this.user = user;
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+        //log("error ne: ");
+        //log(DioErrorUtil.handleError(error));
+        //errorStore.errorMessage = DioErrorUtil.handleError(error);
+        //throw error;
+      });
+    }
+
   @action
   Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName);
@@ -184,6 +179,22 @@ abstract class _UserStore with Store {
     });
   }
 
+  @action
+  Future getUserOfCurrentDetailPost(int Id) async {
+    final future = _repository.getUserOfCurrentDeatiaiPost(Id);
+    fetchUsersFuture = ObservableFuture(future);
 
-
+    fetchUsersFuture.then((user) {
+      this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
 }

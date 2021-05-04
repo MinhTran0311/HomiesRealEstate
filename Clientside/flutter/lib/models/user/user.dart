@@ -76,13 +76,16 @@ class CurrentUserForEditdto{
   String userName;
   String emailAddress;
   String phoneNumber;
+  String profilePicture;
   String creationTime;
   double wallet;
+
   CurrentUserForEditdto({
     this.name,
     this.emailAddress,
     this.phoneNumber,
     this.surname,
+    this.profilePicture,
     this.creationTime,
     this.wallet,
     this.userName
@@ -94,6 +97,7 @@ class CurrentUserForEditdto{
       userName: json["result"]["userName"],
       emailAddress: json["result"]["emailAddress"],
       phoneNumber: json["result"]["phoneNumber"],
+      profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
     );
   }

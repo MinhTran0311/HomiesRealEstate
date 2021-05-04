@@ -1,4 +1,5 @@
 
+import 'package:boilerplate/ui/login/resetPassword.dart';
 import 'package:flutter/material.dart';
 import 'ui/profile/profile.dart';
 import 'ui/home/home.dart';
@@ -14,9 +15,11 @@ class Routes {
   static const String splash = '/splash';
   static const String login = '/login';
   static const String home = '/home';
+  static const String resetPassword = '/resetPassword';
   static const String signup = '/signup';
   static const String userManagement = '/userManagement';
   static const String profile = '/profile';
+
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
@@ -25,6 +28,7 @@ class Routes {
     signup: (BuildContext context) => RegistrationScreen(),
     userManagement: (BuildContext context) => UserManagementScreen(),
     profile: (BuildContext context) => ProfileScreen(),
+    resetPassword: (BuildContext context) => ResetPasswordScreen(),
   };
 }
 

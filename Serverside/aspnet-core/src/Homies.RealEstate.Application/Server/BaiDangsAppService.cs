@@ -29,8 +29,9 @@ namespace Homies.RealEstate.Server
         private readonly IRepository<DanhMuc, int> _lookup_danhMucRepository;
         private readonly IRepository<Xa, int> _lookup_xaRepository;
         private readonly IRepository<HinhAnh, int> _lookup_hinhAnhRepository;
+        private readonly IRepository<ChiTietBaiDang, int> _lookup_chiTietBaiDangRepository;
 
-        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository)
+        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository)
         {
             _baiDangRepository = baiDangRepository;
             _baiDangsExcelExporter = baiDangsExcelExporter;
@@ -38,6 +39,7 @@ namespace Homies.RealEstate.Server
             _lookup_danhMucRepository = lookup_danhMucRepository;
             _lookup_xaRepository = lookup_xaRepository;
             _lookup_hinhAnhRepository = lookup_hinhAnhRepository;
+            _lookup_chiTietBaiDangRepository = lookup_chiTietBaiDangRepository;
         }
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAll(GetAllBaiDangsInput input)
@@ -86,8 +88,6 @@ namespace Homies.RealEstate.Server
 
                            join o4 in _lookup_hinhAnhRepository.GetAll() on o.Id equals o4.BaiDangId into j4
                            from s4 in j4.DefaultIfEmpty()
-
-
 
 
                            select new GetBaiDangForViewDto()
