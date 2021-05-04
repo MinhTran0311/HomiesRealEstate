@@ -289,7 +289,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
-            press: (){}
+            press: (){
+              setState(() {
+                _userstore.getCurrentUser();
+              });
+            }
             ),
         CardItem(
             text: "Trợ giúp",
@@ -380,14 +384,22 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        SurName+" "+Name,
+                      _userstore.user!=null ? Text(
+                        _userstore.user.surname+" "+_userstore.user.name,
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           fontFamily: FontFamily.roboto
                         )
+                      ):Text(
+                          SurName+" "+ Name,
+                          style: TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: FontFamily.roboto
+                          )
                       ),
                       Row(
                         children: [

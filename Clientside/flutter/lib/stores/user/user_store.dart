@@ -117,7 +117,7 @@ abstract class _UserStore with Store {
   bool get isLoadings => loginFuture.status == FutureStatus.pending;
 
   @action
-  Future getCurrenUser() async {
+  Future getCurrentUser() async {
     final future = _repository.getCurrentUser();
     fetchUsersFuture = ObservableFuture(future);
 

@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _postStore.getPosts();
     }
     if (!userStore.loading) {
-      userStore.getCurrenUser();
+      userStore.getCurrentUser();
     }
 
   }

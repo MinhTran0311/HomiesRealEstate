@@ -56,7 +56,7 @@ mixin _$UserStore on _UserStore, Store {
   final _$getUserAsyncAction = AsyncAction('_UserStore.getCurrentUser');
   @override
   Future<dynamic> getCurrentUser() {
-    return _$getUserAsyncAction.run(() => super.getCurrenUser());
+    return _$getUserAsyncAction.run(() => super.getCurrentUser());
   }
   final _$getUserWalletAsyncAction = AsyncAction('_UserStore.getCurrentWalletUser');
   @override
