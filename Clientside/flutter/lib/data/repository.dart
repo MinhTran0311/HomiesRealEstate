@@ -8,6 +8,7 @@ import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/models/user/user.dart';
@@ -50,6 +51,14 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+
+  Future<PropertyList> getPostProperties(String postId) async {
+    return await _postApi.getPostProperties(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database

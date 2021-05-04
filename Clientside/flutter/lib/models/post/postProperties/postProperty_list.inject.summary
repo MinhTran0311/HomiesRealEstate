@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/models/post/postProperties/postProperty_list.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

@@ -16,10 +16,9 @@ class Endpoints {
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";
-  //# endregion
-
-  //#region login & signup
   static const String resetPassword = homiesUrl + "/services/app/Account/SendPasswordResetCode";
+
+
   //#endregion
 
 
@@ -42,6 +41,8 @@ class Endpoints {
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
+  // getPostProperties
+  static const String getAllChiTietBaiDangByPostId = homiesUrl + "/services/app/ChiTietBaiDangs/GetAllChiTietBaiDangByPostId";
   //post image
   static const String postImageToImageBB = imagebb + "/1/upload";
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
