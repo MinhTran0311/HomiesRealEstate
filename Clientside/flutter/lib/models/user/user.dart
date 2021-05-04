@@ -85,7 +85,7 @@ class CurrentUserForEditdto{
     this.emailAddress,
     this.phoneNumber,
     this.surname,
-    this.profilePicture
+    this.profilePicture,
     this.creationTime,
     this.wallet,
     this.userName

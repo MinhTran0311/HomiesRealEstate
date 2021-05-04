@@ -97,10 +97,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              return _store.success
-                  ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
-            },
+              if (_store.resetPassword_success) {
+                print("Success reset");
+                Future.delayed(Duration(milliseconds: 0), () {
+                  Navigator.of(context).pop();
+                });
+                _showSuccssfullMesssage("Hãy kiểm tra đường dẫn đến trang đặt lại mật khẩu trong email của bạn");
+                return Container(width: 0, height: 0);
+              } else {
+                return _showErrorMessage(_store.errorStore.errorMessage);
+              }
+            }
           ),
           Observer(
             builder: (context) {
@@ -137,6 +144,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             SizedBox(height: 24.0),
             _buildForgotPasswordNoti(),
             _buildUserEmail(),
+            SizedBox(height: 12,),
             _buildSubmitButton()
           ],
         ),
@@ -145,16 +153,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   Widget _buildForgotPasswordNoti() {
-    return RichText(
-      text: TextSpan(
-        text: "Forgot Password?\n",
-        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),
-        children: [
-          TextSpan(
-          text: "Một liên kết đặt lại mật khẩu sẽ được gửi đến email của bạn để đặt lại mật khẩu của bạn. Nếu bạn không nhận được email trong vòng vài phút, vui lòng thử lại.",
-          style: TextStyle(fontSize: 18))
-          ]
-        )
+    return Text(
+        "Quên mật khẩu",
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26,color: Colors.white),
       );
   }
 
@@ -219,7 +220,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       },
     );
   }
-
+    _showSuccssfullMesssage(String message) {
+      Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+        message: message,
+        title: "Thông báo",
+        duration: Duration(seconds: 8),
+      )
+        .show(context);
+      }
+      return SizedBox.shrink();
+      });
+    }
   // General Methods:-----------------------------------------------------------
   _showErrorMessage( String message) {
     Future.delayed(Duration(milliseconds: 0), () {

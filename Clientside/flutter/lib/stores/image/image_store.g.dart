@@ -62,6 +62,21 @@ mixin _$ImageStore on _ImageStore, Store {
     });
   }
 
+  final _$selectedIndexAtom = Atom(name: '_ImageStore.selectedIndex');
+
+  @override
+  int get selectedIndex {
+    _$selectedIndexAtom.reportRead();
+    return super.selectedIndex;
+  }
+
+  @override
+  set selectedIndex(int value) {
+    _$selectedIndexAtom.reportWrite(value, super.selectedIndex, () {
+      super.selectedIndex = value;
+    });
+  }
+
   final _$getImagesForDetailAsyncAction =
       AsyncAction('_ImageStore.getImagesForDetail');
 
@@ -77,6 +92,7 @@ mixin _$ImageStore on _ImageStore, Store {
 fetchImageFuture: ${fetchImageFuture},
 imageList: ${imageList},
 success: ${success},
+selectedIndex: ${selectedIndex},
 imageLoading: ${imageLoading}
     ''';
   }

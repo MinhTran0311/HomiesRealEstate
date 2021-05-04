@@ -54,7 +54,8 @@ class UserApi {
     }
   }
 
-Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(String Id) async {
+//Minh làm
+Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   try {
     final res = await _dioClient.get(Endpoints.getUserOfCurrentPost,
     options: Options(
@@ -62,7 +63,6 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(String Id) async {
           "Abp.TenantId": 1,
           "Authorization" : "Bearer ${Preferences.access_token}",
         }
-    <<<<<<< HEAD
     ),
     queryParameters: {
       "Id": Id,
@@ -90,7 +90,6 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(String Id) async {
       throw e;
     }
   }
-
 
   Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     try {

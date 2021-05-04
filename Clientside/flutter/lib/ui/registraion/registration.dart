@@ -8,12 +8,9 @@ import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/app_icon_widget.dart';
-import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
-import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -110,8 +107,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Observer(
             builder: (context) {
               if (_store.regist_success) {
+
+                SharedPreferences.getInstance().then((prefs) {
+                  prefs.setBool(Preferences.is_logged_in, false);
+                });
+                Future.delayed(Duration(milliseconds: 0), () {
+                  Navigator.of(context).pop();
+                });
                 _showSuccssfullMesssage("Đăng ký thành công");
-                return navigate(context);
+                return Container(width: 0, height: 0);
+
               } else {
                 return _showErrorMessage(_store.errorStore.errorMessage);
               }
@@ -327,7 +332,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pop();
     });
-
     return Container();
   }
 
@@ -355,7 +359,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             title: "Thông báo",
             duration: Duration(seconds: 5),
           )
-            ..show(context);
+            .show(context);
         }
         return SizedBox.shrink();
       });

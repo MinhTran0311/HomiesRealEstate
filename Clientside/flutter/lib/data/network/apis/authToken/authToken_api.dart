@@ -40,6 +40,26 @@ class AuthTokenApi {
     }
   }
 
+  Future<dynamic> resetPassword(String email) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.resetPassword,
+        data: {
+          "emailAddress": email,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+            }
+        ),
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
 /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

@@ -38,8 +38,7 @@ class RegistrationApi {
 
       bool resistingSuccess = res["canLogin"];
 
-      print(res);
-      return resistingSuccess;
+      return res;
     } catch (e) {
       throw e;
     }

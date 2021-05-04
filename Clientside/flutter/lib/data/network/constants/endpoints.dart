@@ -18,6 +18,11 @@ class Endpoints {
   static const String signup = homiesUrl + "/services/app/Account/Register";
   //# endregion
 
+  //#region login & signup
+  static const String resetPassword = homiesUrl + "/services/app/Account/SendPasswordResetCode";
+  //#endregion
+
+
   //# region user
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
@@ -33,8 +38,6 @@ class Endpoints {
 
   //get all users
   static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
-  //get all lichsugiaodich
-  static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost

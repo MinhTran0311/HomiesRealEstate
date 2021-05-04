@@ -4,6 +4,7 @@ import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/photoViewScreen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -23,14 +24,32 @@ class Detail extends StatefulWidget {
   _DetailState createState() => _DetailState(post: post);
 }
 
-class _DetailState extends State<Detail> {
+class _DetailState extends State<Detail> with TickerProviderStateMixin {
   final Post post;
   _DetailState({@required this.post});
 
   PostStore _postStore;
   ImageStore _imageStore;
+  UserStore _userStore;
+
+  AnimationController _ColorAnimationController;
+  AnimationController _TextAnimationController;
+  Animation _colorTween, _iconColorTween;
+  Animation<Offset> _transTween;
+
+
   @override
   void initState() {
+    _ColorAnimationController =
+        AnimationController(duration: Duration(seconds: 0),vsync: this);
+    _colorTween = ColorTween(begin: Colors.transparent, end: Colors.white)
+        .animate(_ColorAnimationController);
+    _iconColorTween = ColorTween(begin: Colors.white, end: Colors.amber)
+        .animate(_ColorAnimationController);
+
+    _transTween = Tween(begin: Offset(-10, 40), end: Offset(-10, 0))
+        .animate(_TextAnimationController);
+
     super.initState();
   }
 
@@ -38,8 +57,12 @@ class _DetailState extends State<Detail> {
     super.didChangeDependencies();
     _postStore = Provider.of<PostStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
+    _userStore = Provider.of<UserStore>(context);
     if (!_imageStore.imageLoading){
       _imageStore.getImagesForDetail(this.post.id.toString());
+    }
+    if (!_userStore.loading){
+      _userStore.getUserOfCurrentDetailPost(post.userId);
     }
   }
 
@@ -51,7 +74,7 @@ class _DetailState extends State<Detail> {
         Observer(
           builder: (context)
           {
-            return (_postStore.loading && _imageStore.imageLoading)
+            return (_postStore.loading || _imageStore.imageLoading)
                 ? CustomProgressIndicatorWidget()
                 : Material(child: _buildContent());
           }
@@ -62,140 +85,14 @@ class _DetailState extends State<Detail> {
   Widget _buildContent(){
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
+      body: NotificationListener<ScrollNotification>(
+        onNotification: _scrollListener,
+      child: Stack(
         children: [
-         Hero(
-                tag: _imageStore.imageList.images[0].id,
-                child: Container(
-                  height: size.height*0.3,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(_imageStore.imageList.images[0].duongDan),
-                        fit: BoxFit.cover,
-                      )
-                  ),
-                  // child: Stack(
-                  //   children:[
-                  //     Observer(
-                  //       builder: (context) {
-                  //         return CachedNetworkImage(
-                  //           imageUrl: _imageStore.imageList.images[_imageStore.selectedIndex].duongDan,
-                  //           imageBuilder: (context, imageProvider) =>
-                  //               Container(
-                  //                 width: size.width,
-                  //                 height: size.height * 0.5,
-                  //                 decoration: BoxDecoration(
-                  //                   image: DecorationImage(
-                  //                       image: imageProvider,
-                  //                       fit: BoxFit.cover
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //           placeholder: (context, url) => CircularProgressIndicator(),
-                  //           errorWidget: (context, url, error) => Icon(Icons.error),
-                  //       );
-                  //     }
-                  //
-                  //     ),
-                      child: Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.7),
-                              ]
-                          )
-                      ),
-                    ),
-                )
-
-          ),
-          Container(
-            height: size.height * 0.3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24,vertical: 48),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pop(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      Icon(
-                        Icons.notifications_none,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(child: Container()),
-
-                Padding(
-                  padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.yellow[700],
-                            borderRadius: BorderRadius.all(Radius.circular(5))
-                        ),
-                        width: 100,
-                        padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Center(
-                          child: Text(
-                            post.tagLoaiBaidang,
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                            child: Icon(
-                              Icons.favorite,
-                              color: Colors.amber,
-                              size: 30,
-                            )
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-
-
-              ],
-            ),
-          ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: size.height * 0.6,
+              height: size.height,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
@@ -204,10 +101,10 @@ class _DetailState extends State<Detail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: size.height * 0.6 * 0.8,
+                      height: size.height * 0.78,
                       child: SingleChildScrollView(
                         clipBehavior: Clip.antiAlias,
-                        physics: BouncingScrollPhysics(),
+                        //physics: BouncingScrollPhysics(),
 
                         scrollDirection: Axis.vertical,
                         child: Center(
@@ -215,7 +112,115 @@ class _DetailState extends State<Detail> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            Container(
+                              Hero(
+                                  tag: _imageStore.imageList.images[0].id,
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: size.height*0.3,
+                                        width: size.width,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(_imageStore.imageList.images[0].duongDan),
+                                              fit: BoxFit.cover,
+                                            )
+                                        ),
+                                        // child: Stack(
+                                        //   children:[
+                                        //     Observer(
+                                        //       builder: (context) {
+                                        //         return CachedNetworkImage(
+                                        //           imageUrl: _imageStore.imageList.images[_imageStore.selectedIndex].duongDan,
+                                        //           imageBuilder: (context, imageProvider) =>
+                                        //               Container(
+                                        //                 width: size.width,
+                                        //                 height: size.height * 0.5,
+                                        //                 decoration: BoxDecoration(
+                                        //                   image: DecorationImage(
+                                        //                       image: imageProvider,
+                                        //                       fit: BoxFit.cover
+                                        //                   ),
+                                        //                 ),
+                                        //               ),
+                                        //           placeholder: (context, url) => CircularProgressIndicator(),
+                                        //           errorWidget: (context, url, error) => Icon(Icons.error),
+                                        //       );
+                                        //     }
+                                        //
+                                        //     ),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    Colors.black.withOpacity(0.7),
+                                                ]
+                                            )
+                                        ),
+                                      ),
+                                    ),
+                                      Container(
+                                        height: size.height * 0.3,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+
+                                            //Expanded(child: Container()),
+
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.yellow[700],
+                                                        borderRadius: BorderRadius.all(Radius.circular(5))
+                                                    ),
+                                                    width: 100,
+                                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                                    child: Center(
+                                                      child: Text(
+                                                        post.tagLoaiBaidang,
+                                                        style: TextStyle(
+                                                          fontSize: 22,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  Container(
+                                                    height: 50,
+                                                    width: 50,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Center(
+                                                        child: Icon(
+                                                          Icons.favorite,
+                                                          color: Colors.amber,
+                                                          size: 30,
+                                                        )
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ]
+                                  ),
+
+
+                              ),
+                              Container(
                                 height: 100,
                                 child: Padding(
                                   padding: EdgeInsets.only(left:12, bottom:6,top: 12,right: 12),
@@ -227,8 +232,6 @@ class _DetailState extends State<Detail> {
                                   )
                                   ),
                                 ),
-
-
                               Padding(
                                 padding: EdgeInsets.only(left: 24,top:12,bottom: 12),
                                 child: Row(
@@ -370,7 +373,7 @@ class _DetailState extends State<Detail> {
                       ),
                     ),
                     SizedBox(
-                      height: size.height * 0.6 * 0.2,
+                      height: size.height * 0.12,
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[100],
@@ -435,7 +438,7 @@ class _DetailState extends State<Detail> {
                                         color: Colors.amber,
                                         size: 20,),
                                       onPressed: (){
-                                        _lauchURL("tel:+84935723862");
+                                        _lauchURL("tel:"+_userStore.user.phoneNumber);
                                       },
                                     ),
                                   ),
@@ -452,7 +455,7 @@ class _DetailState extends State<Detail> {
                                         color: Colors.amber,
                                         size: 20,),
                                       onPressed: (){
-                                        _lauchURL("sms:+84935723862");
+                                        _lauchURL("sms:"+_userStore.user.phoneNumber);
                                       },
                                     ),
                                   ),
@@ -468,10 +471,86 @@ class _DetailState extends State<Detail> {
             ),
 
           ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                        child: AnimatedBuilder(
+                          animation: _ColorAnimationController,
+                          builder: (context,child) =>
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: _colorTween.value,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      color: _iconColorTween.value,
+                                      size: 30,
+                                    )
+                                ),
+                              )
+
+                              // Icon(
+                              //   Icons.arrow_back_ios,
+                              //   color: _iconColorTween.value,
+                              //   size: 24,
+                              //
+                              // ),
+
+                          //     AppBar(
+                          //
+                          //   backgroundColor: _colorTween.value,
+                          //   elevation: 0,
+                          //   titleSpacing: 0.0,
+                          //   title: Transform.translate(
+                          //     offset: _transTween.value,
+                          //     child: Text("Chi tiết bài đăng",style: TextStyle(color: Colors.white,
+                          //         fontWeight: FontWeight.bold,
+                          //         fontSize: 16),),
+                          //   ),
+                          //   iconTheme: IconThemeData(color: _iconColorTween.value),
+                          //   actions: <Widget>[
+                          //     IconButton(
+                          //       icon: Icon(
+                          //         Icons.arrow_back_ios,
+                          //         color: Colors.white,
+                          //         size: 24,
+                          //       ),
+                          //       //onPressed: Navigator.of(context).pop(),
+                          //     )
+                          //   ],
+                          //
+                          // ),
+                        )
+
+                    ),
+                  ),
+                  Icon(
+                    Icons.notifications_none,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ],
+              ),
+            ),
+          )
 
         ],
       ),
-
+    )
     );
   }
 
@@ -496,8 +575,11 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  List<Widget> buildPhotos(BuildContext context, ImageList imageList)
-  {
+
+
+
+
+  List<Widget> buildPhotos(BuildContext context, ImageList imageList) {
     List<Widget> list =[];
 
     for (var i=0;i<imageList.images.length;i++){
@@ -539,7 +621,6 @@ class _DetailState extends State<Detail> {
       padding: EdgeInsets.symmetric(horizontal: 6),
       margin: EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
-
               borderRadius: BorderRadius.all(
                 Radius.circular(5),
               ),
@@ -592,6 +673,15 @@ class _DetailState extends State<Detail> {
     await canLaunch(_url) ? await launch(_url) : _showErrorMessage('Không thể kết nối $_url');
   }
 
+  bool _scrollListener(ScrollNotification scrollInfo) {
+    if (scrollInfo.metrics.axis == Axis.vertical) {
+      _ColorAnimationController.animateTo(scrollInfo.metrics.pixels / 100);
+
+      // _TextAnimationController.animateTo(
+      //     (scrollInfo.metrics.pixels - 350) / 50);
+      return true;
+    }
+  }
 
 }
 

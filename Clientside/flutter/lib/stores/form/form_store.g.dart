@@ -215,6 +215,23 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$resetPassword_successAtom =
+      Atom(name: '_FormStore.resetPassword_success');
+
+  @override
+  bool get resetPassword_success {
+    _$resetPassword_successAtom.reportRead();
+    return super.resetPassword_success;
+  }
+
+  @override
+  set resetPassword_success(bool value) {
+    _$resetPassword_successAtom.reportWrite(value, super.resetPassword_success,
+        () {
+      super.resetPassword_success = value;
+    });
+  }
+
   final _$fetchRegistFutureAtom = Atom(name: '_FormStore.fetchRegistFuture');
 
   @override
@@ -417,6 +434,7 @@ authToken: ${authToken},
 loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
+resetPassword_success: ${resetPassword_success},
 fetchRegistFuture: ${fetchRegistFuture},
 fetchResetCodeFuture: ${fetchResetCodeFuture},
 loading: ${loading},

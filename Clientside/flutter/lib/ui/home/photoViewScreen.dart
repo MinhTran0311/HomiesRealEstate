@@ -18,14 +18,13 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     int firstPage = widget.index;
     PageController _pageController = PageController(initialPage: firstPage);
     return Container(
         child: PhotoViewGallery.builder(
-          scrollPhysics: const BouncingScrollPhysics(),
+          //scrollPhysics: const BouncingScrollPhysics(),
           builder: (BuildContext context, int index) {
             return PhotoViewGalleryPageOptions(
               imageProvider: NetworkImage(widget.imageList[index].duongDan),
@@ -45,7 +44,9 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
               ),
             ),
           ),
-          //backgroundDecoration: Decoration(),
+          backgroundDecoration: BoxDecoration(
+            color: Colors.black
+          ),
           pageController: _pageController,
         )
     );

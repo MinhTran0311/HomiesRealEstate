@@ -73,8 +73,12 @@ abstract class _FormStore with Store {
 
   @observable
   bool success = false;
+
   @observable
   bool regist_success = false;
+
+  @observable
+  bool resetPassword_success = false;
 
 
   static ObservableFuture<dynamic> emptyRegistResponse = ObservableFuture.value(null);
@@ -210,17 +214,19 @@ abstract class _FormStore with Store {
 
   @action
   Future register() async {
+    regist_success = false;
     final futrue = _repository.registing(surname, name, username, password, userEmail);
     fetchRegistFuture = ObservableFuture(futrue);
 
     futrue.then((registRes) {
-      if (registRes.response.data["canLogin"]==true) {
+      print("123" + registRes["result"]["canLogin"].toString());
+
+      if (registRes["result"]["canLogin"]) {
         regist_success = true;
       }
       else{
         regist_success = false;
       }
-
     }).catchError((error){
       regist_success = false;
       if (error is DioError) {
@@ -274,19 +280,22 @@ abstract class _FormStore with Store {
 
   @action
   Future<dynamic> resetPassword () async {
-    success=false;
+    resetPassword_success=false;
     final future = _repository.resetPassword(this.userEmail);
     fetchResetCodeFuture = ObservableFuture(future);
 
     future.then((res){
-      if (res){
-        success=true;
+      if (res["success"]){
+        resetPassword_success=true;
       }
-      else success=false;
+      else resetPassword_success=false;
     }).catchError((error){
       if (error is DioError) {
-        if (error.response.data!=null)
+        resetPassword_success=false;
+        if (error.response.data!=null) {
+
           errorStore.errorMessage = error.response.data["error"]["message"];
+        }
         else
           errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;

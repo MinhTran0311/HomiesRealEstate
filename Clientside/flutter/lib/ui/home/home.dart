@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _postStore.getPosts();
     }
     if (!userStore.loading) {
-      userStore.getCurrenUser();
+      userStore.getCurrentUser();
     }
 
   }
@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "10.000VND",
+                          post.gia.toString() + "VND",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4,),
                             Text(
-                              "Dientich",
+                              post.dienTich.toString(),
                               style: TextStyle(
                                 color:Colors.white,
                                 fontSize:  14,
@@ -387,7 +387,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           ],
                         )
-
                       ],
                     )
                   ],

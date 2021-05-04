@@ -101,7 +101,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
         bottomNavigationBar: CurvedNavigationBar(
           height: 60,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           color: Colors.amber,
           items: <Widget>[
             Icon(Icons.home, size: 30,color: Colors.black87,),

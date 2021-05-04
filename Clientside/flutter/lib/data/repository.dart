@@ -86,8 +86,8 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  Future<CurrenUserForEditdyo> getUserOfCurrentDeatiaiPost() async {
-    return await _userApi.getCurrenUser().then((user) {
+  Future<CurrentUserForEditdto> getUserOfCurrentDeatiaiPost(int Id) async {
+    return await _userApi.getUserOfCurrentDetailPost(Id).then((user) {
       return user;
     }).catchError((error) => throw error);
   }
@@ -130,6 +130,7 @@ class Repository {
   Future<dynamic> registing(String surname, String name, String username, String password, String email) async
   {
     return await _registrationApi.regist(surname, name, username, password, email).then((res) {
+
       return res;
     }).catchError((error) => throw error);
   }
@@ -149,7 +150,7 @@ class Repository {
 
   Future<dynamic> resetPassword(String email) async
   {
-    return await Future.delayed(Duration(seconds: 2), ()=> true);
+    return await _authTokenApi.resetPassword(email).catchError((e)=>throw e);
   }
 
 
