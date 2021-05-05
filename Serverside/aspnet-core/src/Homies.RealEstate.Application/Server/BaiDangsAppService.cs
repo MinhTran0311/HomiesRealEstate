@@ -86,10 +86,6 @@ namespace Homies.RealEstate.Server
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
 
-                           join o4 in _lookup_hinhAnhRepository.GetAll() on o.Id equals o4.BaiDangId into j4
-                           from s4 in j4.DefaultIfEmpty()
-
-
                            select new GetBaiDangForViewDto()
                            {
                                BaiDang = new BaiDangDto
@@ -107,24 +103,70 @@ namespace Homies.RealEstate.Server
                                    TrangThai = o.TrangThai,
                                    TagTimKiem = o.TagTimKiem,
                                    TieuDe = o.TieuDe,
-                                   Id = o.Id
+                                   Id = o.Id,
+                                   Gia = o.Gia,
+                                   DienTich = o.DienTich,
+                                   FeaturedImage = o.FeaturedImage,
+                                   UserId = o.UserId,
+                                   XaId = o.XaId,
+                                   DanhMucId = o.DanhMucId
+
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-                               FeaturedImage = s4.DuongDan
-                               //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
-                           };
+                               
+                //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
+            };
 
-            baiDangs.Distinct();
+            //baiDangs.Distinct();
             var totalCount = await filteredBaiDangs.CountAsync();
 
+            var list = await baiDangs.ToListAsync();
 
-
-            return new PagedResultDto<GetBaiDangForViewDto>(
+            if (list.Count==totalCount)
+            {
+                return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
-                await baiDangs.ToListAsync()
+                list
             );
+            }
+            else
+            {
+                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var e = list[i];
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        filteredList.Add(e);
+                    }
+                }
+                return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                filteredList
+            );
+            }
+
+
+            
+        }
+
+        private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].BaiDang.Id== baidangId)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         public async Task<GetBaiDangForViewDto> GetBaiDangForView(int id)
@@ -272,7 +314,14 @@ namespace Homies.RealEstate.Server
                                  TrangThai = o.TrangThai,
                                  TagTimKiem = o.TagTimKiem,
                                  TieuDe = o.TieuDe,
-                                 Id = o.Id
+                                 Id = o.Id,
+                                 Gia = o.Gia,
+                                 DienTich = o.DienTich,
+                                 FeaturedImage = o.FeaturedImage,
+                                 UserId = o.UserId,
+                                 XaId = o.XaId,
+                                 DanhMucId = o.DanhMucId
+
                              },
                              UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                              DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
@@ -414,7 +463,13 @@ namespace Homies.RealEstate.Server
                                    TrangThai = o.TrangThai,
                                    TagTimKiem = o.TagTimKiem,
                                    TieuDe = o.TieuDe,
-                                   Id = o.Id
+                                   Id = o.Id,
+                                   Gia = o.Gia,
+                                   DienTich = o.DienTich,
+                                   FeaturedImage = o.FeaturedImage,
+                                   UserId = o.UserId,
+                                   XaId = o.XaId,
+                                   DanhMucId = o.DanhMucId
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
