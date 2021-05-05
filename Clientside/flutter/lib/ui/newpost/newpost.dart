@@ -17,6 +17,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:text_editor/text_editor.dart';
 import 'add_image.dart';
 class NewpostScreen extends StatefulWidget {
   @override
@@ -275,8 +276,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
             SizedBox(height: 24.0),
-            // _buildUserEmail(),
-            // SizedBox(height: 24.0),
             _buildTownField2(),
             SizedBox(height: 24.0),
             _buildCityField(),
@@ -322,7 +321,63 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-
+  final fonts = [
+    'OpenSans',
+    'Billabong',
+    'GrandHotel',
+    'Oswald',
+    'Quicksand',
+    'BeautifulPeople',
+    'BeautyMountains',
+    'BiteChocolate',
+    'BlackberryJam',
+    'BunchBlossoms',
+    'CinderelaRegular',
+    'Countryside',
+    'Halimun',
+    'LemonJelly',
+    'QuiteMagicalRegular',
+    'Tomatoes',
+    'TropicalAsianDemoRegular',
+    'VeganStyle',
+  ];
+  TextStyle _textStyle = TextStyle(
+    fontSize: 22,
+    color: Colors.white,
+    fontFamily: 'Billabong',
+  );
+  TextAlign _textAlign = TextAlign.center;
+  Widget _buildTileField2() {
+    return Observer(
+      builder: (context) {
+        return TextEditor(
+          fonts: fonts,
+          text: null,
+          textStyle: _textStyle,
+          textAlingment: _textAlign,
+          decoration: EditorDecoration(
+            doneButton: Icon(Icons.close, color: Colors.white),
+            fontFamily: Icon(Icons.title, color: Colors.white),
+            colorPalette: Icon(Icons.palette, color: Colors.white),
+            alignment: AlignmentDecoration(
+              left: Text(
+                'left',
+                style: TextStyle(color: Colors.white),
+              ),
+              center: Text(
+                'center',
+                style: TextStyle(color: Colors.white),
+              ),
+              right: Text(
+                'right',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
   Widget _buildTypeField() {
     return Observer(
       builder: (context) {

@@ -19,7 +19,11 @@ dependencies:
   flutter_html: ^0.11.1
   flutter_circular_chart: ^0.1.0
   circular_profile_avatar: ^1.0.8
-
+  dropdown_search: ^0.4.8
+  multi_image_picker: ^4.7.14
+  firebase_storage: ^5.2.0
+  cloud_firestore: ^0.14.4
+  text_editor: ^0.3.1
   flutter:
     sdk: flutter
 
