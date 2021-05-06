@@ -59,12 +59,15 @@ class Properties extends StatelessWidget {
             ),
             SizedBox(height: 6,),
             Flexible(
-              child: Text(
-                appImage.giaTri,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  appImage.giaTri,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             )

@@ -135,6 +135,36 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize]
+        public async Task CreateOrChangeStatus(CreateOrEditBaiGhimYeuThichDto input)
+        {
+            var user = await GetCurrentUserAsync();
+            var baighim = await _baiGhimYeuThichRepository.FirstOrDefaultAsync(e => e.UserId == user.Id && e.BaiDangId == input.BaiDangId);
+
+            input.UserId = user.Id;
+            if (baighim == null)
+            {
+                await Create(input);
+            }
+            else
+            {
+                await Update(input);
+            }
+        }
+
+        [AbpAuthorize]
+        public async Task<BaiGhimYeuThichExistingOutput> IsExistOrNot(long postId)
+        {
+            var user = await GetCurrentUserAsync();
+            var baighim = await _baiGhimYeuThichRepository.FirstOrDefaultAsync(e => e.UserId == user.Id && e.BaiDangId == postId);
+
+            return new BaiGhimYeuThichExistingOutput
+            {
+                Exist = (baighim != null)
+            };
+        }
+
+
         [AbpAuthorize(AppPermissions.Pages_BaiGhimYeuThichs_Create)]
         protected virtual async Task Create(CreateOrEditBaiGhimYeuThichDto input)
         {
