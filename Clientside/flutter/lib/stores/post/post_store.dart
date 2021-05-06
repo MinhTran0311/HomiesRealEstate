@@ -58,7 +58,7 @@ abstract class _PostStore with Store {
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get propertiesLoading => fetchImageFuture.status == FutureStatus.pending;
+  bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
 
 
   // actions:-------------------------------------------------------------------

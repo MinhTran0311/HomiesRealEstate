@@ -36,7 +36,7 @@ class PostApi {
     }
   }
 
-  Future<PropertyList> getPostProperties(String postId) async {
+    Future<PropertyList> getPostProperties(String postId) async {
     try{
       final res = await _dioClient.get(Endpoints.getAllChiTietBaiDangByPostId,
         options: Options(
