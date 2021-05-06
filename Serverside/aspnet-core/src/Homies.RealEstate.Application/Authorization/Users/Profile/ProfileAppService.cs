@@ -379,5 +379,22 @@ namespace Homies.RealEstate.Authorization.Users.Profile
 
             return new GetProfilePictureOutput(Convert.ToBase64String(bytes));
         }
+        [AbpAuthorize]
+        public async Task<double> GetCurrentUserWallet()
+        {
+            var user = await GetCurrentUserAsync();
+
+            return user.Wallet;
+        }
+
+
+        [DisableAuditing]
+        public async Task<CurrentUserProfileEditDto> GetUserProfileById(long Id)
+        {
+            var user = await UserManager.GetUserByIdAsync(Id);
+            var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
+            userProfileEditDto.ProfilePicture = GetProfilePictureByUser(Id).Result.ProfilePicture;
+            return userProfileEditDto;
+        }
     }
 }

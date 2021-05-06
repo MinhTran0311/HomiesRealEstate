@@ -21,7 +21,7 @@ class RegistrationApi {
   Future<dynamic> regist(String surname, String name, String username, String password, String email) async {
     try {
       final res = await _dioClient.post(
-        "https://homies.exscanner.edu.vn/api/services/app/Account/Register",
+        Endpoints.signup,
         data: {
           "name": name,
           "surname": surname,
@@ -38,8 +38,7 @@ class RegistrationApi {
 
       bool resistingSuccess = res["canLogin"];
 
-      print(res);
-      return resistingSuccess;
+      return res;
     } catch (e) {
       throw e;
     }

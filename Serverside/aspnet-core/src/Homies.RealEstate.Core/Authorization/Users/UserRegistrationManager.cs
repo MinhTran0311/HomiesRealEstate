@@ -72,6 +72,7 @@ namespace Homies.RealEstate.Authorization.Users
                 IsActive = isNewRegisteredUserActiveByDefault,
                 UserName = userName,
                 IsEmailConfirmed = isEmailConfirmed,
+                Wallet =0,
                 Roles = new List<UserRole>()
             };
 

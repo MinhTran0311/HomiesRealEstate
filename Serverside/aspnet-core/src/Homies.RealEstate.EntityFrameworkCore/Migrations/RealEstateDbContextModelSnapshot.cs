@@ -1952,6 +1952,16 @@ namespace Homies.RealEstate.Migrations
                     b.Property<decimal?>("DiemBaiDang")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<double>("DienTich")
+                        .HasColumnType("double");
+
+                    b.Property<string>("FeaturedImage")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<double>("Gia")
+                        .HasColumnType("double");
+
                     b.Property<int?>("LuotXem")
                         .HasColumnType("int");
 

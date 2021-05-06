@@ -9,6 +9,7 @@ import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/network/apis/authToken/authToken_api.dart' as _i9;
 import '../../data/network/apis/users/user_api.dart' as _i10;
 import '../../data/network/apis/roles/role_api.dart' as _i11;
+import '../../data/network/apis/image/image_api.dart' as _i11;
 import '../../data/local/datasources/post/post_datasource.dart' as _i12;
 import '../../data/network/apis/registration/registration_api.dart' as _i13;
 import '../../data/repository.dart' as _i14;
@@ -38,6 +39,7 @@ class AppComponent$Injector implements _i1.AppComponent {
   _i10.UserApi _singletonUserApi;
 
   _i11.RoleApi _singletonRoleApi;
+  _i11.ImageApi _singletonImageApi;
 
   _i12.PostDataSource _singletonPostDataSource;
 
@@ -61,6 +63,7 @@ class AppComponent$Injector implements _i1.AppComponent {
           _createAuthTokenApi(),
           _createUserApi(),
           _createRoleApi(),
+          _createImageApi(),
           _createSharedPreferenceHelper(),
           _createPostDataSource(),
           _createRegistrationApi());
@@ -81,6 +84,8 @@ class AppComponent$Injector implements _i1.AppComponent {
       _localModule.provideUserApi(_createDioClient(), _createRestClient());
   _i11.RoleApi _createRoleApi() => _singletonRoleApi ??=
       _localModule.provideRoleApi(_createDioClient(), _createRestClient());
+  _i11.ImageApi _createImageApi() => _singletonImageApi ??=
+      _localModule.provideImageApi(_createDioClient(), _createRestClient());
   _i12.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();
   _i13.RegistrationApi _createRegistrationApi() =>

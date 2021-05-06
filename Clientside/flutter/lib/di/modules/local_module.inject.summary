@@ -186,6 +186,11 @@
             "injectedType": {
               "lookupKey": {
                 "root": "asset:boilerplate/lib/data/network/apis/roles/role_api.dart#RoleApi",
+            "name": "provideImageApi",
+            "kind": "method",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:boilerplate/lib/data/network/apis/image/image_api.dart#ImageApi",
                 "qualifier": null
               },
               "isProvider": false
@@ -302,6 +307,7 @@
               {
                 "lookupKey": {
                   "root": "asset:boilerplate/lib/data/network/apis/roles/role_api.dart#RoleApi",
+                  "root": "asset:boilerplate/lib/data/network/apis/image/image_api.dart#ImageApi",
                   "qualifier": null
                 },
                 "isProvider": false

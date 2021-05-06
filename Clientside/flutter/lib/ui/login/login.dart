@@ -208,7 +208,12 @@ class _LoginScreenState extends State<LoginScreen> {
               .caption
               .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
         ),
-        onPressed: () {},
+        onPressed: () {
+          SharedPreferences.getInstance().then((preference) {
+            preference.setBool(Preferences.is_logged_in, false);
+            Navigator.pushNamed(context, '/resetPassword');
+          });
+        },
       ),
     );
   }

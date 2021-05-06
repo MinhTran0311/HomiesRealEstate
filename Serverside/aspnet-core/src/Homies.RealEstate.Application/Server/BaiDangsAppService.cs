@@ -28,15 +28,18 @@ namespace Homies.RealEstate.Server
         private readonly IRepository<User, long> _lookup_userRepository;
         private readonly IRepository<DanhMuc, int> _lookup_danhMucRepository;
         private readonly IRepository<Xa, int> _lookup_xaRepository;
+        private readonly IRepository<HinhAnh, int> _lookup_hinhAnhRepository;
+        private readonly IRepository<ChiTietBaiDang, int> _lookup_chiTietBaiDangRepository;
 
-        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository)
+        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository)
         {
             _baiDangRepository = baiDangRepository;
             _baiDangsExcelExporter = baiDangsExcelExporter;
             _lookup_userRepository = lookup_userRepository;
             _lookup_danhMucRepository = lookup_danhMucRepository;
             _lookup_xaRepository = lookup_xaRepository;
-
+            _lookup_hinhAnhRepository = lookup_hinhAnhRepository;
+            _lookup_chiTietBaiDangRepository = lookup_chiTietBaiDangRepository;
         }
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAll(GetAllBaiDangsInput input)
@@ -100,19 +103,70 @@ namespace Homies.RealEstate.Server
                                    TrangThai = o.TrangThai,
                                    TagTimKiem = o.TagTimKiem,
                                    TieuDe = o.TieuDe,
-                                   Id = o.Id
+                                   Id = o.Id,
+                                   Gia = o.Gia,
+                                   DienTich = o.DienTich,
+                                   FeaturedImage = o.FeaturedImage,
+                                   UserId = o.UserId,
+                                   XaId = o.XaId,
+                                   DanhMucId = o.DanhMucId
+
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
-                           };
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
+                               
+                //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
+            };
 
+            //baiDangs.Distinct();
             var totalCount = await filteredBaiDangs.CountAsync();
 
-            return new PagedResultDto<GetBaiDangForViewDto>(
+            var list = await baiDangs.ToListAsync();
+
+            if (list.Count==totalCount)
+            {
+                return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
-                await baiDangs.ToListAsync()
+                list
             );
+            }
+            else
+            {
+                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var e = list[i];
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        filteredList.Add(e);
+                    }
+                }
+                return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                filteredList
+            );
+            }
+
+
+            
+        }
+
+        private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].BaiDang.Id== baidangId)
+                {
+                    return true;
+                }
+
+            }
+            return false;
         }
 
         public async Task<GetBaiDangForViewDto> GetBaiDangForView(int id)
@@ -260,7 +314,14 @@ namespace Homies.RealEstate.Server
                                  TrangThai = o.TrangThai,
                                  TagTimKiem = o.TagTimKiem,
                                  TieuDe = o.TieuDe,
-                                 Id = o.Id
+                                 Id = o.Id,
+                                 Gia = o.Gia,
+                                 DienTich = o.DienTich,
+                                 FeaturedImage = o.FeaturedImage,
+                                 UserId = o.UserId,
+                                 XaId = o.XaId,
+                                 DanhMucId = o.DanhMucId
+
                              },
                              UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                              DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
@@ -359,6 +420,67 @@ namespace Homies.RealEstate.Server
             return new PagedResultDto<BaiDangXaLookupTableDto>(
                 totalCount,
                 lookupTableDtoList
+            );
+        }
+        [AbpAuthorize]
+        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser()
+        {
+            var user = GetCurrentUserAsync();
+            var filteredBaiDangs = _baiDangRepository.GetAll()
+                        .Include(e => e.UserFk)
+                        .Include(e => e.DanhMucFk)
+                        .Include(e => e.XaFk)
+                        .Where(e => e.UserId == user.Id);
+
+
+            var pagedAndFilteredBaiDangs = filteredBaiDangs
+                .OrderBy("id asc");
+
+            var baiDangs = from o in pagedAndFilteredBaiDangs
+                           join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
+                           from s1 in j1.DefaultIfEmpty()
+
+                           join o2 in _lookup_danhMucRepository.GetAll() on o.DanhMucId equals o2.Id into j2
+                           from s2 in j2.DefaultIfEmpty()
+
+                           join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
+                           from s3 in j3.DefaultIfEmpty()
+
+                           select new GetBaiDangForViewDto()
+                           {
+                               BaiDang = new BaiDangDto
+                               {
+                                   TagLoaiBaiDang = o.TagLoaiBaiDang,
+                                   ThoiDiemDang = o.ThoiDiemDang,
+                                   ThoiHan = o.ThoiHan,
+                                   DiaChi = o.DiaChi,
+                                   MoTa = o.MoTa,
+                                   ToaDoX = o.ToaDoX,
+                                   ToaDoY = o.ToaDoY,
+                                   LuotXem = o.LuotXem,
+                                   LuotYeuThich = o.LuotYeuThich,
+                                   DiemBaiDang = o.DiemBaiDang,
+                                   TrangThai = o.TrangThai,
+                                   TagTimKiem = o.TagTimKiem,
+                                   TieuDe = o.TieuDe,
+                                   Id = o.Id,
+                                   Gia = o.Gia,
+                                   DienTich = o.DienTich,
+                                   FeaturedImage = o.FeaturedImage,
+                                   UserId = o.UserId,
+                                   XaId = o.XaId,
+                                   DanhMucId = o.DanhMucId
+                               },
+                               UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                               DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
+                           };
+
+            var totalCount = await filteredBaiDangs.CountAsync();
+
+            return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                await baiDangs.ToListAsync()
             );
         }
     }

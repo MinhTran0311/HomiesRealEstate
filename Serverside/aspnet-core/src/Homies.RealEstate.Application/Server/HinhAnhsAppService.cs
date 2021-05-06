@@ -55,7 +55,8 @@ namespace Homies.RealEstate.Server
                                HinhAnh = new HinhAnhDto
                                {
                                    DuongDan = o.DuongDan,
-                                   Id = o.Id
+                                   Id = o.Id,
+                                   BaiDangId = o.BaiDangId
                                },
                                BaiDangTieuDe = s1 == null || s1.TieuDe == null ? "" : s1.TieuDe.ToString()
                            };
@@ -82,6 +83,40 @@ namespace Homies.RealEstate.Server
 
             return output;
         }
+
+        public async Task<PagedResultDto<GetHinhAnhForViewDto>> GetAllByPostId(long postId)
+        {
+
+            var filteredHinhAnhs = _hinhAnhRepository.GetAll()
+                        .Include(e => e.BaiDangFk)
+                        .Where(e => e.BaiDangFk != null && e.BaiDangFk.Id == postId);
+
+            var pagedAndFilteredHinhAnhs = filteredHinhAnhs
+                .OrderBy("id asc");
+
+
+            var hinhAnhs = from o in pagedAndFilteredHinhAnhs
+                           join o1 in _lookup_baiDangRepository.GetAll() on o.BaiDangId equals o1.Id into j1
+                           from s1 in j1.DefaultIfEmpty()
+
+                           select new GetHinhAnhForViewDto()
+                           {
+                               HinhAnh = new HinhAnhDto
+                               {
+                                   DuongDan = o.DuongDan,
+                                   Id = o.Id,
+                                   BaiDangId = o.BaiDangId
+                               },
+                           };
+
+            var totalCount = await filteredHinhAnhs.CountAsync();
+
+            return new PagedResultDto<GetHinhAnhForViewDto>(
+                totalCount,
+                await hinhAnhs.ToListAsync()
+            );
+        }
+
 
         [AbpAuthorize(AppPermissions.Pages_HinhAnhs_Edit)]
         public async Task<GetHinhAnhForEditOutput> GetHinhAnhForEdit(EntityDto input)

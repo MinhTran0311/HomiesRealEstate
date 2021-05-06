@@ -15,6 +15,13 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
+  Computed<bool> _$propertiesLoadingComputed;
+
+  @override
+  bool get propertiesLoading => (_$propertiesLoadingComputed ??= Computed<bool>(
+          () => super.propertiesLoading,
+          name: '_PostStore.propertiesLoading'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -28,6 +35,23 @@ mixin _$PostStore on _PostStore, Store {
   set fetchPostsFuture(ObservableFuture<PostList> value) {
     _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
       super.fetchPostsFuture = value;
+    });
+  }
+
+  final _$fetchPropertiesFutureAtom =
+      Atom(name: '_PostStore.fetchPropertiesFuture');
+
+  @override
+  ObservableFuture<PropertyList> get fetchPropertiesFuture {
+    _$fetchPropertiesFutureAtom.reportRead();
+    return super.fetchPropertiesFuture;
+  }
+
+  @override
+  set fetchPropertiesFuture(ObservableFuture<PropertyList> value) {
+    _$fetchPropertiesFutureAtom.reportWrite(value, super.fetchPropertiesFuture,
+        () {
+      super.fetchPropertiesFuture = value;
     });
   }
 
@@ -46,6 +70,36 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
+
+  @override
+  PropertyList get propertyList {
+    _$propertyListAtom.reportRead();
+    return super.propertyList;
+  }
+
+  @override
+  set propertyList(PropertyList value) {
+    _$propertyListAtom.reportWrite(value, super.propertyList, () {
+      super.propertyList = value;
+    });
+  }
+
+  final _$imageUrlListAtom = Atom(name: '_PostStore.imageUrlList');
+
+  @override
+  List<String> get imageUrlList {
+    _$imageUrlListAtom.reportRead();
+    return super.imageUrlList;
+  }
+
+  @override
+  set imageUrlList(List<String> value) {
+    _$imageUrlListAtom.reportWrite(value, super.imageUrlList, () {
+      super.imageUrlList = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_PostStore.success');
 
   @override
@@ -61,6 +115,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$propertiesSuccessAtom = Atom(name: '_PostStore.propertiesSuccess');
+
+  @override
+  bool get propertiesSuccess {
+    _$propertiesSuccessAtom.reportRead();
+    return super.propertiesSuccess;
+  }
+
+  @override
+  set propertiesSuccess(bool value) {
+    _$propertiesSuccessAtom.reportWrite(value, super.propertiesSuccess, () {
+      super.propertiesSuccess = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
@@ -68,13 +137,27 @@ mixin _$PostStore on _PostStore, Store {
     return _$getPostsAsyncAction.run(() => super.getPosts());
   }
 
+  final _$getPostPropertiesAsyncAction =
+      AsyncAction('_PostStore.getPostProperties');
+
+  @override
+  Future<dynamic> getPostProperties(String postId) {
+    return _$getPostPropertiesAsyncAction
+        .run(() => super.getPostProperties(postId));
+  }
+
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
+fetchPropertiesFuture: ${fetchPropertiesFuture},
 postList: ${postList},
+propertyList: ${propertyList},
+imageUrlList: ${imageUrlList},
 success: ${success},
-loading: ${loading}
+propertiesSuccess: ${propertiesSuccess},
+loading: ${loading},
+propertiesLoading: ${propertiesLoading}
     ''';
   }
 }
