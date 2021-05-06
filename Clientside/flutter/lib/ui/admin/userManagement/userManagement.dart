@@ -136,10 +136,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
               Expanded(
                 child: Container(
                   alignment: Alignment.topLeft,
-                  child: Icon(
+                  child: GestureDetector(
+                    child: Icon(
                       Icons.arrow_back,
                       size: 28,
                       color: Colors.white,
+                    ),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
               ),
@@ -155,13 +160,18 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 // flex: 2,
                 child: Container(
                   alignment: Alignment.topRight,
-                  child: Icon(
+                  child: GestureDetector(
+                    child: Icon(
                     Icons.person_add_alt_1,
                     size: 28,
                     color: Colors.white,
                   ),
+                    onTap: (){
+                      // Navigator.pop(context);
+                    },
                 ),
               ),
+            ),
             ],
           ),
         ),
@@ -215,7 +225,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       builder: (context) {
         return _userManagementStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildUsersList());
+            : Material(
+            child: _buildUsersList(),
+            color: Color.fromRGBO(241, 242, 246, 1),);
       },
     );
   }
@@ -332,27 +344,23 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   Widget _buildListItem(User user, int position) {
-    // return ListTile(
-    //   dense: true,
-    //   leading: Icon(Icons.people_alt, size: 30, color: Colors.black,),
-    //   title: Text(
-    //     '${user.name}',
-    //     maxLines: 1,
-    //     overflow: TextOverflow.ellipsis,
-    //     softWrap: false,
-    //     style: Theme.of(context).textTheme.title,
-    //   ),
-    //   subtitle: Text(
-    //     '${user.permissions}',
-    //     maxLines: 1,
-    //     overflow: TextOverflow.ellipsis,
-    //     softWrap: false,
-    //   ),
-    //   // onTap: _onClickItemUsers(user),
-    // );
     return Container(
+      decoration: new BoxDecoration(
+        boxShadow: [
+          // color: Colors.white, //background color of box
+          BoxShadow(
+            color: Color.fromRGBO(198, 199, 202, 1),
+            blurRadius: 10, // soften the shadow
+            spreadRadius: 0.01, //extend the shadow
+            offset: Offset(
+              8.0, // Move to right 10  horizontally
+              12.0, // Move to bottom 10 Vertically
+            ),
+          )
+        ],
+      ),
       child: Card(
-        margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+        margin: EdgeInsets.only(top: 8, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -360,7 +368,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         child: Container(
           padding: EdgeInsets.all(20),
           height: 160,
-          color: Color.fromRGBO(242, 242, 242, 1),
+          // color: Color.fromRGBO(242, 242, 242, 1),
+          color: Colors.white,
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [

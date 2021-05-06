@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/ui/admin/management.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}
