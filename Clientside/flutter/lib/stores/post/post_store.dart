@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -30,16 +31,19 @@ abstract class _PostStore with Store {
       ObservableFuture<PostList>(emptyPostResponse);
 
   // Image observer
-  static ObservableFuture<String> emptyImageResponse =
+  static ObservableFuture<PropertyList> emptyPropertiesResponse =
       ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<String> fetchImageFuture =
-      ObservableFuture<String>(emptyImageResponse);
+  ObservableFuture<PropertyList> fetchPropertiesFuture =
+      ObservableFuture<PropertyList>(emptyPropertiesResponse);
 
 
   @observable
   PostList postList;
+
+  @observable
+  PropertyList propertyList;
 
   @observable
   List<String> imageUrlList;
@@ -47,11 +51,14 @@ abstract class _PostStore with Store {
   @observable
   bool success = false;
 
+  @observable
+  bool propertiesSuccess = false;
+
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
   @computed
-  bool get imageLoading => fetchImageFuture.status == FutureStatus.pending;
+  bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
 
 
   // actions:-------------------------------------------------------------------
@@ -61,12 +68,33 @@ abstract class _PostStore with Store {
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
-
       success = true;
       this.postList = postList;
     }).catchError((error) {
       if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future getPostProperties(String postId) async {
+    propertiesSuccess = false;
+    final future = _repository.getPostProperties(postId);
+    fetchPropertiesFuture = ObservableFuture(future);
+
+    future.then((propertyList) {
+      propertiesSuccess = true;
+      this.propertyList = propertyList;
+    }).catchError((error) {
+      propertiesSuccess = false;
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
       else{

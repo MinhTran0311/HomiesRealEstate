@@ -5,6 +5,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:dio/dio.dart';
 
@@ -31,6 +32,26 @@ class PostApi {
 
       return PostList.fromJson(res);
     } catch (e) {
+      throw e;
+    }
+  }
+
+    Future<PropertyList> getPostProperties(String postId) async {
+    try{
+      final res = await _dioClient.get(Endpoints.getAllChiTietBaiDangByPostId,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: {
+          "postId": postId,
+        },
+      );
+
+      return PropertyList.fromJson(res);
+    }catch(e){
       throw e;
     }
   }

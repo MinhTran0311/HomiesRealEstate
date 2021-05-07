@@ -6,6 +6,7 @@ import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/photoViewScreen.dart';
+import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,6 +66,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     if (!_userStore.loading){
       _userStore.getUserOfCurrentDetailPost(post.userId);
     }
+    if (!_postStore.propertiesLoading){
+      _postStore.getPostProperties(this.post.id.toString());
+    }
   }
 
   @override
@@ -84,6 +89,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   Widget _buildContent(){
     Size size = MediaQuery.of(context).size;
+    DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
+    DateTime dateTime = dateFormat.parse(post.thoiDiemDang);
+    var f = NumberFormat("###", "en_US");
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
@@ -166,9 +174,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-
-                                            //Expanded(child: Container()),
-
                                             Padding(
                                               padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
                                               child: Row(
@@ -237,7 +242,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(post.thoiDiemDang,
+                                    Text(
+                                      post.thoiDiemDang.substring(8,10)+"/"+ post.thoiDiemDang.substring(5,7)+"/"+post.thoiDiemDang.substring(0,4),
                                       style: TextStyle(fontSize: 13,color: Colors.grey,fontWeight: FontWeight.bold),
                                     ),
                                     Padding(
@@ -264,16 +270,16 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 ),
                               ),
 
+
                               Padding(
                                 padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Flexible(
-
                                       child: DefaultTextStyle(
                                         child: Text(post.tieuDe),
-                                        maxLines: 2,
+                                        maxLines: 3,
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 28,
@@ -281,8 +287,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-
-
                                   ],
                                 ),
                               ),
@@ -292,13 +296,68 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [Icon(
+                                        Icons.attach_money_outlined,
+                                        color: Colors.amber,
+                                        size: 30,
+                                      ),
+                                        SizedBox(width: 4,),
+                                        Flexible(
+                                          child: Text(
+                                            post.gia.toString(),
+                                            style: TextStyle(
+                                              color:Colors.grey,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),],
+
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                        Icons.zoom_out_map,
+                                        color: Colors.amber,
+                                        size: 30,
+                                      ),
+                                        SizedBox(width: 4,),
+                                        Flexible(
+                                          child: Text(
+                                            post.dienTich.toString(),
+                                            style: TextStyle(
+                                              color:Colors.grey,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),],
+
+                                    )
+
+
+                                  ],
+
+                                ),
+                              ),
+
+                              Padding(
+                                padding: EdgeInsets.only(left: 24,right: 24,bottom: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
                                     Icon(
                                       Icons.location_on,
                                       color: Colors.amber,
                                       size: 30,
                                     ),
                                     SizedBox(width: 4,),
-                                    Expanded(
+                                    Flexible(
                                       child: SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
                                         child: Text(
@@ -316,20 +375,22 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                               ),
 
                               Padding (
-                                padding: EdgeInsets.only(right: 24,left: 24,bottom: 24,),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    buildFeature(Icons.hotel, "3 bedrooms"),
-                                    buildFeature(Icons.wc, "2 bathrooms"),
-                                    buildFeature(Icons.kitchen, "1 bedrooms"),
-                                    buildFeature(Icons.local_parking, "2 Parking"),
-                                  ],
-                                ),
+                                padding: EdgeInsets.only(right: 24,left: 24,bottom: 12,),
+                                child:
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     buildFeature(Icons.hotel, "3 bedrooms"),
+                                //     buildFeature(Icons.wc, "2 bathrooms"),
+                                //     buildFeature(Icons.kitchen, "1 bedrooms"),
+                                //     buildFeature(Icons.local_parking, "2 Parking"),
+                                //   ],
+                                // ),
+                                Properties(_postStore.propertyList),
                               ),
 
                               Padding(
-                                  padding: EdgeInsets.only(right: 24,left: 24,bottom: 10),
+                                  padding: EdgeInsets.only(right: 24,left: 24,bottom: 12),
                                   child: Text(
                                     "Mô tả chi tiết",
                                     style: TextStyle(
@@ -574,9 +635,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       ],
     );
   }
-
-
-
 
 
   List<Widget> buildPhotos(BuildContext context, ImageList imageList) {
