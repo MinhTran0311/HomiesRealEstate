@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!userStore.loading) {
       userStore.getCurrenUser();
     }
+    if(!_postStore.loadinggetcategorys){_postStore.getPostcategorys();}
 
   }
 
@@ -113,12 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMainContent() {
-    return Observer(
-      builder: (context) {
-        return _postStore.loading
-            ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
-      },
+      return Observer(
+        builder: (context) {
+          return _postStore.loading
+              ? CustomProgressIndicatorWidget()
+              : Material(child: _buildPostsList());
+        },
     );
   }
   Widget _buildPostsList()

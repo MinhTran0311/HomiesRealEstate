@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -23,18 +24,30 @@ abstract class _PostStore with Store {
   static ObservableFuture<PostList> emptyPostResponse =
       ObservableFuture.value(null);
 
+  static ObservableFuture<PostCategoryList> emptyPostCategorysResponse =
+      ObservableFuture.value(null);
+
   @observable
   ObservableFuture<PostList> fetchPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
+  @observable
+  ObservableFuture<PostCategoryList> fetchPostCategorysFuture =
+    ObservableFuture<PostCategoryList>(emptyPostCategorysResponse);
 
   @observable
   PostList postList;
 
   @observable
-  bool success = false;
+  PostCategoryList postCategoryList;
 
+  @observable
+  bool success = false;
+  @observable
+  bool successgetcategorys = false;
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+
+  bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -59,4 +72,22 @@ abstract class _PostStore with Store {
       //throw error;
     });
   }
+  Future getPostcategorys() async {
+    final future = _repository.getPostCategorys();
+    fetchPostCategorysFuture = ObservableFuture(future);
+
+    future.then((postCategoryList) {
+      this.postCategoryList = postCategoryList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
 }

@@ -23,7 +23,7 @@ dependencies:
   multi_image_picker: ^4.7.14
   firebase_storage: ^5.2.0
   cloud_firestore: ^0.14.4
-  text_editor: ^0.3.1
+  flutter_summernote: ^0.2.3
   flutter:
     sdk: flutter
 

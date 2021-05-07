@@ -4,6 +4,8 @@ import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/post/post_category.dart';
+import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
@@ -44,7 +46,18 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
-
+  Future<PostCategoryList> getPostCategorys() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _postApi.getPostCategorys().then((postCategoryList) {
+      // postCategoryList.categorys.forEach((category) {
+      //   _postDataSource.insert(category);
+      // });
+      return postCategoryList;
+    }
+    ).catchError((error) => throw error);
+  }
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
     return await _userApi.getAllUsers().then((usersList) {

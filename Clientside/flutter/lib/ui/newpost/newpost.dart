@@ -1,6 +1,7 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:async';
+import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/models/post/post_category.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -10,15 +11,16 @@ import 'package:boilerplate/widgets/app_icon_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
-import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_summernote/flutter_summernote.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:text_editor/text_editor.dart';
 import 'add_image.dart';
+
 class NewpostScreen extends StatefulWidget {
   @override
   _NewpostScreenState createState() => _NewpostScreenState();
@@ -29,6 +31,7 @@ class Item {
   final String name;
   final Icon icon;
 }
+
 class UploadImage {
   List<String> images;
 
@@ -44,61 +47,29 @@ class UploadImage {
 }
 
 class _NewpostScreenState extends State<NewpostScreen> {
+  PostStore _postStore;
+
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
+  String result = "";
+  GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
 
   //endregion
   final FormStore _store = new FormStore();
+
   //region Item
-  Item selectedType;
-  Item selectedTypeType;
-  Item selectedCity;
+  Postcategory selectedType;
+  Postcategory selectedTypeType;
+  Postcategory selectedTypeTypeType;
   Item selectedTown;
+  String selectedCity;
   Item selectedVil;
-  List<Item> type = <Item>[
-    const Item(
-        'Bán',
-        Icon(
-          Icons.point_of_sale,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Cho thuê',
-        Icon(
-          Icons.point_of_sale,
-          color: const Color(0xFF167F67),
-        )),
-  ];
-  List<Item> typetype = <Item>[
-    const Item(
-        'Nhà',
-        Icon(
-          Icons.android,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Căn hộ chung cư',
-        Icon(
-          Icons.flag,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Đất',
-        Icon(
-          Icons.format_indent_decrease,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Nhà xưởng',
-        Icon(
-          Icons.mobile_screen_share,
-          color: const Color(0xFF167F67),
-        )),
-  ];
+  List<Postcategory> type;
+  List<Postcategory> typetype = [];
   List<Item> city = <Item>[
     const Item(
         'Hồ Chí Minh',
@@ -141,6 +112,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           color: const Color(0xFF167F67),
         )),
   ];
+
 //endregion
   //region Time
   //region Time
@@ -175,31 +147,51 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
 //endregion
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // initializing stores
+    _postStore = Provider.of<PostStore>(context);
+    // check to see if already called api
+    if (!_postStore.loadinggetcategorys) {
+      _postStore.getPostcategorys();
+    }
+    // _postStore.loadinggetcategory=true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // ifuserstore.loading
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      primary: true,
-      appBar: AppBar(
-        // Icon: Icons.app_registration,
-        title: Text(
-          "Đăng tin bất động sản",
-          style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.white,
-              fontSize: 23,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.0),
+        primary: true,
+        appBar: AppBar(
+          // Icon: Icons.app_registration,
+          backgroundColor: Colors.amber,
+          title: Text(
+            "Đăng tin bất động sản",
+            style: Theme.of(context).textTheme.button.copyWith(
+                color: Colors.white,
+                fontSize: 23,
+                // backgroundColor:Colors.amber ,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.0),
+          ),
+          centerTitle: true,
         ),
-        leading: IconButton(
-          icon: Icon(Icons.app_registration),
-          onPressed: () {
-            // Do something.
-          },
-        ),
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-      ),
-      body: _buildBody(),
-    );
+        body: _postStore.loadinggetcategorys
+            ? CustomProgressIndicatorWidget()
+            : Material(child: _buildBody()));
   }
 
   Widget _buildBody() {
@@ -212,8 +204,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                  Colors.amber,
-                  Colors.orange[700],
+                  Colors.amber[600],
+                  Colors.amber[50],
                 ])),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
@@ -272,13 +264,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildTileField(),
             SizedBox(height: 24.0),
+            _buildTownField2(),
+            SizedBox(height: 24.0),
             _buildTypeField(),
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
-            SizedBox(height: 24.0),
-            _buildTownField2(),
-            SizedBox(height: 24.0),
-            _buildCityField(),
+            _buildTypeTypeTypeField(),
+            _buildTownField(),
             SizedBox(height: 24.0),
             _buildVilField(),
             SizedBox(height: 24.0),
@@ -290,7 +282,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildEnddateField(),
             SizedBox(height: 24.0),
-            _builddDscribeField(),
+            _buildTileField2(),
             SizedBox(height: 24.0),
             _buildImagepick(),
             SizedBox(height: 24.0),
@@ -321,135 +313,195 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-  final fonts = [
-    'OpenSans',
-    'Billabong',
-    'GrandHotel',
-    'Oswald',
-    'Quicksand',
-    'BeautifulPeople',
-    'BeautyMountains',
-    'BiteChocolate',
-    'BlackberryJam',
-    'BunchBlossoms',
-    'CinderelaRegular',
-    'Countryside',
-    'Halimun',
-    'LemonJelly',
-    'QuiteMagicalRegular',
-    'Tomatoes',
-    'TropicalAsianDemoRegular',
-    'VeganStyle',
-  ];
-  TextStyle _textStyle = TextStyle(
-    fontSize: 22,
-    color: Colors.white,
-    fontFamily: 'Billabong',
-  );
-  TextAlign _textAlign = TextAlign.center;
+
   Widget _buildTileField2() {
     return Observer(
       builder: (context) {
-        return TextEditor(
-          fonts: fonts,
-          text: null,
-          textStyle: _textStyle,
-          textAlingment: _textAlign,
-          decoration: EditorDecoration(
-            doneButton: Icon(Icons.close, color: Colors.white),
-            fontFamily: Icon(Icons.title, color: Colors.white),
-            colorPalette: Icon(Icons.palette, color: Colors.white),
-            alignment: AlignmentDecoration(
-              left: Text(
-                'left',
-                style: TextStyle(color: Colors.white),
-              ),
-              center: Text(
-                'center',
-                style: TextStyle(color: Colors.white),
-              ),
-              right: Text(
-                'right',
-                style: TextStyle(color: Colors.white),
-              ),
+        return SingleChildScrollView(
+          child: FlutterSummernote(
+            height: 360.0,
+            decoration: BoxDecoration(
+              color: Colors.amber[100],
+              borderRadius: BorderRadius.circular(12),
             ),
-          ),
-        );
-      },
-    );
-  }
-  Widget _buildTypeField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
-          child: DropdownButton<Item>(
-            hint: Text("Chọn loại hình"),
-            value: selectedType,
-            //icon:Icons.attach_file ,
-            onChanged: (Item Value) {
-              setState(() {
-                selectedType = Value;
-              });
-            },
-            items: type.map((Item type) {
-              return DropdownMenuItem<Item>(
-                value: type,
-                child: Row(
-                  children: <Widget>[
-                    type.icon,
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.name,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+            hint: "Mô tả",
+            key: _keyEditor,
+            hasAttachment: false,
+            customToolbar: """
+                  [
+                      ['style', ['bold', 'italic', 'underline']],
+                      ['font', ['strikethrough', 'superscript', 'subscript']]
+                  ]
+                """,
+            showBottomToolbar: true,
           ),
         );
       },
     );
   }
 
-  Widget _buildTypeTypeField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
-          child: DropdownButton<Item>(
-            hint: Text("Chọn hình thức"),
-            value: selectedTypeType,
-            //icon:Icons.attach_file ,
-            onChanged: (Item Value) {
-              setState(() {
-                selectedTypeType = Value;
-              });
-            },
-            items: typetype.map((Item type) {
-              return DropdownMenuItem<Item>(
-                value: type,
-                child: Row(
-                  children: <Widget>[
-                    type.icon,
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.name,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
+  Widget _buildTypeField() {
+    List<Postcategory> type = [];
+    for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
+      if (_postStore.postCategoryList.categorys[i].danhMucCha ==
+          null) if (_postStore.postCategoryList.categorys[i] != null)
+        type.add(_postStore.postCategoryList.categorys[i]);
+    return Padding(
+      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+      child: DropdownButton<Postcategory>(
+        hint: Text("Chọn phương thức"),
+        value: selectedType,
+        onChanged: (Postcategory Value) {
+          setState(() {
+            try {
+              selectedType = Value;
+            } catch (_) {
+              selectedType = type[0];
+            }
+          });
+        },
+        items: type.map((Postcategory type) {
+          if (type.danhMucCha == null)
+            return DropdownMenuItem<Postcategory>(
+              value: type,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.home_work_sharp,
+                    color: const Color(0xFF167F67),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    type.tenDanhMuc,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            );
+          else
+            return
+                //Container(width: 0, height: 0);
+                DropdownMenuItem<Postcategory>(
+              value: type,
+              child: SizedBox(height: 0),
+            );
+        }).toList(),
+      ),
     );
+  }
+
+  Widget _buildTypeTypeField() {
+    List<Postcategory> typetype = [];
+    if (selectedType != null) {
+      for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
+        if (_postStore.postCategoryList.categorys[i].danhMucCha ==
+            selectedType
+                .id) if (_postStore.postCategoryList.categorys[i] != null)
+          typetype.add(_postStore.postCategoryList.categorys[i]);
+
+      if (typetype.length != 0)
+        return Observer(
+          builder: (context) {
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
+              child: DropdownButton<Postcategory>(
+                hint: Text("Chọn hình thức nhà đất"),
+                value: selectedTypeType,
+                //icon:Icons.attach_file ,
+                onChanged: (Postcategory Value) {
+                  setState(() {
+                    selectedTypeType = Value;
+                    selectedTypeTypeType = null;
+                  });
+                },
+                items: typetype.map((Postcategory type) {
+                  return DropdownMenuItem<Postcategory>(
+                    value: type,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.home_work_sharp,
+                          color: const Color(0xFF167F67),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          type.tenDanhMuc,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        );
+      else {
+        selectedTypeType = null;
+        return Container(height: 0, width: 0);
+      }
+    } else
+      return Container(height: 0, width: 0);
+  }
+
+  Widget _buildTypeTypeTypeField() {
+    List<Postcategory> typetypetype = [];
+    if (selectedTypeType != null) {
+      for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
+        if (_postStore.postCategoryList.categorys[i].danhMucCha ==
+            selectedTypeType
+                .id) if (_postStore.postCategoryList.categorys[i] != null)
+          typetypetype.add(_postStore.postCategoryList.categorys[i]);
+      if (typetypetype.length != 0)
+        return Observer(
+          builder: (context) {
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
+              child: DropdownButton<Postcategory>(
+                hint: Text("Chọn hình thức nhà đất bổ sung"),
+                value: selectedTypeTypeType,
+                //icon:Icons.attach_file ,
+                onChanged: (Postcategory Value) {
+                  setState(() {
+                    selectedTypeTypeType = Value;
+                  });
+                },
+                items: typetypetype.map((Postcategory type) {
+                  return DropdownMenuItem<Postcategory>(
+                    value: type,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.home_work_sharp,
+                          color: const Color(0xFF167F67),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          type.tenDanhMuc,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        );
+      else {
+        selectedTypeTypeType = null;
+        return Container(height: 0, width: 0);
+      }
+    } else
+      return Container(height: 0, width: 0);
   }
 
   Widget _buildCityField() {
@@ -459,12 +511,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
           padding: const EdgeInsets.only(left: 30.0, right: 10.0),
           child: DropdownButton<Item>(
             hint: Text("Chọn tỉnh/thành phố"),
+            value: selectedTown,
 
-            value: selectedCity,
             //icon:Icons.attach_file ,
+            // ignore: non_constant_identifier_names
             onChanged: (Item Value) {
               setState(() {
-                selectedCity = Value;
+                selectedTown = Value;
               });
             },
 
@@ -495,7 +548,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
           child: DropdownButton<Item>(
             hint: Text("Chọn quận/huyện"),
             value: selectedTown,
@@ -532,25 +585,23 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(builder: (context) {
       //var town1;
       return Padding(
-        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
         child: DropdownSearch<String>(
           //mode: Mode.BOTTOM_SHEET,
           items: [
-            "Brazil",
-            "Italia",
-            "Tunisia",
-            'Canada',
-            'Zraoua',
-            'France',
-            'Belgique'
+            "Thành phố Hà Nội","Tỉnh Hà Giang","Tỉnh Cao Bằng","Tỉnh Bắc Kạn","Tỉnh Tuyên Quang","Tỉnh Lào Cai","Tỉnh Điện Biên","Tỉnh Lai Châu","Tỉnh Sơn La","Tỉnh Yên Bái","Tỉnh Hoà Bình","Tỉnh Thái Nguyên","Tỉnh Lạng Sơn","Tỉnh Quảng Ninh","Tỉnh Bắc Giang","Tỉnh Phú Thọ","Tỉnh Vĩnh Phúc","Tỉnh Bắc Ninh","Tỉnh Hải Dương","Thành phố Hải Phòng","Tỉnh Hưng Yên","Tỉnh Thái Bình","Tỉnh Hà Nam","Tỉnh Nam Định","Tỉnh Ninh Bình","Tỉnh Thanh Hóa","Tỉnh Nghệ An","Tỉnh Hà Tĩnh","Tỉnh Quảng Bình","Tỉnh Quảng Trị","Tỉnh Thừa Thiên Huế","Thành phố Đà Nẵng","Tỉnh Quảng Nam","Tỉnh Quảng Ngãi","Tỉnh Bình Định","Tỉnh Phú Yên","Tỉnh Khánh Hòa","Tỉnh Ninh Thuận","Tỉnh Bình Thuận","Tỉnh Kon Tum","Tỉnh Gia Lai","Tỉnh Đắk Lắk","Tỉnh Đắk Nông","Tỉnh Lâm Đồng","Tỉnh Bình Phước","Tỉnh Tây Ninh","Tỉnh Bình Dương","Tỉnh Đồng Nai","Tỉnh Bà Rịa - Vũng Tàu","Thành phố Hồ Chí Minh","Tỉnh Long An","Tỉnh Tiền Giang","Tỉnh Bến Tre","Tỉnh Trà Vinh","Tỉnh Vĩnh Long","Tỉnh Đồng Tháp","Tỉnh An Giang","Tỉnh Kiên Giang","Thành phố Cần Thơ","Tỉnh Hậu Giang","Tỉnh Sóc Trăng","Tỉnh Bạc Liêu","Tỉnh Cà Mau",
           ],
           hint: "Chọn tỉnh/thành phố",
-          onChanged: print,
+          onChanged: (String Value) {
+            setState(() {
+              selectedCity = Value;
+            });
+          },
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
-            //border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+            border: OutlineInputBorder(),
+           // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
             labelText: "Tìm tỉnh/thành phố",
           ),
           popupTitle: Container(
@@ -741,20 +792,18 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
-  Widget _buildImagepick()
-  {
-    return Observer(builder: (context)
-    {
-      return FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AddImage()));
-        },
-      );
-    },
+  Widget _buildImagepick() {
+    return Observer(
+      builder: (context) {
+        return FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AddImage()));
+          },
+        );
+      },
     );
-
   }
 
   Widget _buildUserEmail() {
@@ -786,18 +835,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
       buttonText: ('Đăng tin'),
       buttonColor: Colors.black87,
       textColor: Colors.white,
-      onPressed: () {
-        // if(_store.canRegister) {
-        //   DeviceUtils.hideKeyboard(context);
-        // //   _store.register();
-        // }
-        // else{
-        //   _showErrorMessage('Please fill in all fields');
-        // }
-        //});
-      },
+      onPressed: () {},
     );
   }
+
 //endregion
 
   Widget navigate(BuildContext context) {
@@ -824,15 +865,5 @@ class _NewpostScreenState extends State<NewpostScreen> {
     });
 
     return SizedBox.shrink();
-  }
-
-  // dispose:-------------------------------------------------------------------
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is removed from the Widget tree
-    _TileController.dispose();
-    _AcreageController.dispose();
-    _userEmailController.dispose();
-    super.dispose();
   }
 }

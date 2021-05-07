@@ -20,11 +20,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2d7158b-b0eb-4024-87f8-d9dd0c66d2f2" name="Default Changelist" comment="demo :(.2">
+      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/post/post_category.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/post/post_category_list.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/homepage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/homepage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/authToken/authToken_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/authToken/authToken_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.g.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" afterDir="false" />
     </list>
@@ -61,7 +66,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Clientside/flutter" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -156,6 +161,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="423" y="277" key="#Notifications" timestamp="1620358862722">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="423" y="277" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1620358862722" />
     <state x="249" y="0" key="#Project_Structure" timestamp="1619246780217">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -168,41 +177,66 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="498" y="202" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1619244222319" />
-    <state x="100" y="100" width="1336" height="624" key="AVDManager" timestamp="1620205042841">
+    <state x="524" y="114" key="#xdebugger.evaluate" timestamp="1620358762811">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="100" y="100" width="1336" height="624" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1620205042841" />
+    <state x="524" y="114" key="#xdebugger.evaluate/0.0.1536.824@0.0.1536.824" timestamp="1620358762811" />
+    <state x="100" y="100" width="1336" height="624" key="AVDManager" timestamp="1620382098342">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="100" y="100" width="1336" height="624" key="AVDManager/0.0.1280.680@0.0.1280.680" timestamp="1620359068361" />
+    <state x="100" y="100" width="1336" height="624" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1620382098342" />
     <state x="586" y="158" key="AndroidProcessChooserDialog" timestamp="1619244204052">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="586" y="158" key="AndroidProcessChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1619244204052" />
-    <state x="549" y="171" key="FileChooserDialogImpl" timestamp="1619397513865">
+    <state width="426" height="466" key="DebuggerActiveHint" timestamp="1620364109325">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1619397513865" />
-    <state width="744" height="209" key="GridCell.Tab.0.bottom" timestamp="1619400547980">
+    <state width="426" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1620364109325" />
+    <state x="549" y="171" key="FileChooserDialogImpl" timestamp="1620295380794">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="744" height="209" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1619400547980" />
-    <state width="744" height="209" key="GridCell.Tab.0.center" timestamp="1619400547979">
+    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1620295380794" />
+    <state width="1219" height="201" key="GridCell.Tab.0.bottom" timestamp="1620372147914">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="744" height="209" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1619400547979" />
-    <state width="744" height="209" key="GridCell.Tab.0.left" timestamp="1619400547978">
+    <state width="1476" height="201" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1620359067832" />
+    <state width="1219" height="201" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1620372147914" />
+    <state width="1219" height="201" key="GridCell.Tab.0.center" timestamp="1620372147914">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="744" height="209" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1619400547978" />
-    <state width="744" height="209" key="GridCell.Tab.0.right" timestamp="1619400547980">
+    <state width="1476" height="201" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1620359067832" />
+    <state width="1219" height="201" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1620372147914" />
+    <state width="1219" height="201" key="GridCell.Tab.0.left" timestamp="1620372147914">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="744" height="209" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1619400547980" />
-    <state x="518" y="114" key="RollbackChangesDialog" timestamp="1619320201761">
+    <state width="1476" height="201" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1620359067832" />
+    <state width="1219" height="201" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1620372147913" />
+    <state width="1219" height="201" key="GridCell.Tab.0.right" timestamp="1620372147914">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="518" y="114" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1619320201761" />
-    <state x="278" y="61" key="SettingsEditor" timestamp="1619318210481">
+    <state width="1476" height="201" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1620359067832" />
+    <state width="1219" height="201" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1620372147914" />
+    <state x="518" y="114" key="RollbackChangesDialog" timestamp="1620226691310">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="278" y="61" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1619318210481" />
+    <state x="518" y="114" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1620226691310" />
+    <state x="278" y="61" key="SettingsEditor" timestamp="1620295297137">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="278" y="61" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1620295297137" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint suspend="THREAD" type="dart-exception" />
+      </default-breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="FlutterRunConfigurationType">
+        <watch expression="selectedType" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
