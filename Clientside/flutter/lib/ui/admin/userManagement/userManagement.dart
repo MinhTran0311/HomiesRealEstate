@@ -367,7 +367,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         ),
         child: Container(
           padding: EdgeInsets.all(20),
-          height: 160,
+          // height: 160,
           // color: Color.fromRGBO(242, 242, 242, 1),
           color: Colors.white,
           child: Column(

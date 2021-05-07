@@ -278,7 +278,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
         ),
         child: Container(
           padding: EdgeInsets.all(20),
-          height: 130,
+          // height: 130,
           // color: Color.fromRGBO(242, 242, 242, 1),
           color: Colors.white,
           child: Column(
@@ -341,68 +341,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
               ),
               Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        // Padding(
-                        //   padding: EdgeInsets.only(top: 20),
-                        //   // child: ,
-                        // ),
-                        // Text(
-                        //   'Kích hoạt: ',
-                        //   overflow: TextOverflow.ellipsis,
-                        //   style: TextStyle(
-                        //     color: Colors.black,
-                        //     fontSize: 18,
-                        //     // fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        role.isStatic ? Container(
-                          decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                          ),
-                          width: 60,
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Center(
-                            child: Text(
-                              "Tĩnh",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ) : Container(),
-                        !role.isDefault ? Container()
-                            : Container(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(5))
-                            ),
-                            width: 80,
-                            // height: 30,
-                            padding: EdgeInsets.symmetric(vertical: 4),
-                            child: Center(
-                              child: Text(
-                                "Mặc định",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
+                  _isStaticAndDefault(role.isStatic, role.isDefault),
+                  SizedBox(height: 30.0,),
                 ],
               ),
             ],
@@ -422,6 +362,58 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
 
         return SizedBox.shrink();
       },
+    );
+  }
+
+  Widget _isStaticAndDefault(bool isStatic, bool isDefault) {
+    return Container(
+      padding: EdgeInsets.only(top: 10,),
+      child: Row(
+        children: [
+          isStatic ? Container(
+            decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
+            width: 60,
+            padding: EdgeInsets.symmetric(vertical: 4),
+            child: Center(
+              child: Text(
+                "Tĩnh",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
+              : Container(),
+          !isDefault ? Container()
+              : Container(
+            padding: EdgeInsets.only(left: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
+              width: 80,
+              // height: 30,
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: Center(
+                child: Text(
+                  "Mặc định",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

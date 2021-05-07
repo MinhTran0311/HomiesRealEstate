@@ -11,6 +11,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
 
 class ManagementScreen extends StatefulWidget {
   @override
@@ -95,7 +96,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
           GestureDetector(
               child: _buildItemsGridView("Nhật ký kiểm tra"),
             onTap: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MapsScreen()),
+              );
             },
           ),
           GestureDetector(

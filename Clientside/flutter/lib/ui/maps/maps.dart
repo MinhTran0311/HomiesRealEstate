@@ -15,8 +15,8 @@ import 'package:flutter/cupertino.dart';
 // import 'package:geolocator/geolocator.dart';
 
 class MapsScreen extends StatefulWidget {
-  MapsScreen(): super();
-  final String title = "Bản đồ";
+  // MapsScreen(): super();
+  // final String title = "Bản đồ";
 
   @override
   _MapsScreenState createState() => _MapsScreenState();
@@ -39,7 +39,7 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   void initState() {
     super.initState();
-    _checkPermission();
+    // _checkPermission();
     // location = new Location();
 
   }
