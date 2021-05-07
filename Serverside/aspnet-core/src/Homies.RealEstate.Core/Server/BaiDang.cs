@@ -66,5 +66,12 @@ namespace Homies.RealEstate.Server
         [ForeignKey("XaId")]
         public Xa XaFk { get; set; }
 
+        [Required]
+        public virtual double Gia { get; set; }
+        [Required]
+        public virtual double DienTich { get; set; }
+        [Required]
+        public virtual String FeaturedImage { get; set; }
+
     }
 }

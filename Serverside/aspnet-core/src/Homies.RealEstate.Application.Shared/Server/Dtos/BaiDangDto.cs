@@ -37,5 +37,11 @@ namespace Homies.RealEstate.Server.Dtos
 
         public int? XaId { get; set; }
 
+        public String FeaturedImage { get; set; }
+
+        public double Gia { get; set; }
+
+        public double DienTich { get; set; }
+
     }
 }

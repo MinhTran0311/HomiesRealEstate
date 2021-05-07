@@ -1,8 +1,14 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/image/image_list.dart';
+import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
@@ -25,6 +31,7 @@ class Repository {
   final PostApi _postApi;
   final AuthTokenApi _authTokenApi;
   final UserApi _userApi;
+  final ImageApi _imageApi;
 
   final RegistrationApi _registrationApi;
 
@@ -58,6 +65,24 @@ class Repository {
     }
     ).catchError((error) => throw error);
   }
+
+  Future<PropertyList> getPostProperties(String postId) async {
+    return await _postApi.getPostProperties(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
+  // Post: ---------------------------------------------------------------------
+  // Future<listLSGD> getLSGD() async {
+  //   // check to see if posts are present in database, then fetch from database
+  //   // else make a network call to get all posts, store them into database for
+  //   // later use
+  //   return await _userApi.getLSGD().then((lsgdList) {
+  //     return lsgdList;
+  //   }).catchError((error) => throw error);
+  // }
+
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
     return await _userApi.getAllUsers().then((usersList) {
@@ -65,12 +90,31 @@ class Repository {
       return usersList;
       }).catchError((error) => throw error);
   }
-  Future<CurrenUserForEditdyo> getCurrenUser() async {
-    return await _userApi.getCurrenUser().then((user) {
+  Future<CurrentUserForEditdto> getCurrentUser() async {
+    return await _userApi.getCurrentUser().then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);
   }
+  Future<dynamic> getWalletUser() async {
+    return await _userApi.getCurrentWalletUser().then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+  Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
+    return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName).then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+
+  Future<CurrentUserForEditdto> getUserOfCurrentDeatiaiPost(int Id) async {
+    return await _userApi.getUserOfCurrentDetailPost(Id).then((user) {
+      return user;
+    }).catchError((error) => throw error);
+  }
+
 
   Future<List<Post>> findPostById(int id) {
     //creating filter
@@ -125,6 +169,28 @@ class Repository {
           throw error;
     });
   }
+
+  Future<dynamic> resetPassword(String email) async
+  {
+    return await _authTokenApi.resetPassword(email).catchError((e)=>throw e);
+  }
+
+
+  //Image
+  Future<String> postImageToImageBB(String path) async {
+    return await _imageApi.postImage(path)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
+  Future<ImageList> getImagesForDetail(String postId) async {
+    return await _imageApi.getImages(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

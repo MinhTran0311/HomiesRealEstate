@@ -70,30 +70,44 @@ class User {
   };
 }
 
-class CurrenUserForEditdyo{
+class CurrentUserForEditdto{
   String name;
   String surname;
   String userName;
   String emailAddress;
   String phoneNumber;
-  CurrenUserForEditdyo({
+  String profilePicture;
+  String creationTime;
+  double wallet;
+
+  CurrentUserForEditdto({
     this.name,
     this.emailAddress,
     this.phoneNumber,
     this.surname,
+    this.profilePicture,
+    this.creationTime,
+    this.wallet,
     this.userName
 });
-  factory CurrenUserForEditdyo.fromMap(Map<String, dynamic> json) {
-    print("Duong11");
-    return CurrenUserForEditdyo(
+  factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
+    return CurrentUserForEditdto(
       name: json["result"]["name"],
       surname: json["result"]["surname"],
       userName: json["result"]["userName"],
       emailAddress: json["result"]["emailAddress"],
       phoneNumber: json["result"]["phoneNumber"],
+      profilePicture: json["result"]["profilePicture"],
+      creationTime: json["result"]["creationTime"],
+    );
+  }
+  factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
+    return CurrentUserForEditdto(
+      wallet: json["result"],
     );
   }
 }
+
 // class CurrenUserForEditdyo{
 //   dynamic result;
 //   CurrenUserForEditdyo({

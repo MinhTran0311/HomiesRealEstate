@@ -201,6 +201,8 @@ namespace Homies.RealEstate.Authorization.Users
 
             return output;
         }
+        
+
 
         private List<string> GetAllRoleNamesOfUsersOrganizationUnits(long userId)
         {
@@ -464,6 +466,14 @@ namespace Homies.RealEstate.Authorization.Users
             }
 
             return query;
+        }
+
+        [AbpAuthorize]
+        public async Task<double> GetCurrentUserWallet()
+        {
+            var user = await GetCurrentUserAsync();
+
+            return user.Wallet;
         }
     }
 }

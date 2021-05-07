@@ -3,6 +3,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
+import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
+  // LSGDStore LSGDStore;
   @override
   void initState() {
     super.initState();
@@ -49,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _postStore.getPosts();
     }
     if (!userStore.loading) {
-      userStore.getCurrenUser();
+      userStore.getCurrentUser();
     }
     if(!_postStore.loadinggetcategorys){_postStore.getPostcategorys();}
 
@@ -219,6 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
+        SizedBox(height: 6,),
         _buildListView(),
       ],
     );
@@ -251,6 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
             context,
             MaterialPageRoute(builder: (context)=>Detail(post: post)));
       },
+
       child: Card(
         margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -261,7 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 210,
           decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(Assets.front_img),
+                //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
+                image: post.featuredImage!=null ? NetworkImage(post.featuredImage) : AssetImage(Assets.front_img),
                 fit: BoxFit.cover,
               )
           ),
@@ -319,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          "10.000VND",
+                          post.gia.toString() + "VND",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -357,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4,),
                             Text(
-                              "Dientich",
+                              post.dienTich.toString(),
                               style: TextStyle(
                                 color:Colors.white,
                                 fontSize:  14,
@@ -383,7 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           ],
                         )
-
                       ],
                     )
                   ],

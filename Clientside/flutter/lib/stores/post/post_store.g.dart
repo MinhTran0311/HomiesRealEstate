@@ -18,6 +18,14 @@ mixin _$PostStore on _PostStore, Store {
   bool get loadinggetcategorys=> (_$loadingComputed ??=
       Computed<bool>(() => super.loadinggetcategorys, name: '_PostStore.loadinggetcategorys'))
       .value;
+  Computed<bool> _$propertiesLoadingComputed;
+
+  @override
+  bool get propertiesLoading => (_$propertiesLoadingComputed ??= Computed<bool>(
+          () => super.propertiesLoading,
+          name: '_PostStore.propertiesLoading'))
+      .value;
+
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
   final _$fetchPostCategorysFutureAtom = Atom(name: '_PostStore.fetchPostCategorysFuture');
 
@@ -26,6 +34,7 @@ mixin _$PostStore on _PostStore, Store {
     _$fetchPostsFutureAtom.reportRead();
     return super.fetchPostsFuture;
   }
+
   @override
   set fetchPostsFuture(ObservableFuture<PostList> value) {
     _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
@@ -45,6 +54,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
   final _$postcategoryListAtom = Atom(name: '_PostStore.postcategoryList');
+
+  final _$fetchPropertiesFutureAtom =
+      Atom(name: '_PostStore.fetchPropertiesFuture');
+
+  @override
+  ObservableFuture<PropertyList> get fetchPropertiesFuture {
+    _$fetchPropertiesFutureAtom.reportRead();
+    return super.fetchPropertiesFuture;
+  }
+
+  @override
+  set fetchPropertiesFuture(ObservableFuture<PropertyList> value) {
+    _$fetchPropertiesFutureAtom.reportWrite(value, super.fetchPropertiesFuture,
+        () {
+      super.fetchPropertiesFuture = value;
+    });
+  }
 
   final _$postListAtom = Atom(name: '_PostStore.postList');
 
@@ -72,7 +98,7 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   final _$successAtom = Atom(name: '_PostStore.success');
-  final _$successgetgategorysAtom = Atom(name: '_PostStore.successgetgategorysAtom');
+
   @override
   bool get success {
     _$successAtom.reportRead();
@@ -98,6 +124,21 @@ mixin _$PostStore on _PostStore, Store {
       super.successgetcategorys = value;
     });
   }
+  final _$propertiesSuccessAtom = Atom(name: '_PostStore.propertiesSuccess');
+
+  @override
+  bool get propertiesSuccess {
+    _$propertiesSuccessAtom.reportRead();
+    return super.propertiesSuccess;
+  }
+
+  @override
+  set propertiesSuccess(bool value) {
+    _$propertiesSuccessAtom.reportWrite(value, super.propertiesSuccess, () {
+      super.propertiesSuccess = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
   final _$getPostcategorysAsyncAction = AsyncAction('_PostStore.getPostcategorys');
 
@@ -110,17 +151,32 @@ mixin _$PostStore on _PostStore, Store {
     return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
   }
 
+  final _$getPostPropertiesAsyncAction =
+      AsyncAction('_PostStore.getPostProperties');
+
+  @override
+  Future<dynamic> getPostProperties(String postId) {
+    return _$getPostPropertiesAsyncAction
+        .run(() => super.getPostProperties(postId));
+  }
+
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPostCategorysFuture: ${fetchPostCategorysFuture},
+fetchPropertiesFuture: ${fetchPropertiesFuture},
 postList: ${postList},
 postCategoryList: ${postCategoryList},
+propertyList: ${propertyList},
+imageUrlList: ${imageUrlList},
 success: ${success},
 successcategorys:${successgetcategorys},
 loading: ${loading},
 loadingcategorys: ${loadinggetcategorys},
+propertiesSuccess: ${propertiesSuccess},
+loading: ${loading},
+propertiesLoading: ${propertiesLoading}
     ''';
   }
 }

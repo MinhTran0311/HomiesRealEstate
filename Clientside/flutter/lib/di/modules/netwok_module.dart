@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
+import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/data/network/apis/registration/registration_api.dart';
@@ -94,6 +95,11 @@ class NetworkModule extends PreferenceModule {
   @singleton
   RegistrationApi provideRegistrationApi(DioClient dioClient, RestClient restClient)=>
       RegistrationApi(dioClient, restClient);
+
+  @provide
+  @singleton
+  ImageApi provideImageApi(DioClient dioClient, RestClient restClient)=>
+      ImageApi(dioClient, restClient);
 // Api Providers End:---------------------------------------------------------
 
 }

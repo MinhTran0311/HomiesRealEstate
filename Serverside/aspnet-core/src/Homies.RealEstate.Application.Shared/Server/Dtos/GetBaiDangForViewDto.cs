@@ -9,6 +9,5 @@
         public string DanhMucTenDanhMuc { get; set; }
 
         public string XaTenXa { get; set; }
-
     }
 }

@@ -51,5 +51,12 @@ namespace Homies.RealEstate.Server.Dtos
 
         public int? XaId { get; set; }
 
+        [Required]
+        public String FeaturedImage { get; set; }
+        [Required]
+        public double Gia { get; set; }
+        [Required]
+        public double DienTich { get; set; }
+
     }
 }
