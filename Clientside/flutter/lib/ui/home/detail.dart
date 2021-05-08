@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
@@ -55,7 +58,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     super.initState();
   }
 
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() {
     super.didChangeDependencies();
     _postStore = Provider.of<PostStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
@@ -93,9 +96,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   Widget _buildContent(){
     Size size = MediaQuery.of(context).size;
-    DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
-    DateTime dateTime = dateFormat.parse(post.thoiDiemDang);
-    var f = NumberFormat("###", "en_US");
+    Uint8List bytes = base64Decode(_userStore.user.profilePicture);
+    
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
@@ -462,7 +464,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                       width: 60,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            image: AssetImage(Assets.front_img),
+                                            image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
                                             fit: BoxFit.cover,
                                           ),
                                           shape: BoxShape.circle
