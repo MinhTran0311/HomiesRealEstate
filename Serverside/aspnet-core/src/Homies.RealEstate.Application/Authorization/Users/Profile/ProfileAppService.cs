@@ -70,6 +70,7 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         public async Task<CurrentUserProfileEditDto> GetCurrentUserProfileForEdit()
         {
             var user = await GetCurrentUserAsync();
+            
             var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
 
             userProfileEditDto.QrCodeSetupImageUrl = user.GoogleAuthenticatorKey != null
@@ -77,6 +78,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile
                     user.EmailAddress, user.GoogleAuthenticatorKey, 300, 300).QrCodeSetupImageUrl
                 : "";
             userProfileEditDto.IsGoogleAuthenticatorEnabled = user.GoogleAuthenticatorKey != null;
+
+            userProfileEditDto.UserId = user.Id;
 
             if (Clock.SupportsMultipleTimezone)
             {
