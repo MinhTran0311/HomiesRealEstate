@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
-        _handleErrorMessage(),
+      _handleErrorMessage(),
       _buildMainContent(),
       ]
     );

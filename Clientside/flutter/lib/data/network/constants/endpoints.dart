@@ -43,6 +43,8 @@ class Endpoints {
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
   // getPostProperties
   static const String getAllChiTietBaiDangByPostId = homiesUrl + "/services/app/ChiTietBaiDangs/GetAllChiTietBaiDangByPostId";
+  static const String isBaiDangYeuThichOrNot = homiesUrl + "/services/app/BaiGhimYeuThichs/IsExistOrNot";
+  static const String createOrChangeStatusBaiGhimYeuThich = homiesUrl + "/services/app/BaiGhimYeuThichs/CreateOrChangeStatus";
   //post image
   static const String postImageToImageBB = imagebb + "/1/upload";
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";

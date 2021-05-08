@@ -59,6 +59,19 @@ class Repository {
     });
   }
 
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) async {
+    return await _postApi.isBaiGhimYeuThichOrNot(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId, bool status) async{
+    return await _postApi.createOrChangeStatusBaiGhimYeuThich(postId,status)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database

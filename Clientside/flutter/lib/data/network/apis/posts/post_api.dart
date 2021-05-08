@@ -8,6 +8,8 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class PostApi {
   // dio instance
@@ -36,7 +38,7 @@ class PostApi {
     }
   }
 
-    Future<PropertyList> getPostProperties(String postId) async {
+  Future<PropertyList> getPostProperties(String postId) async {
     try{
       final res = await _dioClient.get(Endpoints.getAllChiTietBaiDangByPostId,
         options: Options(
@@ -56,13 +58,49 @@ class PostApi {
     }
   }
 
-  /// sample api call with default rest client
-//  Future<PostsList> getPosts() {
-//
-//    return _restClient
-//        .get(Endpoints.getPosts)
-//        .then((dynamic res) => PostsList.fromJson(res))
-//        .catchError((error) => throw NetworkException(message: error));
-//  }
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.isBaiDangYeuThichOrNot,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: {
+          "postId": postId,
+        },
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId,bool status) async {
+    try {
+      DateTime now = DateTime.now();
+      String fomattedDate = DateFormat('yyyy-mm-dd').format(now);
+      print(fomattedDate);
+      final res = await _dioClient.post(
+        Endpoints.createOrChangeStatusBaiGhimYeuThich,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        data: {
+          "trangThai": status ? "On":"Off",
+          "baiDangId": postId,
+          "thoiGian": fomattedDate.toString()
+        }
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
 
 }

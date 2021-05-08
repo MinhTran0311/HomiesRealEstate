@@ -39,6 +39,14 @@ abstract class _PostStore with Store {
       ObservableFuture<PropertyList>(emptyPropertiesResponse);
 
 
+  static ObservableFuture<dynamic> emptyIsBaiDangYeuThichResponse =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
+      ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+
+
   @observable
   PostList postList;
 
@@ -54,12 +62,17 @@ abstract class _PostStore with Store {
   @observable
   bool propertiesSuccess = false;
 
+  @observable
+  bool isBaiGhimYeuThich = false;
+
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
   @computed
   bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
 
+  @computed
+  bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -99,6 +112,56 @@ abstract class _PostStore with Store {
       }
       else{
         errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future isBaiGhimYeuThichOrNot(String postId) async {
+    isBaiGhimYeuThich = false;
+    final futrue = _repository.isBaiGhimYeuThichOrNot(postId);
+    fetchisBaiGhimYeuThichFuture = ObservableFuture(futrue);
+
+    futrue.then((result) {
+      if (result["result"]["exist"]) {
+        isBaiGhimYeuThich = true;
+        print("heyyy");
+        print(result["result"]["exist"].toString());
+      }
+      else{
+        isBaiGhimYeuThich = false;
+      }
+    }).catchError((error){
+      isBaiGhimYeuThich = false;
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future createOrChangeStatusBaiGhimYeuThich(String postId) async {
+    final futrue = _repository.createOrChangeStatusBaiGhimYeuThich(postId,!isBaiGhimYeuThich);
+    print("123");
+    futrue.then((result) {
+      isBaiGhimYeuThich =!isBaiGhimYeuThich;
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
         throw error;
       }
     });

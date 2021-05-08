@@ -69,6 +69,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     if (!_postStore.propertiesLoading){
       _postStore.getPostProperties(this.post.id.toString());
     }
+    if (!_postStore.isBaiGhimYeuThichLoading)
+      {
+        _postStore.isBaiGhimYeuThichOrNot(this.post.id.toString());
+      }
   }
 
   @override
@@ -207,11 +211,16 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Center(
-                                                        child: Icon(
-                                                          Icons.favorite,
-                                                          color: Colors.amber,
-                                                          size: 30,
-                                                        )
+                                                      child: IconButton(
+                                                        icon: Observer(
+                                                          builder: (context){
+                                                          return (_postStore.isBaiGhimYeuThich) ? Icon(Icons.favorite, color: Colors.amber, size: 30,)
+                                                          : Icon(Icons.favorite_border_outlined, color: Colors.amber, size: 30,);}
+                                                          ),
+                                                        onPressed: () {
+                                                          _postStore.createOrChangeStatusBaiGhimYeuThich(post.id.toString());
+                                                        },
+                                                      ),
                                                     ),
                                                   )
                                                 ],

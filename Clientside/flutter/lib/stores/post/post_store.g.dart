@@ -22,6 +22,13 @@ mixin _$PostStore on _PostStore, Store {
           () => super.propertiesLoading,
           name: '_PostStore.propertiesLoading'))
       .value;
+  Computed<bool> _$isBaiGhimYeuThichLoadingComputed;
+
+  @override
+  bool get isBaiGhimYeuThichLoading => (_$isBaiGhimYeuThichLoadingComputed ??=
+          Computed<bool>(() => super.isBaiGhimYeuThichLoading,
+              name: '_PostStore.isBaiGhimYeuThichLoading'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -52,6 +59,23 @@ mixin _$PostStore on _PostStore, Store {
     _$fetchPropertiesFutureAtom.reportWrite(value, super.fetchPropertiesFuture,
         () {
       super.fetchPropertiesFuture = value;
+    });
+  }
+
+  final _$fetchisBaiGhimYeuThichFutureAtom =
+      Atom(name: '_PostStore.fetchisBaiGhimYeuThichFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchisBaiGhimYeuThichFuture {
+    _$fetchisBaiGhimYeuThichFutureAtom.reportRead();
+    return super.fetchisBaiGhimYeuThichFuture;
+  }
+
+  @override
+  set fetchisBaiGhimYeuThichFuture(ObservableFuture<dynamic> value) {
+    _$fetchisBaiGhimYeuThichFutureAtom
+        .reportWrite(value, super.fetchisBaiGhimYeuThichFuture, () {
+      super.fetchisBaiGhimYeuThichFuture = value;
     });
   }
 
@@ -130,6 +154,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isBaiGhimYeuThichAtom = Atom(name: '_PostStore.isBaiGhimYeuThich');
+
+  @override
+  bool get isBaiGhimYeuThich {
+    _$isBaiGhimYeuThichAtom.reportRead();
+    return super.isBaiGhimYeuThich;
+  }
+
+  @override
+  set isBaiGhimYeuThich(bool value) {
+    _$isBaiGhimYeuThichAtom.reportWrite(value, super.isBaiGhimYeuThich, () {
+      super.isBaiGhimYeuThich = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
@@ -146,18 +185,39 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getPostProperties(postId));
   }
 
+  final _$isBaiGhimYeuThichOrNotAsyncAction =
+      AsyncAction('_PostStore.isBaiGhimYeuThichOrNot');
+
+  @override
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) {
+    return _$isBaiGhimYeuThichOrNotAsyncAction
+        .run(() => super.isBaiGhimYeuThichOrNot(postId));
+  }
+
+  final _$createOrChangeStatusBaiGhimYeuThichAsyncAction =
+      AsyncAction('_PostStore.createOrChangeStatusBaiGhimYeuThich');
+
+  @override
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId) {
+    return _$createOrChangeStatusBaiGhimYeuThichAsyncAction
+        .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
+  }
+
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
+fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 postList: ${postList},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
 success: ${success},
 propertiesSuccess: ${propertiesSuccess},
+isBaiGhimYeuThich: ${isBaiGhimYeuThich},
 loading: ${loading},
-propertiesLoading: ${propertiesLoading}
+propertiesLoading: ${propertiesLoading},
+isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading}
     ''';
   }
 }
