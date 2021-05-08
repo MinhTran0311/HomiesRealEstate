@@ -148,6 +148,7 @@ namespace Homies.RealEstate.Server
             }
             else
             {
+                input.Id = baighim.Id;
                 await Update(input);
             }
         }
@@ -163,7 +164,6 @@ namespace Homies.RealEstate.Server
                 Exist = (baighim != null)
             };
         }
-
 
         [AbpAuthorize(AppPermissions.Pages_BaiGhimYeuThichs_Create)]
         protected virtual async Task Create(CreateOrEditBaiGhimYeuThichDto input)
