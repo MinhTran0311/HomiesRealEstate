@@ -30,8 +30,9 @@ namespace Homies.RealEstate.Server
         private readonly IRepository<Xa, int> _lookup_xaRepository;
         private readonly IRepository<HinhAnh, int> _lookup_hinhAnhRepository;
         private readonly IRepository<ChiTietBaiDang, int> _lookup_chiTietBaiDangRepository;
+        private readonly IRepository<ChiTietHoaDonBaiDang, Guid> _lookup_chiTietHoaDonBaiDangRepository;
 
-        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository)
+        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository, IRepository<ChiTietHoaDonBaiDang, Guid> lookup_chiTietHoaDonBaiDangRepository)
         {
             _baiDangRepository = baiDangRepository;
             _baiDangsExcelExporter = baiDangsExcelExporter;
@@ -40,6 +41,7 @@ namespace Homies.RealEstate.Server
             _lookup_xaRepository = lookup_xaRepository;
             _lookup_hinhAnhRepository = lookup_hinhAnhRepository;
             _lookup_chiTietBaiDangRepository = lookup_chiTietBaiDangRepository;
+            _lookup_chiTietHoaDonBaiDangRepository = lookup_chiTietHoaDonBaiDangRepository;
         }
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAll(GetAllBaiDangsInput input)
@@ -222,6 +224,35 @@ namespace Homies.RealEstate.Server
             }
 
             return output;
+        }
+
+        public async Task CreateBaiDangAndDetails(CreateBaiDangAndDetailsDto input)
+        {
+            if (input.BaiDang.TagTimKiem.IsNullOrEmpty())
+            {
+                var danhMucBaiDang = await _lookup_danhMucRepository.FirstOrDefaultAsync(e => e.Id == input.BaiDang.DanhMucId);
+                input.BaiDang.TagTimKiem = danhMucBaiDang.Tag != null ? danhMucBaiDang.Tag : "bai dang";
+            }
+
+            var baiDang = await _baiDangRepository.InsertAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
+
+            if (input.ChiTietBaiDangDtos!=null && input.ChiTietBaiDangDtos.Count > 0)
+            {
+                foreach(CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
+                {
+                    chiTiet.BaiDangId = baiDang.Id;
+                    await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
+                }
+            }
+
+            input.HoaDonBaiDangDto.BaiDangId = baiDang.Id;
+            await _lookup_chiTietHoaDonBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
+
+            foreach (CreateOrEditHinhAnhDto chiTiet in input.HinhAnhDtos)
+            {
+                chiTiet.BaiDangId = baiDang.Id;
+                await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(chiTiet));
+            }
         }
 
         public async Task CreateOrEdit(CreateOrEditBaiDangDto input)
