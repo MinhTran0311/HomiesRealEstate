@@ -28,7 +28,7 @@ class UserApi {
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
-      log("Get All Success");
+      // log("Get All Success");
       return UserList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());

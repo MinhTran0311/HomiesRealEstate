@@ -41,6 +41,8 @@ class Endpoints {
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
+  //getAllRole
+  static const String getAllRole = homiesUrl + "/services/app/Role/GetRoles";
   // getPostProperties
   static const String getAllChiTietBaiDangByPostId = homiesUrl + "/services/app/ChiTietBaiDangs/GetAllChiTietBaiDangByPostId";
   static const String isBaiDangYeuThichOrNot = homiesUrl + "/services/app/BaiGhimYeuThichs/IsExistOrNot";
