@@ -10,25 +10,25 @@ part of 'post_store.dart';
 
 mixin _$PostStore on _PostStore, Store {
   Computed<bool> _$loadingComputed;
-  Computed<bool> _$loadingComputed2;
+  Computed<bool> _$loadingcategoryComputed;
+  Computed<bool> _$propertiesLoadingComputed;
+
   @override
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
-  bool get loadinggetcategorys=> (_$loadingComputed ??=
+  @override
+  bool get loadinggetcategorys=> (_$loadingcategoryComputed ??=
       Computed<bool>(() => super.loadinggetcategorys, name: '_PostStore.loadinggetcategorys'))
       .value;
-  Computed<bool> _$propertiesLoadingComputed;
-
   @override
-  bool get propertiesLoading => (_$propertiesLoadingComputed ??= Computed<bool>(
-          () => super.propertiesLoading,
-          name: '_PostStore.propertiesLoading'))
+  bool get propertiesLoading => (_$propertiesLoadingComputed ??=
+      Computed<bool>(() => super.propertiesLoading, name: '_PostStore.propertiesLoading'))
       .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
   final _$fetchPostCategorysFutureAtom = Atom(name: '_PostStore.fetchPostCategorysFuture');
-
+  final _$fetchPropertiesFutureAtom = Atom(name: '_PostStore.fetchPropertiesFuture');
   @override
   ObservableFuture<PostList> get fetchPostsFuture {
     _$fetchPostsFutureAtom.reportRead();
@@ -53,10 +53,7 @@ mixin _$PostStore on _PostStore, Store {
       super.fetchPostCategorysFuture = value;
     });
   }
-  final _$postcategoryListAtom = Atom(name: '_PostStore.postcategoryList');
 
-  final _$fetchPropertiesFutureAtom =
-      Atom(name: '_PostStore.fetchPropertiesFuture');
 
   @override
   ObservableFuture<PropertyList> get fetchPropertiesFuture {
@@ -73,6 +70,7 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   final _$postListAtom = Atom(name: '_PostStore.postList');
+  final _$postcategoryListAtom = Atom(name: '_PostStore.postcategoryList');
 
   @override
   PostList get postList {
@@ -98,6 +96,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   final _$successAtom = Atom(name: '_PostStore.success');
+  final _$successgetgategorysAtom = Atom(name: '_PostStore.successgetgategorys');
+  final _$propertiesSuccessAtom = Atom(name: '_PostStore.propertiesSuccess');
 
   @override
   bool get success {
@@ -124,7 +124,6 @@ mixin _$PostStore on _PostStore, Store {
       super.successgetcategorys = value;
     });
   }
-  final _$propertiesSuccessAtom = Atom(name: '_PostStore.propertiesSuccess');
 
   @override
   bool get propertiesSuccess {
@@ -141,6 +140,7 @@ mixin _$PostStore on _PostStore, Store {
 
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
   final _$getPostcategorysAsyncAction = AsyncAction('_PostStore.getPostcategorys');
+  final _$getPostPropertiesAsyncAction = AsyncAction('_PostStore.getPostProperties');
 
   @override
   Future<dynamic> getPosts() {
@@ -150,31 +150,78 @@ mixin _$PostStore on _PostStore, Store {
   Future<dynamic> getPostcategorys() {
     return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
   }
-
-  final _$getPostPropertiesAsyncAction =
-      AsyncAction('_PostStore.getPostProperties');
-
   @override
   Future<dynamic> getPostProperties(String postId) {
-    return _$getPostPropertiesAsyncAction
-        .run(() => super.getPostProperties(postId));
+    return _$getPostPropertiesAsyncAction.run(() => super.getPostProperties(postId));
+  }
+///////////////////////////////Pack
+  @override
+  Computed<bool> _$loadingComputedPack;
+
+  @override
+  bool get loadingPack => (_$loadingComputedPack ??=
+      Computed<bool>(() => super.loadingPack, name: '_TownStore.loadingPack'))
+      .value;
+  final _$fetchPacksFutureAtom = Atom(name: '_PackStore.fetchPacksFuture');
+
+  @override
+  ObservableFuture<PackList> get fetchPacksFuture {
+    _$fetchPacksFutureAtom.reportRead();
+    return super.fetchPacksFuture;
+  }
+  final _$packListAtom = Atom(name: '_PackStore.packList');
+
+  @override
+  PackList get packList {
+    _$packListAtom.reportRead();
+    return  super.packList;
+  }
+  @override
+  set packList(PackList value) {
+    _$packListAtom.reportWrite(value, super.packList, () {
+      super.packList = value;
+    });
+  }
+  final _$successPackAtom = Atom(name: '_TownStore.successPack');
+
+  @override
+  bool get successPack {
+    _$successPackAtom.reportRead();
+    return super.successPack;
+  }
+  @override
+  set successPack(bool value) {
+    _$successPackAtom.reportWrite(value, super.successPack, () {
+      super.successPack = value;
+    });
   }
 
+
+  final _$getPacksAsyncAction = AsyncAction('_TownStore.getPacks');
+
+  @override
+  Future<dynamic> getPacks() {
+    return _$getPacksAsyncAction.run(() => super.getPacks());
+  }
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPostCategorysFuture: ${fetchPostCategorysFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
+fetchPacksFuture: ${fetchPacksFuture},
 postList: ${postList},
 postCategoryList: ${postCategoryList},
 propertyList: ${propertyList},
+packList: ${packList},
 imageUrlList: ${imageUrlList},
 success: ${success},
 successcategorys:${successgetcategorys},
+successPack: ${successPack},
 loading: ${loading},
 loadingcategorys: ${loadinggetcategorys},
 propertiesSuccess: ${propertiesSuccess},
+loadingPack: ${loadingPack},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading}
     ''';

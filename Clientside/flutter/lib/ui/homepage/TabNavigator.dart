@@ -1,6 +1,7 @@
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
+import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 
@@ -22,7 +23,7 @@ class TabNavigator extends StatelessWidget {
     else if(tabItem == "Profile")
       child = Container();
     else if(tabItem == "NewPost")
-      child = Container();
+      child = NewpostScreen();
 
     return Navigator(
       key: navigatorKey,

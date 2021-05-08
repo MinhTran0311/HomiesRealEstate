@@ -8,6 +8,8 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
+import 'package:boilerplate/models/post/postpack/pack_list.dart';
+
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:dio/dio.dart';
 
@@ -38,9 +40,10 @@ class PostApi {
       throw e;
     }
   }
+  /// Returns list of postcategory in response
   Future<PostCategoryList> getPostCategorys() async {
     try {
-      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/DanhMucs/GetAll",
+      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/DanhMucs/GetAll?MaxResultCount=50",
         options: Options(
             headers: {
               "Abp.TenantId": 1,
@@ -50,6 +53,23 @@ class PostApi {
       print("111111111111111111");
 
       return PostCategoryList.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+  Future<PackList> getPacks() async {
+    try {
+      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/GoiBaiDangs/GetAll",
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      print("111111111111111111");
+
+      return PackList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;

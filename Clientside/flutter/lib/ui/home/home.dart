@@ -53,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!userStore.loading) {
       userStore.getCurrentUser();
     }
-    if(!_postStore.loadinggetcategorys){_postStore.getPostcategorys();}
+   if(!_postStore.loadinggetcategorys)
+   {_postStore.getPostcategorys();}
 
   }
 

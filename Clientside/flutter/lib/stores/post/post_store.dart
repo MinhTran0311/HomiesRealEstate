@@ -3,6 +3,8 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/post/postpack/pack_list.dart';
+
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
@@ -28,17 +30,16 @@ abstract class _PostStore with Store {
 
   static ObservableFuture<PostCategoryList> emptyPostCategorysResponse =
       ObservableFuture.value(null);
+  static ObservableFuture<PropertyList> emptyPropertiesResponse =
+      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<PostList> fetchPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
+
   @observable
   ObservableFuture<PostCategoryList> fetchPostCategorysFuture =
     ObservableFuture<PostCategoryList>(emptyPostCategorysResponse);
-
-  // Image observer
-  static ObservableFuture<PropertyList> emptyPropertiesResponse =
-      ObservableFuture.value(null);
 
   @observable
   ObservableFuture<PropertyList> fetchPropertiesFuture =
@@ -47,7 +48,6 @@ abstract class _PostStore with Store {
 
   @observable
   PostList postList;
-
   @observable
   PostCategoryList postCategoryList;
 
@@ -61,18 +61,17 @@ abstract class _PostStore with Store {
   bool success = false;
   @observable
   bool successgetcategorys = false;
-
   @observable
   bool propertiesSuccess = false;
 
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
+  @computed
   bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
 
   @computed
   bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
-
 
   // actions:-------------------------------------------------------------------
   @action
@@ -94,7 +93,6 @@ abstract class _PostStore with Store {
       }
     });
   }
-
   @action
   Future getPostProperties(String postId) async {
     propertiesSuccess = false;
@@ -116,14 +114,18 @@ abstract class _PostStore with Store {
       }
     });
   }
+  @action
   Future getPostcategorys() async {
+    successgetcategorys=false;
     final future = _repository.getPostCategorys();
     fetchPostCategorysFuture = ObservableFuture(future);
 
     future.then((postCategoryList) {
+      successgetcategorys=true;
       this.postCategoryList = postCategoryList;
     }).catchError((error) {
       if (error is DioError) {
+        successgetcategorys=false;
         errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
@@ -133,5 +135,42 @@ abstract class _PostStore with Store {
       }
     });
   }
+  //////////////////////pack
+  static ObservableFuture<PackList> emptyPackResponse =
+  ObservableFuture.value(null);
 
+  @observable
+  ObservableFuture<PackList> fetchPacksFuture =
+  ObservableFuture<PackList>(emptyPackResponse);
+
+  @observable
+  PackList packList;
+
+  @observable
+  bool successPack = false;
+
+  @computed
+  bool get loadingPack => fetchPacksFuture.status == FutureStatus.pending;
+
+  // actions:-------------------------------------------------------------------
+  @action
+  Future getPacks() async {
+    final future = _repository.getPacks();
+    fetchPacksFuture = ObservableFuture(future);
+
+    future.then((packList) {
+      success = true;
+      this.packList = packList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
 }

@@ -10,8 +10,11 @@ import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
-import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
+import 'package:boilerplate/models/post/postpack/pack_list.dart';
+import 'package:boilerplate/models/town/commune_list.dart';
+import 'package:boilerplate/models/town/town_list.dart';
+import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
@@ -20,6 +23,7 @@ import 'network/apis/authToken/authToken_api.dart';
 import 'dart:developer';
 import 'local/constants/db_constants.dart';
 import 'network/apis/posts/post_api.dart';
+import 'network/apis/towns/town_api.dart';
 import 'network/apis/users/user_api.dart';
 import 'network/apis/registration/registration_api.dart';
 
@@ -29,6 +33,7 @@ class Repository {
 
   // api objects
   final PostApi _postApi;
+  final TownApi _townApi;
   final AuthTokenApi _authTokenApi;
   final UserApi _userApi;
   final ImageApi _imageApi;
@@ -39,7 +44,7 @@ class Repository {
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._imageApi,this._townApi);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts() async {
@@ -54,14 +59,14 @@ class Repository {
     }).catchError((error) => throw error);
   }
   Future<PostCategoryList> getPostCategorys() async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
     return await _postApi.getPostCategorys().then((postCategoryList) {
-      // postCategoryList.categorys.forEach((category) {
-      //   _postDataSource.insert(category);
-      // });
       return postCategoryList;
+    }
+    ).catchError((error) => throw error);
+  }
+  Future<PackList> getPacks() async {
+    return await _postApi.getPacks().then((packList) {
+      return packList;
     }
     ).catchError((error) => throw error);
   }
@@ -82,6 +87,28 @@ class Repository {
   //     return lsgdList;
   //   }).catchError((error) => throw error);
   // }
+  // Town: ---------------------------------------------------------------------
+  Future<TownList> getTowns() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _townApi.getTowns().then((townsList) {
+     // townsList.towns.forEach((post) {
+     //    _postDataSource.insert(town);
+     //  });
+      return townsList;
+    }).catchError((error) => throw error);
+  }
+  Future<CommuneList> getCommunes() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _townApi.getCommunes().then((communesList) {
+
+      return communesList;
+    }).catchError((error) => throw error);
+  }
+  // Town: ---------------------------------------------------------------------
 
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {

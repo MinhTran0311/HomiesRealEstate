@@ -1,4 +1,6 @@
 
+import 'package:boilerplate/ui/login/resetPassword.dart';
+import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:flutter/material.dart';
 import 'ui/profile/profile.dart';
 import 'ui/home/home.dart';

@@ -1,7 +1,13 @@
 import 'dart:async';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/post/post_category.dart';
+import 'package:boilerplate/models/town/commune%20.dart';
+import 'package:boilerplate/models/post/postpack/pack.dart';
+
+import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/town/town_store.dart';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -48,7 +54,7 @@ class UploadImage {
 
 class _NewpostScreenState extends State<NewpostScreen> {
   PostStore _postStore;
-
+  TownStore _townStore;
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
@@ -65,54 +71,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Postcategory selectedType;
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
-  Item selectedTown;
-  String selectedCity;
+  Pack selectedPack;
+  Town selectedTown = null;
+  Commune selectedCommune = null;
+  String selectedCity = null;
   Item selectedVil;
-  List<Postcategory> type;
-  List<Postcategory> typetype = [];
-  List<Item> city = <Item>[
-    const Item(
-        'Hồ Chí Minh',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Hà Nội',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-  ];
-  List<Item> town = <Item>[
-    const Item(
-        'Hồ Chí Minh',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Hà Nội',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-  ];
-  List<Item> vil = <Item>[
-    const Item(
-        'Hồ Chí Minh',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-    const Item(
-        'Hà Nội',
-        Icon(
-          Icons.home_work_sharp,
-          color: const Color(0xFF167F67),
-        )),
-  ];
-
+  List<Commune> commune = [];
 //endregion
   //region Time
   //region Time
@@ -153,11 +117,20 @@ class _NewpostScreenState extends State<NewpostScreen> {
     super.didChangeDependencies();
     // initializing stores
     _postStore = Provider.of<PostStore>(context);
+    _townStore = Provider.of<TownStore>(context);
     // check to see if already called api
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
     }
-    // _postStore.loadinggetcategory=true;
+    if (!_townStore.loading) {
+      _townStore.getTowns();
+    }
+    if (!_townStore.loadingCommune) {
+      _townStore.getCommunes();
+    }
+    if (!_postStore.loadingPack) {
+      _postStore.getPacks();
+    }
   }
 
   @override
@@ -189,9 +162,36 @@ class _NewpostScreenState extends State<NewpostScreen> {
           ),
           centerTitle: true,
         ),
-        body: _postStore.loadinggetcategorys
+        body: Material(child: _buildbody()));
+  }
+
+  Widget _buildbody() {
+    return Stack(children: <Widget>[
+      _handleErrorMessage(),
+      _buildMainContent(),
+    ]);
+  }
+
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_postStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_postStore.errorStore.errorMessage);
+        }
+
+        return SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Observer(
+      builder: (context) {
+        return _postStore.loadinggetcategorys
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildBody()));
+            : Material(child: _buildBody());
+      },
+    );
   }
 
   Widget _buildBody() {
@@ -264,23 +264,26 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildTileField(),
             SizedBox(height: 24.0),
-            _buildTownField2(),
+            _buildCityField(),
             SizedBox(height: 24.0),
+            _buildTownField(),
+            _buildCommuneField(),
             _buildTypeField(),
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
             _buildTypeTypeTypeField(),
-            _buildTownField(),
-            SizedBox(height: 24.0),
-            _buildVilField(),
-            SizedBox(height: 24.0),
+            //_buildVilField(),
             _buildAcreageField(),
             SizedBox(height: 24.0),
             _buildPriceField(),
             SizedBox(height: 24.0),
-            _buildStartdateField(),
+            _buildPackField(),
             SizedBox(height: 24.0),
-            _buildEnddateField(),
+            _textpackmota(),
+            SizedBox(height: 24.0),
+            _buildPackinfoField(),
+            SizedBox(height: 24.0),
+            _buildStartdateField(),
             SizedBox(height: 24.0),
             _buildTileField2(),
             SizedBox(height: 24.0),
@@ -355,6 +358,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           setState(() {
             try {
               selectedType = Value;
+              selectedTypeType = null;
             } catch (_) {
               selectedType = type[0];
             }
@@ -508,36 +512,108 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
-          child: DropdownButton<Item>(
-            hint: Text("Chọn tỉnh/thành phố"),
-            value: selectedTown,
-
-            //icon:Icons.attach_file ,
-            // ignore: non_constant_identifier_names
-            onChanged: (Item Value) {
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: DropdownSearch<String>(
+            //mode: Mode.BOTTOM_SHEET,
+            items: [
+              "Thành phố Hà Nội",
+              "Tỉnh Hà Giang",
+              "Tỉnh Cao Bằng",
+              "Tỉnh Bắc Kạn",
+              "Tỉnh Tuyên Quang",
+              "Tỉnh Lào Cai",
+              "Tỉnh Điện Biên",
+              "Tỉnh Lai Châu",
+              "Tỉnh Sơn La",
+              "Tỉnh Yên Bái",
+              "Tỉnh Hoà Bình",
+              "Tỉnh Thái Nguyên",
+              "Tỉnh Lạng Sơn",
+              "Tỉnh Quảng Ninh",
+              "Tỉnh Bắc Giang",
+              "Tỉnh Phú Thọ",
+              "Tỉnh Vĩnh Phúc",
+              "Tỉnh Bắc Ninh",
+              "Tỉnh Hải Dương",
+              "Thành phố Hải Phòng",
+              "Tỉnh Hưng Yên",
+              "Tỉnh Thái Bình",
+              "Tỉnh Hà Nam",
+              "Tỉnh Nam Định",
+              "Tỉnh Ninh Bình",
+              "Tỉnh Thanh Hóa",
+              "Tỉnh Nghệ An",
+              "Tỉnh Hà Tĩnh",
+              "Tỉnh Quảng Bình",
+              "Tỉnh Quảng Trị",
+              "Tỉnh Thừa Thiên Huế",
+              "Thành phố Đà Nẵng",
+              "Tỉnh Quảng Nam",
+              "Tỉnh Quảng Ngãi",
+              "Tỉnh Bình Định",
+              "Tỉnh Phú Yên",
+              "Tỉnh Khánh Hòa",
+              "Tỉnh Ninh Thuận",
+              "Tỉnh Bình Thuận",
+              "Tỉnh Kon Tum",
+              "Tỉnh Gia Lai",
+              "Tỉnh Đắk Lắk",
+              "Tỉnh Đắk Nông",
+              "Tỉnh Lâm Đồng",
+              "Tỉnh Bình Phước",
+              "Tỉnh Tây Ninh",
+              "Tỉnh Bình Dương",
+              "Tỉnh Đồng Nai",
+              "Tỉnh Bà Rịa - Vũng Tàu",
+              "Thành phố Hồ Chí Minh",
+              "Tỉnh Long An",
+              "Tỉnh Tiền Giang",
+              "Tỉnh Bến Tre",
+              "Tỉnh Trà Vinh",
+              "Tỉnh Vĩnh Long",
+              "Tỉnh Đồng Tháp",
+              "Tỉnh An Giang",
+              "Tỉnh Kiên Giang",
+              "Thành phố Cần Thơ",
+              "Tỉnh Hậu Giang",
+              "Tỉnh Sóc Trăng",
+              "Tỉnh Bạc Liêu",
+              "Tỉnh Cà Mau",
+            ],
+            hint: "Chọn tỉnh/thành phố",
+            onChanged: (String Value) {
               setState(() {
-                selectedTown = Value;
+                selectedCity = Value;
+                selectedTown = null;
               });
             },
-
-            items: city.map((Item type) {
-              return DropdownMenuItem<Item>(
-                value: type,
-                child: Row(
-                  children: <Widget>[
-                    type.icon,
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.name,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
+            selectedItem: null,
+            showSearchBox: true,
+            searchBoxDecoration: InputDecoration(
+              border: OutlineInputBorder(),
+              // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+              labelText: "Tìm tỉnh/thành phố",
+            ),
+            popupTitle: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColorDark,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-              );
-            }).toList(),
+              ),
+              child: Center(
+                child: Text(
+                  'Tỉnh/thành phố',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -545,125 +621,98 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildTownField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-          child: DropdownButton<Item>(
-            hint: Text("Chọn quận/huyện"),
-            value: selectedTown,
-            //icon:Icons.attach_file ,
-            onChanged: (Item Value) {
-              setState(() {
-                selectedTown = Value;
-              });
-            },
-            items: town.map((Item type) {
-              return DropdownMenuItem<Item>(
-                value: type,
-                child: Row(
-                  children: <Widget>[
-                    type.icon,
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.name,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildTownField2() {
-    return Observer(builder: (context) {
-      //var town1;
+    if (selectedCity != null) {
+      List<Town> town = [];
+      for (var i = 0; i < _townStore.townList.towns.length; i++)
+        if (_townStore.townList.towns[i].tinhTenTinh == selectedCity)
+          town.add(_townStore.townList.towns[i]);
       return Padding(
-        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-        child: DropdownSearch<String>(
-          //mode: Mode.BOTTOM_SHEET,
-          items: [
-            "Thành phố Hà Nội","Tỉnh Hà Giang","Tỉnh Cao Bằng","Tỉnh Bắc Kạn","Tỉnh Tuyên Quang","Tỉnh Lào Cai","Tỉnh Điện Biên","Tỉnh Lai Châu","Tỉnh Sơn La","Tỉnh Yên Bái","Tỉnh Hoà Bình","Tỉnh Thái Nguyên","Tỉnh Lạng Sơn","Tỉnh Quảng Ninh","Tỉnh Bắc Giang","Tỉnh Phú Thọ","Tỉnh Vĩnh Phúc","Tỉnh Bắc Ninh","Tỉnh Hải Dương","Thành phố Hải Phòng","Tỉnh Hưng Yên","Tỉnh Thái Bình","Tỉnh Hà Nam","Tỉnh Nam Định","Tỉnh Ninh Bình","Tỉnh Thanh Hóa","Tỉnh Nghệ An","Tỉnh Hà Tĩnh","Tỉnh Quảng Bình","Tỉnh Quảng Trị","Tỉnh Thừa Thiên Huế","Thành phố Đà Nẵng","Tỉnh Quảng Nam","Tỉnh Quảng Ngãi","Tỉnh Bình Định","Tỉnh Phú Yên","Tỉnh Khánh Hòa","Tỉnh Ninh Thuận","Tỉnh Bình Thuận","Tỉnh Kon Tum","Tỉnh Gia Lai","Tỉnh Đắk Lắk","Tỉnh Đắk Nông","Tỉnh Lâm Đồng","Tỉnh Bình Phước","Tỉnh Tây Ninh","Tỉnh Bình Dương","Tỉnh Đồng Nai","Tỉnh Bà Rịa - Vũng Tàu","Thành phố Hồ Chí Minh","Tỉnh Long An","Tỉnh Tiền Giang","Tỉnh Bến Tre","Tỉnh Trà Vinh","Tỉnh Vĩnh Long","Tỉnh Đồng Tháp","Tỉnh An Giang","Tỉnh Kiên Giang","Thành phố Cần Thơ","Tỉnh Hậu Giang","Tỉnh Sóc Trăng","Tỉnh Bạc Liêu","Tỉnh Cà Mau",
-          ],
-          hint: "Chọn tỉnh/thành phố",
-          onChanged: (String Value) {
+        padding: const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
+        child: DropdownButton<Town>(
+          hint: Text("Chọn quận/huyện"),
+          value: selectedTown,
+          //icon:Icons.attach_file ,
+          onChanged: (Town Value) {
             setState(() {
-              selectedCity = Value;
+              selectedTown = Value;
+              selectedCommune = null;
+              commune = [];
+              for (var i = 0; i < _townStore.communeList.communes.length; i++)
+                if (_townStore.communeList.communes[i].huyenTenHuyen ==
+                    selectedTown.tenHuyen)
+                  commune.add(_townStore.communeList.communes[i]);
+
             });
           },
-          selectedItem: null,
-          showSearchBox: true,
-          searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
-           // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-            labelText: "Tìm tỉnh/thành phố",
-          ),
-          popupTitle: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+          items: town.map((Town type) {
+            return DropdownMenuItem<Town>(
+              value: type,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.blur_circular,
+                    color: const Color(0xFF167F67),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    type.tenHuyen,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
-            ),
-            child: Center(
-              child: Text(
-                'Tỉnh/thành phố',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+            );
+          }).toList(),
         ),
       );
-    });
+    } else
+      return Container(
+        height: 0,
+        width: 0,
+      );
   }
 
-  Widget _buildVilField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 30.0, right: 10.0),
-          child: DropdownButton<Item>(
-            hint: Text("Chọn phường/xã"),
-            value: selectedVil,
-            //icon:Icons.attach_file ,
-            onChanged: (Item Value) {
-              setState(() {
-                selectedVil = Value;
-              });
-            },
-            items: vil.map((Item type) {
-              return DropdownMenuItem<Item>(
-                value: type,
-                child: Row(
-                  children: <Widget>[
-                    type.icon,
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.name,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
+  Widget _buildCommuneField() {
+    if (selectedTown != null) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
+        child: DropdownButton<Commune>(
+          hint: Text("Chọn xã/phường"),
+          value: selectedCommune,
+          //icon:Icons.attach_file ,
+          onChanged: (Commune Value) {
+            setState(() {
+              selectedCommune = Value;
+            });
+          },
+          items: commune.map((Commune type) {
+            return DropdownMenuItem<Commune>(
+              value: type,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.blur_circular,
+                    color: const Color(0xFF167F67),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    type.tenXa,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    } else
+      return Container(
+        height: 0,
+        width: 0,
+      );
   }
 
   Widget _buildAcreageField() {
@@ -692,7 +741,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Giá'),
+          hint: ('Giá bán'),
           hintColor: Colors.white,
           icon: Icons.money,
           inputType: TextInputType.numberWithOptions(decimal: false),
@@ -710,6 +759,82 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
+  Widget _buildPackField() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+      child: DropdownButton<Pack>(
+        hint: Text("Chọn gói bài đăng"),
+        value: selectedPack,
+        onChanged: (Pack Value) {
+          setState(() {
+            selectedPack = Value;
+          });
+        },
+        items: _postStore.packList.packs.map((Pack type) {
+          return DropdownMenuItem<Pack>(
+            value: type,
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.account_circle,
+                  color: const Color(0xFF167F67),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  type.tenGoi,
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+  Widget _textpackmota()
+  {
+    return selectedPack!=null?
+      Text(
+        "Chi phí gói bài đăng: ${selectedPack.phi}",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
+        textAlign:TextAlign.left ,
+      )
+        :Container(width: 0,height: 0);
+  }
+  Widget _buildPackinfoField() {
+
+    return selectedPack!=null?
+      // Padding(
+      //     // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+      //     child:
+      //     Column(
+      //       //mainAxisSize: MainAxisSize.min,
+      //       children:
+      //       <Widget>[
+      //
+      //         SizedBox(
+      //           height: 24.0,
+      //         ),
+              Text(
+                "Mô tả: ${selectedPack.moTa}",
+                textAlign:TextAlign.left ,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //   ),
+            //   SizedBox(
+            //     height: 24.0,
+            //   ),
+            //   Text(
+            //     "Độ ưu tiên: ${selectedPack.doUuTien}",
+            //     textAlign:TextAlign.left ,
+            //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //   ),
+            // ],
+           )
+    // )
+    :Container(width: 0,height: 0,);
+  }
   Widget _buildStartdateField() {
     return Observer(
       builder: (context) {
@@ -725,14 +850,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
               SizedBox(
                 height: 24.0,
               ),
-              RaisedButton(
+              RoundedButtonWidget(
+                buttonColor: Colors.orangeAccent,
+                textColor: Colors.white,
                 onPressed: () => _selectDate1st(context),
-                child: Text(
-                  'Chọn ngày bắt đầu',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                color: Colors.black87,
+                buttonText: ('Chọn ngày bắt đầu'),
               ),
             ],
           ),
@@ -772,26 +894,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
-  Widget _builddDscribeField() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Mô tả'),
-          hintColor: Colors.white,
-          icon: Icons.textsms_rounded,
-          inputType: TextInputType.text,
-          //  iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          iconColor: Colors.white,
-          textController: _DescribeController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {},
-        );
-      },
-    );
-  }
-
   Widget _buildImagepick() {
     return Observer(
       builder: (context) {
@@ -806,34 +908,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
-  Widget _buildUserEmail() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Email'),
-          hintColor: Colors.white,
-          icon: Icons.email_rounded,
-          inputType: TextInputType.text,
-          //iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          iconColor: Colors.white,
-
-          textController: _userEmailController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            _store.setUserEmail(_userEmailController.text);
-          },
-          errorText: _store.formErrorStore.userEmail,
-        );
-      },
-    );
-  }
-
   Widget _buildUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Đăng tin'),
-      buttonColor: Colors.black87,
+      buttonColor: Colors.amber[700],
       textColor: Colors.white,
       onPressed: () {},
     );
