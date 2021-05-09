@@ -148,7 +148,7 @@ class _AccountPageState extends State<AccountPage>{
         Container(
             color: Colors.white,
             padding: const EdgeInsets.only(left: 30, top: 10),
-            child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia "+creationTime)
+            child: TextIcon(icon: Icons.access_time_outlined, text: "Đã tham gia "+DatetimeToString(creationTime))
         ),
 
       ],
@@ -215,10 +215,7 @@ class _AccountPageState extends State<AccountPage>{
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     Address = CtlAddress.text;
-    if(_userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName)==true){
-      _userstore.getCurrentUser();
-    };
-
+    _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName);
   }
 
   Future<void> _showMyDialog() async {
@@ -260,6 +257,9 @@ class _AccountPageState extends State<AccountPage>{
         );
       },
     );
+  }
+  String DatetimeToString(String datetime){
+    return "${datetime.substring(8,10)}/${datetime.substring(5,7)}/${datetime.substring(0,4)}";
   }
 }
 

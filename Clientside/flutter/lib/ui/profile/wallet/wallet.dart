@@ -1,39 +1,59 @@
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/ui/home/detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../profile.dart';
 
 class WalletPage extends StatefulWidget {
   WalletPage({
     Key key,
+    this.userID,
     this.title,
   }) : super(key: key);
-
+  final int userID;
   final String title;
 
 
   @override
-  _WalletPageState createState() => _WalletPageState();
+  _WalletPageState createState() => _WalletPageState(userID: userID);
 }
 
 class _WalletPageState extends State<WalletPage>{
   _WalletPageState({
-    Key key
+    Key key,
+    this.userID,
   }) : super();
-  String Sender = "Phạm Quốc Đạt";
-  String Receiver = "Nguyễn Văn Dương";
-  String pathAvatarsender = "assets/images/img_login.jpg";
-  String pathAvatarreceiver= "assets/images/img_login.jpg";
+  final int userID;
   String moneysend = "15 000";
-  String datetimesend =DateFormat('dd/MM/yyyy').format(DateTime.now());
+  String datetimesend =DateFormat('yyyy-MM-ddThh:mm:ss').format(DateTime.now());
   int _selectedIndex=0;
   bool naptien = true;
   final Ctlmoneysend = TextEditingController();
+  LSGDStore _lsgdStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+
+    _lsgdStore = Provider.of<LSGDStore>(context);
+    //_authTokenStore = Provider.of<AuthTokenStore>(context);
+    // check to see if already called api
+
+    if (!_lsgdStore.loading) {
+      _lsgdStore.getLSGD();
+    }
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,6 +88,7 @@ class _WalletPageState extends State<WalletPage>{
         padding: const EdgeInsets.all(20),
         child: IndexedStack(
           children: [
+            // _buildListView(),
             buildWallet(),
             buildCreateTransactionHistory()
           ],
@@ -83,7 +104,7 @@ class _WalletPageState extends State<WalletPage>{
         child: Column(
           children: [
             createTransactionHistory(),
-            CardItem(text: "Tạo giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+            CardItem(text: "Nạp tiền ${userID}",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
               press: (){
                 setState(() {
                   _showMyDialog();
@@ -140,11 +161,11 @@ class _WalletPageState extends State<WalletPage>{
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Tạo giao dịch'),
+          title: Text('Nạp tiền'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Bạn có chắc chắn tạo lịch sử giao dịch không?'),
+                Text('Bạn có chắc chắn nạp tiền không?'),
               ],
             ),
           ),
@@ -162,7 +183,7 @@ class _WalletPageState extends State<WalletPage>{
               child: Text('Cập nhật'),
               onPressed: () {
                 setState(() {
-                  // update();
+                  update();
                   _selectedIndex =0;
                   Navigator.of(context).pop();
                 });
@@ -173,16 +194,19 @@ class _WalletPageState extends State<WalletPage>{
       },
     );
   }
+  update(){
+    _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID);
+  }
   Widget buildWallet(){
     return Container(
       child: ListView(
-        children: [
+        children: <Widget>[
           Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
           SizedBox(height: 20,),
           Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
             style: TextStyle(fontSize: 24,fontFamily: FontFamily.roboto),),
           SizedBox(height: 20,),
-          CardItem(text: "Tạo giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+          CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
           press: (){
             setState(() {
               _selectedIndex = 1;
@@ -193,19 +217,35 @@ class _WalletPageState extends State<WalletPage>{
           // final Color colorbackgroud;
           // final Color colortext;
           // final Color coloricon;),
-          Center(
-            child: Text("Lịch sử giao dịch",
-              style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+          Divider(
+            color: Colors.grey,
           ),
-          Column(
-            children: [
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-            ],
+          Container(
+            // color: Colors.grey[200],
+            child: Column(
+              children: [
+                Center(
+                  child: Text("Lịch sử giao dịch",
+                    style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+                ),
+                SizedBox(height: 10,),
+                _lsgdStore.listlsgd!=null?Container(
+                  height: 400, // give it a fixed height constraint
+                  // color: Colors.teal,
+                  // child ListView
+                  child: ListView.builder(shrinkWrap: true, // 1st add
+                      physics: ClampingScrollPhysics(), // 2nd add
+                      itemCount: _lsgdStore.listlsgd.listLSGDs.length,
+                      itemBuilder: (_, i) => ListTile(
+                          title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[i])
+                      )
+                  ),
+                ):Container(),
+                // _buildListView(),
+              ],
+            ),
           ),
+
 
           SizedBox(height: 20,),
         ],
@@ -213,62 +253,127 @@ class _WalletPageState extends State<WalletPage>{
     );
   }
 
-  Widget buildCardTransactionHistory(){
-    return Container(
-      padding: const EdgeInsets.all(10),
+  Widget buildCardTransactionHistory(lichsugiaodich lsgd){
+    String datetime;
+    bool naptien;
+
+    if(lsgd.kiemDuyetVienId==null){ datetime = "Đang chờ";}
+    else{     datetime = DatetimeToString(lsgd.thoiDiem);    }
+    if(lsgd.chiTietHoaDonBaiDangId!=null){  naptien = false;  datetime = DatetimeToString(lsgd.thoiDiem); }
+    else{     naptien = true;   }
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.white)
+      ),
       child: Container(
-        height: 75,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-          border: Border.all(color: Colors.grey[300],width: 1.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[300],
-              spreadRadius: 5,
-              blurRadius: 0,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Column(
+        height: 60,
+        padding: const EdgeInsets.all(5),
+        child: Stack(
           children: [
-            Row(
-              children: [
-                Icon(Icons.attach_money,color: Colors.green,),
-                buildText("Số tiền: "+moneysend+" VND"),
-              ],
+            naptien==true?Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all( Radius.circular(50)),
+                    border: Border.all(color: Colors.grey[400],width: 1.0),
+                  ),
+                  child: Icon(Icons.arrow_upward,color: Colors.blue,size: 30,)
+              ),
+            ):Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all( Radius.circular(50)),
+                    border: Border.all(color: Colors.grey[400],width: 1.0),
+                  ),
+                  child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
+              ),
+            ),
+            naptien==true? Align(
+              alignment: Alignment.topLeft,
+              child:
+                // Icon(Icons.add_circle_outline,color: Colors.blue,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 55),
+                  child: buildText("Nạp tiền",Colors.black),
+                ),
+            ):Align(
+              alignment: Alignment.topLeft,
+              child:
+              //Icon(Icons.add_shopping_cart,color: Colors.orange,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 55),
+                  child: SizedBox(width:280,child: buildText("Thanh toán ${lsgd.chiTietHoaDonBaiDangName}",Colors.black)),
+                ),
+            ),
+            naptien==true ? Align(
+              alignment: Alignment.bottomRight,
+                child: buildText("+${lsgd.soTien.toString()}",Colors.black),
+            ): Align(
+              alignment: Alignment.bottomRight,
+              child: buildText("-${lsgd.soTien.toString()}",Colors.black),
+            ),
+            // Row(
+            //   children: [
+            //     Icon(Icons.attach_money,color: Colors.redAccent,),
+            //     buildText("Số tiền: "+moneysend+" VND",Colors.black),
+            //   ],
+            // ),
+            Positioned(
+              top: 30,
+                left: 30,
+                child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
+                Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
             ),
             SizedBox(height: 5,),
-            buildDateConfirm(datetimesend),
+            Align(alignment: Alignment.topLeft,child: Padding(
+              padding: const EdgeInsets.only(top: 25,left: 55),
+              child: buildDateConfirm(datetime,naptien),
+            )),
           ],
         ),
       ),
     );
   }
-  Widget buildDateConfirm(String date){
-    if(date!="Đang chờ"){
-      return Row(
-        children: [
-          Icon(Icons.access_time,color: Colors.green,),
-          buildText("Ngày xác nhận: "),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 18,color: Colors.green),),
-        ],
-      );
+  Widget buildDateConfirm(String date,bool naptien){
+    if(naptien == true){
+      if(date!="Đang chờ"){
+        return Row(
+          children: [
+            // Icon(Icons.access_time,color: Colors.grey,size: 16,),
+            // buildText("Ngày xác nhận: ",Colors.grey),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          ],
+        );
+      }
+      else{
+        return Row(
+          children: [
+            // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
+            // buildText("Ngày xác nhận: ",Colors.grey),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+          ],
+        );
+      }
     }
     else{
       return Row(
         children: [
-          Icon(Icons.access_time,color: Colors.amber,),
-          buildText("Ngày xác nhận: "),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 18,color: Colors.amber),),
+          // Icon(Icons.access_time,color: Colors.grey,size: 16,),
+          // buildText("Ngày thanh toán: ",Colors.grey),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
         ],
       );
     }
   }
 
-  Widget buildText(String text){
-    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400),);
+  Widget buildText(String text,Color c){
+    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
   }
 
   Widget buildSurnameField(String title,TextEditingController controller) {
@@ -285,5 +390,45 @@ class _WalletPageState extends State<WalletPage>{
         // ),
       ),
     );
+  }
+
+  Widget _buildListView() {
+    return _lsgdStore.listlsgd != null
+        ? Expanded(
+      child: ListView.separated(
+        itemCount: _lsgdStore.listlsgd.listLSGDs.length,
+        separatorBuilder: (context, position) {
+          return Divider();
+        },
+        itemBuilder: (context, position) {
+          return _buildLSGDPoster(_lsgdStore.listlsgd.listLSGDs[position],position);
+          //_buildListItem(position);
+        },
+      ),
+    )
+        : Center(
+      child: Text(
+        "Không có bài đăng",
+      ),
+    );
+  }
+  Widget _buildLSGDPoster(lichsugiaodich lsgd, int index){
+    return Card(
+      margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildText(lsgd.soTien.toString(), Colors.black)
+
+        ],
+      ),
+    );
+  }
+  String DatetimeToString(String datetime){
+    return "${datetime.substring(11,13)}:${datetime.substring(14,16)} - ${ datetime.substring(8,10)}/${datetime.substring(5,7)}/${datetime.substring(0,4)}";
   }
 }

@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
-  // LSGDStore LSGDStore;
   @override
   void initState() {
     super.initState();
@@ -44,14 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _postStore = Provider.of<PostStore>(context);
-    userStore = Provider.of<UserStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts();
-    }
-    if (!userStore.loading) {
-      userStore.getCurrentUser();
     }
 
   }
