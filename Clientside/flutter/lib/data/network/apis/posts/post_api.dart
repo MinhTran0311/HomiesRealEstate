@@ -94,7 +94,6 @@ class PostApi {
         data: {
           "trangThai": status ? "On":"Off",
           "baiDangId": postId,
-          "thoiGian": fomattedDate.toString()
         }
       );
       return res;
