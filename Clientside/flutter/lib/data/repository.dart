@@ -46,19 +46,40 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
-  // Post: ---------------------------------------------------------------------
-  // Future<listLSGD> getLSGD() async {
-  //   // check to see if posts are present in database, then fetch from database
-  //   // else make a network call to get all posts, store them into database for
-  //   // later use
-  //   return await _userApi.getLSGD().then((lsgdList) {
-  //     return lsgdList;
-  //   }).catchError((error) => throw error);
-  // }
-
+  // LSGD: ---------------------------------------------------------------------
+  Future<listLSGD> getLSGD() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getLSGD().then((lsgdList) {
+      return lsgdList;
+    }).catchError((error) => throw error);
+  }
+  Future<listLSGD> getAllLSGD() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getAllLSGD().then((lsgdList) {
+      return lsgdList;
+    }).catchError((error) => throw error);
+  }
+  Future<listLSGD> NapTien(double soTien,String thoiDiem,int userId) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.Naptien(soTien, thoiDiem, userId).then((lsgd) {
+      return lsgd;
+    }).catchError((error) => throw error);
+  }
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
     return await _userApi.getAllUsers().then((usersList) {
+      // log('dataUserTest: $usersList');
+      return usersList;
+      }).catchError((error) => throw error);
+  }
+  Future<User> getUserByID(int userID) async {
+    return await _userApi.getUserByID(userID).then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
       }).catchError((error) => throw error);

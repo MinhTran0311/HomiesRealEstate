@@ -25,7 +25,19 @@ class User {
     this.creationTime,
     // this.permissions,
   });
-
+  factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
+    id: json["result"]["user"]["id"],
+    name: json["result"]["user"]["name"],
+    surName: json["result"]["user"]["surname"],
+    userName: json["result"]["user"]["userName"],
+    email: json["result"]["user"]["emailAddress"],
+    phoneNumber: json["result"]["user"]["phoneNumber"],
+    profilePictureID: json["result"]["user"]["profilePictureId"],
+    isActive: json["result"]["user"]["isActive"],
+    isEmailConfirmed: json["result"]["user"]["isEmailConfirmed"],
+    creationTime: json["result"]["user"]["creationTime"],
+    // permissions: json["roles"],
+  );
   factory User.fromMap(Map<String, dynamic> json) => User(
     id: json["id"],
     name: json["name"],

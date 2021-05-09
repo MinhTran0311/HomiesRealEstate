@@ -1,5 +1,6 @@
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user.dart';
+import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
@@ -95,33 +96,88 @@ abstract class _UserStore with Store {
       d();
     }
   }
+
+
+
   @observable
-  CurrentUserForEditdto user;
-  static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
+  User userByID;
+
+  static ObservableFuture<User> emptyUserByIDResponses =
   ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<CurrentUserForEditdto> fetchUsersFuture =
-  ObservableFuture<CurrentUserForEditdto>(emptyUserResponse);
+  ObservableFuture<User> fetchUsersByIDFutures =
+  ObservableFuture<User>(emptyUserByIDResponses);
 
   @computed
-  bool get loading => fetchUsersFuture.status == FutureStatus.pending;
+  bool get loadingsUserByID => fetchUsersByIDFutures.status == FutureStatus.pending;
 
   // empty responses:-----------------------------------------------------------
-  static ObservableFuture<CurrentUserForEditdto> emptyLoginResponses =
+  static ObservableFuture<User> emptyUserByIDResponsess =
   ObservableFuture.value(null);
   @observable
-  ObservableFuture<CurrentUserForEditdto> loginFutures = emptyLoginResponses;
+  ObservableFuture<User> UserByIDFuturess = emptyUserByIDResponsess;
+
+
+  @action
+  Future getUserByID(int userID) async {
+    final future = _repository.getUserByID(userID);
+    fetchUsersByIDFutures = ObservableFuture(future);
+
+    fetchUsersByIDFutures.then((userByID) {
+      this.userByID = userByID;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+
+  @observable
+  CurrentUserForEditdto user;
+
+  //User
+  static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrentUserForEditdto> fetchUserCurrentFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentResponse);
+  //Wallet
+  static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentWalletResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrentUserForEditdto> fetchUserCurrentWalletFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentWalletResponse);
 
   @computed
-  bool get isLoadings => loginFuture.status == FutureStatus.pending;
+  bool get loadingCurrentUser => fetchUserCurrentFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingCurrentUserWallet => fetchUserCurrentWalletFuture.status == FutureStatus.pending;
 
+  // empty responses:-----------------------------------------------------------
+  static ObservableFuture<CurrentUserForEditdto> emptyCurrentUserResponses =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<CurrentUserForEditdto> CurrentUserFuture = emptyCurrentUserResponses;
+
+  @computed
+  bool get isLoadingCurrentUser => CurrentUserFuture.status == FutureStatus.pending;
   @action
   Future getCurrentUser() async {
     final future = _repository.getCurrentUser();
-    fetchUsersFuture = ObservableFuture(future);
-
-    fetchUsersFuture.then((user) {
+    fetchUserCurrentFuture = ObservableFuture(future);
+    fetchUserCurrentFuture.then((user) {
       this.user = user;
     }).catchError((error) {
       if (error is DioError) {
@@ -142,9 +198,10 @@ abstract class _UserStore with Store {
   @action
   Future getCurrentWalletUser() async {
     final future = _repository.getWalletUser();
-    fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    fetchUserCurrentWalletFuture = ObservableFuture(future);
+
+    fetchUserCurrentWalletFuture.then((user) {
       this.user = user;
     }).catchError((error) {
       if (error is DioError) {
@@ -161,13 +218,37 @@ abstract class _UserStore with Store {
       //throw error;
     });
   }
+
+
+
+
+  static ObservableFuture<CurrentUserForEditdto> emptyUpdateUserResponses =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrentUserForEditdto> fetchUpdateUserFutures =
+  ObservableFuture<CurrentUserForEditdto>(emptyUpdateUserResponses);
+
+  @computed
+  bool get loadingsUpdateUser => fetchUpdateUserFutures.status == FutureStatus.pending;
+
+  // empty responses:-----------------------------------------------------------
+  static ObservableFuture<CurrentUserForEditdto> emptyUpdateUserResponsess =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<CurrentUserForEditdto> UpdateUserFuturess = emptyUpdateUserResponsess;
+
   @action
   Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName);
-    fetchUsersFuture = ObservableFuture(future);
+    fetchUpdateUserFutures = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
-      // this.user = user;
+    fetchUpdateUserFutures.then((user) {
+      this.user.name = name;
+      this.user.surname = surname;
+      this.user.phoneNumber = phonenumber;
+      this.user.emailAddress = email;
+      this.user.userName = userName;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
