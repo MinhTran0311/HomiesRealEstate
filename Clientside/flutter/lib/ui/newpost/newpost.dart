@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/town/commune%20.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 
 import 'package:boilerplate/models/town/town.dart';
+import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
 
@@ -23,6 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_summernote/flutter_summernote.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'add_image.dart';
@@ -55,13 +59,13 @@ class UploadImage {
 class _NewpostScreenState extends State<NewpostScreen> {
   PostStore _postStore;
   TownStore _townStore;
+  ImageStore _imageStore;
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
-  String result = "";
   GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
 
   //endregion
@@ -72,14 +76,17 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
   Pack selectedPack;
+  String postId;
   Town selectedTown = null;
   Commune selectedCommune = null;
   String selectedCity = null;
+  String result = "";
   Item selectedVil;
   List<Commune> commune = [];
 //endregion
   //region Time
   //region Time
+  DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
   DateTime selectedDate1st = DateTime.now();
   DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
 
@@ -122,6 +129,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
     }
+    if(!_postStore.loading)
+    { _postStore.getPosts();}
     if (!_townStore.loading) {
       _townStore.getTowns();
     }
@@ -279,8 +288,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildPackField(),
             SizedBox(height: 24.0),
-            _textpackmota(),
-            SizedBox(height: 24.0),
+            //_textpackmota(),
+
             _buildPackinfoField(),
             SizedBox(height: 24.0),
             _buildStartdateField(),
@@ -288,6 +297,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
             _buildTileField2(),
             SizedBox(height: 24.0),
             _buildImagepick(),
+            SizedBox(height: 24.0),
+            //_buildImagepick2(),
             SizedBox(height: 24.0),
             _buildUpButton(),
           ],
@@ -312,32 +323,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
           inputAction: TextInputAction.next,
           autoFocus: false,
           onChanged: (value) {},
-        );
-      },
-    );
-  }
-
-  Widget _buildTileField2() {
-    return Observer(
-      builder: (context) {
-        return SingleChildScrollView(
-          child: FlutterSummernote(
-            height: 360.0,
-            decoration: BoxDecoration(
-              color: Colors.amber[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            hint: "Mô tả",
-            key: _keyEditor,
-            hasAttachment: false,
-            customToolbar: """
-                  [
-                      ['style', ['bold', 'italic', 'underline']],
-                      ['font', ['strikethrough', 'superscript', 'subscript']]
-                  ]
-                """,
-            showBottomToolbar: true,
-          ),
         );
       },
     );
@@ -641,7 +626,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 if (_townStore.communeList.communes[i].huyenTenHuyen ==
                     selectedTown.tenHuyen)
                   commune.add(_townStore.communeList.communes[i]);
-
             });
           },
           items: town.map((Town type) {
@@ -793,34 +777,35 @@ class _NewpostScreenState extends State<NewpostScreen> {
       ),
     );
   }
-  Widget _textpackmota()
-  {
-    return selectedPack!=null?
-      Text(
-        "Chi phí gói bài đăng: ${selectedPack.phi}",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
-        textAlign:TextAlign.left ,
-      )
-        :Container(width: 0,height: 0);
-  }
-  Widget _buildPackinfoField() {
 
-    return selectedPack!=null?
-      // Padding(
-      //     // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-      //     child:
-      //     Column(
-      //       //mainAxisSize: MainAxisSize.min,
-      //       children:
-      //       <Widget>[
-      //
-      //         SizedBox(
-      //           height: 24.0,
-      //         ),
-              Text(
-                "Mô tả: ${selectedPack.moTa}",
-                textAlign:TextAlign.left ,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  // Widget _textpackmota()
+  // {
+  //   return selectedPack!=null?
+  //     Text(
+  //       "Chi phí gói bài đăng: ${selectedPack.phi}",
+  //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
+  //       textAlign:TextAlign.left ,
+  //     )
+  //       :Container(width: 0,height: 0);
+  // }
+  Widget _buildPackinfoField() {
+    return selectedPack != null
+        ?
+        // Padding(
+        //     // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+        //     child:
+        //     Column(
+        //       //mainAxisSize: MainAxisSize.min,
+        //       children:
+        //       <Widget>[
+        //
+        //         SizedBox(
+        //           height: 24.0,
+        //         ),
+        Text(
+            "Mô tả: ${selectedPack.moTa}",
+            textAlign: TextAlign.left,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             //   ),
             //   SizedBox(
             //     height: 24.0,
@@ -831,10 +816,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
             //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             //   ),
             // ],
-           )
-    // )
-    :Container(width: 0,height: 0,);
+          )
+        // )
+        : Container(
+            width: 0,
+            height: 0,
+          );
   }
+
   Widget _buildStartdateField() {
     return Observer(
       builder: (context) {
@@ -843,10 +832,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                "${selectedDate1st.toLocal()}".split(' ')[0],
+              Center(
+                  child: Text(
+                "Ngày bắt đầu:" + "${selectedDate1st.toLocal()}".split(' ')[0],
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+                textAlign: TextAlign.left,
+              )),
               SizedBox(
                 height: 24.0,
               ),
@@ -894,16 +885,60 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
+  Widget _buildTileField2() {
+    //  print(result);
+    return Observer(
+      builder: (context) {
+        return SingleChildScrollView(
+          child: FlutterSummernote(
+            height: 180.0,
+            decoration: BoxDecoration(
+              color: Colors.amber[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            hint: "Mô tả thêm về bài đăng",
+            //   final _etEditor = await _keyEditor.currentState.getText();
+            // print(_etEditor);
+            key: _keyEditor,
+            value: result,
+            hasAttachment: false,
+            customToolbar: """
+                  [
+                      ['style', ['bold', 'italic', 'underline']],
+                      ['font', ['strikethrough', 'superscript', 'subscript']]
+                  ]
+                """,
+            showBottomToolbar: true,
+          ),
+        );
+      },
+    );
+  }
+
+  List<File> _image = [];
+  final picker = ImagePicker();
+  chooseImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _image.add(File(pickedFile?.path));
+    });
+    // if (pickedFile.path == null) retrieveLostData();
+  }
+
   Widget _buildImagepick() {
     return Observer(
       builder: (context) {
         return FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddImage()));
-          },
-        );
+            child: Icon(Icons.camera_enhance_rounded),
+            onPressed: () async {
+              chooseImage();
+              _imageStore.postImages(_image.last.path.toString(), true);
+              //_imageStore.getImagesForDetail((_postStore.postList.posts.last.id+1).toString());
+            }
+            // Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) => AddImage()));
+            // },
+            );
       },
     );
   }

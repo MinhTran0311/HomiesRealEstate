@@ -67,29 +67,29 @@ abstract class _ImageStore with Store {
   }
 
   // @action
-  // Future postImages(String path, bool isThumb) async {
-  //
-  //   if (isThumb){
-  //     // lấy đường dẫn đầu tiên
-  //     //getimage
-  //   }
-  //   else{
-  //     final imageFuture = _repository.postImageToImageBB(path);
-  //     fetchImageFuture = ObservableFuture(imageFuture);
-  //
-  //     imageFuture.then((imgId) {
-  //       //await thêm id ảnh vào db
-  //       print(imgId);
-  //     }).catchError((error) {
-  //       if (error is DioError) {
-  //         errorStore.errorMessage = DioErrorUtil.handleError(error);
-  //         throw error;
-  //       }
-  //       else{
-  //         errorStore.errorMessage="Please check your internet connection and try again!";
-  //         throw error;
-  //       }
-  //     });
-  //   }
-  // }
+  Future postImages(String path, bool isThumb) async {
+
+    if (isThumb){
+      // lấy đường dẫn đầu tiên
+      //getimage
+    }
+    else{
+      final imageFuture = _repository.postImageToImageBB(path);
+    //  fetchImageFuturepost = ObservableFuture(imageFuture);
+
+      imageFuture.then((imgId) {
+        //await thêm id ảnh vào db
+        print(imgId);
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+    }
+  }
 }

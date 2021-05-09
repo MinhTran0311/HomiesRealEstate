@@ -69,6 +69,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     if (!_postStore.propertiesLoading){
       _postStore.getPostProperties(this.post.id.toString());
     }
+
   }
 
   @override
