@@ -565,6 +565,8 @@ class CardItem extends StatelessWidget{
       ),
     );
   }
+
+
 }
 
 

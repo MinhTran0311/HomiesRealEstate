@@ -124,6 +124,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$filter_modelAtom = Atom(name: '_PostStore.filter_model');
+
+  @override
+  filter_Model get filter_model {
+    _$filter_modelAtom.reportRead();
+    return super.filter_model;
+  }
+
+  @override
+  set filter_model(filter_Model value) {
+    _$filter_modelAtom.reportWrite(value, super.filter_model, () {
+      super.filter_model = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_PostStore.success');
 
   @override
@@ -169,6 +184,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$searchContentAtom = Atom(name: '_PostStore.searchContent');
+
+  @override
+  String get searchContent {
+    _$searchContentAtom.reportRead();
+    return super.searchContent;
+  }
+
+  @override
+  set searchContent(String value) {
+    _$searchContentAtom.reportWrite(value, super.searchContent, () {
+      super.searchContent = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
@@ -203,6 +233,30 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
   }
 
+  final _$_PostStoreActionController = ActionController(name: '_PostStore');
+
+  @override
+  void setSearchContent(String value) {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.setSearchContent');
+    try {
+      return super.setSearchContent(value);
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateSearchContent(String value) {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.validateSearchContent');
+    try {
+      return super.validateSearchContent(value);
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -212,9 +266,11 @@ fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 postList: ${postList},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
+filter_model: ${filter_model},
 success: ${success},
 propertiesSuccess: ${propertiesSuccess},
 isBaiGhimYeuThich: ${isBaiGhimYeuThich},
+searchContent: ${searchContent},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading}

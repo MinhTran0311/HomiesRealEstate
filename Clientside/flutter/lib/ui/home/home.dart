@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -24,13 +25,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  TextEditingController _searchController = TextEditingController();
+  
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
-  // LSGDStore LSGDStore;
+
   @override
   void initState() {
     super.initState();
@@ -130,36 +134,40 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
           child: TextField(
-            style: TextStyle(
-              fontSize: 28,
-              height: 1,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: InputDecoration(
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  fontSize: 28,
-                  color: Colors.grey[400],
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
-                ),
-                border:  UnderlineInputBorder(
-                    borderSide:  BorderSide(color: Colors.black)
-                ),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
+              controller: _searchController,
+              onChanged: (value){
+                _postStore.setSearchContent(_searchController.text);
+              },
+              style: TextStyle(
+                fontSize: 28,
+                height: 1,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: InputDecoration(
+                  hintText: "Tìm kiếm",
+                  hintStyle: TextStyle(
+                    fontSize: 28,
                     color: Colors.grey[400],
-                    size: 28,
                   ),
-                )
-            ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.orange[400]),
+                  ),
+                  border:  UnderlineInputBorder(
+                      borderSide:  BorderSide(color: Colors.black)
+                  ),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,
+                    ),
+                  )
+              ),
           ),
         ),
         Padding(
@@ -462,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           );
         }
-    );
+    ).then((value) => _postStore.filter_model = value);
   }
   _buildLanguageDialog() {
     _showDialog<String>(
@@ -517,5 +525,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ).then<void>((T value) {
       // The value passed to Navigator.pop() or null.
     });
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _searchController.dispose();
+    super.dispose();
   }
 }
