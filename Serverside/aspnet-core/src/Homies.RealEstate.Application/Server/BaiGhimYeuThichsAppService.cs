@@ -148,7 +148,6 @@ namespace Homies.RealEstate.Server
             {
                 await Create(input);
                 baiDang.LuotYeuThich += 1;
-                await _lookup_baiDangRepository.UpdateAsync(baiDang);
             }
             else
             {
@@ -161,7 +160,6 @@ namespace Homies.RealEstate.Server
                 {
                     baiDang.LuotYeuThich += -1;
                 }
-                await _lookup_baiDangRepository.UpdateAsync(baiDang);
                 await Update(input);
             }
         }
