@@ -25,18 +25,23 @@ class Endpoints {
   //# region user
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
-  //get users
+  //get all users
+  static const String getUsersByID = homiesUrl + "/services/app/User/GetUserForEdit";
+  //get all users
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
-  static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
-  //# endregion
-
-  //get all lichsugiaodich
+  //get all users
+  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
   //# region Post
 
   //get all users
   static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get all lichsugiaodich
+  static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
+  //update all lichsugiaodich
+  static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost

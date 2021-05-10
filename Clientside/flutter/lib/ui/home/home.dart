@@ -27,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   TextEditingController _searchController = TextEditingController();
-  
+
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
   ThemeStore _themeStore;
@@ -48,14 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _postStore = Provider.of<PostStore>(context);
-    userStore = Provider.of<UserStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts();
-    }
-    if (!userStore.loading) {
-      userStore.getCurrentUser();
     }
 
   }
