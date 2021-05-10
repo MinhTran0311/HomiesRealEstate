@@ -8,7 +8,6 @@ import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/ui/admin/management.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
-import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/account/account.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';

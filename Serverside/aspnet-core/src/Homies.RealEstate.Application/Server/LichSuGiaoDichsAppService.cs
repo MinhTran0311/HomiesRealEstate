@@ -336,7 +336,7 @@ namespace Homies.RealEstate.Server
 
         public async Task<String> KiemDuyetGiaoDich(EntityDto<Guid> input)
         {
-            var currentUser = await GetCurrentUserAsync();
+            var currentUser = GetCurrentUserAsync();
             try
             {
                 var lsgd = GetLichSuGiaoDichForEdit(input);
