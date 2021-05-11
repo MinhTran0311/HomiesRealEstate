@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
@@ -32,7 +29,7 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> with TickerProviderStateMixin {
   final Post post;
   _DetailState({@required this.post});
-  bool finishload = false;
+
   PostStore _postStore;
   ImageStore _imageStore;
   UserStore _userStore;
@@ -45,7 +42,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
     _ColorAnimationController =
         AnimationController(duration: Duration(seconds: 0),vsync: this);
     _colorTween = ColorTween(begin: Colors.transparent, end: Colors.white)
@@ -56,28 +52,23 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     _transTween = Tween(begin: Offset(-10, 40), end: Offset(-10, 0))
         .animate(_TextAnimationController);
 
+    super.initState();
   }
 
   void didChangeDependencies() {
+    super.didChangeDependencies();
     _postStore = Provider.of<PostStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
     _userStore = Provider.of<UserStore>(context);
-    if (!_imageStore.imageLoading && !finishload){
+    if (!_imageStore.imageLoading){
       _imageStore.getImagesForDetail(this.post.id.toString());
     }
-    if (!_userStore.loading && !finishload){
+    if (!_userStore.loading){
       _userStore.getUserOfCurrentDetailPost(post.userId);
     }
-    if (!_postStore.propertiesLoading && !finishload){
+    if (!_postStore.propertiesLoading){
       _postStore.getPostProperties(this.post.id.toString());
     }
-    if (!_postStore.isBaiGhimYeuThichLoading && !finishload)
-    {
-      _postStore.isBaiGhimYeuThichOrNot(this.post.id.toString());
-      finishload=true;
-    }
-    super.didChangeDependencies();
-
   }
 
   @override
@@ -98,8 +89,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   Widget _buildContent(){
     Size size = MediaQuery.of(context).size;
-    Uint8List bytes = base64Decode(_userStore.user.profilePicture);
-    
+    DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
+    DateTime dateTime = dateFormat.parse(post.thoiDiemDang);
+    var f = NumberFormat("###", "en_US");
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
@@ -132,31 +124,51 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                   tag: _imageStore.imageList.images[0].id,
                                   child: Stack(
                                     children: [
-                                      Observer(
-                                      builder: (context){
-                                        return Container(
-                                          height: size.height*0.3,
-                                          width: size.width,
+                                      Container(
+                                        height: size.height*0.3,
+                                        width: size.width,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(_imageStore.imageList.images[0].duongDan),
+                                              fit: BoxFit.cover,
+                                            )
+                                        ),
+                                        // child: Stack(
+                                        //   children:[
+                                        //     Observer(
+                                        //       builder: (context) {
+                                        //         return CachedNetworkImage(
+                                        //           imageUrl: _imageStore.imageList.images[_imageStore.selectedIndex].duongDan,
+                                        //           imageBuilder: (context, imageProvider) =>
+                                        //               Container(
+                                        //                 width: size.width,
+                                        //                 height: size.height * 0.5,
+                                        //                 decoration: BoxDecoration(
+                                        //                   image: DecorationImage(
+                                        //                       image: imageProvider,
+                                        //                       fit: BoxFit.cover
+                                        //                   ),
+                                        //                 ),
+                                        //               ),
+                                        //           placeholder: (context, url) => CircularProgressIndicator(),
+                                        //           errorWidget: (context, url, error) => Icon(Icons.error),
+                                        //       );
+                                        //     }
+                                        //
+                                        //     ),
+                                        child: Container(
                                           decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: NetworkImage(_imageStore.imageList.images[_imageStore.selectedIndex].duongDan),
-                                                fit: BoxFit.cover,
-                                              )
-                                          ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
                                               gradient: LinearGradient(
                                                   begin: Alignment.topCenter,
                                                   end: Alignment.bottomCenter,
                                                   colors: [
                                                     Colors.transparent,
                                                     Colors.black.withOpacity(0.7),
-                                                  ]
-                                                )
-                                            ),
-                                          ),
-                                        );}
+                                                ]
+                                            )
+                                        ),
                                       ),
+                                    ),
                                       Container(
                                         height: size.height * 0.3,
                                         child: Column(
@@ -195,16 +207,11 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Center(
-                                                      child: IconButton(
-                                                        icon: Observer(
-                                                          builder: (context){
-                                                          return (_postStore.isBaiGhimYeuThich) ? Icon(Icons.favorite, color: Colors.amber, size: 30,)
-                                                          : Icon(Icons.favorite_border_outlined, color: Colors.amber, size: 30,);}
-                                                          ),
-                                                        onPressed: () {
-                                                          _postStore.createOrChangeStatusBaiGhimYeuThich(post.id.toString());
-                                                        },
-                                                      ),
+                                                        child: Icon(
+                                                          Icons.favorite,
+                                                          color: Colors.amber,
+                                                          size: 30,
+                                                        )
                                                     ),
                                                   )
                                                 ],
@@ -369,7 +376,17 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
                               Padding (
                                 padding: EdgeInsets.only(right: 24,left: 24,bottom: 12,),
-                                child:_postStore.propertyList!=null? Properties(_postStore.propertyList):Container(width: 0,height: 0,),
+                                child:
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     buildFeature(Icons.hotel, "3 bedrooms"),
+                                //     buildFeature(Icons.wc, "2 bathrooms"),
+                                //     buildFeature(Icons.kitchen, "1 bedrooms"),
+                                //     buildFeature(Icons.local_parking, "2 Parking"),
+                                //   ],
+                                // ),
+                                Properties(_postStore.propertyList),
                               ),
 
                               Padding(
@@ -436,7 +453,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                       width: 60,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
+                                            image: AssetImage(Assets.front_img),
                                             fit: BoxFit.cover,
                                           ),
                                           shape: BoxShape.circle
@@ -633,7 +650,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     return AspectRatio(
       aspectRatio: 5 / 2,
       child: GestureDetector(
-        onTap: (){_imageStore.selectedIndex=index;},
         onLongPress: (){
           print("image index $index");
           _imageStore.selectedIndex=index;
