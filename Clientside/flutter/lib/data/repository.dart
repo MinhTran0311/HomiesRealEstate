@@ -12,6 +12,7 @@ import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune_list.dart';
 import 'package:boilerplate/models/town/town_list.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -67,6 +68,12 @@ class Repository {
   Future<PackList> getPacks() async {
     return await _postApi.getPacks().then((packList) {
       return packList;
+    }
+    ).catchError((error) => throw error);
+  }
+  Future<ThuocTinhList> getThuocTinhs() async {
+    return await _postApi.getThuocTinhs().then((thuocTinhList) {
+      return thuocTinhList;
     }
     ).catchError((error) => throw error);
   }

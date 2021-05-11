@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/post/post_category.dart';
-import 'package:boilerplate/models/town/commune%20.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh.dart';
+import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
+import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
@@ -64,6 +66,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
+  List<TextEditingController> _ThuocTinhController;
+
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
   GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
@@ -88,7 +92,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   //region Time
   DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
   DateTime selectedDate1st = DateTime.now();
-  DateTime selectedDatefl = DateTime.now().add(const Duration(days: 1));
+  DateTime selectedDatefl = null;
 
   _selectDate1st(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -108,8 +112,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: selectedDatefl,
-      firstDate: selectedDate1st.add(const Duration(days: 1)),
-      lastDate: selectedDate1st.add(const Duration(days: 30)),
+      firstDate:
+          DateTime.now().add(Duration(days: selectedPack.thoiGianToiThieu)),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
     );
     if (picked != null && picked != selectedDatefl)
       setState(() {
@@ -129,8 +134,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
     }
-    if(!_postStore.loading)
-    { _postStore.getPosts();}
+    if (!_postStore.loading) {
+      _postStore.getPosts();
+    }
     if (!_townStore.loading) {
       _townStore.getTowns();
     }
@@ -139,6 +145,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     }
     if (!_postStore.loadingPack) {
       _postStore.getPacks();
+    }
+    if (!_postStore.loadingThuocTinh) {
+      _postStore.getThuocTinhs();
     }
   }
 
@@ -286,17 +295,18 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildPriceField(),
             SizedBox(height: 24.0),
+            _buildListView(),
+            SizedBox(height: 24.0),
             _buildPackField(),
             SizedBox(height: 24.0),
             //_textpackmota(),
-
             _buildPackinfoField(),
             SizedBox(height: 24.0),
-            _buildStartdateField(),
+            _buildEnddateField(),
             SizedBox(height: 24.0),
             _buildTileField2(),
             SizedBox(height: 24.0),
-            _buildImagepick(),
+            _buildImagepick2(),
             SizedBox(height: 24.0),
             //_buildImagepick2(),
             SizedBox(height: 24.0),
@@ -699,6 +709,73 @@ class _NewpostScreenState extends State<NewpostScreen> {
       );
   }
 
+  Widget _buildListView() {
+    // return _postStore.thuocTinhList != null
+    //     ?
+    return SingleChildScrollView(
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+          Text("Một số thông tin thêm(nếu có)",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(height: 24.0),
+          Container(
+              height: 200,
+              child: ListView.builder(
+                itemCount: _postStore.thuocTinhList.thuocTinhs.length - 2,
+                itemBuilder: (context, i) {
+                  return
+                      //Text(_postStore.thuocTinhList.thuocTinhs[i+2].tenThuocTinh.toString());
+
+                      _buildThuocTinh(
+                          _postStore.thuocTinhList.thuocTinhs[i + 2], i);
+                },
+              ))
+        ]));
+    //       :  Text(
+    //             "Không có thuộc tính thêm hiển thị",
+    //         );
+  }
+
+  Widget _buildThuocTinh(ThuocTinh thuocTinh, int index) {
+    return thuocTinh != null
+        ? Observer(
+            builder: (context) {
+              return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TextFieldWidget(
+                      inputFontsize: 22,
+                      hint: ('${thuocTinh.tenThuocTinh}'),
+                      hintColor: Colors.white,
+                      icon: Icons.api_outlined,
+                      inputType: thuocTinh.kieuDuLieu == "double" ||
+                              thuocTinh.kieuDuLieu == "int"
+                          ? TextInputType.numberWithOptions(
+                              decimal: false, signed: false)
+                          : TextInputType.text,
+                      // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+                      iconColor: Colors.white,
+                      // textController: _ThuocTinhController[index],
+                      inputAction: TextInputAction.next,
+                      autoFocus: false,
+                      onChanged: (value) {},
+                    ),
+                    SizedBox(height: 24.0),
+                  ]);
+            },
+          )
+        : Center(
+            child: Text(
+              "Không có thuộc tính thêm hiển thị",
+            ),
+          );
+  }
+
   Widget _buildAcreageField() {
     return Observer(
       builder: (context) {
@@ -752,6 +829,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
         onChanged: (Pack Value) {
           setState(() {
             selectedPack = Value;
+            selectedDatefl = DateTime.now()
+                .add(Duration(days: selectedPack.thoiGianToiThieu));
           });
         },
         items: _postStore.packList.packs.map((Pack type) {
@@ -855,34 +934,37 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildEnddateField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "${selectedDatefl.toLocal()}".split(' ')[0],
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-              RaisedButton(
-                onPressed: () => _selectDatefl(context),
-                child: Text(
-                  'Chọn ngày kết thúc',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+    return selectedPack != null
+        ? Observer(
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    RoundedButtonWidget(
+                      onPressed: () => _selectDatefl(context),
+                      buttonColor: Colors.orangeAccent,
+                      textColor: Colors.white,
+                      buttonText: ('Chọn ngày kết thúc'),
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    Text(
+                      "Ngày kết thúc:" +
+                          "${selectedDatefl.toLocal()}".split(' ')[0],
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                color: Colors.black87,
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              );
+            },
+          )
+        : Container(
+            height: 0,
+          );
   }
 
   Widget _buildTileField2() {
@@ -917,28 +999,115 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   List<File> _image = [];
   final picker = ImagePicker();
-  chooseImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  Future getImage(bool gallery) async {
+    ImagePicker picker = ImagePicker();
+    PickedFile pickedFile;
+    // Let user select photo from gallery
+    if (gallery) {
+      pickedFile = await picker.getImage(
+        source: ImageSource.gallery,
+      );
+    }
+    // Otherwise open camera to get new photo
+    else {
+      pickedFile = await picker.getImage(
+        source: ImageSource.camera,
+      );
+    }
+
     setState(() {
-      _image.add(File(pickedFile?.path));
+      if (pickedFile != null) {
+        _image.add(File(pickedFile.path));
+        //_image = File(pickedFile.path); // Use if you only need a single picture
+      } else {
+        print('No image selected.');
+      }
     });
-    // if (pickedFile.path == null) retrieveLostData();
+  }
+
+  Future clearimage(i) async {
+    {
+      setState(() {
+        _image.removeAt(i);
+      });
+    }
   }
 
   Widget _buildImagepick() {
     return Observer(
       builder: (context) {
-        return FloatingActionButton(
-            child: Icon(Icons.camera_enhance_rounded),
-            onPressed: () async {
-              chooseImage();
-              _imageStore.postImages(_image.last.path.toString(), true);
-              //_imageStore.getImagesForDetail((_postStore.postList.posts.last.id+1).toString());
-            }
-            // Navigator.of(context)
-            //     .push(MaterialPageRoute(builder: (context) => AddImage()));
-            // },
-            );
+        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          RawMaterialButton(
+            fillColor: Theme.of(context).accentColor,
+            child: Icon(
+              Icons.add_photo_alternate_rounded,
+              color: Colors.white,
+            ),
+            elevation: 5,
+            onPressed: () {
+              getImage(true);
+            },
+            padding: EdgeInsets.all(15),
+            shape: CircleBorder(),
+          ),
+          Container(child: Image.file(_image.last))
+        ]);
+      },
+    );
+  }
+
+  Widget _buildImagepick2() {
+    return Observer(
+      builder: (context) {
+        // return SingleChildScrollView(
+        return Container(
+          height: 200,
+          padding: EdgeInsets.all(4),
+
+          child:_image.length==0?
+          Center(child
+              : IconButton(
+            icon: Icon(Icons.add_photo_alternate_rounded),
+            iconSize: 150,
+            onPressed: () => getImage(true),
+          )):
+          GridView.builder(
+              itemCount: _image.length + 1,
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              itemBuilder: (context, index) {
+                return index == _image.length
+                    ? _image.length<6?
+                    Center(child
+                        : IconButton(
+                        icon: Icon(Icons.add_photo_alternate_rounded),
+                        onPressed: () => getImage(true),
+                      )):Container(height: 0,)
+                    : Container(
+                        margin: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: FileImage(_image[index]),
+                                fit: BoxFit.cover)),
+                        child: SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: FlatButton(
+                            padding: EdgeInsets.fromLTRB(80, 10, 100, 100),
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.circular(20),
+                            //     side: BorderSide(color: Colors.white)),
+                            // color: Color(0xFFF5F6F9),
+                            onPressed: () => {clearimage(index)},
+                            child: Icon(
+                              Icons.dangerous,
+                              color: Colors.white,
+                              size: 20.0,
+                            ),
+                          ),
+                        ));
+              }),
+        );
       },
     );
   }

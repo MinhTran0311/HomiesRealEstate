@@ -11,6 +11,7 @@ import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
 
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:dio/dio.dart';
 
 class PostApi {
@@ -75,7 +76,23 @@ class PostApi {
       throw e;
     }
   }
+  Future<ThuocTinhList> getThuocTinhs() async {
+    try {
+      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/ThuocTinhs/GetAll",
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      print("111111111111111111");
 
+      return ThuocTinhList.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
     Future<PropertyList> getPostProperties(String postId) async {
     try{
       final res = await _dioClient.get(Endpoints.getAllChiTietBaiDangByPostId,

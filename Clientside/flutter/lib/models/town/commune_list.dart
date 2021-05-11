@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:boilerplate/models/town/commune .dart';
+import 'package:boilerplate/models/town/commune.dart';
 import 'package:flutter/material.dart';
 
 class CommuneList {

@@ -7,7 +7,6 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/town/commune_list.dart';
-import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/models/town/town_list.dart';
 import 'package:dio/dio.dart';
 

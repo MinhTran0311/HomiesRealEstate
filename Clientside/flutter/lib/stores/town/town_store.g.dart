@@ -15,6 +15,14 @@ mixin _$TownStore on _TownStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_TownStore.loading'))
       .value;
+  Computed<bool> _$loadingCommuneComputed;
+
+  @override
+  bool get loadingCommune =>
+      (_$loadingCommuneComputed ??= Computed<bool>(() => super.loadingCommune,
+              name: '_TownStore.loadingCommune'))
+          .value;
+
   final _$fetchTownsFutureAtom = Atom(name: '_TownStore.fetchTownsFuture');
 
   @override
@@ -22,19 +30,29 @@ mixin _$TownStore on _TownStore, Store {
     _$fetchTownsFutureAtom.reportRead();
     return super.fetchTownsFuture;
   }
+
+  @override
+  set fetchTownsFuture(ObservableFuture<TownList> value) {
+    _$fetchTownsFutureAtom.reportWrite(value, super.fetchTownsFuture, () {
+      super.fetchTownsFuture = value;
+    });
+  }
+
   final _$townListAtom = Atom(name: '_TownStore.townList');
 
   @override
   TownList get townList {
     _$townListAtom.reportRead();
-    return  super.townList;
+    return super.townList;
   }
+
   @override
   set townList(TownList value) {
     _$townListAtom.reportWrite(value, super.townList, () {
       super.townList = value;
     });
   }
+
   final _$successAtom = Atom(name: '_TownStore.success');
 
   @override
@@ -42,6 +60,7 @@ mixin _$TownStore on _TownStore, Store {
     _$successAtom.reportRead();
     return super.success;
   }
+
   @override
   set success(bool value) {
     _$successAtom.reportWrite(value, super.success, () {
@@ -49,41 +68,37 @@ mixin _$TownStore on _TownStore, Store {
     });
   }
 
-
-  final _$getTownsAsyncAction = AsyncAction('_TownStore.getTowns');
-
-  @override
-  Future<dynamic> getTowns() {
-    return _$getTownsAsyncAction.run(() => super.getTowns());
-  }
-  ///////////////////////////////commune
-  @override
-  Computed<bool> _$loadingComputedCommune;
-
-  @override
-  bool get loadingCommune => (_$loadingComputedCommune ??=
-      Computed<bool>(() => super.loadingCommune, name: '_TownStore.loadingCommune'))
-      .value;
-  final _$fetchCommunesFutureAtom = Atom(name: '_CommuneStore.fetchCommunesFuture');
+  final _$fetchCommunesFutureAtom =
+      Atom(name: '_TownStore.fetchCommunesFuture');
 
   @override
   ObservableFuture<CommuneList> get fetchCommunesFuture {
     _$fetchCommunesFutureAtom.reportRead();
     return super.fetchCommunesFuture;
   }
-  final _$communeListAtom = Atom(name: '_CommuneStore.communeList');
+
+  @override
+  set fetchCommunesFuture(ObservableFuture<CommuneList> value) {
+    _$fetchCommunesFutureAtom.reportWrite(value, super.fetchCommunesFuture, () {
+      super.fetchCommunesFuture = value;
+    });
+  }
+
+  final _$communeListAtom = Atom(name: '_TownStore.communeList');
 
   @override
   CommuneList get communeList {
     _$communeListAtom.reportRead();
-    return  super.communeList;
+    return super.communeList;
   }
+
   @override
   set communeList(CommuneList value) {
     _$communeListAtom.reportWrite(value, super.communeList, () {
       super.communeList = value;
     });
   }
+
   final _$successCommuneAtom = Atom(name: '_TownStore.successCommune');
 
   @override
@@ -91,6 +106,7 @@ mixin _$TownStore on _TownStore, Store {
     _$successCommuneAtom.reportRead();
     return super.successCommune;
   }
+
   @override
   set successCommune(bool value) {
     _$successCommuneAtom.reportWrite(value, super.successCommune, () {
@@ -98,6 +114,12 @@ mixin _$TownStore on _TownStore, Store {
     });
   }
 
+  final _$getTownsAsyncAction = AsyncAction('_TownStore.getTowns');
+
+  @override
+  Future<dynamic> getTowns() {
+    return _$getTownsAsyncAction.run(() => super.getTowns());
+  }
 
   final _$getCommunesAsyncAction = AsyncAction('_TownStore.getCommunes');
 
@@ -105,17 +127,18 @@ mixin _$TownStore on _TownStore, Store {
   Future<dynamic> getCommunes() {
     return _$getCommunesAsyncAction.run(() => super.getCommunes());
   }
+
   @override
   String toString() {
     return '''
 fetchTownsFuture: ${fetchTownsFuture},
-fetchCommunesFuture: ${fetchCommunesFuture},
 townList: ${townList},
 success: ${success},
-loading: ${loading},
+fetchCommunesFuture: ${fetchCommunesFuture},
 communeList: ${communeList},
-successCommune: ${success},
-loadingCommune: ${loading},
+successCommune: ${successCommune},
+loading: ${loading},
+loadingCommune: ${loadingCommune}
     ''';
   }
 }

@@ -4,6 +4,7 @@ import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -161,6 +162,44 @@ abstract class _PostStore with Store {
     future.then((packList) {
       success = true;
       this.packList = packList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //////////////////////ThuocTinh
+  static ObservableFuture<ThuocTinhList> emptyThuocTinhResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<ThuocTinhList> fetchThuocTinhsFuture =
+  ObservableFuture<ThuocTinhList>(emptyThuocTinhResponse);
+
+  @observable
+  ThuocTinhList thuocTinhList;
+
+  @observable
+  bool successThuocTinh = false;
+
+  @computed
+  bool get loadingThuocTinh => fetchThuocTinhsFuture.status == FutureStatus.pending;
+
+  // actions:-------------------------------------------------------------------
+  @action
+  Future getThuocTinhs() async {
+    final future = _repository.getThuocTinhs();
+    fetchThuocTinhsFuture = ObservableFuture(future);
+
+    future.then((thuocTinhList) {
+      success = true;
+      this.thuocTinhList = thuocTinhList;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

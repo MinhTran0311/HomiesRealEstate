@@ -16,7 +16,6 @@ class _AddImageState extends State<AddImage> {
   double val = 0;
   CollectionReference imgRef;
   firebase_storage.Reference ref;
-
   List<File> _image = [];
   final picker = ImagePicker();
   @override
