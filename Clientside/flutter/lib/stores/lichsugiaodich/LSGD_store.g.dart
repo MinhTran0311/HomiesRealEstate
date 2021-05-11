@@ -13,7 +13,13 @@ mixin _$LSGDStore on _LSGDStore, Store {
 
   @override
   bool get loading => (_$loadingComputed ??=
-      Computed<bool>(() => super.loading, name: '_LSGDStore.loading'))
+          Computed<bool>(() => super.loading, name: '_LSGDStore.loading'))
+      .value;
+  Computed<bool> _$AllloadingComputed;
+
+  @override
+  bool get Allloading => (_$AllloadingComputed ??=
+          Computed<bool>(() => super.Allloading, name: '_LSGDStore.Allloading'))
       .value;
 
   final _$fetchLSGDFutureAtom = Atom(name: '_LSGDStore.fetchLSGDFuture');
@@ -31,18 +37,63 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
-  final _$lsgdListAtom = Atom(name: '_LSGDStore.listLSGD');
+  final _$fetchAllLSGDFutureAtom = Atom(name: '_LSGDStore.fetchAllLSGDFuture');
 
   @override
-  listLSGD get ListLSGD {
-    _$lsgdListAtom.reportRead();
+  ObservableFuture<listLSGD> get fetchAllLSGDFuture {
+    _$fetchAllLSGDFutureAtom.reportRead();
+    return super.fetchAllLSGDFuture;
+  }
+
+  @override
+  set fetchAllLSGDFuture(ObservableFuture<listLSGD> value) {
+    _$fetchAllLSGDFutureAtom.reportWrite(value, super.fetchAllLSGDFuture, () {
+      super.fetchAllLSGDFuture = value;
+    });
+  }
+
+  final _$fetchNaptienFutureAtom = Atom(name: '_LSGDStore.fetchNaptienFuture');
+
+  @override
+  ObservableFuture<listLSGD> get fetchNaptienFuture {
+    _$fetchNaptienFutureAtom.reportRead();
+    return super.fetchNaptienFuture;
+  }
+
+  @override
+  set fetchNaptienFuture(ObservableFuture<listLSGD> value) {
+    _$fetchNaptienFutureAtom.reportWrite(value, super.fetchNaptienFuture, () {
+      super.fetchNaptienFuture = value;
+    });
+  }
+
+  final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
+
+  @override
+  listLSGD get listlsgd {
+    _$listlsgdAtom.reportRead();
     return super.listlsgd;
   }
 
   @override
-  set ListLSGD(listLSGD value) {
-    _$lsgdListAtom.reportWrite(value, super.listlsgd, () {
+  set listlsgd(listLSGD value) {
+    _$listlsgdAtom.reportWrite(value, super.listlsgd, () {
       super.listlsgd = value;
+    });
+  }
+
+  final _$listlsgdAllAtom = Atom(name: '_LSGDStore.listlsgdAll');
+
+  @override
+  listLSGD get listlsgdAll {
+    _$listlsgdAllAtom.reportRead();
+    return super.listlsgdAll;
+  }
+
+  @override
+  set listlsgdAll(listLSGD value) {
+    _$listlsgdAllAtom.reportWrite(value, super.listlsgdAll, () {
+      super.listlsgdAll = value;
     });
   }
 
@@ -67,25 +118,33 @@ mixin _$LSGDStore on _LSGDStore, Store {
   Future<dynamic> getLSGD() {
     return _$getLSGDAsyncAction.run(() => super.getLSGD());
   }
+
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
 
   @override
   Future<dynamic> getAllLSGD() {
     return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD());
   }
-  final _$NapTienAsyncAction = AsyncAction('_LSGDStore.NapTien');
+
+  final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
 
   @override
-  Future<dynamic> NapTien(String thoiDiem,int userId,double soTien) {
-    return _$getLSGDAsyncAction.run(() => super.Naptien(thoiDiem, soTien, userId));
+  Future<dynamic> Naptien(String thoiDiem, double soTien, int userId) {
+    return _$NaptienAsyncAction
+        .run(() => super.Naptien(thoiDiem, soTien, userId));
   }
+
   @override
   String toString() {
     return '''
-fetchPostsFuture: ${fetchLSGDFuture},
-postList: ${listlsgd},
+fetchLSGDFuture: ${fetchLSGDFuture},
+fetchAllLSGDFuture: ${fetchAllLSGDFuture},
+fetchNaptienFuture: ${fetchNaptienFuture},
+listlsgd: ${listlsgd},
+listlsgdAll: ${listlsgdAll},
 success: ${success},
-loading: ${loading}
+loading: ${loading},
+Allloading: ${Allloading}
     ''';
   }
 }
