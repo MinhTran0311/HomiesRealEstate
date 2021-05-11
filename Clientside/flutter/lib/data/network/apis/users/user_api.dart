@@ -54,6 +54,25 @@ class UserApi {
     }
   }
 
+  Future<getAvatarUser> getAvatarByUser(int userId) async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAvatarByUserName,
+      options: Options(
+        headers: {
+          "Abp.TenantId": 1,
+          "Authorization" : "Bearer ${Preferences.access_token}",
+        }
+      ),
+        queryParameters: {
+          "userId": userId,
+        },
+      );
+      return getAvatarUser.fromMap(res);
+    } catch (e) {
+      throw e;
+    }
+  }
+
 //Minh làm
 Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   try {

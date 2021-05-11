@@ -28,6 +28,7 @@ class Endpoints {
   //get users
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
   static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
+  static const String getAvatarByUserName = homiesUrl + "/services/app/Profile/GetProfilePictureByUser";
   //# endregion
 
   //get all lichsugiaodich

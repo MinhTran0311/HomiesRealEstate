@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:developer';
 import 'dart:math';
 
@@ -12,6 +14,7 @@ import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dar
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -74,6 +77,20 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     }
   }
 
+  Image imageFromBase64String(String base64String) {
+    if (base64String.isNotEmpty) {
+      Uint8List bytes = base64.decode(base64String);
+      return Image.memory(bytes);
+    }
+  }
+
+  Uint8List _handlingBase64(String base64String) {
+    if (base64String.isNotEmpty) {
+      Uint8List bytes = base64.decode(base64String);
+      return bytes;
+    }
+  }
+
   _loadRoleList() {
     if (_roleManagementStore.roleList != null) {
       _roles.clear();
@@ -90,6 +107,14 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         });
       }
     }
+  }
+
+  _checkAndGetAvatar(User user) async {
+    if (user.profilePictureID != null) {
+      await _userManagementStore.getAvatarUsers(user.id);
+      return _userManagementStore.avatarUser.avatar;
+    }
+    return '';
   }
 
   _clickButtonApDung() {
@@ -227,7 +252,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             ? CustomProgressIndicatorWidget()
             : Material(
             child: _buildUsersList(),
-            color: Color.fromRGBO(241, 242, 246, 1),);
+            // color: Color.fromRGBO(241, 242, 246, 1),
+        );
       },
     );
   }
@@ -344,199 +370,84 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   Widget _buildListItem(User user, int position) {
-    return Container(
-      decoration: new BoxDecoration(
-        boxShadow: [
-          // color: Colors.white, //background color of box
-          BoxShadow(
-            color: Color.fromRGBO(198, 199, 202, 1),
-            blurRadius: 10, // soften the shadow
-            spreadRadius: 0.01, //extend the shadow
-            offset: Offset(
-              8.0, // Move to right 10  horizontally
-              12.0, // Move to bottom 10 Vertically
-            ),
-          )
-        ],
-      ),
-      child: Card(
-        margin: EdgeInsets.only(top: 8, right: 10, left: 10),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(20),
-          // height: 160,
-          // color: Color.fromRGBO(242, 242, 242, 1),
-          color: Colors.white,
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                      child: Text(
-                        '${user.name}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-
-                    },
-                    child: Icon(
-                      Icons.menu_outlined,
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.person_outline_outlined,
-                          color: Colors.amber,
-                          size: 20,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            '${user.permissions}',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        // Padding(
-                        //   padding: EdgeInsets.only(top: 20),
-                        //   // child: ,
-                        // ),
-                        Text(
-                          'Kích hoạt: ',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        user.isActive ? Container(
-                              child: Icon(
-                              Icons.check_circle_outline,
-                              size: 20,
-                              color: Colors.green,)
-                            ) : Container(
-                            child: Icon(
-                              Icons.not_interested_outlined,
-                              size: 20,
-                              color: Colors.red,
-                            ),
-                            ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    // alignment: Alignment.topRight,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.mail_outline,
-                          color: Colors.amber,
-                          size: 20,
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              '${user.email}',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            )
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    // alignment: Alignment.topRight,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.mark_email_read_outlined,
-                          color: Colors.amber,
-                          size: 20,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            'Xác nhận email: ',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        user.isEmailConfirmed ? Container(
-                            child: Icon(
-                              Icons.check_circle_outline,
-                              size: 20,
-                              color: Colors.green,)
-                        ) : Container(
-                          child: Icon(
-                            Icons.not_interested_outlined,
-                            size: 20,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    // Uint8List bytes = base64Decode(user.profilePictureID);
+    return ListTile(
+      leading: user.profilePictureID == null ? CircleAvatar(
+        backgroundColor: Colors.amber.shade800,
+        child: Text((
+          user.name.substring(0,1) + user.surName.substring(0,1)).toUpperCase(),
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
+      )
+      : CircleAvatar(
+        // child: imageFromBase64String(user.profilePictureID),
+          child: ClipOval(child: new Image.memory(_handlingBase64(_checkAndGetAvatar(user).toString()))),
+        backgroundColor: Colors.brown.shade800,
+        // child: Text((user.surName.substring(0,1)).toUpperCase()),
       ),
-
+      title: Text(
+          user.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+      ),
+      subtitle: Text(user.email),
+      onTap: (){
+        _showSimpleModalDialog(context, user);
+      },
     );
   }
+
+  // Widget _buildListItem(User user, int position) {
+  //   return Container(
+  //     decoration: new BoxDecoration(
+  //       boxShadow: [
+  //         // color: Colors.white, //background color of box
+  //         BoxShadow(
+  //           color: Color.fromRGBO(198, 199, 202, 1),
+  //           blurRadius: 10, // soften the shadow
+  //           spreadRadius: 0.01, //extend the shadow
+  //           offset: Offset(
+  //             8.0, // Move to right 10  horizontally
+  //             12.0, // Move to bottom 10 Vertically
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //     child: Card(
+  //       margin: EdgeInsets.only(top: 8, right: 10, left: 10),
+  //       clipBehavior: Clip.antiAlias,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(15)),
+  //       ),
+  //       child: Container(
+  //         padding: EdgeInsets.all(20),
+  //         // height: 160,
+  //         // color: Color.fromRGBO(242, 242, 242, 1),
+  //         color: Colors.white,
+  //         child: Column(
+  //           children: [
+  //             Container(
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(50),
+  //                 color: Colors.white,
+  //                 // boxShadow: [
+  //                 //   BoxShadow(color: Colors.green, spreadRadius: 3),
+  //                 // ],
+  //               ),
+  //               height: 50,
+  //               width: 50,
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //
+  //   );
+  // }
 
   Widget _handleErrorMessage() {
     return Observer(
@@ -630,6 +541,50 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           );
         }
     );
+  }
+
+  _showSimpleModalDialog(context, User user){
+    showGeneralDialog(
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            child: Opacity(
+              opacity: a1.value,
+              child: AlertDialog(
+                shape: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0)),
+                title: user.profilePictureID == null ? CircleAvatar(
+                  backgroundColor: Colors.amber.shade800,
+                  child: Text((
+                      user.name.substring(0,1) + user.surName.substring(0,1)).toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                  ),
+                )
+                    : CircleAvatar(
+                  // child: imageFromBase64String(user.profilePictureID),
+                  child: ClipOval(child: new Image.memory(_handlingBase64(user.profilePictureID))),
+                  backgroundColor: Colors.amber.shade800,
+                  // child: Text((user.surName.substring(0,1)).toUpperCase()),
+                ),
+                content: Column(
+                  children: [
+                    Row(
+
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 200),
+        barrierDismissible: true,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {});
   }
 
   Widget buildFilterAdvance() {

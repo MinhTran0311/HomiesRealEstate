@@ -11,6 +11,7 @@ class User {
   String creationTime;
   List<dynamic> permissionsList;
   String permissions;
+  String avatar;
 
   // List<String> permissions;
 
@@ -27,6 +28,7 @@ class User {
     this.creationTime,
     this.permissionsList,
     this.permissions,
+    this.avatar,
   });
 
   factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
@@ -108,6 +110,19 @@ class CurrentUserForEditdto{
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       wallet: json["result"],
+    );
+  }
+}
+
+class getAvatarUser{
+  String avatar;
+
+  getAvatarUser({
+   this.avatar,
+});
+  factory getAvatarUser.fromMap(Map<String, dynamic> json) {
+    return getAvatarUser(
+      avatar: json["result"]["profilePicture"],
     );
   }
 }
