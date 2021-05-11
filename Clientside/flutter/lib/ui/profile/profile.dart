@@ -7,14 +7,17 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -24,17 +27,12 @@ import 'account/account.dart';
 class ProfileScreen extends StatefulWidget{
   ProfileScreen({
     Key key,
-    @required this.Phone,
-    @required this.Email,
-    @required this.Address,
-    @required this.SurName,
-    @required this.Name,
   }) : super(key: key);
 
-  final String Phone,Email,Address,SurName,Name;
+
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name);
+  _ProfileScreenState createState() => _ProfileScreenState();
 
 
   // @override
@@ -44,25 +42,10 @@ class ProfileScreen extends StatefulWidget{
 class _ProfileScreenState extends State<ProfileScreen>{
   _ProfileScreenState({
     Key key,
-    @required this.Phone,
-    @required this.Email,
-    @required this.Address,
-    @required this.SurName,
-    @required this.Name,
   }) : super();
 
 
   String pathAvatar= "assets/images/img_login.jpg";
-  String SurName ="Người";
-  String Name ="Dùng";
-  String FullName="Người Dùng";
-  String profession="Nhà môi giới";
-  String Sodu = "0";
-  String Baidadang = "0";
-  String Phone = "Chưa đăng ký";
-  String Email = "Chưa đăng ký";
-  String Address = "KTX Khu A, ĐHQG-HCM";
-  String creationTime =DateFormat('dd/MM/yyyy').format(DateTime.now());
   File image;
   final picker = ImagePicker();
   int selected = 0;
@@ -87,24 +70,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     _userstore = Provider.of<UserStore>(context);
 
-    if (!_userstore.loading) {
+    if (!_userstore.isLoadingCurrentUser) {
       _userstore.getCurrentUser();
       _userstore.getCurrentWalletUser();
-      if(_userstore.user!=null){
-        print("Duong"+_userstore.user.name);
-        setState(() {
-          SurName = _userstore.user.surname;
-          Name = _userstore.user.name;
-          FullName = SurName + " " +Name;
-          if(_userstore.user.emailAddress!=null)Email = _userstore.user.emailAddress;
-          if(_userstore.user.phoneNumber!=null)Phone = _userstore.user.phoneNumber;
-          if(_userstore.user.wallet!=null)Sodu = _userstore.user.wallet.toString();
-          else Sodu = "0";
-          if(_userstore.user.creationTime!=null)creationTime = _userstore.user.creationTime.substring(8,10)+"/"+ _userstore.user.creationTime.substring(5,7)+"/"+_userstore.user.creationTime.substring(0,4);
-
-        });
-       }
-
     }
 
   }
@@ -113,7 +81,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
   void initState() {
     super.initState();
 
-    // ifuserstore.loading
 
   }
   @override
@@ -133,7 +100,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
     Widget build(BuildContext context) {
       return Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody()
+          body: Observer(
+            builder: (context){
+              return !_userstore.isLoadingCurrentUser && !_userstore.loadingCurrentUserWallet ?_buildBody():CustomProgressIndicatorWidget();
+            },
+          ),
       );
     }
 
@@ -152,7 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     );
   }
-  bool _first =true;
   int _selectedIndex=0;
   Widget _buildBody() {
     return Container(
@@ -163,33 +133,12 @@ class _ProfileScreenState extends State<ProfileScreen>{
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             _buildUserInformation(),
-            // Account(Phone: _Phone,Email: _Email,Address: _Address,),
-            // MenuItem(),
-            // ExpansionPanelList(
-            //   animationDuration: Duration(seconds: 1),
-            //   dividerColor: Colors.white,
-            //   elevation: 1,
-            //   expandedHeaderPadding: EdgeInsets.all(8),
-            //   children: [
-            //     ExpansionPanel(
-            //         headerBuilder: (context,isopen){
-            //           return CardItem(text: "Tài khoản của tôi",
-            //               icon: Icons.account_circle_outlined,
-            //               press: (){});
-            //         },
-            //         body: Text("hello"),
-            //       canTapOnHeader: true,
-            //
-            //     )
-            //   ],
-            // )
-
             IndexedStack(
               children: [
                 MenuItem(),
-                AccountPage(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,creationTime: creationTime,),
-                WalletPage(),
-                ReportPage(title: "Doanh Thu",)
+                _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
+                WalletPage(userID: 2,title: "Nạp tiền",),
+                ReportPage(title: "Doanh Thu",),
               ],
               index: _selectedIndex,
             ),
@@ -204,106 +153,121 @@ class _ProfileScreenState extends State<ProfileScreen>{
     );
   }
 
-  // Widget SelectItem(int selected){
-  //   switch(selected) {
-  //     case 0: {
-  //       return Account(Phone: _Phone,Email: _Email,Address: _Address,);
-  //     }
-  //     break;
-  //
-  //     case 1: {
-  //       return ReportPage(title: "Doanh Thu",);
-  //     }
-  //     break;
-  //
-  //     default: {
-  //       return ReportPage();
-  //     }
-  //     break;
-  //   }
-  // }
 
   Widget MenuItem(){
     return Container(
-
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
-        border: Border.all(color: Colors.white,width: 10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
+      height: 500,
       child: Column(
-        children: <Widget>[
-          Container(height: 10,color: Colors.white,),
-        CardItem(
-            text: "Tài Khoản của tôi",
-            icon: Icons.account_circle_outlined,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-            coloricon: Colors.orange,
-            press: (){
-              setState(() {
-              // _first=!_first;
-              // selected = 0;
-              _selectedIndex =1;
-              });
-          },
-        ),
-        CardItem(
-            text: "Ví tiền của tôi",
-            icon: Icons.account_balance_wallet_outlined,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-          coloricon: Colors.orange,
-            press: (){
-              setState(() {
-                // _first=!_first;
-                // selected = 1;
-                _selectedIndex =2;
-              });
-            },
-        ),
-        CardItem(
-            text: "Báo cáo thống kê",
-            icon: Icons.article_outlined,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-          coloricon: Colors.orange,
-            press: (){
-              setState(() {
-                // _first=!_first;
-                // selected = 1;
-                _selectedIndex =3;
-              });
-            },
-        ),
-        CardItem(
-            text: "Cài đặt",
-            icon: Icons.settings_outlined,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-            coloricon: Colors.orange,
-            press: (){
-              setState(() {
-                _userstore.getCurrentUser();
-              });
-            }
+        children: [
+          Container(
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
+              border: Border.all(color: Colors.white,width: 15.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
-        CardItem(
-            text: "Trợ giúp",
-            icon: Icons.info_outline,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-          coloricon: Colors.orange,
-            press: (){},
-        ),
-          // Container(height: 20,color: Colors.white,),
+          ),
+          Container(
+            height: 470,
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
+            //   border: Border.all(color: Colors.white,width: 10.0),
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: Colors.black26,
+            //       spreadRadius: 5,
+            //       blurRadius: 7,
+            //       offset: Offset(0, 3), // changes position of shadow
+            //     ),
+            //   ],
+            // ),
+            decoration: BoxDecoration(
+              // borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
+              // border: Border.all(color: Colors.white,width: 250.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white,
+                  spreadRadius: 5,
+                  blurRadius: 0,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Column(
+              children: <Widget>[
+                // Container(height: 10,color: Colors.white,),
+              CardItem(
+                  text: "Tài Khoản của tôi",
+                  icon: Icons.account_circle_outlined,
+                  colorbackgroud: Colors.grey[200],
+                  colortext: Colors.black,
+                  coloricon: Colors.orange,
+                  press: (){
+                    setState(() {
+                    // _first=!_first;
+                    // selected = 0;
+                    _selectedIndex =1;
+                    });
+                },
+              ),
+              CardItem(
+                  text: "Ví tiền của tôi",
+                  icon: Icons.account_balance_wallet_outlined,
+                  colorbackgroud: Colors.grey[200],
+                  colortext: Colors.black,
+                coloricon: Colors.orange,
+                  press: (){
+                    setState(() {
+                      // _first=!_first;
+                      // selected = 1;
+                      _selectedIndex =2;
+                    });
+                  },
+              ),
+              CardItem(
+                  text: "Báo cáo thống kê",
+                  icon: Icons.article_outlined,
+                  colorbackgroud: Colors.grey[200],
+                  colortext: Colors.black,
+                coloricon: Colors.orange,
+                  press: (){
+                    setState(() {
+                      // _first=!_first;
+                      // selected = 1;
+                      _selectedIndex =3;
+                    });
+                  },
+              ),
+              CardItem(
+                  text: "Cài đặt",
+                  icon: Icons.settings_outlined,
+                  colorbackgroud: Colors.grey[200],
+                  colortext: Colors.black,
+                  coloricon: Colors.orange,
+                  press: (){
+                    setState(() {
+                    });
+                  }
+                  ),
+              CardItem(
+                  text: "Trợ giúp",
+                  icon: Icons.info_outline,
+                  colorbackgroud: Colors.grey[200],
+                  colortext: Colors.black,
+                coloricon: Colors.orange,
+                  press: (){},
+              ),
+                // Container(height: 20,color: Colors.white,),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -384,23 +348,27 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _userstore.user!=null ? Text(
-                        _userstore.user.surname+" "+_userstore.user.name,
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: FontFamily.roboto
-                        )
-                      ):Text(
-                          SurName+" "+ Name,
+                      Observer(
+                      builder: (context){
+                      return
+                        _userstore.user!=null ? Text(
+                          _userstore.user.surname+" "+_userstore.user.name,
                           style: TextStyle(
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: FontFamily.roboto
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: FontFamily.roboto
                           )
-                      ),
+                        ):Text(
+                            "Người dùng",
+                            style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: FontFamily.roboto
+                            )
+                        );
+                      }),
                       Row(
                         children: [
                           Icon(
@@ -410,7 +378,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
                           Text(
-                              " "+profession,
+                              "Người mô giới",
                               style: TextStyle(
                                   fontSize: 17.0,
                                   // fontWeight: FontWeight.bold,
@@ -434,14 +402,22 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   padding: const EdgeInsets.only(top: 25,left: 40,),
                   child: Column(
                     children: [
-                      Text(
-                        Sodu,
+                      _userstore.user!=null && _userstore.user.wallet!=null ?Text(
+                        _userstore.user.wallet.toString(),
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontFamily: FontFamily.roboto
                       ),
+                      ):Text(
+                        "0",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontFamily.roboto
+                        ),
                       ),
                       Text("Sô dư",
                         style: TextStyle(
@@ -459,7 +435,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     children: [
                       Text(
-                        Baidadang,
+                        "0",
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -484,35 +460,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
     );
   }
 
-
-    // Widget _buildCardItem(IconData i, String t){
-    // return   Container(
-    //   child: Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-    //       child: FlatButton(
-    //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    //           onPressed: (){},
-    //           color: Colors.grey[200],
-    //           padding: EdgeInsets.all(20),
-    //           child: Row(
-    //             children: [
-    //               Icon(i,size: 30,color: Colors.orange,),
-    //               SizedBox(width: 40,),
-    //               Expanded(
-    //                 child: Text(t,
-    //                   style: TextStyle(
-    //                     fontWeight: FontWeight.bold,
-    //                     fontSize: 20
-    //                   )
-    //                 ),
-    //               ),
-    //               Icon(Icons.arrow_forward_ios)
-    //             ],
-    //           )
-    //       ),
-    //     ),
-    // );
-    // }
 }
 class CardItem extends StatelessWidget{
   const CardItem({
@@ -565,6 +512,8 @@ class CardItem extends StatelessWidget{
       ),
     );
   }
+
+
 }
 
 

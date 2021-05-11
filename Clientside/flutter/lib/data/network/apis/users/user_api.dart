@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:dio/dio.dart';
@@ -21,6 +22,7 @@ class UserApi {
     try {
       final res = await _dioClient.post(Endpoints.getAllUsers,
         data: {
+
         },
         options: Options(
             headers: {
@@ -35,8 +37,27 @@ class UserApi {
       throw e;
     }
   }
-
+  Future<User> getUserByID(int userID) async {
+    try {
+      final res = await _dioClient.get(Endpoints.getUsersByID,
+        queryParameters: {
+        "Id":userID
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get UserID Success ${res.toString()}");
+      return User.UserByIDfromMap(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
   Future<CurrentUserForEditdto> getCurrentUser() async {
+
     try {
       final res = await _dioClient.get(Endpoints.getCurrenUser,
 
@@ -102,7 +123,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
-      log("Get All Success");
+      log("Get Wallet Success");
       return CurrentUserForEditdto.fromMapWallet(res);
     } catch (e) {
       print("lỗi" + e.toString());
@@ -140,4 +161,73 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
         //   throw e;
         // }
     }
+    //   return CurrenUserForEditdyo.fromMap(res);
+    // } catch (e) {
+    //   print("lỗi" + e.toString());
+    //   throw e;
+    // }
+  }
+
+  Future<listLSGD> getLSGD() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getCurrenlichsugiaodich,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listLSGD.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> Naptien(double soTien, String thoiDiem,int userId) async {
+    String ghiChu = "Nạp Tiền";
+    try {
+      final res = await _dioClient.post(Endpoints.CreateOrEditLSGD,
+        data: {
+          "soTien": soTien,
+          "ghiChu": ghiChu,
+          "thoiDiem": thoiDiem,
+          "userId": userId,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("CreateLSGD Success");
+      bool CreateLSGDSuccess = res["success"];
+
+      print(res);
+      return CreateLSGDSuccess;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<listLSGD> getAllLSGD() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAllLSGD,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listLSGD.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
 }
