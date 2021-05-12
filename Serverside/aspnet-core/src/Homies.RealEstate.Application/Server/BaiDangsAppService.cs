@@ -476,6 +476,7 @@ namespace Homies.RealEstate.Server
             input.HoaDonBaiDangDto.BaiDangId = baiDang.Id;
             await _lookup_chiTietHoaDonBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
+
             foreach (CreateOrEditHinhAnhDto chiTiet in input.HinhAnhDtos)
             {
                 chiTiet.BaiDangId = baiDang.Id;
