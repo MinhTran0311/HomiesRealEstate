@@ -77,14 +77,14 @@ class Repository {
   }
 
   // Post: ---------------------------------------------------------------------
-  // Future<listLSGD> getLSGD() async {
-  //   // check to see if posts are present in database, then fetch from database
-  //   // else make a network call to get all posts, store them into database for
-  //   // later use
-  //   return await _userApi.getLSGD().then((lsgdList) {
-  //     return lsgdList;
-  //   }).catchError((error) => throw error);
-  // }
+  Future<listLSGD> getLSGD() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getLSGD().then((lsgdList) {
+      return lsgdList;
+    }).catchError((error) => throw error);
+  }
 
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
