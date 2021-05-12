@@ -456,6 +456,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showBottomSheet(){
     showModalBottomSheet(
         context: context,
+        enableDrag: false,
+        isDismissible: false,
         isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

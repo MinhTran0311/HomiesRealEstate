@@ -21,10 +21,16 @@ class _FilterState extends State<Filter> {
   TextEditingController _dienTichMinValueController = TextEditingController();
   TextEditingController _dienTichMaxValueController = TextEditingController();
   TextEditingController _diaChiController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+
+  FocusNode _minGiaFocus;
+  FocusNode _minDienTichFocus;
 
   @override
   void initState() {
     super.initState();
+    _minGiaFocus = new FocusNode();
+    _minDienTichFocus = new FocusNode();
   }
 
   @override
@@ -105,9 +111,18 @@ class _FilterState extends State<Filter> {
                 // ),
                 buiDienTichFilter(),
                 buildDiaChiFilter(),
-
+                buildUsernameFilter(),
                 RoundedButtonWidget(
                   buttonText: "Đóng bộ lọc",
+                  buttonColor: Colors.amber,
+                  textColor: Colors.white,
+                  onPressed: (){
+                    //Navigator.pop(context, widget.filterModel);
+                    _filterStore.validateSearchContent();
+                  },
+                ),
+                RoundedButtonWidget(
+                  buttonText: "Xóa bộ lọc",
                   buttonColor: Colors.amber,
                   textColor: Colors.white,
                   onPressed: (){
@@ -129,7 +144,7 @@ class _FilterState extends State<Filter> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 100,
+            width: 110,
             child: Text("Loại bài",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -146,7 +161,7 @@ class _FilterState extends State<Filter> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: SizedBox(
-                      width: 75,
+                      width: 160,
                       height: 60,
                       child: DropdownButton<String>(
                         isExpanded: true,
@@ -217,7 +232,7 @@ class _FilterState extends State<Filter> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 100,
+            width: 110,
             child: Text("Giá tiền",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -232,40 +247,41 @@ class _FilterState extends State<Filter> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _filterStore.suDungGiaFilter ? SizedBox(
-                          width: 75,
-                          child: TextField(
-                            textInputAction: TextInputAction.next,
-                            onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                            keyboardType: TextInputType.number,
-                            controller: _giaMinValueController,
-                            onChanged: (value){
-                              _filterStore.setGiaMin(value);
-                              // _filterStore.setMinGiaSlider(double.parse(value),value.isEmpty);
-                            },
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Min",
-                              hintStyle: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey[400],
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red[400]),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange[400]),
-                              ),
-                              border:  UnderlineInputBorder(
-                                  borderSide:  BorderSide(color: Colors.black)
-                              ),
-                            ),
-                          ),
-                        )
-                       : Container(width: 0,height: 0,),
+                    width: 75,
+                    child: TextField(
+                      focusNode: _minGiaFocus,
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                      keyboardType: TextInputType.number,
+                      controller: _giaMinValueController,
+                      onChanged: (value){
+                        _filterStore.setGiaMin(value);
+                        // _filterStore.setMinGiaSlider(double.parse(value),value.isEmpty);
+                      },
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: "Min",
+                        hintStyle: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[400],
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red[400]),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.orange[400]),
+                        ),
+                        border:  UnderlineInputBorder(
+                            borderSide:  BorderSide(color: Colors.black)
+                        ),
+                      ),
+                    ),
+                  )
+                      : Container(width: 0,height: 0,),
                   _filterStore.suDungGiaFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
                   _filterStore.suDungGiaFilter ? SizedBox(
                     width: 75,
@@ -352,7 +368,7 @@ class _FilterState extends State<Filter> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 100,
+            width: 110,
             child: Text("Diện tích",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -368,38 +384,39 @@ class _FilterState extends State<Filter> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _filterStore.suDungDienTichFilter ? SizedBox(
-                      width: 75,
-                      child: TextField(
-                        textInputAction: TextInputAction.next,
-                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                        keyboardType: TextInputType.number,
-                        controller: _dienTichMinValueController,
-                        onChanged: (value){
-                          _filterStore.setDienTichMin(value);
-                          },
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Min",
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[400],
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[400]),
-                          ),
-                          border:  UnderlineInputBorder(
-                              borderSide:  BorderSide(color: Colors.black)
-                          ),
-                        ),
-                      ),
-                    ) : Container(width: 0,height: 0,),
+                width: 75,
+                child: TextField(
+                  focusNode: _minDienTichFocus,
+                  textInputAction: TextInputAction.next,
+                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  keyboardType: TextInputType.number,
+                  controller: _dienTichMinValueController,
+                  onChanged: (value){
+                    _filterStore.setDienTichMin(value);
+                  },
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: "Min",
+                    hintStyle: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[400],
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red[400]),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange[400]),
+                    ),
+                    border:  UnderlineInputBorder(
+                        borderSide:  BorderSide(color: Colors.black)
+                    ),
+                  ),
+                ),
+              ) : Container(width: 0,height: 0,),
               _filterStore.suDungDienTichFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
               _filterStore.suDungDienTichFilter ? SizedBox(
                 width: 75,
@@ -485,7 +502,7 @@ class _FilterState extends State<Filter> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 100,
+            width: 110,
             child: Text("Địa chỉ",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -512,6 +529,67 @@ class _FilterState extends State<Filter> {
               ),
               decoration: InputDecoration(
                 hintText: "Địa chỉ bất kì",
+                suffixIcon: IconButton(
+                  onPressed: () => _diaChiController.clear(),
+                  icon: Icon(Icons.clear),
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[400],
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border:  UnderlineInputBorder(
+                    borderSide:  BorderSide(color: Colors.black)
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget buildUsernameFilter(){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 110,
+            child: Text("Username",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: _usernameController,
+              onChanged: (value){
+                _filterStore.setDiaChiContent(value);
+              },
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: "Username",
+                suffixIcon: IconButton(
+                  onPressed: () => _usernameController.clear(),
+                  icon: Icon(Icons.clear),
+                ),
                 hintStyle: TextStyle(
                   fontSize: 18,
                   color: Colors.grey[400],
@@ -541,6 +619,7 @@ class _FilterState extends State<Filter> {
     _dienTichMaxValueController.dispose();
     _dienTichMinValueController.dispose();
     _diaChiController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 }

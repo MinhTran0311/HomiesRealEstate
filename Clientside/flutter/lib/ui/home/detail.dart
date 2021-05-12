@@ -103,7 +103,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
-      child: Stack(
+        child: Stack(
         children: [
           Align(
             alignment: Alignment.bottomCenter,
@@ -513,7 +513,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
                   ]),
             ),
-
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -591,7 +590,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
               ),
             ),
           )
-
         ],
       ),
     )

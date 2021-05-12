@@ -123,6 +123,7 @@ abstract class _FilterStore with Store {
     return newValue.toString().split(".")[0] + "0000";
   }
 
+
   @action
   void validateSearchContent() {
     filter_Model finalFilter = new filter_Model();
