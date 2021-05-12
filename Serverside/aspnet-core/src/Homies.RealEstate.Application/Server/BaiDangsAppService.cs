@@ -278,7 +278,7 @@ namespace Homies.RealEstate.Server
         {
 
             var filteredBaiDangs = _baiDangRepository.GetAll()
-                        .Include(e =>   e.UserFk)
+                        .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TagLoaiBaiDang.Contains(input.Filter) || e.DiaChi.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
@@ -296,7 +296,7 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem == input.TagTimKiemFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe == input.TieuDeFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter)
-                        .WhereIf(input.XaIdFilter!=null, e => e.XaFk != null && e.XaFk.Id == input.XaIdFilter);
+                        .WhereIf(input.XaIdFilter!=null, e => e.XaId != null && e.XaId == input.XaIdFilter);
                         
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "id asc")
@@ -311,6 +311,12 @@ namespace Homies.RealEstate.Server
 
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
+
+                           join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
+                           from s4 in j4.DefaultIfEmpty()
+
+                           join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
+                           from s5 in j5.DefaultIfEmpty()
 
                            select new GetBaiDangForViewDto()
                            {
@@ -341,7 +347,8 @@ namespace Homies.RealEstate.Server
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-
+                               HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
+                               TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
                                //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
                            };
 
