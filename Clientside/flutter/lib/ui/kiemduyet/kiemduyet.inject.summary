@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/ui/kiemduyet/kiemduyet.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}
