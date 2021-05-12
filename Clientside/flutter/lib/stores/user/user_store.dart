@@ -213,12 +213,29 @@ abstract class _UserStore with Store {
     });
   }
 
+
+  static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrentUserForEditdto> fetchUsersFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUserResponse);
+
+  @computed
+  bool get loading => fetchUsersFuture.status == FutureStatus.pending;
+
+  // empty responses:-----------------------------------------------------------
+  static ObservableFuture<CurrentUserForEditdto> emptyLoginResponses =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<CurrentUserForEditdto> loginFutures = emptyLoginResponses;
+
   @action
   Future getUserOfCurrentDetailPost(int Id) async {
     final future = _repository.getUserOfCurrentDeatiaiPost(Id);
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    future.then((user) {
       this.user = user;
     }).catchError((error) {
       if (error is DioError) {

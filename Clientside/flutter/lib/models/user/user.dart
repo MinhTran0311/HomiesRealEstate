@@ -28,8 +28,6 @@ class User {
     this.permissionsList,
     this.permissions,
   });
-
-  
   factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
     id: json["result"]["user"]["id"],
     name: json["result"]["user"]["name"],
@@ -43,7 +41,7 @@ class User {
     creationTime: json["result"]["user"]["creationTime"],
     // permissions: json["roles"],
   );
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
     id: json["id"],
     name: json["name"],
     surName: json["surname"],
@@ -107,7 +105,8 @@ class CurrentUserForEditdto{
     this.creationTime,
     this.wallet,
     this.userName
-});
+  });
+
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       name: json["result"]["name"],
@@ -119,6 +118,7 @@ class CurrentUserForEditdto{
       creationTime: json["result"]["creationTime"],
     );
   }
+
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       wallet: json["result"],

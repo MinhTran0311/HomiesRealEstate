@@ -107,6 +107,23 @@ mixin _$FilterStore on _FilterStore, Store {
     });
   }
 
+  final _$loaiBaiDangDropDownValueAtom =
+      Atom(name: '_FilterStore.loaiBaiDangDropDownValue');
+
+  @override
+  String get loaiBaiDangDropDownValue {
+    _$loaiBaiDangDropDownValueAtom.reportRead();
+    return super.loaiBaiDangDropDownValue;
+  }
+
+  @override
+  set loaiBaiDangDropDownValue(String value) {
+    _$loaiBaiDangDropDownValueAtom
+        .reportWrite(value, super.loaiBaiDangDropDownValue, () {
+      super.loaiBaiDangDropDownValue = value;
+    });
+  }
+
   final _$seletedRangeAtom = Atom(name: '_FilterStore.seletedRange');
 
   @override
@@ -242,6 +259,7 @@ filter_model: ${filter_model},
 success: ${success},
 giaDropDownValue: ${giaDropDownValue},
 dienTichDropDownValue: ${dienTichDropDownValue},
+loaiBaiDangDropDownValue: ${loaiBaiDangDropDownValue},
 seletedRange: ${seletedRange},
 suDungGiaFilter: ${suDungGiaFilter},
 suDungDienTichFilter: ${suDungDienTichFilter},

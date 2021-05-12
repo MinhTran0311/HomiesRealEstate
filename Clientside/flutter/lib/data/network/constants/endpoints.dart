@@ -21,7 +21,7 @@ class Endpoints {
 
   //#endregion
 
-
+  static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
   //# region user
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
@@ -36,8 +36,6 @@ class Endpoints {
 
   //# region Post
 
-  //get all users
-  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
   //get all lichsugiaodich
   static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
   //update all lichsugiaodich

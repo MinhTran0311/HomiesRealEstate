@@ -147,7 +147,6 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     //   print("lỗi" + e.toString());
     //   throw e;
     // }
-  }
 
   Future<listLSGD> getLSGD() async {
     try {
