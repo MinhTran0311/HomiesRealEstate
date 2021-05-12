@@ -17,6 +17,9 @@ namespace Homies.RealEstate.Server.Dtos
         public CreateOrEditChiTietHoaDonBaiDangDto HoaDonBaiDangDto { get; set; }
 
         [Required]
+        public CreateOrEditLichSuGiaoDichDto LichSuGiaoDichDto { get; set; }
+
+        [Required]
         public List<CreateOrEditHinhAnhDto> HinhAnhDtos { get; set; }
     }
 }
