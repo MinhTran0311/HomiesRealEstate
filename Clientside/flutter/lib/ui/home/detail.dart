@@ -436,7 +436,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                       width: 60,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
+                                            //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
+                                            image: AssetImage(Assets.front_img),
                                             fit: BoxFit.cover,
                                           ),
                                           shape: BoxShape.circle

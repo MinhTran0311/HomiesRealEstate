@@ -45,11 +45,11 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi);
 
   // Post: ---------------------------------------------------------------------
-  Future<PostList> getPosts() async {
+  Future<PostList> getPosts(int skipCount, int maxResultCount) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getPosts().then((postsList) {
+    return await _postApi.getPosts(skipCount, maxResultCount).then((postsList) {
       postsList.posts.forEach((post) {
         _postDataSource.insert(post);
       });
