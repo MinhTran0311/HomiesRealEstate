@@ -29,6 +29,19 @@ mixin _$PostStore on _PostStore, Store {
           Computed<bool>(() => super.isBaiGhimYeuThichLoading,
               name: '_PostStore.isBaiGhimYeuThichLoading'))
       .value;
+  Computed<bool> _$searchLoadingComputed;
+
+  @override
+  bool get searchLoading =>
+      (_$searchLoadingComputed ??= Computed<bool>(() => super.searchLoading,
+              name: '_PostStore.searchLoading'))
+          .value;
+  Computed<bool> _$hasFilterComputed;
+
+  @override
+  bool get hasFilter => (_$hasFilterComputed ??=
+          Computed<bool>(() => super.hasFilter, name: '_PostStore.hasFilter'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -76,6 +89,21 @@ mixin _$PostStore on _PostStore, Store {
     _$fetchisBaiGhimYeuThichFutureAtom
         .reportWrite(value, super.fetchisBaiGhimYeuThichFuture, () {
       super.fetchisBaiGhimYeuThichFuture = value;
+    });
+  }
+
+  final _$fetchSearchFutureAtom = Atom(name: '_PostStore.fetchSearchFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchSearchFuture {
+    _$fetchSearchFutureAtom.reportRead();
+    return super.fetchSearchFuture;
+  }
+
+  @override
+  set fetchSearchFuture(ObservableFuture<dynamic> value) {
+    _$fetchSearchFutureAtom.reportWrite(value, super.fetchSearchFuture, () {
+      super.fetchSearchFuture = value;
     });
   }
 
@@ -233,6 +261,13 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
   }
 
+  final _$searchPostsAsyncAction = AsyncAction('_PostStore.searchPosts');
+
+  @override
+  Future<dynamic> searchPosts() {
+    return _$searchPostsAsyncAction.run(() => super.searchPosts());
+  }
+
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
@@ -263,6 +298,7 @@ mixin _$PostStore on _PostStore, Store {
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
+fetchSearchFuture: ${fetchSearchFuture},
 postList: ${postList},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
@@ -273,7 +309,9 @@ isBaiGhimYeuThich: ${isBaiGhimYeuThich},
 searchContent: ${searchContent},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
-isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading}
+isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
+searchLoading: ${searchLoading},
+hasFilter: ${hasFilter}
     ''';
   }
 }

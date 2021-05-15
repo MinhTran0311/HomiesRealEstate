@@ -53,6 +53,7 @@ class Endpoints {
   //post image
   static const String postImageToImageBB = imagebb + "/1/upload";
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
-
-//# endregion
+  //search
+  static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
+  //# endregion
 }

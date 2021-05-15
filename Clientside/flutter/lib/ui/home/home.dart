@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -161,11 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   suffixIcon: Padding(
                     padding: EdgeInsets.only(left: 16),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey[400],
-                      size: 28,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.grey[400],
+                        size: 28,
+                      ),
+                      onPressed: (){
+                        _postStore.searchPosts();
+                      },
                     ),
+
                   )
               ),
           ),
@@ -453,8 +460,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SizedBox.shrink();
   }
-  void _showBottomSheet(){
-    showModalBottomSheet(
+  void _showBottomSheet() async {
+    _postStore.filter_model = await showModalBottomSheet<filter_Model>(
         context: context,
         enableDrag: false,
         isDismissible: false,
@@ -465,14 +472,14 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(30),
             )
         ),
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Wrap(
             children: [
               Filter(),
             ],
           );
         }
-    ).then((value) => _postStore.filter_model = value);
+    );
   }
   _buildLanguageDialog() {
     _showDialog<String>(

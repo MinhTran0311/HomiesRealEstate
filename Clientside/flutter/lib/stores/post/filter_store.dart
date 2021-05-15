@@ -62,16 +62,14 @@ abstract class _FilterStore with Store {
   @computed
   bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
-
-
-
-
-
-
   // actions:-------------------------------------------------------------------
   @action
   void setDiaChiContent(String value) {
     filter_model.diaChi = value;
+  }
+  @action
+  void setUsernameContent(String value) {
+    filter_model.username = value;
   }
   @action
   void setGiaMin(String value) {
@@ -79,7 +77,6 @@ abstract class _FilterStore with Store {
   }
   @action
   void setGiaMax(String value) {
-    print(value);
     filter_model.giaMax = value;
   }
   @action
@@ -125,17 +122,41 @@ abstract class _FilterStore with Store {
 
 
   @action
-  void validateSearchContent() {
-    filter_Model finalFilter = new filter_Model();
-    finalFilter.loaiBaiDang = loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
-    finalFilter.giaMin = filter_model.giaMin.isEmpty? filter_model.giaMin : calculateActualValue(filter_model.giaMin, giaDropDownValue);
-    finalFilter.giaMax = filter_model.giaMax.isEmpty? filter_model.giaMax : calculateActualValue(filter_model.giaMax, giaDropDownValue);
-    finalFilter.dienTichMin = filter_model.dienTichMin;
-    finalFilter.dienTichMax = filter_model.dienTichMax;
-    finalFilter.diaChi = filter_model.diaChi;
+  filter_Model validateSearchContent() {
+    if (loaiBaiDangDropDownValue == "Bất kì" &&
+        filter_model.giaMin.isEmpty &&
+        filter_model.giaMax.isEmpty &&
+        filter_model.dienTichMin.isEmpty&&
+        filter_model.dienTichMax.isEmpty&&
+        filter_model.diaChi.isEmpty&&
+        filter_model.username.isEmpty
+    )
+      return null;
+    else {
+      filter_Model finalFilter = new filter_Model();
+      finalFilter.loaiBaiDang =
+      loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
+      finalFilter.giaMin =
+      filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(
+          filter_model.giaMin, giaDropDownValue);
+      finalFilter.giaMax =
+      filter_model.giaMax.isEmpty ? filter_model.giaMax : calculateActualValue(
+          filter_model.giaMax, giaDropDownValue);
+      finalFilter.dienTichMin = filter_model.dienTichMin;
+      finalFilter.dienTichMax = filter_model.dienTichMax;
+      finalFilter.diaChi = filter_model.diaChi;
+      finalFilter.username = filter_model.username;
+      return finalFilter;
+    }
+  }
 
-    print(finalFilter);
-    return;
+  @action
+  void resetValue(){
+    loaiBaiDangDropDownValue = 'Bất kì';
+    giaDropDownValue = 'Bất kì';
+    dienTichDropDownValue = 'Bất kì';
+
+    filter_model = new filter_Model();
   }
 }
 
