@@ -285,19 +285,19 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.DiaChi.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagLoaiBaiDangFilter), e => e.TagLoaiBaiDang == input.TagLoaiBaiDangFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi.Contains(input.DiaChiFilter))
-                        
-                        
+
+
                         .WhereIf(input.MinDienTichFilter != null, e => e.DienTich >= input.MinDienTichFilter)
-                        .WhereIf(input.MaxDienTichFilter != null, e => e.DienTich <= input.MaxDienTichFilter)                        
-                        
+                        .WhereIf(input.MaxDienTichFilter != null, e => e.DienTich <= input.MaxDienTichFilter)
+
                         .WhereIf(input.MinGiaFilter != null, e => e.Gia >= input.MinGiaFilter)
                         .WhereIf(input.MaxGiaFilter != null, e => e.Gia <= input.MaxGiaFilter)
-                        
-                        
+
+
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem.Contains(input.TagTimKiemFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
-                        .WhereIf(input.XaIdFilter!=null, e => e.XaId != null && e.XaId == input.XaIdFilter)
+                        .WhereIf(input.XaIdFilter != null, e => e.XaId != null && e.XaId == input.XaIdFilter);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "id asc")
