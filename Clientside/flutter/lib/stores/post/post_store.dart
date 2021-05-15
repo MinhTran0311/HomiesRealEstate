@@ -51,6 +51,13 @@ abstract class _PostStore with Store {
     ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
     ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
 
+    static ObservableFuture<dynamic> emptySearchResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchSearchFuture =
+    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+
     @observable
     PostList postList;
 
@@ -61,7 +68,7 @@ abstract class _PostStore with Store {
     List<String> imageUrlList;
 
     @observable
-    filter_Model filter_model= new filter_Model();
+    filter_Model filter_model = new filter_Model();
 
     @observable
     bool success = false;
@@ -85,6 +92,12 @@ abstract class _PostStore with Store {
     @computed
     bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
 
+    @computed
+    bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
+
+    @computed
+    bool get hasFilter => filter_model!=null;
+
     // actions:-------------------------------------------------------------------
     @action
     void setSearchContent(String value) {
@@ -99,6 +112,8 @@ abstract class _PostStore with Store {
       future.then((postList) {
         success = true;
         this.postList = postList;
+        this.postList.posts.add(postList.posts[0]);
+        this.postList.posts.add(postList.posts[0]);
       }).catchError((error) {
         if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -166,7 +181,7 @@ abstract class _PostStore with Store {
     @action
     Future createOrChangeStatusBaiGhimYeuThich(String postId) async {
       final futrue = _repository.createOrChangeStatusBaiGhimYeuThich(postId,!isBaiGhimYeuThich);
-      print("123");
+
       futrue.then((result) {
         isBaiGhimYeuThich =!isBaiGhimYeuThich;
       }).catchError((error){
@@ -183,6 +198,27 @@ abstract class _PostStore with Store {
       });
     }
 
+  @action
+  Future searchPosts() async {
+    filter_model.searchContent = searchContent;
+    final futrue = _repository.searchPosts(filter_model);
+    fetchisBaiGhimYeuThichFuture = ObservableFuture(futrue);
+
+    futrue.then((result) {
+      this.postList = result;
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
   @action
   void validateSearchContent(String value) {
       return;

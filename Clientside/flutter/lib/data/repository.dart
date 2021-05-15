@@ -7,6 +7,7 @@ import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -49,6 +50,14 @@ class Repository {
     // else make a network call to get all posts, store them into database for
     // later use
     return await _postApi.getPosts().then((postsList) {
+      postsList.posts.forEach((post) {
+        _postDataSource.insert(post);
+      });
+      return postsList;
+    }).catchError((error) => throw error);
+  }
+  Future<PostList> searchPosts(filter_Model filter_model) async {
+    return await _postApi.searchPosts(filter_model).then((postsList) {
       postsList.posts.forEach((post) {
         _postDataSource.insert(post);
       });

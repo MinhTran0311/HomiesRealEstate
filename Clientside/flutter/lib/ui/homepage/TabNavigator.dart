@@ -21,7 +21,7 @@ class TabNavigator extends StatelessWidget {
     else if(tabItem == "ManagementScreen")
       child = ManagementScreen();
     else if(tabItem == "ProfileScreen")
-      child = ProfileScreen();
+      child = Container();
     else if(tabItem == "NewPost")
       child = Container();
 

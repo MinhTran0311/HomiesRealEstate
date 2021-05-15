@@ -278,14 +278,13 @@ namespace Homies.RealEstate.Server
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllByFilter(GetAllBaiDangByFilterInput input)
         {
-
             var filteredBaiDangs = _baiDangRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TagLoaiBaiDang.Contains(input.Filter) || e.DiaChi.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.DiaChi.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagLoaiBaiDangFilter), e => e.TagLoaiBaiDang == input.TagLoaiBaiDangFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi == input.DiaChiFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi.Contains(input.DiaChiFilter))
                         
                         
                         .WhereIf(input.MinDienTichFilter != null, e => e.DienTich >= input.MinDienTichFilter)
@@ -295,11 +294,11 @@ namespace Homies.RealEstate.Server
                         .WhereIf(input.MaxGiaFilter != null, e => e.Gia <= input.MaxGiaFilter)
                         
                         
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem == input.TagTimKiemFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe == input.TieuDeFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter)
-                        .WhereIf(input.XaIdFilter!=null, e => e.XaId != null && e.XaId == input.XaIdFilter);
-                        
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem.Contains(input.TagTimKiemFilter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
+                        .WhereIf(input.XaIdFilter!=null, e => e.XaId != null && e.XaId == input.XaIdFilter)
+
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "id asc")
                 .PageBy(input);

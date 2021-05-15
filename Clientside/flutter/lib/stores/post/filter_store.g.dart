@@ -153,6 +153,17 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
+  void setUsernameContent(String value) {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_FilterStore.setUsernameContent');
+    try {
+      return super.setUsernameContent(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setGiaMin(String value) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.setGiaMin');
@@ -241,11 +252,22 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
-  void validateSearchContent() {
+  filter_Model validateSearchContent() {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.validateSearchContent');
     try {
       return super.validateSearchContent();
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetValue() {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_FilterStore.resetValue');
+    try {
+      return super.resetValue();
     } finally {
       _$_FilterStoreActionController.endAction(_$actionInfo);
     }

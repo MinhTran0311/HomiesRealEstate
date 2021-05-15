@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -127,8 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  Widget _buildPostsList()
-  {
+  Widget _buildPostsList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -161,11 +163,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   suffixIcon: Padding(
                     padding: EdgeInsets.only(left: 16),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey[400],
-                      size: 28,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.grey[400],
+                        size: 28,
+                      ),
+                      onPressed: (){
+                        _postStore.searchPosts();
+                      },
                     ),
+
                   )
               ),
           ),
@@ -229,29 +237,52 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(height: 6,),
-        _buildListView(),
+        Expanded(child: _buildListView()),
       ],
     );
   }
   Widget _buildListView() {
+
+    GlobalKey _contentKey = GlobalKey();
+    GlobalKey _refresherKey = GlobalKey();
+
     return _postStore.postList != null
-        ? Expanded(
-          child: ListView.separated(
-              itemCount: _postStore.postList.posts.length,
-              separatorBuilder: (context, position) {
-                return Divider();
-              },
-              itemBuilder: (context, position) {
-                return _buildPostPoster(_postStore.postList.posts[position],position);
-                  //_buildListItem(position);
-              },
-            ),
-        )
-        : Center(
-            child: Text(
-              "Không có bài đăng",
-            ),
-          );
+      ? SmartRefresher(
+        key: _refresherKey,
+        controller: _refreshController,
+        enablePullUp: true,
+        enablePullDown: true,
+        header: WaterDropHeader(),
+        physics: BouncingScrollPhysics(),
+        footer: ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+        ),
+        onLoading: () async {
+          await Future.delayed(Duration(milliseconds: 180));
+          _refreshController.loadComplete();
+        },
+        onRefresh: () async {
+          await Future.delayed(Duration(milliseconds: 180));
+          _refreshController.refreshCompleted();
+        },
+        child: ListView.separated(
+          key: _contentKey,
+            itemCount: _postStore.postList.posts.length,
+            separatorBuilder: (context, position) {
+              return Divider();
+            },
+            itemBuilder: (context, position) {
+              return _buildPostPoster(_postStore.postList.posts[position],position);
+                //_buildListItem(position);
+            },
+          ),
+      )
+      : Center(
+          child: Text(
+            "Không có bài đăng",
+          ),
+        );
   }
 
   Widget _buildPostPoster(Post post, int index){
@@ -453,8 +484,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SizedBox.shrink();
   }
-  void _showBottomSheet(){
-    showModalBottomSheet(
+  void _showBottomSheet() async {
+    _postStore.filter_model = await showModalBottomSheet<filter_Model>(
         context: context,
         enableDrag: false,
         isDismissible: false,
@@ -465,14 +496,14 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(30),
             )
         ),
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Wrap(
             children: [
               Filter(),
             ],
           );
         }
-    ).then((value) => _postStore.filter_model = value);
+    );
   }
   _buildLanguageDialog() {
     _showDialog<String>(
