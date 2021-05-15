@@ -462,29 +462,27 @@ namespace Homies.RealEstate.Server
                 var danhMucBaiDang = await _lookup_danhMucRepository.FirstOrDefaultAsync(e => e.Id == input.BaiDang.DanhMucId);
                 input.BaiDang.TagTimKiem = danhMucBaiDang.Tag != null ? danhMucBaiDang.Tag : "bai dang";
             }
-
-            var baiDang = await _baiDangRepository.InsertAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
-
-            if (input.ChiTietBaiDangDtos!=null && input.ChiTietBaiDangDtos.Count > 0)
+            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
+            if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
             {
-                foreach(CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
+                foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
                 {
-                    chiTiet.BaiDangId = baiDang.Id;
+                    chiTiet.BaiDangId = baiDangId;
                     await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
                 }
             }
 
-            input.HoaDonBaiDangDto.BaiDangId = baiDang.Id;
-            var hoadon = await _lookup_chiTietHoaDonBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
+            input.HoaDonBaiDangDto.BaiDangId = baiDangId;
+            var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
 
-            input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadon.Id;
+            input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
             var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
             await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
 
             foreach (CreateOrEditHinhAnhDto chiTiet in input.HinhAnhDtos)
             {
-                chiTiet.BaiDangId = baiDang.Id;
+                chiTiet.BaiDangId = baiDangId;
                 await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(chiTiet));
             }
         }

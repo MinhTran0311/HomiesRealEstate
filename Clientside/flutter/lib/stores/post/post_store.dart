@@ -62,6 +62,12 @@ abstract class _PostStore with Store {
     PostList postList;
 
     @observable
+    int skipCount = 0;
+
+    @observable
+    int maxCount = 10;
+
+    @observable
     PropertyList propertyList;
 
     @observable
@@ -106,7 +112,7 @@ abstract class _PostStore with Store {
 
     @action
     Future getPosts() async {
-      final future = _repository.getPosts();
+      final future = _repository.getPosts(skipCount, maxCount);
       fetchPostsFuture = ObservableFuture(future);
 
       future.then((postList) {
