@@ -1,15 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/models/image/image.dart';
+import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
+import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/post/postProperties/postProperty.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -22,12 +30,14 @@ import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_summernote/flutter_summernote.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,13 +72,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
   PostStore _postStore;
   TownStore _townStore;
   ImageStore _imageStore;
+  UserStore _userStore;
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
-  List<TextEditingController> _ThuocTinhController;
+  var _ThuocTinhController = new List<TextEditingController>();
 
-  TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _LocateController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
   GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
 
@@ -81,6 +92,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Postcategory selectedTypeTypeType;
   Pack selectedPack;
   String postId;
+  int songay;
   Town selectedTown = null;
   Commune selectedCommune = null;
   String selectedCity = null;
@@ -91,26 +103,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
   //region Time
   //region Time
   DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
-  DateTime selectedDate1st = DateTime.now();
   DateTime selectedDatefl = null;
-
-  _selectDate1st(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate1st,
-      firstDate: DateTime.now(),
-      lastDate: (DateTime.now().add(Duration(days: 10))),
-    );
-    if (picked != null && picked != selectedDate1st)
-      setState(() {
-        selectedDate1st = picked;
-        selectedDatefl = selectedDate1st.add(const Duration(days: 1));
-      });
-  }
-
   _selectDatefl(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
+      locale: const Locale('en', ''),
       initialDate: selectedDatefl,
       firstDate:
           DateTime.now().add(Duration(days: selectedPack.thoiGianToiThieu)),
@@ -119,6 +116,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (picked != null && picked != selectedDatefl)
       setState(() {
         selectedDatefl = picked;
+        songay = 0;
+        while (selectedDatefl
+            .isAfter(DateTime.now().add(Duration(days: songay)))) songay++;
       });
   }
 
@@ -130,6 +130,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     // initializing stores
     _postStore = Provider.of<PostStore>(context);
     _townStore = Provider.of<TownStore>(context);
+    _userStore = Provider.of<UserStore>(context);
+    _imageStore = Provider.of<ImageStore>(context);
+
     // check to see if already called api
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
@@ -148,6 +151,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     }
     if (!_postStore.loadingThuocTinh) {
       _postStore.getThuocTinhs();
+    }
+    if (!_userStore.loading) {
+      _userStore.getCurrentUser(); //_userStore.getCurrentWalletUser();
     }
   }
 
@@ -205,15 +211,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _postStore.loadinggetcategorys
-            ? CustomProgressIndicatorWidget()
-            : Material(child: _buildBody());
+        return !_postStore.loadinggetcategorys && !_townStore.loadingCommune
+            ? Material(child: _buildBody())
+            : CustomProgressIndicatorWidget();
       },
     );
   }
 
   Widget _buildBody() {
+    var _formKey;
     return Material(
+        child: Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
           Container(
@@ -257,7 +267,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildLeftSide() {
@@ -278,6 +288,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // !_imageStore.imageLoadingpost?
+            // showAlertDialog(context):null,
             AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             SizedBox(height: 24.0),
             _buildTileField(),
@@ -286,6 +298,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildTownField(),
             _buildCommuneField(),
+            _buildLocateField(),
+            SizedBox(height: 24.0),
             _buildTypeField(),
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
@@ -311,6 +325,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             //_buildImagepick2(),
             SizedBox(height: 24.0),
             _buildUpButton(),
+            _buildUpButton2(),
           ],
         ),
       ),
@@ -321,74 +336,95 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildTileField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Tiêu đề'),
-          hintColor: Colors.white,
-          icon: Icons.textsms_rounded,
-          inputType: TextInputType.text,
-          //  iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          iconColor: Colors.white,
-          textController: _TileController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {},
-        );
+        var _formKey;
+        return Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.textsms_rounded),
+                      fillColor: Colors.white,
+                      //hintText: 'Tiêu đề',
+                      labelText: 'Tiêu đề',
+                    ),
+                    onSaved: (value) {
+                      // //  FormState.save();
+                      //   print(value);
+                      //   // code when the user saves the form.
+                    },
+                    controller: _TileController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng điền tiêu đề';
+                      }
+                      return null;
+                    },
+                  ),
+                ]));
       },
     );
   }
 
   Widget _buildTypeField() {
     List<Postcategory> type = [];
+    var _formKey;
     for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
       if (_postStore.postCategoryList.categorys[i].danhMucCha ==
           null) if (_postStore.postCategoryList.categorys[i] != null)
         type.add(_postStore.postCategoryList.categorys[i]);
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      child: DropdownButton<Postcategory>(
-        hint: Text("Chọn phương thức"),
-        value: selectedType,
-        onChanged: (Postcategory Value) {
-          setState(() {
-            try {
-              selectedType = Value;
-              selectedTypeType = null;
-            } catch (_) {
-              selectedType = type[0];
-            }
-          });
-        },
-        items: type.map((Postcategory type) {
-          if (type.danhMucCha == null)
-            return DropdownMenuItem<Postcategory>(
-              value: type,
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.home_work_sharp,
-                    color: const Color(0xFF167F67),
+    return Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          child: DropdownButtonFormField<Postcategory>(
+            hint: Text("Chọn phương thức"),
+            value: selectedType,
+            onChanged: (Postcategory Value) {
+              setState(() {
+                try {
+                  selectedType = Value;
+                  selectedTypeType = null;
+                } catch (_) {
+                  selectedType = type[0];
+                }
+              });
+            },
+            validator: (value) =>
+                value == null ? 'vui lòng chọn phương thức' : null,
+            items: type.map((Postcategory type) {
+              if (type.danhMucCha == null)
+                return DropdownMenuItem<Postcategory>(
+                  value: type,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.home_work_sharp,
+                        color: const Color(0xFF167F67),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        type.tenDanhMuc,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    type.tenDanhMuc,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            );
-          else
-            return
-                //Container(width: 0, height: 0);
-                DropdownMenuItem<Postcategory>(
-              value: type,
-              child: SizedBox(height: 0),
-            );
-        }).toList(),
-      ),
-    );
+                );
+              else
+                return
+                    //Container(width: 0, height: 0);
+                    DropdownMenuItem<Postcategory>(
+                  value: type,
+                  child: SizedBox(height: 0),
+                );
+            }).toList(),
+          ),
+        ));
   }
 
   Widget _buildTypeTypeField() {
@@ -496,7 +532,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           },
         );
       else {
-        selectedTypeTypeType = null;
+        selectedTypeTypeType = selectedTypeType;
         return Container(height: 0, width: 0);
       }
     } else
@@ -709,34 +745,74 @@ class _NewpostScreenState extends State<NewpostScreen> {
       );
   }
 
-  Widget _buildListView() {
-    // return _postStore.thuocTinhList != null
-    //     ?
-    return SingleChildScrollView(
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-          Text("Một số thông tin thêm(nếu có)",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(height: 24.0),
-          Container(
-              height: 200,
-              child: ListView.builder(
-                itemCount: _postStore.thuocTinhList.thuocTinhs.length - 2,
-                itemBuilder: (context, i) {
-                  return
-                      //Text(_postStore.thuocTinhList.thuocTinhs[i+2].tenThuocTinh.toString());
+  Widget _buildLocateField() {
+    return Observer(
+      builder: (context) {
+        var _formKey;
+        return Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.textsms_rounded),
+                      fillColor: Colors.white,
+                      //hintText: 'Tiêu đề',
+                      labelText: 'Địa chỉ',
+                    ),
+                    onSaved: (value) {
+                      // //  FormState.save();
+                      //   print(value);
+                      //   // code when the user saves the form.
+                    },
+                    controller: _LocateController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng nhập địa chỉ';
+                      }
+                      return null;
+                    },
+                  ),
+                ]));
+      },
+    );
+  }
 
-                      _buildThuocTinh(
-                          _postStore.thuocTinhList.thuocTinhs[i + 2], i);
-                },
-              ))
-        ]));
-    //       :  Text(
-    //             "Không có thuộc tính thêm hiển thị",
-    //         );
+  Widget _buildListView() {
+    return Observer(builder: (context) {
+      return !_postStore.loadingThuocTinh
+          ? SingleChildScrollView(
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                  Text("Một số thông tin thêm(nếu có)",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 24.0),
+                  Container(
+                      height: 200,
+                      child: ListView.builder(
+                        itemCount:
+                            _postStore.thuocTinhList.thuocTinhs.length - 2,
+                        itemBuilder: (context, i) {
+                          _ThuocTinhController.add(new TextEditingController());
+                          return _buildThuocTinh(
+                              _postStore.thuocTinhList.thuocTinhs[i + 2], i);
+                        },
+                      ))
+                ]))
+          : Container(
+              height: 0,
+              width: 0,
+            );
+      //       :  Text(
+      //             "Không có thuộc tính thêm hiển thị",
+      //         );
+    });
   }
 
   Widget _buildThuocTinh(ThuocTinh thuocTinh, int index) {
@@ -760,7 +836,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                           : TextInputType.text,
                       // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
                       iconColor: Colors.white,
-                      // textController: _ThuocTinhController[index],
+                      textController: _ThuocTinhController[index],
                       inputAction: TextInputAction.next,
                       autoFocus: false,
                       onChanged: (value) {},
@@ -779,20 +855,30 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildAcreageField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Diện tích'),
-          hintColor: Colors.white,
-          icon: Icons.api_outlined,
-          inputType:
-              TextInputType.numberWithOptions(decimal: false, signed: false),
-          // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          iconColor: Colors.white,
-          textController: _AcreageController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {},
-        );
+        var _formKey;
+        return Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.textsms_rounded),
+                      fillColor: Colors.white,
+                      labelText: 'Diện tích',
+                    ),
+                    onSaved: (value) {},
+                    keyboardType: TextInputType.number,
+                    controller: _AcreageController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng điền diện tích';
+                      }
+                      return null;
+                    },
+                  ),
+                ]));
       },
     );
   }
@@ -800,22 +886,30 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildPriceField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Giá bán'),
-          hintColor: Colors.white,
-          icon: Icons.money,
-          inputType: TextInputType.numberWithOptions(decimal: false),
-//          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          iconColor: Colors.white,
-          textController: _PriceController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            // _store.setTile(_TileController.text);
-          },
-          //errorText: _store.formErrorStore.Tile,
-        );
+        var _formKey;
+        return Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.money),
+                      fillColor: Colors.white,
+                      labelText: 'Giá bán',
+                    ),
+                    onSaved: (value) {},
+                    keyboardType: TextInputType.number,
+                    controller: _PriceController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng điền giá bán';
+                      }
+                      return null;
+                    },
+                  ),
+                ]));
       },
     );
   }
@@ -857,80 +951,17 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
-  // Widget _textpackmota()
-  // {
-  //   return selectedPack!=null?
-  //     Text(
-  //       "Chi phí gói bài đăng: ${selectedPack.phi}",
-  //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
-  //       textAlign:TextAlign.left ,
-  //     )
-  //       :Container(width: 0,height: 0);
-  // }
   Widget _buildPackinfoField() {
     return selectedPack != null
-        ?
-        // Padding(
-        //     // padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-        //     child:
-        //     Column(
-        //       //mainAxisSize: MainAxisSize.min,
-        //       children:
-        //       <Widget>[
-        //
-        //         SizedBox(
-        //           height: 24.0,
-        //         ),
-        Text(
+        ? Text(
             "Mô tả: ${selectedPack.moTa}",
             textAlign: TextAlign.left,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            //   ),
-            //   SizedBox(
-            //     height: 24.0,
-            //   ),
-            //   Text(
-            //     "Độ ưu tiên: ${selectedPack.doUuTien}",
-            //     textAlign:TextAlign.left ,
-            //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            //   ),
-            // ],
           )
-        // )
         : Container(
             width: 0,
             height: 0,
           );
-  }
-
-  Widget _buildStartdateField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Center(
-                  child: Text(
-                "Ngày bắt đầu:" + "${selectedDate1st.toLocal()}".split(' ')[0],
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.left,
-              )),
-              SizedBox(
-                height: 24.0,
-              ),
-              RoundedButtonWidget(
-                buttonColor: Colors.orangeAccent,
-                textColor: Colors.white,
-                onPressed: () => _selectDate1st(context),
-                buttonText: ('Chọn ngày bắt đầu'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   Widget _buildEnddateField() {
@@ -1033,94 +1064,243 @@ class _NewpostScreenState extends State<NewpostScreen> {
     }
   }
 
-  Widget _buildImagepick() {
-    return Observer(
-      builder: (context) {
-        return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          RawMaterialButton(
-            fillColor: Theme.of(context).accentColor,
-            child: Icon(
-              Icons.add_photo_alternate_rounded,
-              color: Colors.white,
-            ),
-            elevation: 5,
-            onPressed: () {
-              getImage(true);
-            },
-            padding: EdgeInsets.all(15),
-            shape: CircleBorder(),
-          ),
-          Container(child: Image.file(_image.last))
-        ]);
-      },
-    );
-  }
-
   Widget _buildImagepick2() {
     return Observer(
       builder: (context) {
-        // return SingleChildScrollView(
         return Container(
           height: 200,
           padding: EdgeInsets.all(4),
-
-          child:_image.length==0?
-          Center(child
-              : IconButton(
-            icon: Icon(Icons.add_photo_alternate_rounded),
-            iconSize: 150,
-            onPressed: () => getImage(true),
-          )):
-          GridView.builder(
-              itemCount: _image.length + 1,
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-              itemBuilder: (context, index) {
-                return index == _image.length
-                    ? _image.length<6?
-                    Center(child
-                        : IconButton(
-                        icon: Icon(Icons.add_photo_alternate_rounded),
-                        onPressed: () => getImage(true),
-                      )):Container(height: 0,)
-                    : Container(
-                        margin: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: FileImage(_image[index]),
-                                fit: BoxFit.cover)),
-                        child: SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: FlatButton(
-                            padding: EdgeInsets.fromLTRB(80, 10, 100, 100),
-                            // shape: RoundedRectangleBorder(
-                            //     borderRadius: BorderRadius.circular(20),
-                            //     side: BorderSide(color: Colors.white)),
-                            // color: Color(0xFFF5F6F9),
-                            onPressed: () => {clearimage(index)},
-                            child: Icon(
-                              Icons.dangerous,
-                              color: Colors.white,
-                              size: 20.0,
-                            ),
-                          ),
-                        ));
-              }),
+          child: _image.length == 0
+              ? Center(
+                  child: IconButton(
+                  icon: Icon(Icons.add_photo_alternate_rounded),
+                  iconSize: 150,
+                  onPressed: () => getImage(true),
+                ))
+              : GridView.builder(
+                  itemCount: _image.length + 1,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
+                  itemBuilder: (context, index) {
+                    return index == _image.length
+                        ? _image.length < 6
+                            ? Center(
+                                child: IconButton(
+                                icon: Icon(Icons.add_photo_alternate_rounded),
+                                onPressed: () => getImage(true),
+                              ))
+                            : Container(
+                                height: 0,
+                              )
+                        : Container(
+                            margin: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: FileImage(_image[index]),
+                                    fit: BoxFit.cover)),
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: FlatButton(
+                                padding: EdgeInsets.fromLTRB(80, 10, 100, 100),
+                                // shape: RoundedRectangleBorder(
+                                //     borderRadius: BorderRadius.circular(20),
+                                //     side: BorderSide(color: Colors.white)),
+                                // color: Color(0xFFF5F6F9),
+                                onPressed: () => {clearimage(index)},
+                                child: Icon(
+                                  Icons.dangerous,
+                                  color: Colors.white,
+                                  size: 20.0,
+                                ),
+                              ),
+                            ));
+                  }),
         );
       },
     );
   }
 
-  Widget _buildUpButton() {
-    return RoundedButtonWidget(
-      buttonText: ('Đăng tin'),
-      buttonColor: Colors.amber[700],
-      textColor: Colors.white,
-      onPressed: () {},
+  showAlertDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Cảnh báo"),
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _TileController.value.text.isEmpty
+                ? Text('Vui lòng nhập tiêu đề')
+                : Container(
+                    height: 0,
+                  ),
+            _PriceController.value.text.isEmpty
+                ? Text('Vui lòng nhập giá')
+                : Container(
+                    height: 0,
+                  ),
+            _AcreageController.value.text.isEmpty
+                ? Text('Vui lòng nhập diện tích')
+                : Container(
+                    height: 0,
+                  ),
+            selectedCommune == null
+                ? Text('Vui lòng chọn địa chỉ')
+                : Container(
+                    height: 0,
+                  ),
+            selectedPack == null
+                ? Text('Vui lòng chọn gói bài đăng')
+                : Container(
+                    height: 0,
+                  ),
+            selectedTypeTypeType == null
+                ? Text('Vui lòng chọn hình thức nhà/đất')
+                : Container(
+                    height: 0,
+                  ),
+            _image.length == 0
+                ? Text('Vui lòng thêm hình ảnh cho bài đăng')
+                : Container(
+                    height: 0,
+                  ),
+          ]),
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
+  Dangtin(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Thông báo"),
+      content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Text('Vui lòng bấm thanh toán để hoàn tất')]),
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  var _newpost = new Newpost();
+  var sc = false;
+  Widget _buildUpButton() {
+    return Observer(builder: (context) {
+      return RoundedButtonWidget(
+        buttonText: ('Đăng tin'),
+        buttonColor: _imageStore.imageLoadingpost && sc
+            ? Colors.amber[700]
+            : Colors.grey,
+        textColor: Colors.white,
+        onPressed: () async {
+          if (!sc) {
+            if (_TileController.value.text.isEmpty ||
+                _PriceController.value.text.isEmpty ||
+                _AcreageController.value.text.isEmpty ||
+                selectedCommune == null ||
+                selectedPack == null ||
+                selectedTypeTypeType == null ||
+                _image.length == 0)
+              showAlertDialog(context);
+            else {
+              sc = true;
+              var post = new Post();
+              final _etEditor = await _keyEditor.currentState.getText();
+              post.tenXa = selectedCommune.tenXa;
+              post.xaId = selectedCommune.id;
+              post.moTa = _etEditor;
+              post.danhMuc = selectedTypeTypeType.tenDanhMuc;
+              post.danhMucId = selectedTypeTypeType.id;
+              post.dienTich = double.parse(_AcreageController.text);
+              post.gia = double.parse(_PriceController.text);
+              post.tieuDe = _TileController.text;
+              post.thoiDiemDang = DateTime.now().toString();
+              post.thoiHan = selectedDatefl.toString();
+              post.featuredImage = _image.first.path.toString();
+              post.diemBaiDang = 0;
+              post.luotXem = 0;
+              post.luotYeuThich = 0;
+              post.tagLoaiBaidang = selectedTypeTypeType.tag.split(",")[0];
+              post.tagTimKiem = selectedTypeTypeType.tag;
+              post.diaChi = _LocateController.text;
+              post.userName = _userStore.user.userName;
+              post.toaDoX = "10.87042965917961";
+              post.toaDoY = "106.80213344451961";
+              post.trangThai = "Hoạt động";
+              post.userId = _userStore.user.id;
+              _newpost.post = post;
+              List<String> path = new List<String>();
+              for (var i in _image) path.add(i.path);
+              if (!_imageStore.imageLoadingpost)
+                _imageStore.postImages(path, "Dangtinbdstieude-${post.tieuDe}");
+              Dangtin(context);
+              // while(!_imageStore.imageLoadingpost)
+              // {print("hello");};
+            }
+          }
+        },
+      );
+    });
+  }
+
+  Widget _buildUpButton2() {
+    return Observer(builder: (context) {
+      if (!_imageStore.imageLoadingpost && sc)
+        return RoundedButtonWidget(
+            buttonText: ('Thanh toán'),
+            buttonColor: Colors.amber[700],
+            textColor: Colors.white,
+            onPressed: () async {
+              sc = false;
+              lichsugiaodich lichsu = new lichsugiaodich();
+              lichsu.ghiChu = "${_userStore.user.id} ${selectedPack.tenGoi}";
+              if (songay == null) songay = selectedPack.thoiGianToiThieu;
+              lichsu.soTien = songay * selectedPack.phi;
+              lichsu.userId = _userStore.user.id;
+              lichsu.thoiDiem = DateTime.now().toString();
+              _newpost.lichsugiaodichs = lichsu;
+              Hoadonbaidang hoadon = new Hoadonbaidang();
+              hoadon.thoiDiem = DateTime.now().toString();
+              hoadon.giaGoi = selectedPack.phi;
+              hoadon.soNgayMua = songay;
+              hoadon.userId = _userStore.user.id;
+              hoadon.ghiChu = lichsu.ghiChu;
+              hoadon.tongTien = lichsu.soTien;
+              _newpost.hoadonbaidang = hoadon;
+              _newpost.properties = new List<Property>();
+              if (_ThuocTinhController != null)
+                for (int i = 0; i < _ThuocTinhController.length; i++)
+                  if (_ThuocTinhController[i].text.isNotEmpty) {
+                    Property value = new Property();
+                    value.giaTri = _ThuocTinhController[i].text;
+                    value.thuocTinhId =
+                        _postStore.thuocTinhList.thuocTinhs[i + 2].id;
+                    _newpost.properties.add(value);
+                  }
+              _newpost.images.clear();
+              for (var item in _imageStore.imageListpost) {
+                AppImage u = new AppImage();
+                u.duongDan = item;
+                _newpost.images.add(u);
+              }
+              _newpost.post.featuredImage = _imageStore.imageListpost.first;
+              _postStore.postPost(_newpost);
+            });
+      else
+        return Container(
+          height: 0,
+        );
+    });
+  }
 //endregion
 
   Widget navigate(BuildContext context) {

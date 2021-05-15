@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -84,7 +86,12 @@ class Repository {
       throw error;
     });
   }
-
+  Future<String> postPost(Newpost post) async {
+    return await _postApi.postPost(post)
+        .catchError((error) {
+      throw error;
+    });
+  }
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database
@@ -96,20 +103,12 @@ class Repository {
   // }
   // Town: ---------------------------------------------------------------------
   Future<TownList> getTowns() async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
+
     return await _townApi.getTowns().then((townsList) {
-     // townsList.towns.forEach((post) {
-     //    _postDataSource.insert(town);
-     //  });
       return townsList;
     }).catchError((error) => throw error);
   }
   Future<CommuneList> getCommunes() async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
     return await _townApi.getCommunes().then((communesList) {
 
       return communesList;
@@ -136,8 +135,8 @@ class Repository {
       return user;
     }).catchError((error) => throw error);
   }
-  Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
-    return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName).then((user) {
+  Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName,int id) async {
+    return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName,id).then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);
@@ -211,8 +210,8 @@ class Repository {
 
 
   //Image
-  Future<String> postImageToImageBB(String path) async {
-    return await _imageApi.postImage(path)
+  Future<String> postImageToImageBB(String path,String name) async {
+    return await _imageApi.postImage(path,name)
         .catchError((error) {
       throw error;
     });

@@ -21,7 +21,6 @@ class Property {
     id: json["chiTietBaiDang"]["id"],
     thuocTinhTenThuocTinh: json["thuocTinhTenThuocTinh"].toString(),
   );
-
   Map<String, dynamic> toMap() => {
     "giaTri": giaTri,
     "baiDangId": baiDangId,

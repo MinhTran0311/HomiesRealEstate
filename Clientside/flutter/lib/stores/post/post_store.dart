@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -212,4 +213,33 @@ abstract class _PostStore with Store {
       }
     });
   }
+  //////////////////postPost
+  static ObservableFuture<String> emptyNewpostResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetchNewpostsFuture =
+  ObservableFuture<String>(emptyNewpostResponse);
+
+  @observable
+  bool successNewpost = false;
+
+  @computed
+  bool get loadingNewpost => fetchNewpostsFuture.status == FutureStatus.pending;
+  Future postPost(Newpost post) async {
+      final postPostFuture = _repository.postPost(post);
+      fetchNewpostsFuture = ObservableFuture(postPostFuture);
+      postPostFuture.then((newpost) {
+        print(newpost);
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+    }
 }

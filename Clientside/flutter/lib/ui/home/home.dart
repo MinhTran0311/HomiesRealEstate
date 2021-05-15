@@ -50,14 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_postStore.loading) {
       _postStore.getPosts();
     }
-    if (!userStore.loading) {
-      userStore.getCurrentUser();
-    }
-   if(!_postStore.loadinggetcategorys)
-   {_postStore.getPostcategorys();}
-
+    // if (!userStore.loading) {
+    //   userStore.getCurrentUser();
+    // }
+    //  if(!_postStore.loadinggetcategorys)
+    //  {_postStore.getPostcategorys();}
+    //
+    // }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

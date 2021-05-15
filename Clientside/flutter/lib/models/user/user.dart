@@ -37,6 +37,7 @@ class User {
     isActive: json["isActive"],
     isEmailConfirmed: json["isEmailConfirmed"],
     creationTime: json["creationTime"],
+
     // permissions: json["roles"],
   );
 
@@ -79,7 +80,7 @@ class CurrentUserForEditdto{
   String profilePicture;
   String creationTime;
   double wallet;
-
+  int id;
   CurrentUserForEditdto({
     this.name,
     this.emailAddress,
@@ -88,7 +89,8 @@ class CurrentUserForEditdto{
     this.profilePicture,
     this.creationTime,
     this.wallet,
-    this.userName
+    this.userName,
+    this.id,
 });
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
@@ -99,6 +101,7 @@ class CurrentUserForEditdto{
       phoneNumber: json["result"]["phoneNumber"],
       profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
+      id: json["result"]["userId"]
     );
   }
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
