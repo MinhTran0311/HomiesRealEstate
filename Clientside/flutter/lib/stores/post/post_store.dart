@@ -112,6 +112,8 @@ abstract class _PostStore with Store {
       future.then((postList) {
         success = true;
         this.postList = postList;
+        this.postList.posts.add(postList.posts[0]);
+        this.postList.posts.add(postList.posts[0]);
       }).catchError((error) {
         if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
