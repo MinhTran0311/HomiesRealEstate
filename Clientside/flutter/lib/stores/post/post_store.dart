@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -62,10 +63,13 @@ abstract class _PostStore with Store {
     PostList postList;
 
     @observable
+    bool isIntialLoading=true;
+
+    @observable
     int skipCount = 0;
 
     @observable
-    int maxCount = 10;
+    int maxCount = 1;
 
     @observable
     PropertyList propertyList;
@@ -90,7 +94,7 @@ abstract class _PostStore with Store {
 
 
     @computed
-    bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+    bool get loading => fetchPostsFuture.status == FutureStatus.pending && isIntialLoading;
 
     @computed
     bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
@@ -111,15 +115,25 @@ abstract class _PostStore with Store {
     }
 
     @action
-    Future getPosts() async {
-      final future = _repository.getPosts(skipCount, maxCount);
+    Future getPosts(bool isLoadMore) async {
+      if (!isLoadMore){
+        skipCount = 0;
+      }
+      else
+        skipCount+= Preferences.skipIndex;
+      final future = _repository.getPosts(skipCount, Preferences.maxCount);
       fetchPostsFuture = ObservableFuture(future);
 
       future.then((postList) {
         success = true;
-        this.postList = postList;
-        this.postList.posts.add(postList.posts[0]);
-        this.postList.posts.add(postList.posts[0]);
+        if (!isLoadMore){
+          this.postList = postList;
+          //this.postList.posts.add(postList.posts[0]);
+        }
+        else {
+          for (int i=0; i< postList.posts.length; i++)
+            this.postList.posts.add(postList.posts[i]);
+        }
       }).catchError((error) {
         if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -163,8 +177,6 @@ abstract class _PostStore with Store {
       futrue.then((result) {
         if (result["result"]["exist"]) {
           isBaiGhimYeuThich = true;
-          print("heyyy");
-          print(result["result"]["exist"].toString());
         }
         else{
           isBaiGhimYeuThich = false;

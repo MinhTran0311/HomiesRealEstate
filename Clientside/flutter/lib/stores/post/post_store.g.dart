@@ -122,6 +122,36 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_PostStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_PostStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
   final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
 
   @override
@@ -230,8 +260,8 @@ mixin _$PostStore on _PostStore, Store {
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
-  Future<dynamic> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
+  Future<dynamic> getPosts(bool isLoadMore) {
+    return _$getPostsAsyncAction.run(() => super.getPosts(isLoadMore));
   }
 
   final _$getPostPropertiesAsyncAction =
@@ -300,6 +330,8 @@ fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 fetchSearchFuture: ${fetchSearchFuture},
 postList: ${postList},
+skipCount: ${skipCount},
+maxCount: ${maxCount},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
 filter_model: ${filter_model},

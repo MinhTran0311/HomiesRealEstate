@@ -14,6 +14,7 @@ import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
@@ -37,7 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-
+  final ScrollController _scrollController= ScrollController();
+  bool isRefreshing = false;
   @override
   void initState() {
     super.initState();
@@ -55,12 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
-      _postStore.getPosts();
+      _postStore.getPosts(false);
+      _postStore.isIntialLoading=false;
     }
     if (!userStore.loading) {
       userStore.getCurrentUser();
     }
-
   }
 
   @override
@@ -134,6 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        IconButton(icon: Icon(Icons.style), onPressed: (){
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
+          _refreshController.refreshCompleted();
+        }),
         Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
           child: TextField(
               controller: _searchController,
@@ -252,31 +260,65 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _refreshController,
         enablePullUp: true,
         enablePullDown: true,
-        header: WaterDropHeader(),
+        header: WaterDropHeader(
+          refresh: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          idleIcon:SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          waterDropColor: Colors.amber,
+        ),
         physics: BouncingScrollPhysics(),
         footer: ClassicFooter(
           loadStyle: LoadStyle.ShowWhenLoading,
           completeDuration: Duration(milliseconds: 500),
         ),
         onLoading: () async {
-          await Future.delayed(Duration(milliseconds: 180));
+          print("loading");
+
+          _postStore.getPosts(true);
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) setState(() {
+          });
+
           _refreshController.loadComplete();
+
         },
         onRefresh: () async {
-          await Future.delayed(Duration(milliseconds: 180));
+          print("refresh");
+          _postStore.getPosts(false);
+
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) setState(() {});
+          isRefreshing = true;
           _refreshController.refreshCompleted();
         },
-        child: ListView.separated(
+        child: ListView.builder(
           key: _contentKey,
-            itemCount: _postStore.postList.posts.length,
-            separatorBuilder: (context, position) {
-              return Divider();
-            },
-            itemBuilder: (context, position) {
-              return _buildPostPoster(_postStore.postList.posts[position],position);
-                //_buildListItem(position);
-            },
-          ),
+          controller: _scrollController,
+          itemCount: _postStore.postList.posts.length,
+          // separatorBuilder: (context, position) {
+          //   return Divider();
+          // },
+          itemBuilder: (context, position) {
+
+            return _buildPostPoster(_postStore.postList.posts[position],position);
+              //_buildListItem(position);
+          },
+        ),
       )
       : Center(
           child: Text(
