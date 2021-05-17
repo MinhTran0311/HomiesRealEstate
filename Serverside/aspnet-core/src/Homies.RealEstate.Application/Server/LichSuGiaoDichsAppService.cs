@@ -339,8 +339,12 @@ namespace Homies.RealEstate.Server
             var user = await GetCurrentUserAsync();
 
             var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
-            lsgd.KiemDuyetVienId = user.Id;
-            lsgd.UserFk.Wallet += lsgd.SoTien;
+            if (lsgd.KiemDuyetVienId!=null&& lsgd.KiemDuyetVienId!=0)
+            {
+                lsgd.KiemDuyetVienId = user.Id;
+                lsgd.UserFk.Wallet += lsgd.SoTien;
+            }
+            
 
 
 
