@@ -12,7 +12,7 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
-
+import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -759,7 +759,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     decoration: const InputDecoration(
                       icon: Icon(Icons.textsms_rounded),
                       fillColor: Colors.white,
-                      //hintText: 'Tiêu đề',
+                      hintText: '',
                       labelText: 'Địa chỉ',
                     ),
                     onSaved: (value) {
@@ -827,8 +827,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     TextFieldWidget(
                       inputFontsize: 22,
                       hint: ('${thuocTinh.tenThuocTinh}'),
-                      hintColor: Colors.white,
+                      hintColor: Colors.black,
                       icon: Icons.api_outlined,
+
                       inputType: thuocTinh.kieuDuLieu == "double" ||
                               thuocTinh.kieuDuLieu == "int"
                           ? TextInputType.numberWithOptions(
@@ -867,6 +868,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       icon: Icon(Icons.textsms_rounded),
                       fillColor: Colors.white,
                       labelText: 'Diện tích',
+                      hintText: "mxm"
                     ),
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
@@ -898,6 +900,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       icon: Icon(Icons.money),
                       fillColor: Colors.white,
                       labelText: 'Giá bán',
+                      hintText: "VND",
                     ),
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
@@ -923,8 +926,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
         onChanged: (Pack Value) {
           setState(() {
             selectedPack = Value;
-            selectedDatefl = DateTime.now()
-                .add(Duration(days: selectedPack.thoiGianToiThieu));
+            songay=selectedPack.thoiGianToiThieu;
+            selectedDatefl = DateTime.now().add(Duration(days: selectedPack.thoiGianToiThieu));
           });
         },
         items: _postStore.packList.packs.map((Pack type) {
@@ -988,6 +991,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
+                    SizedBox(height: 24.0,),
+                    Text(
+                      "Phí bài đăng:" +
+                          "${(selectedPack.phi*songay)}",
+                      style:
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 24.0,),
                   ],
                 ),
               );
@@ -1181,10 +1192,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text('Vui lòng bấm thanh toán để hoàn tất')]),
+          children: <Widget>[sc?Text('Vui lòng bấm thanh toán để hoàn tất'):Text('Vui lòng bấm đăng tin trước')]),
+
     );
     showDialog(
       context: context,
+
       builder: (BuildContext context) {
         return alert;
       },
@@ -1197,12 +1210,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(builder: (context) {
       return RoundedButtonWidget(
         buttonText: ('Đăng tin'),
-        buttonColor: _imageStore.imageLoadingpost && sc
+        buttonColor: !_imageStore.imageLoadingpost
             ? Colors.amber[700]
             : Colors.grey,
         textColor: Colors.white,
         onPressed: () async {
-          if (!sc) {
+         // if (!sc)
+          {
             if (_TileController.value.text.isEmpty ||
                 _PriceController.value.text.isEmpty ||
                 _AcreageController.value.text.isEmpty ||
@@ -1214,28 +1228,30 @@ class _NewpostScreenState extends State<NewpostScreen> {
             else {
               sc = true;
               var post = new Post();
-              final _etEditor = await _keyEditor.currentState.getText();
+
               post.tenXa = selectedCommune.tenXa;
               post.xaId = selectedCommune.id;
-              post.moTa = _etEditor;
               post.danhMuc = selectedTypeTypeType.tenDanhMuc;
               post.danhMucId = selectedTypeTypeType.id;
               post.dienTich = double.parse(_AcreageController.text);
               post.gia = double.parse(_PriceController.text);
               post.tieuDe = _TileController.text;
-              post.thoiDiemDang = DateTime.now().toString();
-              post.thoiHan = selectedDatefl.toString();
-              post.featuredImage = _image.first.path.toString();
+              post.thoiDiemDang = DateTime.now().toUtc().toIso8601String().toString();
+              post.thoiHan = DateTime.parse(post.thoiDiemDang).add(Duration(days:songay )).toUtc().toIso8601String().toString();
               post.diemBaiDang = 0;
               post.luotXem = 0;
               post.luotYeuThich = 0;
-              post.tagLoaiBaidang = selectedTypeTypeType.tag.split(",")[0];
+              if(selectedType.tenDanhMuc=="Nhà đất cho thuê")
+              post.tagLoaiBaidang = "Cho thuê"
+                ;
+              else  post.tagLoaiBaidang = "Bán";
+
               post.tagTimKiem = selectedTypeTypeType.tag;
               post.diaChi = _LocateController.text;
               post.userName = _userStore.user.userName;
               post.toaDoX = "10.87042965917961";
               post.toaDoY = "106.80213344451961";
-              post.trangThai = "Hoạt động";
+              post.trangThai = "On";
               post.userId = _userStore.user.id;
               _newpost.post = post;
               List<String> path = new List<String>();
@@ -1254,46 +1270,51 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildUpButton2() {
     return Observer(builder: (context) {
-      if (!_imageStore.imageLoadingpost && sc)
+      if (!_imageStore.imageLoadingpost )
         return RoundedButtonWidget(
             buttonText: ('Thanh toán'),
             buttonColor: Colors.amber[700],
             textColor: Colors.white,
             onPressed: () async {
-              sc = false;
-              lichsugiaodich lichsu = new lichsugiaodich();
-              lichsu.ghiChu = "${_userStore.user.id} ${selectedPack.tenGoi}";
-              if (songay == null) songay = selectedPack.thoiGianToiThieu;
-              lichsu.soTien = songay * selectedPack.phi;
-              lichsu.userId = _userStore.user.id;
-              lichsu.thoiDiem = DateTime.now().toString();
-              _newpost.lichsugiaodichs = lichsu;
-              Hoadonbaidang hoadon = new Hoadonbaidang();
-              hoadon.thoiDiem = DateTime.now().toString();
-              hoadon.giaGoi = selectedPack.phi;
-              hoadon.soNgayMua = songay;
-              hoadon.userId = _userStore.user.id;
-              hoadon.ghiChu = lichsu.ghiChu;
-              hoadon.tongTien = lichsu.soTien;
-              _newpost.hoadonbaidang = hoadon;
-              _newpost.properties = new List<Property>();
-              if (_ThuocTinhController != null)
-                for (int i = 0; i < _ThuocTinhController.length; i++)
-                  if (_ThuocTinhController[i].text.isNotEmpty) {
-                    Property value = new Property();
-                    value.giaTri = _ThuocTinhController[i].text;
-                    value.thuocTinhId =
-                        _postStore.thuocTinhList.thuocTinhs[i + 2].id;
-                    _newpost.properties.add(value);
-                  }
-              _newpost.images.clear();
-              for (var item in _imageStore.imageListpost) {
-                AppImage u = new AppImage();
-                u.duongDan = item;
-                _newpost.images.add(u);
-              }
-              _newpost.post.featuredImage = _imageStore.imageListpost.first;
-              _postStore.postPost(_newpost);
+              if(sc) {
+                sc = false;
+                final _etEditor = await _keyEditor.currentState.getText();
+                _newpost.post.moTa = _etEditor;
+                _newpost.post.featuredImage = _imageStore.imageListpost.first;
+                lichsugiaodich lichsu = new lichsugiaodich();
+                lichsu.ghiChu = "${_userStore.user.id} ${selectedPack.tenGoi}";
+                lichsu.soTien = songay * selectedPack.phi;
+                lichsu.userId = _userStore.user.id;
+                lichsu.thoiDiem = _newpost.post.thoiDiemDang;
+                _newpost.lichsugiaodichs = lichsu;
+                Hoadonbaidang hoadon = new Hoadonbaidang();
+                hoadon.thoiDiem = _newpost.post.thoiDiemDang;
+                hoadon.giaGoi = selectedPack.phi;
+                hoadon.soNgayMua = songay;
+                hoadon.userId = _userStore.user.id;
+                hoadon.ghiChu = lichsu.ghiChu;
+                hoadon.tongTien = lichsu.soTien;
+                hoadon.goiBaiDangId = selectedPack.id;
+                _newpost.hoadonbaidang = hoadon;
+                _newpost.properties = new List<Property>();
+                if (_ThuocTinhController != null)
+                  for (int i = 0; i < _ThuocTinhController.length; i++)
+                    if (_ThuocTinhController[i].text.isNotEmpty) {
+                      Property value = new Property();
+                      value.giaTri = _ThuocTinhController[i].text;
+                      value.thuocTinhId =
+                          _postStore.thuocTinhList.thuocTinhs[i + 2].id;
+                      _newpost.properties.add(value);
+                    }
+                _newpost.images = new List<AppImage>();
+                for (var item in _imageStore.imageListpost) {
+                  AppImage u = new AppImage();
+                  u.duongDan = item;
+                  _newpost.images.add(u);
+                }
+                //_newpost.post.featuredImage = _imageStore.imageListpost.first;
+                _postStore.postPost(_newpost);
+              } else Dangtin(context);
             });
       else
         return Container(

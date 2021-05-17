@@ -454,7 +454,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   ),
                 ),
                 SizedBox(width: 70,),
-                Container(
+                MaterialButton(
                   padding: const EdgeInsets.only(top: 25),
                   child: Column(
                     children: [
@@ -475,6 +475,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
                       )
                     ],
                   ),
+                  onPressed: (){
+
+                  },
                 )
               ],
             )

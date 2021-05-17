@@ -15,34 +15,14 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
-  Computed<bool> _$loadinggetcategorysComputed;
 
-  @override
-  bool get loadinggetcategorys => (_$loadinggetcategorysComputed ??=
-          Computed<bool>(() => super.loadinggetcategorys,
-              name: '_PostStore.loadinggetcategorys'))
-      .value;
   Computed<bool> _$propertiesLoadingComputed;
-
   @override
   bool get propertiesLoading => (_$propertiesLoadingComputed ??= Computed<bool>(
           () => super.propertiesLoading,
           name: '_PostStore.propertiesLoading'))
       .value;
-  Computed<bool> _$loadingPackComputed;
 
-  @override
-  bool get loadingPack =>
-      (_$loadingPackComputed ??= Computed<bool>(() => super.loadingPack,
-              name: '_PostStore.loadingPack'))
-          .value;
-  Computed<bool> _$loadingThuocTinhComputed;
-
-  @override
-  bool get loadingThuocTinh => (_$loadingThuocTinhComputed ??= Computed<bool>(
-          () => super.loadingThuocTinh,
-          name: '_PostStore.loadingThuocTinh'))
-      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -59,22 +39,7 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$fetchPostCategorysFutureAtom =
-      Atom(name: '_PostStore.fetchPostCategorysFuture');
 
-  @override
-  ObservableFuture<PostCategoryList> get fetchPostCategorysFuture {
-    _$fetchPostCategorysFutureAtom.reportRead();
-    return super.fetchPostCategorysFuture;
-  }
-
-  @override
-  set fetchPostCategorysFuture(ObservableFuture<PostCategoryList> value) {
-    _$fetchPostCategorysFutureAtom
-        .reportWrite(value, super.fetchPostCategorysFuture, () {
-      super.fetchPostCategorysFuture = value;
-    });
-  }
 
   final _$fetchPropertiesFutureAtom =
       Atom(name: '_PostStore.fetchPropertiesFuture');
@@ -108,20 +73,7 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$postCategoryListAtom = Atom(name: '_PostStore.postCategoryList');
 
-  @override
-  PostCategoryList get postCategoryList {
-    _$postCategoryListAtom.reportRead();
-    return super.postCategoryList;
-  }
-
-  @override
-  set postCategoryList(PostCategoryList value) {
-    _$postCategoryListAtom.reportWrite(value, super.postCategoryList, () {
-      super.postCategoryList = value;
-    });
-  }
 
   final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
 
@@ -168,22 +120,6 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$successgetcategorysAtom =
-      Atom(name: '_PostStore.successgetcategorys');
-
-  @override
-  bool get successgetcategorys {
-    _$successgetcategorysAtom.reportRead();
-    return super.successgetcategorys;
-  }
-
-  @override
-  set successgetcategorys(bool value) {
-    _$successgetcategorysAtom.reportWrite(value, super.successgetcategorys, () {
-      super.successgetcategorys = value;
-    });
-  }
-
   final _$propertiesSuccessAtom = Atom(name: '_PostStore.propertiesSuccess');
 
   @override
@@ -199,6 +135,91 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
+
+  @override
+  Future<dynamic> getPosts() {
+    return _$getPostsAsyncAction.run(() => super.getPosts());
+  }
+
+  final _$getPostPropertiesAsyncAction =
+  AsyncAction('_PostStore.getPostProperties');
+
+  @override
+  Future<dynamic> getPostProperties(String postId) {
+    return _$getPostPropertiesAsyncAction
+        .run(() => super.getPostProperties(postId));
+  }
+
+
+//////////////////////category
+  Computed<bool> _$loadinggetcategorysComputed;
+
+  @override
+  bool get loadinggetcategorys => (_$loadinggetcategorysComputed ??=
+      Computed<bool>(() => super.loadinggetcategorys,
+          name: '_PostStore.loadinggetcategorys'))
+      .value;
+  final _$fetchPostCategorysFutureAtom =
+  Atom(name: '_PostStore.fetchPostCategorysFuture');
+
+  @override
+  ObservableFuture<PostCategoryList> get fetchPostCategorysFuture {
+    _$fetchPostCategorysFutureAtom.reportRead();
+    return super.fetchPostCategorysFuture;
+  }
+
+  @override
+  set fetchPostCategorysFuture(ObservableFuture<PostCategoryList> value) {
+    _$fetchPostCategorysFutureAtom
+        .reportWrite(value, super.fetchPostCategorysFuture, () {
+      super.fetchPostCategorysFuture = value;
+    });
+  }
+  final _$postCategoryListAtom = Atom(name: '_PostStore.postCategoryList');
+
+  @override
+  PostCategoryList get postCategoryList {
+    _$postCategoryListAtom.reportRead();
+    return super.postCategoryList;
+  }
+
+  @override
+  set postCategoryList(PostCategoryList value) {
+    _$postCategoryListAtom.reportWrite(value, super.postCategoryList, () {
+      super.postCategoryList = value;
+    });
+  }
+  final _$successgetcategorysAtom =
+  Atom(name: '_PostStore.successgetcategorys');
+
+  @override
+  bool get successgetcategorys {
+    _$successgetcategorysAtom.reportRead();
+    return super.successgetcategorys;
+  }
+
+  @override
+  set successgetcategorys(bool value) {
+    _$successgetcategorysAtom.reportWrite(value, super.successgetcategorys, () {
+      super.successgetcategorys = value;
+    });
+  }
+  final _$getPostcategorysAsyncAction =
+  AsyncAction('_PostStore.getPostcategorys');
+
+  @override
+  Future<dynamic> getPostcategorys() {
+    return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
+  }
+///////////////////pack
+  Computed<bool> _$loadingPackComputed;
+
+  @override
+  bool get loadingPack =>
+      (_$loadingPackComputed ??= Computed<bool>(() => super.loadingPack,
+          name: '_PostStore.loadingPack'))
+          .value;
   final _$fetchPacksFutureAtom = Atom(name: '_PostStore.fetchPacksFuture');
 
   @override
@@ -243,6 +264,21 @@ mixin _$PostStore on _PostStore, Store {
       super.successPack = value;
     });
   }
+  final _$getPacksAsyncAction = AsyncAction('_PostStore.getPacks');
+
+  @override
+  Future<dynamic> getPacks() {
+    return _$getPacksAsyncAction.run(() => super.getPacks());
+  }
+
+//////////////////thuoctinh
+  Computed<bool> _$loadingThuocTinhComputed;
+
+  @override
+  bool get loadingThuocTinh => (_$loadingThuocTinhComputed ??= Computed<bool>(
+          () => super.loadingThuocTinh,
+      name: '_PostStore.loadingThuocTinh'))
+      .value;
 
   final _$fetchThuocTinhsFutureAtom =
       Atom(name: '_PostStore.fetchThuocTinhsFuture');
@@ -290,44 +326,74 @@ mixin _$PostStore on _PostStore, Store {
       super.successThuocTinh = value;
     });
   }
-
-  final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
-
-  @override
-  Future<dynamic> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
-  }
-
-  final _$getPostPropertiesAsyncAction =
-      AsyncAction('_PostStore.getPostProperties');
-
-  @override
-  Future<dynamic> getPostProperties(String postId) {
-    return _$getPostPropertiesAsyncAction
-        .run(() => super.getPostProperties(postId));
-  }
-
-  final _$getPostcategorysAsyncAction =
-      AsyncAction('_PostStore.getPostcategorys');
-
-  @override
-  Future<dynamic> getPostcategorys() {
-    return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
-  }
-
-  final _$getPacksAsyncAction = AsyncAction('_PostStore.getPacks');
-
-  @override
-  Future<dynamic> getPacks() {
-    return _$getPacksAsyncAction.run(() => super.getPacks());
-  }
-
   final _$getThuocTinhsAsyncAction = AsyncAction('_PostStore.getThuocTinhs');
 
   @override
   Future<dynamic> getThuocTinhs() {
     return _$getThuocTinhsAsyncAction.run(() => super.getThuocTinhs());
   }
+//////////////////postforcur
+  Computed<bool> _$loadingPostForCurComputed;
+
+  @override
+  bool get loadingPostForCur => (_$loadingPostForCurComputed ??= Computed<bool>(
+          () => super.loadingPostForCur,
+      name: '_PostStore.loadingPostForCur'))
+      .value;
+
+  final _$fetchPostForCursFutureAtom =
+  Atom(name: '_PostStore.fetchPostForCursFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchPostForCursFuture {
+    _$fetchPostForCursFutureAtom.reportRead();
+    return super.fetchPostForCursFuture;
+  }
+
+  @override
+  set fetchPostForCursFuture(ObservableFuture<PostList> value) {
+    _$fetchPostForCursFutureAtom.reportWrite(value, super.fetchPostForCursFuture,
+            () {
+          super.fetchPostForCursFuture = value;
+        });
+  }
+
+  final _$PostForCurListAtom = Atom(name: '_PostStore.PostForCurList');
+
+  @override
+  PostList get postForCurList {
+    _$PostForCurListAtom.reportRead();
+    return super.postForCurList;
+  }
+
+  @override
+  set postForCurList(PostList value) {
+    _$PostForCurListAtom.reportWrite(value, super.postForCurList, () {
+      super.postForCurList = value;
+    });
+  }
+
+  final _$successPostForCurAtom = Atom(name: '_PostStore.successPostForCur');
+
+  @override
+  bool get successPostForCur {
+    _$successPostForCurAtom.reportRead();
+    return super.successPostForCur;
+  }
+
+  @override
+  set successPostForCur(bool value) {
+    _$successPostForCurAtom.reportWrite(value, super.successPostForCur, () {
+      super.successPostForCur = value;
+    });
+  }
+  final _$getPostForCursAsyncAction = AsyncAction('_PostStore.getPostForCurs');
+
+  @override
+  Future<dynamic> getPostForCurs() {
+    return _$getPostForCursAsyncAction.run(() => super.getPostForCurs());
+  }
+
 
   @override
   String toString() {

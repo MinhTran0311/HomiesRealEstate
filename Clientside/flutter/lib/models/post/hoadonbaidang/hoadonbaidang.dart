@@ -35,11 +35,11 @@ class Hoadonbaidang {
   );
 
   Map<String, dynamic> toMap() => {
-    "thoiDiem": thoiDiem,
+    "thoiDiem": "$thoiDiem",
     "giaGoi": giaGoi,
     "soNgayMua": soNgayMua,
     "tongTien": tongTien,
-    "ghiChu": ghiChu,
+    "ghiChu": "$ghiChu",
     "baiDangId": baiDangId,
     "goiBaiDangId": goiBaiDangId,
     "userId": userId,

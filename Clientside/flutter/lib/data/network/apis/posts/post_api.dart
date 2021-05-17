@@ -147,6 +147,22 @@ class PostApi {
     }
   }
 
+  Future<PostList> getPostsforcur() async {
+    try {
+      final res = await _dioClient.get(
+        "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllBaiDangsByCurrentUser",
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+      );
+
+      return PostList.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
   /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

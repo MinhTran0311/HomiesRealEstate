@@ -1,9 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post.dart';
-import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -16,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -47,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     userStore = Provider.of<UserStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
-    if (!_postStore.loading) {
-      _postStore.getPosts();
+    if (!_postStore.loadingPostForCur) {
+      _postStore.getPostForCurs();
     }
   }
   @override
@@ -221,22 +217,22 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Widget _buildListView() {
-    return _postStore.postList != null
+    return _postStore.postForCurList != null
         ? Expanded(
           child: ListView.separated(
-              itemCount: _postStore.postList.posts.length,
+              itemCount: _postStore.postForCurList.posts.length,
               separatorBuilder: (context, position) {
                 return Divider();
               },
               itemBuilder: (context, position) {
-                return _buildPostPoster(_postStore.postList.posts[position],position);
+                return _buildPostPoster(_postStore.postForCurList.posts[position],position);
                   //_buildListItem(position);
               },
             ),
         )
         : Center(
             child: Text(
-              "Không có bài đăng",
+              "chưa có bài đăng",
             ),
           );
   }

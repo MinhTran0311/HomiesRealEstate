@@ -7,12 +7,16 @@ class Endpoints {
   //base url Homies
   static const String homiesUrl = "https://homies.exscanner.edu.vn/api";
   static const String imagebb = "https://api.imgbb.com";
-
-  // receiveTimeout
-  static const int receiveTimeout = 7000;
+// receiveTimeout
+  static const int receiveTimeout = 30000;
 
   // connectTimeout
-  static const int connectionTimeout = 6000;
+  static const int connectionTimeout = 60000;
+  // // receiveTimeout
+  // static const int receiveTimeout = 7000;
+  //
+  // // connectTimeout
+  // static const int connectionTimeout = 6000;
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";

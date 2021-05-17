@@ -242,4 +242,33 @@ abstract class _PostStore with Store {
         }
       });
     }
+    ///////////////////////////getpostforcur
+  static ObservableFuture<PostList> emptyPostforcursResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<PostList> fetchPostForCursFuture = ObservableFuture<PostList>(emptyPostforcursResponse);
+  @observable
+  PostList postForCurList;
+  @computed
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending;
+  @observable
+  bool successPostForCur = false;
+  @observable
+  Future getPostForCurs() async {
+    final future = _repository.getPostsforcur();
+    fetchPostForCursFuture = ObservableFuture(future);
+    future.then((postList) {
+      successPostForCur = true;
+      this.postForCurList = postList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
 }
