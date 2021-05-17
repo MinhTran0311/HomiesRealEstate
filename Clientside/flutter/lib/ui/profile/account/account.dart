@@ -111,8 +111,7 @@ class _AccountPageState extends State<AccountPage>{
                   ],
                 ),
 
-                child:
-                Padding(
+                child: Padding(
                   padding: const EdgeInsets.only(left: 15.0,top: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

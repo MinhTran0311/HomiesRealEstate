@@ -15,14 +15,33 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
-
   Computed<bool> _$propertiesLoadingComputed;
+
   @override
   bool get propertiesLoading => (_$propertiesLoadingComputed ??= Computed<bool>(
           () => super.propertiesLoading,
           name: '_PostStore.propertiesLoading'))
       .value;
+  Computed<bool> _$isBaiGhimYeuThichLoadingComputed;
 
+  @override
+  bool get isBaiGhimYeuThichLoading => (_$isBaiGhimYeuThichLoadingComputed ??=
+          Computed<bool>(() => super.isBaiGhimYeuThichLoading,
+              name: '_PostStore.isBaiGhimYeuThichLoading'))
+      .value;
+  Computed<bool> _$searchLoadingComputed;
+
+  @override
+  bool get searchLoading =>
+      (_$searchLoadingComputed ??= Computed<bool>(() => super.searchLoading,
+              name: '_PostStore.searchLoading'))
+          .value;
+  Computed<bool> _$hasFilterComputed;
+
+  @override
+  bool get hasFilter => (_$hasFilterComputed ??=
+          Computed<bool>(() => super.hasFilter, name: '_PostStore.hasFilter'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -38,8 +57,6 @@ mixin _$PostStore on _PostStore, Store {
       super.fetchPostsFuture = value;
     });
   }
-
-
 
   final _$fetchPropertiesFutureAtom =
       Atom(name: '_PostStore.fetchPropertiesFuture');
@@ -58,6 +75,38 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchisBaiGhimYeuThichFutureAtom =
+      Atom(name: '_PostStore.fetchisBaiGhimYeuThichFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchisBaiGhimYeuThichFuture {
+    _$fetchisBaiGhimYeuThichFutureAtom.reportRead();
+    return super.fetchisBaiGhimYeuThichFuture;
+  }
+
+  @override
+  set fetchisBaiGhimYeuThichFuture(ObservableFuture<dynamic> value) {
+    _$fetchisBaiGhimYeuThichFutureAtom
+        .reportWrite(value, super.fetchisBaiGhimYeuThichFuture, () {
+      super.fetchisBaiGhimYeuThichFuture = value;
+    });
+  }
+
+  final _$fetchSearchFutureAtom = Atom(name: '_PostStore.fetchSearchFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchSearchFuture {
+    _$fetchSearchFutureAtom.reportRead();
+    return super.fetchSearchFuture;
+  }
+
+  @override
+  set fetchSearchFuture(ObservableFuture<dynamic> value) {
+    _$fetchSearchFutureAtom.reportWrite(value, super.fetchSearchFuture, () {
+      super.fetchSearchFuture = value;
+    });
+  }
+
   final _$postListAtom = Atom(name: '_PostStore.postList');
 
   @override
@@ -73,7 +122,35 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_PostStore.skipCount');
 
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_PostStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
 
   final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
 
@@ -102,6 +179,21 @@ mixin _$PostStore on _PostStore, Store {
   set imageUrlList(List<String> value) {
     _$imageUrlListAtom.reportWrite(value, super.imageUrlList, () {
       super.imageUrlList = value;
+    });
+  }
+
+  final _$filter_modelAtom = Atom(name: '_PostStore.filter_model');
+
+  @override
+  filter_Model get filter_model {
+    _$filter_modelAtom.reportRead();
+    return super.filter_model;
+  }
+
+  @override
+  set filter_model(filter_Model value) {
+    _$filter_modelAtom.reportWrite(value, super.filter_model, () {
+      super.filter_model = value;
     });
   }
 
@@ -135,15 +227,45 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isBaiGhimYeuThichAtom = Atom(name: '_PostStore.isBaiGhimYeuThich');
+
+  @override
+  bool get isBaiGhimYeuThich {
+    _$isBaiGhimYeuThichAtom.reportRead();
+    return super.isBaiGhimYeuThich;
+  }
+
+  @override
+  set isBaiGhimYeuThich(bool value) {
+    _$isBaiGhimYeuThichAtom.reportWrite(value, super.isBaiGhimYeuThich, () {
+      super.isBaiGhimYeuThich = value;
+    });
+  }
+
+  final _$searchContentAtom = Atom(name: '_PostStore.searchContent');
+
+  @override
+  String get searchContent {
+    _$searchContentAtom.reportRead();
+    return super.searchContent;
+  }
+
+  @override
+  set searchContent(String value) {
+    _$searchContentAtom.reportWrite(value, super.searchContent, () {
+      super.searchContent = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
-  Future<dynamic> getPosts() {
-    return _$getPostsAsyncAction.run(() => super.getPosts());
+  Future<dynamic> getPosts(bool isLoadMore) {
+    return _$getPostsAsyncAction.run(() => super.getPosts(isLoadMore));
   }
 
   final _$getPostPropertiesAsyncAction =
-  AsyncAction('_PostStore.getPostProperties');
+      AsyncAction('_PostStore.getPostProperties');
 
   @override
   Future<dynamic> getPostProperties(String postId) {
@@ -151,274 +273,77 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getPostProperties(postId));
   }
 
-
-//////////////////////category
-  Computed<bool> _$loadinggetcategorysComputed;
-
-  @override
-  bool get loadinggetcategorys => (_$loadinggetcategorysComputed ??=
-      Computed<bool>(() => super.loadinggetcategorys,
-          name: '_PostStore.loadinggetcategorys'))
-      .value;
-  final _$fetchPostCategorysFutureAtom =
-  Atom(name: '_PostStore.fetchPostCategorysFuture');
+  final _$isBaiGhimYeuThichOrNotAsyncAction =
+      AsyncAction('_PostStore.isBaiGhimYeuThichOrNot');
 
   @override
-  ObservableFuture<PostCategoryList> get fetchPostCategorysFuture {
-    _$fetchPostCategorysFutureAtom.reportRead();
-    return super.fetchPostCategorysFuture;
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) {
+    return _$isBaiGhimYeuThichOrNotAsyncAction
+        .run(() => super.isBaiGhimYeuThichOrNot(postId));
+  }
+
+  final _$createOrChangeStatusBaiGhimYeuThichAsyncAction =
+      AsyncAction('_PostStore.createOrChangeStatusBaiGhimYeuThich');
+
+  @override
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId) {
+    return _$createOrChangeStatusBaiGhimYeuThichAsyncAction
+        .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
+  }
+
+  final _$searchPostsAsyncAction = AsyncAction('_PostStore.searchPosts');
+
+  @override
+  Future<dynamic> searchPosts() {
+    return _$searchPostsAsyncAction.run(() => super.searchPosts());
+  }
+
+  final _$_PostStoreActionController = ActionController(name: '_PostStore');
+
+  @override
+  void setSearchContent(String value) {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.setSearchContent');
+    try {
+      return super.setSearchContent(value);
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
-  set fetchPostCategorysFuture(ObservableFuture<PostCategoryList> value) {
-    _$fetchPostCategorysFutureAtom
-        .reportWrite(value, super.fetchPostCategorysFuture, () {
-      super.fetchPostCategorysFuture = value;
-    });
+  void validateSearchContent(String value) {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.validateSearchContent');
+    try {
+      return super.validateSearchContent(value);
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
   }
-  final _$postCategoryListAtom = Atom(name: '_PostStore.postCategoryList');
-
-  @override
-  PostCategoryList get postCategoryList {
-    _$postCategoryListAtom.reportRead();
-    return super.postCategoryList;
-  }
-
-  @override
-  set postCategoryList(PostCategoryList value) {
-    _$postCategoryListAtom.reportWrite(value, super.postCategoryList, () {
-      super.postCategoryList = value;
-    });
-  }
-  final _$successgetcategorysAtom =
-  Atom(name: '_PostStore.successgetcategorys');
-
-  @override
-  bool get successgetcategorys {
-    _$successgetcategorysAtom.reportRead();
-    return super.successgetcategorys;
-  }
-
-  @override
-  set successgetcategorys(bool value) {
-    _$successgetcategorysAtom.reportWrite(value, super.successgetcategorys, () {
-      super.successgetcategorys = value;
-    });
-  }
-  final _$getPostcategorysAsyncAction =
-  AsyncAction('_PostStore.getPostcategorys');
-
-  @override
-  Future<dynamic> getPostcategorys() {
-    return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
-  }
-///////////////////pack
-  Computed<bool> _$loadingPackComputed;
-
-  @override
-  bool get loadingPack =>
-      (_$loadingPackComputed ??= Computed<bool>(() => super.loadingPack,
-          name: '_PostStore.loadingPack'))
-          .value;
-  final _$fetchPacksFutureAtom = Atom(name: '_PostStore.fetchPacksFuture');
-
-  @override
-  ObservableFuture<PackList> get fetchPacksFuture {
-    _$fetchPacksFutureAtom.reportRead();
-    return super.fetchPacksFuture;
-  }
-
-  @override
-  set fetchPacksFuture(ObservableFuture<PackList> value) {
-    _$fetchPacksFutureAtom.reportWrite(value, super.fetchPacksFuture, () {
-      super.fetchPacksFuture = value;
-    });
-  }
-
-  final _$packListAtom = Atom(name: '_PostStore.packList');
-
-  @override
-  PackList get packList {
-    _$packListAtom.reportRead();
-    return super.packList;
-  }
-
-  @override
-  set packList(PackList value) {
-    _$packListAtom.reportWrite(value, super.packList, () {
-      super.packList = value;
-    });
-  }
-
-  final _$successPackAtom = Atom(name: '_PostStore.successPack');
-
-  @override
-  bool get successPack {
-    _$successPackAtom.reportRead();
-    return super.successPack;
-  }
-
-  @override
-  set successPack(bool value) {
-    _$successPackAtom.reportWrite(value, super.successPack, () {
-      super.successPack = value;
-    });
-  }
-  final _$getPacksAsyncAction = AsyncAction('_PostStore.getPacks');
-
-  @override
-  Future<dynamic> getPacks() {
-    return _$getPacksAsyncAction.run(() => super.getPacks());
-  }
-
-//////////////////thuoctinh
-  Computed<bool> _$loadingThuocTinhComputed;
-
-  @override
-  bool get loadingThuocTinh => (_$loadingThuocTinhComputed ??= Computed<bool>(
-          () => super.loadingThuocTinh,
-      name: '_PostStore.loadingThuocTinh'))
-      .value;
-
-  final _$fetchThuocTinhsFutureAtom =
-      Atom(name: '_PostStore.fetchThuocTinhsFuture');
-
-  @override
-  ObservableFuture<ThuocTinhList> get fetchThuocTinhsFuture {
-    _$fetchThuocTinhsFutureAtom.reportRead();
-    return super.fetchThuocTinhsFuture;
-  }
-
-  @override
-  set fetchThuocTinhsFuture(ObservableFuture<ThuocTinhList> value) {
-    _$fetchThuocTinhsFutureAtom.reportWrite(value, super.fetchThuocTinhsFuture,
-        () {
-      super.fetchThuocTinhsFuture = value;
-    });
-  }
-
-  final _$thuocTinhListAtom = Atom(name: '_PostStore.thuocTinhList');
-
-  @override
-  ThuocTinhList get thuocTinhList {
-    _$thuocTinhListAtom.reportRead();
-    return super.thuocTinhList;
-  }
-
-  @override
-  set thuocTinhList(ThuocTinhList value) {
-    _$thuocTinhListAtom.reportWrite(value, super.thuocTinhList, () {
-      super.thuocTinhList = value;
-    });
-  }
-
-  final _$successThuocTinhAtom = Atom(name: '_PostStore.successThuocTinh');
-
-  @override
-  bool get successThuocTinh {
-    _$successThuocTinhAtom.reportRead();
-    return super.successThuocTinh;
-  }
-
-  @override
-  set successThuocTinh(bool value) {
-    _$successThuocTinhAtom.reportWrite(value, super.successThuocTinh, () {
-      super.successThuocTinh = value;
-    });
-  }
-  final _$getThuocTinhsAsyncAction = AsyncAction('_PostStore.getThuocTinhs');
-
-  @override
-  Future<dynamic> getThuocTinhs() {
-    return _$getThuocTinhsAsyncAction.run(() => super.getThuocTinhs());
-  }
-//////////////////postforcur
-  Computed<bool> _$loadingPostForCurComputed;
-
-  @override
-  bool get loadingPostForCur => (_$loadingPostForCurComputed ??= Computed<bool>(
-          () => super.loadingPostForCur,
-      name: '_PostStore.loadingPostForCur'))
-      .value;
-
-  final _$fetchPostForCursFutureAtom =
-  Atom(name: '_PostStore.fetchPostForCursFuture');
-
-  @override
-  ObservableFuture<PostList> get fetchPostForCursFuture {
-    _$fetchPostForCursFutureAtom.reportRead();
-    return super.fetchPostForCursFuture;
-  }
-
-  @override
-  set fetchPostForCursFuture(ObservableFuture<PostList> value) {
-    _$fetchPostForCursFutureAtom.reportWrite(value, super.fetchPostForCursFuture,
-            () {
-          super.fetchPostForCursFuture = value;
-        });
-  }
-
-  final _$PostForCurListAtom = Atom(name: '_PostStore.PostForCurList');
-
-  @override
-  PostList get postForCurList {
-    _$PostForCurListAtom.reportRead();
-    return super.postForCurList;
-  }
-
-  @override
-  set postForCurList(PostList value) {
-    _$PostForCurListAtom.reportWrite(value, super.postForCurList, () {
-      super.postForCurList = value;
-    });
-  }
-
-  final _$successPostForCurAtom = Atom(name: '_PostStore.successPostForCur');
-
-  @override
-  bool get successPostForCur {
-    _$successPostForCurAtom.reportRead();
-    return super.successPostForCur;
-  }
-
-  @override
-  set successPostForCur(bool value) {
-    _$successPostForCurAtom.reportWrite(value, super.successPostForCur, () {
-      super.successPostForCur = value;
-    });
-  }
-  final _$getPostForCursAsyncAction = AsyncAction('_PostStore.getPostForCurs');
-
-  @override
-  Future<dynamic> getPostForCurs() {
-    return _$getPostForCursAsyncAction.run(() => super.getPostForCurs());
-  }
-
 
   @override
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
-fetchPostCategorysFuture: ${fetchPostCategorysFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
+fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
+fetchSearchFuture: ${fetchSearchFuture},
 postList: ${postList},
-postCategoryList: ${postCategoryList},
+skipCount: ${skipCount},
+maxCount: ${maxCount},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
+filter_model: ${filter_model},
 success: ${success},
-successgetcategorys: ${successgetcategorys},
 propertiesSuccess: ${propertiesSuccess},
-fetchPacksFuture: ${fetchPacksFuture},
-packList: ${packList},
-successPack: ${successPack},
-fetchThuocTinhsFuture: ${fetchThuocTinhsFuture},
-thuocTinhList: ${thuocTinhList},
-successThuocTinh: ${successThuocTinh},
+isBaiGhimYeuThich: ${isBaiGhimYeuThich},
+searchContent: ${searchContent},
 loading: ${loading},
-loadinggetcategorys: ${loadinggetcategorys},
 propertiesLoading: ${propertiesLoading},
-loadingPack: ${loadingPack},
-loadingThuocTinh: ${loadingThuocTinh}
+isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
+searchLoading: ${searchLoading},
+hasFilter: ${hasFilter}
     ''';
   }
 }

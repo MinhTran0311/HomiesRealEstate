@@ -8,8 +8,9 @@ import '../../data/network/rest_client.dart' as _i7;
 import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/network/apis/authToken/authToken_api.dart' as _i9;
 import '../../data/network/apis/users/user_api.dart' as _i10;
-import '../../data/network/apis/image/image_api.dart' as _i11;
-import '../../data/network/apis/towns/town_api.dart' as _i12;
+import '../../data/network/apis/towns/town_api.dart' as _i19;
+import '../../data/network/apis/roles/role_api.dart' as _i11;
+import '../../data/network/apis/image/image_api.dart' as _i12;
 import '../../data/local/datasources/post/post_datasource.dart' as _i13;
 import '../../data/network/apis/registration/registration_api.dart' as _i14;
 import '../../data/repository.dart' as _i15;
@@ -38,9 +39,11 @@ class AppComponent$Injector implements _i1.AppComponent {
 
   _i10.UserApi _singletonUserApi;
 
-  _i11.ImageApi _singletonImageApi;
+  _i11.RoleApi _singletonRoleApi;
 
-  _i12.TownApi _singletonTownApi;
+  _i19.TownApi _singletonTownApi;
+
+  _i12.ImageApi _singletonImageApi;
 
   _i13.PostDataSource _singletonPostDataSource;
 
@@ -63,6 +66,7 @@ class AppComponent$Injector implements _i1.AppComponent {
           _createPostApi(),
           _createAuthTokenApi(),
           _createUserApi(),
+          _createRoleApi(),
           _createImageApi(),
           _createTownApi(),
           _createSharedPreferenceHelper(),
@@ -83,9 +87,11 @@ class AppComponent$Injector implements _i1.AppComponent {
       _localModule.provideAuthTokenApi(_createDioClient(), _createRestClient());
   _i10.UserApi _createUserApi() => _singletonUserApi ??=
       _localModule.provideUserApi(_createDioClient(), _createRestClient());
-  _i11.ImageApi _createImageApi() => _singletonImageApi ??=
+  _i11.RoleApi _createRoleApi() => _singletonRoleApi ??=
+      _localModule.provideRoleApi(_createDioClient(), _createRestClient());
+  _i12.ImageApi _createImageApi() => _singletonImageApi ??=
       _localModule.provideImageApi(_createDioClient(), _createRestClient());
-  _i12.TownApi _createTownApi() => _singletonTownApi ??=
+  _i19.TownApi _createTownApi() => _singletonTownApi ??=
       _localModule.provideTownApi(_createDioClient(), _createRestClient());
   _i13.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();

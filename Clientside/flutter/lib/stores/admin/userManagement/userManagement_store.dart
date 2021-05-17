@@ -19,12 +19,12 @@ abstract class _UserManagementStore with Store {
   _UserManagementStore(Repository repository) : this._repository = repository;
 
   // store variables:-----------------------------------------------------------
-  static ObservableFuture<UserList> emptyPostResponse =
+  static ObservableFuture<UserList> emptyUserResponse =
   ObservableFuture.value(null);
 
   @observable
   ObservableFuture<UserList> fetchUsersFuture =
-  ObservableFuture<UserList>(emptyPostResponse);
+  ObservableFuture<UserList>(emptyUserResponse);
 
   @observable
   UserList userList;

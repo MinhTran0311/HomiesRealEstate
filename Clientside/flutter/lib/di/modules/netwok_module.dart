@@ -3,6 +3,7 @@ import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/towns/town_api.dart';
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
+import 'package:boilerplate/data/network/apis/roles/role_api.dart';
 import 'package:boilerplate/data/network/apis/registration/registration_api.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
@@ -100,6 +101,10 @@ class NetworkModule extends PreferenceModule {
   @singleton
   RegistrationApi provideRegistrationApi(DioClient dioClient, RestClient restClient)=>
       RegistrationApi(dioClient, restClient);
+  @provide
+  @singleton
+  RoleApi provideRoleApi(DioClient dioClient, RestClient restClient)=>
+      RoleApi(dioClient, restClient);
 
   @provide
   @singleton

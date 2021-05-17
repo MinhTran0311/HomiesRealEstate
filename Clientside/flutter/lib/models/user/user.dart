@@ -9,6 +9,8 @@ class User {
   bool isActive;
   bool isEmailConfirmed;
   String creationTime;
+  List<dynamic> permissionsList;
+  String permissions;
 
   // List<String> permissions;
 
@@ -23,22 +25,26 @@ class User {
     this.isActive,
     this.isEmailConfirmed,
     this.creationTime,
-    // this.permissions,
+    this.permissionsList,
+    this.permissions,
   });
-
-  factory User.fromMap(Map<String, dynamic> json) => User(
-    id: json["id"],
-    name: json["name"],
-    surName: json["surname"],
-    userName: json["userName"],
-    email: json["emailAddress"],
-    phoneNumber: json["phoneNumber"],
-    profilePictureID: json["profilePictureId"],
-    isActive: json["isActive"],
-    isEmailConfirmed: json["isEmailConfirmed"],
-    creationTime: json["creationTime"],
+  factory User.UserByIDfromMap(Map<String, dynamic> json,rolesName) => User(
+    id: json["result"]["user"]["id"],
+    name: json["result"]["user"]["name"],
+    surName: json["result"]["user"]["surname"],
+    userName: json["result"]["user"]["userName"],
+    email: json["result"]["user"]["emailAddress"],
+    phoneNumber: json["result"]["user"]["phoneNumber"],
+    profilePictureID: json["result"]["user"]["profilePictureId"],
+    isActive: json["result"]["user"]["isActive"],
+    isEmailConfirmed: json["result"]["user"]["isEmailConfirmed"],
+    creationTime: json["result"]["user"]["creationTime"],
+    // permissions: json["roles"],
 
     // permissions: json["roles"],
+    permissions: rolesName,
+    permissionsList: json["roles"],
+
   );
 
   // factory User.fromJson(Map<String, dynamic> json) {
@@ -67,7 +73,7 @@ class User {
     "isActive": isActive,
     "isEmailConfirmed": isEmailConfirmed,
     "creationTime": creationTime,
-    // "roles": permissions,
+    "roles": permissionsList,
   };
 }
 
@@ -102,8 +108,10 @@ class CurrentUserForEditdto{
       profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
       id: json["result"]["userId"]
+
     );
   }
+
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       wallet: json["result"],

@@ -75,7 +75,10 @@ namespace Homies.RealEstate.Server
                                           SoTien = o.SoTien,
                                           ThoiDiem = o.ThoiDiem,
                                           GhiChu = o.GhiChu,
-                                          Id = o.Id
+                                          Id = o.Id,
+                                          UserId = s1.Id,
+                                          ChiTietHoaDonBaiDangId = s2.Id,
+                                          KiemDuyetVienId = o.KiemDuyetVienId
                                       },
                                       UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                       ChiTietHoaDonBaiDangGhiChu = s2 == null || s2.GhiChu == null ? "" : s2.GhiChu.ToString(),
@@ -286,7 +289,7 @@ namespace Homies.RealEstate.Server
         [AbpAuthorize]
         public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync()
         {
-            var user = GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             var filteredLichSuGiaoDichs = _lichSuGiaoDichRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.ChiTietHoaDonBaiDangFk)
@@ -313,7 +316,10 @@ namespace Homies.RealEstate.Server
                                           SoTien = o.SoTien,
                                           ThoiDiem = o.ThoiDiem,
                                           GhiChu = o.GhiChu,
-                                          Id = o.Id
+                                          Id = o.Id,
+                                          UserId = user.Id,
+                                          ChiTietHoaDonBaiDangId = s2.Id,
+                                          KiemDuyetVienId = o.KiemDuyetVienId
                                       },
                                       UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                       ChiTietHoaDonBaiDangGhiChu = s2 == null || s2.GhiChu == null ? "" : s2.GhiChu.ToString(),
@@ -328,25 +334,16 @@ namespace Homies.RealEstate.Server
             );
         }
 
-        public async Task<String> KiemDuyetGiaoDich(EntityDto<Guid> input)
+        public async Task KiemDuyetGiaoDich(EntityDto<Guid> input)
         {
-            var currentUser = GetCurrentUserAsync();
-            try
-            {
-                var lsgd = GetLichSuGiaoDichForEdit(input);
-                CreateOrEditLichSuGiaoDichDto lsgdDto = new CreateOrEditLichSuGiaoDichDto();
-                var lichSuGiaoDich = ObjectMapper.Map<CreateOrEditLichSuGiaoDichDto>(lsgd);
-                lichSuGiaoDich.KiemDuyetVienId = currentUser.Id;
-                await Update(lichSuGiaoDich);
-                var user =  await _lookup_userRepository.GetAsync((long)lichSuGiaoDich.UserId);
-                user.Wallet += lichSuGiaoDich.SoTien;
-                await _lookup_userRepository.UpdateAsync(user);
-                return "Thành Công";
-            }catch(Exception e)
-            {
-                return "Thất bại";
-            }
-            
+            var user = await GetCurrentUserAsync();
+
+            var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
+            lsgd.KiemDuyetVienId = user.Id;
+            lsgd.UserFk.Wallet += lsgd.SoTien;
+
+
+
 
         }
 

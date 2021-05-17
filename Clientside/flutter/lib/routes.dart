@@ -9,6 +9,7 @@ import 'ui/splash/splash.dart';
 import 'ui/registraion/registration.dart';
 import 'ui/homepage/homepage.dart';
 import 'ui/admin/userManagement/userManagement.dart';
+import 'ui/admin/roleManagement/roleManagement.dart';
 class Routes {
   Routes._();
 
@@ -19,6 +20,7 @@ class Routes {
   static const String resetPassword = '/resetPassword';
   static const String signup = '/signup';
   static const String userManagement = '/userManagement';
+  static const String roleManagement = '/roleManagement';
   static const String profile = '/profile';
   static const String newpost = '/newpost';
 
@@ -29,6 +31,7 @@ class Routes {
     home: (BuildContext context) => HomePageScreen(),
     signup: (BuildContext context) => RegistrationScreen(),
     userManagement: (BuildContext context) => UserManagementScreen(),
+    roleManagement: (BuildContext context) => RoleManagementScreen(),
     profile: (BuildContext context) => ProfileScreen(),
     newpost: (BuildContext context) => NewpostScreen(),
     resetPassword: (BuildContext context) => ResetPasswordScreen(),

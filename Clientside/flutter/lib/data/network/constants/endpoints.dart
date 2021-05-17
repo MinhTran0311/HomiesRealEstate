@@ -7,16 +7,12 @@ class Endpoints {
   //base url Homies
   static const String homiesUrl = "https://homies.exscanner.edu.vn/api";
   static const String imagebb = "https://api.imgbb.com";
-// receiveTimeout
+
+  // receiveTimeout
   static const int receiveTimeout = 30000;
 
   // connectTimeout
-  static const int connectionTimeout = 60000;
-  // // receiveTimeout
-  // static const int receiveTimeout = 7000;
-  //
-  // // connectTimeout
-  // static const int connectionTimeout = 6000;
+  static const int connectionTimeout = 20000;
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";
@@ -25,31 +21,39 @@ class Endpoints {
 
   //#endregion
 
-
+  static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
   //# region user
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
-  //get users
+  //get all users
+  static const String getUsersByID = homiesUrl + "/services/app/User/GetUserForEdit";
+  //get all users
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
-  static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
-  //# endregion
-
-  //get all lichsugiaodich
+  //get all users
+  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
   //# region Post
 
-  //get all users
-  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get all lichsugiaodich
+  static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
+  //update all lichsugiaodich
+  static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
   static const String getAllBaiDang = homiesUrl + "/services/app/BaiDangs/GetAll";
+  //getAllRole
+  static const String getAllRole = homiesUrl + "/services/app/Role/GetRoles";
   // getPostProperties
   static const String getAllChiTietBaiDangByPostId = homiesUrl + "/services/app/ChiTietBaiDangs/GetAllChiTietBaiDangByPostId";
+  static const String isBaiDangYeuThichOrNot = homiesUrl + "/services/app/BaiGhimYeuThichs/IsExistOrNot";
+  static const String createOrChangeStatusBaiGhimYeuThich = homiesUrl + "/services/app/BaiGhimYeuThichs/CreateOrChangeStatus";
   //post image
   static const String postImageToImageBB = imagebb + "/1/upload";
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
-
-//# endregion
+  //search
+  static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
+  //# endregion
 }

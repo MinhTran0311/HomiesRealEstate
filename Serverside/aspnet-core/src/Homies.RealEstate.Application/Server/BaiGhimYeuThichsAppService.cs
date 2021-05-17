@@ -141,13 +141,25 @@ namespace Homies.RealEstate.Server
             var user = await GetCurrentUserAsync();
             var baighim = await _baiGhimYeuThichRepository.FirstOrDefaultAsync(e => e.UserId == user.Id && e.BaiDangId == input.BaiDangId);
 
+            var baiDang = await _lookup_baiDangRepository.FirstOrDefaultAsync(e => e.Id == input.BaiDangId);
+
             input.UserId = user.Id;
             if (baighim == null)
             {
                 await Create(input);
+                baiDang.LuotYeuThich += 1;
             }
             else
             {
+                input.Id = baighim.Id;
+                if (input.TrangThai.Equals("On"))
+                {
+                    baiDang.LuotYeuThich += 1;
+                }
+                else if (input.TrangThai.Equals("Off"))
+                {
+                    baiDang.LuotYeuThich += -1;
+                }
                 await Update(input);
             }
         }
@@ -163,7 +175,6 @@ namespace Homies.RealEstate.Server
                 Exist = (baighim != null)
             };
         }
-
 
         [AbpAuthorize(AppPermissions.Pages_BaiGhimYeuThichs_Create)]
         protected virtual async Task Create(CreateOrEditBaiGhimYeuThichDto input)

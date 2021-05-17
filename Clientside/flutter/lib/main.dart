@@ -9,6 +9,7 @@ import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dar
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
+import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
+import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
 
 // global instance for app component
 AppComponent appComponent;
@@ -58,8 +60,10 @@ class MyApp extends StatelessWidget {
   final UserStore _userStore = UserStore(appComponent.getRepository());
   final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
   final UserManagementStore _userManagementStore = UserManagementStore(appComponent.getRepository());
+  final RoleManagementStore _roleManagementStore = RoleManagementStore(appComponent.getRepository());
   final ImageStore _imageStore = ImageStore(appComponent.getRepository());
   final TownStore _townStore = TownStore(appComponent.getRepository());
+  final FilterStore _filterStore = FilterStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
@@ -71,6 +75,9 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
+        Provider<RoleManagementStore>(create: (_) => _roleManagementStore),
+
+        Provider<FilterStore>(create: (_) => _filterStore),
         Provider<UserStore>(create: (_) => _userStore),
         Provider<ImageStore>(create: (_) => _imageStore),
         Provider<TownStore>(create: (_) => _townStore),

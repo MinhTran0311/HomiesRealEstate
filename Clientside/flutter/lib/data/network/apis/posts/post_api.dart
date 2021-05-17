@@ -6,16 +6,18 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
-
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
+import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class PostApi {
   // dio instance
@@ -28,16 +30,20 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<PostList> getPosts() async {
+  Future<PostList> getPosts(int skipCount, int maxResultCount) async {
     try {
-      final res = await _dioClient.get(
-        "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAll",
-        options: Options(headers: {
-          "Abp.TenantId": 1,
-          "Authorization": "Bearer ${Preferences.access_token}",
-        }),
+      final res = await _dioClient.get(Endpoints.getAllBaiDang,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: {
+          "SkipCount": skipCount,
+          "MaxResultCount": maxResultCount,
+        },
       );
-
       return PostList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());
@@ -101,13 +107,14 @@ class PostApi {
   }
 
   Future<PropertyList> getPostProperties(String postId) async {
-    try {
-      final res = await _dioClient.get(
-        Endpoints.getAllChiTietBaiDangByPostId,
-        options: Options(headers: {
-          "Abp.TenantId": 1,
-          "Authorization": "Bearer ${Preferences.access_token}",
-        }),
+    try{
+      final res = await _dioClient.get(Endpoints.getAllChiTietBaiDangByPostId,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
         queryParameters: {
           "postId": postId,
         },
@@ -146,7 +153,6 @@ class PostApi {
       throw e;
     }
   }
-
   Future<PostList> getPostsforcur() async {
     try {
       final res = await _dioClient.get(
@@ -171,5 +177,70 @@ class PostApi {
 //        .then((dynamic res) => PostsList.fromJson(res))
 //        .catchError((error) => throw NetworkException(message: error));
 //  }
+
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.isBaiDangYeuThichOrNot,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: {
+          "postId": postId,
+        },
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId,bool status) async {
+    try {
+      DateTime now = DateTime.now();
+      String fomattedDate = DateFormat('yyyy-mm-dd').format(now);
+      print(fomattedDate);
+      final res = await _dioClient.post(
+        Endpoints.createOrChangeStatusBaiGhimYeuThich,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        data: {
+          "trangThai": status ? "On":"Off",
+          "baiDangId": postId,
+        }
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
+  Future<PostList> searchPosts(filter_Model filter_model) async {
+    try {
+
+      final res = await _dioClient.get(Endpoints.searchPosts,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+        queryParameters: filter_model.toMap(skipCount: 0, maxCount: 10),
+      );
+      print('search results: ');
+      print(res);
+      return PostList.fromJson(res);
+    } catch (e) {
+      throw e;
+    }
+  }
 
 }

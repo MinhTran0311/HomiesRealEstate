@@ -2,6 +2,8 @@ import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
@@ -22,99 +24,240 @@ abstract class _PostStore with Store {
 
   // store for handling errors
   final ErrorStore errorStore = ErrorStore();
+  List<ReactionDisposer> _disposers;
 
   // constructor:---------------------------------------------------------------
-  _PostStore(Repository repository) : this._repository = repository;
+  _PostStore(Repository repository) {
+    this._repository = repository;
+    _disposers = [reaction((_) => searchContent, validateSearchContent)];
+  }
+
+    // store variables:-----------------------------------------------------------
+    // Post observer
+    static ObservableFuture<PostList> emptyPostResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<PostList> fetchPostsFuture =
+    ObservableFuture<PostList>(emptyPostResponse);
+
+    // Image observer
+    static ObservableFuture<PropertyList> emptyPropertiesResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<PropertyList> fetchPropertiesFuture =
+    ObservableFuture<PropertyList>(emptyPropertiesResponse);
+
+
+    static ObservableFuture<dynamic> emptyIsBaiDangYeuThichResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
+    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+
+    static ObservableFuture<dynamic> emptySearchResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchSearchFuture =
+    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+
+    @observable
+    PostList postList;
+
+    @observable
+    bool isIntialLoading=true;
+
+    @observable
+    int skipCount = 0;
+
+    @observable
+    int maxCount = 1;
+
+    @observable
+    PropertyList propertyList;
 
   // store variables:-----------------------------------------------------------
-  static ObservableFuture<PostList> emptyPostResponse =
-      ObservableFuture.value(null);
 
   static ObservableFuture<PostCategoryList> emptyPostCategorysResponse =
       ObservableFuture.value(null);
-  static ObservableFuture<PropertyList> emptyPropertiesResponse =
-      ObservableFuture.value(null);
-
-  @observable
-  ObservableFuture<PostList> fetchPostsFuture =
-      ObservableFuture<PostList>(emptyPostResponse);
 
   @observable
   ObservableFuture<PostCategoryList> fetchPostCategorysFuture =
     ObservableFuture<PostCategoryList>(emptyPostCategorysResponse);
 
   @observable
-  ObservableFuture<PropertyList> fetchPropertiesFuture =
-      ObservableFuture<PropertyList>(emptyPropertiesResponse);
+    List<String> imageUrlList;
 
+    @observable
+    filter_Model filter_model = new filter_Model();
 
-  @observable
-  PostList postList;
+    @observable
+    bool success = false;
+
+    @observable
+    bool propertiesSuccess = false;
+
+    @observable
+    bool isBaiGhimYeuThich = false;
+
   @observable
   PostCategoryList postCategoryList;
+    @observable
+    String searchContent='';
+    @computed
+    bool get loading => fetchPostsFuture.status == FutureStatus.pending && isIntialLoading;
 
-  @observable
-  PropertyList propertyList;
-
-  @observable
-  List<String> imageUrlList;
-
-  @observable
-  bool success = false;
   @observable
   bool successgetcategorys = false;
-  @observable
-  bool propertiesSuccess = false;
+  @computed
+  bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
 
   @computed
-  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+  bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
+
+    @computed
+    bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
 
   @computed
   bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
 
   @computed
-  bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
+    bool get hasFilter => filter_model!=null;
 
-  // actions:-------------------------------------------------------------------
+    // actions:-------------------------------------------------------------------
+    @action
+    void setSearchContent(String value) {
+      searchContent = value;
+    }
+
+    @action
+    Future getPosts(bool isLoadMore) async {
+      if (!isLoadMore){
+        skipCount = 0;
+      }
+      else
+        skipCount+= Preferences.skipIndex;
+      final future = _repository.getPosts(skipCount, Preferences.maxCount);
+      fetchPostsFuture = ObservableFuture(future);
+
+      future.then((postList) {
+        success = true;
+        if (!isLoadMore){
+          this.postList = postList;
+          //this.postList.posts.add(postList.posts[0]);
+        }
+        else {
+          for (int i=0; i< postList.posts.length; i++)
+            this.postList.posts.add(postList.posts[i]);
+        }
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+    }
+
+    @action
+    Future getPostProperties(String postId) async {
+      propertiesSuccess = false;
+      final future = _repository.getPostProperties(postId);
+      fetchPropertiesFuture = ObservableFuture(future);
+
+      future.then((propertyList) {
+        propertiesSuccess = true;
+        this.propertyList = propertyList;
+      }).catchError((error) {
+        propertiesSuccess = false;
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+    }
+
+    @action
+    Future isBaiGhimYeuThichOrNot(String postId) async {
+      isBaiGhimYeuThich = false;
+      final futrue = _repository.isBaiGhimYeuThichOrNot(postId);
+      fetchisBaiGhimYeuThichFuture = ObservableFuture(futrue);
+
+      futrue.then((result) {
+        if (result["result"]["exist"]) {
+          isBaiGhimYeuThich = true;
+        }
+        else{
+          isBaiGhimYeuThich = false;
+        }
+      }).catchError((error){
+        isBaiGhimYeuThich = false;
+        if (error is DioError) {
+          if (error.response.data!=null)
+            errorStore.errorMessage = error.response.data["error"]["message"];
+          else
+            errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          throw error;
+        }
+      });
+    }
+
+    @action
+    Future createOrChangeStatusBaiGhimYeuThich(String postId) async {
+      final futrue = _repository.createOrChangeStatusBaiGhimYeuThich(postId,!isBaiGhimYeuThich);
+
+      futrue.then((result) {
+        isBaiGhimYeuThich =!isBaiGhimYeuThich;
+      }).catchError((error){
+        if (error is DioError) {
+          if (error.response.data!=null)
+            errorStore.errorMessage = error.response.data["error"]["message"];
+          else
+            errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          throw error;
+        }
+      });
+    }
   @action
-  Future getPosts() async {
-    final future = _repository.getPosts();
-    fetchPostsFuture = ObservableFuture(future);
+  Future searchPosts() async {
+    filter_model.searchContent = searchContent;
+    final futrue = _repository.searchPosts(filter_model);
+    fetchisBaiGhimYeuThichFuture = ObservableFuture(futrue);
 
-    future.then((postList) {
-      success = true;
-      this.postList = postList;
-    }).catchError((error) {
+    futrue.then((result) {
+      this.postList = result;
+    }).catchError((error){
       if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
           errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
         throw error;
       }
     });
   }
   @action
-  Future getPostProperties(String postId) async {
-    propertiesSuccess = false;
-    final future = _repository.getPostProperties(postId);
-    fetchPropertiesFuture = ObservableFuture(future);
-
-    future.then((propertyList) {
-      propertiesSuccess = true;
-      this.propertyList = propertyList;
-    }).catchError((error) {
-      propertiesSuccess = false;
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
-        throw error;
-      }
-    });
+  void validateSearchContent(String value) {
+      return;
   }
   @action
   Future getPostcategorys() async {
@@ -272,3 +415,4 @@ abstract class _PostStore with Store {
     });
   }
 }
+

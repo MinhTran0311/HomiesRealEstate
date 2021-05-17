@@ -119,7 +119,7 @@ abstract class _UserStore with Store {
     final future = _repository.getCurrentUser();
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    future.then((user) {
       this.user = user;
     }).catchError((error) {
       if (error is DioError) {
@@ -138,7 +138,7 @@ abstract class _UserStore with Store {
       final future = _repository.getWalletUser();
       fetchUsersFuture = ObservableFuture(future);
 
-      fetchUsersFuture.then((user) {
+      future.then((user) {
         this.user = user;
       }).catchError((error) {
         if (error is DioError) {
@@ -161,7 +161,7 @@ abstract class _UserStore with Store {
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    future.then((user) {
       // this.user = user;
     }).catchError((error) {
       if (error is DioError) {
@@ -184,7 +184,7 @@ abstract class _UserStore with Store {
     final future = _repository.getUserOfCurrentDeatiaiPost(Id);
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    future.then((user) {
       this.user = user;
     }).catchError((error) {
       if (error is DioError) {

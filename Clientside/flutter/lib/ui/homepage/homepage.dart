@@ -5,6 +5,8 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
+import 'package:boilerplate/ui/admin/management.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:boilerplate/ui/profile/account/account.dart';
@@ -18,6 +20,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
+import 'package:boilerplate/ui/admin/management.dart';
 
 import 'TabNavigator.dart';
 
@@ -32,12 +36,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
   PageController _pageController;
   int _selectedIndex = 0;
 
-  List<String> pageKeys = ["HomeScreen", "Map", "Notification","Profile","NewPost"];
+  List<String> pageKeys = ["HomeScreen", "MapsScreen", "ManagementScreen","ProfileScreen","NewPost"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "HomeScreen": GlobalKey<NavigatorState>(),
-    "Map": GlobalKey<NavigatorState>(),
-    "Notification": GlobalKey<NavigatorState>(),
-    "Profile": GlobalKey<NavigatorState>(),
+    "MapsScreen": GlobalKey<NavigatorState>(),
+    "ManagementScreen": GlobalKey<NavigatorState>(),
+    "ProfileScreen": GlobalKey<NavigatorState>(),
     "NewPost": GlobalKey<NavigatorState>(),
   };
 
@@ -94,9 +98,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
         body: Stack(
           children: [
             _buildOffstageNavigator("HomeScreen"),
-            _buildOffstageNavigator("Map"),
-            _buildOffstageNavigator("Notification"),
-            _buildOffstageNavigator("Profile"),
+            _buildOffstageNavigator("MapsScreen"),
+            _buildOffstageNavigator("ManagementScreen"),
+            _buildOffstageNavigator("ProfileScreen"),
             _buildOffstageNavigator("NewPost"),
           ],
         ),
