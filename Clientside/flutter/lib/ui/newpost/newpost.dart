@@ -137,9 +137,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
     }
-    if (!_postStore.loading) {
-      _postStore.getPosts();
-    }
+    // if (!_postStore.loading) {
+    //   _postStore.getPosts();
+    // }
     if (!_townStore.loading) {
       _townStore.getTowns();
     }
@@ -1280,6 +1280,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 sc = false;
                 final _etEditor = await _keyEditor.currentState.getText();
                 _newpost.post.moTa = _etEditor;
+                print(_etEditor);
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
                 lichsu.ghiChu = "${_userStore.user.id} ${selectedPack.tenGoi}";

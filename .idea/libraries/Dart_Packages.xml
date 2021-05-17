@@ -429,6 +429,27 @@
             </list>
           </value>
         </entry>
+        <entry key="geolocator">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-6.2.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="geolocator_platform_interface">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-1.0.9/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="geolocator_web">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-1.0.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="glob">
           <value>
             <list>
@@ -797,6 +818,13 @@
           <value>
             <list>
               <option value="$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-0.1.8/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="pull_to_refresh">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/pull_to_refresh-1.6.3/lib" />
             </list>
           </value>
         </entry>
@@ -1170,6 +1198,9 @@
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_mobx-1.1.0+2/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/flutter_summernote-0.2.3/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-6.2.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_platform_interface-1.0.9/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_web-1.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/glob-1.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/google_fonts-1.1.2/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-1.2.0/lib" />
@@ -1221,6 +1252,7 @@
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/provider-4.3.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/pub_semver-1.4.4/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/pubspec_parse-0.1.8/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/pull_to_refresh-1.6.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.5/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/random_string-2.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.25.0/lib" />

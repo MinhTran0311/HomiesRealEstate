@@ -50,7 +50,7 @@ class UserApi {
             }
         ),);
       log("Get UserID Success ${res.toString()}");
-      return User.UserByIDfromMap(res);
+      return User.UserByIDfromMap(res,null);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;

@@ -31,7 +31,7 @@ class UserList {
             }
             rolesName = rolesName + json["result"]["items"][i]["roles"][j]["roleName"];
           }
-          users.add(User.fromMap(json["result"]["items"][i], rolesName.toString()));
+          users.add(User.UserByIDfromMap(json["result"]["items"][i], rolesName.toString()));
         }
       }
       return UserList(
