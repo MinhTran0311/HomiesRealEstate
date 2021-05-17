@@ -20,74 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2d7158b-b0eb-4024-87f8-d9dd0c66d2f2" name="Default Changelist" comment="demo :(.2">
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/.gradle/6.8.3/fileChanges/last-build.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/.gradle/6.8.3/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/.gradle/configuration-cache/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/.gradle/vcs-1/gc.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/roles/role_api.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/converter/local_converter.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/post/filter_model.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/role/role.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/role/role_list.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/admin/roleManagement/roleManagement_store.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/admin/roleManagement/roleManagement_store.g.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/lichsugiaodich/LSGD_store.g.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/filter_store.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/filter_store.g.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/admin/management.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/admin/roleManagement/roleManagement.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/CreateBaiDangAndDetailsDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/GetAllBaiDangByFilterInput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/constants/strings.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/constants/strings.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/users/user_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/users/user_api.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/constants/endpoints.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/constants/endpoints.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/constants/preferences.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/sharedpref/constants/preferences.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/local_module.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/di/modules/netwok_module.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user_list.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/routes.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/admin/userManagement/userManagement_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/admin/userManagement/userManagement_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/lichsugiaodich/LSGD_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/lichsugiaodich/LSGD_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.g.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.g.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/user/user_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/user/user_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/admin/userManagement/userManagement.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/admin/userManagement/userManagement.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/detail.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/filter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/filter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/home/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/TabNavigator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/TabNavigator.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/homepage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/homepage/homepage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/login/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/login/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/maps/maps.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/maps/maps.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/account/account.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/account/account.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/rounded_button_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/widgets/rounded_button_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Authorization/Users/Profile/Dto/CurrentUserProfileEditDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Authorization/Users/Profile/Dto/CurrentUserProfileEditDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/CreateOrEditBaiDangDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/CreateOrEditBaiDangDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/CreateOrEditLichSuGiaoDichDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/CreateOrEditLichSuGiaoDichDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/GetBaiDangForViewDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application.Shared/Server/Dtos/GetBaiDangForViewDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Authorization/Users/Profile/ProfileAppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Authorization/Users/Profile/ProfileAppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/BaiDangsAppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/BaiDangsAppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/BaiGhimYeuThichsAppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/BaiGhimYeuThichsAppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/LichSuGiaoDichsAppService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Application/Server/LichSuGiaoDichsAppService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Web.Host/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Serverside/aspnet-core/src/Homies.RealEstate.Web.Host/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_no_store]" />
   <component name="Git.Settings">
     <favorite-branches>
       <branch-storage>
