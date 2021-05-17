@@ -224,7 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
       buttonColor: Colors.orangeAccent,
       textColor: Colors.white,
       onPressed: () async {
-        log("Login clicked");
         if (_store.canLogin) {
           DeviceUtils.hideKeyboard(context);
           _store.authLogIn(_userNameController.text,_passwordController.text);

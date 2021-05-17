@@ -7,6 +7,7 @@ import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -44,11 +45,19 @@ class Repository {
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi);
 
   // Post: ---------------------------------------------------------------------
-  Future<PostList> getPosts() async {
+  Future<PostList> getPosts(int skipCount, int maxResultCount) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getPosts().then((postsList) {
+    return await _postApi.getPosts(skipCount, maxResultCount).then((postsList) {
+      postsList.posts.forEach((post) {
+        _postDataSource.insert(post);
+      });
+      return postsList;
+    }).catchError((error) => throw error);
+  }
+  Future<PostList> searchPosts(filter_Model filter_model) async {
+    return await _postApi.searchPosts(filter_model).then((postsList) {
       postsList.posts.forEach((post) {
         _postDataSource.insert(post);
       });
@@ -63,16 +72,60 @@ class Repository {
     });
   }
 
+  Future<dynamic> isBaiGhimYeuThichOrNot(String postId) async {
+    return await _postApi.isBaiGhimYeuThichOrNot(postId)
+        .catchError((error) {
+      throw error;
+    });
+  }
+  Future<dynamic> createOrChangeStatusBaiGhimYeuThich(String postId, bool status) async{
+    return await _postApi.createOrChangeStatusBaiGhimYeuThich(postId,status)
+        .catchError((error) {
+      throw error;
+    });
+  }
+
   // Post: ---------------------------------------------------------------------
-  // Future<listLSGD> getLSGD() async {
+  Future<listLSGD> getLSGD() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getLSGD().then((lsgdList) {
+      return lsgdList;
+    }).catchError((error) => throw error);
+  }
+  Future<listLSGD> getAllLSGD() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getAllLSGD().then((lsgdList) {
+      return lsgdList;
+    }).catchError((error) => throw error);
+  }
+  Future<bool> NapTien(double soTien,String thoiDiem,int userId) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.Naptien(soTien, thoiDiem, userId).then((lsgd) {
+      return lsgd;
+    }).catchError((error) => throw error);
+  }
+  // Future<listLSGD> KiemDuyetNapTien(int userId, String idLSGD,int kiemDuyetVienID) async {
   //   // check to see if posts are present in database, then fetch from database
   //   // else make a network call to get all posts, store them into database for
   //   // later use
-  //   return await _userApi.getLSGD().then((lsgdList) {
-  //     return lsgdList;
+  //   return await _userApi.KiemDuyetNaptien(userId, idLSGD,kiemDuyetVienID).then((lsgd) {
+  //     return lsgd;
   //   }).catchError((error) => throw error);
   // }
-
+  Future<bool> KiemDuyetGiaoDich(String idLSGD) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.KiemDuyetGiaoDich(idLSGD).then((lsgd) {
+      return lsgd;
+    }).catchError((error) => throw error);
+  }
   //User: ----------------------------------------------------------------------
   Future<UserList> getAllUsers() async {
     return await _userApi.getAllUsers().then((usersList) {
@@ -86,14 +139,26 @@ class Repository {
       return user;
     }).catchError((error) => throw error);
   }
-  Future<dynamic> getWalletUser() async {
-    return await _userApi.getCurrentWalletUser().then((user) {
+  Future<double> getWalletUser() async {
+    return await _userApi.getCurrentWalletUser().then((walletuser) {
       // log('dataUserTest: $user');
-      return user;
+      return walletuser;
+    }).catchError((error) => throw error);
+  }
+  Future<String> getPictureUser() async {
+    return await _userApi.getCurrentPictureUser().then((pictureuser) {
+      // log('dataUserTest: $user');
+      return pictureuser;
     }).catchError((error) => throw error);
   }
   Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName).then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+  Future<dynamic> updatePictureCurrentUser(String fileToken) async {
+    return await _userApi.updatetPictureCurrentUser(fileToken).then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);

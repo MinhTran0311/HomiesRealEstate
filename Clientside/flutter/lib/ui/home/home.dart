@@ -4,6 +4,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -12,10 +13,12 @@ import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,13 +27,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  TextEditingController _searchController = TextEditingController();
+  
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
-  // LSGDStore LSGDStore;
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final ScrollController _scrollController= ScrollController(keepScrollOffset: true);
+  bool isRefreshing = false;
+  GlobalKey _contentKey = GlobalKey();
+  GlobalKey _refresherKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -48,12 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
-      _postStore.getPosts();
+      _postStore.getPosts(false);
+      _postStore.isIntialLoading=false;
     }
     if (!userStore.loading) {
       userStore.getCurrentUser();
     }
-
   }
 
   @override
@@ -123,8 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-  Widget _buildPostsList()
-  {
+  Widget _buildPostsList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -158,8 +168,30 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.grey[400],
                     size: 28,
                   ),
-                )
-            ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red[400]),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.orange[400]),
+                  ),
+                  border:  UnderlineInputBorder(
+                      borderSide:  BorderSide(color: Colors.black)
+                  ),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.grey[400],
+                        size: 28,
+                      ),
+                      onPressed: (){
+                        _postStore.searchPosts();
+                      },
+                    ),
+
+                  )
+              ),
           ),
         ),
         Padding(
@@ -221,30 +253,97 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(height: 6,),
-        _buildListView(),
+        Expanded(child: _buildListView()),
       ],
     );
   }
   Widget _buildListView() {
+
+
+
     return _postStore.postList != null
-        ? Expanded(
-          child: ListView.separated(
-              itemCount: _postStore.postList.posts.length,
-              separatorBuilder: (context, position) {
-                return Divider();
-              },
-              itemBuilder: (context, position) {
-                return _buildPostPoster(_postStore.postList.posts[position],position);
-                  //_buildListItem(position);
-              },
+      ? SmartRefresher(
+        key: _refresherKey,
+        controller: _refreshController,
+        enablePullUp: true,
+        enablePullDown: true,
+        header: WaterDropHeader(
+          refresh: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
             ),
-        )
-        : Center(
-            child: Text(
-              "Không có bài đăng",
+          ),
+          idleIcon:SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
             ),
+          ),
+          waterDropColor: Colors.amber,
+        ),
+        physics: BouncingScrollPhysics(),
+        footer: ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+        ),
+        onLoading: () async {
+          print("loading");
+
+          _postStore.getPosts(true);
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) {
+            setState(() {
+
+            });
+          }
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
           );
+
+          _refreshController.loadComplete();
+
+          print("111111111");
+        },
+        onRefresh: () async {
+          print("refresh");
+          _postStore.getPosts(false);
+
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) setState(() {});
+          isRefreshing = true;
+          _refreshController.refreshCompleted();
+        },
+        scrollController: _scrollController,
+        primary: false,
+        child: ListView.builder(
+          key: _contentKey,
+          controller: _scrollController,
+          itemCount: _postStore.postList.posts.length,
+          // separatorBuilder: (context, position) {
+          //   return Divider();
+          // },
+          itemBuilder: (context, position) {
+
+            return _buildPostPoster(_postStore.postList.posts[position],position);
+              //_buildListItem(position);
+          },
+        ),
+      )
+      : Center(
+          child: Text(
+            "Không có bài đăng",
+          ),
+        );
   }
+
+
 
   Widget _buildPostPoster(Post post, int index){
     return GestureDetector(
@@ -445,9 +544,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SizedBox.shrink();
   }
-  void _showBottomSheet(){
-    showModalBottomSheet(
+  void _showBottomSheet() async {
+    _postStore.filter_model = await showModalBottomSheet<filter_Model>(
         context: context,
+        enableDrag: false,
+        isDismissible: false,
         isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -455,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(30),
             )
         ),
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Wrap(
             children: [
               Filter(),

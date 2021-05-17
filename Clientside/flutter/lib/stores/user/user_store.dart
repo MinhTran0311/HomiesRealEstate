@@ -105,6 +105,35 @@ abstract class _UserStore with Store {
   @computed
   bool get loading => fetchUsersFuture.status == FutureStatus.pending;
 
+  //User
+  static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CurrentUserForEditdto> fetchUserCurrentFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentResponse);
+  //Wallet
+  static ObservableFuture<double> emptyUserCurrentWalletResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<double> fetchUserCurrentWalletFuture =
+  ObservableFuture<double>(emptyUserCurrentWalletResponse);
+  //Picture
+  static ObservableFuture<String> emptyUserCurrentPictureResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetchUserCurrentPictureFuture =
+  ObservableFuture<String>(emptyUserCurrentPictureResponse);
+
+  @computed
+  bool get loadingCurrentUser => fetchUserCurrentFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingCurrentUserWallet => fetchUserCurrentWalletFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingCurrentUserPicture => fetchUserCurrentPictureFuture.status == FutureStatus.pending;
+
   // empty responses:-----------------------------------------------------------
   static ObservableFuture<CurrentUserForEditdto> emptyLoginResponses =
   ObservableFuture.value(null);
@@ -136,10 +165,10 @@ abstract class _UserStore with Store {
   @action
   Future getCurrentWalletUser() async {
       final future = _repository.getWalletUser();
-      fetchUsersFuture = ObservableFuture(future);
+      fetchUserCurrentWalletFuture = ObservableFuture(future);
 
-      fetchUsersFuture.then((user) {
-        this.user = user;
+      fetchUserCurrentWalletFuture.then((wallet) {
+        this.user.wallet = wallet;
       }).catchError((error) {
         if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -161,8 +190,31 @@ abstract class _UserStore with Store {
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName);
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
-      // this.user = user;
+    fetchUserCurrentWalletFuture.then((wallet) {
+      this.user.wallet = wallet;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+  @action
+  Future getCurrentPictureUser() async {
+    final future = _repository.getPictureUser();
+
+    fetchUserCurrentPictureFuture = ObservableFuture(future);
+
+    fetchUserCurrentPictureFuture.then((picture) {
+      this.user.picture = picture;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -184,8 +236,38 @@ abstract class _UserStore with Store {
     final future = _repository.getUserOfCurrentDeatiaiPost(Id);
     fetchUsersFuture = ObservableFuture(future);
 
-    fetchUsersFuture.then((user) {
+    future.then((user) {
       this.user = user;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
+  static ObservableFuture<dynamic> emptyUpdatePictureUserResponses =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdatePictureUserFutures =
+  ObservableFuture<dynamic>(emptyUpdatePictureUserResponses);
+
+  @computed
+  bool get loadingsUpdatePictureUser => fetchUpdatePictureUserFutures.status == FutureStatus.pending;
+
+  @action
+  Future updatePictureCurrentUser(String fileToken) async {
+    final future = _repository.updatePictureCurrentUser(fileToken);
+    fetchUpdatePictureUserFutures = ObservableFuture(future);
+
+    fetchUpdatePictureUserFutures.then((image) {
+      if(image==true)
+      this.user.picture = fileToken;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

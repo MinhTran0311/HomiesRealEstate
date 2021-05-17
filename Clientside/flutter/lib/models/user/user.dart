@@ -31,6 +31,19 @@ class User {
     this.avatar,
   });
 
+  factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
+    id: json["result"]["user"]["id"],
+    name: json["result"]["user"]["name"],
+    surName: json["result"]["user"]["surname"],
+    userName: json["result"]["user"]["userName"],
+    email: json["result"]["user"]["emailAddress"],
+    phoneNumber: json["result"]["user"]["phoneNumber"],
+    profilePictureID: json["result"]["user"]["profilePictureId"],
+    isActive: json["result"]["user"]["isActive"],
+    isEmailConfirmed: json["result"]["user"]["isEmailConfirmed"],
+    creationTime: json["result"]["user"]["creationTime"],
+    // permissions: json["roles"],
+  );
   factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
     id: json["id"],
     name: json["name"],
@@ -86,6 +99,8 @@ class CurrentUserForEditdto{
   String profilePicture;
   String creationTime;
   double wallet;
+  int  UserID;
+  String  picture;
 
   CurrentUserForEditdto({
     this.name,
@@ -95,8 +110,11 @@ class CurrentUserForEditdto{
     this.profilePicture,
     this.creationTime,
     this.wallet,
-    this.userName
-});
+    this.userName,
+    this.UserID,
+    this.picture,
+  });
+
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       name: json["result"]["name"],
@@ -106,8 +124,10 @@ class CurrentUserForEditdto{
       phoneNumber: json["result"]["phoneNumber"],
       profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
+      UserID: json["result"]["userId"],
     );
   }
+
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       wallet: json["result"],

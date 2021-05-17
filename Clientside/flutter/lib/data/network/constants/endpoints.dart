@@ -21,7 +21,7 @@ class Endpoints {
 
   //#endregion
 
-
+  static const String getUserOfCurrentPost = homiesUrl + "/services/app/Profile/GetUserProfileById";
   //# region user
   //get all users
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
@@ -32,12 +32,21 @@ class Endpoints {
   //# endregion
 
   //get all lichsugiaodich
+  //get all users
+  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get picture users
+  static const String getCurrentPictureUser = homiesUrl + "/services/app/Profile/GetProfilePicture";
+  //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
   //# region Post
 
-  //get all users
-  static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get all lichsugiaodich
+  static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
+  //update all lichsugiaodich
+  static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
+  //update kiemduyetgiaodich
+  static const String kiemDuyetGiaoDich = homiesUrl + "/services/app/LichSuGiaoDichs/KiemDuyetGiaoDich";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
@@ -49,6 +58,7 @@ class Endpoints {
   //post image
   static const String postImageToImageBB = imagebb + "/1/upload";
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
-
-//# endregion
+  //search
+  static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
+  //# endregion
 }

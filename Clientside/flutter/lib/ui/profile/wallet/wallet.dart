@@ -1,5 +1,9 @@
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/ui/home/detail.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +56,6 @@ class _WalletPageState extends State<WalletPage>{
         ],
       ),
       child: Container(
-
                 // decoration: BoxDecoration(
                 //   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
                 //   // border: Border.all(color: Colors.white,width: 1.0),
@@ -66,13 +69,34 @@ class _WalletPageState extends State<WalletPage>{
                 //   ],
                 // ),
         padding: const EdgeInsets.all(20),
-        child: IndexedStack(
-          children: [
-            buildWallet(),
-            buildCreateTransactionHistory()
-          ],
-          index: _selectedIndex,
-        ),
+        child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              title: TabBar(
+                labelColor: Colors.white,
+                tabs: [
+                  Tab(text: "Nạp tiền",),
+                  Tab(text: "Lịch sử giao dịch",),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                IndexedStack(
+                  children: [
+                    // _buildListView(),
+                    buildWallet(),
+                    buildCreateTransactionHistory()
+                  ],
+                  index: _selectedIndex,
+                ),
+                buildLSGD()
+              ],
+            ),
+          ),
+        )
+
       )
     );
   }
@@ -82,8 +106,9 @@ class _WalletPageState extends State<WalletPage>{
       child: Center(
         child: Column(
           children: [
+            SizedBox(height: 20,),
             createTransactionHistory(),
-            CardItem(text: "Tạo giao dịch",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+            CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
               press: (){
                 setState(() {
                   _showMyDialog();
@@ -173,6 +198,36 @@ class _WalletPageState extends State<WalletPage>{
       },
     );
   }
+  _showErrorMessage( String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 5),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
+  }
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
+  }
+  update(){
+    _showSuccssfullMesssage("cập nhật ${ _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID)}");
+
+  }
   Widget buildWallet(){
     return Container(
       child: ListView(
@@ -193,29 +248,59 @@ class _WalletPageState extends State<WalletPage>{
           // final Color colorbackgroud;
           // final Color colortext;
           // final Color coloricon;),
-          Center(
-            child: Text("Lịch sử giao dịch",
-              style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
-          ),
-          Column(
-            children: [
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-              buildCardTransactionHistory(),
-            ],
-          ),
-
-          SizedBox(height: 20,),
+          // Divider(
+          //   color: Colors.grey,
+          // ),
+          //
+          //
+          // SizedBox(height: 20,),
         ],
       ),
     );
   }
 
-  Widget buildCardTransactionHistory(){
-    return Container(
-      padding: const EdgeInsets.all(10),
+  Widget buildLSGD(){
+    return  Container(
+      // color: Colors.grey[200],
+      child: Column(
+        children: [
+          // SizedBox(height: 20,),
+          // Center(
+          //   child: Text("Lịch sử giao dịch",
+          //     style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+          // ),
+          SizedBox(height: 10,),
+          _lsgdStore.listlsgd!=null?Container(
+            height: 370, // give it a fixed height constraint
+            // color: Colors.teal,
+            // child ListView
+            child: ListView.builder(shrinkWrap: true, // 1st add
+                physics: ClampingScrollPhysics(), // 2nd add
+                itemCount: _lsgdStore.listlsgd.listLSGDs.length,
+                itemBuilder: (_, i) => ListTile(
+                    title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[i])
+                )
+            ),
+          ):Container(),
+          // _buildListView(),
+        ],
+      ),
+    );
+
+  }
+  Widget buildCardTransactionHistory(lichsugiaodich lsgd){
+    String datetime;
+    bool naptien;
+
+    if(lsgd.kiemDuyetVienId==null){ datetime = "Đang chờ";}
+    else{     datetime = DatetimeToString(lsgd.thoiDiem);    }
+    if(lsgd.chiTietHoaDonBaiDangId!=null){  naptien = false;  datetime = DatetimeToString(lsgd.thoiDiem); }
+    else{     naptien = true;   }
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.white)
+      ),
       child: Container(
         height: 75,
         padding: const EdgeInsets.all(10),

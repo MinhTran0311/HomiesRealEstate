@@ -92,7 +92,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
-  Future<CurrentUserForEditdto> getCurrentWalletUser() async {
+  Future<double> getCurrentWalletUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenWalletUser,
 
@@ -104,12 +104,32 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
         ),);
       log("Get All Success");
       return CurrentUserForEditdto.fromMapWallet(res);
+      log("Get Wallet Success");
+      double getCurrentWallet = res["result"];
+      return getCurrentWallet;
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;
     }
   }
+  Future<String> getCurrentPictureUser() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getCurrentPictureUser,
 
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get Wallet Success");
+      String getCurrentPicture = res["result"]["profilePicture"];
+      return getCurrentPicture;
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
   Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     try {
       final res = await _dioClient.put(Endpoints.updateCurrenUser,
@@ -140,4 +160,146 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
         //   throw e;
         // }
     }
+    //   return CurrenUserForEditdyo.fromMap(res);
+    // } catch (e) {
+    //   print("lỗi" + e.toString());
+    //   throw e;
+    // }
+
+
+  Future<dynamic> updatetPictureCurrentUser(String fileToken) async {
+    try {
+      final res = await _dioClient.put(Endpoints.updateCurrenUser,
+        data: {
+          "fileToken": fileToken,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("updateUser Success");
+      bool updateUserSuccess = res["success"];
+
+      print(res);
+      return updateUserSuccess;
+    } catch (e) {
+      throw e;
+    }
+    //   return CurrenUserForEditdyo.fromMap(res);
+    // } catch (e) {
+    //   print("lỗi" + e.toString());
+    //   throw e;
+    // }
+  }
+
+  Future<listLSGD> getLSGD() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getCurrenlichsugiaodich,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listLSGD.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
+  Future<bool> Naptien(double soTien, String thoiDiem,int userId) async {
+    String ghiChu = "Nạp Tiền";
+    try {
+      final res = await _dioClient.post(Endpoints.CreateOrEditLSGD,
+        data: {
+          "soTien": soTien,
+          "ghiChu": ghiChu,
+          "thoiDiem": thoiDiem,
+          "userId": userId,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("CreateLSGD Success");
+      bool CreateLSGDSuccess = res["success"];
+
+      print(res);
+      return CreateLSGDSuccess;
+    } catch (e) {
+      throw e;
+    }
+  }
+  // Future<dynamic> KiemDuyetNaptien(int userId, String idLSGD,int kiemDuyetVienID) async {
+  //   String ghiChu = "Nạp Tiền";
+  //   try {
+  //     final res = await _dioClient.post(Endpoints.CreateOrEditLSGD,
+  //       data: {
+  //         "ghiChu": ghiChu,
+  //         "userId": userId,
+  //         "kiemDuyetVienId": kiemDuyetVienID,
+  //         "id": idLSGD,
+  //       },
+  //       options: Options(
+  //           headers: {
+  //             "Abp.TenantId": 1,
+  //             "Authorization": "Bearer ${Preferences.access_token}",
+  //           }
+  //       ),);
+  //     log("CreateLSGD Success");
+  //     bool CreateLSGDSuccess = res["success"];
+  //
+  //     print(res);
+  //     return CreateLSGDSuccess;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+  Future<bool> KiemDuyetGiaoDich(String idLSGD) async {
+    try {
+      final res = await _dioClient.post(Endpoints.kiemDuyetGiaoDich,
+        data: {
+          "id": idLSGD,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("CreateLSGD Success");
+      bool CreateLSGDSuccess = res["success"];
+
+      print(res);
+      return CreateLSGDSuccess;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<listLSGD> getAllLSGD() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAllLSGD,
+
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listLSGD.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+
 }
