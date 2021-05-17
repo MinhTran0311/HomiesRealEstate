@@ -1,6 +1,7 @@
 
 
-import 'dart:io';
+import 'dart:convert';
+import 'dart:io' ;
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -73,7 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     setState(() {
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        pathAvatar = image.path;
+        final bytes = File(pickedFile.path).readAsBytesSync();
+        _userstore.updatePictureCurrentUser(base64Encode(bytes));
       } else {
         print('No image selected.');
       }
@@ -89,6 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     if (!_userstore.loading) {
       _userstore.getCurrentUser();
+
+    }
+    if(!_userstore.loadingCurrentUserWallet){
       _userstore.getCurrentWalletUser();
       if(_userstore.user!=null){
         print("Duong"+_userstore.user.name);
@@ -106,7 +111,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
        }
 
     }
-
+    if(!_userstore.loadingCurrentUserPicture){
+      _userstore.getCurrentPictureUser();
+    }
   }
 
   @override
@@ -339,13 +346,24 @@ class _ProfileScreenState extends State<ProfileScreen>{
                         fit: StackFit.expand,
                         overflow: Overflow.visible,
                         children:[
-                          CircleAvatar(radius: (52),
-                              backgroundColor: Colors.white,
-                              child: ClipRRect(
-                                borderRadius:BorderRadius.circular(50),
-                                child: Image.asset(pathAvatar),
-                              )
-                          ),
+                        Observer(
+                          builder: (context) {
+                            return
+                              _userstore.user.picture !=null ? CircleAvatar(radius: (52),
+                                  backgroundColor: Colors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.memory(Base64Decoder().convert(_userstore.user.picture)),
+                                  )
+                              ): CircleAvatar(radius: (52),
+                                  backgroundColor: Colors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.asset(pathAvatar),
+                                  )
+                              );
+                          }
+                        ),
                         // CircularProfileAvatar(
                         //   _pathAvatar,
                         //   borderWidth: 4.0,
@@ -434,14 +452,27 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   padding: const EdgeInsets.only(top: 25,left: 40,),
                   child: Column(
                     children: [
-                      Text(
-                        Sodu,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontFamily.roboto
-                      ),
+                      Observer(
+                      builder: (context) {
+                        return
+                          _userstore.user != null ? Text(
+                            _userstore.user.wallet.toString(),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.roboto
+                            ),
+                          ) : Text(
+                            "0",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.roboto
+                            ),
+                          );
+                        }
                       ),
                       Text("Sô dư",
                         style: TextStyle(

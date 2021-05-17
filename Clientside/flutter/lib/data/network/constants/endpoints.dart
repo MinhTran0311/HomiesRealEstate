@@ -31,6 +31,8 @@ class Endpoints {
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
   //get all users
   static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get picture users
+  static const String getCurrentPictureUser = homiesUrl + "/services/app/Profile/GetProfilePicture";
   //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
@@ -40,6 +42,8 @@ class Endpoints {
   static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
   //update all lichsugiaodich
   static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
+  //update kiemduyetgiaodich
+  static const String kiemDuyetGiaoDich = homiesUrl + "/services/app/LichSuGiaoDichs/KiemDuyetGiaoDich";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
