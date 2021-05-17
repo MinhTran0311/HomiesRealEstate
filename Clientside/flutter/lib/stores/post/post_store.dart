@@ -7,6 +7,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'post_store.g.dart';
@@ -92,6 +93,8 @@ abstract class _PostStore with Store {
     @observable
     String searchContent='';
 
+    @observable
+    ScrollController scrollController= ScrollController();
 
     @computed
     bool get loading => fetchPostsFuture.status == FutureStatus.pending && isIntialLoading;
@@ -128,11 +131,15 @@ abstract class _PostStore with Store {
         success = true;
         if (!isLoadMore){
           this.postList = postList;
+          print("len: " + this.postList.posts.length.toString());
+
           //this.postList.posts.add(postList.posts[0]);
         }
         else {
           for (int i=0; i< postList.posts.length; i++)
             this.postList.posts.add(postList.posts[i]);
+          print("len: " + this.postList.posts.length.toString());
+
         }
       }).catchError((error) {
         if (error is DioError) {
