@@ -174,7 +174,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         primary: true,
         appBar: AppBar(
           // Icon: Icons.app_registration,
-          backgroundColor: Colors.Colors.amber[600],
+          backgroundColor: Colors.amber[600],
           title: Text(
             "Đăng tin bất động sản",
             style: Theme.of(context).textTheme.button.copyWith(
