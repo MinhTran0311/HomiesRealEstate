@@ -17,6 +17,7 @@ class _FilterState extends State<Filter> {
   FilterStore _filterStore;
 
   TextEditingController _giaMinValueController = TextEditingController();
+
   TextEditingController _giaMaxValueController = TextEditingController();
   TextEditingController _dienTichMinValueController = TextEditingController();
   TextEditingController _dienTichMaxValueController = TextEditingController();
@@ -37,6 +38,13 @@ class _FilterState extends State<Filter> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _filterStore = Provider.of<FilterStore>(context);
+    print(_filterStore.filter_model.diaChi);
+    _diaChiController.text = _filterStore.filter_model.diaChi;
+    _usernameController.text = _filterStore.filter_model.username;
+    _giaMinValueController.text=_filterStore.filter_model.giaMin;
+    _giaMaxValueController.text=_filterStore.filter_model.giaMax;
+    _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
+    _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
   }
 
 
@@ -232,6 +240,7 @@ class _FilterState extends State<Filter> {
                           keyboardType: TextInputType.number,
                           controller: _giaMinValueController,
                           onChanged: (value){
+
                             _filterStore.setGiaMin(value);
                             // _filterStore.setMinGiaSlider(double.parse(value),value.isEmpty);
                           },
