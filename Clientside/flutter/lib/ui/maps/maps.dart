@@ -60,8 +60,7 @@ class _MapsScreenState extends State<MapsScreen> {
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
-      // get post filter theo toa do X vaf toa do Y
-      _postStore.getPosts(false);
+      _postStore.getPosts();
       _addMarkerButtonProcessed();
     }
   }

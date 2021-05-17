@@ -7,7 +7,6 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/photoViewScreen.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
-import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -96,7 +95,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: _scrollListener,
-        child: Stack(
+      child: Stack(
         children: [
           Align(
             alignment: Alignment.bottomCenter,
@@ -414,9 +413,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 // )
                               ),
 
-
-                              buildMap(),
-
                               Padding(
                                   padding: EdgeInsets.only(right: 24,left: 24,bottom: 10),
                                   child: Text(
@@ -457,7 +453,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                       width: 60,
                                       decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
                                             image: AssetImage(Assets.front_img),
                                             fit: BoxFit.cover,
                                           ),
@@ -535,6 +530,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
                   ]),
             ),
+
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -612,6 +608,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
               ),
             ),
           )
+
         ],
       ),
     )
@@ -675,33 +672,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  Widget buildMap(){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-            padding: EdgeInsets.only(right: 24,left: 24,bottom: 12),
-            child: Text(
-              "Bản đồ",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-        ),
-
-        Padding(
-            padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
-            child: Container(
-              height: 350,
-              child: MapsScreen(),
-            )
-        )
-      ],
-    );
-
   }
 
   Widget buildTag(String filterName){

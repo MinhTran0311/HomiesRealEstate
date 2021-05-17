@@ -101,6 +101,6 @@ class Post {
     "featuredImage": featuredImage,
     "dienTich": dienTich,
     "gia": gia,
-  };
+      };
   
 }

@@ -15,8 +15,7 @@ namespace Homies.RealEstate.Server.Dtos
         [StringLength(LichSuGiaoDichConsts.MaxGhiChuLength, MinimumLength = LichSuGiaoDichConsts.MinGhiChuLength)]
         public string GhiChu { get; set; }
 
-        [Required]
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
         public Guid? ChiTietHoaDonBaiDangId { get; set; }
 

@@ -5,7 +5,6 @@ class RoundedButtonWidget extends StatelessWidget {
   final Color buttonColor;
   final Color textColor;
   final VoidCallback onPressed;
-  final double textSize;
 
   const RoundedButtonWidget({
     Key key,
@@ -13,7 +12,6 @@ class RoundedButtonWidget extends StatelessWidget {
     this.buttonColor,
     this.textColor = Colors.white,
     this.onPressed,
-    this.textSize = 17,
   }) : super(key: key);
 
   @override
@@ -24,7 +22,7 @@ class RoundedButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         buttonText,
-        style: Theme.of(context).textTheme.button.copyWith(color: textColor,fontSize: textSize,fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.button.copyWith(color: textColor,fontSize: 17,fontWeight: FontWeight.bold),
       ),
     );
   }

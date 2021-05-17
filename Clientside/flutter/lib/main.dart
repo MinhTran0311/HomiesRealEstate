@@ -9,7 +9,6 @@ import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dar
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
-import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -75,7 +74,6 @@ class MyApp extends StatelessWidget {
         Provider<RoleManagementStore>(create: (_) => _roleManagementStore),
 
         //Provider<FormStore>(create: (_) => _formStore),
-        Provider<FilterStore>(create: (_) => _filterStore),
         Provider<UserStore>(create: (_) => _userStore),
         Provider<ImageStore>(create: (_) => _imageStore),
       ],

@@ -334,20 +334,25 @@ namespace Homies.RealEstate.Server
             );
         }
 
-        public async Task KiemDuyetGiaoDich(EntityDto<Guid> input)
+        public async Task<String> KiemDuyetGiaoDich(EntityDto<Guid> input)
         {
-            var user = await GetCurrentUserAsync();
-
-            var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
-            if (lsgd.KiemDuyetVienId!=null&& lsgd.KiemDuyetVienId!=0)
+            var currentUser = GetCurrentUserAsync();
+            try
             {
-                lsgd.KiemDuyetVienId = user.Id;
-                lsgd.UserFk.Wallet += lsgd.SoTien;
+                var lsgd = GetLichSuGiaoDichForEdit(input);
+                CreateOrEditLichSuGiaoDichDto lsgdDto = new CreateOrEditLichSuGiaoDichDto();
+                var lichSuGiaoDich = ObjectMapper.Map<CreateOrEditLichSuGiaoDichDto>(lsgd);
+                lichSuGiaoDich.KiemDuyetVienId = currentUser.Id;
+                await Update(lichSuGiaoDich);
+                var user =  await _lookup_userRepository.GetAsync((long)lichSuGiaoDich.UserId);
+                user.Wallet += lichSuGiaoDich.SoTien;
+                await _lookup_userRepository.UpdateAsync(user);
+                return "Thành Công";
+            }catch(Exception e)
+            {
+                return "Thất bại";
             }
             
-
-
-
 
         }
 

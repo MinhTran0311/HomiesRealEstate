@@ -100,81 +100,6 @@ mixin _$UserStore on _UserStore, Store {
   set loginFutures(ObservableFuture<CurrentUserForEditdto> value) {
     _$loginFuturesAtom.reportWrite(value, super.loginFutures, () {
       super.loginFutures = value;
-  ObservableFuture<double> get fetchUserCurrentWalletFuture {
-    _$fetchUserCurrentWalletFutureAtom.reportRead();
-    return super.fetchUserCurrentWalletFuture;
-  }
-
-  @override
-  set fetchUserCurrentWalletFuture(
-      ObservableFuture<double> value) {
-    _$fetchUserCurrentWalletFutureAtom
-        .reportWrite(value, super.fetchUserCurrentWalletFuture, () {
-      super.fetchUserCurrentWalletFuture = value;
-    });
-  }
-  final _$fetchUserCurrentPictureFutureAtom =
-      Atom(name: '_UserStore.fetchUserCurrentPictureFuture');
-
-  @override
-  ObservableFuture<String> get fetchUserCurrentPictureFuture {
-    _$fetchUserCurrentPictureFutureAtom.reportRead();
-    return super.fetchUserCurrentPictureFuture;
-  }
-
-  @override
-  set fetchUserCurrentPictureFuture(
-      ObservableFuture<String> value) {
-    _$fetchUserCurrentPictureFutureAtom
-        .reportWrite(value, super.fetchUserCurrentPictureFuture, () {
-      super.fetchUserCurrentPictureFuture = value;
-    });
-  }
-
-  final _$CurrentUserFutureAtom = Atom(name: '_UserStore.CurrentUserFuture');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get CurrentUserFuture {
-    _$CurrentUserFutureAtom.reportRead();
-    return super.CurrentUserFuture;
-  }
-
-  @override
-  set CurrentUserFuture(ObservableFuture<CurrentUserForEditdto> value) {
-    _$CurrentUserFutureAtom.reportWrite(value, super.CurrentUserFuture, () {
-      super.CurrentUserFuture = value;
-    });
-  }
-
-  final _$fetchUpdateUserFuturesAtom =
-      Atom(name: '_UserStore.fetchUpdateUserFutures');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserFutures {
-    _$fetchUpdateUserFuturesAtom.reportRead();
-    return super.fetchUpdateUserFutures;
-  }
-
-  @override
-  set fetchUpdateUserFutures(ObservableFuture<CurrentUserForEditdto> value) {
-    _$fetchUpdateUserFuturesAtom
-        .reportWrite(value, super.fetchUpdateUserFutures, () {
-      super.fetchUpdateUserFutures = value;
-    });
-  }
-
-  final _$UpdateUserFuturessAtom = Atom(name: '_UserStore.UpdateUserFuturess');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get UpdateUserFuturess {
-    _$UpdateUserFuturessAtom.reportRead();
-    return super.UpdateUserFuturess;
-  }
-
-  @override
-  set UpdateUserFuturess(ObservableFuture<CurrentUserForEditdto> value) {
-    _$UpdateUserFuturessAtom.reportWrite(value, super.UpdateUserFuturess, () {
-      super.UpdateUserFuturess = value;
     });
   }
 
@@ -196,17 +121,9 @@ mixin _$UserStore on _UserStore, Store {
       AsyncAction('_UserStore.getCurrentWalletUser');
 
   @override
-  Future<double> getCurrentWalletUser() {
+  Future<dynamic> getCurrentWalletUser() {
     return _$getCurrentWalletUserAsyncAction
         .run(() => super.getCurrentWalletUser());
-  }
-  final _$getCurrentPictureUserAsyncAction =
-      AsyncAction('_UserStore.getCurrentPictureUser');
-
-  @override
-  Future<double> getCurrentPictureUser() {
-    return _$getCurrentPictureUserAsyncAction
-        .run(() => super.getCurrentPictureUser());
   }
 
   final _$updateCurrentUserAsyncAction =
@@ -217,14 +134,6 @@ mixin _$UserStore on _UserStore, Store {
       String phonenumber, String email, String userName) {
     return _$updateCurrentUserAsyncAction.run(() =>
         super.updateCurrentUser(name, surname, phonenumber, email, userName));
-  }
-  final _$updatePictureCurrentUserAsyncAction =
-      AsyncAction('_UserStore.updatePictureCurrentUser');
-
-  @override
-  Future<dynamic> updatePictureCurrentUser(String fileToken) {
-    return _$updatePictureCurrentUserAsyncAction.run(() =>
-        super.updatePictureCurrentUser(fileToken));
   }
 
   final _$getUserOfCurrentDetailPostAsyncAction =
