@@ -105,9 +105,9 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  Future<getAvatarUser> getAvatarUsers(int Id) async {
-    return await _userApi.getAvatarByUser(Id).then((user){
-      return user;
+  Future<dynamic> getAvatarUsers(int Id) async {
+    return await _userApi.getAvatarByUser(Id).then((profilePicture){
+      return profilePicture;
     }).catchError((error) => throw error);
   }
 

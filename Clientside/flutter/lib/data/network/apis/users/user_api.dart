@@ -54,7 +54,7 @@ class UserApi {
     }
   }
 
-  Future<getAvatarUser> getAvatarByUser(int userId) async {
+  Future<dynamic> getAvatarByUser(int userId) async {
     try {
       final res = await _dioClient.get(Endpoints.getAvatarByUserName,
       options: Options(
@@ -67,7 +67,7 @@ class UserApi {
           "userId": userId,
         },
       );
-      return getAvatarUser.fromMap(res);
+      return res["result"]["profilePicture"];
     } catch (e) {
       throw e;
     }

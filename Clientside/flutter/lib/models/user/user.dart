@@ -50,6 +50,7 @@ class User {
   //   return User(
   //     id: json["id"],
   //     name: json["name"],
+
   //     surName: json["surname"],
   //     userName: json["userName"],
   //     email: json["emailAddress"],
@@ -110,19 +111,6 @@ class CurrentUserForEditdto{
   factory CurrentUserForEditdto.fromMapWallet(Map<String, dynamic> json) {
     return CurrentUserForEditdto(
       wallet: json["result"],
-    );
-  }
-}
-
-class getAvatarUser{
-  String avatar;
-
-  getAvatarUser({
-   this.avatar,
-});
-  factory getAvatarUser.fromMap(Map<String, dynamic> json) {
-    return getAvatarUser(
-      avatar: json["result"]["profilePicture"],
     );
   }
 }

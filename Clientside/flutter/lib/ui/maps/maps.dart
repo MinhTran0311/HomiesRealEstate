@@ -1,3 +1,5 @@
+import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,6 +14,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/ui/home/detail.dart';
+
 // import 'package:geolocator/geolocator.dart';
 
 class MapsScreen extends StatefulWidget {
@@ -19,6 +24,7 @@ class MapsScreen extends StatefulWidget {
   // final String title = "Bản đồ";
 
   @override
+  // MapsScreen({@required})
   _MapsScreenState createState() => _MapsScreenState();
 }
 
@@ -32,6 +38,7 @@ class _MapsScreenState extends State<MapsScreen> {
   // Location _location = Location();
   // Location location;
   Position _position = Position();
+  Post postClickMarker;
   bool permissionEnable = false;
 
   PostStore _postStore;
@@ -136,6 +143,9 @@ class _MapsScreenState extends State<MapsScreen> {
               title: '${postOrder.tagLoaiBaidang}',
               snippet: '100 tỷ',
             ),
+            onTap: () {
+              this.postClickMarker = postOrder;
+            },
             icon: BitmapDescriptor.defaultMarker,
           ));
         }
@@ -156,6 +166,112 @@ class _MapsScreenState extends State<MapsScreen> {
     );
   }
 
+  Widget containerBaseInfor() {
+    if (this.postClickMarker != null) {
+      return GestureDetector(
+        child: Row(
+          children: [
+            Container(
+              height: 120,
+              width: MediaQuery.of(context).size.width/3.2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                ),
+                  image: DecorationImage(
+                    //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
+                    image: this.postClickMarker.featuredImage!=null ? NetworkImage(this.postClickMarker.featuredImage) : AssetImage(Assets.front_img),
+                    fit: BoxFit.cover,
+                  )
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+              ),
+              height: 120,
+              width: MediaQuery.of(context).size.width/2.3,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${this.postClickMarker.dienTich}" + " m2",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      Text(
+                        // "${this.postClickMarker.gia}"
+                        "22 tỷ",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Container(
+                        // color: Colors.yellow,
+                        width: MediaQuery.of(context).size.width/2.8,
+                        child:  Text(
+                          "${this.postClickMarker.tieuDe}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Container (
+                        // padding: const EdgeInsets.all(16.0),
+                        width: MediaQuery.of(context).size.width/2.8,
+                        child: new Column (
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text (
+                              "${this.postClickMarker.moTa}"
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context)=>Detail(post: this.postClickMarker)));
+        },
+      );
+    }
+    else return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,6 +283,19 @@ class _MapsScreenState extends State<MapsScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.amber,
+        // actions: [
+        //   IconButton(
+        //     padding: EdgeInsets.only(right: 10),
+        //     icon: Icon(
+        //       Icons.refresh,
+        //       color: Colors.white,
+        //       size: 28,
+        //     ),
+        //     onPressed: () {
+        //       setState(() {});
+        //     },
+        //   ),
+        // ],
       ),
       body: Stack(
         children: <Widget>[
@@ -205,6 +334,27 @@ class _MapsScreenState extends State<MapsScreen> {
                   ],
                 ),
               ),
+          ),
+          Container(
+            padding: EdgeInsets.all(16.0),
+            // height: MediaQuery.of(context).size.height,
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Column(
+                children: <Widget>[
+                  containerBaseInfor(),
+                  // button(_onMapTypeButtonProcessed, Icons.map),
+                  // SizedBox(
+                  //   height: 16.0,
+                  // ),
+                  // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                  // SizedBox(
+                  //   height: 16.0,
+                  // ),
+                  // button(_goToCurrentLocationDevice, Icons.my_location),
+                ],
+              ),
+            ),
           ),
         ],
       ),

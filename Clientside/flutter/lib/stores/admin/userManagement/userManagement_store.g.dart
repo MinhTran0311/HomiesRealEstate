@@ -15,6 +15,13 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   bool get loading => (_$loadingComputed ??= Computed<bool>(() => super.loading,
           name: '_UserManagementStore.loading'))
       .value;
+  Computed<bool> _$loadingAvatarComputed;
+
+  @override
+  bool get loadingAvatar =>
+      (_$loadingAvatarComputed ??= Computed<bool>(() => super.loadingAvatar,
+              name: '_UserManagementStore.loadingAvatar'))
+          .value;
 
   final _$fetchUsersFutureAtom =
       Atom(name: '_UserManagementStore.fetchUsersFuture');
@@ -32,6 +39,23 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$fetchAvatarUserFutureAtom =
+      Atom(name: '_UserManagementStore.fetchAvatarUserFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchAvatarUserFuture {
+    _$fetchAvatarUserFutureAtom.reportRead();
+    return super.fetchAvatarUserFuture;
+  }
+
+  @override
+  set fetchAvatarUserFuture(ObservableFuture<dynamic> value) {
+    _$fetchAvatarUserFutureAtom.reportWrite(value, super.fetchAvatarUserFuture,
+        () {
+      super.fetchAvatarUserFuture = value;
+    });
+  }
+
   final _$userListAtom = Atom(name: '_UserManagementStore.userList');
 
   @override
@@ -44,6 +68,21 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   set userList(UserList value) {
     _$userListAtom.reportWrite(value, super.userList, () {
       super.userList = value;
+    });
+  }
+
+  final _$avatarUserAtom = Atom(name: '_UserManagementStore.avatarUser');
+
+  @override
+  String get avatarUser {
+    _$avatarUserAtom.reportRead();
+    return super.avatarUser;
+  }
+
+  @override
+  set avatarUser(String value) {
+    _$avatarUserAtom.reportWrite(value, super.avatarUser, () {
+      super.avatarUser = value;
     });
   }
 
@@ -74,9 +113,12 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   String toString() {
     return '''
 fetchUsersFuture: ${fetchUsersFuture},
+fetchAvatarUserFuture: ${fetchAvatarUserFuture},
 userList: ${userList},
+avatarUser: ${avatarUser},
 successGetUsers: ${successGetUsers},
-loading: ${loading}
+loading: ${loading},
+loadingAvatar: ${loadingAvatar}
     ''';
   }
 }

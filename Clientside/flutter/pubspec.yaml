@@ -70,7 +70,7 @@ dependencies:
   google_fonts: ^1.0.0
   curved_navigation_bar: ^0.3.2
   google_maps_flutter: ^1.2.0
-  location: ^2.3.5
+#  location: ^2.3.5
   geolocator: ^6.1.1
   # Dependency injection
   inject:
