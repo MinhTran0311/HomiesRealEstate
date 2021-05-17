@@ -151,17 +151,26 @@ abstract class _UserStore with Store {
   ObservableFuture<CurrentUserForEditdto> fetchUserCurrentFuture =
   ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentResponse);
   //Wallet
-  static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentWalletResponse =
+  static ObservableFuture<double> emptyUserCurrentWalletResponse =
   ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<CurrentUserForEditdto> fetchUserCurrentWalletFuture =
-  ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentWalletResponse);
+  ObservableFuture<double> fetchUserCurrentWalletFuture =
+  ObservableFuture<double>(emptyUserCurrentWalletResponse);
+  //Picture
+  static ObservableFuture<String> emptyUserCurrentPictureResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetchUserCurrentPictureFuture =
+  ObservableFuture<String>(emptyUserCurrentPictureResponse);
 
   @computed
   bool get loadingCurrentUser => fetchUserCurrentFuture.status == FutureStatus.pending;
   @computed
   bool get loadingCurrentUserWallet => fetchUserCurrentWalletFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingCurrentUserPicture => fetchUserCurrentPictureFuture.status == FutureStatus.pending;
 
   // empty responses:-----------------------------------------------------------
   static ObservableFuture<CurrentUserForEditdto> emptyCurrentUserResponses =
@@ -195,8 +204,31 @@ abstract class _UserStore with Store {
 
     fetchUserCurrentWalletFuture = ObservableFuture(future);
 
-    fetchUserCurrentWalletFuture.then((user) {
-      this.user = user;
+    fetchUserCurrentWalletFuture.then((wallet) {
+      this.user.wallet = wallet;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+  @action
+  Future getCurrentPictureUser() async {
+    final future = _repository.getPictureUser();
+
+    fetchUserCurrentPictureFuture = ObservableFuture(future);
+
+    fetchUserCurrentPictureFuture.then((picture) {
+      this.user.picture = picture;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -281,6 +313,36 @@ abstract class _UserStore with Store {
       this.user.phoneNumber = phonenumber;
       this.user.emailAddress = email;
       this.user.userName = userName;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+
+  static ObservableFuture<dynamic> emptyUpdatePictureUserResponses =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdatePictureUserFutures =
+  ObservableFuture<dynamic>(emptyUpdatePictureUserResponses);
+
+  @computed
+  bool get loadingsUpdatePictureUser => fetchUpdatePictureUserFutures.status == FutureStatus.pending;
+
+  @action
+  Future updatePictureCurrentUser(String fileToken) async {
+    final future = _repository.updatePictureCurrentUser(fileToken);
+    fetchUpdatePictureUserFutures = ObservableFuture(future);
+
+    fetchUpdatePictureUserFutures.then((image) {
+      if(image==true)
+      this.user.picture = fileToken;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

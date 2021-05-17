@@ -164,17 +164,34 @@ mixin _$UserStore on _UserStore, Store {
       Atom(name: '_UserStore.fetchUserCurrentWalletFuture');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUserCurrentWalletFuture {
+  ObservableFuture<double> get fetchUserCurrentWalletFuture {
     _$fetchUserCurrentWalletFutureAtom.reportRead();
     return super.fetchUserCurrentWalletFuture;
   }
 
   @override
   set fetchUserCurrentWalletFuture(
-      ObservableFuture<CurrentUserForEditdto> value) {
+      ObservableFuture<double> value) {
     _$fetchUserCurrentWalletFutureAtom
         .reportWrite(value, super.fetchUserCurrentWalletFuture, () {
       super.fetchUserCurrentWalletFuture = value;
+    });
+  }
+  final _$fetchUserCurrentPictureFutureAtom =
+      Atom(name: '_UserStore.fetchUserCurrentPictureFuture');
+
+  @override
+  ObservableFuture<String> get fetchUserCurrentPictureFuture {
+    _$fetchUserCurrentPictureFutureAtom.reportRead();
+    return super.fetchUserCurrentPictureFuture;
+  }
+
+  @override
+  set fetchUserCurrentPictureFuture(
+      ObservableFuture<String> value) {
+    _$fetchUserCurrentPictureFutureAtom
+        .reportWrite(value, super.fetchUserCurrentPictureFuture, () {
+      super.fetchUserCurrentPictureFuture = value;
     });
   }
 
@@ -250,9 +267,17 @@ mixin _$UserStore on _UserStore, Store {
       AsyncAction('_UserStore.getCurrentWalletUser');
 
   @override
-  Future<dynamic> getCurrentWalletUser() {
+  Future<double> getCurrentWalletUser() {
     return _$getCurrentWalletUserAsyncAction
         .run(() => super.getCurrentWalletUser());
+  }
+  final _$getCurrentPictureUserAsyncAction =
+      AsyncAction('_UserStore.getCurrentPictureUser');
+
+  @override
+  Future<double> getCurrentPictureUser() {
+    return _$getCurrentPictureUserAsyncAction
+        .run(() => super.getCurrentPictureUser());
   }
 
   final _$getUserOfCurrentDetailPostAsyncAction =
@@ -272,6 +297,14 @@ mixin _$UserStore on _UserStore, Store {
       String phonenumber, String email, String userName) {
     return _$updateCurrentUserAsyncAction.run(() =>
         super.updateCurrentUser(name, surname, phonenumber, email, userName));
+  }
+  final _$updatePictureCurrentUserAsyncAction =
+      AsyncAction('_UserStore.updatePictureCurrentUser');
+
+  @override
+  Future<dynamic> updatePictureCurrentUser(String fileToken) {
+    return _$updatePictureCurrentUserAsyncAction.run(() =>
+        super.updatePictureCurrentUser(fileToken));
   }
 
   @override

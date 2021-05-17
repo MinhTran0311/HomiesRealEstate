@@ -1,9 +1,12 @@
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
@@ -26,14 +29,19 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     Key key,
   }) : super();
   LSGDStore _lsgdStore;
+  UserStore _userStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _lsgdStore = Provider.of<LSGDStore>(context);
+    _userStore = Provider.of<UserStore>(context);
 
     if (!_lsgdStore.Allloading) {
       _lsgdStore.getAllLSGD();
+    }
+    if (!_userStore.loadingCurrentUser) {
+      _userStore.getCurrentUser();
     }
 
 
@@ -154,7 +162,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                 children: [
                   lsgd.chiTietHoaDonBaiDangId ==null ? CupertinoSwitch(
                     value:  !checkKiemDuyet(lsgd.kiemDuyetVienId),
-                    onChanged: (bool value) { setState(() { lsgd.kiemDuyetVienId = 2; }); },
+                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, _userStore.user.UserID);  });},
                   ):Container(),
 
                 ],
@@ -173,6 +181,76 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   bool checkKiemDuyet(int id){
     if(id==null)return true;
     else return false;
+  }
+  _showErrorMessage( String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 5),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
+  }
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
+  }
+  Future<void> _showMyDialog(lichsugiaodich lsgd,int UserID) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nạp tiền'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Bạn có chắc chắn xác nhận giao dịch không?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Hủy'),
+              onPressed: () {
+                setState(() {
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+            TextButton(
+              child: Text('Cập nhật'),
+              onPressed: () {
+                setState(() {
+                  lsgd.kiemDuyetVienId = UserID;
+                  print("Duongdebug: ${_lsgdStore.KiemDuyetGiaoDich(lsgd.id)}");
+                  if(_lsgdStore.KiemDuyetGiaoDich(lsgd.id)==true){
+                    _showSuccssfullMesssage("Cập nhật thành công");
+                  }
+                  else{
+                   _showErrorMessage("Cập nhật thất bại");
+                  }
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

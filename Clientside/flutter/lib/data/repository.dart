@@ -95,11 +95,27 @@ class Repository {
       return lsgdList;
     }).catchError((error) => throw error);
   }
-  Future<listLSGD> NapTien(double soTien,String thoiDiem,int userId) async {
+  Future<bool> NapTien(double soTien,String thoiDiem,int userId) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
     return await _userApi.Naptien(soTien, thoiDiem, userId).then((lsgd) {
+      return lsgd;
+    }).catchError((error) => throw error);
+  }
+  // Future<listLSGD> KiemDuyetNapTien(int userId, String idLSGD,int kiemDuyetVienID) async {
+  //   // check to see if posts are present in database, then fetch from database
+  //   // else make a network call to get all posts, store them into database for
+  //   // later use
+  //   return await _userApi.KiemDuyetNaptien(userId, idLSGD,kiemDuyetVienID).then((lsgd) {
+  //     return lsgd;
+  //   }).catchError((error) => throw error);
+  // }
+  Future<bool> KiemDuyetGiaoDich(String idLSGD) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.KiemDuyetGiaoDich(idLSGD).then((lsgd) {
       return lsgd;
     }).catchError((error) => throw error);
   }
@@ -122,14 +138,26 @@ class Repository {
       return user;
     }).catchError((error) => throw error);
   }
-  Future<dynamic> getWalletUser() async {
-    return await _userApi.getCurrentWalletUser().then((user) {
+  Future<double> getWalletUser() async {
+    return await _userApi.getCurrentWalletUser().then((walletuser) {
       // log('dataUserTest: $user');
-      return user;
+      return walletuser;
+    }).catchError((error) => throw error);
+  }
+  Future<String> getPictureUser() async {
+    return await _userApi.getCurrentPictureUser().then((pictureuser) {
+      // log('dataUserTest: $user');
+      return pictureuser;
     }).catchError((error) => throw error);
   }
   Future<dynamic> updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
     return await _userApi.updatetCurrentUser(name,surname,phonenumber,email,userName).then((user) {
+      // log('dataUserTest: $user');
+      return user;
+    }).catchError((error) => throw error);
+  }
+  Future<dynamic> updatePictureCurrentUser(String fileToken) async {
+    return await _userApi.updatetPictureCurrentUser(fileToken).then((user) {
       // log('dataUserTest: $user');
       return user;
     }).catchError((error) => throw error);

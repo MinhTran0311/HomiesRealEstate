@@ -25,7 +25,11 @@ abstract class _LSGDStore with Store {
   ObservableFuture.value(null);
   static ObservableFuture<listLSGD> emptyAllLSGDResponse =
   ObservableFuture.value(null);
-  static ObservableFuture<listLSGD> emptyNaptienResponse =
+  static ObservableFuture<bool> emptyNaptienResponse =
+  ObservableFuture.value(null);
+  static ObservableFuture<bool> emptyKiemDuyetGiaoDichResponse =
+  ObservableFuture.value(null);
+  static ObservableFuture<listLSGD> emptyKiemDuyetNapTienResponse =
   ObservableFuture.value(null);
 
   @observable
@@ -35,8 +39,14 @@ abstract class _LSGDStore with Store {
   ObservableFuture<listLSGD> fetchAllLSGDFuture =
   ObservableFuture<listLSGD>(emptyAllLSGDResponse);
   @observable
-  ObservableFuture<listLSGD> fetchNaptienFuture =
-  ObservableFuture<listLSGD>(emptyNaptienResponse);
+  ObservableFuture<bool> fetchNaptienFuture =
+  ObservableFuture<bool>(emptyNaptienResponse);
+  @observable
+  ObservableFuture<bool> fetchKiemDuyetGiaoDichFuture =
+  ObservableFuture<bool>(emptyKiemDuyetGiaoDichResponse);
+  @observable
+  ObservableFuture<listLSGD> fetchKiemDuyetNapTienFuture =
+  ObservableFuture<listLSGD>(emptyKiemDuyetNapTienResponse);
 
 
   @observable
@@ -51,6 +61,12 @@ abstract class _LSGDStore with Store {
   bool get loading => fetchLSGDFuture.status == FutureStatus.pending;
   @computed
   bool get Allloading => fetchAllLSGDFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingNapTien => fetchNaptienFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingKiemDuyetGiaoDich => fetchKiemDuyetGiaoDichFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingKiemDuyetNapTien => fetchKiemDuyetNapTienFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -101,6 +117,49 @@ abstract class _LSGDStore with Store {
   Future Naptien(String thoiDiem,double soTien,int userId) async {
     final future = _repository.NapTien(soTien, thoiDiem, userId);
     fetchNaptienFuture = ObservableFuture(future);
+
+    future.then((listLSGD) {
+      // this.listlsgd = listLSGD;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
+
+  // actions:-------------------------------------------------------------------
+  // @action
+  // Future KiemDuyetNaptien(int userId, String idLSGD,int kiemDuyetVienID) async {
+  //   final future = _repository.KiemDuyetNapTien(userId, idLSGD, kiemDuyetVienID);
+  //   fetchKiemDuyetNapTienFuture = ObservableFuture(future);
+  //
+  //   future.then((listLSGD) {
+  //     // this.listlsgd = listLSGD;
+  //   }).catchError((error) {
+  //     if (error is DioError) {
+  //       errorStore.errorMessage = DioErrorUtil.handleError(error);
+  //       throw error;
+  //     }
+  //     else{
+  //       errorStore.errorMessage="Please check your internet connection and try again!";
+  //       throw error;
+  //     }
+  //     //errorStore.errorMessage = DioErrorUtil.handleError(error);
+  //     //throw error;
+  //   });
+  // }
+  // actions:-------------------------------------------------------------------
+  @action
+  Future KiemDuyetGiaoDich(String idLSGD) async {
+    final future = _repository.KiemDuyetGiaoDich(idLSGD);
+    fetchKiemDuyetGiaoDichFuture = ObservableFuture(future);
 
     future.then((listLSGD) {
       // this.listlsgd = listLSGD;

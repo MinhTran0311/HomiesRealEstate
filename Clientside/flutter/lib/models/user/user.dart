@@ -95,6 +95,8 @@ class CurrentUserForEditdto{
   String profilePicture;
   String creationTime;
   double wallet;
+  int  UserID;
+  String  picture;
 
   CurrentUserForEditdto({
     this.name,
@@ -104,7 +106,9 @@ class CurrentUserForEditdto{
     this.profilePicture,
     this.creationTime,
     this.wallet,
-    this.userName
+    this.userName,
+    this.UserID,
+    this.picture,
   });
 
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
@@ -116,6 +120,7 @@ class CurrentUserForEditdto{
       phoneNumber: json["result"]["phoneNumber"],
       profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
+      UserID: json["result"]["userId"],
     );
   }
 
