@@ -124,7 +124,7 @@ namespace Homies.RealEstate.Server
 
             var list = await baiDangs.ToListAsync();
 
-            if (list.Count == totalCount)
+            if (list.Count==totalCount)
             {
                 return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
@@ -153,199 +153,14 @@ namespace Homies.RealEstate.Server
             }
 
 
-                           join o2 in _lookup_danhMucRepository.GetAll() on o.DanhMucId equals o2.Id into j2
-                           from s2 in j2.DefaultIfEmpty()
-
-                           join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
-                           from s3 in j3.DefaultIfEmpty()
-
-                           join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
-                           from s4 in j4.DefaultIfEmpty()
-
-                           join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
-                           from s5 in j5.DefaultIfEmpty()
-
-                           select new GetBaiDangForViewDto()
-                           {
-                               BaiDang = new BaiDangDto
-                               {
-                                   TagLoaiBaiDang = o.TagLoaiBaiDang,
-                                   ThoiDiemDang = o.ThoiDiemDang,
-                                   ThoiHan = o.ThoiHan,
-                                   DiaChi = o.DiaChi,
-                                   MoTa = o.MoTa,
-                                   ToaDoX = o.ToaDoX,
-                                   ToaDoY = o.ToaDoY,
-                                   LuotXem = o.LuotXem,
-                                   LuotYeuThich = o.LuotYeuThich,
-                                   DiemBaiDang = o.DiemBaiDang,
-                                   TrangThai = o.TrangThai,
-                                   TagTimKiem = o.TagTimKiem,
-                                   TieuDe = o.TieuDe,
-                                   Id = o.Id,
-                                   Gia = o.Gia,
-                                   DienTich = o.DienTich,
-                                   FeaturedImage = o.FeaturedImage,
-                                   UserId = o.UserId,
-                                   XaId = o.XaId,
-                                   DanhMucId = o.DanhMucId
-
-                               },
-                               UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
-                               DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-                               HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
-                               TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
-                           };
-            var totalCount = await filteredBaiDangs.CountAsync();
-
-            var list = await baiDangs.ToListAsync();
-
-            if (list.Count == totalCount)
-            {
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                list
-            );
-            }
-            else
-            {
-                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    var e = list[i];
-                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        filteredList.Add(e);
-                    }
-                }
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                filteredList
-            );
-            }
-        }
-
-        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllByFilter(GetAllBaiDangByFilterInput input)
-        {
-            var filteredBaiDangs = _baiDangRepository.GetAll()
-                        .Include(e => e.UserFk)
-                        .Include(e => e.DanhMucFk)
-                        .Include(e => e.XaFk)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.DiaChi.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagLoaiBaiDangFilter), e => e.TagLoaiBaiDang == input.TagLoaiBaiDangFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi.Contains(input.DiaChiFilter))
-
-
-                        .WhereIf(input.MinDienTichFilter != null, e => e.DienTich >= input.MinDienTichFilter)
-                        .WhereIf(input.MaxDienTichFilter != null, e => e.DienTich <= input.MaxDienTichFilter)
-
-                        .WhereIf(input.MinGiaFilter != null, e => e.Gia >= input.MinGiaFilter)
-                        .WhereIf(input.MaxGiaFilter != null, e => e.Gia <= input.MaxGiaFilter)
-
-
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem.Contains(input.TagTimKiemFilter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
-                        .WhereIf(input.XaIdFilter != null, e => e.XaId != null && e.XaId == input.XaIdFilter);
-
-            var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "id asc")
-                .PageBy(input);
-
-            var baiDangs = from o in pagedAndFilteredBaiDangs
-                           join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
-                           from s1 in j1.DefaultIfEmpty()
-
-                           join o2 in _lookup_danhMucRepository.GetAll() on o.DanhMucId equals o2.Id into j2
-                           from s2 in j2.DefaultIfEmpty()
-
-                           join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
-                           from s3 in j3.DefaultIfEmpty()
-
-                           join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
-                           from s4 in j4.DefaultIfEmpty()
-
-                           join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
-                           from s5 in j5.DefaultIfEmpty()
-
-                           select new GetBaiDangForViewDto()
-                           {
-                               BaiDang = new BaiDangDto
-                               {
-                                   TagLoaiBaiDang = o.TagLoaiBaiDang,
-                                   ThoiDiemDang = o.ThoiDiemDang,
-                                   ThoiHan = o.ThoiHan,
-                                   DiaChi = o.DiaChi,
-                                   MoTa = o.MoTa,
-                                   ToaDoX = o.ToaDoX,
-                                   ToaDoY = o.ToaDoY,
-                                   LuotXem = o.LuotXem,
-                                   LuotYeuThich = o.LuotYeuThich,
-                                   DiemBaiDang = o.DiemBaiDang,
-                                   TrangThai = o.TrangThai,
-                                   TagTimKiem = o.TagTimKiem,
-                                   TieuDe = o.TieuDe,
-                                   Id = o.Id,
-                                   Gia = o.Gia,
-                                   DienTich = o.DienTich,
-                                   FeaturedImage = o.FeaturedImage,
-                                   UserId = o.UserId,
-                                   XaId = o.XaId,
-                                   DanhMucId = o.DanhMucId
-
-                               },
-                               UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
-                               DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-                               HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
-                               TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
-                               //FeaturedImage = _lookup_hinhAnhRepository.FirstOrDefault(e => e.BaiDangId == o.Id).DuongDan
-                           };
-
-            //baiDangs.Distinct();
-            var totalCount = await filteredBaiDangs.CountAsync();
-
-            var list = await baiDangs.ToListAsync();
-
-            if (list.Count == totalCount)
-            {
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                list
-            );
-            }
-            else
-            {
-                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    var e = list[i];
-                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        filteredList.Add(e);
-                    }
-                }
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                filteredList
-            );
-            }
+            
         }
 
         private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
         {
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].BaiDang.Id == baidangId)
+                if (list[i].BaiDang.Id== baidangId)
                 {
                     return true;
                 }
@@ -408,76 +223,6 @@ namespace Homies.RealEstate.Server
 
             return output;
         }
-
-        public async Task CreateBaiDangAndDetails(CreateBaiDangAndDetailsDto input)
-        {
-            if (input.BaiDang.TagTimKiem.IsNullOrEmpty())
-            {
-                var danhMucBaiDang = await _lookup_danhMucRepository.FirstOrDefaultAsync(e => e.Id == input.BaiDang.DanhMucId);
-                input.BaiDang.TagTimKiem = danhMucBaiDang.Tag != null ? danhMucBaiDang.Tag : "bai dang";
-            }
-            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
-            if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
-            {
-                foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
-                {
-                    chiTiet.BaiDangId = baiDangId;
-                    await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
-                }
-            }
-
-            input.HoaDonBaiDangDto.BaiDangId = baiDangId;
-            var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
-
-            input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
-            var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
-            await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
-
-            foreach (CreateOrEditHinhAnhDto chiTiet in input.HinhAnhDtos)
-            {
-                chiTiet.BaiDangId = baiDangId;
-                await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(chiTiet));
-            }
-        }
-
-        public async Task EditBaiDangAndDetails(EditBaiDangAndDetailsDto input)
-        {
-            if (input.BaiDang != null && input.BaiDang.Id != null)
-            {
-                var baiDang = await _baiDangRepository.FirstOrDefaultAsync((int)input.BaiDang.Id);
-                ObjectMapper.Map(input.BaiDang, baiDang);
-            }
-
-            await _lookup_chiTietBaiDangRepository.DeleteAsync(e => e.BaiDangId == input.BaiDang.Id);
-
-            if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
-            {
-                foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
-                {
-                    if (chiTiet.BaiDangId != null)
-                    {
-                        chiTiet.Id = null;
-                        await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
-                    }
-                }
-            }
-
-            await _lookup_hinhAnhRepository.DeleteAsync(e => e.BaiDangId == input.BaiDang.Id);
-
-            if (input.HinhAnhDtos != null && input.HinhAnhDtos.Count > 0)
-            {
-                foreach (CreateOrEditHinhAnhDto hinhAnh in input.HinhAnhDtos)
-                {
-                    if (hinhAnh.BaiDangId != null)
-                    {
-                        hinhAnh.Id = null;
-                        await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(hinhAnh));
-                    }
-                }
-            }
-        }
-
-        
 
         public async Task CreateOrEdit(CreateOrEditBaiDangDto input)
         {
@@ -680,7 +425,7 @@ namespace Homies.RealEstate.Server
         [AbpAuthorize]
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser()
         {
-            var user = await GetCurrentUserAsync();
+            var user = GetCurrentUserAsync();
             var filteredBaiDangs = _baiDangRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
@@ -700,12 +445,6 @@ namespace Homies.RealEstate.Server
 
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
-
-                           join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
-                           from s4 in j4.DefaultIfEmpty()
-
-                           join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
-                           from s5 in j5.DefaultIfEmpty()
 
                            select new GetBaiDangForViewDto()
                            {
@@ -734,9 +473,7 @@ namespace Homies.RealEstate.Server
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
-                               HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
-                               TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
                            };
 
             var totalCount = await filteredBaiDangs.CountAsync();

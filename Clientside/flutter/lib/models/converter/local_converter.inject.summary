@@ -1,8 +1,0 @@
-{
-  "asset": "asset:boilerplate/lib/models/converter/local_converter.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}
