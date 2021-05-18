@@ -272,6 +272,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$scrollControllerAtom = Atom(name: '_PostStore.scrollController');
+
+  @override
+  ScrollController get scrollController {
+    _$scrollControllerAtom.reportRead();
+    return super.scrollController;
+  }
+
+  @override
+  set scrollController(ScrollController value) {
+    _$scrollControllerAtom.reportWrite(value, super.scrollController, () {
+      super.scrollController = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
@@ -355,6 +370,7 @@ success: ${success},
 propertiesSuccess: ${propertiesSuccess},
 isBaiGhimYeuThich: ${isBaiGhimYeuThich},
 searchContent: ${searchContent},
+scrollController: ${scrollController},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
