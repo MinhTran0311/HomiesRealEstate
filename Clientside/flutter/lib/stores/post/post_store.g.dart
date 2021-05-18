@@ -70,6 +70,51 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom = Atom(name: '_PostStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
+  final _$skipCountAtom = Atom(name: '_PostStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_PostStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
   final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
 
   @override
@@ -152,6 +197,9 @@ mixin _$PostStore on _PostStore, Store {
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
 postList: ${postList},
+isIntialLoading: ${isIntialLoading},
+skipCount: ${skipCount},
+maxCount: ${maxCount},
 propertyList: ${propertyList},
 imageUrlList: ${imageUrlList},
 success: ${success},
