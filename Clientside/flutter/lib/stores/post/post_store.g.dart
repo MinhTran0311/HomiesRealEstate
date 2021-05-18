@@ -122,6 +122,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom = Atom(name: '_PostStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$skipCountAtom = Atom(name: '_PostStore.skipCount');
 
   @override
@@ -330,6 +345,7 @@ fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 fetchSearchFuture: ${fetchSearchFuture},
 postList: ${postList},
+isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
 maxCount: ${maxCount},
 propertyList: ${propertyList},

@@ -145,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }),
         Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
           child: TextField(
+            autofocus: false,
               controller: _searchController,
               onChanged: (value){
                 _postStore.setSearchContent(_searchController.text);
@@ -347,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
                 //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
-                image: post.featuredImage!=null ? local_Converter.im(post.featuredImage) : AssetImage(Assets.front_img),
+                image: post.featuredImage!=null ? NetworkImage(post.featuredImage) : AssetImage(Assets.front_img),
                 fit: BoxFit.cover,
               )
           ),
