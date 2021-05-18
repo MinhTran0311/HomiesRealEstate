@@ -7,6 +7,5 @@ class Preferences {
   static const String is_dark_mode = "is_dark_mode";
   static const String current_language = "current_language";
   static const String imgbb_api_key = "e654c99ecc0c0269a734e39f35249c8f";
-  static const int skipIndex = 1;
-  static const int maxCount = 1;
+
 }

@@ -35,12 +35,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
   PageController _pageController;
   int _selectedIndex = 0;
 
-  List<String> pageKeys = ["HomeScreen", "MapsScreen", "ManagementScreen","ProfileScreen","NewPost"];
+  List<String> pageKeys = ["HomeScreen", "MapsScreen", "ManagementScreen","Profile","NewPost"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "HomeScreen": GlobalKey<NavigatorState>(),
     "MapsScreen": GlobalKey<NavigatorState>(),
     "ManagementScreen": GlobalKey<NavigatorState>(),
-    "ProfileScreen": GlobalKey<NavigatorState>(),
+    "Profile": GlobalKey<NavigatorState>(),
     "NewPost": GlobalKey<NavigatorState>(),
   };
 
@@ -99,7 +99,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             _buildOffstageNavigator("HomeScreen"),
             _buildOffstageNavigator("MapsScreen"),
             _buildOffstageNavigator("ManagementScreen"),
-            _buildOffstageNavigator("ProfileScreen"),
+            _buildOffstageNavigator("Profile"),
             _buildOffstageNavigator("NewPost"),
           ],
         ),

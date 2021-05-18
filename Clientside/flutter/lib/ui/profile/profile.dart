@@ -1,7 +1,6 @@
 
 
-import 'dart:convert';
-import 'dart:io' ;
+import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -16,7 +15,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -75,8 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
     setState(() {
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        final bytes = File(pickedFile.path).readAsBytesSync();
-        _userstore.updatePictureCurrentUser(base64Encode(bytes));
+        pathAvatar = image.path;
       } else {
         print('No image selected.');
       }
@@ -92,9 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
     if (!_userstore.loading) {
       _userstore.getCurrentUser();
-
-    }
-    if(!_userstore.loadingCurrentUserWallet){
       _userstore.getCurrentWalletUser();
       if(_userstore.user!=null){
         print("Duong"+_userstore.user.name);
@@ -112,9 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
        }
 
     }
-    if(!_userstore.loadingCurrentUserPicture){
-      _userstore.getCurrentPictureUser();
-    }
+
   }
 
   @override
@@ -347,24 +339,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
                         fit: StackFit.expand,
                         overflow: Overflow.visible,
                         children:[
-                        Observer(
-                          builder: (context) {
-                            return
-                              _userstore.user.picture !=null ? CircleAvatar(radius: (52),
-                                  backgroundColor: Colors.white,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.memory(Base64Decoder().convert(_userstore.user.picture)),
-                                  )
-                              ): CircleAvatar(radius: (52),
-                                  backgroundColor: Colors.white,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.asset(pathAvatar),
-                                  )
-                              );
-                          }
-                        ),
+                          CircleAvatar(radius: (52),
+                              backgroundColor: Colors.white,
+                              child: ClipRRect(
+                                borderRadius:BorderRadius.circular(50),
+                                child: Image.asset(pathAvatar),
+                              )
+                          ),
                         // CircularProfileAvatar(
                         //   _pathAvatar,
                         //   borderWidth: 4.0,
@@ -453,27 +434,14 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   padding: const EdgeInsets.only(top: 25,left: 40,),
                   child: Column(
                     children: [
-                      Observer(
-                      builder: (context) {
-                        return
-                          _userstore.user != null ? Text(
-                            _userstore.user.wallet.toString(),
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontFamily.roboto
-                            ),
-                          ) : Text(
-                            "0",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontFamily.roboto
-                            ),
-                          );
-                        }
+                      Text(
+                        Sodu,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontFamily.roboto
+                      ),
                       ),
                       Text("Sô dư",
                         style: TextStyle(
@@ -597,8 +565,6 @@ class CardItem extends StatelessWidget{
       ),
     );
   }
-
-
 }
 
 

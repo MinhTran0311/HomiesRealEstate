@@ -15,60 +15,17 @@ mixin _$UserStore on _UserStore, Store {
   bool get isLoading => (_$isLoadingComputed ??=
           Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
-  Computed<bool> _$loadingsUserByIDComputed;
-
-  @override
-  bool get loadingsUserByID => (_$loadingsUserByIDComputed ??= Computed<bool>(
-          () => super.loadingsUserByID,
-          name: '_UserStore.loadingsUserByID'))
-      .value;
-  Computed<bool> _$loadingCurrentUserComputed;
-
-  @override
-  bool get loadingCurrentUser => (_$loadingCurrentUserComputed ??=
-          Computed<bool>(() => super.loadingCurrentUser,
-              name: '_UserStore.loadingCurrentUser'))
-      .value;
-  Computed<bool> _$loadingCurrentUserWalletComputed;
-
-  @override
-  bool get loadingCurrentUserWallet => (_$loadingCurrentUserWalletComputed ??=
-          Computed<bool>(() => super.loadingCurrentUserWallet,
-              name: '_UserStore.loadingCurrentUserWallet'))
-      .value;
-  Computed<bool> _$loadingCurrentUserPictureComputed;
-
-  @override
-  bool get loadingCurrentUserPicture => (_$loadingCurrentUserPictureComputed ??=
-          Computed<bool>(() => super.loadingCurrentUserPicture,
-              name: '_UserStore.loadingCurrentUserPicture'))
-      .value;
-  Computed<bool> _$isLoadingCurrentUserComputed;
-
-  @override
-  bool get isLoadingCurrentUser => (_$isLoadingCurrentUserComputed ??=
-          Computed<bool>(() => super.isLoadingCurrentUser,
-              name: '_UserStore.isLoadingCurrentUser'))
-      .value;
   Computed<bool> _$loadingComputed;
 
   @override
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_UserStore.loading'))
       .value;
-  Computed<bool> _$loadingsUpdateUserComputed;
+  Computed<bool> _$isLoadingsComputed;
 
   @override
-  bool get loadingsUpdateUser => (_$loadingsUpdateUserComputed ??=
-          Computed<bool>(() => super.loadingsUpdateUser,
-              name: '_UserStore.loadingsUpdateUser'))
-      .value;
-  Computed<bool> _$loadingsUpdatePictureUserComputed;
-
-  @override
-  bool get loadingsUpdatePictureUser => (_$loadingsUpdatePictureUserComputed ??=
-          Computed<bool>(() => super.loadingsUpdatePictureUser,
-              name: '_UserStore.loadingsUpdatePictureUser'))
+  bool get isLoadings => (_$isLoadingsComputed ??=
+          Computed<bool>(() => super.isLoadings, name: '_UserStore.isLoadings'))
       .value;
 
   final _$successAtom = Atom(name: '_UserStore.success');
@@ -101,53 +58,6 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$userByIDAtom = Atom(name: '_UserStore.userByID');
-
-  @override
-  User get userByID {
-    _$userByIDAtom.reportRead();
-    return super.userByID;
-  }
-
-  @override
-  set userByID(User value) {
-    _$userByIDAtom.reportWrite(value, super.userByID, () {
-      super.userByID = value;
-    });
-  }
-
-  final _$fetchUsersByIDFuturesAtom =
-      Atom(name: '_UserStore.fetchUsersByIDFutures');
-
-  @override
-  ObservableFuture<User> get fetchUsersByIDFutures {
-    _$fetchUsersByIDFuturesAtom.reportRead();
-    return super.fetchUsersByIDFutures;
-  }
-
-  @override
-  set fetchUsersByIDFutures(ObservableFuture<User> value) {
-    _$fetchUsersByIDFuturesAtom.reportWrite(value, super.fetchUsersByIDFutures,
-        () {
-      super.fetchUsersByIDFutures = value;
-    });
-  }
-
-  final _$UserByIDFuturessAtom = Atom(name: '_UserStore.UserByIDFuturess');
-
-  @override
-  ObservableFuture<User> get UserByIDFuturess {
-    _$UserByIDFuturessAtom.reportRead();
-    return super.UserByIDFuturess;
-  }
-
-  @override
-  set UserByIDFuturess(ObservableFuture<User> value) {
-    _$UserByIDFuturessAtom.reportWrite(value, super.UserByIDFuturess, () {
-      super.UserByIDFuturess = value;
-    });
-  }
-
   final _$userAtom = Atom(name: '_UserStore.user');
 
   @override
@@ -160,72 +70,6 @@ mixin _$UserStore on _UserStore, Store {
   set user(CurrentUserForEditdto value) {
     _$userAtom.reportWrite(value, super.user, () {
       super.user = value;
-    });
-  }
-
-  final _$fetchUserCurrentFutureAtom =
-      Atom(name: '_UserStore.fetchUserCurrentFuture');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUserCurrentFuture {
-    _$fetchUserCurrentFutureAtom.reportRead();
-    return super.fetchUserCurrentFuture;
-  }
-
-  @override
-  set fetchUserCurrentFuture(ObservableFuture<CurrentUserForEditdto> value) {
-    _$fetchUserCurrentFutureAtom
-        .reportWrite(value, super.fetchUserCurrentFuture, () {
-      super.fetchUserCurrentFuture = value;
-    });
-  }
-
-  final _$fetchUserCurrentWalletFutureAtom =
-      Atom(name: '_UserStore.fetchUserCurrentWalletFuture');
-
-  @override
-  ObservableFuture<double> get fetchUserCurrentWalletFuture {
-    _$fetchUserCurrentWalletFutureAtom.reportRead();
-    return super.fetchUserCurrentWalletFuture;
-  }
-
-  @override
-  set fetchUserCurrentWalletFuture(ObservableFuture<double> value) {
-    _$fetchUserCurrentWalletFutureAtom
-        .reportWrite(value, super.fetchUserCurrentWalletFuture, () {
-      super.fetchUserCurrentWalletFuture = value;
-    });
-  }
-
-  final _$fetchUserCurrentPictureFutureAtom =
-      Atom(name: '_UserStore.fetchUserCurrentPictureFuture');
-
-  @override
-  ObservableFuture<String> get fetchUserCurrentPictureFuture {
-    _$fetchUserCurrentPictureFutureAtom.reportRead();
-    return super.fetchUserCurrentPictureFuture;
-  }
-
-  @override
-  set fetchUserCurrentPictureFuture(ObservableFuture<String> value) {
-    _$fetchUserCurrentPictureFutureAtom
-        .reportWrite(value, super.fetchUserCurrentPictureFuture, () {
-      super.fetchUserCurrentPictureFuture = value;
-    });
-  }
-
-  final _$CurrentUserFutureAtom = Atom(name: '_UserStore.CurrentUserFuture');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get CurrentUserFuture {
-    _$CurrentUserFutureAtom.reportRead();
-    return super.CurrentUserFuture;
-  }
-
-  @override
-  set CurrentUserFuture(ObservableFuture<CurrentUserForEditdto> value) {
-    _$CurrentUserFutureAtom.reportWrite(value, super.CurrentUserFuture, () {
-      super.CurrentUserFuture = value;
     });
   }
 
@@ -259,55 +103,6 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$fetchUpdateUserFuturesAtom =
-      Atom(name: '_UserStore.fetchUpdateUserFutures');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserFutures {
-    _$fetchUpdateUserFuturesAtom.reportRead();
-    return super.fetchUpdateUserFutures;
-  }
-
-  @override
-  set fetchUpdateUserFutures(ObservableFuture<CurrentUserForEditdto> value) {
-    _$fetchUpdateUserFuturesAtom
-        .reportWrite(value, super.fetchUpdateUserFutures, () {
-      super.fetchUpdateUserFutures = value;
-    });
-  }
-
-  final _$UpdateUserFuturessAtom = Atom(name: '_UserStore.UpdateUserFuturess');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get UpdateUserFuturess {
-    _$UpdateUserFuturessAtom.reportRead();
-    return super.UpdateUserFuturess;
-  }
-
-  @override
-  set UpdateUserFuturess(ObservableFuture<CurrentUserForEditdto> value) {
-    _$UpdateUserFuturessAtom.reportWrite(value, super.UpdateUserFuturess, () {
-      super.UpdateUserFuturess = value;
-    });
-  }
-
-  final _$fetchUpdatePictureUserFuturesAtom =
-      Atom(name: '_UserStore.fetchUpdatePictureUserFutures');
-
-  @override
-  ObservableFuture<dynamic> get fetchUpdatePictureUserFutures {
-    _$fetchUpdatePictureUserFuturesAtom.reportRead();
-    return super.fetchUpdatePictureUserFutures;
-  }
-
-  @override
-  set fetchUpdatePictureUserFutures(ObservableFuture<dynamic> value) {
-    _$fetchUpdatePictureUserFuturesAtom
-        .reportWrite(value, super.fetchUpdatePictureUserFutures, () {
-      super.fetchUpdatePictureUserFutures = value;
-    });
-  }
-
   final _$loginAsyncAction = AsyncAction('_UserStore.login');
 
   @override
@@ -331,13 +126,14 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.getCurrentWalletUser());
   }
 
-  final _$getCurrentPictureUserAsyncAction =
-      AsyncAction('_UserStore.getCurrentPictureUser');
+  final _$updateCurrentUserAsyncAction =
+      AsyncAction('_UserStore.updateCurrentUser');
 
   @override
-  Future<dynamic> getCurrentPictureUser() {
-    return _$getCurrentPictureUserAsyncAction
-        .run(() => super.getCurrentPictureUser());
+  Future<dynamic> updateCurrentUser(String name, String surname,
+      String phonenumber, String email, String userName) {
+    return _$updateCurrentUserAsyncAction.run(() =>
+        super.updateCurrentUser(name, surname, phonenumber, email, userName));
   }
 
   final _$getUserOfCurrentDetailPostAsyncAction =
@@ -349,52 +145,17 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.getUserOfCurrentDetailPost(Id));
   }
 
-  final _$updateCurrentUserAsyncAction =
-      AsyncAction('_UserStore.updateCurrentUser');
-
-  @override
-  Future<dynamic> updateCurrentUser(String name, String surname,
-      String phonenumber, String email, String userName) {
-    return _$updateCurrentUserAsyncAction.run(() =>
-        super.updateCurrentUser(name, surname, phonenumber, email, userName));
-  }
-
-  final _$updatePictureCurrentUserAsyncAction =
-      AsyncAction('_UserStore.updatePictureCurrentUser');
-
-  @override
-  Future<dynamic> updatePictureCurrentUser(String fileToken) {
-    return _$updatePictureCurrentUserAsyncAction
-        .run(() => super.updatePictureCurrentUser(fileToken));
-  }
-
   @override
   String toString() {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
-userByID: ${userByID},
-fetchUsersByIDFutures: ${fetchUsersByIDFutures},
-UserByIDFuturess: ${UserByIDFuturess},
 user: ${user},
-fetchUserCurrentFuture: ${fetchUserCurrentFuture},
-fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
-fetchUserCurrentPictureFuture: ${fetchUserCurrentPictureFuture},
-CurrentUserFuture: ${CurrentUserFuture},
 fetchUsersFuture: ${fetchUsersFuture},
 loginFutures: ${loginFutures},
-fetchUpdateUserFutures: ${fetchUpdateUserFutures},
-UpdateUserFuturess: ${UpdateUserFuturess},
-fetchUpdatePictureUserFutures: ${fetchUpdatePictureUserFutures},
 isLoading: ${isLoading},
-loadingsUserByID: ${loadingsUserByID},
-loadingCurrentUser: ${loadingCurrentUser},
-loadingCurrentUserWallet: ${loadingCurrentUserWallet},
-loadingCurrentUserPicture: ${loadingCurrentUserPicture},
-isLoadingCurrentUser: ${isLoadingCurrentUser},
 loading: ${loading},
-loadingsUpdateUser: ${loadingsUpdateUser},
-loadingsUpdatePictureUser: ${loadingsUpdatePictureUser}
+isLoadings: ${isLoadings}
     ''';
   }
 }
