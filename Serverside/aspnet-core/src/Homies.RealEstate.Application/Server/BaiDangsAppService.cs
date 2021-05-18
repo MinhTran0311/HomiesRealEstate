@@ -138,7 +138,7 @@ namespace Homies.RealEstate.Server
 
             var list = await baiDangs.ToListAsync();
 
-            if (list.Count==totalCount)
+            if (list.Count == totalCount)
             {
                 return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
@@ -212,8 +212,8 @@ namespace Homies.RealEstate.Server
                            from s3 in j3.DefaultIfEmpty()
 
                            join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
-                           from s4 in j4.DefaultIfEmpty()                           
-                           
+                           from s4 in j4.DefaultIfEmpty()
+
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()
 
@@ -397,7 +397,7 @@ namespace Homies.RealEstate.Server
         {
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].BaiDang.Id== baidangId)
+                if (list[i].BaiDang.Id == baidangId)
                 {
                     return true;
                 }
@@ -481,7 +481,6 @@ namespace Homies.RealEstate.Server
             input.HoaDonBaiDangDto.BaiDangId = baiDangId;
             var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
-
             input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
             var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
             await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
@@ -492,6 +491,50 @@ namespace Homies.RealEstate.Server
                 await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(chiTiet));
             }
         }
+
+        public async Task EditBaiDangAndDetails(EditBaiDangAndDetailsDto input)
+        {
+            if (input.BaiDang != null && input.BaiDang.Id != null)
+            {
+                var baiDang = await _baiDangRepository.FirstOrDefaultAsync((int)input.BaiDang.Id);
+                ObjectMapper.Map(input.BaiDang, baiDang);
+            }
+
+            if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
+            {
+                foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
+                {
+                    if (chiTiet.Id != null && chiTiet.BaiDangId != null)
+                    {
+                        var chiTietBaiDang = await _lookup_chiTietBaiDangRepository.FirstOrDefaultAsync((int)chiTiet.Id);
+                        ObjectMapper.Map(chiTiet, chiTietBaiDang);
+                    }
+                    else if (chiTiet.Id == null && chiTiet.BaiDangId != null)
+                    {
+                        await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
+                    }
+                }
+            }
+
+            if (input.HinhAnhDtos != null && input.HinhAnhDtos.Count > 0)
+            {
+                foreach (CreateOrEditHinhAnhDto hinhAnh in input.HinhAnhDtos)
+                {
+
+                    if (hinhAnh.Id != null && hinhAnh.BaiDangId != null)
+                    {
+                        var hinhAnhBaiDang = await _lookup_chiTietBaiDangRepository.FirstOrDefaultAsync((int)hinhAnh.Id);
+                        ObjectMapper.Map(hinhAnh, hinhAnhBaiDang);
+                    }
+                    else if (hinhAnh.Id == null && hinhAnh.BaiDangId != null)
+                    {
+                        await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(hinhAnh));
+                    }
+                }
+            }
+        }
+
+        
 
         public async Task CreateOrEdit(CreateOrEditBaiDangDto input)
         {
@@ -694,7 +737,7 @@ namespace Homies.RealEstate.Server
         [AbpAuthorize]
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser()
         {
-            var user = GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             var filteredBaiDangs = _baiDangRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
@@ -714,6 +757,12 @@ namespace Homies.RealEstate.Server
 
                            join o3 in _lookup_xaRepository.GetAll() on o.XaId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
+
+                           join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
+                           from s4 in j4.DefaultIfEmpty()
+
+                           join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
+                           from s5 in j5.DefaultIfEmpty()
 
                            select new GetBaiDangForViewDto()
                            {
@@ -742,7 +791,9 @@ namespace Homies.RealEstate.Server
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
-                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString()
+                               XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
+                               HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
+                               TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
                            };
 
             var totalCount = await filteredBaiDangs.CountAsync();
