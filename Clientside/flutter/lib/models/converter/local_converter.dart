@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 
 class local_Converter{
   String PriceFormat(double price){
@@ -12,6 +16,11 @@ class local_Converter{
     price /= pow(1000,position);
     price = double.parse(price.toStringAsFixed(2));
     return price.toString() + ' ' + array[position];
+  }
+
+  Image imageFromBase64String(String base64String) {
+    Uint8List bytes = base64.decode(base64String);
+    return Image.memory(bytes);
   }
 
 }

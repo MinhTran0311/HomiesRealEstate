@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts(false);
-      _postStore.isIntialLoading=false;
+      //_postStore.isIntialLoading=false;
     }
     if (!userStore.loading) {
       userStore.getCurrentUser();
@@ -353,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
                 //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
-                image: post.featuredImage!=null ? NetworkImage(post.featuredImage) : AssetImage(Assets.front_img),
+                image: post.featuredImage!=null ? local_Converter.im(post.featuredImage) : AssetImage(Assets.front_img),
                 fit: BoxFit.cover,
               )
           ),

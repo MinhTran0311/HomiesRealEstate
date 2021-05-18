@@ -64,7 +64,7 @@ abstract class _PostStore with Store {
     PostList postList;
 
     @observable
-    bool isIntialLoading=true;
+    bool isIntialLoading = true;
 
     @observable
     int skipCount = 0;
@@ -131,15 +131,11 @@ abstract class _PostStore with Store {
         success = true;
         if (!isLoadMore){
           this.postList = postList;
-          print("len: " + this.postList.posts.length.toString());
-
-          //this.postList.posts.add(postList.posts[0]);
+          if (isIntialLoading) isIntialLoading=false;
         }
         else {
           for (int i=0; i< postList.posts.length; i++)
             this.postList.posts.add(postList.posts[i]);
-          print("len: " + this.postList.posts.length.toString());
-
         }
       }).catchError((error) {
         if (error is DioError) {

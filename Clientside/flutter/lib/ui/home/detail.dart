@@ -13,16 +13,14 @@ import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:boilerplate/models/converter/local_converter.dart';
 class Detail extends StatefulWidget {
   final Post post;
   Detail({@required this.post});
