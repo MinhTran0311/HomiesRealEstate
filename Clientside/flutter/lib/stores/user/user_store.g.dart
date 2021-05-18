@@ -13,19 +13,42 @@ mixin _$UserStore on _UserStore, Store {
 
   @override
   bool get isLoading => (_$isLoadingComputed ??=
-          Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
+      Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
-  Computed<bool> _$loadingComputed;
+  Computed<bool> _$loadingsUserByIDComputed;
 
   @override
-  bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_UserStore.loading'))
+  bool get loadingsUserByID => (_$loadingsUserByIDComputed ??= Computed<bool>(
+          () => super.loadingsUserByID,
+      name: '_UserStore.loadingsUserByID'))
       .value;
-  Computed<bool> _$isLoadingsComputed;
+  Computed<bool> _$loadingCurrentUserComputed;
 
   @override
-  bool get isLoadings => (_$isLoadingsComputed ??=
-          Computed<bool>(() => super.isLoadings, name: '_UserStore.isLoadings'))
+  bool get loadingCurrentUser => (_$loadingCurrentUserComputed ??=
+      Computed<bool>(() => super.loadingCurrentUser,
+          name: '_UserStore.loadingCurrentUser'))
+      .value;
+  Computed<bool> _$loadingCurrentUserWalletComputed;
+
+  @override
+  bool get loadingCurrentUserWallet => (_$loadingCurrentUserWalletComputed ??=
+      Computed<bool>(() => super.loadingCurrentUserWallet,
+          name: '_UserStore.loadingCurrentUserWallet'))
+      .value;
+  Computed<bool> _$isLoadingCurrentUserComputed;
+
+  @override
+  bool get isLoadingCurrentUser => (_$isLoadingCurrentUserComputed ??=
+      Computed<bool>(() => super.isLoadingCurrentUser,
+          name: '_UserStore.isLoadingCurrentUser'))
+      .value;
+  Computed<bool> _$loadingsUpdateUserComputed;
+
+  @override
+  bool get loadingsUpdateUser => (_$loadingsUpdateUserComputed ??=
+      Computed<bool>(() => super.loadingsUpdateUser,
+          name: '_UserStore.loadingsUpdateUser'))
       .value;
 
   final _$successAtom = Atom(name: '_UserStore.success');
@@ -58,6 +81,53 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$userByIDAtom = Atom(name: '_UserStore.userByID');
+
+  @override
+  User get userByID {
+    _$userByIDAtom.reportRead();
+    return super.userByID;
+  }
+
+  @override
+  set userByID(User value) {
+    _$userByIDAtom.reportWrite(value, super.userByID, () {
+      super.userByID = value;
+    });
+  }
+
+  final _$fetchUsersByIDFuturesAtom =
+  Atom(name: '_UserStore.fetchUsersByIDFutures');
+
+  @override
+  ObservableFuture<User> get fetchUsersByIDFutures {
+    _$fetchUsersByIDFuturesAtom.reportRead();
+    return super.fetchUsersByIDFutures;
+  }
+
+  @override
+  set fetchUsersByIDFutures(ObservableFuture<User> value) {
+    _$fetchUsersByIDFuturesAtom.reportWrite(value, super.fetchUsersByIDFutures,
+            () {
+          super.fetchUsersByIDFutures = value;
+        });
+  }
+
+  final _$UserByIDFuturessAtom = Atom(name: '_UserStore.UserByIDFuturess');
+
+  @override
+  ObservableFuture<User> get UserByIDFuturess {
+    _$UserByIDFuturessAtom.reportRead();
+    return super.UserByIDFuturess;
+  }
+
+  @override
+  set UserByIDFuturess(ObservableFuture<User> value) {
+    _$UserByIDFuturessAtom.reportWrite(value, super.UserByIDFuturess, () {
+      super.UserByIDFuturess = value;
+    });
+  }
+
   final _$userAtom = Atom(name: '_UserStore.user');
 
   @override
@@ -73,33 +143,27 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$fetchUsersFutureAtom = Atom(name: '_UserStore.fetchUsersFuture');
+  final _$fetchUserCurrentFutureAtom =
+  Atom(name: '_UserStore.fetchUserCurrentFuture');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUsersFuture {
-    _$fetchUsersFutureAtom.reportRead();
-    return super.fetchUsersFuture;
+  ObservableFuture<CurrentUserForEditdto> get fetchUserCurrentFuture {
+    _$fetchUserCurrentFutureAtom.reportRead();
+    return super.fetchUserCurrentFuture;
   }
 
   @override
-  set fetchUsersFuture(ObservableFuture<CurrentUserForEditdto> value) {
-    _$fetchUsersFutureAtom.reportWrite(value, super.fetchUsersFuture, () {
-      super.fetchUsersFuture = value;
+  set fetchUserCurrentFuture(ObservableFuture<CurrentUserForEditdto> value) {
+    _$fetchUserCurrentFutureAtom
+        .reportWrite(value, super.fetchUserCurrentFuture, () {
+      super.fetchUserCurrentFuture = value;
     });
   }
 
-  final _$loginFuturesAtom = Atom(name: '_UserStore.loginFutures');
+  final _$fetchUserCurrentWalletFutureAtom =
+  Atom(name: '_UserStore.fetchUserCurrentWalletFuture');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get loginFutures {
-    _$loginFuturesAtom.reportRead();
-    return super.loginFutures;
-  }
-
-  @override
-  set loginFutures(ObservableFuture<CurrentUserForEditdto> value) {
-    _$loginFuturesAtom.reportWrite(value, super.loginFutures, () {
-      super.loginFutures = value;
   ObservableFuture<double> get fetchUserCurrentWalletFuture {
     _$fetchUserCurrentWalletFutureAtom.reportRead();
     return super.fetchUserCurrentWalletFuture;
@@ -114,7 +178,7 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
   final _$fetchUserCurrentPictureFutureAtom =
-      Atom(name: '_UserStore.fetchUserCurrentPictureFuture');
+  Atom(name: '_UserStore.fetchUserCurrentPictureFuture');
 
   @override
   ObservableFuture<String> get fetchUserCurrentPictureFuture {
@@ -147,7 +211,7 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   final _$fetchUpdateUserFuturesAtom =
-      Atom(name: '_UserStore.fetchUpdateUserFutures');
+  Atom(name: '_UserStore.fetchUpdateUserFutures');
 
   @override
   ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserFutures {
@@ -185,6 +249,13 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  // final _$getUserByIDAsyncAction = AsyncAction('_UserStore.getUserByID');
+  //
+  // @override
+  // Future<dynamic> getUserByID(int userID) {
+  //   return _$getUserByIDAsyncAction.run(() => super.getUserByID(userID));
+  // }
+
   final _$getCurrentUserAsyncAction = AsyncAction('_UserStore.getCurrentUser');
 
   @override
@@ -193,7 +264,7 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   final _$getCurrentWalletUserAsyncAction =
-      AsyncAction('_UserStore.getCurrentWalletUser');
+  AsyncAction('_UserStore.getCurrentWalletUser');
 
   @override
   Future<double> getCurrentWalletUser() {
@@ -201,7 +272,7 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.getCurrentWalletUser());
   }
   final _$getCurrentPictureUserAsyncAction =
-      AsyncAction('_UserStore.getCurrentPictureUser');
+  AsyncAction('_UserStore.getCurrentPictureUser');
 
   @override
   Future<double> getCurrentPictureUser() {
@@ -209,8 +280,17 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.getCurrentPictureUser());
   }
 
+  final _$getUserOfCurrentDetailPostAsyncAction =
+  AsyncAction('_UserStore.getUserOfCurrentDetailPost');
+
+  @override
+  Future<dynamic> getUserOfCurrentDetailPost(int Id) {
+    return _$getUserOfCurrentDetailPostAsyncAction
+        .run(() => super.getUserOfCurrentDetailPost(Id));
+  }
+
   final _$updateCurrentUserAsyncAction =
-      AsyncAction('_UserStore.updateCurrentUser');
+  AsyncAction('_UserStore.updateCurrentUser');
 
   @override
   Future<dynamic> updateCurrentUser(String name, String surname,
@@ -219,7 +299,7 @@ mixin _$UserStore on _UserStore, Store {
         super.updateCurrentUser(name, surname, phonenumber, email, userName));
   }
   final _$updatePictureCurrentUserAsyncAction =
-      AsyncAction('_UserStore.updatePictureCurrentUser');
+  AsyncAction('_UserStore.updatePictureCurrentUser');
 
   @override
   Future<dynamic> updatePictureCurrentUser(String fileToken) {
@@ -227,26 +307,26 @@ mixin _$UserStore on _UserStore, Store {
         super.updatePictureCurrentUser(fileToken));
   }
 
-  final _$getUserOfCurrentDetailPostAsyncAction =
-      AsyncAction('_UserStore.getUserOfCurrentDetailPost');
-
-  @override
-  Future<dynamic> getUserOfCurrentDetailPost(int Id) {
-    return _$getUserOfCurrentDetailPostAsyncAction
-        .run(() => super.getUserOfCurrentDetailPost(Id));
-  }
-
   @override
   String toString() {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
+userByID: ${userByID},
+fetchUsersByIDFutures: ${fetchUsersByIDFutures},
+UserByIDFuturess: ${UserByIDFuturess},
 user: ${user},
-fetchUsersFuture: ${fetchUsersFuture},
-loginFutures: ${loginFutures},
+fetchUserCurrentFuture: ${fetchUserCurrentFuture},
+fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
+CurrentUserFuture: ${CurrentUserFuture},
+fetchUpdateUserFutures: ${fetchUpdateUserFutures},
+UpdateUserFuturess: ${UpdateUserFuturess},
 isLoading: ${isLoading},
-loading: ${loading},
-isLoadings: ${isLoadings}
+loadingsUserByID: ${loadingsUserByID},
+loadingCurrentUser: ${loadingCurrentUser},
+loadingCurrentUserWallet: ${loadingCurrentUserWallet},
+isLoadingCurrentUser: ${isLoadingCurrentUser},
+loadingsUpdateUser: ${loadingsUpdateUser}
     ''';
   }
 }

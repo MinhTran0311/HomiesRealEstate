@@ -51,6 +51,8 @@ abstract class _LSGDStore with Store {
 
   @observable
   listLSGD listlsgd;
+  @observable
+  listLSGD listlsgdAll;
 
   @observable
   bool success = false;

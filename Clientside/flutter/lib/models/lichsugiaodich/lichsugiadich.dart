@@ -41,23 +41,23 @@ class lichsugiaodich{
 
 
 class listLSGD{
-  final List<lichsugiaodich> lichsugiaodichs;
+  final List<lichsugiaodich> listLSGDs;
 
   listLSGD({
-    this.lichsugiaodichs,
+    this.listLSGDs,
   });
 
   factory listLSGD.fromJson(Map<String, dynamic> json) {
-    List<lichsugiaodich> lichsugiaodichs = List<lichsugiaodich>();
+    List<lichsugiaodich> listLSGDs = List<lichsugiaodich>();
     print("DuongLSGD");
     print(json);
     //posts = json["result"]["items"].map((post) => Post.fromMap(post)).toList();
     //print(json["result"]["items"][0].runtimeType);
     for (int i =0; i<json["result"]["items"].length; i++) {
-      lichsugiaodichs.add(lichsugiaodich.fromMap(json["result"]["items"][i]));
+      listLSGDs.add(lichsugiaodich.fromMap(json["result"]["items"][i]));
     }
     return listLSGD(
-      lichsugiaodichs: lichsugiaodichs,
+      listLSGDs: listLSGDs,
     );
   }
 }
