@@ -7,6 +7,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'post_store.g.dart';
@@ -92,6 +93,8 @@ abstract class _PostStore with Store {
     @observable
     String searchContent='';
 
+    @observable
+    ScrollController scrollController= ScrollController();
 
     @computed
     bool get loading => fetchPostsFuture.status == FutureStatus.pending && isIntialLoading;
