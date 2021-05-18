@@ -5,7 +5,8 @@ using Abp.Authorization.Users;
 namespace Homies.RealEstate.Authorization.Users.Profile.Dto
 {
     public class CurrentUserProfileEditDto
-    {
+    { 
+
         [Required]
         [StringLength(AbpUserBase.MaxNameLength)]
         public string Name { get; set; }
@@ -36,6 +37,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile.Dto
         public DateTime CreationTime { get; set; }
         
         public string ProfilePicture { get; set; }
+
+        public long? UserId { get; set; }
 
 
     }

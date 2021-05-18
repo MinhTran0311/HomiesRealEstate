@@ -1,5 +1,5 @@
 {
-  "asset": "asset:boilerplate/lib/data/network/apis/users/avatar_api.dart",
+  "asset": "asset:boilerplate/lib/models/converter/local_converter.dart",
   "summary": {
     "injector": [],
     "module": [],

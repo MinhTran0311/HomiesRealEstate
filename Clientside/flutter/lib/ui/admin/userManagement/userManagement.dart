@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:developer';
 import 'dart:math';
 
@@ -11,11 +9,9 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dart';
-import 'package:boilerplate/ui/admin/management.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,7 +21,6 @@ import 'package:boilerplate/ui/home/filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:boilerplate/ui/admin/userManagement/filterUser.dart';
 import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
-import 'package:boilerplate/ui/admin/userManagement/createOrEditUser.dart';
 
 class UserManagementScreen extends StatefulWidget {
   @override
@@ -43,7 +38,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   var _selectedValueAfterTouchBtn;
   var _roles = List<DropdownMenuItem>();
   var _listUserFilterFromRole = List<User>();
-  var userChoosen;
   // bool selectedRole = false;
 
   // bool visibilityFilter = false;
@@ -74,14 +68,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     if (!_userManagementStore.loading) {
       _userManagementStore.getUsers();
     }
+
     if (!_roleManagementStore.loading) {
       _roleManagementStore.getRoles();
     }
-  }
-
-  Image imageFromBase64String(String base64String) {
-    Uint8List bytes = base64.decode(base64String);
-    return Image.memory(bytes);
   }
 
   _loadRoleList() {
@@ -140,43 +130,51 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 28,
-            color: Colors.white,
-          ),
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementScreen()),
-            );
-          },
-        ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Text("Quản lý người dùng",
-            style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
-          ],
-        ),
-        actions: [
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            icon: Icon(
-              Icons.person_add_alt_1,
-              color: Colors.white,
-              size: 28,
+        title: Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 28,
+                      color: Colors.white,
+                    ),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text("Quản lý người dùng",
+                    style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+                ),
+              ),
+              Expanded(
+                // flex: 2,
+                child: Container(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    child: Icon(
+                    Icons.person_add_alt_1,
+                    size: 28,
+                    color: Colors.white,
+                  ),
+                    onTap: (){
+                      // Navigator.pop(context);
+                    },
+                ),
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
-              );
-            },
+            ],
           ),
-        ],
+        ),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -225,13 +223,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return (_userManagementStore.loadingAvatar)
+        return _userManagementStore.loading
             ? CustomProgressIndicatorWidget()
             : Material(
             child: _buildUsersList(),
-            color: Colors.white,
-        );
-        // return CustomProgressIndicatorWidget();
+            color: Color.fromRGBO(241, 242, 246, 1),);
       },
     );
   }
@@ -348,85 +344,199 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   Widget _buildListItem(User user, int position) {
-    // Uint8List bytes = base64Decode(user.profilePictureID);
-    return ListTile(
-      leading: user.avatar == null ? CircleAvatar(
-        backgroundColor: Colors.amber.shade800,
-        child: Text((
-          user.name.substring(0,1) + user.surName.substring(0,1)).toUpperCase(),
-          style: TextStyle(
-            color: Colors.white,
+    return Container(
+      decoration: new BoxDecoration(
+        boxShadow: [
+          // color: Colors.white, //background color of box
+          BoxShadow(
+            color: Color.fromRGBO(198, 199, 202, 1),
+            blurRadius: 10, // soften the shadow
+            spreadRadius: 0.01, //extend the shadow
+            offset: Offset(
+              8.0, // Move to right 10  horizontally
+              12.0, // Move to bottom 10 Vertically
+            ),
+          )
+        ],
+      ),
+      child: Card(
+        margin: EdgeInsets.only(top: 8, right: 10, left: 10),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          // height: 160,
+          // color: Color.fromRGBO(242, 242, 242, 1),
+          color: Colors.white,
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                      child: Text(
+                        '${user.name}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+
+                    },
+                    child: Icon(
+                      Icons.menu_outlined,
+                      size: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person_outline_outlined,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            '${user.permissions}',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 20),
+                        //   // child: ,
+                        // ),
+                        Text(
+                          'Kích hoạt: ',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        user.isActive ? Container(
+                              child: Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: Colors.green,)
+                            ) : Container(
+                            child: Icon(
+                              Icons.not_interested_outlined,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    // alignment: Alignment.topRight,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.mail_outline,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              '${user.email}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            )
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    // alignment: Alignment.topRight,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.mark_email_read_outlined,
+                          color: Colors.amber,
+                          size: 20,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            'Xác nhận email: ',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        user.isEmailConfirmed ? Container(
+                            child: Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: Colors.green,)
+                        ) : Container(
+                          child: Icon(
+                            Icons.not_interested_outlined,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      )
-      : CircleAvatar(
-        // child: imageFromBase64String(user.profilePictureID),
-          child: ClipOval(child: imageFromBase64String(user.avatar)),
-        backgroundColor: Colors.brown.shade800,
-        // child: Text((user.surName.substring(0,1)).toUpperCase()),
       ),
-      title: Text(
-          user.name,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-      ),
-      subtitle: Text(user.email),
-      onTap: (){
-        this.userChoosen = user;
-        _showSimpleModalDialog(context, user);
-      },
+
     );
   }
-
-  // Widget _buildListItem(User user, int position) {
-  //   return Container(
-  //     decoration: new BoxDecoration(
-  //       boxShadow: [
-  //         // color: Colors.white, //background color of box
-  //         BoxShadow(
-  //           color: Color.fromRGBO(198, 199, 202, 1),
-  //           blurRadius: 10, // soften the shadow
-  //           spreadRadius: 0.01, //extend the shadow
-  //           offset: Offset(
-  //             8.0, // Move to right 10  horizontally
-  //             12.0, // Move to bottom 10 Vertically
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //     child: Card(
-  //       margin: EdgeInsets.only(top: 8, right: 10, left: 10),
-  //       clipBehavior: Clip.antiAlias,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(15)),
-  //       ),
-  //       child: Container(
-  //         padding: EdgeInsets.all(20),
-  //         // height: 160,
-  //         // color: Color.fromRGBO(242, 242, 242, 1),
-  //         color: Colors.white,
-  //         child: Column(
-  //           children: [
-  //             Container(
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(50),
-  //                 color: Colors.white,
-  //                 // boxShadow: [
-  //                 //   BoxShadow(color: Colors.green, spreadRadius: 3),
-  //                 // ],
-  //               ),
-  //               height: 50,
-  //               width: 50,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //
-  //   );
-  // }
 
   Widget _handleErrorMessage() {
     return Observer(
@@ -522,483 +632,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  _showSimpleModalDialog(context, User user){
-    showModalBottomSheet(
-      // backgroundColor: Colors.red,
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
-            )
-        ),
-        builder: (BuildContext context){
-          return Wrap(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                        // Colors.blue,
-                        // Colors.red,
-                        Colors.orange.shade700,
-                        Colors.amberAccent.shade100,
-                      ],
-                    )
-                ),
-                // padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children:[
-                        Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            // mainAxisSize: MainAxisSize.max,
-                            // crossAxisAlignment: CrossAxisAlignment.stretch,
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  user.avatar == null ? CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    maxRadius: 50,
-                                    minRadius: 25,
-                                    child: Text((
-                                        user.name.substring(0,1) + user.surName.substring(0,1)).toUpperCase(),
-                                      style: TextStyle(
-                                        fontSize: 35,
-                                        color: Colors.amber,
-                                      ),
-                                    ),
-                                  )
-                                      : CircleAvatar(
-                                    maxRadius: 50,
-                                    minRadius: 25,
-                                    // child: imageFromBase64String(user.profilePictureID),
-                                    child: ClipOval(child: imageFromBase64String(user.avatar)),
-                                    backgroundColor: Colors.brown.shade800,
-                                    // child: Text((user.surName.substring(0,1)).toUpperCase()),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.menu,
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                    onPressed: () {
-                                      _showPopupMenu();
-                                    },
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 17,),
-                              Text(
-                                "${user.name} " + "${user.surName}",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 5,),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.person_pin,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Text(
-                                    "${user.permissions}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          margin: EdgeInsets.all(20),
-                        ),
-                      ]
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25),
-                          ),
-                          // gradient: LinearGradient(
-                          //   begin: Alignment.topRight,
-                          //   end: Alignment.bottomLeft,
-                          //   colors: [
-                          //     // Colors.blue,
-                          //     // Colors.red,
-                          //     Colors.orange.shade700,
-                          //     Colors.amberAccent.shade100,
-                          //   ],
-                          // )
-                        color: Colors.white,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      // margin: EdgeInsets.only(bottom: 10),
-                      // padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                      // color: Colors.white,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                            decoration: BoxDecoration(
-                              // borderRadius: BorderRadius.only(
-                              //   topLeft: Radius.circular(25),
-                              //   topRight: Radius.circular(25),
-                              // ),
-                              border: Border(
-                                bottom: BorderSide( //                   <--- left side
-                                  color: Colors.amber,
-                                  width: 1.0,
-                                ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.person,
-                                        color: Colors.amber,
-                                        size: 28,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        "Tài khoản",
-                                        style: TextStyle(
-                                          color: Colors.amber,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      // alignment: Alignment.centerRight,
-                                      "${user.userName}",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10,),
-                                    user.isActive == false ? Icon(
-                                      Icons.cancel,
-                                      color: Colors.red,
-                                      size: 24,
-                                    ) : Icon (
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 24,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.mail,
-                                        color: Colors.amber,
-                                        size: 28,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        "Email",
-                                        style: TextStyle(
-                                          color: Colors.amber,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    user.isEmailConfirmed == false ? Container(
-                                      child: Row(
-                                        children: [
-                                          Text("Chưa xác nhận",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                            ),),
-                                          SizedBox(width: 10,),
-                                          Icon(
-                                            Icons.warning_rounded,
-                                            color: Colors.red,
-                                            size: 24,
-                                          ),
-                                        ]
-                                      ),
-                                      ) : Container(
-                                      child: Row(
-                                          children: [
-                                            Text("Đã xác nhận",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                              ),),
-                                            SizedBox(width: 10,),
-                                            Icon (
-                                              Icons.check_circle,
-                                              color: Colors.green,
-                                              size: 24,
-                                            ),
-                                          ]
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 20),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide( //                   <--- left side
-                                  color: Colors.amber,
-                                  width: 1.0,
-                                ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  // alignment: Alignment.centerRight,
-                                  "${user.email}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                // user.isEmailConfirmed == false ? Icon(
-                                //   Icons.warning_rounded,
-                                //   color: Colors.red,
-                                //   size: 24,
-                                // ) : Icon (
-                                //   Icons.check_circle,
-                                //   color: Colors.green,
-                                //   size: 24,
-                                // ),
-                              ],
-                            ),
-                          ),
-                          // SizedBox(height: 30,),
-                          Container(
-                            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide( //                   <--- left side
-                                  color: Colors.amber,
-                                  width: 1.0,
-                                ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.phone,
-                                        color: Colors.amber,
-                                        size: 28,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        "Điện thoại",
-                                        style: TextStyle(
-                                          color: Colors.amber,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                (user.phoneNumber == null || user.phoneNumber.isEmpty) ?
-                                Text(
-                                  // alignment: Alignment.centerRight,
-                                  "****",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                )
-                               :Text(
-                                  // alignment: Alignment.centerRight,
-                                  "${user.phoneNumber}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                  fontSize: 18,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide( //                   <--- left side
-                                  color: Colors.amber,
-                                  width: 1.0,
-                                ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.timelapse,
-                                        color: Colors.amber,
-                                        size: 28,
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Text(
-                                        "Ngày tham gia",
-                                        style: TextStyle(
-                                          color: Colors.amber,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  // alignment: Alignment.centerRight,
-                                  "${_handlingStringCreationTime(user.creationTime)}",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 20),
-                            // decoration: BoxDecoration(
-                            //   border: Border(
-                            //     bottom: BorderSide( //                   <--- left side
-                            //       color: Colors.amber,
-                            //       width: 1.0,
-                            //     ),
-                            //     // top: BorderSide( //                    <--- top side
-                            //     //   color: Colors.amber,
-                            //     //   width: 1.0,
-                            //     // ),
-                            //   ),
-                            // ),
-                            child: ElevatedButton(
-                                child: Text(
-                                    "Chỉnh sửa thông tin",
-                                    style: TextStyle(fontSize: 22,
-                                    fontWeight: FontWeight.bold),
-                                ),
-                                style: ButtonStyle(
-                                    foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                    backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
-                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                                            side: BorderSide(color: Colors.red),
-                                        )
-                                    )
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: user)),
-                                  );
-                                },
-                            )
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        }
-    );
-  }
-
   Widget buildFilterAdvance() {
     return Container(
         padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
@@ -1084,103 +717,5 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     ).then<void>((T value) {
       // The value passed to Navigator.pop() or null.
     });
-  }
-
-  _showPopupMenu(){
-    showMenu<String>(
-      context: context,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        // builder: (BuildContext context){
-        //   return Wrap(
-        //     children: [
-        //       buildFilterAdvance(),
-        //     ],
-        //   );
-        // }
-      position: RelativeRect.fromLTRB(25.0, 150.0, 0.0, 0.0),      //position where you want to show the menu on screen
-      items: [
-        PopupMenuItem<String>(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.edit,
-                  size: 20,
-                ),
-                SizedBox(width: 10,),
-                Text("Chỉnh sửa",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            value: '1'),
-        PopupMenuItem<String>(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.people_alt,
-                  size: 20,
-                ),
-                SizedBox(width: 10,),
-                Text("Quyền",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            value: '2'),
-        PopupMenuItem<String>(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.delete_rounded,
-                  size: 20,
-                ),
-                SizedBox(width: 10,),
-                Text("Xóa bỏ",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            value: '3'),
-      ],
-      elevation: 8.0,
-    )
-        .then<void>((String itemSelected) {
-
-      if (itemSelected == null) return;
-
-      if(itemSelected == "1"){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: this.userChoosen)),
-        );
-      }else if(itemSelected == "2"){
-        //code here
-      }else{
-        //code here
-      }
-
-    });
-  }
-
-  String _handlingStringCreationTime(String time) {
-    if (time.isEmpty)
-      return '';
-    else {
-      String nam = time.substring(0,4);
-      String thang = time.substring(5,7);
-      String ngay = time.substring(8,10);
-      // String gio = time.substring(11,13);
-      // String phut = time.substring(14,16);
-      // String giay = time.substring(17,19);
-      return ngay + "/" + thang + "/" + nam;
-    }
   }
 }

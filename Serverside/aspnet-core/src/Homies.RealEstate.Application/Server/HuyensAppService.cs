@@ -55,6 +55,7 @@ namespace Homies.RealEstate.Server
                              Huyen = new HuyenDto
                              {
                                  TenHuyen = o.TenHuyen,
+                                 TinhId = o.TinhId,
                                  Id = o.Id
                              },
                              TinhTenTinh = s1 == null || s1.TenTinh == null ? "" : s1.TenTinh.ToString()
