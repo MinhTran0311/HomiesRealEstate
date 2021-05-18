@@ -500,34 +500,29 @@ namespace Homies.RealEstate.Server
                 ObjectMapper.Map(input.BaiDang, baiDang);
             }
 
+            await _lookup_chiTietBaiDangRepository.DeleteAsync(e => e.BaiDangId == input.BaiDang.Id);
+
             if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
             {
                 foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
                 {
-                    if (chiTiet.Id != null && chiTiet.BaiDangId != null)
+                    if (chiTiet.BaiDangId != null)
                     {
-                        var chiTietBaiDang = await _lookup_chiTietBaiDangRepository.FirstOrDefaultAsync((int)chiTiet.Id);
-                        ObjectMapper.Map(chiTiet, chiTietBaiDang);
-                    }
-                    else if (chiTiet.Id == null && chiTiet.BaiDangId != null)
-                    {
+                        chiTiet.Id = null;
                         await _lookup_chiTietBaiDangRepository.InsertAsync(ObjectMapper.Map<ChiTietBaiDang>(chiTiet));
                     }
                 }
             }
 
+            await _lookup_hinhAnhRepository.DeleteAsync(e => e.BaiDangId == input.BaiDang.Id);
+
             if (input.HinhAnhDtos != null && input.HinhAnhDtos.Count > 0)
             {
                 foreach (CreateOrEditHinhAnhDto hinhAnh in input.HinhAnhDtos)
                 {
-
-                    if (hinhAnh.Id != null && hinhAnh.BaiDangId != null)
+                    if (hinhAnh.BaiDangId != null)
                     {
-                        var hinhAnhBaiDang = await _lookup_chiTietBaiDangRepository.FirstOrDefaultAsync((int)hinhAnh.Id);
-                        ObjectMapper.Map(hinhAnh, hinhAnhBaiDang);
-                    }
-                    else if (hinhAnh.Id == null && hinhAnh.BaiDangId != null)
-                    {
+                        hinhAnh.Id = null;
                         await _lookup_hinhAnhRepository.InsertAsync(ObjectMapper.Map<HinhAnh>(hinhAnh));
                     }
                 }
