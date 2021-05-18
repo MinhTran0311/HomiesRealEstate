@@ -9,10 +9,10 @@ class Endpoints {
   static const String imagebb = "https://api.imgbb.com";
 
   // receiveTimeout
-  static const int receiveTimeout = 7000;
+  static const int receiveTimeout = 30000;
 
   // connectTimeout
-  static const int connectionTimeout = 6000;
+  static const int connectionTimeout = 20000;
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";
@@ -31,6 +31,8 @@ class Endpoints {
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
   //get all users
   static const String getCurrenWalletUser = homiesUrl + "/services/app/Profile/GetCurrentUserWallet";
+  //get picture users
+  static const String getCurrentPictureUser = homiesUrl + "/services/app/Profile/GetProfilePicture";
   //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
 
@@ -40,6 +42,8 @@ class Endpoints {
   static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
   //update all lichsugiaodich
   static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
+  //update kiemduyetgiaodich
+  static const String kiemDuyetGiaoDich = homiesUrl + "/services/app/LichSuGiaoDichs/KiemDuyetGiaoDich";
   //get all lichsugiaodich
   static const String updateCurrenUser = homiesUrl + "/services/app/Profile/UpdateCurrentUserProfile";
   // getAllPost
