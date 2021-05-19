@@ -15,6 +15,33 @@ mixin _$LSGDStore on _LSGDStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_LSGDStore.loading'))
       .value;
+  Computed<bool> _$AllloadingComputed;
+
+  @override
+  bool get Allloading => (_$AllloadingComputed ??=
+          Computed<bool>(() => super.Allloading, name: '_LSGDStore.Allloading'))
+      .value;
+  Computed<bool> _$loadingNapTienComputed;
+
+  @override
+  bool get loadingNapTien =>
+      (_$loadingNapTienComputed ??= Computed<bool>(() => super.loadingNapTien,
+              name: '_LSGDStore.loadingNapTien'))
+          .value;
+  Computed<bool> _$loadingKiemDuyetGiaoDichComputed;
+
+  @override
+  bool get loadingKiemDuyetGiaoDich => (_$loadingKiemDuyetGiaoDichComputed ??=
+          Computed<bool>(() => super.loadingKiemDuyetGiaoDich,
+              name: '_LSGDStore.loadingKiemDuyetGiaoDich'))
+      .value;
+  Computed<bool> _$loadingKiemDuyetNapTienComputed;
+
+  @override
+  bool get loadingKiemDuyetNapTien => (_$loadingKiemDuyetNapTienComputed ??=
+          Computed<bool>(() => super.loadingKiemDuyetNapTien,
+              name: '_LSGDStore.loadingKiemDuyetNapTien'))
+      .value;
 
   final _$fetchLSGDFutureAtom = Atom(name: '_LSGDStore.fetchLSGDFuture');
 
@@ -61,6 +88,40 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$fetchKiemDuyetGiaoDichFutureAtom =
+      Atom(name: '_LSGDStore.fetchKiemDuyetGiaoDichFuture');
+
+  @override
+  ObservableFuture<bool> get fetchKiemDuyetGiaoDichFuture {
+    _$fetchKiemDuyetGiaoDichFutureAtom.reportRead();
+    return super.fetchKiemDuyetGiaoDichFuture;
+  }
+
+  @override
+  set fetchKiemDuyetGiaoDichFuture(ObservableFuture<bool> value) {
+    _$fetchKiemDuyetGiaoDichFutureAtom
+        .reportWrite(value, super.fetchKiemDuyetGiaoDichFuture, () {
+      super.fetchKiemDuyetGiaoDichFuture = value;
+    });
+  }
+
+  final _$fetchKiemDuyetNapTienFutureAtom =
+      Atom(name: '_LSGDStore.fetchKiemDuyetNapTienFuture');
+
+  @override
+  ObservableFuture<listLSGD> get fetchKiemDuyetNapTienFuture {
+    _$fetchKiemDuyetNapTienFutureAtom.reportRead();
+    return super.fetchKiemDuyetNapTienFuture;
+  }
+
+  @override
+  set fetchKiemDuyetNapTienFuture(ObservableFuture<listLSGD> value) {
+    _$fetchKiemDuyetNapTienFutureAtom
+        .reportWrite(value, super.fetchKiemDuyetNapTienFuture, () {
+      super.fetchKiemDuyetNapTienFuture = value;
+    });
+  }
+
   final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
 
   @override
@@ -73,6 +134,21 @@ mixin _$LSGDStore on _LSGDStore, Store {
   set listlsgd(listLSGD value) {
     _$listlsgdAtom.reportWrite(value, super.listlsgd, () {
       super.listlsgd = value;
+    });
+  }
+
+  final _$listlsgdAllAtom = Atom(name: '_LSGDStore.listlsgdAll');
+
+  @override
+  listLSGD get listlsgdAll {
+    _$listlsgdAllAtom.reportRead();
+    return super.listlsgdAll;
+  }
+
+  @override
+  set listlsgdAll(listLSGD value) {
+    _$listlsgdAllAtom.reportWrite(value, super.listlsgdAll, () {
+      super.listlsgdAll = value;
     });
   }
 
@@ -108,21 +184,16 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
 
   @override
-  Future<bool> Naptien(String thoiDiem, double soTien, int userId) {
+  Future<dynamic> Naptien(String thoiDiem, double soTien, int userId) {
     return _$NaptienAsyncAction
         .run(() => super.Naptien(thoiDiem, soTien, userId));
   }
-  // final _$KiemDuyetNaptienAsyncAction = AsyncAction('_LSGDStore.KiemDuyetNaptien');
-  //
-  // @override
-  // Future<dynamic> KiemDuyetNaptien(int userId, String idLSGD,int kiemDuyetVienID) {
-  //   return _$KiemDuyetNaptienAsyncAction
-  //       .run(() => super.KiemDuyetNaptien(userId, idLSGD, kiemDuyetVienID));
-  // }
-  final _$KiemDuyetGiaoDichAsyncAction = AsyncAction('_LSGDStore.KiemDuyetGiaoDich');
+
+  final _$KiemDuyetGiaoDichAsyncAction =
+      AsyncAction('_LSGDStore.KiemDuyetGiaoDich');
 
   @override
-  Future<bool> KiemDuyetGiaoDich(String idLSGD) {
+  Future<dynamic> KiemDuyetGiaoDich(String idLSGD) {
     return _$KiemDuyetGiaoDichAsyncAction
         .run(() => super.KiemDuyetGiaoDich(idLSGD));
   }
@@ -131,9 +202,18 @@ mixin _$LSGDStore on _LSGDStore, Store {
   String toString() {
     return '''
 fetchLSGDFuture: ${fetchLSGDFuture},
+fetchAllLSGDFuture: ${fetchAllLSGDFuture},
+fetchNaptienFuture: ${fetchNaptienFuture},
+fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
+fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
 listlsgd: ${listlsgd},
+listlsgdAll: ${listlsgdAll},
 success: ${success},
-loading: ${loading}
+loading: ${loading},
+Allloading: ${Allloading},
+loadingNapTien: ${loadingNapTien},
+loadingKiemDuyetGiaoDich: ${loadingKiemDuyetGiaoDich},
+loadingKiemDuyetNapTien: ${loadingKiemDuyetNapTien}
     ''';
   }
 }

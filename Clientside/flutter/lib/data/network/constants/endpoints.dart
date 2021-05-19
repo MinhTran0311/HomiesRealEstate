@@ -9,10 +9,10 @@ class Endpoints {
   static const String imagebb = "https://api.imgbb.com";
 
   // receiveTimeout
-  static const int receiveTimeout = 30000;
+  static const int receiveTimeout = 7000;
 
   // connectTimeout
-  static const int connectionTimeout = 20000;
+  static const int connectionTimeout = 6000;
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";
@@ -27,6 +27,8 @@ class Endpoints {
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
   //get all users
   static const String getUsersByID = homiesUrl + "/services/app/User/GetUserForEdit";
+  //get Avatar by User
+  static const String getAvatarByUser = homiesUrl + "/services/app/Profile/GetProfilePictureByUser";
   //get all users
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
   //get all users

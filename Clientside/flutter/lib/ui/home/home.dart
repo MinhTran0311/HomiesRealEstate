@@ -39,8 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final ScrollController _scrollController= ScrollController();
+  final ScrollController _scrollController= ScrollController(keepScrollOffset: true);
   bool isRefreshing = false;
+  GlobalKey _contentKey = GlobalKey();
+  GlobalKey _refresherKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -137,14 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(icon: Icon(Icons.style), onPressed: (){
-          _scrollController.jumpTo(
-            _scrollController.position.maxScrollExtent,
-          );
-          _refreshController.refreshCompleted();
-        }),
         Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
           child: TextField(
+            autofocus: false,
               controller: _searchController,
               onChanged: (value){
                 _postStore.setSearchContent(_searchController.text);
@@ -251,10 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Widget _buildListView() {
-
-    GlobalKey _contentKey = GlobalKey();
-    GlobalKey _refresherKey = GlobalKey();
-
     return _postStore.postList != null
       ? SmartRefresher(
         key: _refresherKey,
@@ -292,8 +285,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
           _postStore.getPosts(true);
           await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) setState(() {
-          });
+          if (mounted) {
+            setState(() {
+
+            });
+          }
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
 
           _refreshController.loadComplete();
 
@@ -307,6 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
           isRefreshing = true;
           _refreshController.refreshCompleted();
         },
+        scrollController: _scrollController,
+        primary: false,
         child: ListView.builder(
           key: _contentKey,
           controller: _scrollController,
@@ -347,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
                 //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
-                image: post.featuredImage!=null ? local_Converter.im(post.featuredImage) : AssetImage(Assets.front_img),
+                image: post.featuredImage!=null ? NetworkImage(post.featuredImage) : AssetImage(Assets.front_img),
                 fit: BoxFit.cover,
               )
           ),

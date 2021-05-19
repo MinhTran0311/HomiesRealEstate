@@ -11,6 +11,7 @@ class User {
   String creationTime;
   List<dynamic> permissionsList;
   String permissions;
+  String avatar;
 
   // List<String> permissions;
 
@@ -27,6 +28,7 @@ class User {
     this.creationTime,
     this.permissionsList,
     this.permissions,
+    this.avatar,
   });
   factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
     id: json["result"]["user"]["id"],

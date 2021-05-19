@@ -37,6 +37,13 @@ class _FilterState extends State<Filter> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _filterStore = Provider.of<FilterStore>(context);
+
+    _diaChiController.text = _filterStore.filter_model.diaChi;
+    _usernameController.text = _filterStore.filter_model.username;
+    _giaMinValueController.text=_filterStore.filter_model.giaMin;
+    _giaMaxValueController.text=_filterStore.filter_model.giaMax;
+    _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
+    _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
   }
 
 

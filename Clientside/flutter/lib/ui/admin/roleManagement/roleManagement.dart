@@ -63,6 +63,20 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
 
   }
 
+  String _handlingStringCreationTime(String time) {
+    if (time.isEmpty)
+      return '';
+    else {
+      String nam = time.substring(0,4);
+      String thang = time.substring(5,7);
+      String ngay = time.substring(8,10);
+      String gio = time.substring(11,13);
+      String phut = time.substring(14,16);
+      String giay = time.substring(17,19);
+      return "Ngày tạo: " + ngay + "/" + thang + "/" + nam + ", " + gio + ":" + phut + ":" + giay;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -325,7 +339,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                         Container(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
-                              '${role.creationTime}',
+                              // '${role.creationTime}',
+                              _handlingStringCreationTime(role.creationTime),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Colors.black,
