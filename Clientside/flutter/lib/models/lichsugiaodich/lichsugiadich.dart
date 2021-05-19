@@ -6,22 +6,16 @@ class lichsugiaodich{
   String ghiChu;
   String thoiDiem;
   double soTien;
-  String UserName;
-  String UserNameKiemDuyet;
-  String chiTietHoaDonBaiDangName;
 
 
   lichsugiaodich({
-    this.id,
-    this.kiemDuyetVienId,
-    this.chiTietHoaDonBaiDangId,
-    this.userId,
-    this.ghiChu,
-    this.thoiDiem,
-    this.soTien,
-    this.UserName,
-    this.UserNameKiemDuyet,
-    this.chiTietHoaDonBaiDangName,
+  this.id,
+  this.kiemDuyetVienId,
+  this.chiTietHoaDonBaiDangId,
+  this.userId,
+  this.ghiChu,
+  this.thoiDiem,
+  this.soTien,
   });
 
   factory lichsugiaodich.fromMap(Map<String, dynamic> json) => lichsugiaodich(
@@ -32,9 +26,6 @@ class lichsugiaodich{
     ghiChu: json["lichSuGiaoDich"]["ghiChu"],
     thoiDiem: json["lichSuGiaoDich"]["thoiDiem"],
     soTien: json["lichSuGiaoDich"]["soTien"],
-    UserName: json["userName"],
-    UserNameKiemDuyet: json["userName2"],
-    chiTietHoaDonBaiDangName: json["chiTietHoaDonBaiDangGhiChu"],
   );
 
   Map<String, dynamic> toMap() => {
