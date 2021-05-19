@@ -406,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          post.gia.toString() + "VND",
+                          priceFormat(post.gia),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -444,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4,),
                             Text(
-                              post.dienTich.toString(),
+                              post.dienTich.toString() +' m2',
                               style: TextStyle(
                                 color:Colors.white,
                                 fontSize:  14,
