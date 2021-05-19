@@ -35,7 +35,7 @@ class TownApi {
   }
   Future<CommuneList> getCommunes() async {
     try {
-      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/Xas/GetAll?MaxResultCount=11309",
+      final res = await _dioClient.get("https://homies.exscanner.edu.vn/api/services/app/Xas/GetAll?MaxResultCount=11310",
         options: Options(
             headers: {
               "Abp.TenantId": 1,

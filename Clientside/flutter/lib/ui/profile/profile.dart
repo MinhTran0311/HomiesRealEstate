@@ -15,11 +15,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'account/account.dart';
+import 'mypost/mypost.dart';
 
 class ProfileScreen extends StatefulWidget{
   ProfileScreen({
@@ -67,6 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
   final picker = ImagePicker();
   int selected = 0;
   UserStore _userstore;
+  PostStore _postStore;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -84,9 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _userstore = Provider.of<UserStore>(context);
-
+    _postStore = Provider.of<PostStore>(context);
     if (!_userstore.loading) {
       _userstore.getCurrentUser();
       _userstore.getCurrentWalletUser();
@@ -103,16 +105,28 @@ class _ProfileScreenState extends State<ProfileScreen>{
           if(_userstore.user.creationTime!=null)creationTime = _userstore.user.creationTime.substring(8,10)+"/"+ _userstore.user.creationTime.substring(5,7)+"/"+_userstore.user.creationTime.substring(0,4);
 
         });
-       }
+      }
 
     }
 
+    if(!_postStore.loadingPostForCur)
+      _postStore.getPostForCurs();
   }
 
   @override
   void initState() {
     super.initState();
-
+    String pathAvatar= "assets/images/img_login.jpg";
+    String SurName ="Người";
+    String Name ="Dùng";
+    String FullName="Người Dùng";
+    String profession="Nhà môi giới";
+    String Sodu = "0";
+    String Baidadang = "0";
+    String Phone = "Chưa đăng ký";
+    String Email = "Chưa đăng ký";
+    String Address = "KTX Khu A, ĐHQG-HCM";
+    String creationTime =DateFormat('dd/MM/yyyy').format(DateTime.now());
     // ifuserstore.loading
 
   }
@@ -310,6 +324,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
   }
 
   Widget _buildUserInformation() {
+    return Observer(
+        builder: (context) {
     return Container(
       height: 189,
 
@@ -393,7 +409,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                           fontFamily: FontFamily.roboto
                         )
                       ):Text(
-                          SurName+" "+ Name,
+                          SurName+" "+Name,
                           style: TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
@@ -428,7 +444,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
               ],
             ),
             Row(
-
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   padding: const EdgeInsets.only(top: 25,left: 40,),
@@ -454,12 +470,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   ),
                 ),
                 SizedBox(width: 70,),
+                !_postStore.loadingPostForCur?
                 MaterialButton(
-                  padding: const EdgeInsets.only(top: 25),
+                  padding: const EdgeInsets.only(top: 25,right: 50),
                   child: Column(
                     children: [
                       Text(
-                        Baidadang,
+                        _postStore.postForCurList.posts.length.toString(),
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -476,15 +493,18 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     ],
                   ),
                   onPressed: (){
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyPostScreen(userStore: _userstore,postStore: _postStore,)),
+                    );
                   },
-                )
+                ):Container(height: 0,),
               ],
             )
           ],
         ),
       )
-    );
+    );});
   }
 
 

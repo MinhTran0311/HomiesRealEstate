@@ -385,6 +385,34 @@ abstract class _PostStore with Store {
         }
       });
     }
+  static ObservableFuture<String> emptyeditostResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetcheditpostsFuture =
+  ObservableFuture<String>(emptyeditostResponse);
+
+  @observable
+  bool successeditpost = false;
+
+  @computed
+  bool get loadingeditpost => fetcheditpostsFuture.status == FutureStatus.pending;
+  Future editpost(Newpost post) async {
+    final editpostFuture = _repository.editpost(post);
+    fetchNewpostsFuture = ObservableFuture(editpostFuture);
+    editpostFuture.then((newpost) {
+      print(newpost);
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
     ///////////////////////////getpostforcur
   static ObservableFuture<PostList> emptyPostforcursResponse =
   ObservableFuture.value(null);

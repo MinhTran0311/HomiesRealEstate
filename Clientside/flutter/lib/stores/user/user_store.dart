@@ -95,6 +95,7 @@ abstract class _UserStore with Store {
   }
   @observable
   CurrentUserForEditdto user;
+  CurrentUserForEditdto usercurrent;
   static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
   ObservableFuture.value(null);
 
@@ -120,7 +121,8 @@ abstract class _UserStore with Store {
     fetchUsersFuture = ObservableFuture(future);
 
     future.then((user) {
-      this.user = user;
+      this.usercurrent = user;
+      this.user=user;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

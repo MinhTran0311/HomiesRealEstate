@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
   pull_to_refresh: 1.6.3
-
   image_picker: ^0.6.7+6
   flutter_localizations:
     sdk: flutter

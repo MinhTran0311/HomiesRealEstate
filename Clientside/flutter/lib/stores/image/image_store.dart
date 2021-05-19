@@ -70,15 +70,11 @@ abstract class _ImageStore with Store {
   }
 
   // @action
-  Future postImages(List<String> path, String name) async {
+  Future postImages(String path, String name) async {
     {
-      imageListpost=new List<String>();
-      for(var item in path)
-        {
-      final imageFuture = _repository.postImageToImageBB(item,"$name ${item}");
-      imageFuture.then((imgId) {
-        imageListpost.add(imgId);
-      if(item==path.last)
+      final imageFuture = _repository.postImageToImageBB(path,"$name");
+      imageFuture.then((imgId)
+      {imageListpost.add(imgId);
         fetchImageFuturepost = ObservableFuture(imageFuture);
       }).catchError((error) {
         if (error is DioError) {
@@ -92,5 +88,5 @@ abstract class _ImageStore with Store {
       });
 
         }
-  }}
+  }
 }

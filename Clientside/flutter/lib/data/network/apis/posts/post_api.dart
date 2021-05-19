@@ -7,6 +7,7 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
+import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_category.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
@@ -242,5 +243,30 @@ class PostApi {
       throw e;
     }
   }
+  Future<String> editpost(Newpost newpost) async {
+    try {
+      final res = await _dioClient.post(
+          "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/EditBaiDangAndDetails",
+          options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+              "Content-Type": "application/json",
+            },
+          ),
+          data: {
 
+            "baiDang": (newpost.post.toMap()),
+            "chiTietBaiDangDtos": [
+              if (newpost.properties != null)
+                for (var item in newpost.properties) item.toMap()
+            ],
+            "hinhAnhDtos": [
+              for (var item in newpost.images) item.toMap()
+            ]
+          });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
