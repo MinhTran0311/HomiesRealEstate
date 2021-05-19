@@ -293,6 +293,12 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi.Contains(input.DiaChiFilter))
 
 
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoXMinFilter), e => float.Parse(e.ToaDoX) > float.Parse(input.ToaDoXMinFilter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoYMinFilter), e => float.Parse(e.ToaDoY) > float.Parse(input.ToaDoYMinFilter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoXMaxFilter), e => float.Parse(e.ToaDoX) < float.Parse(input.ToaDoXMaxFilter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoYMaxFilter), e => float.Parse(e.ToaDoY) < float.Parse(input.ToaDoYMaxFilter))
+
+
                         .WhereIf(input.MinDienTichFilter != null, e => e.DienTich >= input.MinDienTichFilter)
                         .WhereIf(input.MaxDienTichFilter != null, e => e.DienTich <= input.MaxDienTichFilter)
 
