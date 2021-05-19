@@ -3,11 +3,13 @@ import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -86,7 +88,7 @@ class _WalletPageState extends State<WalletPage>{
                 //     ),
                 //   ],
                 // ),
-        padding: const EdgeInsets.all(20),
+        // padding: const EdgeInsets.all(20),
         child: DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -109,7 +111,11 @@ class _WalletPageState extends State<WalletPage>{
                   ],
                   index: _selectedIndex,
                 ),
-                buildLSGD()
+            Observer(
+                builder: (context) {
+                  return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
+                }
+            )
               ],
             ),
           ),
@@ -250,10 +256,15 @@ class _WalletPageState extends State<WalletPage>{
     return Container(
       child: ListView(
         children: <Widget>[
-          Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
+          ),
           SizedBox(height: 20,),
-          Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
-            style: TextStyle(fontSize: 24,fontFamily: FontFamily.roboto),),
+          Center(
+            child: Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
+              style: TextStyle(fontSize: 24,fontFamily: FontFamily.roboto),),
+          ),
           SizedBox(height: 20,),
           CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
           press: (){
@@ -289,7 +300,7 @@ class _WalletPageState extends State<WalletPage>{
           // ),
           SizedBox(height: 10,),
           _lsgdStore.listlsgd!=null?Container(
-            height: 370, // give it a fixed height constraint
+            height: 500, // give it a fixed height constraint
             // color: Colors.teal,
             // child ListView
             child: ListView.builder(shrinkWrap: true, // 1st add
