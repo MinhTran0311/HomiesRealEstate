@@ -27,6 +27,8 @@ class Endpoints {
   static const String getAllUsers = homiesUrl + "/services/app/User/GetUsers";
   //get all users
   static const String getUsersByID = homiesUrl + "/services/app/User/GetUserForEdit";
+  //get Avatar by User
+  static const String getAvatarByUser = homiesUrl + "/services/app/Profile/GetProfilePictureByUser";
   //get all users
   static const String getCurrenUser = homiesUrl + "/services/app/Profile/GetCurrentUserProfileForEdit";
   //get all users

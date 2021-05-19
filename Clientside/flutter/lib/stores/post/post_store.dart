@@ -149,6 +149,26 @@ abstract class _PostStore with Store {
       });
     }
 
+  // @action
+  // Future getPostsFromXY() async {
+  //   final future = _repository.getPosts();
+  //   fetchPostsFuture = ObservableFuture(future);
+  //
+  //   future.then((postList) {
+  //     success = true;
+  //     this.postList = postList;
+  //   }).catchError((error) {
+  //     if (error is DioError) {
+  //       errorStore.errorMessage = DioErrorUtil.handleError(error);
+  //       throw error;
+  //     }
+  //     else{
+  //       errorStore.errorMessage="Please check your internet connection and try again!";
+  //       throw error;
+  //     }
+  //   });
+  // }
+
     @action
     Future getPostProperties(String postId) async {
       propertiesSuccess = false;
