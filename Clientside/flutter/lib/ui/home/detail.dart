@@ -676,7 +676,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
             child: Container(
               height: 350,
-              child: MapsScreen(),
+              child: MapsScreen(post: this.post),
             )
         )
       ],
