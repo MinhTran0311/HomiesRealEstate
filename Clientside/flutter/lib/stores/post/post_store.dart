@@ -53,15 +53,25 @@ abstract class _PostStore with Store {
     ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
     ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
 
+    static ObservableFuture<dynamic> emptyGetRecommendPostsFutureResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchisGetRecommendPostsFuture =
+    ObservableFuture<dynamic>(emptyGetRecommendPostsFutureResponse);
+
     static ObservableFuture<dynamic> emptySearchResponse =
     ObservableFuture.value(null);
 
     @observable
     ObservableFuture<dynamic> fetchSearchFuture =
-    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+    ObservableFuture<dynamic>(emptySearchResponse);
 
     @observable
     PostList postList;
+
+    @observable
+    PostList rcmPostList;
 
     @observable
     bool isIntialLoading = true;
@@ -104,6 +114,9 @@ abstract class _PostStore with Store {
 
     @computed
     bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
+
+    @computed
+    bool get getRecommendPostsFutureLoading => fetchisGetRecommendPostsFuture.status == FutureStatus.pending;
 
     @computed
     bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
@@ -260,6 +273,32 @@ abstract class _PostStore with Store {
       }
     });
   }
+
+  @action
+  Future getRecommendPosts(String tag) async {
+    filter_Model fm = new filter_Model();
+    fm.tagTimKiem = tag;
+    final futrue = _repository.searchPosts(fm);
+    fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
+
+    futrue.then((result) {
+      this.rcmPostList = result;
+      print("11111");
+      print(this.rcmPostList.posts.length);
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
   @action
   void validateSearchContent(String value) {
       return;
