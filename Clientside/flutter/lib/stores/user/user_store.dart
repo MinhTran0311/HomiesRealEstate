@@ -142,6 +142,8 @@ abstract class _UserStore with Store {
 
   @observable
   CurrentUserForEditdto user;
+  @observable
+  CurrentUserForEditdto userCurrent;
 
   //User
   static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentResponse =
@@ -185,7 +187,7 @@ abstract class _UserStore with Store {
     final future = _repository.getCurrentUser();
     fetchUserCurrentFuture = ObservableFuture(future);
     fetchUserCurrentFuture.then((user) {
-      this.user = user;
+      this.userCurrent = user;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -205,7 +207,7 @@ abstract class _UserStore with Store {
     fetchUserCurrentWalletFuture = ObservableFuture(future);
 
     fetchUserCurrentWalletFuture.then((wallet) {
-      this.user.wallet = wallet;
+      this.userCurrent.wallet = wallet;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -228,7 +230,7 @@ abstract class _UserStore with Store {
     fetchUserCurrentPictureFuture = ObservableFuture(future);
 
     fetchUserCurrentPictureFuture.then((picture) {
-      this.user.picture = picture;
+      this.userCurrent.picture = picture;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -286,12 +288,12 @@ abstract class _UserStore with Store {
   }
 
 
-  static ObservableFuture<CurrentUserForEditdto> emptyUpdateUserResponses =
+  static ObservableFuture<dynamic> emptyUpdateUserResponses =
   ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<CurrentUserForEditdto> fetchUpdateUserFutures =
-  ObservableFuture<CurrentUserForEditdto>(emptyUpdateUserResponses);
+  ObservableFuture<dynamic> fetchUpdateUserFutures =
+  ObservableFuture<dynamic>(emptyUpdateUserResponses);
 
   @computed
   bool get loadingsUpdateUser => fetchUpdateUserFutures.status == FutureStatus.pending;
@@ -308,11 +310,11 @@ abstract class _UserStore with Store {
     fetchUpdateUserFutures = ObservableFuture(future);
 
     fetchUpdateUserFutures.then((user) {
-      this.user.name = name;
-      this.user.surname = surname;
-      this.user.phoneNumber = phonenumber;
-      this.user.emailAddress = email;
-      this.user.userName = userName;
+      this.userCurrent.name = name;
+      this.userCurrent.surname = surname;
+      this.userCurrent.phoneNumber = phonenumber;
+      this.userCurrent.emailAddress = email;
+      this.userCurrent.userName = userName;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -342,7 +344,7 @@ abstract class _UserStore with Store {
 
     fetchUpdatePictureUserFutures.then((image) {
       if(image==true)
-        this.user.picture = fileToken;
+        this.userCurrent.picture = fileToken;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

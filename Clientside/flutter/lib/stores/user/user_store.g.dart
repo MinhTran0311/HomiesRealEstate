@@ -162,6 +162,20 @@ mixin _$UserStore on _UserStore, Store {
       super.user = value;
     });
   }
+  final _$userCurrentAtom = Atom(name: '_UserStore.userCurrent');
+
+  @override
+  CurrentUserForEditdto get userCurrent {
+    _$userCurrentAtom.reportRead();
+    return super.userCurrent;
+  }
+
+  @override
+  set userCurrent(CurrentUserForEditdto value) {
+    _$userCurrentAtom.reportWrite(value, super.userCurrent, () {
+      super.userCurrent = value;
+    });
+  }
 
   final _$fetchUserCurrentFutureAtom =
       Atom(name: '_UserStore.fetchUserCurrentFuture');
@@ -263,13 +277,13 @@ mixin _$UserStore on _UserStore, Store {
       Atom(name: '_UserStore.fetchUpdateUserFutures');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserFutures {
+  ObservableFuture<dynamic> get fetchUpdateUserFutures {
     _$fetchUpdateUserFuturesAtom.reportRead();
     return super.fetchUpdateUserFutures;
   }
 
   @override
-  set fetchUpdateUserFutures(ObservableFuture<CurrentUserForEditdto> value) {
+  set fetchUpdateUserFutures(ObservableFuture<dynamic> value) {
     _$fetchUpdateUserFuturesAtom
         .reportWrite(value, super.fetchUpdateUserFutures, () {
       super.fetchUpdateUserFutures = value;

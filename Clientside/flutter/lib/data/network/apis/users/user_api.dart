@@ -306,7 +306,9 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   Future<listLSGD> getAllLSGD() async {
     try {
       final res = await _dioClient.get(Endpoints.getAllLSGD,
-
+        queryParameters: {
+          "MaxResultCount": 1000,
+        },
         options: Options(
             headers: {
               "Abp.TenantId": 1,
