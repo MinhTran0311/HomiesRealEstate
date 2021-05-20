@@ -1141,6 +1141,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       AppImage u = new AppImage();
                       if (j<=_imageStore.imageList.images.length)
                         u.id=_imageStore.imageList.images[j].id;
+                      j++;
                       u.baiDangId=this.post.id.toString();
                       u.duongDan = item;
                       _newpost.images.add(u);}
