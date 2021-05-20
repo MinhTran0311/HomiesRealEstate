@@ -132,7 +132,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
       _postStore.getThuocTinhs();
     }
     if (!_userStore.loading) {
-      _userStore.getCurrentUser(); //_userStore.getCurrentWalletUser();
+      _userStore.getCurrentUser();
+      _userStore.getCurrentWalletUser();
     }
   }
 
@@ -1098,7 +1099,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               width: 80,
                               height: 80,
                               child: FlatButton(
-                                padding: EdgeInsets.fromLTRB(90, 10, 100, 100),
+                                padding: EdgeInsets.fromLTRB(80, 10, 100, 100),
                                 // shape: RoundedRectangleBorder(
                                 //     borderRadius: BorderRadius.circular(20),
                                 //     side: BorderSide(color: Colors.white)),

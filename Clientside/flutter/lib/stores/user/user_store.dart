@@ -188,6 +188,7 @@ abstract class _UserStore with Store {
     fetchUserCurrentFuture = ObservableFuture(future);
     fetchUserCurrentFuture.then((user) {
       this.user = user;
+      this.usercurrent=user;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -208,6 +209,7 @@ abstract class _UserStore with Store {
 
     fetchUserCurrentWalletFuture.then((wallet) {
       this.user.wallet = wallet;
+      this.usercurrent.wallet;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

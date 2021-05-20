@@ -407,7 +407,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                           );
                         }
                       ),
-                      Text("Sô dư",
+                      Text("Số dư",
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
