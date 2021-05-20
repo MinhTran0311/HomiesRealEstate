@@ -16,35 +16,29 @@ import 'package:provider/provider.dart';
 
 
 class KiemDuyetPage extends StatefulWidget {
-  KiemDuyetPage({Key key, this.title}) : super(key: key);
+  KiemDuyetPage({Key key, this.title,this.UserID}) : super(key: key);
 
   final String title;
+  final int UserID;
 
   @override
-  _KiemDuyetPageState createState() => _KiemDuyetPageState();
+  _KiemDuyetPageState createState() => _KiemDuyetPageState(UserID: UserID);
 }
 
 class _KiemDuyetPageState extends State<KiemDuyetPage>{
   _KiemDuyetPageState({
-    Key key,
+    Key key,this.UserID
   }) : super();
-  LSGDStore _lsgdStore;
-  UserStore _userStore;
+  LSGDStore _lsgdStore;final int UserID;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _lsgdStore = Provider.of<LSGDStore>(context);
-    _userStore = Provider.of<UserStore>(context);
 
     if (!_lsgdStore.Allloading) {
       _lsgdStore.getAllLSGD();
     }
-    if (!_userStore.loadingCurrentUser) {
-      _userStore.getCurrentUser();
-    }
-
-
 
   }
 
@@ -63,6 +57,11 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
   Widget _buildAppBar() {
     return AppBar(
+      // leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+      //     onPressed: (){setState(() {
+      //       Navigator.pop(context);
+      //     });}),
+      centerTitle: true,
       backgroundColor: Colors.white,
       // leading: _selectedIndex !=0 ? IconButton(icon: Icon(Icons.arrow_back_ios),
       //     onPressed: (){setState(() {
@@ -76,16 +75,20 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   Widget _buildBody() {
     return Container(
       color: Colors.grey[200],
-      child: ListView(
-        children: [
-         ListView.builder(shrinkWrap: true, // 1st add
-                physics: ClampingScrollPhysics(), // 2nd add
-                itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-                itemBuilder: (_, i) => ListTile(
-                    title: _buildCardKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i])
-                )
-        )
-        ],
+      child: RefreshIndicator(
+        child: ListView.builder(
+            shrinkWrap: true, // 1st add
+               physics: ClampingScrollPhysics(), // 2nd add
+               itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+               itemBuilder: (_, i) => ListTile(
+                   title: _buildCardKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i])
+               )
+        ),
+        onRefresh: (){
+          setState(() {
+            _lsgdStore.getAllLSGD();
+          });
+        },
       ),
     );
   }
@@ -162,7 +165,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                 children: [
                   lsgd.chiTietHoaDonBaiDangId ==null ? CupertinoSwitch(
                     value:  !checkKiemDuyet(lsgd.kiemDuyetVienId),
-                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, _userStore.user.UserID);  });},
+                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, UserID);  });},
                   ):Container(),
 
                 ],
@@ -237,12 +240,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                 setState(() {
                   lsgd.kiemDuyetVienId = UserID;
                   print("Duongdebug: ${_lsgdStore.KiemDuyetGiaoDich(lsgd.id)}");
-                  if(_lsgdStore.KiemDuyetGiaoDich(lsgd.id)==true){
-                    _showSuccssfullMesssage("Cập nhật thành công");
-                  }
-                  else{
-                   _showErrorMessage("Cập nhật thất bại");
-                  }
+                  // _showSuccssfullMesssage("Cập nhật thành công");
                   Navigator.of(context).pop();
                 });
               },

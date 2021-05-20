@@ -3,6 +3,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
+import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -453,6 +454,7 @@ abstract class _PostStore with Store {
         }
       });
     }
+    ////////////////edit
   static ObservableFuture<String> emptyeditostResponse =
   ObservableFuture.value(null);
 
@@ -500,6 +502,34 @@ abstract class _PostStore with Store {
       successPostForCur = true;
       this.postForCurList = postList;
     }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  /////////////////delete
+  static ObservableFuture<String> emptydeleteResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchdeleteFuture = ObservableFuture<String>(emptydeleteResponse);
+  @observable
+  //postForCurList;
+  @computed
+  bool get Deletepost => fetchdeleteFuture.status == FutureStatus.pending;
+  @observable
+  bool successdelete = false;
+  @observable
+  Future Delete(Post post) async {
+    final future = _repository.Delete(post);
+    fetchdeleteFuture = ObservableFuture(future);
+    future.then((post) {
+      successdelete = true;
+        }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
