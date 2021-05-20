@@ -535,7 +535,21 @@ namespace Homies.RealEstate.Server
             }
         }
 
-        
+        public async Task GiaHanBaiDang(GiaHanInput input)
+        {
+            var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
+            if (baiDang != null)
+            {
+                baiDang.ThoiHan = input.ThoiHan;
+
+                
+                var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
+
+                input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
+                var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
+                await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
+            }
+        }
 
         public async Task CreateOrEdit(CreateOrEditBaiDangDto input)
         {
