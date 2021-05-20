@@ -20,16 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2d7158b-b0eb-4024-87f8-d9dd0c66d2f2" name="Default Changelist" comment="20/5">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/users/user_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/users/user_api.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/models/post/post.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/post/post.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/models/user/user_list.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/post/post_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/stores/user/user_store.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/stores/user/user_store.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/newpost/newpost.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/account/account.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/account/account.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +44,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="luong" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -155,22 +146,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1620570213168" />
-    <state width="1491" height="436" key="GridCell.Tab.0.bottom" timestamp="1621474031932">
+    <state width="1491" height="292" key="GridCell.Tab.0.bottom" timestamp="1621474724944">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1491" height="436" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1621474031932" />
-    <state width="1491" height="436" key="GridCell.Tab.0.center" timestamp="1621474031932">
+    <state width="1491" height="292" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1621474724944" />
+    <state width="1491" height="292" key="GridCell.Tab.0.center" timestamp="1621474724944">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1491" height="436" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1621474031932" />
-    <state width="1491" height="436" key="GridCell.Tab.0.left" timestamp="1621474031932">
+    <state width="1491" height="292" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1621474724944" />
+    <state width="1491" height="292" key="GridCell.Tab.0.left" timestamp="1621474724944">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1491" height="436" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1621474031932" />
-    <state width="1491" height="436" key="GridCell.Tab.0.right" timestamp="1621474031932">
+    <state width="1491" height="292" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1621474724944" />
+    <state width="1491" height="292" key="GridCell.Tab.0.right" timestamp="1621474724944">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1491" height="436" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1621474031932" />
+    <state width="1491" height="292" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1621474724944" />
     <state x="0" y="67" key="MergeDialog" timestamp="1621473031022">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -201,31 +192,17 @@
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1621335056005" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/Clientside/flutter/lib/data/network/apis/posts/post_api.dart</url>
-          <line>268</line>
-          <option name="timeStamp" value="81" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart</url>
-          <line>47</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/Clientside/flutter/lib/ui/profile/profile.dart</url>
-          <line>426</line>
-          <option name="timeStamp" value="169" />
-        </line-breakpoint>
-      </breakpoints>
-      <default-breakpoints>
-        <breakpoint suspend="THREAD" type="dart-exception" />
-      </default-breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="FlutterRunConfigurationType">
-        <watch expression="_ThuocTinhController" />
+        <watch expression="commune" language="Dart" />
+        <watch expression="_townStore.communeList.communes" language="Dart" />
+        <watch expression="_imageStore.imageList.images[0].id" language="Dart" />
+        <watch expression="_imageStore.imageList.images[0].duongDan" language="Dart" />
+        <watch expression="_image" />
+        <watch expression="_keyEditor" />
+        <watch expression="result" language="Dart" />
+        <watch expression="this.post.id.toString()" />
+        <watch expression="_image.last.path.toString()" language="Dart" />
       </configuration>
     </watches-manager>
   </component>

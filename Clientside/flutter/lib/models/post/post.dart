@@ -59,8 +59,8 @@ class Post {
     userName: json["userName"],
     danhMuc: json["danhMucTenDanhMuc"],
     tenXa: json["xaTenXa"],
-    tenHuyen: json["huyenTenhuyen"],
-    tenTinh: json["tinhTentinh"],
+    tenHuyen: json["huyenTenHuyen"],
+    tenTinh: json["tinhTenTinh"],
     tagLoaiBaidang: json["baiDang"]["tagLoaiBaiDang"],
     thoiDiemDang: json["baiDang"]["thoiDiemDang"],
     thoiHan: json["baiDang"]["thoiHan"],
@@ -81,14 +81,14 @@ class Post {
     featuredImage: json["baiDang"]["featuredImage"],
     dienTich: json["baiDang"]["dienTich"],
     gia: json["baiDang"]["gia"],
-      );
+  );
 
   Map<String, dynamic> toMap() => {
     "userName": userName,
     "danhMucTenDanhMuc": danhMuc,
     "xaTenXa": tenXa,
-    "huyenTenhuyen":tenHuyen,
-    "tinhTentinh":tenTinh,
+    "huyenTenHuyen": tenHuyen,
+    "tinhTenTinh": tenTinh,
     "tagLoaiBaiDang": tagLoaiBaidang,
     "thoiDiemDang": thoiDiemDang,
     "thoiHan": thoiHan,
@@ -110,5 +110,5 @@ class Post {
     "dienTich": dienTich,
     "gia": gia,
   };
-  
+
 }
