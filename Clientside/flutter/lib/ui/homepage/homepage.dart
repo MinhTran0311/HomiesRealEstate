@@ -122,14 +122,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
               _selectTab(pageKeys[index], index);
               _currentIndex = index;
             });
-            _pageController.jumpToPage(index);
+            //_pageController.jumpToPage(index);
           },
         ),
       ),
     );
   }
-
-
 
   void _selectTab(String tabItem, int index) {
     if(tabItem == _currentPage ){
