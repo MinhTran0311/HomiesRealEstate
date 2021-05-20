@@ -23,8 +23,6 @@ class WalletPage extends StatefulWidget {
   }) : super(key: key);
   final int userID;
   final String title;
-
-
   @override
   _WalletPageState createState() => _WalletPageState(userID: userID);
 }
@@ -93,6 +91,11 @@ class _WalletPageState extends State<WalletPage>{
           length: 2,
           child: Scaffold(
             appBar: AppBar(
+              leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
+                  onPressed: (){setState(() {
+                    Navigator.pop(context);
+                  });}),
+              centerTitle: true,
               title: TabBar(
                 labelColor: Colors.white,
                 tabs: [
@@ -103,19 +106,12 @@ class _WalletPageState extends State<WalletPage>{
             ),
             body: TabBarView(
               children: [
-                IndexedStack(
-                  children: [
-                    // _buildListView(),
-                    buildWallet(),
-                    buildCreateTransactionHistory()
-                  ],
-                  index: _selectedIndex,
-                ),
-            Observer(
-                builder: (context) {
-                  return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
-                }
-            )
+                buildWallet(),
+                Observer(
+                    builder: (context) {
+                      return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
+                    }
+                )
               ],
             ),
           ),
@@ -125,133 +121,7 @@ class _WalletPageState extends State<WalletPage>{
     );
   }
 
-  Widget buildCreateTransactionHistory(){
-    return Container(
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20,),
-            createTransactionHistory(),
-            CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
-              press: (){
-                setState(() {
-                  _showMyDialog();
 
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget createTransactionHistory(){
-    return Container(
-      padding: const EdgeInsets.only(left: 20,right: 20),
-      child: Column(
-          children:[
-            Container(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
-                  Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
-                  TextFormField(
-                      controller: Ctlmoneysend,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      decoration: InputDecoration(
-                          hintText: "1500000",
-                          icon: Icon(Icons.attach_money,color: Colors.amber,)
-                      )
-                  ),
-
-                ],
-              ),
-            ),
-            // CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
-            //   press: (){
-            //     setState(() {
-            //       _showMyDialog();
-            //     });
-            //   },
-            // ),
-          ]
-      ),
-    );
-  }
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Nạp tiền'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Bạn có chắc chắn nạp tiền không?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Hủy'),
-              onPressed: () {
-                setState(() {
-                  _selectedIndex =1;
-                  Navigator.of(context).pop();
-                });
-              },
-            ),
-            TextButton(
-              child: Text('Cập nhật'),
-              onPressed: () {
-                setState(() {
-                  update();
-                  _selectedIndex =0;
-                  Navigator.of(context).pop();
-                });
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
-  update(){
-    _showSuccssfullMesssage("cập nhật ${ _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID)}");
-
-  }
   Widget buildWallet(){
     return Container(
       child: ListView(
@@ -269,7 +139,8 @@ class _WalletPageState extends State<WalletPage>{
           CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
           press: (){
             setState(() {
-              _selectedIndex = 1;
+              Route route = MaterialPageRoute(builder: (context) => NapTienPage(userID: userID,));
+              Navigator.push(context, route);
             });
           },
           ),
@@ -303,12 +174,20 @@ class _WalletPageState extends State<WalletPage>{
             height: 500, // give it a fixed height constraint
             // color: Colors.teal,
             // child ListView
-            child: ListView.builder(shrinkWrap: true, // 1st add
-                physics: ClampingScrollPhysics(), // 2nd add
-                itemCount: _lsgdStore.listlsgd.listLSGDs.length,
-                itemBuilder: (_, i) => ListTile(
-                    title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[i])
-                )
+            child: RefreshIndicator(
+              child: ListView.builder(
+                  shrinkWrap: true, // 1st add
+                  physics: ClampingScrollPhysics(), // 2nd add
+                  // physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: _lsgdStore.listlsgd.listLSGDs.length,
+                  itemBuilder: (_, i) => ListTile(
+                      title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[_lsgdStore.listlsgd.listLSGDs.length - 1- i])
+                  )
+              ),
+              onRefresh: (){setState(() {
+                _lsgdStore.getLSGD();
+              });
+              },
             ),
           ):Container(),
           // _buildListView(),
@@ -457,6 +336,7 @@ class _WalletPageState extends State<WalletPage>{
   }
 
   Widget _buildListView() {
+    _lsgdStore.listlsgd.listLSGDs.reversed;
     return _lsgdStore.listlsgd != null
         ? Expanded(
       child: ListView.separated(
@@ -465,7 +345,7 @@ class _WalletPageState extends State<WalletPage>{
           return Divider();
         },
         itemBuilder: (context, position) {
-          return _buildLSGDPoster(_lsgdStore.listlsgd.listLSGDs[position],position);
+          return _buildLSGDPoster(_lsgdStore.listlsgd.listLSGDs[_lsgdStore.listlsgd.listLSGDs.length - position],_lsgdStore.listlsgd.listLSGDs.length -position);
           //_buildListItem(position);
         },
       ),
@@ -494,5 +374,172 @@ class _WalletPageState extends State<WalletPage>{
   }
   String DatetimeToString(String datetime){
     return "${datetime.substring(11,13)}:${datetime.substring(14,16)} - ${ datetime.substring(8,10)}/${datetime.substring(5,7)}/${datetime.substring(0,4)}";
+  }
+}
+
+
+
+
+class NapTienPage extends StatefulWidget {
+  NapTienPage({
+    Key key,
+    this.userID,
+    this.title,
+  }) : super(key: key);
+  final int userID;
+  final String title;
+  @override
+  _NapTienPageState createState() => _NapTienPageState(userID: userID);
+}
+
+class _NapTienPageState extends State<NapTienPage> {
+  _NapTienPageState({
+    Key key,
+    this.userID,
+  }) : super();
+  final int userID;
+  String moneysend = "15 000";
+  String datetimesend = DateFormat('yyyy-MM-ddThh:mm:ss').format(
+      DateTime.now());
+  bool naptien = true;
+  final Ctlmoneysend = TextEditingController();
+  LSGDStore _lsgdStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _lsgdStore = Provider.of<LSGDStore>(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Scaffold(
+          appBar: AppBar(centerTitle:true,title: Center(child: Text("Nạp tiền",style: TextStyle(color: Colors.white),),),
+            leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
+                onPressed: (){setState(() {
+                  Navigator.pop(context);
+                });}),),
+            body: buildCreateTransactionHistory()
+        )
+    );
+  }
+  Widget buildCreateTransactionHistory(){
+    return Container(
+      child: Center(
+        child: Wrap(
+          children: [
+            SizedBox(height: 20,),
+            createTransactionHistory(),
+            CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+              press: (){
+                setState(() {
+                  if(Ctlmoneysend.text.length>3)
+                  _showMyDialog();
+                  else(
+                  _showErrorMessage("Số tiền tối thiểu là 1000")
+                  );
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget createTransactionHistory(){
+    return Container(
+      padding: const EdgeInsets.only(left: 20,right: 20),
+      child: Column(
+        children: [
+          Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
+          Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
+          TextFormField(
+              controller: Ctlmoneysend,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              decoration: InputDecoration(
+                  hintText: "1500000",
+                  icon: Icon(Icons.attach_money,color: Colors.amber,)
+              )
+          ),
+          // Observer(builder: (context)=> Ctlmoneysend.text.length<4?Text("Số tiền tối thiểu là 1000",style: TextStyle(fontFamily: FontFamily.roboto,color: Colors.redAccent),):Container())
+
+        ],
+      ),
+    );
+  }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Nạp tiền'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Bạn có chắc chắn nạp tiền không?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Hủy'),
+              onPressed: () {
+                setState(() {
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+            TextButton(
+              child: Text('Cập nhật'),
+              onPressed: () {
+                setState(() {
+
+                  update();
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  _showErrorMessage( String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 5),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
+  }
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
+  }
+  update(){
+    _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID);
+    Route route = MaterialPageRoute(builder: (context) => WalletPage(userID: userID,));
+    Navigator.push(context, route);
+    _showSuccssfullMesssage("Nạp tiền thành công");
   }
 }

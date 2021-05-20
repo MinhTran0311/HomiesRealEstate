@@ -57,6 +57,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
+  TextEditingController _keyEditor2=TextEditingController();
   var _ThuocTinhController = new List<TextEditingController>();
 
   TextEditingController _LocateController = TextEditingController();
@@ -133,6 +134,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
     }
     if (!_userStore.loading) {
       _userStore.getCurrentUser();
+    }
+    if(!_userStore.loadingCurrentUserWallet) {
       _userStore.getCurrentWalletUser();
     }
   }
@@ -994,31 +997,34 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildTileField2() {
-    //  print(result);
     return Observer(
       builder: (context) {
-        return SingleChildScrollView(
-          child: FlutterSummernote(
-            height: 180.0,
-            decoration: BoxDecoration(
-              color: Colors.amber[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            hint: "Mô tả thêm về bài đăng",
-            //   final _etEditor = await _keyEditor.currentState.getText();
-            // print(_etEditor);
-            key: _keyEditor,
-            value: result,
-            hasAttachment: false,
-            customToolbar: """
-                  [
-                      ['style', ['bold', 'italic', 'underline']],
-                      ['font', ['strikethrough', 'superscript', 'subscript']]
-                  ]
-                """,
-            showBottomToolbar: true,
-          ),
-        );
+        var _formKey;
+        return Form(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.always,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.money),
+                      fillColor: Colors.white,
+                      labelText: 'Mô tả',
+                      hintText: "Mô tả thêm về bài đăng",
+                    ),
+                    onSaved: (value) {},
+                    //keyboardType: TextInputType.number,
+                    controller: _keyEditor2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng nhập mô tả';
+                      }
+                      if(value.length>1000) return null;
+                      return null;
+                    },
+                  ),
+                ]));
       },
     );
   }
@@ -1161,7 +1167,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
-            songay * selectedPack.phi>_userStore.usercurrent.wallet?
+            songay * selectedPack.phi>_userStore.userCurrent.wallet?
     Text('Vui lòng nạp thêm tiền để đăng bài')
         : Container(
     height: 0,),
@@ -1213,8 +1219,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 selectedCommune == null ||
                 selectedPack == null ||
                 selectedTypeTypeType == null ||
-                _image.length == 0||
-            songay * selectedPack.phi>_userStore.usercurrent.wallet)
+                _image.length == 0
+            //|| songay * selectedPack.phi>_userStore.usercurrent.wallet
+            )
               showAlertDialog(context);
             else {
               sc = true;
@@ -1228,10 +1235,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
               post.gia = double.parse(_PriceController.text);
               post.tieuDe = _TileController.text;
               post.thoiDiemDang =
-                  DateTime.now().toUtc().toIso8601String().toString();
+                  DateTime.now().toIso8601String().toString();
               post.thoiHan = DateTime.parse(post.thoiDiemDang)
                   .add(Duration(days: songay))
-                  .toUtc()
                   .toIso8601String()
                   .toString();
               post.diemBaiDang = 0;
@@ -1243,11 +1249,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 post.tagLoaiBaidang = "Bán";
               post.tagTimKiem = selectedTypeTypeType.tag;
               post.diaChi = _LocateController.text;
-              post.userName = _userStore.usercurrent.userName;
+              post.userName = _userStore.userCurrent.userName;
               post.toaDoX = "10.87042965917961";
               post.toaDoY = "106.80213344451961";
               post.trangThai = "On";
-              post.userId = _userStore.usercurrent.UserID;
+              post.userId = _userStore.userCurrent.UserID;
               _newpost.post = post;
               Dangtin(context);
             }
@@ -1267,15 +1273,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
             onPressed: () async {
               if (sc) {
                 sc = false;
-                final _etEditor = await _keyEditor.currentState.getText();
-                _newpost.post.moTa = _etEditor;
-                print(_etEditor);
+                //final _etEditor = await _keyEditor.currentState.getText();
+                _newpost.post.moTa = _keyEditor2.text;
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
-                lichsu.ghiChu = "${_userStore.usercurrent.UserID} ${selectedPack.tenGoi}";
+                lichsu.ghiChu = "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
-                if(_userStore.usercurrent.UserID!=null)
-                lichsu.userId = _userStore.usercurrent.UserID;
+                if(_userStore.userCurrent.UserID!=null)
+                lichsu.userId = _userStore.userCurrent.UserID;
                 else lichsu.userId=2;
                 lichsu.thoiDiem = _newpost.post.thoiDiemDang;
                 _newpost.lichsugiaodichs = lichsu;
@@ -1283,8 +1288,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hoadon.thoiDiem = _newpost.post.thoiDiemDang;
                 hoadon.giaGoi = selectedPack.phi;
                 hoadon.soNgayMua = songay;
-                hoadon.userId = _userStore.usercurrent.UserID;
-                print(_userStore.usercurrent.wallet.toString());
+                hoadon.userId = _userStore.userCurrent.UserID;
+                print(_userStore.userCurrent.wallet.toString());
                 hoadon.ghiChu = lichsu.ghiChu;
                 hoadon.tongTien = lichsu.soTien;
                 hoadon.goiBaiDangId = selectedPack.id;

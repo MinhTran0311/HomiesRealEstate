@@ -8,6 +8,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -57,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
       if (pickedFile != null) {
         image = File(pickedFile.path);
         final bytes = File(pickedFile.path).readAsBytesSync();
-        _userstore.updatePictureCurrentUser(base64Encode(bytes));
+        _userstore.userCurrent.picture = (base64Encode(bytes).toString());
       } else {
         print('No image selected.');
       }
@@ -96,7 +97,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
   void dispose() {
     super.dispose();
   }
-
+  String DatetimeToString(String datetime){
+    return "${datetime.substring(11,13)}:${datetime.substring(14,16)} - ${ datetime.substring(8,10)}/${datetime.substring(5,7)}/${datetime.substring(0,4)}";
+  }
   // Future getImage() async{
   //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
   //   setState(() {
@@ -145,15 +148,16 @@ class _ProfileScreenState extends State<ProfileScreen>{
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             _buildUserInformation(),
-            IndexedStack(
-              children: [
-                MenuItem(),
-                _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
-                WalletPage(),
-                ReportPage(title: "Doanh Thu",)
-              ],
-              index: _selectedIndex,
-            ),
+            MenuItem(),
+            // IndexedStack(
+            //   children: [
+            //     MenuItem(),
+            //     _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
+            //     WalletPage(),
+            //     ReportPage(title: "Doanh Thu",)
+            //   ],
+            //   index: _selectedIndex,
+            // ),
 
           ]
       ),
@@ -163,7 +167,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
   Widget MenuItem(){
     return Container(
-
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
         border: Border.all(color: Colors.white,width: 10.0),
@@ -189,7 +192,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
               setState(() {
               // _first=!_first;
               // selected = 0;
-              _selectedIndex =1;
+              // _selectedIndex =1;
+                Route route = MaterialPageRoute(builder: (context) => AccountPage(UserName:_userstore.userCurrent.userName,Phone: _userstore.userCurrent.phoneNumber,Email: _userstore.userCurrent.emailAddress,Address: "Address",SurName: _userstore.userCurrent.surname,Name: _userstore.userCurrent.name,creationTime:DatetimeToString(_userstore.userCurrent.creationTime) ,));
+                Navigator.push(context, route);
               });
           },
         ),
@@ -203,8 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
               setState(() {
                 // _first=!_first;
                 // selected = 1;
-                _selectedIndex =2;
+                // _selectedIndex =2;
+                Route route = MaterialPageRoute(builder: (context) => WalletPage(userID: _userstore.userCurrent.UserID,));
+                Navigator.push(context, route);
               });
+
             },
         ),
         CardItem(
@@ -217,7 +225,9 @@ class _ProfileScreenState extends State<ProfileScreen>{
               setState(() {
                 // _first=!_first;
                 // selected = 1;
-                _selectedIndex =3;
+                // _selectedIndex =3;
+                Route route = MaterialPageRoute(builder: (context) => ReportPage());
+                Navigator.push(context, route);
               });
             },
         ),
@@ -229,7 +239,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
             coloricon: Colors.orange,
             press: (){
               setState(() {
-                _userstore.getCurrentUser();
+                Route route = MaterialPageRoute(builder: (context) => KiemDuyetPage(UserID: _userstore.userCurrent.UserID,));
+                Navigator.push(context, route);
               });
             }
             ),
@@ -241,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
           coloricon: Colors.orange,
             press: (){},
         ),
-          // Container(height: 20,color: Colors.white,),
+          Container(height: 20,color: Colors.white,),
         ],
       ),
     );
@@ -282,11 +293,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
                         Observer(
                           builder: (context) {
                             return
-                              _userstore.user.picture !=null ? CircleAvatar(radius: (52),
+                              _userstore.userCurrent.picture !=null ? CircleAvatar(radius: (52),
                                   backgroundColor: Colors.white,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(50),
-                                    child: Image.memory(Base64Decoder().convert(_userstore.user.picture)),
+                                    child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
                                   )
                               ): CircleAvatar(radius: (52),
                                   backgroundColor: Colors.white,
@@ -335,8 +346,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _userstore.user!=null ? Text(
-                        _userstore.user.surname+" "+_userstore.user.name,
+                      _userstore.userCurrent!=null ? Text(
+                        _userstore.userCurrent.surname+" "+_userstore.userCurrent.name,
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -388,8 +399,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
                       Observer(
                       builder: (context) {
                         return
-                          _userstore.user != null ? Text(
-                            _userstore.user.wallet.toString(),
+                          _userstore.userCurrent != null ? Text(
+                            _userstore.userCurrent.wallet.toString(),
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -454,36 +465,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
       )
     );});
   }
-
-
-    // Widget _buildCardItem(IconData i, String t){
-    // return   Container(
-    //   child: Padding(
-    //       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-    //       child: FlatButton(
-    //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    //           onPressed: (){},
-    //           color: Colors.grey[200],
-    //           padding: EdgeInsets.all(20),
-    //           child: Row(
-    //             children: [
-    //               Icon(i,size: 30,color: Colors.orange,),
-    //               SizedBox(width: 40,),
-    //               Expanded(
-    //                 child: Text(t,
-    //                   style: TextStyle(
-    //                     fontWeight: FontWeight.bold,
-    //                     fontSize: 20
-    //                   )
-    //                 ),
-    //               ),
-    //               Icon(Icons.arrow_forward_ios)
-    //             ],
-    //           )
-    //       ),
-    //     ),
-    // );
-    // }
 }
 class CardItem extends StatelessWidget{
   const CardItem({

@@ -136,8 +136,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: size.height * 0.78,
+          //SizedBox(
+           // height: size.height * 0.75,
+          Flexible(
+            flex: 7,
             child: SingleChildScrollView(
               clipBehavior: Clip.antiAlias,
               //physics: BouncingScrollPhysics(),
@@ -482,8 +484,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
               ),
             ),
           ),
-          SizedBox(
-            height: size.height * 0.11,
+          //SizedBox(
+            //height: size.height * 0.12,
+          Flexible(
+            flex: 1,
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.grey[100],
@@ -600,11 +604,12 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                               color: _colorTween.value,
                               shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey),
                             ),
                             child: Align(
                                 alignment: Alignment.center,
                                 child: Icon(
-                                  Icons.arrow_back_ios,
+                                  Icons.arrow_back_ios_outlined,
                                   color: _iconColorTween.value,
                                   size: 30,
                                 )

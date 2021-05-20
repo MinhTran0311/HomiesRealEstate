@@ -33,7 +33,7 @@ class UserApi {
       // log("Get All Success");
       return UserList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      print("lỗi2" + e.toString());
       throw e;
     }
   }
@@ -307,7 +307,9 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   Future<listLSGD> getAllLSGD() async {
     try {
       final res = await _dioClient.get(Endpoints.getAllLSGD,
-
+        queryParameters: {
+          "MaxResultCount": 1000,
+        },
         options: Options(
             headers: {
               "Abp.TenantId": 1,

@@ -69,11 +69,11 @@ class _MapsScreenState extends State<MapsScreen> {
     if (this.post == null) {
       if (!_postStore.loading) {
         // _postStore.getPostsFromXY();
-        _addMarkerButtonProcessed();
+         _addMarkerButtonProcessed();
       }
     }
     else {
-      _addMarkerButtonProcessed();
+       _addMarkerButtonProcessed();
     }
     _setCameraPositon();
   }

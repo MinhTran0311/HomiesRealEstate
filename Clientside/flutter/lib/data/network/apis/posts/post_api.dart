@@ -269,4 +269,38 @@ class PostApi {
       throw e;
     }
   }
+  Future<String> Delete(Post post) async {
+    try {
+      final res = await _dioClient.post(
+          "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/CreateOrEdit",
+          options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+              "Content-Type": "application/json",
+            },
+          ),
+          data: post.toMap(),
+          );
+    } catch (e) {
+      throw e;
+    }
+  }
+  Future<String> GiaHan(Newpost newpost) async {
+    try {
+      final res = await _dioClient.post(
+          "https://homies.exscanner.edu.vn/api/services/app/ChiTietHoaDonBaiDangs/CreateOrEdit",
+          options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization": "Bearer ${Preferences.access_token}",
+            },
+          ),
+          data: {
+            newpost.lichsugiaodichs.toMap()
+          });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
