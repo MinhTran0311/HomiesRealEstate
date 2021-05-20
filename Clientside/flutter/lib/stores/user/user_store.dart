@@ -142,7 +142,6 @@ abstract class _UserStore with Store {
 
   @observable
   CurrentUserForEditdto user;
-  CurrentUserForEditdto usercurrent;
 
   //User
   static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentResponse =
@@ -159,8 +158,7 @@ abstract class _UserStore with Store {
   ObservableFuture<double> fetchUserCurrentWalletFuture =
   ObservableFuture<double>(emptyUserCurrentWalletResponse);
   //Picture
-  static ObservableFuture<String> emptyUserCurrentPictureResponse =  ObservableFuture.value(null);
-  static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
+  static ObservableFuture<String> emptyUserCurrentPictureResponse =
   ObservableFuture.value(null);
 
   @observable
@@ -188,7 +186,6 @@ abstract class _UserStore with Store {
     fetchUserCurrentFuture = ObservableFuture(future);
     fetchUserCurrentFuture.then((user) {
       this.user = user;
-      this.usercurrent=user;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -209,7 +206,6 @@ abstract class _UserStore with Store {
 
     fetchUserCurrentWalletFuture.then((wallet) {
       this.user.wallet = wallet;
-      this.usercurrent.wallet;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -249,6 +245,9 @@ abstract class _UserStore with Store {
     });
   }
 
+
+  static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
+  ObservableFuture.value(null);
 
   @observable
   ObservableFuture<CurrentUserForEditdto> fetchUsersFuture =
@@ -304,8 +303,8 @@ abstract class _UserStore with Store {
   ObservableFuture<CurrentUserForEditdto> UpdateUserFuturess = emptyUpdateUserResponsess;
 
   @action
-  Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName,int id) async {
-    final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
+  Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
+    final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName);
     fetchUpdateUserFutures = ObservableFuture(future);
 
     fetchUpdateUserFutures.then((user) {
@@ -314,7 +313,6 @@ abstract class _UserStore with Store {
       this.user.phoneNumber = phonenumber;
       this.user.emailAddress = email;
       this.user.userName = userName;
-      this.user.UserID=id;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

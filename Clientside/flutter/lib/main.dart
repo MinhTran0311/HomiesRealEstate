@@ -13,7 +13,6 @@ import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
 import 'package:boilerplate/ui/home/home.dart';
@@ -64,7 +63,6 @@ class MyApp extends StatelessWidget {
   final UserManagementStore _userManagementStore = UserManagementStore(appComponent.getRepository());
   final RoleManagementStore _roleManagementStore = RoleManagementStore(appComponent.getRepository());
   final ImageStore _imageStore = ImageStore(appComponent.getRepository());
-  final TownStore _townStore = TownStore(appComponent.getRepository());
   final FilterStore _filterStore = FilterStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
@@ -83,7 +81,6 @@ class MyApp extends StatelessWidget {
         Provider<UserStore>(create: (_) => _userStore),
         Provider<LSGDStore>(create: (_) => _lsgdStore),
         Provider<ImageStore>(create: (_) => _imageStore),
-        Provider<TownStore>(create: (_) => _townStore),
       ],
       child: Observer(
         name: 'global-observer',

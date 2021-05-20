@@ -42,8 +42,8 @@ class lichsugiaodich{
     "kiemDuyetVienId": kiemDuyetVienId,
     "chiTietHoaDonBaiDangId": chiTietHoaDonBaiDangId,
     "userId": userId,
-    "ghiChu": "$ghiChu",
-    "thoiDiem": "$thoiDiem",
+    "ghiChu": ghiChu,
+    "thoiDiem": thoiDiem,
     "soTien": soTien,
   };
 }

@@ -152,35 +152,6 @@
             ]
           },
           {
-            "name": "provideTownApi",
-            "kind": "method",
-            "injectedType": {
-              "lookupKey": {
-                "root": "asset:boilerplate/lib/data/network/apis/towns/town_api.dart#TownApi",
-                "qualifier": null
-              },
-              "isProvider": false
-            },
-            "singleton": true,
-            "asynchronous": false,
-            "dependencies": [
-              {
-                "lookupKey": {
-                  "root": "asset:boilerplate/lib/data/network/dio_client.dart#DioClient",
-                  "qualifier": null
-                },
-                "isProvider": false
-              },
-              {
-                "lookupKey": {
-                  "root": "asset:boilerplate/lib/data/network/rest_client.dart#RestClient",
-                  "qualifier": null
-                },
-                "isProvider": false
-              }
-            ]
-          },
-          {
             "name": "provideRegistrationApi",
             "kind": "method",
             "injectedType": {
@@ -367,13 +338,6 @@
               {
                 "lookupKey": {
                   "root": "asset:boilerplate/lib/data/network/apis/image/image_api.dart#ImageApi",
-                  "qualifier": null
-                },
-                "isProvider": false
-              },
-              {
-                "lookupKey": {
-                  "root": "asset:boilerplate/lib/data/network/apis/towns/town_api.dart#TownApi",
                   "qualifier": null
                 },
                 "isProvider": false

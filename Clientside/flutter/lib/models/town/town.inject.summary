@@ -1,8 +1,0 @@
-{
-  "asset": "asset:boilerplate/lib/models/town/town.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}

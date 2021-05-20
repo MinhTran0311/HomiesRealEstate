@@ -6,7 +6,6 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
-import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:dio/dio.dart';
@@ -28,16 +27,16 @@ class ImageApi {
   ImageApi(this._dioClient, this._restClient);
 
   /// Returns id of image
-  Future<String> postImage(String path,String name) async {
+  Future<String> postImage(String path) async {
     try {
        WidgetsFlutterBinding.ensureInitialized();
-      File _image = File(path);
+       final _image = await ImagePicker.pickImage(source: ImageSource.gallery);
       List<int> imageBytes = _image.readAsBytesSync();
       String base64Image = base64.encode(imageBytes);
 
        var formData = FormData.fromMap({
          "image": base64Image,
-         "name": name,
+         "name": "1st picture",
        });
 
       final res = await _dioClient.post(Endpoints.postImageToImageBB,
@@ -47,7 +46,7 @@ class ImageApi {
         },
         data: formData,
       );
-
+      print(res["data"]["image"]["url"].toString());
       return res["data"]["image"]["url"];
     } catch (e) {
       throw e;

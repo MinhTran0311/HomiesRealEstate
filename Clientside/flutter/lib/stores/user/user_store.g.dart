@@ -354,9 +354,9 @@ mixin _$UserStore on _UserStore, Store {
 
   @override
   Future<dynamic> updateCurrentUser(String name, String surname,
-      String phonenumber, String email, String userName,int id) {
+      String phonenumber, String email, String userName) {
     return _$updateCurrentUserAsyncAction.run(() =>
-        super.updateCurrentUser(name, surname, phonenumber, email, userName, id));
+        super.updateCurrentUser(name, surname, phonenumber, email, userName));
   }
 
   final _$updatePictureCurrentUserAsyncAction =
