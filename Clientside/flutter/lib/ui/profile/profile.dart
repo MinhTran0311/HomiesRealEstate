@@ -1,5 +1,6 @@
 
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
@@ -80,7 +81,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     if(!_userstore.loadingCurrentUserPicture){
       _userstore.getCurrentPictureUser();
     }
-
+    if(!_postStore.loadingPostForCur)
+      _postStore.getPostForCurs();
   }
 
   @override

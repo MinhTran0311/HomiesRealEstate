@@ -1246,7 +1246,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               post.toaDoX = "10.87042965917961";
               post.toaDoY = "106.80213344451961";
               post.trangThai = "On";
-              post.userId = _userStore.usercurrent.id;
+              post.userId = _userStore.usercurrent.UserID;
               _newpost.post = post;
               Dangtin(context);
             }
@@ -1271,10 +1271,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 print(_etEditor);
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
-                lichsu.ghiChu = "${_userStore.usercurrent.id} ${selectedPack.tenGoi}";
+                lichsu.ghiChu = "${_userStore.usercurrent.UserID} ${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
-                if(_userStore.usercurrent.id!=null)
-                lichsu.userId = _userStore.usercurrent.id;
+                if(_userStore.usercurrent.UserID!=null)
+                lichsu.userId = _userStore.usercurrent.UserID;
                 else lichsu.userId=2;
                 lichsu.thoiDiem = _newpost.post.thoiDiemDang;
                 _newpost.lichsugiaodichs = lichsu;
@@ -1282,7 +1282,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hoadon.thoiDiem = _newpost.post.thoiDiemDang;
                 hoadon.giaGoi = selectedPack.phi;
                 hoadon.soNgayMua = songay;
-                hoadon.userId = _userStore.usercurrent.id;
+                hoadon.userId = _userStore.usercurrent.UserID;
                 print(_userStore.usercurrent.wallet.toString());
                 hoadon.ghiChu = lichsu.ghiChu;
                 hoadon.tongTien = lichsu.soTien;
