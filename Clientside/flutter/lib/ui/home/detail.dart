@@ -604,11 +604,12 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                               color: _colorTween.value,
                               shape: BoxShape.circle,
+                              border: Border.all(color: Colors.grey),
                             ),
                             child: Align(
                                 alignment: Alignment.center,
                                 child: Icon(
-                                  Icons.arrow_back_ios,
+                                  Icons.arrow_back_ios_outlined,
                                   color: _iconColorTween.value,
                                   size: 30,
                                 )
