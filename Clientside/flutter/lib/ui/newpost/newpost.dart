@@ -1167,7 +1167,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
-            songay * selectedPack.phi>_userStore.usercurrent.wallet?
+            songay * selectedPack.phi>_userStore.userCurrent.wallet?
     Text('Vui lòng nạp thêm tiền để đăng bài')
         : Container(
     height: 0,),
@@ -1249,11 +1249,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 post.tagLoaiBaidang = "Bán";
               post.tagTimKiem = selectedTypeTypeType.tag;
               post.diaChi = _LocateController.text;
-              post.userName = _userStore.usercurrent.userName;
+              post.userName = _userStore.userCurrent.userName;
               post.toaDoX = "10.87042965917961";
               post.toaDoY = "106.80213344451961";
               post.trangThai = "On";
-              post.userId = _userStore.usercurrent.UserID;
+              post.userId = _userStore.userCurrent.UserID;
               _newpost.post = post;
               Dangtin(context);
             }
@@ -1277,10 +1277,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 _newpost.post.moTa = _keyEditor2.text;
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
-                lichsu.ghiChu = "${_userStore.usercurrent.UserID} ${selectedPack.tenGoi}";
+                lichsu.ghiChu = "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
-                if(_userStore.usercurrent.UserID!=null)
-                lichsu.userId = _userStore.usercurrent.UserID;
+                if(_userStore.userCurrent.UserID!=null)
+                lichsu.userId = _userStore.userCurrent.UserID;
                 else lichsu.userId=2;
                 lichsu.thoiDiem = _newpost.post.thoiDiemDang;
                 _newpost.lichsugiaodichs = lichsu;
@@ -1288,8 +1288,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hoadon.thoiDiem = _newpost.post.thoiDiemDang;
                 hoadon.giaGoi = selectedPack.phi;
                 hoadon.soNgayMua = songay;
-                hoadon.userId = _userStore.usercurrent.UserID;
-                print(_userStore.usercurrent.wallet.toString());
+                hoadon.userId = _userStore.userCurrent.UserID;
+                print(_userStore.userCurrent.wallet.toString());
                 hoadon.ghiChu = lichsu.ghiChu;
                 hoadon.tongTien = lichsu.soTien;
                 hoadon.goiBaiDangId = selectedPack.id;

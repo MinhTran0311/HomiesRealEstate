@@ -155,7 +155,6 @@ mixin _$UserStore on _UserStore, Store {
     _$userAtom.reportRead();
     return super.user;
   }
-
   @override
   set user(CurrentUserForEditdto value) {
     _$userAtom.reportWrite(value, super.user, () {

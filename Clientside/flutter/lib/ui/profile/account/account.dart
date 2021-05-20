@@ -763,7 +763,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     setState(() {
-      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName);
+      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,_userstore.userCurrent.UserID);
       _showSuccssfullMesssage("Cập nhật thành công");
     });
 

@@ -305,8 +305,8 @@ abstract class _UserStore with Store {
   ObservableFuture<CurrentUserForEditdto> UpdateUserFuturess = emptyUpdateUserResponsess;
 
   @action
-  Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
-    final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName);
+  Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName,int id) async {
+    final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
     fetchUpdateUserFutures = ObservableFuture(future);
 
     fetchUpdateUserFutures.then((user) {
