@@ -59,18 +59,28 @@ abstract class _PostStore with Store {
     ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
     ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
 
+    static ObservableFuture<dynamic> emptyGetRecommendPostsFutureResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchisGetRecommendPostsFuture =
+    ObservableFuture<dynamic>(emptyGetRecommendPostsFutureResponse);
+
     static ObservableFuture<dynamic> emptySearchResponse =
     ObservableFuture.value(null);
 
     @observable
     ObservableFuture<dynamic> fetchSearchFuture =
-    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+    ObservableFuture<dynamic>(emptySearchResponse);
 
     @observable
     PostList postList;
 
     @observable
-    bool isIntialLoading=true;
+    PostList rcmPostList;
+
+    @observable
+    bool isIntialLoading = true;
 
     @observable
     int skipCount = 0;
@@ -125,6 +135,9 @@ abstract class _PostStore with Store {
   bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
 
     @computed
+    bool get getRecommendPostsFutureLoading => fetchisGetRecommendPostsFuture.status == FutureStatus.pending;
+
+    @computed
     bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
 
   @computed
@@ -145,7 +158,7 @@ abstract class _PostStore with Store {
         skipCount = 0;
       }
       else
-        skipCount+= Preferences.skipIndex;
+        skipCount += Preferences.skipIndex;
       final future = _repository.getPosts(skipCount, Preferences.maxCount);
       fetchPostsFuture = ObservableFuture(future);
 
@@ -282,6 +295,35 @@ abstract class _PostStore with Store {
       }
     });
   }
+
+  @action
+  Future getRecommendPosts(String tag, bool isSearchInHome) async {
+    filter_Model fm = new filter_Model();
+    fm.tagTimKiem = tag;
+    final futrue = _repository.searchPosts(fm);
+    fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
+
+    futrue.then((result) {
+      if(!isSearchInHome)
+       this.rcmPostList = result;
+      else {
+        this.postList = result;
+        skipCount=0;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
   @action
   void validateSearchContent(String value) {
       return;
@@ -499,4 +541,3 @@ abstract class _PostStore with Store {
     });
   }
 }
-
