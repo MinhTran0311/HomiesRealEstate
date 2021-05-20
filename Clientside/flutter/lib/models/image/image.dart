@@ -16,7 +16,7 @@ class AppImage {
   );
 
   Map<String, dynamic> toMap() => {
-    "duongDan": duongDan,
+    "duongDan": "$duongDan",
     "baiDangId": baiDangId,
     "id": id,
   };

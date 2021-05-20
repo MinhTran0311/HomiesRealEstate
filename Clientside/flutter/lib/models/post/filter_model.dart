@@ -11,6 +11,10 @@ class filter_Model {
   String diaChi;
   String username;
   String tagTimKiem;
+  String xMax;
+  String yMax;
+  String xMin;
+  String yMin;
 
   filter_Model({
     this.searchContent="",
@@ -25,6 +29,10 @@ class filter_Model {
     this.diaChi="",
     this.username="",
     this.tagTimKiem="",
+    this.xMax="",
+    this.yMax="",
+    this.xMin="",
+    this.yMin="",
   });
   Map<String, dynamic> toMap({int skipCount = 0 , int maxCount = 10}) => {
     "Filter": searchContent,
@@ -39,10 +47,12 @@ class filter_Model {
     "XaIdFilter": xaId,
     "HuyenIdFilter": huyenId,
     "TinhTenTinhFilter": tinhId,
-    "MaxResultCount": 10,
 
-    //"toaDoX": toaDoX,
-    //"toaDoY": toaDoY,
+    "ToaDoXMinFilter": xMin,
+    "ToaDoYMinFilter": yMin,
+    "ToaDoXMaxFilter": xMax,
+    "ToaDoYMaxFilter": yMax,
+
     "TagTimKiemFilter": tagTimKiem,
     "SkipCount": skipCount,
     "MaxResultCount": maxCount,

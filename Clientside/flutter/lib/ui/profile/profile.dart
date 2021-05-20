@@ -1,7 +1,7 @@
 
 
 import 'dart:convert';
-import 'dart:io' ;
+import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -24,6 +24,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'account/account.dart';
+import 'mypost/mypost.dart';
 
 class ProfileScreen extends StatefulWidget{
   ProfileScreen({
@@ -49,6 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
   final picker = ImagePicker();
   int selected = 0;
   UserStore _userstore;
+  PostStore _postStore;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -69,8 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     super.didChangeDependencies();
 
     _userstore = Provider.of<UserStore>(context);
-
-    if (!_userstore.loadingCurrentUser) {
+    _postStore = Provider.of<PostStore>(context);
+    if (!_userstore.loading) {
       _userstore.getCurrentUser();
 
     }
@@ -80,6 +82,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     if(!_userstore.loadingCurrentUserPicture){
       _userstore.getCurrentPictureUser();
     }
+    if(!_postStore.loadingPostForCur)
+      _postStore.getPostForCurs();
   }
 
   @override
@@ -255,6 +259,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
   }
 
   Widget _buildUserInformation() {
+    return Observer(
+        builder: (context) {
     return Container(
       height: 189,
 
@@ -384,7 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
               ],
             ),
             Row(
-
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   padding: const EdgeInsets.only(top: 25,left: 40,),
@@ -412,7 +418,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                           );
                         }
                       ),
-                      Text("Sô dư",
+                      Text("Số dư",
                         style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -423,12 +429,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   ),
                 ),
                 SizedBox(width: 70,),
-                Container(
-                  padding: const EdgeInsets.only(top: 25),
+                !_postStore.loadingPostForCur?
+                MaterialButton(
+                  padding: const EdgeInsets.only(top: 25,right: 50),
                   child: Column(
                     children: [
                       Text(
-                        "0",
+                        _postStore.postForCurList.posts.length.toString(),
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -444,13 +451,19 @@ class _ProfileScreenState extends State<ProfileScreen>{
                       )
                     ],
                   ),
-                )
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyPostScreen(userStore: _userstore,postStore: _postStore,)),
+                    );
+                  },
+                ):Container(height: 0,),
               ],
             )
           ],
         ),
       )
-    );
+    );});
   }
 }
 class CardItem extends StatelessWidget{

@@ -149,7 +149,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       throw e;
     }
   }
-  Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName) async {
+  Future<dynamic> updatetCurrentUser(String name,String surname,String phonenumber,String email,String userName, int id) async {
     try {
       final res = await _dioClient.put(Endpoints.updateCurrenUser,
         data: {
@@ -158,6 +158,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
           "emailAddress": email,
           "phoneNumber":phonenumber,
           "userName":userName,
+          "id":id,
         },
         options: Options(
             headers: {
@@ -231,7 +232,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
-  Future<bool> Naptien(double soTien, String thoiDiem,int userId) async {
+  Future<dynamic> Naptien(double soTien, String thoiDiem,int userId) async {
     String ghiChu = "Nạp Tiền";
     try {
       final res = await _dioClient.post(Endpoints.CreateOrEditLSGD,
