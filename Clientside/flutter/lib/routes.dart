@@ -1,5 +1,6 @@
 
 import 'package:boilerplate/ui/login/resetPassword.dart';
+import 'package:boilerplate/ui/newpost/newpost.dart';
 import 'package:flutter/material.dart';
 import 'ui/profile/profile.dart';
 import 'ui/home/home.dart';
@@ -21,6 +22,7 @@ class Routes {
   static const String userManagement = '/userManagement';
   static const String roleManagement = '/roleManagement';
   static const String profile = '/profile';
+  static const String newpost = '/newpost';
 
 
   static final routes = <String, WidgetBuilder>{
@@ -31,6 +33,7 @@ class Routes {
     userManagement: (BuildContext context) => UserManagementScreen(),
     roleManagement: (BuildContext context) => RoleManagementScreen(),
     profile: (BuildContext context) => ProfileScreen(),
+    newpost: (BuildContext context) => NewpostScreen(),
     resetPassword: (BuildContext context) => ResetPasswordScreen(),
   };
 }

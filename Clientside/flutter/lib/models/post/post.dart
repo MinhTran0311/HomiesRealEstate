@@ -81,7 +81,7 @@ class Post {
     featuredImage: json["baiDang"]["featuredImage"],
     dienTich: json["baiDang"]["dienTich"],
     gia: json["baiDang"]["gia"],
-      );
+  );
 
   Map<String, dynamic> toMap() => {
     "userName": userName,
@@ -110,5 +110,5 @@ class Post {
     "dienTich": dienTich,
     "gia": gia,
   };
-  
+
 }

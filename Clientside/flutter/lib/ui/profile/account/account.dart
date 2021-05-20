@@ -215,7 +215,7 @@ class _AccountPageState extends State<AccountPage>{
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     Address = CtlAddress.text;
-    if(_userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName)==true){
+    if(_userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.user.userName,_userstore.user.UserID)==true){
       _userstore.getCurrentUser();
     };
 

@@ -2,8 +2,13 @@ import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
+import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/post/postpack/pack_list.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
+
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
@@ -85,7 +90,16 @@ abstract class _PostStore with Store {
     @observable
     PropertyList propertyList;
 
-    @observable
+  // store variables:-----------------------------------------------------------
+
+  static ObservableFuture<PostCategoryList> emptyPostCategorysResponse =
+      ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<PostCategoryList> fetchPostCategorysFuture =
+    ObservableFuture<PostCategoryList>(emptyPostCategorysResponse);
+
+  @observable
     List<String> imageUrlList;
 
     @observable
@@ -100,6 +114,8 @@ abstract class _PostStore with Store {
     @observable
     bool isBaiGhimYeuThich = false;
 
+  @observable
+  PostCategoryList postCategoryList;
     @observable
     String searchContent='';
 
@@ -109,11 +125,13 @@ abstract class _PostStore with Store {
     @computed
     bool get loading => fetchPostsFuture.status == FutureStatus.pending && isIntialLoading;
 
-    @computed
-    bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
+  @observable
+  bool successgetcategorys = false;
+  @computed
+  bool get propertiesLoading => fetchPropertiesFuture.status == FutureStatus.pending;
 
-    @computed
-    bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
+  @computed
+  bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
 
     @computed
     bool get getRecommendPostsFutureLoading => fetchisGetRecommendPostsFuture.status == FutureStatus.pending;
@@ -121,7 +139,10 @@ abstract class _PostStore with Store {
     @computed
     bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
 
-    @computed
+  @computed
+  bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
+
+  @computed
     bool get hasFilter => filter_model!=null;
 
     // actions:-------------------------------------------------------------------
@@ -305,5 +326,188 @@ abstract class _PostStore with Store {
   @action
   void validateSearchContent(String value) {
       return;
+  }
+  @action
+  Future getPostcategorys() async {
+    successgetcategorys=false;
+    final future = _repository.getPostCategorys();
+    fetchPostCategorysFuture = ObservableFuture(future);
+
+    future.then((postCategoryList) {
+      successgetcategorys=true;
+      this.postCategoryList = postCategoryList;
+    }).catchError((error) {
+      if (error is DioError) {
+        successgetcategorys=false;
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //////////////////////pack
+  static ObservableFuture<PackList> emptyPackResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<PackList> fetchPacksFuture =
+  ObservableFuture<PackList>(emptyPackResponse);
+
+  @observable
+  PackList packList;
+
+  @observable
+  bool successPack = false;
+
+  @computed
+  bool get loadingPack => fetchPacksFuture.status == FutureStatus.pending;
+
+  // actions:-------------------------------------------------------------------
+  @action
+  Future getPacks() async {
+    final future = _repository.getPacks();
+    fetchPacksFuture = ObservableFuture(future);
+
+    future.then((packList) {
+      success = true;
+      this.packList = packList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //////////////////////ThuocTinh
+  static ObservableFuture<ThuocTinhList> emptyThuocTinhResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<ThuocTinhList> fetchThuocTinhsFuture =
+  ObservableFuture<ThuocTinhList>(emptyThuocTinhResponse);
+
+  @observable
+  ThuocTinhList thuocTinhList;
+
+  @observable
+  bool successThuocTinh = false;
+
+  @computed
+  bool get loadingThuocTinh => fetchThuocTinhsFuture.status == FutureStatus.pending;
+
+  // actions:-------------------------------------------------------------------
+  @action
+  Future getThuocTinhs() async {
+    final future = _repository.getThuocTinhs();
+    fetchThuocTinhsFuture = ObservableFuture(future);
+
+    future.then((thuocTinhList) {
+      success = true;
+      this.thuocTinhList = thuocTinhList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //////////////////postPost
+  static ObservableFuture<String> emptyNewpostResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetchNewpostsFuture =
+  ObservableFuture<String>(emptyNewpostResponse);
+
+  @observable
+  bool successNewpost = false;
+
+  @computed
+  bool get loadingNewpost => fetchNewpostsFuture.status == FutureStatus.pending;
+  Future postPost(Newpost post) async {
+      final postPostFuture = _repository.postPost(post);
+      fetchNewpostsFuture = ObservableFuture(postPostFuture);
+      postPostFuture.then((newpost) {
+        print(newpost);
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+    }
+  static ObservableFuture<String> emptyeditostResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<String> fetcheditpostsFuture =
+  ObservableFuture<String>(emptyeditostResponse);
+
+  @observable
+  bool successeditpost = false;
+
+  @computed
+  bool get loadingeditpost => fetcheditpostsFuture.status == FutureStatus.pending;
+  Future editpost(Newpost post) async {
+    final editpostFuture = _repository.editpost(post);
+    fetchNewpostsFuture = ObservableFuture(editpostFuture);
+    editpostFuture.then((newpost) {
+      print(newpost);
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+    ///////////////////////////getpostforcur
+  static ObservableFuture<PostList> emptyPostforcursResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<PostList> fetchPostForCursFuture = ObservableFuture<PostList>(emptyPostforcursResponse);
+  @observable
+  PostList postForCurList;
+  @computed
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending;
+  @observable
+  bool successPostForCur = false;
+  @observable
+  Future getPostForCurs() async {
+    final future = _repository.getPostsforcur();
+    fetchPostForCursFuture = ObservableFuture(future);
+    future.then((postList) {
+      successPostForCur = true;
+      this.postForCurList = postList;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
   }
 }
