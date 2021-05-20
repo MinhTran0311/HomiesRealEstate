@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/routes.dart';
@@ -38,8 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final ScrollController _scrollController= ScrollController();
+  final ScrollController _scrollController= ScrollController(keepScrollOffset: true);
   bool isRefreshing = false;
+  GlobalKey _contentKey = GlobalKey();
+  GlobalKey _refresherKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -58,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts(false);
-      _postStore.isIntialLoading=false;
+      //_postStore.isIntialLoading=false;
     }
     if (!userStore.loading) {
       userStore.getCurrentUser();
@@ -135,14 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(icon: Icon(Icons.style), onPressed: (){
-          _scrollController.jumpTo(
-            _scrollController.position.maxScrollExtent,
-          );
-          _refreshController.refreshCompleted();
-        }),
         Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
           child: TextField(
+            autofocus: false,
               controller: _searchController,
               onChanged: (value){
                 _postStore.setSearchContent(_searchController.text);
@@ -249,10 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   Widget _buildListView() {
-
-    GlobalKey _contentKey = GlobalKey();
-    GlobalKey _refresherKey = GlobalKey();
-
     return _postStore.postList != null
       ? SmartRefresher(
         key: _refresherKey,
@@ -290,8 +284,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
           _postStore.getPosts(true);
           await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) setState(() {
-          });
+          if (mounted) {
+            setState(() {
+
+            });
+          }
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
 
           _refreshController.loadComplete();
 
@@ -305,6 +305,8 @@ class _HomeScreenState extends State<HomeScreen> {
           isRefreshing = true;
           _refreshController.refreshCompleted();
         },
+        scrollController: _scrollController,
+        primary: false,
         child: ListView.builder(
           key: _contentKey,
           controller: _scrollController,
@@ -403,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          post.gia.toString() + "VND",
+                          priceFormat(post.gia),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -441,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4,),
                             Text(
-                              post.dienTich.toString(),
+                              post.dienTich.toString() +' m2',
                               style: TextStyle(
                                 color:Colors.white,
                                 fontSize:  14,

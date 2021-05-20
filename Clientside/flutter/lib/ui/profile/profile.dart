@@ -10,6 +10,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,17 +27,10 @@ import 'mypost/mypost.dart';
 class ProfileScreen extends StatefulWidget{
   ProfileScreen({
     Key key,
-    @required this.Phone,
-    @required this.Email,
-    @required this.Address,
-    @required this.SurName,
-    @required this.Name,
   }) : super(key: key);
 
-  final String Phone,Email,Address,SurName,Name;
-
   @override
-  _ProfileScreenState createState() => _ProfileScreenState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name);
+  _ProfileScreenState createState() => _ProfileScreenState();
 
 
   // @override
@@ -46,25 +40,10 @@ class ProfileScreen extends StatefulWidget{
 class _ProfileScreenState extends State<ProfileScreen>{
   _ProfileScreenState({
     Key key,
-    @required this.Phone,
-    @required this.Email,
-    @required this.Address,
-    @required this.SurName,
-    @required this.Name,
   }) : super();
 
 
   String pathAvatar= "assets/images/img_login.jpg";
-  String SurName ="Người";
-  String Name ="Dùng";
-  String FullName="Người Dùng";
-  String profession="Nhà môi giới";
-  String Sodu = "0";
-  String Baidadang = "0";
-  String Phone = "Chưa đăng ký";
-  String Email = "Chưa đăng ký";
-  String Address = "KTX Khu A, ĐHQG-HCM";
-  String creationTime =DateFormat('dd/MM/yyyy').format(DateTime.now());
   File image;
   final picker = ImagePicker();
   int selected = 0;
@@ -76,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     setState(() {
       if (pickedFile != null) {
         image = File(pickedFile.path);
-        pathAvatar = image.path;
+        final bytes = File(pickedFile.path).readAsBytesSync();
+        _userstore.updatePictureCurrentUser(base64Encode(bytes));
       } else {
         print('No image selected.');
       }
@@ -87,46 +67,26 @@ class _ProfileScreenState extends State<ProfileScreen>{
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     _userstore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
     if (!_userstore.loading) {
       _userstore.getCurrentUser();
-      _userstore.getCurrentWalletUser();
-      if(_userstore.user!=null){
-        print("Duong"+_userstore.user.name);
-        setState(() {
-          SurName = _userstore.user.surname;
-          Name = _userstore.user.name;
-          FullName = SurName + " " +Name;
-          if(_userstore.user.emailAddress!=null)Email = _userstore.user.emailAddress;
-          if(_userstore.user.phoneNumber!=null)Phone = _userstore.user.phoneNumber;
-          if(_userstore.user.wallet!=null)Sodu = _userstore.user.wallet.toString();
-          else Sodu = "0";
-          if(_userstore.user.creationTime!=null)creationTime = _userstore.user.creationTime.substring(8,10)+"/"+ _userstore.user.creationTime.substring(5,7)+"/"+_userstore.user.creationTime.substring(0,4);
-
-        });
-      }
 
     }
+    if(!_userstore.loadingCurrentUserWallet) {
+      _userstore.getCurrentWalletUser();
+    }
+    if(!_userstore.loadingCurrentUserPicture){
+      _userstore.getCurrentPictureUser();
+    }
 
-    if(!_postStore.loadingPostForCur)
-      _postStore.getPostForCurs();
   }
 
   @override
   void initState() {
     super.initState();
-    String pathAvatar= "assets/images/img_login.jpg";
-    String SurName ="Người";
-    String Name ="Dùng";
-    String FullName="Người Dùng";
-    String profession="Nhà môi giới";
-    String Sodu = "0";
-    String Baidadang = "0";
-    String Phone = "Chưa đăng ký";
-    String Email = "Chưa đăng ký";
-    String Address = "KTX Khu A, ĐHQG-HCM";
-    String creationTime =DateFormat('dd/MM/yyyy').format(DateTime.now());
+
     // ifuserstore.loading
 
   }
@@ -147,7 +107,12 @@ class _ProfileScreenState extends State<ProfileScreen>{
     Widget build(BuildContext context) {
       return Scaffold(
           appBar: _buildAppBar(),
-          body: _buildBody()
+          body:
+          Observer(
+              builder: (context) {
+                return !_userstore.loadingCurrentUser && !_userstore.loadingCurrentUserWallet && !_userstore.loadingCurrentUserPicture ? _buildBody():CustomProgressIndicatorWidget();
+              }
+          )
       );
     }
 
@@ -173,69 +138,26 @@ class _ProfileScreenState extends State<ProfileScreen>{
       color: Colors.orange,
       width: double.infinity,
       height:  double.infinity,
-      child: ListView(
+      child:
+      ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
             _buildUserInformation(),
-            // Account(Phone: _Phone,Email: _Email,Address: _Address,),
-            // MenuItem(),
-            // ExpansionPanelList(
-            //   animationDuration: Duration(seconds: 1),
-            //   dividerColor: Colors.white,
-            //   elevation: 1,
-            //   expandedHeaderPadding: EdgeInsets.all(8),
-            //   children: [
-            //     ExpansionPanel(
-            //         headerBuilder: (context,isopen){
-            //           return CardItem(text: "Tài khoản của tôi",
-            //               icon: Icons.account_circle_outlined,
-            //               press: (){});
-            //         },
-            //         body: Text("hello"),
-            //       canTapOnHeader: true,
-            //
-            //     )
-            //   ],
-            // )
-
             IndexedStack(
               children: [
                 MenuItem(),
-                AccountPage(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,creationTime: creationTime,),
+                _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
                 WalletPage(),
                 ReportPage(title: "Doanh Thu",)
               ],
               index: _selectedIndex,
             ),
-            // AnimatedCrossFade(
-            //     secondChild: SelectItem(selected),
-            //     firstChild: MenuItem(),
-            //     crossFadeState: _first ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            //     duration: const Duration(seconds: 1),
-            // )
+
           ]
       ),
     );
   }
 
-  // Widget SelectItem(int selected){
-  //   switch(selected) {
-  //     case 0: {
-  //       return Account(Phone: _Phone,Email: _Email,Address: _Address,);
-  //     }
-  //     break;
-  //
-  //     case 1: {
-  //       return ReportPage(title: "Doanh Thu",);
-  //     }
-  //     break;
-  //
-  //     default: {
-  //       return ReportPage();
-  //     }
-  //     break;
-  //   }
-  // }
 
   Widget MenuItem(){
     return Container(
@@ -355,13 +277,24 @@ class _ProfileScreenState extends State<ProfileScreen>{
                         fit: StackFit.expand,
                         overflow: Overflow.visible,
                         children:[
-                          CircleAvatar(radius: (52),
-                              backgroundColor: Colors.white,
-                              child: ClipRRect(
-                                borderRadius:BorderRadius.circular(50),
-                                child: Image.asset(pathAvatar),
-                              )
-                          ),
+                        Observer(
+                          builder: (context) {
+                            return
+                              _userstore.user.picture !=null ? CircleAvatar(radius: (52),
+                                  backgroundColor: Colors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.memory(Base64Decoder().convert(_userstore.user.picture)),
+                                  )
+                              ): CircleAvatar(radius: (52),
+                                  backgroundColor: Colors.white,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.asset(pathAvatar),
+                                  )
+                              );
+                          }
+                        ),
                         // CircularProfileAvatar(
                         //   _pathAvatar,
                         //   borderWidth: 4.0,
@@ -409,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                           fontFamily: FontFamily.roboto
                         )
                       ):Text(
-                          SurName+" "+Name,
+                          "Người dùng ",
                           style: TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
@@ -426,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
                           Text(
-                              " "+profession,
+                              "Người dùng ",
                               style: TextStyle(
                                   fontSize: 17.0,
                                   // fontWeight: FontWeight.bold,
@@ -450,14 +383,27 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   padding: const EdgeInsets.only(top: 25,left: 40,),
                   child: Column(
                     children: [
-                      Text(
-                        Sodu,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontFamily.roboto
-                      ),
+                      Observer(
+                      builder: (context) {
+                        return
+                          _userstore.user != null ? Text(
+                            _userstore.user.wallet.toString(),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.roboto
+                            ),
+                          ) : Text(
+                            "0",
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontFamily.roboto
+                            ),
+                          );
+                        }
                       ),
                       Text("Sô dư",
                         style: TextStyle(

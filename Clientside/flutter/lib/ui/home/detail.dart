@@ -10,17 +10,19 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/photoViewScreen.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
+
 
 class Detail extends StatefulWidget {
   final Post post;
@@ -300,7 +302,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                         SizedBox(width: 4,),
                                         Flexible(
                                           child: Text(
-                                            post.gia.toString(),
+                                            priceFormat(post.gia),
                                             style: TextStyle(
                                               color:Colors.grey,
                                               fontSize: 18,
@@ -322,7 +324,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                         SizedBox(width: 4,),
                                         Flexible(
                                           child: Text(
-                                            post.dienTich.toString(),
+                                            post.dienTich.toString() + ' m2',
                                             style: TextStyle(
                                               color:Colors.grey,
                                               fontSize: 18,
@@ -350,18 +352,44 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                       size: 30,
                                     ),
                                     SizedBox(width: 4,),
-                                    Flexible(
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          post.tenXa,
-                                          style: TextStyle(
-                                            color:Colors.grey,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
+                                    Container(
+                                      width: size.width-24-58,
+                                      height: 24,
+                                      //child: Flexible(
+                                        //child: SingleChildScrollView(
+
+                                          //scrollDirection: Axis.horizontal,
+                                          child: Marquee(
+                                            text:post.diaChi.isEmpty ? "" : post.diaChi +', '+ post.tenXa + ', ' + post.tenHuyen + ', ' + post.tenTinh +' ',
+                                            style: TextStyle(
+                                                    color:Colors.grey,
+                                                     fontSize: 18,
+                                                     fontWeight: FontWeight.bold,
+                                                   ),
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            scrollAxis: Axis.horizontal,
+                                            pauseAfterRound: Duration(seconds: 1),
+                                            showFadingOnlyWhenScrolling: true,
+                                            fadingEdgeEndFraction: 0.1,
+                                            numberOfRounds: null,
+                                            velocity: 60.0,
+                                            accelerationDuration: Duration(seconds: 1),
+                                            accelerationCurve: Curves.linear,
+                                            decelerationDuration: Duration(milliseconds: 500),
+                                            decelerationCurve: Curves.easeOut,
+                                            blankSpace: 20.0,
+                                          )
+
+                                        //   Text(
+                                        //     post.tenXa + ', ' + post.tenHuyen + ', ' + post.tenTinh,
+                                        //     style: TextStyle(
+                                        //       color:Colors.grey,
+                                        //       fontSize: 18,
+                                        //       fontWeight: FontWeight.bold,
+                                        //     //),
+                                        //   ),
+                                        // ),
+                                      //),
                                     ),
                                   ],
                                 ),
@@ -396,6 +424,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 // )
                               ),
 
+                              buildMap(),
                               Padding(
                                   padding: EdgeInsets.only(right: 24,left: 24,bottom: 10),
                                   child: Text(
@@ -654,6 +683,32 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildMap(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.only(right: 24,left: 24,bottom: 12),
+            child: Text(
+              "Bản đồ",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+        ),
+
+        Padding(
+            padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
+            child: Container(
+              height: 350,
+              child: MapsScreen(post: this.post),
+            )
+        )
+      ],
     );
   }
 

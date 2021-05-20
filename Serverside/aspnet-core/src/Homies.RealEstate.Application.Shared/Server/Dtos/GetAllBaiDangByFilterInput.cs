@@ -11,9 +11,11 @@ namespace Homies.RealEstate.Server.Dtos
 
         public string DiaChiFilter { get; set; }
 
-        public string ToaDoXFilter { get; set; }
+        public string ToaDoXMinFilter { get; set; }
+        public string ToaDoXMaxFilter { get; set; }
 
-        public string ToaDoYFilter { get; set; }
+        public string ToaDoYMinFilter { get; set; }
+        public string ToaDoYMaxFilter { get; set; }
 
         public double? MaxGiaFilter { get; set; }
         public double? MinGiaFilter { get; set; }
