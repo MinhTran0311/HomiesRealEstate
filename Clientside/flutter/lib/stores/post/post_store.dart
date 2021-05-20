@@ -136,7 +136,7 @@ abstract class _PostStore with Store {
         skipCount = 0;
       }
       else
-        skipCount+= Preferences.skipIndex;
+        skipCount += Preferences.skipIndex;
       final future = _repository.getPosts(skipCount, Preferences.maxCount);
       fetchPostsFuture = ObservableFuture(future);
 
@@ -275,16 +275,19 @@ abstract class _PostStore with Store {
   }
 
   @action
-  Future getRecommendPosts(String tag) async {
+  Future getRecommendPosts(String tag, bool isSearchInHome) async {
     filter_Model fm = new filter_Model();
     fm.tagTimKiem = tag;
     final futrue = _repository.searchPosts(fm);
     fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
 
     futrue.then((result) {
-      this.rcmPostList = result;
-      print("11111");
-      print(this.rcmPostList.posts.length);
+      if(!isSearchInHome)
+       this.rcmPostList = result;
+      else {
+        this.postList = result;
+        skipCount=0;
+      }
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null)

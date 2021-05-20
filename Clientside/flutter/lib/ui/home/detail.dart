@@ -75,7 +75,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       _postStore.getPostProperties(this.post.id.toString());
     }
     if(!_postStore.getRecommendPostsFutureLoading && !finishload) {
-      _postStore.getRecommendPosts(post.tagTimKiem);
+      _postStore.getRecommendPosts(post.tagTimKiem,false);
     }
     if (!_postStore.isBaiGhimYeuThichLoading && !finishload)
     {
@@ -95,7 +95,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         Observer(
           builder: (context)
           {
-            return (_postStore.loading || _imageStore.imageLoading)
+            return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || _postStore.isBaiGhimYeuThichLoading || _postStore.propertiesLoading)
                 ? CustomProgressIndicatorWidget()
                 : Material(child: _buildContent());
           }
@@ -107,26 +107,28 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     Size size = MediaQuery.of(context).size;
     Uint8List bytes = base64Decode(_userStore.user.profilePicture);
     
-    return Scaffold(
-      body: NotificationListener<ScrollNotification>(
-        onNotification: _scrollListener,
-        child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: size.height,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
+    return SafeArea(
+      child: Scaffold(
+        body: NotificationListener<ScrollNotification>(
+          onNotification: _scrollListener,
+          child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: size.height,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
+                ),
+                child: buildContent(size),
               ),
-              child: buildContent(size),
             ),
-          ),
-          buildHeader()
-        ],
+            buildHeader()
+          ],
+        ),
+      )
       ),
-    )
     );
   }
 
@@ -135,7 +137,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            height: size.height * 0.8,
+            height: size.height * 0.78,
             child: SingleChildScrollView(
               clipBehavior: Clip.antiAlias,
               //physics: BouncingScrollPhysics(),
@@ -481,7 +483,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             ),
           ),
           SizedBox(
-            height: size.height * 0.12,
+            height: size.height * 0.11,
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.grey[100],
@@ -656,7 +658,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(11),
-          color: Colors.grey[100],
+          color: Colors.grey[50],
         ),
         child: AspectRatio(
           aspectRatio: 4 / 5,
@@ -677,6 +679,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
+                         border: Border.all(
+                           color: Colors.grey[300],
+                           width: 1,
+                         ),
                       image: DecorationImage(
                         image: NetworkImage(post.featuredImage),
                         fit: BoxFit.cover,
@@ -724,7 +730,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             padding: const EdgeInsets.symmetric(horizontal: 6,vertical: 6),
                             child: Container(
                               width: 130,
-                              height: 15,
+                              height: 16,
                               child: Marquee(
                                 text:post.diaChi.isEmpty ? "" : post.diaChi +', '+ post.tenXa+
                                     (post.tenHuyen.isEmpty?"":", " + post.tenHuyen) + (post.tenTinh.isEmpty?"":", " + post.tenTinh),
@@ -841,25 +847,33 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   }
 
   Widget buildTag(String filterName){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6),
-      margin: EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              border: Border.all(
-                color: Colors.grey[300],
-                width: 1,
-              )
-          ),
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child:Text(
-          filterName,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: (){
+        _postStore.getRecommendPosts(post.tagTimKiem,true);
+        _postStore.setSearchContent(post.tagTimKiem);
+        _postStore.filter_model.tagTimKiem = post.tagTimKiem;
+        Navigator.popUntil(context, (route) => route.isFirst);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 6),
+        margin: EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+                border: Border.all(
+                  color: Colors.grey[300],
+                  width: 1,
+                )
+            ),
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child:Text(
+            filterName,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -905,6 +919,5 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       return true;
     }
   }
-
 }
 
