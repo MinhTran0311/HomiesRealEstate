@@ -127,6 +127,9 @@ class Repository {
   Future<String> editpost(Newpost post) async {
     return await _postApi.editpost(post);
   }
+  Future<String> Delete(Post post) async {
+    return await _postApi.Delete(post);
+  }
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database
