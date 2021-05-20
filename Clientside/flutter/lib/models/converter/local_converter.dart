@@ -21,4 +21,3 @@ Image imageFromBase64String(String base64String) {
   Uint8List bytes = base64.decode(base64String);
   return Image.memory(bytes);
 }
-

@@ -29,6 +29,14 @@ mixin _$PostStore on _PostStore, Store {
           Computed<bool>(() => super.isBaiGhimYeuThichLoading,
               name: '_PostStore.isBaiGhimYeuThichLoading'))
       .value;
+  Computed<bool> _$getRecommendPostsFutureLoadingComputed;
+
+  @override
+  bool get getRecommendPostsFutureLoading =>
+      (_$getRecommendPostsFutureLoadingComputed ??= Computed<bool>(
+              () => super.getRecommendPostsFutureLoading,
+              name: '_PostStore.getRecommendPostsFutureLoading'))
+          .value;
   Computed<bool> _$searchLoadingComputed;
 
   @override
@@ -92,6 +100,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchisGetRecommendPostsFutureAtom =
+      Atom(name: '_PostStore.fetchisGetRecommendPostsFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchisGetRecommendPostsFuture {
+    _$fetchisGetRecommendPostsFutureAtom.reportRead();
+    return super.fetchisGetRecommendPostsFuture;
+  }
+
+  @override
+  set fetchisGetRecommendPostsFuture(ObservableFuture<dynamic> value) {
+    _$fetchisGetRecommendPostsFutureAtom
+        .reportWrite(value, super.fetchisGetRecommendPostsFuture, () {
+      super.fetchisGetRecommendPostsFuture = value;
+    });
+  }
+
   final _$fetchSearchFutureAtom = Atom(name: '_PostStore.fetchSearchFuture');
 
   @override
@@ -119,6 +144,21 @@ mixin _$PostStore on _PostStore, Store {
   set postList(PostList value) {
     _$postListAtom.reportWrite(value, super.postList, () {
       super.postList = value;
+    });
+  }
+
+  final _$rcmPostListAtom = Atom(name: '_PostStore.rcmPostList');
+
+  @override
+  PostList get rcmPostList {
+    _$rcmPostListAtom.reportRead();
+    return super.rcmPostList;
+  }
+
+  @override
+  set rcmPostList(PostList value) {
+    _$rcmPostListAtom.reportWrite(value, super.rcmPostList, () {
+      super.rcmPostList = value;
     });
   }
 
@@ -328,6 +368,15 @@ mixin _$PostStore on _PostStore, Store {
     return _$searchPostsAsyncAction.run(() => super.searchPosts());
   }
 
+  final _$getRecommendPostsAsyncAction =
+      AsyncAction('_PostStore.getRecommendPosts');
+
+  @override
+  Future<dynamic> getRecommendPosts(String tag, bool isSearchInHome) {
+    return _$getRecommendPostsAsyncAction
+        .run(() => super.getRecommendPosts(tag, isSearchInHome));
+  }
+
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
@@ -358,8 +407,10 @@ mixin _$PostStore on _PostStore, Store {
 fetchPostsFuture: ${fetchPostsFuture},
 fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
+fetchisGetRecommendPostsFuture: ${fetchisGetRecommendPostsFuture},
 fetchSearchFuture: ${fetchSearchFuture},
 postList: ${postList},
+rcmPostList: ${rcmPostList},
 isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
 maxCount: ${maxCount},
@@ -374,6 +425,7 @@ scrollController: ${scrollController},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
+getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
 hasFilter: ${hasFilter}
     ''';
