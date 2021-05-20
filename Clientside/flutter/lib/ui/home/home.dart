@@ -67,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
       userStore.getCurrentUser();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,12 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMainContent() {
-    return Observer(
-      builder: (context) {
-        return _postStore.loading
-            ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
-      },
+      return Observer(
+        builder: (context) {
+          return _postStore.loading
+              ? CustomProgressIndicatorWidget()
+              : Material(child: _buildPostsList());
+        },
     );
   }
   Widget _buildPostsList() {

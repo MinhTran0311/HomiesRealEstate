@@ -85,8 +85,6 @@ mixin _$ImageStore on _ImageStore, Store {
     return _$getImagesForDetailAsyncAction
         .run(() => super.getImagesForDetail(postId));
   }
-
-  @override
   String toString() {
     return '''
 fetchImageFuture: ${fetchImageFuture},
@@ -94,6 +92,7 @@ imageList: ${imageList},
 success: ${success},
 selectedIndex: ${selectedIndex},
 imageLoading: ${imageLoading}
+
     ''';
   }
 }
