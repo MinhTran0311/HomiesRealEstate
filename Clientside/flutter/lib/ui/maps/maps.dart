@@ -1,3 +1,4 @@
+import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -328,6 +329,7 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   Widget build(BuildContext context) {
     if (this.post == null) {
+      final applicationBloc = Provider.of<ApplicationBloc>(context);
       return Scaffold(
         primary: true,
         appBar: AppBar(
@@ -351,65 +353,116 @@ class _MapsScreenState extends State<MapsScreen> {
           //   ),
           // ],
         ),
-        body: Stack(
+        body:
+        // (applicationBloc.currentLocation == null) ? Center(
+        //   child: CircularProgressIndicator(),
+        // )
+        // :
+        ListView(
           children: <Widget>[
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11.0,
-              ),
-              mapType: _currentMapType,
-              markers: _markers,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
             Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    button(_onMapTypeButtonProcessed, Icons.map),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Tìm kiếm",
+                  suffixIcon: Icon(Icons.search)
                 ),
+
+                onChanged: (value) => applicationBloc.searchPlaces(value),
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              // height: MediaQuery.of(context).size.height,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  children: <Widget>[
-                    containerBaseInfor(),
-                    // button(_onMapTypeButtonProcessed, Icons.map),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
+            Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.8,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        gestureRecognizers: Set()
+                          ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                          ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+                          ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                          ..add(Factory<VerticalDragGestureRecognizer>(
+                                  () => VerticalDragGestureRecognizer())),
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                          target: _center,
+                          zoom: 11.0,
+                        ),
+                        mapType: _currentMapType,
+                        markers: _markers,
+                        onCameraMove: _onCameraMove,
+                      ),
+                      // _addMarkerButtonProcessed(),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              button(_onMapTypeButtonProcessed, Icons.map),
+                              SizedBox(
+                                height: 16.0,
+                              ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        // height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            children: <Widget>[
+                              containerBaseInfor(),
+                              // button(_onMapTypeButtonProcessed, Icons.map),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                Container(
+                  height: MediaQuery.of(context).size.height*0.8,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(.6),
+                    backgroundBlendMode: BlendMode.darken
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height*0.8,
+                  child: ListView.builder(
+                    itemCount: applicationBloc.searchResults.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(applicationBloc.searchResults[index].description,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),)
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
+
           ],
         ),
       );

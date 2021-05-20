@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/blocs/application_bloc.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}
