@@ -67,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
       userStore.getCurrentUser();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,12 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMainContent() {
-    return Observer(
-      builder: (context) {
-        return _postStore.loading
-            ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
-      },
+      return Observer(
+        builder: (context) {
+          return _postStore.loading
+              ? CustomProgressIndicatorWidget()
+              : Material(child: _buildPostsList());
+        },
     );
   }
   Widget _buildPostsList() {
@@ -406,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          post.gia.toString() + "VND",
+                          priceFormat(post.gia),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -444,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(width: 4,),
                             Text(
-                              post.dienTich.toString(),
+                              post.dienTich.toString() +' m2',
                               style: TextStyle(
                                 color:Colors.white,
                                 fontSize:  14,

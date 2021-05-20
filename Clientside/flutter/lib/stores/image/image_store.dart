@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -24,14 +25,16 @@ abstract class _ImageStore with Store {
   // Image observer
   static ObservableFuture<ImageList> emptyImageResponse =
   ObservableFuture.value(null);
-
+  static ObservableFuture<String> emptyStringResponse =
+  ObservableFuture.value(null);
   @observable
-  ObservableFuture<ImageList> fetchImageFuture =
-  ObservableFuture<ImageList>(emptyImageResponse);
+  ObservableFuture<ImageList> fetchImageFuture = ObservableFuture<ImageList>(emptyImageResponse);
+  ObservableFuture<String> fetchImageFuturepost = ObservableFuture<String>(emptyStringResponse);
 
 
   @observable
   ImageList imageList;
+  List <String> imageListpost=new List<String>();
 
   @observable
   bool success = false;
@@ -41,7 +44,8 @@ abstract class _ImageStore with Store {
 
   @computed
   bool get imageLoading => fetchImageFuture.status == FutureStatus.pending;
-
+  @computed
+  bool get imageLoadingpost => fetchImageFuturepost.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -49,7 +53,6 @@ abstract class _ImageStore with Store {
     success = false;
     final future = _repository.getImagesForDetail(postId);
     fetchImageFuture = ObservableFuture(future);
-
     future.then((imageList) {
       success = true;
       this.imageList = imageList;
@@ -67,29 +70,23 @@ abstract class _ImageStore with Store {
   }
 
   // @action
-  // Future postImages(String path, bool isThumb) async {
-  //
-  //   if (isThumb){
-  //     // lấy đường dẫn đầu tiên
-  //     //getimage
-  //   }
-  //   else{
-  //     final imageFuture = _repository.postImageToImageBB(path);
-  //     fetchImageFuture = ObservableFuture(imageFuture);
-  //
-  //     imageFuture.then((imgId) {
-  //       //await thêm id ảnh vào db
-  //       print(imgId);
-  //     }).catchError((error) {
-  //       if (error is DioError) {
-  //         errorStore.errorMessage = DioErrorUtil.handleError(error);
-  //         throw error;
-  //       }
-  //       else{
-  //         errorStore.errorMessage="Please check your internet connection and try again!";
-  //         throw error;
-  //       }
-  //     });
-  //   }
-  // }
+  Future postImages(String path, String name) async {
+    {
+      final imageFuture = _repository.postImageToImageBB(path,"$name");
+      imageFuture.then((imgId)
+      {imageListpost.add(imgId);
+        fetchImageFuturepost = ObservableFuture(imageFuture);
+      }).catchError((error) {
+        if (error is DioError) {
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+          throw error;
+        }
+        else{
+          errorStore.errorMessage="Please check your internet connection and try again!";
+          throw error;
+        }
+      });
+
+        }
+  }
 }
