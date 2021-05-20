@@ -34,6 +34,8 @@ class _MapsScreenState extends State<MapsScreen> {
   final Post post;
   _MapsScreenState({@required this.post});
 
+  TextEditingController _autocompleteText= TextEditingController();
+
   Completer<GoogleMapController> _controller = Completer();
   static LatLng _center;
   final Set<Marker> _markers = {};
@@ -363,6 +365,7 @@ class _MapsScreenState extends State<MapsScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _autocompleteText,
                 decoration: InputDecoration(
                   hintText: "Tìm kiếm",
                   suffixIcon: Icon(Icons.search)
@@ -438,7 +441,8 @@ class _MapsScreenState extends State<MapsScreen> {
                     ],
                   ),
                 ),
-                Container(
+                (_autocompleteText == null || _autocompleteText.toString().isEmpty) ? Container()
+                    : Container(
                   height: MediaQuery.of(context).size.height*0.8,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -446,7 +450,8 @@ class _MapsScreenState extends State<MapsScreen> {
                     backgroundBlendMode: BlendMode.darken
                   ),
                 ),
-                Container(
+                applicationBloc.searchResults == null ? Container()
+                    : Container(
                   height: MediaQuery.of(context).size.height*0.8,
                   child: ListView.builder(
                     itemCount: applicationBloc.searchResults.length,
