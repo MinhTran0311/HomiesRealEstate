@@ -407,7 +407,6 @@ namespace Homies.RealEstate.Server
                 {
                     return true;
                 }
-
             }
             return false;
         }
@@ -760,6 +759,7 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
 
+
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy("id asc");
 
@@ -778,6 +778,11 @@ namespace Homies.RealEstate.Server
 
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()
+
+                           join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
+                           from s6 in j6.DefaultIfEmpty()
+
+
 
                            select new GetBaiDangForViewDto()
                            {
@@ -809,14 +814,54 @@ namespace Homies.RealEstate.Server
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
                                HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
                                TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
+                               ChiTietHoaDon = s6 == null ? null : ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(s6)
                            };
 
             var totalCount = await filteredBaiDangs.CountAsync();
 
-            return new PagedResultDto<GetBaiDangForViewDto>(
+            var list = await baiDangs.ToListAsync();
+
+            if (list.Count == totalCount)
+            {
+                return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
-                await baiDangs.ToListAsync()
+                list
             );
+            }
+            else
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    for (int j = 0; j < list.Count; j++)
+                    {
+                        if (list[j].ChiTietHoaDon.BaiDangId == list[i].ChiTietHoaDon.BaiDangId && list[j].ChiTietHoaDon.ThoiDiem < list[i].ChiTietHoaDon.ThoiDiem)
+                            list.RemoveAt(j);
+                    }
+                }
+
+                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var e = list[i];
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+
+                        //var duc = _lookup_chiTietHoaDonBaiDangRepository.GetAll().Where(ee => ee.BaiDangId == e.BaiDang.Id).OrderByDescending(r => r.ThoiDiem).First();
+                        //var ducc = await _lookup_chiTietHoaDonBaiDangRepository.FirstOrDefaultAsync(ee => ee.ThoiDiem == duc && ee.BaiDangId == e.BaiDang.Id);
+                        //e.ChiTietHoaDon = ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(duc);
+                        filteredList.Add(e);
+                    }
+                }
+
+                return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                filteredList
+            );
+            }
         }
     }
 }

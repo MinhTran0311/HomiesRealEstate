@@ -40,7 +40,9 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.HuyenFk)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TenXa.Contains(input.Filter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TenXaFilter), e => e.TenXa == input.TenXaFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.HuyenTenHuyenFilter), e => e.HuyenFk != null && e.HuyenFk.TenHuyen == input.HuyenTenHuyenFilter);
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.HuyenTenHuyenFilter), e => e.HuyenFk != null && e.HuyenFk.TenHuyen == input.HuyenTenHuyenFilter)
+                        .WhereIf(input.HuyenIdFilter != null, e => e.HuyenId != null && e.HuyenId == input.HuyenIdFilter);
+
 
             var pagedAndFilteredXas = filteredXas
                 .OrderBy(input.Sorting ?? "id asc")
