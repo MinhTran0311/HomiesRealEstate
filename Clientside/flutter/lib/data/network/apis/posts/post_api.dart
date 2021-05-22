@@ -31,25 +31,46 @@ class PostApi {
   PostApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<PostList> getPosts(int skipCount, int maxResultCount) async {
+  Future<PostList> getPosts(int skipCount, int maxResultCount, filter_Model filter_model) async {
+    if (filter_model==null)
+      filter_model = new filter_Model();
     try {
       final res = await _dioClient.get(
-        Endpoints.getAllBaiDang,
+        Endpoints.searchPosts,
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-        queryParameters: {
-          "SkipCount": skipCount,
-          "MaxResultCount": maxResultCount,
-        },
+        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount),
       );
       return PostList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
       throw e;
     }
   }
+
+  // Future<PostList> searchPosts(int skipCount, int maxResultCount, filter_Model filter_model) async {
+  //   Map<String,dynamic> count = {
+  //     "SkipCount": skipCount,
+  //     "MaxResultCount": maxResultCount,};
+  //   var combination = {};
+  //   combination.addAll(count);
+  //   combination.addAll(filter_model.toMap());
+  //
+  //   try {
+  //     final res = await _dioClient.get(
+  //       Endpoints.searchPosts,
+  //       options: Options(headers: {
+  //         "Abp.TenantId": 1,
+  //         "Authorization": "Bearer ${Preferences.access_token}",
+  //       }),
+  //       queryParameters: combination,
+  //     );
+  //     return PostList.fromJson(res);
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   /// Returns list of postcategory in response
   Future<PostCategoryList> getPostCategorys() async {
@@ -217,23 +238,7 @@ class PostApi {
     }
   }
 
-  Future<PostList> searchPosts(filter_Model filter_model) async {
-    try {
-      final res = await _dioClient.get(
-        Endpoints.searchPosts,
-        options: Options(headers: {
-          "Abp.TenantId": 1,
-          "Authorization": "Bearer ${Preferences.access_token}",
-        }),
-        queryParameters: filter_model.toMap(skipCount: 0, maxCount: 10),
-      );
-      print('search results: ');
-      print(res);
-      return PostList.fromJson(res);
-    } catch (e) {
-      throw e;
-    }
-  }
+
 
   Future<String> editpost(Newpost newpost) async {
     try {

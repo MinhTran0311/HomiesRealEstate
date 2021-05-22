@@ -652,6 +652,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     List<Widget> list =[];
     for (int i=0; i<_postStore.rcmPostList.posts.length; i++){
       if (_postStore.rcmPostList.posts[i].id!=post.id)
+
         list.add(buildRecommendPost(context,_postStore.rcmPostList.posts[i],i));
     }
     return list;
@@ -789,7 +790,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       child: GestureDetector(
         onTap: (){_imageStore.selectedIndex=index;},
         onLongPress: (){
-          print("image index $index");
           _imageStore.selectedIndex=index;
           Navigator.push(
               context,
@@ -854,10 +854,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   Widget buildTag(String filterName){
     return GestureDetector(
       onTap: (){
-        _postStore.getRecommendPosts(post.tagTimKiem,true);
         _postStore.setSearchContent(post.tagTimKiem);
-        _postStore.filter_model.tagTimKiem = post.tagTimKiem;
+        _postStore.getRecommendPosts(post.tagTimKiem,true);
         Navigator.popUntil(context, (route) => route.isFirst);
+
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 6),

@@ -98,6 +98,19 @@ mixin _$PostStore on _PostStore, Store {
   bool get Deletepost => (_$DeletepostComputed ??=
           Computed<bool>(() => super.Deletepost, name: '_PostStore.Deletepost'))
       .value;
+  Computed<bool> _$giahanpostComputed;
+
+  @override
+  bool get giahanpost => (_$giahanpostComputed ??=
+          Computed<bool>(() => super.giahanpost, name: '_PostStore.giahanpost'))
+      .value;
+  Computed<bool> _$getpackpricepostComputed;
+
+  @override
+  bool get getpackpricepost => (_$getpackpricepostComputed ??= Computed<bool>(
+          () => super.getpackpricepost,
+          name: '_PostStore.getpackpricepost'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -237,21 +250,6 @@ mixin _$PostStore on _PostStore, Store {
   set skipCount(int value) {
     _$skipCountAtom.reportWrite(value, super.skipCount, () {
       super.skipCount = value;
-    });
-  }
-
-  final _$maxCountAtom = Atom(name: '_PostStore.maxCount');
-
-  @override
-  int get maxCount {
-    _$maxCountAtom.reportRead();
-    return super.maxCount;
-  }
-
-  @override
-  set maxCount(int value) {
-    _$maxCountAtom.reportWrite(value, super.maxCount, () {
-      super.maxCount = value;
     });
   }
 
@@ -655,6 +653,69 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchgiahanFutureAtom = Atom(name: '_PostStore.fetchgiahanFuture');
+
+  @override
+  ObservableFuture<String> get fetchgiahanFuture {
+    _$fetchgiahanFutureAtom.reportRead();
+    return super.fetchgiahanFuture;
+  }
+
+  @override
+  set fetchgiahanFuture(ObservableFuture<String> value) {
+    _$fetchgiahanFutureAtom.reportWrite(value, super.fetchgiahanFuture, () {
+      super.fetchgiahanFuture = value;
+    });
+  }
+
+  final _$successgiahanAtom = Atom(name: '_PostStore.successgiahan');
+
+  @override
+  bool get successgiahan {
+    _$successgiahanAtom.reportRead();
+    return super.successgiahan;
+  }
+
+  @override
+  set successgiahan(bool value) {
+    _$successgiahanAtom.reportWrite(value, super.successgiahan, () {
+      super.successgiahan = value;
+    });
+  }
+
+  final _$fetchgetpackpriceFutureAtom =
+      Atom(name: '_PostStore.fetchgetpackpriceFuture');
+
+  @override
+  ObservableFuture<double> get fetchgetpackpriceFuture {
+    _$fetchgetpackpriceFutureAtom.reportRead();
+    return super.fetchgetpackpriceFuture;
+  }
+
+  @override
+  set fetchgetpackpriceFuture(ObservableFuture<double> value) {
+    _$fetchgetpackpriceFutureAtom
+        .reportWrite(value, super.fetchgetpackpriceFuture, () {
+      super.fetchgetpackpriceFuture = value;
+    });
+  }
+
+  final _$successgetpackpriceAtom =
+      Atom(name: '_PostStore.successgetpackprice');
+
+  @override
+  bool get successgetpackprice {
+    _$successgetpackpriceAtom.reportRead();
+    return super.successgetpackprice;
+  }
+
+  @override
+  set successgetpackprice(bool value) {
+    _$successgetpackpriceAtom.reportWrite(value, super.successgetpackprice, () {
+      super.successgetpackprice = value;
+    });
+  }
+
   @override
   ObservableFuture<dynamic> getPostForCurs() {
     final _$future = super.getPostForCurs();
@@ -667,11 +728,32 @@ mixin _$PostStore on _PostStore, Store {
     return ObservableFuture<dynamic>(_$future);
   }
 
+  @override
+  ObservableFuture<dynamic> giahan(Newpost post) {
+    final _$future = super.giahan(post);
+    return ObservableFuture<dynamic>(_$future);
+  }
+
+  @override
+  ObservableFuture<double> getpackprice(int idpack) {
+    final _$future = super.getpackprice(idpack);
+    return ObservableFuture<double>(_$future);
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
   Future<dynamic> getPosts(bool isLoadMore) {
     return _$getPostsAsyncAction.run(() => super.getPosts(isLoadMore));
+  }
+
+  final _$getRecommendPostsAsyncAction =
+      AsyncAction('_PostStore.getRecommendPosts');
+
+  @override
+  Future<dynamic> getRecommendPosts(String tag, bool isSearchInHome) {
+    return _$getRecommendPostsAsyncAction
+        .run(() => super.getRecommendPosts(tag, isSearchInHome));
   }
 
   final _$getPostPropertiesAsyncAction =
@@ -701,22 +783,6 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
   }
 
-  final _$searchPostsAsyncAction = AsyncAction('_PostStore.searchPosts');
-
-  @override
-  Future<dynamic> searchPosts() {
-    return _$searchPostsAsyncAction.run(() => super.searchPosts());
-  }
-
-  final _$getRecommendPostsAsyncAction =
-      AsyncAction('_PostStore.getRecommendPosts');
-
-  @override
-  Future<dynamic> getRecommendPosts(String tag, bool isSearchInHome) {
-    return _$getRecommendPostsAsyncAction
-        .run(() => super.getRecommendPosts(tag, isSearchInHome));
-  }
-
   final _$getPostcategorysAsyncAction =
       AsyncAction('_PostStore.getPostcategorys');
 
@@ -742,11 +808,11 @@ mixin _$PostStore on _PostStore, Store {
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
-  void setSearchContent(String value) {
+  void setSearchContent(String value, {bool isTag = false}) {
     final _$actionInfo = _$_PostStoreActionController.startAction(
         name: '_PostStore.setSearchContent');
     try {
-      return super.setSearchContent(value);
+      return super.setSearchContent(value, isTag: isTag);
     } finally {
       _$_PostStoreActionController.endAction(_$actionInfo);
     }
@@ -775,7 +841,6 @@ postList: ${postList},
 rcmPostList: ${rcmPostList},
 isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
-maxCount: ${maxCount},
 propertyList: ${propertyList},
 fetchPostCategorysFuture: ${fetchPostCategorysFuture},
 imageUrlList: ${imageUrlList},
@@ -802,6 +867,10 @@ postForCurList: ${postForCurList},
 successPostForCur: ${successPostForCur},
 fetchdeleteFuture: ${fetchdeleteFuture},
 successdelete: ${successdelete},
+fetchgiahanFuture: ${fetchgiahanFuture},
+successgiahan: ${successgiahan},
+fetchgetpackpriceFuture: ${fetchgetpackpriceFuture},
+successgetpackprice: ${successgetpackprice},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
@@ -814,7 +883,9 @@ loadingThuocTinh: ${loadingThuocTinh},
 loadingNewpost: ${loadingNewpost},
 loadingeditpost: ${loadingeditpost},
 loadingPostForCur: ${loadingPostForCur},
-Deletepost: ${Deletepost}
+Deletepost: ${Deletepost},
+giahanpost: ${giahanpost},
+getpackpricepost: ${getpackpricepost}
     ''';
   }
 }

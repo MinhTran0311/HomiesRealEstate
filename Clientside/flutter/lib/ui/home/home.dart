@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 28,
                       ),
                       onPressed: (){
-                        _postStore.searchPosts();
+                        _postStore.getPosts(false);
                       },
                     ),
 
