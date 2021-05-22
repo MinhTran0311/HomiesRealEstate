@@ -311,12 +311,15 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.textsms_rounded),
-                      fillColor: Colors.white,
-                      //hintText: 'Tiêu đề',
-                      labelText: 'Tiêu đề',
-                    ),
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.textsms_rounded),
+                        fillColor: Colors.white,
+                        hintText: 'Tối đa 50 kí tự',
+                        labelText: 'Tiêu đề',
+                        suffixIcon: IconButton(
+                          onPressed: () => _TileController.clear(),
+                          icon: Icon(Icons.clear),
+                        )),
                     onSaved: (value) {
                       // //  FormState.save();
                       //   print(value);
@@ -324,8 +327,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     },
                     controller: _TileController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Vui lòng điền tiêu đề';
+                      if (value == null || value.isEmpty || value.length > 50) {
+                        return 'Vui lòng điền lại tiêu đề';
                       }
                       return null;
                     },
@@ -345,52 +348,57 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.always,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-          child: DropdownButtonFormField<Postcategory>(
-            hint: Text("Chọn phương thức"),
-            value: selectedType,
-            onChanged: (Postcategory Value) {
-              setState(() {
-                try {
-                  selectedType = Value;
-                  selectedTypeType = null;
-                } catch (_) {
-                  selectedType = type[0];
-                }
-              });
-            },
-            validator: (value) =>
-                value == null ? 'vui lòng chọn phương thức' : null,
-            items: type.map((Postcategory type) {
-              if (type.danhMucCha == null)
-                return DropdownMenuItem<Postcategory>(
-                  value: type,
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.home_work_sharp,
-                        color: const Color(0xFF167F67),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        type.tenDanhMuc,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                );
-              else
-                return
-                    //Container(width: 0, height: 0);
-                    DropdownMenuItem<Postcategory>(
+        child: DropdownButtonFormField<Postcategory>(
+          hint: Text("Chọn phương thức "),
+          value: selectedType,
+          onChanged: (Postcategory Value) {
+            setState(() {
+              try {
+                selectedType = Value;
+                selectedTypeType = null;
+              } catch (_) {
+                selectedType = type[0];
+              }
+            });
+          },
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () => setState(() {
+                  selectedType = null;
+                }),
+                icon: Icon(Icons.clear),
+              )),
+          validator: (value) =>
+          value == null ? 'vui lòng chọn phương thức' : null,
+          items: type.map((Postcategory type) {
+            if (type.danhMucCha == null)
+              return DropdownMenuItem<Postcategory>(
+                value: type,
+                //showClearButton:true,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.home_work_sharp,
+                      color: const Color(0xFF167F67),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      type.tenDanhMuc,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              );
+            else
+              return
+                //Container(width: 0, height: 0);
+                DropdownMenuItem<Postcategory>(
                   value: type,
                   child: SizedBox(height: 0),
                 );
-            }).toList(),
-          ),
+          }).toList(),
         ));
   }
 
@@ -408,9 +416,16 @@ class _EditpostScreenState extends State<EditpostScreen> {
           builder: (context) {
             return Padding(
               padding:
-                  const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
-              child: DropdownButton<Postcategory>(
+              const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
+              child: DropdownButtonFormField<Postcategory>(
                 hint: Text("Chọn hình thức nhà đất"),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) =>
+                value == null ? 'vui lòng chọn hình thức nhà đất' : null,
+                decoration: InputDecoration( suffixIcon: IconButton(
+                  onPressed: ()=>setState(() { selectedTypeType=null; }),
+                  icon: Icon(Icons.clear),
+                )),
                 value: selectedTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
@@ -419,6 +434,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     selectedTypeTypeType = null;
                   });
                 },
+
                 items: typetype.map((Postcategory type) {
                   return DropdownMenuItem<Postcategory>(
                     value: type,
@@ -464,9 +480,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
           builder: (context) {
             return Padding(
               padding:
-                  const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
-              child: DropdownButton<Postcategory>(
-                hint: Text("Chọn hình thức nhà đất bổ sung"),
+              const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
+              child: DropdownButtonFormField<Postcategory>(
+                hint: Text("Chọn hình thức bổ sung"),
                 value: selectedTypeTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
@@ -474,6 +490,10 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     selectedTypeTypeType = Value;
                   });
                 },
+                decoration: InputDecoration( suffixIcon: IconButton(
+                  onPressed: ()=>setState(() { selectedTypeTypeType=null; }),
+                  icon: Icon(Icons.clear),
+                )),
                 items: typetypetype.map((Postcategory type) {
                   return DropdownMenuItem<Postcategory>(
                     value: type,
@@ -510,9 +530,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
           child: DropdownSearch<String>(
-            //mode: Mode.BOTTOM_SHEET,
+            autoValidateMode: AutovalidateMode.always,
+            validator: (value) =>
+            value == null ? 'vui lòng chọn tỉnh/thành' : null,
             items: [
               "Thành phố Hà Nội",
               "Tỉnh Hà Giang",
@@ -578,6 +600,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
               "Tỉnh Bạc Liêu",
               "Tỉnh Cà Mau",
             ],
+            showClearButton: true,
             hint: "Chọn tỉnh/thành phố",
             onChanged: (String Value) {
               setState(() {
@@ -589,7 +612,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
               border: OutlineInputBorder(),
-              // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
               labelText: "Tìm tỉnh/thành phố",
             ),
             popupTitle: Container(
@@ -625,10 +647,17 @@ class _EditpostScreenState extends State<EditpostScreen> {
         if (townStore.townList.towns[i].tinhTenTinh == selectedCity)
           town.add(townStore.townList.towns[i]);
       return Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
-        child: DropdownButton<Town>(
+        padding: const EdgeInsets.only(left: 20.0, right: 0.0, bottom: 24.0),
+        child: DropdownButtonFormField<Town>(
           hint: Text("Chọn quận/huyện"),
           value: selectedTown,
+          autovalidateMode: AutovalidateMode.always,
+          validator: (value) =>
+          value == null ? 'vui lòng chọn quận huyện' : null,
+          decoration: InputDecoration( suffixIcon: IconButton(
+            onPressed: ()=>setState(() { selectedTown=null; }),
+            icon: Icon(Icons.clear),
+          )),
           //icon:Icons.attach_file ,
           onChanged: (Town Value) {
             setState(() {
@@ -673,9 +702,16 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Widget _buildCommuneField() {
     if (selectedTown != null) {
       return Padding(
-        padding: const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
-        child: DropdownButton<Commune>(
+        padding: const EdgeInsets.only(left: 40.0, right: 0.0, bottom: 24.0),
+        child: DropdownButtonFormField<Commune>(
           hint: Text("Chọn xã/phường"),
+          autovalidateMode: AutovalidateMode.always,
+          validator: (value) =>
+          value == null ? 'vui lòng chọn xã/phường' : null,
+          decoration: InputDecoration( suffixIcon: IconButton(
+            onPressed: ()=>setState(() { selectedCommune=null; }),
+            icon: Icon(Icons.clear),
+          )),
           value: selectedCommune,
           //icon:Icons.attach_file ,
           onChanged: (Commune Value) {
@@ -723,10 +759,14 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.textsms_rounded),
+                    decoration:  InputDecoration(
+                      icon: Icon(Icons.home),
                       fillColor: Colors.white,
-                      hintText: '',
+                      hintText: 'Số nhà/tên khu phố',
+                      suffixIcon: IconButton(
+                        onPressed: ()=> _LocateController.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
                       labelText: 'Địa chỉ',
                     ),
                     onSaved: (value) {
@@ -735,6 +775,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       //   // code when the user saves the form.
                     },
                     controller: _LocateController,
+
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng nhập địa chỉ';
@@ -751,30 +792,31 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(builder: (context) {
       return !postStore.loadingThuocTinh
           ? SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                  Text("Một số thông tin thêm(nếu có)",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 24.0),
-                  Container(
-                      height: 200,
-                      child: ListView.builder(
-                        itemCount:
-                            postStore.thuocTinhList.thuocTinhs.length - 2,
-                        itemBuilder: (context, i) {
-                          return _buildThuocTinh(
-                              postStore.thuocTinhList.thuocTinhs[i + 2], i);
-                        },
-                      ))
-                ]))
+          child: ExpansionTile(
+              title: Text(
+                "Một số thông tin thêm(nếu có)",
+                style:
+                TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+              ),
+              tilePadding: EdgeInsets.only(top: 0.0),
+              //.all(0),
+              children: <Widget>[
+                Container(
+                  height: 200,
+                  child: ListView.builder(
+                    itemCount: postStore.thuocTinhList.thuocTinhs.length - 2,
+                    itemBuilder: (context, i) {
+                      _ThuocTinhController.add(new TextEditingController());
+                      return _buildThuocTinh(
+                          postStore.thuocTinhList.thuocTinhs[i + 2], i);
+                    },
+                  ),
+                )
+              ]))
           : Container(
-              height: 0,
-              width: 0,
-            );
+        height: 0,
+        width: 0,
+      );
       //       :  Text(
       //             "Không có thuộc tính thêm hiển thị",
       //         );
@@ -784,39 +826,41 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Widget _buildThuocTinh(ThuocTinh thuocTinh, int index) {
     return thuocTinh != null
         ? Observer(
-            builder: (context) {
-              return Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextFieldWidget(
-                      inputFontsize: 22,
-                      hint: ('${thuocTinh.tenThuocTinh}'),
-                      hintColor: Colors.black,
-                      icon: Icons.api_outlined,
-
-                      inputType: thuocTinh.kieuDuLieu == "double" ||
-                              thuocTinh.kieuDuLieu == "int"
-                          ? TextInputType.numberWithOptions(
-                              decimal: false, signed: false)
-                          : TextInputType.text,
-                      // iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-                      iconColor: Colors.white,
-                      textController: _ThuocTinhController[index],
-                      inputAction: TextInputAction.next,
-                      autoFocus: false,
-                      onChanged: (value) {_ThuocTinhController[index]=TextEditingController(text: value);},
-                    ),
-                    SizedBox(height: 24.0),
-                  ]);
-            },
-          )
+      builder: (context) {
+        return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                  icon: Icon(Icons.home_work),
+                  fillColor: Colors.white,
+                  labelText: '${thuocTinh.tenThuocTinh}',
+                  suffixIcon: IconButton(
+                    onPressed: ()=> _ThuocTinhController[index].clear(),
+                    icon: Icon(Icons.clear),
+                  ),
+                  //hintText: "${thuocTinh.kieuDuLieu}",
+                ),
+                onSaved: (value) {},
+                keyboardType: thuocTinh.kieuDuLieu == "double" ||
+                    thuocTinh.kieuDuLieu == "int"
+                    ? TextInputType.numberWithOptions(
+                    decimal: false, signed: false)
+                    : TextInputType.text,
+                controller: _ThuocTinhController[index],
+                onChanged: (value) {},
+              ),
+              SizedBox(height: 24.0),
+            ]);
+      },
+    )
         : Center(
-            child: Text(
-              "Không có thuộc tính thêm hiển thị",
-            ),
-          );
+      child: Text(
+        "Không có thuộc tính thêm hiển thị",
+      ),
+    );
   }
 
   Widget _buildAcreageField() {
@@ -830,14 +874,20 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    decoration: const InputDecoration(
-                        icon: Icon(Icons.textsms_rounded),
-                        fillColor: Colors.white,
+                    decoration:  InputDecoration(
+                        icon: Icon(Icons.api),
+                        fillColor: Colors.green,
                         labelText: 'Diện tích',
-                        hintText: "mxm"),
+                        suffixIcon: IconButton(
+                          onPressed: ()=> _AcreageController.clear(),
+                          icon: Icon(Icons.clear),
+                        ),
+                        hintText: "mxm"
+                    ),
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
+                    autofocus: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng điền diện tích';
@@ -861,10 +911,14 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       icon: Icon(Icons.money),
                       fillColor: Colors.white,
                       labelText: 'Giá bán',
+                      suffixIcon: IconButton(
+                        onPressed: ()=> _PriceController.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
                       hintText: "VND",
                     ),
                     onSaved: (value) {},
@@ -881,7 +935,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
       },
     );
   }
-
   Widget _buildTileField2() {
     return Observer(
       builder: (context) {
@@ -893,11 +946,15 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.money),
+                    decoration:  InputDecoration(
+                      icon: Icon(Icons.textsms_rounded),
                       fillColor: Colors.white,
                       labelText: 'Mô tả',
                       hintText: "Mô tả thêm về bài đăng",
+                      suffixIcon: IconButton(
+                        onPressed: ()=> _keyEditor2.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
                     ),
                     onSaved: (value) {},
                     //keyboardType: TextInputType.number,
@@ -906,7 +963,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng nhập mô tả';
                       }
-                      if(value.length>1000) return null;
+                      if (value.length > 1000) return null;
                       return null;
                     },
                   ),

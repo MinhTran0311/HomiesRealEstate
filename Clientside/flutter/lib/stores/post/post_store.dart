@@ -539,4 +539,61 @@ abstract class _PostStore with Store {
       }
     });
   }
+  /////////////////giahan
+  static ObservableFuture<String> emptygiahanResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchgiahanFuture = ObservableFuture<String>(emptygiahanResponse);
+  @observable
+  //postForCurList;
+  @computed
+  bool get giahanpost => fetchgiahanFuture.status == FutureStatus.pending;
+  @observable
+  bool successgiahan = false;
+  @observable
+  Future giahan(Newpost post) async {
+    final future = _repository.giahan(post);
+    fetchgiahanFuture = ObservableFuture(future);
+    future.then((post) {
+      successgiahan = true;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  /////////////////getpackprice
+  static ObservableFuture<double> emptypackpriceResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<double> fetchgetpackpriceFuture = ObservableFuture<double>(emptypackpriceResponse);
+  @observable
+  //postForCurList;
+  @computed
+  bool get getpackpricepost => fetchgiahanFuture.status == FutureStatus.pending;
+  @observable
+  bool successgetpackprice = false;
+  @observable
+  Future<double> getpackprice(int idpack) async {
+    final future = _repository.getpackprice(idpack);
+    fetchgetpackpriceFuture = ObservableFuture(future);
+    future.then((giagoi) {
+      successdelete = true;
+      return giagoi;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
 }

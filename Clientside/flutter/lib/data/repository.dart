@@ -131,6 +131,12 @@ class Repository {
   Future<String> Delete(Post post) async {
     return await _postApi.Delete(post);
   }
+  Future<String> giahan(Newpost post) async {
+    return await _postApi.giahan(post);
+  }
+  Future<double> getpackprice(int idpost) async {
+    return await _postApi.getpackprice(idpost);
+  }
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database

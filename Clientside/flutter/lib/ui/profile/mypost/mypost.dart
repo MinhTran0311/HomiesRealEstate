@@ -1,4 +1,7 @@
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -32,28 +35,19 @@ class _MyPostScreenState extends State<MyPostScreen> {
   final UserStore userStore;
   final PostStore postStore;
   _MyPostScreenState({@required this.userStore, this.postStore});
-  //stores:---------------------------------------------------------------------
-  ThemeStore _themeStore;
-  LanguageStore _languageStore;
   TownStore _townStore;
   List<DateTime> selectedDatefl = new List<DateTime>();
-
   @override
   void initState() {
     super.initState();
     selectedDatefl = new List<DateTime>(postStore.postForCurList.posts.length);
+    songay=new List<int>(postStore.postForCurList.posts.length);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _languageStore = Provider.of<LanguageStore>(context);
-    _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
-    if (!postStore.loadingPostForCur) {
-      postStore.getPostForCurs();
-    }
-    if (!userStore.loading) userStore.getCurrentUser();
     if (!_townStore.loading) {
       _townStore.getTowns();
     }
@@ -67,7 +61,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
       postStore.getThuocTinhs();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -282,7 +275,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           );
   }
 
-  var songay;
+  List<int> songay=new List<int>();
   _selectDatefl(
     BuildContext context,
     DateTime ngayhethan,
@@ -290,7 +283,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   ) async {
     if (selectedDatefl[index] == null)
       selectedDatefl[index] = ngayhethan.add(Duration(days: 2));
-    final DateTime picked = await showDatePicker(
+    final DateTime picked= await showDatePicker(
       context: context,
       locale: const Locale('en', ''),
       initialDate: selectedDatefl[index].subtract(Duration(days: 1)),
@@ -299,25 +292,28 @@ class _MyPostScreenState extends State<MyPostScreen> {
     );
     if (picked != null && picked != selectedDatefl[index])
       setState(() {
-        songay = 0;
+        songay[index] = 0;
         if (DateTime.now().isAfter(
             DateTime.parse(postStore.postForCurList.posts[index].thoiHan))) {
-          while (picked.isAfter(DateTime.now().add(Duration(days: songay))))
-            songay++;
-          selectedDatefl[index] = DateTime.now().add(Duration(days: songay));
+          while (picked.isAfter(DateTime.now().add(Duration(days: songay[index]))))
+            songay[index]++;
+          selectedDatefl[index] = DateTime.now().add(Duration(days: songay[index]));
         } else {
           while (picked.isAfter(
               DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
-                  .add(Duration(days: songay))))
-            songay++;
+                  .add(Duration(days: songay[index]))))
+            songay[index]++;
           selectedDatefl[index] =
               DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
-                  .add(Duration(days: songay));
+                  .add(Duration(days: songay[index]));
         }
       });
   }
 
   Widget _buildPostPoster(Post post, int index) {
+    Newpost newpost;
+    return Observer(
+        builder: (context) {
     return Card(
       margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
       clipBehavior: Clip.antiAlias,
@@ -591,7 +587,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}")),
                   SizedBox(height: 12),
                   RoundedButtonWidget(
-                    onPressed: () => {
+                    onPressed: () async => {
+                      if (post.giagoi==null)
+                        post.giagoi= await postStore.getpackprice(post.goiBaiDangId)  ,
                       _selectDatefl(
                           context, DateTime.parse(post.thoiHan), index)
                     },
@@ -601,8 +599,29 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   ),
                   if (selectedDatefl[index] != null)
                   RoundedButtonWidget(
-                    onPressed: () => {
-
+                    onPressed: ()=>{newpost= new Newpost(),
+                      if(post.giagoi==null)
+                      post.giagoi=5000,
+                      if(post.goiBaiDangId==null)
+                      post.goiBaiDangId=1,
+                      post.thoiHan=selectedDatefl[index].toIso8601String(),
+                      newpost.post=post,
+                      newpost.lichsugiaodichs=new lichsugiaodich(),
+                      newpost.lichsugiaodichs.userId=post.userId,
+                      newpost.lichsugiaodichs.ghiChu="${post.tieuDe} gia hạn",
+                      newpost.lichsugiaodichs.thoiDiem=DateTime.now().toIso8601String(),
+                      newpost.lichsugiaodichs.soTien=songay[index]*post.giagoi,
+                      newpost.hoadonbaidang=new Hoadonbaidang(),
+                      newpost.hoadonbaidang.thoiDiem=newpost.lichsugiaodichs.thoiDiem,
+                      newpost.hoadonbaidang.giaGoi=post.giagoi,
+                      newpost.hoadonbaidang.soNgayMua=songay[index],
+                      newpost.hoadonbaidang.tongTien=newpost.lichsugiaodichs.soTien,
+                      newpost.hoadonbaidang.ghiChu="Gia hạn bài đăng \"${post.tieuDe}\"",
+                      newpost.hoadonbaidang.baiDangId=post.id,
+                      newpost.hoadonbaidang.goiBaiDangId=post.goiBaiDangId,
+                      newpost.hoadonbaidang.userId=post.userId,
+                      selectedDatefl[index]=null,
+                      postStore.giahan(newpost),
                     },
                     buttonColor: Colors.orangeAccent,
                     textColor: Colors.white,
@@ -612,7 +631,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           ],
         ),
       ]),
-    );
+    );});
   }
 
   Widget _handleErrorMessage() {
