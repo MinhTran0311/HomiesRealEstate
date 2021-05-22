@@ -44,11 +44,59 @@ mixin _$PostStore on _PostStore, Store {
       (_$searchLoadingComputed ??= Computed<bool>(() => super.searchLoading,
               name: '_PostStore.searchLoading'))
           .value;
+  Computed<bool> _$loadinggetcategorysComputed;
+
+  @override
+  bool get loadinggetcategorys => (_$loadinggetcategorysComputed ??=
+          Computed<bool>(() => super.loadinggetcategorys,
+              name: '_PostStore.loadinggetcategorys'))
+      .value;
   Computed<bool> _$hasFilterComputed;
 
   @override
   bool get hasFilter => (_$hasFilterComputed ??=
           Computed<bool>(() => super.hasFilter, name: '_PostStore.hasFilter'))
+      .value;
+  Computed<bool> _$loadingPackComputed;
+
+  @override
+  bool get loadingPack =>
+      (_$loadingPackComputed ??= Computed<bool>(() => super.loadingPack,
+              name: '_PostStore.loadingPack'))
+          .value;
+  Computed<bool> _$loadingThuocTinhComputed;
+
+  @override
+  bool get loadingThuocTinh => (_$loadingThuocTinhComputed ??= Computed<bool>(
+          () => super.loadingThuocTinh,
+          name: '_PostStore.loadingThuocTinh'))
+      .value;
+  Computed<bool> _$loadingNewpostComputed;
+
+  @override
+  bool get loadingNewpost =>
+      (_$loadingNewpostComputed ??= Computed<bool>(() => super.loadingNewpost,
+              name: '_PostStore.loadingNewpost'))
+          .value;
+  Computed<bool> _$loadingeditpostComputed;
+
+  @override
+  bool get loadingeditpost =>
+      (_$loadingeditpostComputed ??= Computed<bool>(() => super.loadingeditpost,
+              name: '_PostStore.loadingeditpost'))
+          .value;
+  Computed<bool> _$loadingPostForCurComputed;
+
+  @override
+  bool get loadingPostForCur => (_$loadingPostForCurComputed ??= Computed<bool>(
+          () => super.loadingPostForCur,
+          name: '_PostStore.loadingPostForCur'))
+      .value;
+  Computed<bool> _$DeletepostComputed;
+
+  @override
+  bool get Deletepost => (_$DeletepostComputed ??=
+          Computed<bool>(() => super.Deletepost, name: '_PostStore.Deletepost'))
       .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
@@ -222,6 +270,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchPostCategorysFutureAtom =
+      Atom(name: '_PostStore.fetchPostCategorysFuture');
+
+  @override
+  ObservableFuture<PostCategoryList> get fetchPostCategorysFuture {
+    _$fetchPostCategorysFutureAtom.reportRead();
+    return super.fetchPostCategorysFuture;
+  }
+
+  @override
+  set fetchPostCategorysFuture(ObservableFuture<PostCategoryList> value) {
+    _$fetchPostCategorysFutureAtom
+        .reportWrite(value, super.fetchPostCategorysFuture, () {
+      super.fetchPostCategorysFuture = value;
+    });
+  }
+
   final _$imageUrlListAtom = Atom(name: '_PostStore.imageUrlList');
 
   @override
@@ -297,6 +362,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$postCategoryListAtom = Atom(name: '_PostStore.postCategoryList');
+
+  @override
+  PostCategoryList get postCategoryList {
+    _$postCategoryListAtom.reportRead();
+    return super.postCategoryList;
+  }
+
+  @override
+  set postCategoryList(PostCategoryList value) {
+    _$postCategoryListAtom.reportWrite(value, super.postCategoryList, () {
+      super.postCategoryList = value;
+    });
+  }
+
   final _$searchContentAtom = Atom(name: '_PostStore.searchContent');
 
   @override
@@ -325,6 +405,266 @@ mixin _$PostStore on _PostStore, Store {
     _$scrollControllerAtom.reportWrite(value, super.scrollController, () {
       super.scrollController = value;
     });
+  }
+
+  final _$successgetcategorysAtom =
+      Atom(name: '_PostStore.successgetcategorys');
+
+  @override
+  bool get successgetcategorys {
+    _$successgetcategorysAtom.reportRead();
+    return super.successgetcategorys;
+  }
+
+  @override
+  set successgetcategorys(bool value) {
+    _$successgetcategorysAtom.reportWrite(value, super.successgetcategorys, () {
+      super.successgetcategorys = value;
+    });
+  }
+
+  final _$fetchPacksFutureAtom = Atom(name: '_PostStore.fetchPacksFuture');
+
+  @override
+  ObservableFuture<PackList> get fetchPacksFuture {
+    _$fetchPacksFutureAtom.reportRead();
+    return super.fetchPacksFuture;
+  }
+
+  @override
+  set fetchPacksFuture(ObservableFuture<PackList> value) {
+    _$fetchPacksFutureAtom.reportWrite(value, super.fetchPacksFuture, () {
+      super.fetchPacksFuture = value;
+    });
+  }
+
+  final _$packListAtom = Atom(name: '_PostStore.packList');
+
+  @override
+  PackList get packList {
+    _$packListAtom.reportRead();
+    return super.packList;
+  }
+
+  @override
+  set packList(PackList value) {
+    _$packListAtom.reportWrite(value, super.packList, () {
+      super.packList = value;
+    });
+  }
+
+  final _$successPackAtom = Atom(name: '_PostStore.successPack');
+
+  @override
+  bool get successPack {
+    _$successPackAtom.reportRead();
+    return super.successPack;
+  }
+
+  @override
+  set successPack(bool value) {
+    _$successPackAtom.reportWrite(value, super.successPack, () {
+      super.successPack = value;
+    });
+  }
+
+  final _$fetchThuocTinhsFutureAtom =
+      Atom(name: '_PostStore.fetchThuocTinhsFuture');
+
+  @override
+  ObservableFuture<ThuocTinhList> get fetchThuocTinhsFuture {
+    _$fetchThuocTinhsFutureAtom.reportRead();
+    return super.fetchThuocTinhsFuture;
+  }
+
+  @override
+  set fetchThuocTinhsFuture(ObservableFuture<ThuocTinhList> value) {
+    _$fetchThuocTinhsFutureAtom.reportWrite(value, super.fetchThuocTinhsFuture,
+        () {
+      super.fetchThuocTinhsFuture = value;
+    });
+  }
+
+  final _$thuocTinhListAtom = Atom(name: '_PostStore.thuocTinhList');
+
+  @override
+  ThuocTinhList get thuocTinhList {
+    _$thuocTinhListAtom.reportRead();
+    return super.thuocTinhList;
+  }
+
+  @override
+  set thuocTinhList(ThuocTinhList value) {
+    _$thuocTinhListAtom.reportWrite(value, super.thuocTinhList, () {
+      super.thuocTinhList = value;
+    });
+  }
+
+  final _$successThuocTinhAtom = Atom(name: '_PostStore.successThuocTinh');
+
+  @override
+  bool get successThuocTinh {
+    _$successThuocTinhAtom.reportRead();
+    return super.successThuocTinh;
+  }
+
+  @override
+  set successThuocTinh(bool value) {
+    _$successThuocTinhAtom.reportWrite(value, super.successThuocTinh, () {
+      super.successThuocTinh = value;
+    });
+  }
+
+  final _$fetchNewpostsFutureAtom =
+      Atom(name: '_PostStore.fetchNewpostsFuture');
+
+  @override
+  ObservableFuture<String> get fetchNewpostsFuture {
+    _$fetchNewpostsFutureAtom.reportRead();
+    return super.fetchNewpostsFuture;
+  }
+
+  @override
+  set fetchNewpostsFuture(ObservableFuture<String> value) {
+    _$fetchNewpostsFutureAtom.reportWrite(value, super.fetchNewpostsFuture, () {
+      super.fetchNewpostsFuture = value;
+    });
+  }
+
+  final _$successNewpostAtom = Atom(name: '_PostStore.successNewpost');
+
+  @override
+  bool get successNewpost {
+    _$successNewpostAtom.reportRead();
+    return super.successNewpost;
+  }
+
+  @override
+  set successNewpost(bool value) {
+    _$successNewpostAtom.reportWrite(value, super.successNewpost, () {
+      super.successNewpost = value;
+    });
+  }
+
+  final _$fetcheditpostsFutureAtom =
+      Atom(name: '_PostStore.fetcheditpostsFuture');
+
+  @override
+  ObservableFuture<String> get fetcheditpostsFuture {
+    _$fetcheditpostsFutureAtom.reportRead();
+    return super.fetcheditpostsFuture;
+  }
+
+  @override
+  set fetcheditpostsFuture(ObservableFuture<String> value) {
+    _$fetcheditpostsFutureAtom.reportWrite(value, super.fetcheditpostsFuture,
+        () {
+      super.fetcheditpostsFuture = value;
+    });
+  }
+
+  final _$successeditpostAtom = Atom(name: '_PostStore.successeditpost');
+
+  @override
+  bool get successeditpost {
+    _$successeditpostAtom.reportRead();
+    return super.successeditpost;
+  }
+
+  @override
+  set successeditpost(bool value) {
+    _$successeditpostAtom.reportWrite(value, super.successeditpost, () {
+      super.successeditpost = value;
+    });
+  }
+
+  final _$fetchPostForCursFutureAtom =
+      Atom(name: '_PostStore.fetchPostForCursFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchPostForCursFuture {
+    _$fetchPostForCursFutureAtom.reportRead();
+    return super.fetchPostForCursFuture;
+  }
+
+  @override
+  set fetchPostForCursFuture(ObservableFuture<PostList> value) {
+    _$fetchPostForCursFutureAtom
+        .reportWrite(value, super.fetchPostForCursFuture, () {
+      super.fetchPostForCursFuture = value;
+    });
+  }
+
+  final _$postForCurListAtom = Atom(name: '_PostStore.postForCurList');
+
+  @override
+  PostList get postForCurList {
+    _$postForCurListAtom.reportRead();
+    return super.postForCurList;
+  }
+
+  @override
+  set postForCurList(PostList value) {
+    _$postForCurListAtom.reportWrite(value, super.postForCurList, () {
+      super.postForCurList = value;
+    });
+  }
+
+  final _$successPostForCurAtom = Atom(name: '_PostStore.successPostForCur');
+
+  @override
+  bool get successPostForCur {
+    _$successPostForCurAtom.reportRead();
+    return super.successPostForCur;
+  }
+
+  @override
+  set successPostForCur(bool value) {
+    _$successPostForCurAtom.reportWrite(value, super.successPostForCur, () {
+      super.successPostForCur = value;
+    });
+  }
+
+  final _$fetchdeleteFutureAtom = Atom(name: '_PostStore.fetchdeleteFuture');
+
+  @override
+  ObservableFuture<String> get fetchdeleteFuture {
+    _$fetchdeleteFutureAtom.reportRead();
+    return super.fetchdeleteFuture;
+  }
+
+  @override
+  set fetchdeleteFuture(ObservableFuture<String> value) {
+    _$fetchdeleteFutureAtom.reportWrite(value, super.fetchdeleteFuture, () {
+      super.fetchdeleteFuture = value;
+    });
+  }
+
+  final _$successdeleteAtom = Atom(name: '_PostStore.successdelete');
+
+  @override
+  bool get successdelete {
+    _$successdeleteAtom.reportRead();
+    return super.successdelete;
+  }
+
+  @override
+  set successdelete(bool value) {
+    _$successdeleteAtom.reportWrite(value, super.successdelete, () {
+      super.successdelete = value;
+    });
+  }
+
+  @override
+  ObservableFuture<dynamic> getPostForCurs() {
+    final _$future = super.getPostForCurs();
+    return ObservableFuture<dynamic>(_$future);
+  }
+
+  @override
+  ObservableFuture<dynamic> Delete(Post post) {
+    final _$future = super.Delete(post);
+    return ObservableFuture<dynamic>(_$future);
   }
 
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
@@ -377,6 +717,28 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getRecommendPosts(tag, isSearchInHome));
   }
 
+  final _$getPostcategorysAsyncAction =
+      AsyncAction('_PostStore.getPostcategorys');
+
+  @override
+  Future<dynamic> getPostcategorys() {
+    return _$getPostcategorysAsyncAction.run(() => super.getPostcategorys());
+  }
+
+  final _$getPacksAsyncAction = AsyncAction('_PostStore.getPacks');
+
+  @override
+  Future<dynamic> getPacks() {
+    return _$getPacksAsyncAction.run(() => super.getPacks());
+  }
+
+  final _$getThuocTinhsAsyncAction = AsyncAction('_PostStore.getThuocTinhs');
+
+  @override
+  Future<dynamic> getThuocTinhs() {
+    return _$getThuocTinhsAsyncAction.run(() => super.getThuocTinhs());
+  }
+
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
@@ -415,19 +777,44 @@ isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
 maxCount: ${maxCount},
 propertyList: ${propertyList},
+fetchPostCategorysFuture: ${fetchPostCategorysFuture},
 imageUrlList: ${imageUrlList},
 filter_model: ${filter_model},
 success: ${success},
 propertiesSuccess: ${propertiesSuccess},
 isBaiGhimYeuThich: ${isBaiGhimYeuThich},
+postCategoryList: ${postCategoryList},
 searchContent: ${searchContent},
 scrollController: ${scrollController},
+successgetcategorys: ${successgetcategorys},
+fetchPacksFuture: ${fetchPacksFuture},
+packList: ${packList},
+successPack: ${successPack},
+fetchThuocTinhsFuture: ${fetchThuocTinhsFuture},
+thuocTinhList: ${thuocTinhList},
+successThuocTinh: ${successThuocTinh},
+fetchNewpostsFuture: ${fetchNewpostsFuture},
+successNewpost: ${successNewpost},
+fetcheditpostsFuture: ${fetcheditpostsFuture},
+successeditpost: ${successeditpost},
+fetchPostForCursFuture: ${fetchPostForCursFuture},
+postForCurList: ${postForCurList},
+successPostForCur: ${successPostForCur},
+fetchdeleteFuture: ${fetchdeleteFuture},
+successdelete: ${successdelete},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
 getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
-hasFilter: ${hasFilter}
+loadinggetcategorys: ${loadinggetcategorys},
+hasFilter: ${hasFilter},
+loadingPack: ${loadingPack},
+loadingThuocTinh: ${loadingThuocTinh},
+loadingNewpost: ${loadingNewpost},
+loadingeditpost: ${loadingeditpost},
+loadingPostForCur: ${loadingPostForCur},
+Deletepost: ${Deletepost}
     ''';
   }
 }
