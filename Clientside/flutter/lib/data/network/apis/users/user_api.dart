@@ -33,7 +33,7 @@ class UserApi {
       // log("Get All Success");
       return UserList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      print("lỗi2" + e.toString());
       throw e;
     }
   }
