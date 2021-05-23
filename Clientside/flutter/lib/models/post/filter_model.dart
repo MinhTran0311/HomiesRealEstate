@@ -5,9 +5,9 @@ class filter_Model {
   String giaMax;
   String dienTichMin;
   String dienTichMax;
-  int tinhId;
-  int huyenId;
-  int xaId;
+  String tenTinh;
+  String tenHuyen;
+  String tenXa;
   String diaChi;
   String username;
   String tagTimKiem;
@@ -23,9 +23,9 @@ class filter_Model {
     this.giaMax="",
     this.dienTichMin="",
     this.dienTichMax="",
-    this.tinhId,
-    this.huyenId,
-    this.xaId,
+    this.tenTinh,
+    this.tenHuyen,
+    this.tenXa,
     this.diaChi="",
     this.username="",
     this.tagTimKiem="",
@@ -44,9 +44,9 @@ class filter_Model {
     "MaxDienTichFilter": dienTichMin,
     "MinDienTichFilter": dienTichMax,
     "UserNameFilter": username,
-    "XaIdFilter": xaId,
-    "HuyenIdFilter": huyenId,
-    "TinhTenTinhFilter": tinhId,
+    "TenXaFilter": tenXa,
+    "TenHuyenFilter": tenHuyen,
+    "TenTinhFilter": tenTinh,
 
     "ToaDoXMinFilter": xMin,
     "ToaDoYMinFilter": yMin,

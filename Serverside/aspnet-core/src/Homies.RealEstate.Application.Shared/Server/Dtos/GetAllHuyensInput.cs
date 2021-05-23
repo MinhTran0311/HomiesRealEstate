@@ -11,5 +11,7 @@ namespace Homies.RealEstate.Server.Dtos
 
         public string TinhTenTinhFilter { get; set; }
 
+        public int? TinhIdFilter { get; set; }
+
     }
 }

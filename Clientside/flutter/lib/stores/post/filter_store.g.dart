@@ -23,27 +23,27 @@ mixin _$FilterStore on _FilterStore, Store {
           Computed<bool>(() => super.suDungDienTichFilter,
               name: '_FilterStore.suDungDienTichFilter'))
       .value;
-  Computed<bool> _$loadingComputed;
+  Computed<bool> _$loadingProvinceComputed;
 
   @override
-  bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_FilterStore.loading'))
-      .value;
-
-  final _$fetchPostsFutureAtom = Atom(name: '_FilterStore.fetchPostsFuture');
-
-  @override
-  ObservableFuture<PostList> get fetchPostsFuture {
-    _$fetchPostsFutureAtom.reportRead();
-    return super.fetchPostsFuture;
-  }
+  bool get loadingProvince =>
+      (_$loadingProvinceComputed ??= Computed<bool>(() => super.loadingProvince,
+              name: '_FilterStore.loadingProvince'))
+          .value;
+  Computed<bool> _$loadingTownComputed;
 
   @override
-  set fetchPostsFuture(ObservableFuture<PostList> value) {
-    _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
-      super.fetchPostsFuture = value;
-    });
-  }
+  bool get loadingTown =>
+      (_$loadingTownComputed ??= Computed<bool>(() => super.loadingTown,
+              name: '_FilterStore.loadingTown'))
+          .value;
+  Computed<bool> _$loadingCommuneComputed;
+
+  @override
+  bool get loadingCommune =>
+      (_$loadingCommuneComputed ??= Computed<bool>(() => super.loadingCommune,
+              name: '_FilterStore.loadingCommune'))
+          .value;
 
   final _$filter_modelAtom = Atom(name: '_FilterStore.filter_model');
 
@@ -139,6 +139,125 @@ mixin _$FilterStore on _FilterStore, Store {
     });
   }
 
+  final _$provinceListStringAtom =
+      Atom(name: '_FilterStore.provinceListString');
+
+  @override
+  List<String> get provinceListString {
+    _$provinceListStringAtom.reportRead();
+    return super.provinceListString;
+  }
+
+  @override
+  set provinceListString(List<String> value) {
+    _$provinceListStringAtom.reportWrite(value, super.provinceListString, () {
+      super.provinceListString = value;
+    });
+  }
+
+  final _$fetchProvinceFutureAtom =
+      Atom(name: '_FilterStore.fetchProvinceFuture');
+
+  @override
+  ObservableFuture<ProvinceList> get fetchProvinceFuture {
+    _$fetchProvinceFutureAtom.reportRead();
+    return super.fetchProvinceFuture;
+  }
+
+  @override
+  set fetchProvinceFuture(ObservableFuture<ProvinceList> value) {
+    _$fetchProvinceFutureAtom.reportWrite(value, super.fetchProvinceFuture, () {
+      super.fetchProvinceFuture = value;
+    });
+  }
+
+  final _$townListStringAtom = Atom(name: '_FilterStore.townListString');
+
+  @override
+  List<String> get townListString {
+    _$townListStringAtom.reportRead();
+    return super.townListString;
+  }
+
+  @override
+  set townListString(List<String> value) {
+    _$townListStringAtom.reportWrite(value, super.townListString, () {
+      super.townListString = value;
+    });
+  }
+
+  final _$fetchTownFutureAtom = Atom(name: '_FilterStore.fetchTownFuture');
+
+  @override
+  ObservableFuture<TownList> get fetchTownFuture {
+    _$fetchTownFutureAtom.reportRead();
+    return super.fetchTownFuture;
+  }
+
+  @override
+  set fetchTownFuture(ObservableFuture<TownList> value) {
+    _$fetchTownFutureAtom.reportWrite(value, super.fetchTownFuture, () {
+      super.fetchTownFuture = value;
+    });
+  }
+
+  final _$communeListStringAtom = Atom(name: '_FilterStore.communeListString');
+
+  @override
+  List<String> get communeListString {
+    _$communeListStringAtom.reportRead();
+    return super.communeListString;
+  }
+
+  @override
+  set communeListString(List<String> value) {
+    _$communeListStringAtom.reportWrite(value, super.communeListString, () {
+      super.communeListString = value;
+    });
+  }
+
+  final _$fetchCommuneFutureAtom =
+      Atom(name: '_FilterStore.fetchCommuneFuture');
+
+  @override
+  ObservableFuture<CommuneList> get fetchCommuneFuture {
+    _$fetchCommuneFutureAtom.reportRead();
+    return super.fetchCommuneFuture;
+  }
+
+  @override
+  set fetchCommuneFuture(ObservableFuture<CommuneList> value) {
+    _$fetchCommuneFutureAtom.reportWrite(value, super.fetchCommuneFuture, () {
+      super.fetchCommuneFuture = value;
+    });
+  }
+
+  final _$getAllProvinceAsyncAction =
+      AsyncAction('_FilterStore.getAllProvince');
+
+  @override
+  Future<dynamic> getAllProvince() {
+    return _$getAllProvinceAsyncAction.run(() => super.getAllProvince());
+  }
+
+  final _$getTownByProvinceNameAsyncAction =
+      AsyncAction('_FilterStore.getTownByProvinceName');
+
+  @override
+  Future<dynamic> getTownByProvinceName(String provinceName) {
+    return _$getTownByProvinceNameAsyncAction
+        .run(() => super.getTownByProvinceName(provinceName));
+  }
+
+  final _$getCommuneByTownNameAsyncAction =
+      AsyncAction('_FilterStore.getCommuneByTownName');
+
+  @override
+  Future<dynamic> getCommuneByTownName(String TownName) {
+    return _$getCommuneByTownNameAsyncAction
+        .run(() => super.getCommuneByTownName(TownName));
+  }
+
   final _$_FilterStoreActionController = ActionController(name: '_FilterStore');
 
   @override
@@ -208,7 +327,7 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
-  void setTinhId(int value) {
+  void setTinhId(String value) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.setTinhId');
     try {
@@ -219,7 +338,7 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
-  void setHuyenId(int value) {
+  void setHuyenId(String value) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.setHuyenId');
     try {
@@ -230,7 +349,7 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
-  void setXaId(int value) {
+  void setXaId(String value) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.setXaId');
     try {
@@ -276,16 +395,23 @@ mixin _$FilterStore on _FilterStore, Store {
   @override
   String toString() {
     return '''
-fetchPostsFuture: ${fetchPostsFuture},
 filter_model: ${filter_model},
 success: ${success},
 giaDropDownValue: ${giaDropDownValue},
 dienTichDropDownValue: ${dienTichDropDownValue},
 loaiBaiDangDropDownValue: ${loaiBaiDangDropDownValue},
 seletedRange: ${seletedRange},
+provinceListString: ${provinceListString},
+fetchProvinceFuture: ${fetchProvinceFuture},
+townListString: ${townListString},
+fetchTownFuture: ${fetchTownFuture},
+communeListString: ${communeListString},
+fetchCommuneFuture: ${fetchCommuneFuture},
 suDungGiaFilter: ${suDungGiaFilter},
 suDungDienTichFilter: ${suDungDienTichFilter},
-loading: ${loading}
+loadingProvince: ${loadingProvince},
+loadingTown: ${loadingTown},
+loadingCommune: ${loadingCommune}
     ''';
   }
 }
