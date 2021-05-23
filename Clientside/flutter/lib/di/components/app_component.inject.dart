@@ -8,15 +8,15 @@ import '../../data/network/rest_client.dart' as _i7;
 import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/network/apis/authToken/authToken_api.dart' as _i9;
 import '../../data/network/apis/users/user_api.dart' as _i10;
-import '../../data/network/apis/towns/town_api.dart' as _i19;
 import '../../data/network/apis/roles/role_api.dart' as _i11;
 import '../../data/network/apis/image/image_api.dart' as _i12;
-import '../../data/local/datasources/post/post_datasource.dart' as _i13;
-import '../../data/network/apis/registration/registration_api.dart' as _i14;
-import '../../data/repository.dart' as _i15;
-import 'dart:async' as _i16;
-import '../modules/netwok_module.dart' as _i17;
-import '../../main.dart' as _i18;
+import '../../data/network/apis/towns/town_api.dart' as _i13;
+import '../../data/local/datasources/post/post_datasource.dart' as _i14;
+import '../../data/network/apis/registration/registration_api.dart' as _i15;
+import '../../data/repository.dart' as _i16;
+import 'dart:async' as _i17;
+import '../modules/netwok_module.dart' as _i18;
+import '../../main.dart' as _i19;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);
@@ -41,18 +41,18 @@ class AppComponent$Injector implements _i1.AppComponent {
 
   _i11.RoleApi _singletonRoleApi;
 
-  _i19.TownApi _singletonTownApi;
-
   _i12.ImageApi _singletonImageApi;
 
-  _i13.PostDataSource _singletonPostDataSource;
+  _i13.TownApi _singletonTownApi;
 
-  _i14.RegistrationApi _singletonRegistrationApi;
+  _i14.PostDataSource _singletonPostDataSource;
 
-  _i15.Repository _singletonRepository;
+  _i15.RegistrationApi _singletonRegistrationApi;
 
-  static _i16.Future<_i1.AppComponent> create(
-      _i17.NetworkModule _,
+  _i16.Repository _singletonRepository;
+
+  static _i17.Future<_i1.AppComponent> create(
+      _i18.NetworkModule _,
       _i2.LocalModule localModule,
       _i3.PreferenceModule preferenceModule) async {
     final injector = AppComponent$Injector._(localModule, preferenceModule);
@@ -60,8 +60,8 @@ class AppComponent$Injector implements _i1.AppComponent {
     return injector;
   }
 
-  _i18.MyApp _createMyApp() => _i18.MyApp();
-  _i15.Repository _createRepository() =>
+  _i19.MyApp _createMyApp() => _i19.MyApp();
+  _i16.Repository _createRepository() =>
       _singletonRepository ??= _localModule.provideRepository(
           _createPostApi(),
           _createAuthTokenApi(),
@@ -91,15 +91,15 @@ class AppComponent$Injector implements _i1.AppComponent {
       _localModule.provideRoleApi(_createDioClient(), _createRestClient());
   _i12.ImageApi _createImageApi() => _singletonImageApi ??=
       _localModule.provideImageApi(_createDioClient(), _createRestClient());
-  _i19.TownApi _createTownApi() => _singletonTownApi ??=
+  _i13.TownApi _createTownApi() => _singletonTownApi ??=
       _localModule.provideTownApi(_createDioClient(), _createRestClient());
-  _i13.PostDataSource _createPostDataSource() =>
+  _i14.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();
-  _i14.RegistrationApi _createRegistrationApi() =>
+  _i15.RegistrationApi _createRegistrationApi() =>
       _singletonRegistrationApi ??= _localModule.provideRegistrationApi(
           _createDioClient(), _createRestClient());
   @override
-  _i18.MyApp get app => _createMyApp();
+  _i19.MyApp get app => _createMyApp();
   @override
-  _i15.Repository getRepository() => _createRepository();
+  _i16.Repository getRepository() => _createRepository();
 }

@@ -132,6 +132,7 @@ class _MapsScreenState extends State<MapsScreen> {
   Future<void> _goToCurrentLocationDevice() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_position1));
+    // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
   }
 
   _onMapCreated(GoogleMapController controller) {
@@ -367,7 +368,7 @@ class _MapsScreenState extends State<MapsScreen> {
               child: TextField(
                 controller: _autocompleteText,
                 decoration: InputDecoration(
-                  hintText: "Tìm kiếm",
+                  hintText: "Nhập tọa độ x, y",
                   suffixIcon: Icon(Icons.search)
                 ),
 
@@ -441,30 +442,30 @@ class _MapsScreenState extends State<MapsScreen> {
                     ],
                   ),
                 ),
-                (_autocompleteText == null || _autocompleteText.toString().isEmpty) ? Container()
-                    : Container(
-                  height: MediaQuery.of(context).size.height*0.8,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(.6),
-                    backgroundBlendMode: BlendMode.darken
-                  ),
-                ),
-                applicationBloc.searchResults == null ? Container()
-                    : Container(
-                  height: MediaQuery.of(context).size.height*0.8,
-                  child: ListView.builder(
-                    itemCount: applicationBloc.searchResults.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(applicationBloc.searchResults[index].description,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),)
-                      );
-                    },
-                  ),
-                ),
+                // (_autocompleteText == null || _autocompleteText.toString().isEmpty) ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(.6),
+                //     backgroundBlendMode: BlendMode.darken
+                //   ),
+                // ),
+                // applicationBloc.searchResults == null ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   child: ListView.builder(
+                //     itemCount: applicationBloc.searchResults.length,
+                //     itemBuilder: (context, index) {
+                //       return ListTile(
+                //         title: Text(applicationBloc.searchResults[index].description,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //         ),)
+                //       );
+                //     },
+                //   ),
+                // ),
               ],
             ),
 
@@ -487,7 +488,7 @@ class _MapsScreenState extends State<MapsScreen> {
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 11.0,
+                zoom: 15.0,
               ),
               mapType: _currentMapType,
               markers: _markers,

@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:boilerplate/models/placeSearch.dart';
 import 'package:boilerplate/services/geolocator_service.dart';
 import 'package:boilerplate/services/placesService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class ApplicationBloc with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -21,9 +24,10 @@ class ApplicationBloc with ChangeNotifier {
   }
 
   searchPlaces(String searchTerm) async {
-    searchResults = await placesService.getAutocomplete(searchTerm);
-    print("SearchResult: " + searchResults.toString());
-    print(searchResults);
-    notifyListeners();
+    // searchResults = await placesService.getAutocomplete(searchTerm);
+    // print("SearchResult: " + searchResults.toString());
+    // print(searchResults);
+    // notifyListeners();
+    List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
   }
 }

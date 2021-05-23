@@ -16,6 +16,13 @@ mixin _$ImageStore on _ImageStore, Store {
       (_$imageLoadingComputed ??= Computed<bool>(() => super.imageLoading,
               name: '_ImageStore.imageLoading'))
           .value;
+  Computed<bool> _$imageLoadingpostComputed;
+
+  @override
+  bool get imageLoadingpost => (_$imageLoadingpostComputed ??= Computed<bool>(
+          () => super.imageLoadingpost,
+          name: '_ImageStore.imageLoadingpost'))
+      .value;
 
   final _$fetchImageFutureAtom = Atom(name: '_ImageStore.fetchImageFuture');
 
@@ -85,14 +92,16 @@ mixin _$ImageStore on _ImageStore, Store {
     return _$getImagesForDetailAsyncAction
         .run(() => super.getImagesForDetail(postId));
   }
+
+  @override
   String toString() {
     return '''
 fetchImageFuture: ${fetchImageFuture},
 imageList: ${imageList},
 success: ${success},
 selectedIndex: ${selectedIndex},
-imageLoading: ${imageLoading}
-
+imageLoading: ${imageLoading},
+imageLoadingpost: ${imageLoadingpost}
     ''';
   }
 }
