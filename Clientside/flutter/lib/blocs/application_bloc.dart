@@ -1,5 +1,4 @@
-import 'dart:html';
-
+// import 'dart:html';
 import 'package:boilerplate/models/placeSearch.dart';
 import 'package:boilerplate/services/geolocator_service.dart';
 import 'package:boilerplate/services/placesService.dart';
@@ -13,6 +12,10 @@ class ApplicationBloc with ChangeNotifier {
   //Variables
   Position currentLocation;
   List<PlaceSearch> searchResults;
+  List<Placemark> placemarks;
+  double lat = 52.2165157;
+  double tit = 6.9437819;
+
 
   ApplicationBloc() {
     setCurrentLocation();
@@ -28,6 +31,9 @@ class ApplicationBloc with ChangeNotifier {
     // print("SearchResult: " + searchResults.toString());
     // print(searchResults);
     // notifyListeners();
-    List<Location> locations = await locationFromAddress("Gronausestraat 710, Enschede");
+    // List<Location> locations = await locationFromAddress("searchTerm");
+    placemarks = await placemarkFromCoordinates(lat, tit);
+    print("placemarks");
+    print(placemarks);
   }
 }

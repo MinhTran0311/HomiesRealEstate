@@ -50,6 +50,7 @@ class _MapsScreenState extends State<MapsScreen> {
   bool permissionEnable = false;
 
   PostStore _postStore;
+  ApplicationBloc _applicationBloc;
 
   @override
   void initState() {
@@ -70,6 +71,7 @@ class _MapsScreenState extends State<MapsScreen> {
       if (!_postStore.loading) {
         // _postStore.getPostsFromXY();
          _addMarkerButtonProcessed();
+         _applicationBloc = Provider.of<ApplicationBloc>(context);
       }
     }
     else {
@@ -133,6 +135,19 @@ class _MapsScreenState extends State<MapsScreen> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_position1));
     // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
+  }
+
+  Future<void> _goToCurrentLocationSearch() async {
+    if (_applicationBloc.placemarks != null) {
+      final GoogleMapController controller = await _controller.future;
+      CameraPosition posotionSearch = CameraPosition(
+        bearing: 192.833,
+        target: LatLng(_applicationBloc.lat, _applicationBloc.tit),
+        tilt: 59.440,
+        zoom: 13.0,
+      );
+      // controller.animateCamera(CameraUpdate.newCameraPosition(_applicationBloc.placemarks[0]));
+    }
   }
 
   _onMapCreated(GoogleMapController controller) {
@@ -332,7 +347,6 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   Widget build(BuildContext context) {
     if (this.post == null) {
-      final applicationBloc = Provider.of<ApplicationBloc>(context);
       return Scaffold(
         primary: true,
         appBar: AppBar(
@@ -368,11 +382,12 @@ class _MapsScreenState extends State<MapsScreen> {
               child: TextField(
                 controller: _autocompleteText,
                 decoration: InputDecoration(
-                  hintText: "Nhập tọa độ x, y",
+                  hintText: "Nhập kinh độ và vĩ độ",
                   suffixIcon: Icon(Icons.search)
                 ),
 
-                onChanged: (value) => applicationBloc.searchPlaces(value),
+                // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                onSubmitted: (value) => this._applicationBloc.searchPlaces(value),
               ),
             ),
             Stack(
