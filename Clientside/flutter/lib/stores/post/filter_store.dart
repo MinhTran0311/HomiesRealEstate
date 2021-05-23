@@ -3,6 +3,9 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
+import 'package:boilerplate/models/town/commune_list.dart';
+import 'package:boilerplate/models/town/province_list.dart';
+import 'package:boilerplate/models/town/town_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
@@ -23,17 +26,12 @@ abstract class _FilterStore with Store {
   List<ReactionDisposer> _disposers;
 
   // constructor:---------------------------------------------------------------
-  _FilterStore(Repository repository);
+  _FilterStore(Repository repository){
+    this._repository = repository;
+  }
 
   // store variables:-----------------------------------------------------------
   // Post observer
-  static ObservableFuture<PostList> emptyPostResponse =
-  ObservableFuture.value(null);
-
-  @observable
-  ObservableFuture<PostList> fetchPostsFuture =
-  ObservableFuture<PostList>(emptyPostResponse);
-
   @observable
   filter_Model filter_model= new filter_Model();
 
@@ -57,10 +55,6 @@ abstract class _FilterStore with Store {
 
   @computed
   bool get suDungDienTichFilter => dienTichDropDownValue != "Bất kì";
-
-
-  @computed
-  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -88,27 +82,18 @@ abstract class _FilterStore with Store {
     filter_model.dienTichMax = value;
   }
   @action
-  void setTinhId(int value) {
-    filter_model.tinhId = value;
+  void setTinhId(String value) {
+    filter_model.tenTinh = value;
   }
   @action
-  void setHuyenId(int value) {
-    filter_model.huyenId = value;
+  void setHuyenId(String value) {
+    filter_model.tenHuyen = value;
   }
   @action
-  void setXaId(int value) {
-    filter_model.xaId = value;
+  void setXaId(String value) {
+    filter_model.tenXa = value;
   }
 
-  // @action
-  // void setMinGiaSlider(double value, bool isEmptyMax){
-  //   if (filter_model.giaMax!=null && !isEmptyMax)
-  //     seletedRange = RangeValues(value, filter_model.giaMax);
-  //   else if (isEmptyMax)
-  //     seletedRange = RangeValues(value, 20000);
-  //
-  //
-  // }
   @action String calculateActualValue(String value, String option){
     if (option == "Bất kì")
       return "";
@@ -119,7 +104,6 @@ abstract class _FilterStore with Store {
     else newValue = newValue * 100000;
     return newValue.toString().split(".")[0] + "0000";
   }
-
 
   @action
   filter_Model validateSearchContent() {
@@ -134,18 +118,20 @@ abstract class _FilterStore with Store {
       return null;
     else {
       filter_Model finalFilter = new filter_Model();
-      finalFilter.loaiBaiDang =
-      loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
-      finalFilter.giaMin =
-      filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(
-          filter_model.giaMin, giaDropDownValue);
-      finalFilter.giaMax =
-      filter_model.giaMax.isEmpty ? filter_model.giaMax : calculateActualValue(
-          filter_model.giaMax, giaDropDownValue);
+      finalFilter.loaiBaiDang = loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
+      finalFilter.giaMin = filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(filter_model.giaMin, giaDropDownValue);
+      finalFilter.giaMax = filter_model.giaMax.isEmpty ? filter_model.giaMax : calculateActualValue(filter_model.giaMax, giaDropDownValue);
       finalFilter.dienTichMin = filter_model.dienTichMin;
       finalFilter.dienTichMax = filter_model.dienTichMax;
       finalFilter.diaChi = filter_model.diaChi;
       finalFilter.username = filter_model.username;
+      finalFilter.tenTinh = filter_model.tenTinh;
+      finalFilter.tenHuyen = filter_model.tenHuyen;
+      finalFilter.tenXa = filter_model.tenXa;
+
+      print(finalFilter.tenTinh);
+      print(finalFilter.tenHuyen);
+      print(finalFilter.tenXa);
       return finalFilter;
     }
   }
@@ -158,5 +144,117 @@ abstract class _FilterStore with Store {
 
     filter_model = new filter_Model();
   }
+  //#region Province
+  @observable
+  List<String> provinceListString = new List<String>();
+
+  static ObservableFuture<ProvinceList> emptyProvinceResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<ProvinceList> fetchProvinceFuture =
+  ObservableFuture<ProvinceList>(emptyProvinceResponse);
+
+  @computed
+  bool get loadingProvince => fetchProvinceFuture.status == FutureStatus.pending;
+
+  @action
+  Future getAllProvince() async {
+    final future = _repository.getAllProvinces();
+    fetchProvinceFuture = ObservableFuture(future);
+
+    future.then((provinceList) {
+      success = true;
+      for (int i=0; i< provinceList.provinces.length; i++)
+        this.provinceListString.add(provinceList.provinces[i].tenTinh);
+
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //#endregion
+
+  //#region Town
+  @observable
+  List<String> townListString = [];
+
+  static ObservableFuture<TownList> emptyTownResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<TownList> fetchTownFuture =
+  ObservableFuture<TownList>(emptyTownResponse);
+
+  @computed
+  bool get loadingTown => fetchTownFuture.status == FutureStatus.pending;
+
+  @action
+  Future getTownByProvinceName(String provinceName) async {
+    final future = _repository.getTowns(provinceFilter: provinceName);
+    fetchTownFuture = ObservableFuture(future);
+
+    future.then((townList) {
+      success = true;
+      print("111111111111111111");
+      this.townListString.clear();
+      for (int i=0; i< townList.towns.length; i++)
+        this.townListString.add(townList.towns[i].tenHuyen);
+      print(townListString.length);
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  //#endregion
+
+  //#region Commune
+  @observable
+  List<String> communeListString = [];
+
+  static ObservableFuture<CommuneList> emptyCommuneResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<CommuneList> fetchCommuneFuture =
+  ObservableFuture<CommuneList>(emptyCommuneResponse);
+
+  @computed
+  bool get loadingCommune => fetchCommuneFuture.status == FutureStatus.pending;
+
+  @action
+  Future getCommuneByTownName(String TownName) async {
+    final future = _repository.getCommunes(townFilter: TownName);
+    fetchCommuneFuture = ObservableFuture(future);
+
+    future.then((communeList) {
+      success = true;
+      this.communeListString.clear();
+      for (int i=0; i< communeList.communes.length; i++)
+        this.communeListString.add(communeList.communes[i].tenXa);
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+//#endregion
+
 }
 

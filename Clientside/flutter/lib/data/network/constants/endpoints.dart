@@ -62,4 +62,9 @@ class Endpoints {
   //search
   static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
   //# endregion
+
+  static const String getAllProvinces = homiesUrl + "/services/app/Tinhs/GetAll";
+  static const String getAllTowns = homiesUrl + "/services/app/Huyens/GetAll";
+  static const String getAllCommunes = homiesUrl + "/services/app/Xas/GetAll";
+
 }

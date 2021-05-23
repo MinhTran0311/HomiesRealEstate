@@ -162,6 +162,7 @@ mixin _$UserStore on _UserStore, Store {
       super.user = value;
     });
   }
+
   final _$userCurrentAtom = Atom(name: '_UserStore.userCurrent');
 
   @override
@@ -368,9 +369,9 @@ mixin _$UserStore on _UserStore, Store {
 
   @override
   Future<dynamic> updateCurrentUser(String name, String surname,
-      String phonenumber, String email, String userName,int id) {
-    return _$updateCurrentUserAsyncAction.run(() =>
-        super.updateCurrentUser(name, surname, phonenumber, email, userName, id));
+      String phonenumber, String email, String userName, int id) {
+    return _$updateCurrentUserAsyncAction.run(() => super
+        .updateCurrentUser(name, surname, phonenumber, email, userName, id));
   }
 
   final _$updatePictureCurrentUserAsyncAction =
@@ -391,6 +392,7 @@ userByID: ${userByID},
 fetchUsersByIDFutures: ${fetchUsersByIDFutures},
 UserByIDFuturess: ${UserByIDFuturess},
 user: ${user},
+userCurrent: ${userCurrent},
 fetchUserCurrentFuture: ${fetchUserCurrentFuture},
 fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
 fetchUserCurrentPictureFuture: ${fetchUserCurrentPictureFuture},

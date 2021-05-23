@@ -13,5 +13,7 @@
         public string HuyenTenHuyen { get; set; }
 
         public string TinhTenTinh { get; set; }
+
+        public ChiTietHoaDonBaiDangDto ChiTietHoaDon { get; set; }
     }
 }

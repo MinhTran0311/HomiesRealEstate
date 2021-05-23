@@ -66,7 +66,9 @@ namespace Homies.RealEstate.Server
                                        {
                                            ThoiGian = o.ThoiGian,
                                            TrangThai = o.TrangThai,
-                                           Id = o.Id
+                                           Id = o.Id,
+                                           BaiDangId = o.BaiDangId
+                                           
                                        },
                                        UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                        BaiDangTieuDe = s2 == null || s2.TieuDe == null ? "" : s2.TieuDe.ToString()
@@ -75,6 +77,75 @@ namespace Homies.RealEstate.Server
             var totalCount = await filteredBaiGhimYeuThichs.CountAsync();
 
             return new PagedResultDto<GetBaiGhimYeuThichForViewDto>(
+                totalCount,
+                await baiGhimYeuThichs.ToListAsync()
+            );
+        }
+
+        public async Task<PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>> GetAllBaiGhimByCurrentUser()
+        {
+            var user = await GetCurrentUserAsync();
+
+            var filteredBaiGhimYeuThichs = _baiGhimYeuThichRepository.GetAll()
+                        .Include(e => e.UserFk)
+                        .Include(e => e.BaiDangFk)
+                        .Where(e => e.UserId == user.Id)
+                        .Where(e => e.TrangThai.Equals("On"));
+
+            var pagedAndFilteredBaiGhimYeuThichs = filteredBaiGhimYeuThichs
+                .OrderBy("id asc");
+
+            var baiGhimYeuThichs = from o in pagedAndFilteredBaiGhimYeuThichs
+                                   join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
+                                   from s1 in j1.DefaultIfEmpty()
+
+                                   join o2 in _lookup_baiDangRepository.GetAll() on o.BaiDangId equals o2.Id into j2
+                                   from s2 in j2.DefaultIfEmpty()
+
+                                   select new GetBaiGhimYeuThichForViewByUserDto()
+                                   {
+                                       BaiGhimYeuThich = new BaiGhimYeuThichDto
+                                       {
+                                           ThoiGian = o.ThoiGian,
+                                           TrangThai = o.TrangThai,
+                                           Id = o.Id,
+                                           UserId=o.UserId,
+                                           BaiDangId = o.BaiDangId
+
+                                       },
+                                       
+                                        BaiDang = new BaiDangDto
+                                        {
+                                            TagLoaiBaiDang = s2.TagLoaiBaiDang,
+                                            ThoiDiemDang = s2.ThoiDiemDang,
+                                            ThoiHan = s2.ThoiHan,
+                                            DiaChi = s2.DiaChi,
+                                            MoTa = s2.MoTa,
+                                            ToaDoX = s2.ToaDoX,
+                                            ToaDoY = s2.ToaDoY,
+                                            LuotXem = s2.LuotXem,
+                                            LuotYeuThich = s2.LuotYeuThich,
+                                            DiemBaiDang = s2.DiemBaiDang,
+                                            TrangThai = s2.TrangThai,
+                                            TagTimKiem = s2.TagTimKiem,
+                                            TieuDe = s2.TieuDe,
+                                            Id = s2.Id,
+                                            Gia = s2.Gia,
+                                            DienTich = s2.DienTich,
+                                            FeaturedImage = s2.FeaturedImage,
+                                            UserId = s2.UserId,
+                                            XaId = s2.XaId,
+                                            DanhMucId = s2.DanhMucId
+                                        },
+                                        UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
+                                        XaTenXa = s2.XaFk == null || s2.XaFk.TenXa == null ? "" : s2.XaFk.TenXa.ToString(),
+                                        HuyenTenHuyen = s2.XaFk == null || s2.XaFk.HuyenFk == null || s2.XaFk.HuyenFk.TenHuyen == null ? "" : s2.XaFk.HuyenFk.TenHuyen.ToString(),
+                                        TinhTenTinh = s2.XaFk == null || s2.XaFk.HuyenFk == null || s2.XaFk.HuyenFk.TinhFk == null || s2.XaFk.HuyenFk.TinhFk.TenTinh == null ? "" : s2.XaFk.HuyenFk.TinhFk.TenTinh.ToString()
+                                   };
+
+            var totalCount = await filteredBaiGhimYeuThichs.CountAsync();
+
+            return new PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>(
                 totalCount,
                 await baiGhimYeuThichs.ToListAsync()
             );

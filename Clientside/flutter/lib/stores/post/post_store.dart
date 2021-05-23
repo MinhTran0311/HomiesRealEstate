@@ -3,6 +3,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
+import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/postProperties/postProperty_list.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -58,18 +59,28 @@ abstract class _PostStore with Store {
     ObservableFuture<dynamic> fetchisBaiGhimYeuThichFuture =
     ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
 
+    static ObservableFuture<dynamic> emptyGetRecommendPostsFutureResponse =
+    ObservableFuture.value(null);
+
+    @observable
+    ObservableFuture<dynamic> fetchisGetRecommendPostsFuture =
+    ObservableFuture<dynamic>(emptyGetRecommendPostsFutureResponse);
+
     static ObservableFuture<dynamic> emptySearchResponse =
     ObservableFuture.value(null);
 
     @observable
     ObservableFuture<dynamic> fetchSearchFuture =
-    ObservableFuture<dynamic>(emptyIsBaiDangYeuThichResponse);
+    ObservableFuture<dynamic>(emptySearchResponse);
 
     @observable
     PostList postList;
 
     @observable
-    bool isIntialLoading=true;
+    PostList rcmPostList;
+
+    @observable
+    bool isIntialLoading = true;
 
     @observable
     int skipCount = 0;
@@ -124,6 +135,9 @@ abstract class _PostStore with Store {
   bool get isBaiGhimYeuThichLoading => fetchisBaiGhimYeuThichFuture.status == FutureStatus.pending;
 
     @computed
+    bool get getRecommendPostsFutureLoading => fetchisGetRecommendPostsFuture.status == FutureStatus.pending;
+
+    @computed
     bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
 
   @computed
@@ -144,7 +158,7 @@ abstract class _PostStore with Store {
         skipCount = 0;
       }
       else
-        skipCount+= Preferences.skipIndex;
+        skipCount += Preferences.skipIndex;
       final future = _repository.getPosts(skipCount, Preferences.maxCount);
       fetchPostsFuture = ObservableFuture(future);
 
@@ -281,6 +295,35 @@ abstract class _PostStore with Store {
       }
     });
   }
+
+  @action
+  Future getRecommendPosts(String tag, bool isSearchInHome) async {
+    filter_Model fm = new filter_Model();
+    fm.tagTimKiem = tag;
+    final futrue = _repository.searchPosts(fm);
+    fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
+
+    futrue.then((result) {
+      if(!isSearchInHome)
+       this.rcmPostList = result;
+      else {
+        this.postList = result;
+        skipCount=0;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
   @action
   void validateSearchContent(String value) {
       return;
@@ -411,6 +454,7 @@ abstract class _PostStore with Store {
         }
       });
     }
+    ////////////////edit
   static ObservableFuture<String> emptyeditostResponse =
   ObservableFuture.value(null);
 
@@ -468,5 +512,116 @@ abstract class _PostStore with Store {
       }
     });
   }
+  /////////////////delete
+  static ObservableFuture<String> emptydeleteResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchdeleteFuture = ObservableFuture<String>(emptydeleteResponse);
+  //postForCurList;
+  @computed
+  bool get Deletepost => fetchdeleteFuture.status == FutureStatus.pending;
+  @observable
+  bool successdelete = false;
+  @observable
+  Future Delete(Post post) async {
+    final future = _repository.Delete(post);
+    fetchdeleteFuture = ObservableFuture(future);
+    future.then((post) {
+      successdelete = true;
+        }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  /////////////////giahan
+  static ObservableFuture<String> emptygiahanResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchgiahanFuture = ObservableFuture<String>(emptygiahanResponse);
+  // @observable
+  //postForCurList;
+  @computed
+  bool get giahanpost => fetchgiahanFuture.status == FutureStatus.pending;
+  @observable
+  bool successgiahan = false;
+  @observable
+  Future giahan(Newpost post) async {
+    final future = _repository.giahan(post);
+    fetchgiahanFuture = ObservableFuture(future);
+    future.then((post) {
+      successgiahan = true;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  /////////////////getpackprice
+  static ObservableFuture<double> emptypackpriceResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<double> fetchgetpackpriceFuture = ObservableFuture<double>(emptypackpriceResponse);
+  //@observable
+  @computed
+  bool get getpackpricepost => fetchgiahanFuture.status == FutureStatus.pending;
+  @observable
+  bool successgetpackprice = false;
+  @observable
+  Future<double> getpackprice(int idpack) async {
+    final future = _repository.getpackprice(idpack);
+    fetchgetpackpriceFuture = ObservableFuture(future);
+    future.then((giagoi) {
+      successdelete = true;
+      return giagoi;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  ///////////////////////////getpostfav
+  static ObservableFuture<PostList> emptypostfavResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<PostList> fetchpostfavoFuture = ObservableFuture<PostList>(emptypostfavResponse);
+  @observable
+  PostList favopost;
+  @computed
+  bool get loadingfavopost => fetchpostfavoFuture.status == FutureStatus.pending;
+  @observable
+  bool successfavopost = false;
+  @observable
+  Future getfavopost(int iduser) async {
+    final future = _repository.getfavopost(iduser);
+    fetchpostfavoFuture = ObservableFuture(future);
+    future.then((favopost) {
+      //successPostForCur = true;
+      this.favopost = favopost;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
 }
-

@@ -17,6 +17,7 @@ import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune_list.dart';
+import 'package:boilerplate/models/town/province_list.dart';
 import 'package:boilerplate/models/town/town_list.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
@@ -127,6 +128,21 @@ class Repository {
   Future<String> editpost(Newpost post) async {
     return await _postApi.editpost(post);
   }
+  Future<String> Delete(Post post) async {
+    return await _postApi.Delete(post);
+  }
+  Future<String> giahan(Newpost post) async {
+    return await _postApi.giahan(post);
+  }
+  Future<double> getpackprice(int idpost) async {
+    return await _postApi.getpackprice(idpost);
+  }
+  Future<PostList> getfavopost(int iduser) async {
+    return await _postApi.getfavopost(iduser).then((postsList) {
+
+      return postsList;
+    }).catchError((error) => throw error);
+  }
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database
@@ -137,14 +153,19 @@ class Repository {
   //   }).catchError((error) => throw error);
   // }
   // Town: ---------------------------------------------------------------------
-  Future<TownList> getTowns() async {
 
-    return await _townApi.getTowns().then((townsList) {
+  Future<ProvinceList> getAllProvinces() async {
+    return await _townApi.getAllProvinces().then((provincesList) {
+      return provincesList;
+    }).catchError((error) => throw error);
+  }
+  Future<TownList> getTowns({String provinceFilter}) async {
+    return await _townApi.getTowns(provinceFilter: provinceFilter).then((townsList) {
       return townsList;
     }).catchError((error) => throw error);
   }
-  Future<CommuneList> getCommunes() async {
-    return await _townApi.getCommunes().then((communesList) {
+  Future<CommuneList> getCommunes({String townFilter}) async {
+    return await _townApi.getCommunes(townFilter: townFilter).then((communesList) {
 
       return communesList;
     }).catchError((error) => throw error);

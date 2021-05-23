@@ -11,5 +11,7 @@ namespace Homies.RealEstate.Server.Dtos
 
         public string HuyenTenHuyenFilter { get; set; }
 
+        public int? HuyenIdFilter { get; set; }
+
     }
 }

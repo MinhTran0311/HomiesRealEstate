@@ -9,4 +9,8 @@ class Preferences {
   static const String imgbb_api_key = "e654c99ecc0c0269a734e39f35249c8f";
   static const int skipIndex = 1;
   static const int maxCount = 1;
+
+  static const int maxProvinceCount = 64;
+  static const int maxTownCount = 709;
+  static const int maxCommuneCount = 11310;
 }

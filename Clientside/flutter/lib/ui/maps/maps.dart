@@ -1,3 +1,4 @@
+import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -33,6 +34,8 @@ class _MapsScreenState extends State<MapsScreen> {
   final Post post;
   _MapsScreenState({@required this.post});
 
+  TextEditingController _autocompleteText= TextEditingController();
+
   Completer<GoogleMapController> _controller = Completer();
   static LatLng _center;
   final Set<Marker> _markers = {};
@@ -47,6 +50,7 @@ class _MapsScreenState extends State<MapsScreen> {
   bool permissionEnable = false;
 
   PostStore _postStore;
+  ApplicationBloc _applicationBloc;
 
   @override
   void initState() {
@@ -66,11 +70,12 @@ class _MapsScreenState extends State<MapsScreen> {
     if (this.post == null) {
       if (!_postStore.loading) {
         // _postStore.getPostsFromXY();
-        _addMarkerButtonProcessed();
+         _addMarkerButtonProcessed();
+         _applicationBloc = Provider.of<ApplicationBloc>(context);
       }
     }
     else {
-      _addMarkerButtonProcessed();
+       _addMarkerButtonProcessed();
     }
     _setCameraPositon();
   }
@@ -129,6 +134,20 @@ class _MapsScreenState extends State<MapsScreen> {
   Future<void> _goToCurrentLocationDevice() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_position1));
+    // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
+  }
+
+  Future<void> _goToCurrentLocationSearch() async {
+    if (_applicationBloc.placemarks != null) {
+      final GoogleMapController controller = await _controller.future;
+      CameraPosition posotionSearch = CameraPosition(
+        bearing: 192.833,
+        target: LatLng(_applicationBloc.lat, _applicationBloc.tit),
+        tilt: 59.440,
+        zoom: 13.0,
+      );
+      // controller.animateCamera(CameraUpdate.newCameraPosition(_applicationBloc.placemarks[0]));
+    }
   }
 
   _onMapCreated(GoogleMapController controller) {
@@ -351,65 +370,120 @@ class _MapsScreenState extends State<MapsScreen> {
           //   ),
           // ],
         ),
-        body: Stack(
+        body:
+        // (applicationBloc.currentLocation == null) ? Center(
+        //   child: CircularProgressIndicator(),
+        // )
+        // :
+        ListView(
           children: <Widget>[
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11.0,
-              ),
-              mapType: _currentMapType,
-              markers: _markers,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
             Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    button(_onMapTypeButtonProcessed, Icons.map),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _autocompleteText,
+                decoration: InputDecoration(
+                  hintText: "Nhập kinh độ và vĩ độ",
+                  suffixIcon: Icon(Icons.search)
                 ),
+
+                // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                onSubmitted: (value) => this._applicationBloc.searchPlaces(value),
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              // height: MediaQuery.of(context).size.height,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  children: <Widget>[
-                    containerBaseInfor(),
-                    // button(_onMapTypeButtonProcessed, Icons.map),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    // button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
+            Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.8,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        gestureRecognizers: Set()
+                          ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                          ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+                          ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                          ..add(Factory<VerticalDragGestureRecognizer>(
+                                  () => VerticalDragGestureRecognizer())),
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                          target: _center,
+                          zoom: 11.0,
+                        ),
+                        mapType: _currentMapType,
+                        markers: _markers,
+                        onCameraMove: _onCameraMove,
+                      ),
+                      // _addMarkerButtonProcessed(),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              button(_onMapTypeButtonProcessed, Icons.map),
+                              SizedBox(
+                                height: 16.0,
+                              ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        // height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            children: <Widget>[
+                              containerBaseInfor(),
+                              // button(_onMapTypeButtonProcessed, Icons.map),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                // (_autocompleteText == null || _autocompleteText.toString().isEmpty) ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(.6),
+                //     backgroundBlendMode: BlendMode.darken
+                //   ),
+                // ),
+                // applicationBloc.searchResults == null ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   child: ListView.builder(
+                //     itemCount: applicationBloc.searchResults.length,
+                //     itemBuilder: (context, index) {
+                //       return ListTile(
+                //         title: Text(applicationBloc.searchResults[index].description,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //         ),)
+                //       );
+                //     },
+                //   ),
+                // ),
+              ],
             ),
+
           ],
         ),
       );
@@ -429,7 +503,7 @@ class _MapsScreenState extends State<MapsScreen> {
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 11.0,
+                zoom: 15.0,
               ),
               mapType: _currentMapType,
               markers: _markers,

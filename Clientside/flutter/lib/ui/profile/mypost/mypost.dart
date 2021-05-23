@@ -1,4 +1,7 @@
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
+import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -12,9 +15,11 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 class MyPostScreen extends StatefulWidget {
@@ -30,25 +35,19 @@ class _MyPostScreenState extends State<MyPostScreen> {
   final UserStore userStore;
   final PostStore postStore;
   _MyPostScreenState({@required this.userStore, this.postStore});
-  //stores:---------------------------------------------------------------------
-  ThemeStore _themeStore;
-  LanguageStore _languageStore;
   TownStore _townStore;
+  List<DateTime> selectedDatefl = new List<DateTime>();
   @override
   void initState() {
     super.initState();
+    selectedDatefl = new List<DateTime>(postStore.postForCurList.posts.length);
+    songay=new List<int>(postStore.postForCurList.posts.length);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _languageStore = Provider.of<LanguageStore>(context);
-    _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
-    if (!postStore.loadingPostForCur) {
-      postStore.getPostForCurs();
-    }
-    if (!userStore.loading) userStore.getCurrentUser();
     if (!_townStore.loading) {
       _townStore.getTowns();
     }
@@ -62,17 +61,16 @@ class _MyPostScreenState extends State<MyPostScreen> {
       postStore.getThuocTinhs();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         // Icon: Icons.app_registration,
-        backgroundColor: Colors.amber[400],
+        backgroundColor: Colors.white,
         title: Text(
           "Bài đăng của tôi",
           style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.white,
+              color: Colors.amber,
               fontSize: 23,
               // backgroundColor:Colors.amber ,
               fontWeight: FontWeight.bold,
@@ -146,110 +144,110 @@ class _MyPostScreenState extends State<MyPostScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 16),
-          child: TextField(
-            style: TextStyle(
-              fontSize: 28,
-              height: 1,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            decoration: InputDecoration(
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  fontSize: 28,
-                  color: Colors.grey[400],
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
-                ),
-                border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black)),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
-                  ),
-                )),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 32,
-                  child: Stack(
-                    children: [
-                      ListView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          SizedBox(
-                            width: 24,
-                          ),
-                          buildFilter('Loại nhà'),
-                          buildFilter('Giá'),
-                          buildFilter('Phòng ngủ'),
-                          buildFilter('Hồ bơi'),
-                          SizedBox(
-                            width: 8,
-                          ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          width: 28,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.centerRight,
-                                  end: Alignment.centerLeft,
-                                  stops: [
-                                0.0,
-                                0.1
-                              ],
-                                  colors: [
-                                Theme.of(context).scaffoldBackgroundColor,
-                                Theme.of(context)
-                                    .scaffoldBackgroundColor
-                                    .withOpacity(0.0),
-                              ])),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _showBottomSheet();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16, right: 24),
-                  child: Text(
-                    'filters',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 6,
-        ),
+        // Padding(
+        //   padding: EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 16),
+        //   child: TextField(
+        //     style: TextStyle(
+        //       fontSize: 28,
+        //       height: 1,
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //     decoration: InputDecoration(
+        //         hintText: "Search",
+        //         hintStyle: TextStyle(
+        //           fontSize: 28,
+        //           color: Colors.grey[400],
+        //         ),
+        //         enabledBorder: UnderlineInputBorder(
+        //           borderSide: BorderSide(color: Colors.red[400]),
+        //         ),
+        //         focusedBorder: UnderlineInputBorder(
+        //           borderSide: BorderSide(color: Colors.orange[400]),
+        //         ),
+        //         border: UnderlineInputBorder(
+        //             borderSide: BorderSide(color: Colors.black)),
+        //         suffixIcon: Padding(
+        //           padding: EdgeInsets.only(left: 16),
+        //           child: Icon(
+        //             Icons.search,
+        //             color: Colors.grey[400],
+        //             size: 28,
+        //           ),
+        //         )),
+        //   ),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(top: 16),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Expanded(
+        //         child: Container(
+        //           height: 32,
+        //           child: Stack(
+        //             children: [
+        //               ListView(
+        //                 physics: BouncingScrollPhysics(),
+        //                 scrollDirection: Axis.horizontal,
+        //                 children: [
+        //                   SizedBox(
+        //                     width: 24,
+        //                   ),
+        //                   buildFilter('Loại nhà'),
+        //                   buildFilter('Giá'),
+        //                   buildFilter('Phòng ngủ'),
+        //                   buildFilter('Hồ bơi'),
+        //                   SizedBox(
+        //                     width: 8,
+        //                   ),
+        //                 ],
+        //               ),
+        //               Align(
+        //                 alignment: Alignment.centerRight,
+        //                 child: Container(
+        //                   width: 28,
+        //                   decoration: BoxDecoration(
+        //                       gradient: LinearGradient(
+        //                           begin: Alignment.centerRight,
+        //                           end: Alignment.centerLeft,
+        //                           stops: [
+        //                         0.0,
+        //                         0.1
+        //                       ],
+        //                           colors: [
+        //                         Theme.of(context).scaffoldBackgroundColor,
+        //                         Theme.of(context)
+        //                             .scaffoldBackgroundColor
+        //                             .withOpacity(0.0),
+        //                       ])),
+        //                 ),
+        //               )
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       GestureDetector(
+        //         onTap: () {
+        //           _showBottomSheet();
+        //         },
+        //         child: Padding(
+        //           padding: EdgeInsets.only(left: 16, right: 24),
+        //           child: Text(
+        //             'filters',
+        //             style: TextStyle(
+        //               fontSize: 18,
+        //               fontWeight: FontWeight.bold,
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: 6,
+        // ),
         _buildListView(),
       ],
     );
@@ -277,7 +275,45 @@ class _MyPostScreenState extends State<MyPostScreen> {
           );
   }
 
+  List<int> songay=new List<int>();
+  _selectDatefl(
+    BuildContext context,
+    DateTime ngayhethan,
+    int index,
+  ) async {
+    if (selectedDatefl[index] == null)
+      selectedDatefl[index] = ngayhethan.add(Duration(days: 2));
+    final DateTime picked= await showDatePicker(
+      context: context,
+      locale: const Locale('en', ''),
+      initialDate: selectedDatefl[index].subtract(Duration(days: 1)),
+      firstDate: ngayhethan.add(Duration(days: 1)),
+      lastDate: ngayhethan.add(const Duration(days: 100)),
+    );
+    if (picked != null && picked != selectedDatefl[index])
+      setState(() {
+        songay[index] = 0;
+        if (DateTime.now().isAfter(
+            DateTime.parse(postStore.postForCurList.posts[index].thoiHan))) {
+          while (picked.isAfter(DateTime.now().add(Duration(days: songay[index]))))
+            songay[index]++;
+          selectedDatefl[index] = DateTime.now().add(Duration(days: songay[index]));
+        } else {
+          while (picked.isAfter(
+              DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
+                  .add(Duration(days: songay[index]))))
+            songay[index]++;
+          selectedDatefl[index] =
+              DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
+                  .add(Duration(days: songay[index]));
+        }
+      });
+  }
+
   Widget _buildPostPoster(Post post, int index) {
+    Newpost newpost;
+    return Observer(
+        builder: (context) {
     return Card(
       margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
       clipBehavior: Clip.antiAlias,
@@ -291,7 +327,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 MaterialPageRoute(builder: (context) => Detail(post: post)));
           },
           child: Container(
-            height: 210,
+            height: 190,
             decoration: BoxDecoration(
                 image: DecorationImage(
               image: post.featuredImage != null
@@ -457,85 +493,145 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         ],
                       )
                     ],
-                  )
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    // height:24,
+                    children: [
+                      IconButton(
+                          icon: const Icon(
+                            Icons.edit,
+                            color: (Colors.amber),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditpostScreen(
+                                          post: post,
+                                          townStore: _townStore,
+                                          postStore: postStore,
+                                          userStore: userStore,
+                                        )));
+                          }),
+                      IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.amber,
+                          ),
+                          onPressed: (){
+                            var futureValue =
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "Bạn có chắc chắn muốn xóa bài đăng?",
+                                      style: TextStyle(
+                                          fontSize: 24, color: Colors.black, fontFamily: 'intel'),
+                                    ),
+                                    content: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RoundedButtonWidget(
+                                            buttonText:"Đồng ý",
+                                          buttonColor: Colors.green,
+                                          onPressed: (){
+                                            Navigator.of(context).pop(true);
+                                          },
+                                        ),
+                                        RoundedButtonWidget(
+                                          buttonColor: Colors.grey,
+                                          buttonText:"Hủy",
+                                          onPressed: (){
+                                            Navigator.of(context).pop(false);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                });
+                            futureValue.then( (value) {
+                              post.trangThai="Off";
+                              if(value)postStore.Delete(post);
+                                // true/false
+                            });
+                          }),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditpostScreen(
-                                post: post,
-                                townStore: _townStore,
-                                postStore: postStore,
-                                userStore: userStore,
-                              )));
-                }),
-            MaterialButton(
-
-                    child: Text("Gia hạn"),
-                      onPressed: (){
-                                showGiaHanDialog(context,post);
+        ExpansionTile(
+          title: Text(
+            "Gia hạn",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+          ),
+          tilePadding: EdgeInsets.only(top: 0.0),
+          //.all(0),
+          children: <Widget>[
+            Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                      "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                  if (selectedDatefl[index] != null) (SizedBox(height: 12)),
+                  if (selectedDatefl[index] != null)
+                    (Text(
+                        "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}")),
+                  SizedBox(height: 12),
+                  RoundedButtonWidget(
+                    onPressed: () async => {
+                      if (post.giagoi==null)
+                        post.giagoi= await postStore.getpackprice(post.goiBaiDangId)  ,
+                      _selectDatefl(
+                          context, DateTime.parse(post.thoiHan), index)
                     },
-                    ),
-            IconButton(icon: const Icon(Icons.delete), onPressed: null),
+                    buttonColor: Colors.orangeAccent,
+                    textColor: Colors.white,
+                    buttonText: ('Chọn ngày kết thúc'),
+                  ),
+                  if (selectedDatefl[index] != null)
+                  RoundedButtonWidget(
+                    onPressed: ()=>{newpost= new Newpost(),
+                      if(post.giagoi==null)
+                      post.giagoi=5000,
+                      if(post.goiBaiDangId==null)
+                      post.goiBaiDangId=1,
+                      post.thoiHan=selectedDatefl[index].toIso8601String(),
+                      newpost.post=post,
+                      newpost.lichsugiaodichs=new lichsugiaodich(),
+                      newpost.lichsugiaodichs.userId=post.userId,
+                      newpost.lichsugiaodichs.ghiChu="${post.tieuDe} gia hạn",
+                      newpost.lichsugiaodichs.thoiDiem=DateTime.now().toIso8601String(),
+                      newpost.lichsugiaodichs.soTien=songay[index]*post.giagoi,
+                      newpost.hoadonbaidang=new Hoadonbaidang(),
+                      newpost.hoadonbaidang.thoiDiem=newpost.lichsugiaodichs.thoiDiem,
+                      newpost.hoadonbaidang.giaGoi=post.giagoi,
+                      newpost.hoadonbaidang.soNgayMua=songay[index],
+                      newpost.hoadonbaidang.tongTien=newpost.lichsugiaodichs.soTien,
+                      newpost.hoadonbaidang.ghiChu="Gia hạn bài đăng \"${post.tieuDe}\"",
+                      newpost.hoadonbaidang.baiDangId=post.id,
+                      newpost.hoadonbaidang.goiBaiDangId=post.goiBaiDangId,
+                      newpost.hoadonbaidang.userId=post.userId,
+                      selectedDatefl[index]=null,
+                      postStore.giahan(newpost),
+                    },
+                    buttonColor: Colors.orangeAccent,
+                    textColor: Colors.white,
+                    buttonText: ('Gia hạn'),
+                  ),
+                ]),
           ],
-        )
+        ),
       ]),
-    );
-  }
-
-  var songay;
-  DateTime selectedDatefl = null;
-  _selectDatefl(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      locale: const Locale('en', ''),
-      initialDate: selectedDatefl,
-      firstDate: DateTime.now().add(Duration(days: 1)),
-      lastDate: DateTime.now().add(const Duration(days: 30)),
-    );
-    if (picked != null && picked != selectedDatefl)
-      setState(() {
-        selectedDatefl = picked;
-        songay = 0;
-        while (selectedDatefl
-            .isAfter(DateTime.now().add(Duration(days: songay)))) songay++;
-      });
-  }
-
-  showGiaHanDialog(BuildContext context, Post post) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Gia hạn bài đăng"),
-          content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                    "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
-                Text(""),
-                RoundedButtonWidget(
-                  onPressed: () => _selectDatefl(context),
-                  buttonColor: Colors.orangeAccent,
-                  textColor: Colors.white,
-                  buttonText: ('Chọn ngày kết thúc'),
-                ),
-              ]),
-        );
-      },
-    );
+    );});
   }
 
   Widget _handleErrorMessage() {

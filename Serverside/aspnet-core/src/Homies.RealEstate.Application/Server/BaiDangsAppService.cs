@@ -309,7 +309,10 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem.Contains(input.TagTimKiemFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
-                        .WhereIf(input.XaIdFilter != null, e => e.XaId != null && e.XaId == input.XaIdFilter);
+                        
+                        .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Contains(input.XaTenXaFilter))
+                        .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Contains(input.HuyenTenHuyenFilter))
+                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "id asc")
@@ -355,7 +358,6 @@ namespace Homies.RealEstate.Server
                                    UserId = o.UserId,
                                    XaId = o.XaId,
                                    DanhMucId = o.DanhMucId
-
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
@@ -407,7 +409,6 @@ namespace Homies.RealEstate.Server
                 {
                     return true;
                 }
-
             }
             return false;
         }
@@ -535,7 +536,21 @@ namespace Homies.RealEstate.Server
             }
         }
 
-        
+        public async Task GiaHanBaiDang(GiaHanInput input)
+        {
+            var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
+            if (baiDang != null)
+            {
+                baiDang.ThoiHan = input.ThoiHan;
+
+                
+                var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
+
+                input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
+                var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
+                await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
+            }
+        }
 
         public async Task CreateOrEdit(CreateOrEditBaiDangDto input)
         {
@@ -746,6 +761,7 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
 
+
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy("id asc");
 
@@ -764,6 +780,11 @@ namespace Homies.RealEstate.Server
 
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()
+
+                           join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
+                           from s6 in j6.DefaultIfEmpty()
+
+
 
                            select new GetBaiDangForViewDto()
                            {
@@ -795,14 +816,54 @@ namespace Homies.RealEstate.Server
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
                                HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
                                TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
+                               ChiTietHoaDon = s6 == null ? null : ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(s6)
                            };
 
             var totalCount = await filteredBaiDangs.CountAsync();
 
-            return new PagedResultDto<GetBaiDangForViewDto>(
+            var list = await baiDangs.ToListAsync();
+
+            if (list.Count == totalCount)
+            {
+                return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
-                await baiDangs.ToListAsync()
+                list
             );
+            }
+            else
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    for (int j = 0; j < list.Count; j++)
+                    {
+                        if (list[j].ChiTietHoaDon.BaiDangId == list[i].ChiTietHoaDon.BaiDangId && list[j].ChiTietHoaDon.ThoiDiem < list[i].ChiTietHoaDon.ThoiDiem)
+                            list.RemoveAt(j);
+                    }
+                }
+
+                List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var e = list[i];
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+
+                        //var duc = _lookup_chiTietHoaDonBaiDangRepository.GetAll().Where(ee => ee.BaiDangId == e.BaiDang.Id).OrderByDescending(r => r.ThoiDiem).First();
+                        //var ducc = await _lookup_chiTietHoaDonBaiDangRepository.FirstOrDefaultAsync(ee => ee.ThoiDiem == duc && ee.BaiDangId == e.BaiDang.Id);
+                        //e.ChiTietHoaDon = ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(duc);
+                        filteredList.Add(e);
+                    }
+                }
+
+                return new PagedResultDto<GetBaiDangForViewDto>(
+                totalCount,
+                filteredList
+            );
+            }
         }
     }
 }
