@@ -28,7 +28,6 @@ class Post {
   double gia;
   double giagoi;
   int goiBaiDangId;
-
   Post(
       {this.userName,
       this.danhMuc,
@@ -84,9 +83,63 @@ class Post {
       featuredImage: json["baiDang"]["featuredImage"],
       dienTich: json["baiDang"]["dienTich"],
       gia: json["baiDang"]["gia"],
-      giagoi: json["chiTietHoaDon"]["giagoi"],
-      goiBaiDangId: json["chiTietHoaDon"]["goiBaiDangId"]);
-
+  );
+  factory Post.fromMapmypost(Map<String, dynamic> json) => Post(
+    userName: json["userName"],
+    danhMuc: json["danhMucTenDanhMuc"],
+    tenXa: json["xaTenXa"],
+    tenHuyen: json["huyenTenHuyen"],
+    tenTinh: json["tinhTenTinh"],
+    tagLoaiBaidang: json["baiDang"]["tagLoaiBaiDang"],
+    thoiDiemDang: json["baiDang"]["thoiDiemDang"],
+    thoiHan: json["baiDang"]["thoiHan"],
+    diaChi: json["baiDang"]["diaChi"],
+    moTa: json["baiDang"]["moTa"],
+    toaDoX: json["baiDang"]["toaDoX"],
+    toaDoY: json["baiDang"]["toaDoY"],
+    luotXem: json["baiDang"]["luotXem"],
+    luotYeuThich: json["baiDang"]["luotYeuThich"],
+    diemBaiDang: json["baiDang"]["diemBaiDang"],
+    trangThai: json["baiDang"]["trangThai"],
+    tagTimKiem: json["baiDang"]["tagTimKiem"],
+    tieuDe: json["baiDang"]["tieuDe"],
+    userId: json["baiDang"]["userId"],
+    danhMucId: json["baiDang"]["danhMucId"],
+    xaId: json["baiDang"]["xaId"],
+    id: json["baiDang"]["id"],
+    featuredImage: json["baiDang"]["featuredImage"],
+    dienTich: json["baiDang"]["dienTich"],
+    gia: json["baiDang"]["gia"],
+   // giagoi: json["giagoi"],
+    goiBaiDangId: json["goiBaiDangId"]
+  );
+  factory Post.fromMapfavo(Map<String, dynamic> json) => Post(
+    userName: json["userName"],
+    danhMuc: json["baiDang"]["danhMucTenDanhMuc"],
+    tenXa: json["xaTenXa"],
+    tenHuyen: json["huyenTenHuyen"],
+    tenTinh: json["tinhTenTinh"],
+    tagLoaiBaidang: json["baiDang"]["tagLoaiBaiDang"],
+    thoiDiemDang: json["baiDang"]["thoiDiemDang"],
+    thoiHan: json["baiDang"]["thoiHan"],
+    diaChi: json["baiDang"]["diaChi"],
+    moTa: json["baiDang"]["moTa"],
+    toaDoX: json["baiDang"]["toaDoX"],
+    toaDoY: json["baiDang"]["toaDoY"],
+    luotXem: json["baiDang"]["luotXem"],
+    luotYeuThich: json["baiDang"]["luotYeuThich"],
+    diemBaiDang: json["baiDang"]["diemBaiDang"],
+    trangThai: json["baiDang"]["trangThai"],
+    tagTimKiem: json["baiDang"]["tagTimKiem"],
+    tieuDe: json["baiDang"]["tieuDe"],
+    userId: json["baiDang"]["userId"],
+    danhMucId: json["baiDang"]["danhMucId"],
+    xaId: json["baiDang"]["xaId"],
+    id: json["baiDang"]["id"],
+    featuredImage: json["baiDang"]["featuredImage"],
+    dienTich: json["baiDang"]["dienTich"],
+    gia: json["baiDang"]["gia"],
+  );
   Map<String, dynamic> toMap() => {
         "userName": userName,
         "danhMucTenDanhMuc": danhMuc,

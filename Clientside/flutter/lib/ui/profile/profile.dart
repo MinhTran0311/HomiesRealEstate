@@ -7,6 +7,7 @@ import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
+import 'package:boilerplate/ui/profile/favopost/favopost.dart';
 import 'package:boilerplate/ui/profile/help/help.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
@@ -78,7 +79,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _userstore.getCurrentPictureUser();
     }
     if (!_postStore.loadingPostForCur) _postStore.getPostForCurs();
+
+
   }
+
 
   @override
   void initState() {
@@ -259,26 +263,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               }),
           CardItem(
-            text: "Trợ giúp",
-            icon: Icons.info_outline,
-            colorbackgroud: Colors.grey[200],
-            colortext: Colors.black,
-            coloricon: Colors.orange,
-            press:  () {
-              setState(() {
-                Route route = MaterialPageRoute(
-                    builder: (context) => HelpPage());
-                Navigator.push(context, route);
-              });
-            }
-          ),
+              text: "Trợ giúp",
+              icon: Icons.info_outline,
+              colorbackgroud: Colors.grey[200],
+              colortext: Colors.black,
+              coloricon: Colors.orange,
+              press: () {
+                setState(() {
+                  Route route =
+                      MaterialPageRoute(builder: (context) => HelpPage());
+                  Navigator.push(context, route);
+                });
+              }),
           CardItem(
             text: "Danh sách bài ghim",
             icon: Icons.article_outlined,
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
-            press: () {},
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FavoPostScreen(
+                          userid: _userstore.userCurrent.UserID,
+                        )),
+              );
+            },
           ),
           Container(
             height: 20,

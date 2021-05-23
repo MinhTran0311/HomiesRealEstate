@@ -574,7 +574,6 @@ abstract class _PostStore with Store {
   @observable
   ObservableFuture<double> fetchgetpackpriceFuture = ObservableFuture<double>(emptypackpriceResponse);
   @observable
-  //postForCurList;
   @computed
   bool get getpackpricepost => fetchgiahanFuture.status == FutureStatus.pending;
   @observable
@@ -586,6 +585,35 @@ abstract class _PostStore with Store {
     future.then((giagoi) {
       successdelete = true;
       return giagoi;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  ///////////////////////////getpostfav
+  static ObservableFuture<PostList> emptypostfavResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<PostList> fetchpostfavoFuture = ObservableFuture<PostList>(emptypostfavResponse);
+  @observable
+  PostList favopost;
+  @computed
+  bool get loadingfavopost => fetchpostfavoFuture.status == FutureStatus.pending;
+  @observable
+  bool successfavopost = false;
+  @observable
+  Future getfavopost(int iduser) async {
+    final future = _repository.getfavopost(iduser);
+    fetchpostfavoFuture = ObservableFuture(future);
+    future.then((favopost) {
+      //successPostForCur = true;
+      this.favopost = favopost;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

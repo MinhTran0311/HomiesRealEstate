@@ -136,6 +136,12 @@ class Repository {
   Future<double> getpackprice(int idpost) async {
     return await _postApi.getpackprice(idpost);
   }
+  Future<PostList> getfavopost(int iduser) async {
+    return await _postApi.getfavopost(iduser).then((postsList) {
+
+      return postsList;
+    }).catchError((error) => throw error);
+  }
   // Post: ---------------------------------------------------------------------
   // Future<listLSGD> getLSGD() async {
   //   // check to see if posts are present in database, then fetch from database
