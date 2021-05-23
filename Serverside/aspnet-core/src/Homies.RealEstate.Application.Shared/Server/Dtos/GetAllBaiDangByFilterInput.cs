@@ -30,12 +30,14 @@ namespace Homies.RealEstate.Server.Dtos
         public string UserNameFilter { get; set; }
 
         public string XaTenXaFilter { get; set; }
+        public string HuyenTenHuyenFilter { get; set; }
+        public string TinhTenTinhFilter { get; set; }
 
         public int? XaIdFilter { get; set; }
 
-        public int? HuyenIdFilter { get; set; }
+        //public int? HuyenIdFilter { get; set; }
 
-        public int? TinhTenTinhFilter { get; set; }
+        //public int? TinhTenTinhFilter { get; set; }
 
     }
 }

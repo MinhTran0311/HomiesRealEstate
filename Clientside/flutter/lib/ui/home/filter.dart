@@ -1,6 +1,13 @@
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
+import 'package:boilerplate/models/town/province.dart';
+import 'package:boilerplate/models/town/province_list.dart';
 import 'package:boilerplate/stores/post/filter_store.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
+import 'package:dio/dio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -36,7 +43,11 @@ class _FilterState extends State<Filter> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     _filterStore = Provider.of<FilterStore>(context);
+
+    if (!_filterStore.loadingProvince)
+      _filterStore.getAllProvince();
 
     _diaChiController.text = _filterStore.filter_model.diaChi;
     _usernameController.text = _filterStore.filter_model.username;
@@ -44,98 +55,109 @@ class _FilterState extends State<Filter> {
     _giaMaxValueController.text=_filterStore.filter_model.giaMax;
     _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
     _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
+    if (_filterStore.filter_model.tenTinh.isNotEmpty){
+      _filterStore.getTownByProvinceName(_filterStore.filter_model.tenTinh);
+    }
+    if (_filterStore.filter_model.tenHuyen.isNotEmpty){
+      _filterStore.getCommuneByTownName(_filterStore.filter_model.tenHuyen);
+    }
   }
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: (){
-        Navigator.pop(context, _filterStore.validateSearchContent());
-        return;
-      },
-      child: SizedBox(
-        height: size.height*0.75,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-              padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 24),
-                    child: Text("Tạo bộ lọc tìm kiếm",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+      return WillPopScope(
+        onWillPop: (){
+          Navigator.pop(context, _filterStore.validateSearchContent());
+          return;
+        },
+        child: SizedBox(
+          height: size.height*0.75,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+                padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 24),
+                      child: Text("Tạo bộ lọc tìm kiếm",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  buildLoaiBaiDang(),
-                  buildGiaFilter(),
-                  // _filterStore.suDungGiaFilter ? Observer(
-                  //   builder: (context){
-                  //     return RangeSlider(
-                  //       values: _filterStore.seletedRange,
-                  //       labels: RangeLabels(
-                  //         _filterStore.seletedRange.start.toString(),
-                  //         _filterStore.seletedRange.end.toString(),
-                  //       ),
-                  //       onChanged: (RangeValues newRange){
-                  //         setState(() {
-                  //           _filterStore.seletedRange = newRange;
-                  //           _giaMinValueController.text=_filterStore.seletedRange.start.toString();
-                  //           _giaMaxValueController.text=_filterStore.seletedRange.end.toString();
-                  //         });
-                  //       },
-                  //       min: 0,
-                  //       max: 20000,
-                  //       activeColor: Colors.blue[900],
-                  //       inactiveColor: Colors.grey[300],
-                  //
-                  //     );
-                  //   })
-                  //   :Container(width: 0,height: 0,),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    buildLoaiBaiDang(),
+                    buildGiaFilter(),
+                    // _filterStore.suDungGiaFilter ? Observer(
+                    //   builder: (context){
+                    //     return RangeSlider(
+                    //       values: _filterStore.seletedRange,
+                    //       labels: RangeLabels(
+                    //         _filterStore.seletedRange.start.toString(),
+                    //         _filterStore.seletedRange.end.toString(),
+                    //       ),
+                    //       onChanged: (RangeValues newRange){
+                    //         setState(() {
+                    //           _filterStore.seletedRange = newRange;
+                    //           _giaMinValueController.text=_filterStore.seletedRange.start.toString();
+                    //           _giaMaxValueController.text=_filterStore.seletedRange.end.toString();
+                    //         });
+                    //       },
+                    //       min: 0,
+                    //       max: 20000,
+                    //       activeColor: Colors.blue[900],
+                    //       inactiveColor: Colors.grey[300],
+                    //
+                    //     );
+                    //   })
+                    //   :Container(width: 0,height: 0,),
 
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Text(
-                  //       r"$70k",
-                  //       style: TextStyle(
-                  //         fontSize: 14,
-                  //       ),
-                  //     ),
-                  //     Text(
-                  //       r"$1000k",
-                  //       style: TextStyle(
-                  //         fontSize: 14,
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  buiDienTichFilter(),
-                  buildDiaChiFilter(),
-                  buildUsernameFilter(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      buildApplyButton(),
-                      buildClearButton(),
-                    ],
-                  ),
-                ],
-              )
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       r"$70k",
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //       ),
+                    //     ),
+                    //     Text(
+                    //       r"$1000k",
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+                    buiDienTichFilter(),
+                    buildDiaChiFilter(),
+                    buildProvinceFilter(),
+                    SizedBox(height: 12,),
+                    buildTownFilter(),
+                    SizedBox(height: 12,),
+                    buildCommuneFilter(),
+                    buildUsernameFilter(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        buildApplyButton(),
+                        buildClearButton(),
+                      ],
+                    ),
+                  ],
+                )
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget buildLoaiBaiDang(){
@@ -169,7 +191,7 @@ class _FilterState extends State<Filter> {
                           return DropdownButton<String>(
                             isExpanded: true,
                             value: _filterStore.loaiBaiDangDropDownValue,
-                            icon: const Icon(Icons.arrow_downward),
+                            icon: const Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
                             style: TextStyle(color: Colors.black),
@@ -311,7 +333,7 @@ class _FilterState extends State<Filter> {
                           child: DropdownButton<String>(
                             isExpanded: true,
                             value: _filterStore.giaDropDownValue,
-                            icon: const Icon(Icons.arrow_downward),
+                            icon: const Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
                             style: TextStyle(color: Colors.black),
@@ -452,7 +474,7 @@ class _FilterState extends State<Filter> {
                         child: DropdownButton<String>(
                           isExpanded: true,
                           value: _filterStore.dienTichDropDownValue,
-                          icon: const Icon(Icons.arrow_downward),
+                          icon: const Icon(Icons.arrow_drop_down),
                           iconSize: 24,
                           elevation: 16,
                           style: TextStyle(color: Colors.black),
@@ -547,6 +569,145 @@ class _FilterState extends State<Filter> {
       ),
     );
   }
+  Widget buildProvinceFilter(){
+    return Container(
+      child: Observer(
+        builder: (context){
+          return  DropdownSearch<String>(
+
+            items: _filterStore.provinceListString,
+            hint: "Chọn tỉnh thành",
+            onChanged: (String Value) {
+              _filterStore.filter_model.tenTinh = Value;
+              if (Value!=null)
+                _filterStore.getTownByProvinceName(Value);
+            },
+            selectedItem: _filterStore.filter_model.tenTinh,
+            showSearchBox: true,
+            searchBoxDecoration: InputDecoration(
+              border: OutlineInputBorder(),
+              // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+              labelText: "Tìm tỉnh thành",
+            ),
+            showClearButton: true,
+            popupTitle: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColorDark,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Tỉnh thành',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+
+      )
+    );
+  }
+  Widget buildTownFilter(){
+    return Observer(
+      builder: (context){
+        return (!_filterStore.loadingTown && _filterStore.townListString.length>0) ?
+        DropdownSearch<String>(
+          items: _filterStore.townListString,
+          hint: "Chọn quận/huyện",
+          onChanged: (String Value) {
+            if (_filterStore.filter_model.tenHuyen != Value){
+            _filterStore.filter_model.tenHuyen = Value;
+            if (Value!=null)
+              _filterStore.getCommuneByTownName(Value);
+            }
+          },
+          selectedItem: _filterStore.filter_model.tenHuyen,
+          showSearchBox: true,
+          searchBoxDecoration: InputDecoration(
+            border: OutlineInputBorder(),
+            // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+            labelText: "Tìm quận/huyện",
+          ),
+          showClearButton: true,
+          popupTitle: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'Quận/huyện',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ) : Container(height: 0,width: 0,);
+      },
+    );
+  }
+  Widget buildCommuneFilter(){
+    return Observer(
+      builder: (context){
+        return (!_filterStore.loadingCommune && _filterStore.communeListString.length>0) ?
+        DropdownSearch<String>(
+          items: _filterStore.communeListString,
+          hint: "Chọn phường/xã",
+          onChanged: (String Value) {
+            _filterStore.filter_model.tenXa = Value;
+            if (Value==null) {
+              _filterStore.communeListString.clear();
+            }
+          },
+          selectedItem: _filterStore.filter_model.tenXa,
+          showSearchBox: true,
+          searchBoxDecoration: InputDecoration(
+            border: OutlineInputBorder(),
+            // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+            labelText: "Tìm phường/xã",
+          ),
+          showClearButton: true,
+          popupTitle: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'Phường/xã',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ) : Container(height: 0,width: 0,);
+      },
+    );
+  }
+
   Widget buildUsernameFilter(){
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),

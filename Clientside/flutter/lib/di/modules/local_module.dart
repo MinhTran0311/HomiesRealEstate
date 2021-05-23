@@ -91,5 +91,5 @@ class LocalModule extends NetworkModule {
     PostDataSource postDataSource,
     RegistrationApi registrationApi,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi,  userApi,roleApi, imageApi,townApi);
+      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, roleApi, imageApi, townApi);
 }

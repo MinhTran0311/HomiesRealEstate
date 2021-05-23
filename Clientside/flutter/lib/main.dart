@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
         Provider<AuthTokenStore>(create: (_) => _authTokenStore),
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
         Provider<RoleManagementStore>(create: (_) => _roleManagementStore),
-
         Provider<FilterStore>(create: (_) => _filterStore),
         Provider<UserStore>(create: (_) => _userStore),
         Provider<LSGDStore>(create: (_) => _lsgdStore),

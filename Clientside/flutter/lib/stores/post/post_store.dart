@@ -517,7 +517,6 @@ abstract class _PostStore with Store {
   ObservableFuture.value(null);
   @observable
   ObservableFuture<String> fetchdeleteFuture = ObservableFuture<String>(emptydeleteResponse);
-  @observable
   //postForCurList;
   @computed
   bool get Deletepost => fetchdeleteFuture.status == FutureStatus.pending;
