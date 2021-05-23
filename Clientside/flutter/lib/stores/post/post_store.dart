@@ -544,7 +544,7 @@ abstract class _PostStore with Store {
   ObservableFuture.value(null);
   @observable
   ObservableFuture<String> fetchgiahanFuture = ObservableFuture<String>(emptygiahanResponse);
-  @observable
+  // @observable
   //postForCurList;
   @computed
   bool get giahanpost => fetchgiahanFuture.status == FutureStatus.pending;
@@ -572,7 +572,7 @@ abstract class _PostStore with Store {
   ObservableFuture.value(null);
   @observable
   ObservableFuture<double> fetchgetpackpriceFuture = ObservableFuture<double>(emptypackpriceResponse);
-  @observable
+  //@observable
   @computed
   bool get getpackpricepost => fetchgiahanFuture.status == FutureStatus.pending;
   @observable
