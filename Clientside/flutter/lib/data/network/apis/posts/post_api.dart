@@ -40,8 +40,8 @@ class PostApi {
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
-        }),
-        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount),
+        }),queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount)
+        ,
       );
       return PostList.fromJson(res);
     } catch (e) {
@@ -172,7 +172,7 @@ class PostApi {
     }
   }
 
-  Future<PostList> getPostsforcur() async {
+  Future<PostList> getPostsforcur(int skipCount, int maxResultCount,) async {
     try {
       final res = await _dioClient.get(
         "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllBaiDangsByCurrentUser",
@@ -180,6 +180,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
+          queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount},
       );
 
       return PostList.fromJsonmypost(res);

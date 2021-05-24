@@ -84,7 +84,7 @@ abstract class _PostStore with Store {
 
     @observable
     int skipCount = 0;
-
+    int skipCountmypost = 0;
     @observable
     PropertyList propertyList;
 
@@ -498,8 +498,13 @@ abstract class _PostStore with Store {
   @observable
   bool successPostForCur = false;
   @observable
-  Future getPostForCurs() async {
-    final future = _repository.getPostsforcur();
+  Future getPostForCurs(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCountmypost = 0;
+    }
+    else
+      skipCountmypost += Preferences.skipIndex;
+    final future = _repository.getPostsforcur(skipCountmypost,Preferences.maxCount);
     fetchPostForCursFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForCur = true;

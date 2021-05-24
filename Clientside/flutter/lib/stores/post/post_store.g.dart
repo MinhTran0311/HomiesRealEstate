@@ -770,8 +770,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getPostForCurs() {
-    final _$future = super.getPostForCurs();
+  ObservableFuture<dynamic> getPostForCurs(bool isLoadMore) {
+    final _$future = super.getPostForCurs(isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
 
