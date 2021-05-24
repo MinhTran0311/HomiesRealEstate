@@ -182,7 +182,7 @@ class PostApi {
         }),
       );
 
-      return PostList.fromJson(res);
+      return PostList.fromJsonmypost(res);
     } catch (e) {
       print("lỗi" + e.toString());
       throw e;
@@ -317,6 +317,22 @@ class PostApi {
       );
       return res["result"]["goiBaiDang"]["phi"];
     } catch (e) {
+      throw e;
+    }
+  }
+  Future<PostList> getfavopost(int iduser) async {
+    try {
+      final res = await _dioClient.get(
+        "https://homies.exscanner.edu.vn/api/services/app/BaiGhimYeuThichs/GetAllBaiGhimByCurrentUser",
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+        queryParameters: {"id": iduser},
+      );
+      return PostList.fromJsonfavopost(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
       throw e;
     }
   }

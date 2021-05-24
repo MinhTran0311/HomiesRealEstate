@@ -111,6 +111,13 @@ mixin _$PostStore on _PostStore, Store {
           () => super.getpackpricepost,
           name: '_PostStore.getpackpricepost'))
       .value;
+  Computed<bool> _$loadingfavopostComputed;
+
+  @override
+  bool get loadingfavopost =>
+      (_$loadingfavopostComputed ??= Computed<bool>(() => super.loadingfavopost,
+              name: '_PostStore.loadingfavopost'))
+          .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -716,6 +723,52 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchpostfavoFutureAtom =
+      Atom(name: '_PostStore.fetchpostfavoFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchpostfavoFuture {
+    _$fetchpostfavoFutureAtom.reportRead();
+    return super.fetchpostfavoFuture;
+  }
+
+  @override
+  set fetchpostfavoFuture(ObservableFuture<PostList> value) {
+    _$fetchpostfavoFutureAtom.reportWrite(value, super.fetchpostfavoFuture, () {
+      super.fetchpostfavoFuture = value;
+    });
+  }
+
+  final _$favopostAtom = Atom(name: '_PostStore.favopost');
+
+  @override
+  PostList get favopost {
+    _$favopostAtom.reportRead();
+    return super.favopost;
+  }
+
+  @override
+  set favopost(PostList value) {
+    _$favopostAtom.reportWrite(value, super.favopost, () {
+      super.favopost = value;
+    });
+  }
+
+  final _$successfavopostAtom = Atom(name: '_PostStore.successfavopost');
+
+  @override
+  bool get successfavopost {
+    _$successfavopostAtom.reportRead();
+    return super.successfavopost;
+  }
+
+  @override
+  set successfavopost(bool value) {
+    _$successfavopostAtom.reportWrite(value, super.successfavopost, () {
+      super.successfavopost = value;
+    });
+  }
+
   @override
   ObservableFuture<dynamic> getPostForCurs() {
     final _$future = super.getPostForCurs();
@@ -738,6 +791,12 @@ mixin _$PostStore on _PostStore, Store {
   ObservableFuture<double> getpackprice(int idpack) {
     final _$future = super.getpackprice(idpack);
     return ObservableFuture<double>(_$future);
+  }
+
+  @override
+  ObservableFuture<dynamic> getfavopost(int iduser) {
+    final _$future = super.getfavopost(iduser);
+    return ObservableFuture<dynamic>(_$future);
   }
 
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
@@ -871,6 +930,9 @@ fetchgiahanFuture: ${fetchgiahanFuture},
 successgiahan: ${successgiahan},
 fetchgetpackpriceFuture: ${fetchgetpackpriceFuture},
 successgetpackprice: ${successgetpackprice},
+fetchpostfavoFuture: ${fetchpostfavoFuture},
+favopost: ${favopost},
+successfavopost: ${successfavopost},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
@@ -885,7 +947,8 @@ loadingeditpost: ${loadingeditpost},
 loadingPostForCur: ${loadingPostForCur},
 Deletepost: ${Deletepost},
 giahanpost: ${giahanpost},
-getpackpricepost: ${getpackpricepost}
+getpackpricepost: ${getpackpricepost},
+loadingfavopost: ${loadingfavopost}
     ''';
   }
 }

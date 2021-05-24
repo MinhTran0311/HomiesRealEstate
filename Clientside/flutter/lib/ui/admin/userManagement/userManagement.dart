@@ -768,80 +768,57 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    user.isEmailConfirmed == false ? Container(
-                                      child: Row(
-                                          children: [
-                                            Text("Chưa xác nhận",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                              ),),
-                                            SizedBox(width: 10,),
-                                            Icon(
-                                              Icons.warning_rounded,
-                                              color: Colors.red,
-                                              size: 24,
-                                            ),
-                                          ]
+                                    Text(
+                                      // alignment: Alignment.centerRight,
+                                      "${user.email}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
-                                    ) : Container(
-                                      child: Row(
-                                          children: [
-                                            Text("Đã xác nhận",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                              ),),
-                                            SizedBox(width: 10,),
-                                            Icon (
-                                              Icons.check_circle,
-                                              color: Colors.green,
-                                              size: 24,
-                                            ),
-                                          ]
-                                      ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 20),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide( //                   <--- left side
-                                  color: Colors.amber,
-                                  width: 1.0,
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              user.isEmailConfirmed == false ? Container(
+                                padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 20),
+                                child: Row(
+                                    children: [
+                                      Text("Chưa xác nhận",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),),
+                                      SizedBox(width: 10,),
+                                      Icon(
+                                        Icons.warning_rounded,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
+                                    ]
                                 ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
+                              ) : Container(
+                                padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 20),
+                                child: Row(
+                                    children: [
+                                      Text("Đã xác nhận",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),),
+                                      SizedBox(width: 10,),
+                                      Icon (
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 24,
+                                      ),
+                                    ]
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  // alignment: Alignment.centerRight,
-                                  "${user.email}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                // user.isEmailConfirmed == false ? Icon(
-                                //   Icons.warning_rounded,
-                                //   color: Colors.red,
-                                //   size: 24,
-                                // ) : Icon (
-                                //   Icons.check_circle,
-                                //   color: Colors.green,
-                                //   size: 24,
-                                // ),
-                              ],
-                            ),
+                            ],
                           ),
                           // SizedBox(height: 30,),
                           Container(
@@ -852,10 +829,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                   color: Colors.amber,
                                   width: 1.0,
                                 ),
-                                // top: BorderSide( //                    <--- top side
-                                //   color: Colors.amber,
-                                //   width: 1.0,
-                                // ),
+                                top: BorderSide( //                    <--- top side
+                                  color: Colors.amber,
+                                  width: 1.0,
+                                ),
                               ),
                             ),
                             child: Row(

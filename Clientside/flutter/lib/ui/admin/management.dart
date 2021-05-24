@@ -5,7 +5,9 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:material_dialog/material_dialog.dart';
@@ -60,92 +62,156 @@ class _ManagementScreenState extends State<ManagementScreen> {
     return Observer(
       builder: (context) {
         return Material(child: _buildMenuItems(),
-          color: Color.fromRGBO(241, 242, 246, 1),
+          color: Color.fromRGBO(236, 236, 238, 1),
+          // color: Colors.white,
         );
       },
     );
   }
 
   Widget _buildMenuItems() {
-    return Container(
-      child: GridView.count(
-        primary: false,
-        padding: const EdgeInsets.only(top: 30, right: 25, left: 25, bottom: 25),
-        crossAxisSpacing: 25,
-        mainAxisSpacing: 25,
-        crossAxisCount: 2,
-        children: <Widget>[
-          GestureDetector(
-            child: _buildItemsGridView("Người dùng"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserManagementScreen()),
-              );
-            },
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.15, 0.15, 1],
+            colors: [
+              Color.fromRGBO(230, 145, 56, 1),
+              Colors.amberAccent,
+              Color.fromRGBO(236, 236, 238, 1),
+              Color.fromRGBO(236, 236, 238, 1),
+            ],
+            tileMode: TileMode.repeated,
           ),
-          GestureDetector(
-            child: _buildItemsGridView("Vai trò"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RoleManagementScreen()),
-              );
-            },
-          ),
-          GestureDetector(
-              child: _buildItemsGridView("Nhật ký kiểm tra"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MapsScreen()),
-              );
-            },
-          ),
-          GestureDetector(
-            child: _buildItemsGridView("Cài đặt"),
-            onTap: () {
-
-            },
-          ),
-          // Container(
-          //   padding: const EdgeInsets.all(8),
-          //   child: const Text('Revolution is coming...'),
-          //   color: Colors.amberAccent,
-          // ),
-          // Container(
-          //   padding: const EdgeInsets.all(8),
-          //   child: const Text('Revolution, they...'),
-          //   color: Colors.amberAccent,
-          // ),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(height: 35 ,),
+            Container(
+              padding: EdgeInsets.only(top: 15, left: 18),
+              width: MediaQuery.of(context).size.width*0.95,
+              // height: 200,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  // color: Colors.white, //background color of box
+                  BoxShadow(
+                    color: Color.fromRGBO(198, 199, 202, 1),
+                    blurRadius: 12, // soften the shadow
+                    spreadRadius: 0.01, //extend the shadow
+                    offset: Offset(
+                      8.0, // Move to right 10  horizontally
+                      12.0, // Move to bottom 10 Vertically
+                    ),
+                  )
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tổng Quan Tháng 05/2021",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/images/analytics.png',
+                            width: MediaQuery.of(context).size.width*0.15,
+                          ),
+                          SizedBox(height: 10,),
+                          Text("Người dùng mới"),
+                          SizedBox(height: 10,),
+                          Text(
+                            "155",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/images/map.png',
+                            width: MediaQuery.of(context).size.width*0.15,
+                          ),
+                          SizedBox(height: 10,),
+                          Text("Bài đăng mới"),
+                          SizedBox(height: 10,),
+                          Text(
+                            "1.055",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          )
+                        ],
+                      ),
+                      // Column(
+                      //   children: [
+                      //     Image.asset(
+                      //       'assets/images/map.png',
+                      //       width: MediaQuery.of(context).size.width*0.15,
+                      //     ),
+                      //     SizedBox(height: 10,),
+                      //     Text("Bài đăng mới"),
+                      //     SizedBox(height: 10,),
+                      //     Text(
+                      //       "1.055",
+                      //       style: TextStyle(
+                      //         fontWeight: FontWeight.bold,
+                      //         fontSize: 20,
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                    ],
+                  ),
+                  SizedBox(height: 15,),
+                ],
+              ),
+            ),
+            SizedBox(height: 25,),
+            _buildListItem("Người dùng", "assets/images/customer.png", 20, "Danh sách người dùng", _clickBtnListUser, Colors.amber, 0),
+            SizedBox(height: 25,),
+            _buildListItem("Vai trò", "assets/images/project-management.png", 15, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            SizedBox(height: 25,),
+            _buildListItem("Nhật ký kiểm tra", "assets/images/open-book.png", 300, "Nhật ký kiểm tra", _clickBtnListTester, Colors.red, 0),
+            SizedBox(height: 25,),
+            _buildListItem("Maps tạm", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMaps, Colors.green, 0),
+            SizedBox(height: 25,),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildItemsGridView(String nameItem)
-  {
+  Widget _buildListItem(String nameItem, String pathPicture, int totalItems, String nameButton, Function function, Color colors, double leftPadding) {
     return Container(
       decoration: new BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.amber,
-            Colors.orange[700],
-          ]
-        ),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10)
-        ),
         boxShadow: [
           // color: Colors.white, //background color of box
           BoxShadow(
             color: Color.fromRGBO(198, 199, 202, 1),
-            blurRadius: 10, // soften the shadow
+            blurRadius: 12, // soften the shadow
             spreadRadius: 0.01, //extend the shadow
             offset: Offset(
               8.0, // Move to right 10  horizontally
@@ -154,21 +220,132 @@ class _ManagementScreenState extends State<ManagementScreen> {
           )
         ],
       ),
-      padding: const EdgeInsets.all(8),
-      alignment: Alignment.topCenter,
-      child: Container (
-        padding: EdgeInsets.only(top: 10),
-        child: Text(
-          nameItem,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+      child: Card(
+        margin: EdgeInsets.only(top: 8, right: 10, left: 10),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-      )
+        child: Container(
+          padding: EdgeInsets.all(20),
+          // height: 130,
+          // color: Color.fromRGBO(242, 242, 242, 1),
+          color: Colors.white,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                // child: Image.asset(
+                //   pathPicture,
+                //   width: MediaQuery.of(context).size.width*0.2,
+                // ),
+                child: Container(
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: colors,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    padding: EdgeInsets.only(left: leftPadding),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: Colors.white, width: 2),
+                      color: colors,
+                    ),
+                    // backgroundColor: colors,
+                    child: Image.asset(
+                      pathPicture,
+                      width: 40,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 15,),
+              Flexible(
+                flex: 4,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          nameItem,
+                          style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        // SizedBox(width: 15,),
+                        Text(
+                          totalItems.toString(),
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6,),
+                    ElevatedButton(
+                        child: Text(
+                            nameButton.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )
+                        ),
+                        style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                            backgroundColor: MaterialStateProperty.all<Color>(colors),
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    side: BorderSide(color: colors)
+                                )
+                            )
+                        ),
+                        onPressed: function,
+                    )
+                  ],
+                )
+              ),
+            ],
+          ),
+
+        ),
+      ),
+
     );
   }
 
+  _clickBtnListUser() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserManagementScreen()),
+    );
+  }
 
+  _clickBtnListRole() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RoleManagementScreen()),
+    );
+  }
+
+  _clickBtnListTester() {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => UserManagementScreen()),
+    // );
+  }
+
+  _clickBtnMaps() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MapsScreen()),
+    );
+  }
 }
