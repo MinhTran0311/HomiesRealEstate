@@ -286,15 +286,12 @@ class _HomeScreenState extends State<HomeScreen> {
           await Future.delayed(Duration(milliseconds: 2000));
           if (mounted) {
             setState(() {
-
             });
           }
           _scrollController.jumpTo(
             _scrollController.position.maxScrollExtent,
           );
-
           _refreshController.loadComplete();
-
         },
         onRefresh: () async {
           print("refresh");

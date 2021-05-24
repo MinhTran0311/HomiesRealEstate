@@ -148,9 +148,11 @@ abstract class _PostStore with Store {
   void setSearchContent(String value, {bool isTag=false}) {
     searchContent = value;
     if (!hasFilter) filter_model = new filter_Model();
-    filter_model.searchContent = searchContent;
+
     if (isTag)
       filter_model.tagTimKiem = value;
+    else
+      filter_model.searchContent = searchContent;
   }
 
   @action
@@ -213,7 +215,7 @@ abstract class _PostStore with Store {
 
     final futrue = _repository.getPosts(0,3,new filter_Model(tagTimKiem: tag));
     fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
-    filter_model.tagTimKiem = tag;
+    setSearchContent(tag, isTag: true);
     futrue.then((result) {
       if(!isSearchInHome)
         this.rcmPostList = result;

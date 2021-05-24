@@ -449,7 +449,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       child: buildTagList(post.tagTimKiem),
                     ),
 
-                    _postStore.rcmPostList.posts !=null ? Container(
+                    _postStore.rcmPostList !=null ? Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -477,7 +477,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           )
                         ],
                       )
-
                     ):Container(width: 0,height:0,) ,
                   ],
                 ),
