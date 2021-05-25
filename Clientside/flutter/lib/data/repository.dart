@@ -224,6 +224,12 @@ class Repository {
     return await _userApi.getAllUsers().then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
+    }).catchError((error) => throw error);
+  }
+  Future<User> getUserByID(int id) async {
+    return await _userApi.getUserByID(id).then((user) {
+      // log('dataUserTest: $usersList');
+      return user;
       }).catchError((error) => throw error);
   }
   Future<CurrentUserForEditdto> getCurrentUser() async {

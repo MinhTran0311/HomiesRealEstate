@@ -382,6 +382,14 @@ mixin _$UserStore on _UserStore, Store {
     return _$updatePictureCurrentUserAsyncAction
         .run(() => super.updatePictureCurrentUser(fileToken));
   }
+  final _$getUserByIDAsyncAction =
+      AsyncAction('_UserStore.getUserByID');
+
+  @override
+  Future<dynamic> getUserByID(int userId) {
+    return _$getUserByIDAsyncAction
+        .run(() => super.getUserByID(userId));
+  }
 
   @override
   String toString() {

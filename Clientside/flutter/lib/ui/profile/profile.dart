@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -42,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState({
     Key key,
   }) : super();
-
+  String role="Khách";
   String pathAvatar = "assets/images/img_login.jpg";
   File image;
   final picker = ImagePicker();
@@ -79,8 +80,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _userstore.getCurrentPictureUser();
     }
     if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(true);
-
-
+    // if(!_userstore.loadingsUserByID)
+    //   if(_userstore.userByID!=null)
+    //     role=" ";
+    //     for(int i=0; i<_userstore.userByID.permissionsList.length;i++){
+    //       if(_userstore.userByID.permissionsList[i].displayName!=null)
+    //       role+=_userstore.userByID.permissionsList[i].displayName+", ";
+    //     }
   }
 
 
@@ -381,8 +387,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _userstore.userCurrent != null
-                              ? Text(
+                          Observer(builder: (context) {
+                            return
+                              _userstore.userCurrent != null
+                                  ? Text(
                                   _userstore.userCurrent.surname +
                                       " " +
                                       _userstore.userCurrent.name,
@@ -391,29 +399,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                       fontFamily: FontFamily.roboto))
-                              : Text("Người dùng ",
+                                  : Text("Người dùng ",
                                   style: TextStyle(
                                       fontSize: 30.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontFamily: FontFamily.roboto)),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.people,
-                                color: Colors.white,
-                                size: 24.0,
-                                semanticLabel:
-                                    'Text to announce in accessibility modes',
-                              ),
-                              Text("Người dùng ",
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      // fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: FontFamily.roboto)),
-                            ],
-                          ),
+                                      fontFamily: FontFamily.roboto));
+
+                          }),
+                        Observer(builder: (context) {
+                          return
+                            _userstore.userByID != null ? Row(
+                              children: [
+                                Icon(
+                                  Icons.people,
+                                  color: Colors.white,
+                                  size: 24.0,
+                                  semanticLabel:
+                                  'Text to announce in accessibility modes',
+                                ),
+                                Text(role,
+                                    style: TextStyle(
+                                        fontSize: 17.0,
+                                        // fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontFamily: FontFamily.roboto)),
+                              ],
+                            ) : Container();
+                          }
+                        ),
                         ],
                       ),
                     ),
@@ -432,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Observer(builder: (context) {
                             return _userstore.userCurrent != null
                                 ? Text(
-                                    _userstore.userCurrent.wallet.toString(),
+                                priceFormat(_userstore.userCurrent.wallet),
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,

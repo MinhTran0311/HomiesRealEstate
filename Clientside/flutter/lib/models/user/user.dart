@@ -41,7 +41,7 @@ class User {
     isActive: json["result"]["user"]["isActive"],
     isEmailConfirmed: json["result"]["user"]["isEmailConfirmed"],
     creationTime: json["result"]["user"]["creationTime"],
-    // permissions: json["roles"],
+    // permissionsList: json["result"]["roles"],
   );
   factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
     id: json["id"],
