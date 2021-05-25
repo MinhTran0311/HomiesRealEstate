@@ -198,6 +198,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
             SizedBox(height: 25,),
             _buildListItem("Maps tạm", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMaps, Colors.green, 0),
             SizedBox(height: 25,),
+            _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", 15, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
+            SizedBox(height: 25,),
           ],
         ),
       ),
@@ -347,5 +349,12 @@ class _ManagementScreenState extends State<ManagementScreen> {
       context,
       MaterialPageRoute(builder: (context) => MapsScreen()),
     );
+  }
+
+  _clickBtnChecker() {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => MapsScreen()),
+    // );
   }
 }
