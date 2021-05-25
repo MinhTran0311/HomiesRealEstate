@@ -181,10 +181,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 loadStyle: LoadStyle.ShowWhenLoading,
                 completeDuration: Duration(milliseconds: 500),
               ),
-              onLoading: () async {
+                onLoading: () async {
                 print("loading");
+                //selectedDatefl.add(new DateTime(null));
                 postStore.getPostForCurs(true);
                 await Future.delayed(Duration(milliseconds: 2000));
+                selectedDatefl=new List <DateTime>(postStore.postForCurList.posts.length);
                 if (mounted) {
                   setState(() {});
                 }
@@ -264,7 +266,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
-    return Observer(builder: (context) {
+    //return Observer(builder: (context) {
       return Card(
         margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -596,7 +598,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           ),
         ]),
       );
-    });
+    //});
   }
 
   Widget _handleErrorMessage() {

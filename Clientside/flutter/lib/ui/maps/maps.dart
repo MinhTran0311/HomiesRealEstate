@@ -137,7 +137,8 @@ class _MapsScreenState extends State<MapsScreen> {
     // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
   }
 
-  Future<void> _goToCurrentLocationSearch() async {
+  Future<void> _goToCurrentLocationSearch(String value) async {
+    this._applicationBloc.searchPlaces(value);
     if (_applicationBloc.placemarks != null) {
       final GoogleMapController controller = await _controller.future;
       CameraPosition posotionSearch = CameraPosition(
@@ -146,7 +147,19 @@ class _MapsScreenState extends State<MapsScreen> {
         tilt: 59.440,
         zoom: 13.0,
       );
-      // controller.animateCamera(CameraUpdate.newCameraPosition(_applicationBloc.placemarks[0]));
+      controller.animateCamera(CameraUpdate.newCameraPosition(posotionSearch));
+      _markers.add(Marker(
+        // markerId: MarkerId(postOrder.id.toString()),
+        position: new LatLng(_applicationBloc.lat, _applicationBloc.tit),
+        infoWindow: InfoWindow(
+          title: '${_applicationBloc.placemarks[0].street}',
+          // snippet: '${_applicationBloc.placemarks[0].country}' + '${_applicationBloc.placemarks[0].}',
+        ),
+        onTap: () {
+          // this.postClickMarker = postOrder;
+        },
+        icon: BitmapDescriptor.defaultMarker,
+      ));
     }
   }
 
@@ -387,13 +400,13 @@ class _MapsScreenState extends State<MapsScreen> {
                 ),
 
                 // onChanged: (value) => this._applicationBloc.searchPlaces(value),
-                onSubmitted: (value) => this._applicationBloc.searchPlaces(value),
+                onSubmitted: (value) => _goToCurrentLocationSearch(value),
               ),
             ),
             Stack(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height*0.8,
+                  height: MediaQuery.of(context).size.height*0.7,
                   child: Stack(
                     children: [
                       GoogleMap(

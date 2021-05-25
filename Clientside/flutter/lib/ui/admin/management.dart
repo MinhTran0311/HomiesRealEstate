@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
+import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -198,6 +199,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
             SizedBox(height: 25,),
             _buildListItem("Maps tạm", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMaps, Colors.green, 0),
             SizedBox(height: 25,),
+            _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", 15, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
+            SizedBox(height: 25,),
           ],
         ),
       ),
@@ -346,6 +349,13 @@ class _ManagementScreenState extends State<ManagementScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => MapsScreen()),
+    );
+  }
+
+  _clickBtnChecker() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => KiemDuyetPage()),
     );
   }
 }

@@ -79,14 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!_userstore.loadingCurrentUserPicture) {
       _userstore.getCurrentPictureUser();
     }
-    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(true);
-    // if(!_userstore.loadingsUserByID)
-    //   if(_userstore.userByID!=null)
-    //     role=" ";
-    //     for(int i=0; i<_userstore.userByID.permissionsList.length;i++){
-    //       if(_userstore.userByID.permissionsList[i].displayName!=null)
-    //       role+=_userstore.userByID.permissionsList[i].displayName+", ";
-    //     }
+    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
+
+
   }
 
 
