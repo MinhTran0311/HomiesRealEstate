@@ -37,7 +37,8 @@ class Endpoints {
   static const String getCurrentPictureUser = homiesUrl + "/services/app/Profile/GetProfilePicture";
   //get current lichsugiaodich
   static const String getCurrenlichsugiaodich = homiesUrl + "/services/app/LichSuGiaoDichs/GetAllLSGDByCurrentUser";
-
+  //getReportDate
+  static const String getReportDate = homiesUrl + "/services/app/User/GetReportByUser";
   //# region Post
 
   //get all lichsugiaodich

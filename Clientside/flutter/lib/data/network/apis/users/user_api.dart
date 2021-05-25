@@ -7,6 +7,7 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:dio/dio.dart';
@@ -323,5 +324,22 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       throw e;
     }
   }
+  //getReportData
+  Future<listitemReport> getReportData() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getReportDate,
 
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listitemReport.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
 }

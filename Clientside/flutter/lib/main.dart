@@ -13,6 +13,7 @@ import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/reportData/reportData_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
   final LanguageStore _languageStore = LanguageStore(appComponent.getRepository());
   final UserStore _userStore = UserStore(appComponent.getRepository());
   final LSGDStore _lsgdStore = LSGDStore(appComponent.getRepository());
+  final ReportDataStore _reportDataStore = ReportDataStore(appComponent.getRepository());
   final AuthTokenStore _authTokenStore = AuthTokenStore(appComponent.getRepository());
   final UserManagementStore _userManagementStore = UserManagementStore(appComponent.getRepository());
   final RoleManagementStore _roleManagementStore = RoleManagementStore(appComponent.getRepository());
@@ -80,6 +82,7 @@ class MyApp extends StatelessWidget {
         Provider<UserManagementStore>(create: (_) => _userManagementStore),
         Provider<RoleManagementStore>(create: (_) => _roleManagementStore),
         Provider<FilterStore>(create: (_) => _filterStore),
+        Provider<ReportDataStore>(create: (_) => _reportDataStore),
         Provider<UserStore>(create: (_) => _userStore),
         Provider<LSGDStore>(create: (_) => _lsgdStore),
         Provider<ImageStore>(create: (_) => _imageStore),
