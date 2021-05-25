@@ -490,11 +490,13 @@ abstract class _PostStore with Store {
   static ObservableFuture<PostList> emptyPostforcursResponse =
   ObservableFuture.value(null);
   @observable
+  bool isIntialLoadingpostforcur = true;
+  @observable
   ObservableFuture<PostList> fetchPostForCursFuture = ObservableFuture<PostList>(emptyPostforcursResponse);
   @observable
-  PostList postForCurList;
+  PostList postForCurList=new PostList();
   @computed
-  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending;
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending && isIntialLoadingpostforcur;
   @observable
   bool successPostForCur = false;
   @observable
@@ -508,8 +510,15 @@ abstract class _PostStore with Store {
     fetchPostForCursFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForCur = true;
-      this.postForCurList = postList;
-    }).catchError((error) {
+      if (!isLoadMore) {
+        this.postForCurList = postList;
+        if (isIntialLoadingpostforcur) isIntialLoadingpostforcur = false;
+      }
+      else {
+        for(var i in postList.posts)
+          this.postForCurList.posts.add(i);
+      }
+      }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;

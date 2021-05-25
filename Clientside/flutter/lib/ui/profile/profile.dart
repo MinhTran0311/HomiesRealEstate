@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!_userstore.loadingCurrentUserPicture) {
       _userstore.getCurrentPictureUser();
     }
-    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(true);
+    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
 
 
   }
