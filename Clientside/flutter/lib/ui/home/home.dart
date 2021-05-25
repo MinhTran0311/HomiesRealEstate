@@ -29,17 +29,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   TextEditingController _searchController = TextEditingController();
-  
+
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final ScrollController _scrollController= ScrollController(keepScrollOffset: true);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  final ScrollController _scrollController =
+      ScrollController(keepScrollOffset: true);
   bool isRefreshing = false;
   GlobalKey _contentKey = GlobalKey();
   GlobalKey _refresherKey = GlobalKey();
@@ -67,13 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
       userStore.getCurrentUser();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(),);
+      body: _buildBody(),
+    );
   }
 
-  Widget buildFilter(String filterName){
+  Widget buildFilter(String filterName) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12),
       margin: EdgeInsets.only(right: 12),
@@ -84,8 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
           border: Border.all(
             color: Colors.grey[300],
             width: 1,
-          )
-      ),
+          )),
       child: Center(
         child: Text(
           filterName,
@@ -97,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   // Widget _buildLogoutButton() {
   //   return IconButton(
@@ -117,70 +118,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Stack(
-      children: <Widget>[
+    return Stack(children: <Widget>[
       _handleErrorMessage(),
       _buildMainContent(),
-      ]
-    );
+    ]);
   }
 
   Widget _buildMainContent() {
-      return Observer(
-        builder: (context) {
-          return _postStore.loading
-              ? CustomProgressIndicatorWidget()
-              : Material(child: _buildPostsList());
-        },
+    return Observer(
+      builder: (context) {
+        return _postStore.loading
+            ? CustomProgressIndicatorWidget()
+            : Material(child: _buildPostsList());
+      },
     );
   }
+
   Widget _buildPostsList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: EdgeInsets.only(top: 48,left: 24,right: 24, bottom: 16),
+        Padding(
+          padding: EdgeInsets.only(top: 48, left: 24, right: 24, bottom: 16),
           child: TextField(
             autofocus: false,
-              controller: _searchController,
-              onChanged: (value){
-                _postStore.setSearchContent(_searchController.text);
-              },
-              style: TextStyle(
-                fontSize: 28,
-                height: 1,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                  hintText: "Tìm kiếm",
-                  hintStyle: TextStyle(
-                    fontSize: 28,
-                    color: Colors.grey[400],
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange[400]),
-                  ),
-                  border:  UnderlineInputBorder(
-                      borderSide:  BorderSide(color: Colors.black)
-                  ),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.only(left: 16),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.grey[400],
-                        size: 28,
-                      ),
-                      onPressed: (){
-                        _postStore.searchPosts();
-                      },
+            controller: _searchController,
+            onChanged: (value) {
+              _postStore.setSearchContent(_searchController.text);
+            },
+            style: TextStyle(
+              fontSize: 28,
+              height: 1,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: InputDecoration(
+                hintText: "Tìm kiếm",
+                hintStyle: TextStyle(
+                  fontSize: 28,
+                  color: Colors.grey[400],
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black)),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,
                     ),
-
-                  )
-              ),
+                    onPressed: () {
+                      _postStore.getPosts(false);
+                    },
+                  ),
+                )),
           ),
         ),
         Padding(
@@ -188,47 +186,57 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Container(
-                height: 32,
-                child: Stack(
-                  children: [
-                    ListView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        SizedBox(width: 24,),
-                        buildFilter('Loại nhà'),
-                        buildFilter('Giá'),
-                        buildFilter('Phòng ngủ'),
-                        buildFilter('Hồ bơi'),
-                        SizedBox(width: 8,),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 28,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.centerRight,
-                                end: Alignment.centerLeft,
-                                stops: [0.0,0.1],
-                                colors: [
-                                  Theme.of(context).scaffoldBackgroundColor,
-                                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
-                                ]
-                            )
-                        ),
+              Expanded(
+                child: Container(
+                  height: 32,
+                  child: Stack(
+                    children: [
+                      ListView(
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: 24,
+                          ),
+                          buildFilter('Loại nhà'),
+                          buildFilter('Giá'),
+                          buildFilter('Phòng ngủ'),
+                          buildFilter('Hồ bơi'),
+                          SizedBox(
+                            width: 8,
+                          ),
+                        ],
                       ),
-                    )
-                  ],
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          width: 28,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.centerRight,
+                                  end: Alignment.centerLeft,
+                                  stops: [
+                                0.0,
+                                0.1
+                              ],
+                                  colors: [
+                                Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context)
+                                    .scaffoldBackgroundColor
+                                    .withOpacity(0.0),
+                              ])),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),),
+              ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   _showBottomSheet();
                 },
-                child: Padding(padding: EdgeInsets.only(left:16,right:24),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16, right: 24),
                   child: Text(
                     'filters',
                     style: TextStyle(
@@ -241,101 +249,98 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        SizedBox(height: 6,),
+        SizedBox(
+          height: 6,
+        ),
         Expanded(child: _buildListView()),
       ],
     );
   }
+
   Widget _buildListView() {
     return _postStore.postList != null
-      ? SmartRefresher(
-        key: _refresherKey,
-        controller: _refreshController,
-        enablePullUp: true,
-        enablePullDown: true,
-        header: WaterDropHeader(
-          refresh: SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: Icon(
-              Icons.flight_takeoff_outlined,
-              color: Colors.amber,
-              size: 20,
+        ? SmartRefresher(
+            key: _refresherKey,
+            controller: _refreshController,
+            enablePullUp: true,
+            enablePullDown: true,
+            header: WaterDropHeader(
+              refresh: SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: Icon(
+                  Icons.flight_takeoff_outlined,
+                  color: Colors.amber,
+                  size: 20,
+                ),
+              ),
+              idleIcon: SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: Icon(
+                  Icons.flight_takeoff_outlined,
+                  color: Colors.amber,
+                  size: 20,
+                ),
+              ),
+              waterDropColor: Colors.amber,
             ),
-          ),
-          idleIcon:SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: Icon(
-              Icons.flight_takeoff_outlined,
-              color: Colors.amber,
-              size: 20,
+            physics: BouncingScrollPhysics(),
+            footer: ClassicFooter(
+              loadStyle: LoadStyle.ShowWhenLoading,
+              completeDuration: Duration(milliseconds: 500),
             ),
-          ),
-          waterDropColor: Colors.amber,
-        ),
-        physics: BouncingScrollPhysics(),
-        footer: ClassicFooter(
-          loadStyle: LoadStyle.ShowWhenLoading,
-          completeDuration: Duration(milliseconds: 500),
-        ),
-        onLoading: () async {
-          print("loading");
+            onLoading: () async {
+              print("loading");
 
-          _postStore.getPosts(true);
-          await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) {
-            setState(() {
+              _postStore.getPosts(true);
+              await Future.delayed(Duration(milliseconds: 2000));
+              if (mounted) {
+                setState(() {});
+              }
+              _scrollController.jumpTo(
+                _scrollController.position.maxScrollExtent,
+              );
+              _refreshController.loadComplete();
+            },
+            onRefresh: () async {
+              print("refresh");
+              _postStore.getPosts(false);
 
-            });
-          }
-          _scrollController.jumpTo(
-            _scrollController.position.maxScrollExtent,
+              await Future.delayed(Duration(milliseconds: 2000));
+              if (mounted) setState(() {});
+              isRefreshing = true;
+              _refreshController.refreshCompleted();
+            },
+            scrollController: _scrollController,
+            primary: false,
+            child: ListView.builder(
+              key: _contentKey,
+              controller: _scrollController,
+              itemCount: _postStore.postList.posts.length,
+              // separatorBuilder: (context, position) {
+              //   return Divider();
+              // },
+              itemBuilder: (context, position) {
+                return _buildPostPoster(
+                    _postStore.postList.posts[position], position);
+                //_buildListItem(position);
+              },
+            ),
+          )
+        : Center(
+            child: Text(
+              "Không có bài đăng",
+            ),
           );
-
-          _refreshController.loadComplete();
-
-        },
-        onRefresh: () async {
-          print("refresh");
-          _postStore.getPosts(false);
-
-          await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) setState(() {});
-          isRefreshing = true;
-          _refreshController.refreshCompleted();
-        },
-        scrollController: _scrollController,
-        primary: false,
-        child: ListView.builder(
-          key: _contentKey,
-          controller: _scrollController,
-          itemCount: _postStore.postList.posts.length,
-          // separatorBuilder: (context, position) {
-          //   return Divider();
-          // },
-          itemBuilder: (context, position) {
-
-            return _buildPostPoster(_postStore.postList.posts[position],position);
-              //_buildListItem(position);
-          },
-        ),
-      )
-      : Center(
-          child: Text(
-            "Không có bài đăng",
-          ),
-        );
   }
 
-  Widget _buildPostPoster(Post post, int index){
+  Widget _buildPostPoster(Post post, int index) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context)=>Detail(post: post)));
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Detail(post: post)));
       },
-
       child: Card(
         margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -346,32 +351,33 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 210,
           decoration: BoxDecoration(
               image: DecorationImage(
-                //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
-                image: post.featuredImage!=null ? NetworkImage(post.featuredImage) : AssetImage(Assets.front_img),
-                fit: BoxFit.cover,
-              )
-          ),
+            //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
+            image: post.featuredImage != null
+                ? NetworkImage(post.featuredImage)
+                : AssetImage(Assets.front_img),
+            fit: BoxFit.cover,
+          )),
           child: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.5,1.0],
+                    stops: [
+                  0.5,
+                  1.0
+                ],
                     colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.7),
-                    ]
-                )
-            ),
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.7),
+                ])),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.yellow[700],
-                      borderRadius: BorderRadius.all(Radius.circular(5))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   width: 80,
                   padding: EdgeInsets.symmetric(vertical: 4),
                   child: Center(
@@ -385,9 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Expanded(
-                    child: Container()
-                ),
+                Expanded(child: Container()),
                 Column(
                   children: [
                     Row(
@@ -414,7 +418,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ],
                     ),
-                    SizedBox(height: 4,),
+                    SizedBox(
+                      height: 4,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -425,28 +431,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.white,
                               size: 14,
                             ),
-                            SizedBox(width: 4,),
+                            SizedBox(
+                              width: 4,
+                            ),
                             Text(
                               post.tenXa,
                               style: TextStyle(
-                                color:Colors.white,
-                                fontSize:  14,
+                                color: Colors.white,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-
-                            SizedBox(width: 8,),
+                            SizedBox(
+                              width: 8,
+                            ),
                             Icon(
                               Icons.zoom_out_map,
                               color: Colors.white,
                               size: 14,
                             ),
-                            SizedBox(width: 4,),
+                            SizedBox(
+                              width: 4,
+                            ),
                             Text(
-                              post.dienTich.toString() +' m2',
+                              post.dienTich.toString() + ' m2',
                               style: TextStyle(
-                                color:Colors.white,
-                                fontSize:  14,
+                                color: Colors.white,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -459,7 +470,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.amber,
                               size: 14,
                             ),
-                            SizedBox(width: 4,),
+                            SizedBox(
+                              width: 4,
+                            ),
                             Text(
                               post.diemBaiDang.toString(),
                               style: TextStyle(
@@ -527,6 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SizedBox.shrink();
   }
+
   void _showBottomSheet() async {
     _postStore.filter_model = await showModalBottomSheet<filter_Model>(
         context: context,
@@ -535,19 +549,18 @@ class _HomeScreenState extends State<HomeScreen> {
         isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            )
-        ),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        )),
         builder: (BuildContext context) {
           return Wrap(
             children: [
               Filter(),
             ],
           );
-        }
-    );
+        });
   }
+
   _buildLanguageDialog() {
     _showDialog<String>(
       context: context,
@@ -579,7 +592,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     color: _languageStore.locale == object.locale
                         ? Theme.of(context).primaryColor
-                        : _themeStore.darkMode ? Colors.white : Colors.black,
+                        : _themeStore.darkMode
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
                 onTap: () {

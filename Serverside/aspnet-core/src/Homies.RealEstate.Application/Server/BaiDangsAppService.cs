@@ -123,7 +123,6 @@ namespace Homies.RealEstate.Server
                                    UserId = o.UserId,
                                    XaId = o.XaId,
                                    DanhMucId = o.DanhMucId
-
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),

@@ -128,9 +128,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_postStore.loadingThuocTinh) {
       _postStore.getThuocTinhs();
     }
-    // if (!_userStore.loading) {
-    //   _userStore.getCurrentUser();
-    // }
+    if (!_userStore.loadingCurrentUserWallet) {
+      _userStore.getCurrentWalletUser();
+    }
     // if (!_userStore.loadingCurrentUserWallet) {
     //   _userStore.getCurrentWalletUser();
     // }
@@ -713,7 +713,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildCommuneField() {
     if (selectedTown != null) {
       return Padding(
-        padding: const EdgeInsets.only(left: 40.0, right: 0.0, bottom: 24.0),
+        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
         child: DropdownButtonFormField<Commune>(
           hint: Text("Chọn xã/phường"),
           autovalidateMode: AutovalidateMode.always,
@@ -861,7 +861,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               decimal: false, signed: false)
                           : TextInputType.text,
                       controller: _ThuocTinhController[index],
-                      onChanged: (value) {},
+                      onChanged: (value) {_ThuocTinhController[index]=new TextEditingController(text: value);},
                     ),
                     SizedBox(height: 24.0),
                   ]);
@@ -1227,12 +1227,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     height: 0,
                   ),
             if(songay!=null&&selectedPack.phi!=null)
-            songay * selectedPack.phi > _userStore.userCurrent.wallet
-                ? Text('Vui lòng nạp thêm tiền để đăng bài')
-                : Container(
-                    height: 0,
-                  ),
-          ]),
+          songay * selectedPack.phi > _userStore.userCurrent.wallet
+          ? Text('Vui lòng nạp thêm tiền để đăng bài')
+          : Container(
+          height: 0,
+          ),
+    ]),
     );
     showDialog(
       context: context,

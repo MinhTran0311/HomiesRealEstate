@@ -141,8 +141,8 @@ abstract class _FilterStore with Store {
     loaiBaiDangDropDownValue = 'Bất kì';
     giaDropDownValue = 'Bất kì';
     dienTichDropDownValue = 'Bất kì';
-
-    filter_model = new filter_Model();
+    var _searchContent = filter_model.searchContent;
+    filter_model = new filter_Model(searchContent: _searchContent);
   }
   //#region Province
   @observable
