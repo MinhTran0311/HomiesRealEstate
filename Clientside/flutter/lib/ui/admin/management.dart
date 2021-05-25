@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
+import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -352,9 +353,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
   }
 
   _clickBtnChecker() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => MapsScreen()),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => KiemDuyetPage()),
+    );
   }
 }
