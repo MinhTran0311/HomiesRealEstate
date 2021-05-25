@@ -7,7 +7,6 @@ import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-//import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -55,10 +54,10 @@ class _FilterState extends State<Filter> {
     _giaMaxValueController.text=_filterStore.filter_model.giaMax;
     _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
     _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
-    if (_filterStore.filter_model.tenTinh.isNotEmpty){
+    if (_filterStore.filter_model.tenTinh!= null && _filterStore.filter_model.tenTinh.isNotEmpty){
       _filterStore.getTownByProvinceName(_filterStore.filter_model.tenTinh);
     }
-    if (_filterStore.filter_model.tenHuyen.isNotEmpty){
+    if (_filterStore.filter_model.tenHuyen!= null &&_filterStore.filter_model.tenHuyen.isNotEmpty){
       _filterStore.getCommuneByTownName(_filterStore.filter_model.tenHuyen);
     }
   }
@@ -146,7 +145,7 @@ class _FilterState extends State<Filter> {
                     buildCommuneFilter(),
                     buildUsernameFilter(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         buildApplyButton(),
                         buildClearButton(),
@@ -250,10 +249,10 @@ class _FilterState extends State<Filter> {
             builder: (context){
               return Container(
                   child:  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _filterStore.suDungGiaFilter ? SizedBox(
-                        width: 75,
+                        width: 65,
                         child: TextField(
                           focusNode: _minGiaFocus,
                           textInputAction: TextInputAction.next,
@@ -290,7 +289,7 @@ class _FilterState extends State<Filter> {
                           : Container(width: 0,height: 0,),
                       _filterStore.suDungGiaFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
                       _filterStore.suDungGiaFilter ? SizedBox(
-                        width: 75,
+                        width: 65,
                         child: TextField(
                           autofocus: false,
 
@@ -328,7 +327,7 @@ class _FilterState extends State<Filter> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: SizedBox(
-                          width: 75,
+                          width: 70,
                           height: 60,
                           child: DropdownButton<String>(
                             isExpanded: true,
@@ -394,10 +393,10 @@ class _FilterState extends State<Filter> {
             {
               return Container(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _filterStore.suDungDienTichFilter ? SizedBox(
-                      width: 75,
+                      width: 65,
                       child: TextField(
                         focusNode: _minDienTichFocus,
                         textInputAction: TextInputAction.next,
@@ -432,7 +431,7 @@ class _FilterState extends State<Filter> {
                     ) : Container(width: 0,height: 0,),
                     _filterStore.suDungDienTichFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
                     _filterStore.suDungDienTichFilter ? SizedBox(
-                      width: 75,
+                      width: 65,
                       child: TextField(
                         textInputAction: TextInputAction.done,
                         onSubmitted: (_) => FocusScope.of(context).unfocus(),
@@ -469,7 +468,7 @@ class _FilterState extends State<Filter> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: SizedBox(
-                        width: 75,
+                        width: 70,
                         height: 60,
                         child: DropdownButton<String>(
                           isExpanded: true,
@@ -768,7 +767,7 @@ class _FilterState extends State<Filter> {
   }
   Widget buildApplyButton(){
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: 3),
       child: RoundedButtonWidget(
         buttonText: "Sử dụng bộ lọc",
         textSize: 20,
@@ -783,7 +782,7 @@ class _FilterState extends State<Filter> {
 
   Widget buildClearButton(){
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 3),
       child: RoundedButtonWidget(
         buttonText: "Đặt lại giá trị",
         textSize: 20,

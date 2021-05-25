@@ -260,21 +260,6 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
-  final _$maxCountAtom = Atom(name: '_PostStore.maxCount');
-
-  @override
-  int get maxCount {
-    _$maxCountAtom.reportRead();
-    return super.maxCount;
-  }
-
-  @override
-  set maxCount(int value) {
-    _$maxCountAtom.reportWrite(value, super.maxCount, () {
-      super.maxCount = value;
-    });
-  }
-
   final _$propertyListAtom = Atom(name: '_PostStore.propertyList');
 
   @override
@@ -785,8 +770,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getPostForCurs() {
-    final _$future = super.getPostForCurs();
+  ObservableFuture<dynamic> getPostForCurs(bool isLoadMore) {
+    final _$future = super.getPostForCurs(isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -821,6 +806,15 @@ mixin _$PostStore on _PostStore, Store {
     return _$getPostsAsyncAction.run(() => super.getPosts(isLoadMore));
   }
 
+  final _$getRecommendPostsAsyncAction =
+      AsyncAction('_PostStore.getRecommendPosts');
+
+  @override
+  Future<dynamic> getRecommendPosts(String tag, bool isSearchInHome) {
+    return _$getRecommendPostsAsyncAction
+        .run(() => super.getRecommendPosts(tag, isSearchInHome));
+  }
+
   final _$getPostPropertiesAsyncAction =
       AsyncAction('_PostStore.getPostProperties');
 
@@ -848,22 +842,6 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.createOrChangeStatusBaiGhimYeuThich(postId));
   }
 
-  final _$searchPostsAsyncAction = AsyncAction('_PostStore.searchPosts');
-
-  @override
-  Future<dynamic> searchPosts() {
-    return _$searchPostsAsyncAction.run(() => super.searchPosts());
-  }
-
-  final _$getRecommendPostsAsyncAction =
-      AsyncAction('_PostStore.getRecommendPosts');
-
-  @override
-  Future<dynamic> getRecommendPosts(String tag, bool isSearchInHome) {
-    return _$getRecommendPostsAsyncAction
-        .run(() => super.getRecommendPosts(tag, isSearchInHome));
-  }
-
   final _$getPostcategorysAsyncAction =
       AsyncAction('_PostStore.getPostcategorys');
 
@@ -889,11 +867,11 @@ mixin _$PostStore on _PostStore, Store {
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
-  void setSearchContent(String value) {
+  void setSearchContent(String value, {bool isTag = false}) {
     final _$actionInfo = _$_PostStoreActionController.startAction(
         name: '_PostStore.setSearchContent');
     try {
-      return super.setSearchContent(value);
+      return super.setSearchContent(value, isTag: isTag);
     } finally {
       _$_PostStoreActionController.endAction(_$actionInfo);
     }
@@ -922,7 +900,6 @@ postList: ${postList},
 rcmPostList: ${rcmPostList},
 isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
-maxCount: ${maxCount},
 propertyList: ${propertyList},
 fetchPostCategorysFuture: ${fetchPostCategorysFuture},
 imageUrlList: ${imageUrlList},
