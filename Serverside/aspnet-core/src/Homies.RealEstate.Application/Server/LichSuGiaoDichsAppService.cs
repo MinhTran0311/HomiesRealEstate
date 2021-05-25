@@ -287,7 +287,7 @@ namespace Homies.RealEstate.Server
             );
         }
         [AbpAuthorize]
-        public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync()
+        public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync(PagedAndSortedResultRequestDto input)
         {
             var user = await GetCurrentUserAsync();
             var filteredLichSuGiaoDichs = _lichSuGiaoDichRepository.GetAll()
@@ -297,7 +297,8 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
-                .OrderBy("id asc");
+                .OrderBy("id asc")
+                .PageBy(input);
 
             var lichSuGiaoDichs = from o in pagedAndFilteredLichSuGiaoDichs
                                   join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
@@ -339,7 +340,7 @@ namespace Homies.RealEstate.Server
             var user = await GetCurrentUserAsync();
 
             var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
-            if (lsgd.KiemDuyetVienId!=null)
+            if (lsgd.KiemDuyetVienId==null)
             {
                 lsgd.KiemDuyetVienId = user.Id;
                 lsgd.UserFk.Wallet += lsgd.SoTien;

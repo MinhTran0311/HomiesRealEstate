@@ -82,7 +82,7 @@ namespace Homies.RealEstate.Server
             );
         }
 
-        public async Task<PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>> GetAllBaiGhimByCurrentUser()
+        public async Task<PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>> GetAllBaiGhimByCurrentUser(PagedAndSortedResultRequestDto input)
         {
             var user = await GetCurrentUserAsync();
 
@@ -93,7 +93,8 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiGhimYeuThichs = filteredBaiGhimYeuThichs
-                .OrderBy("id asc");
+                .OrderBy("id asc")
+                .PageBy(input);
 
             var baiGhimYeuThichs = from o in pagedAndFilteredBaiGhimYeuThichs
                                    join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1

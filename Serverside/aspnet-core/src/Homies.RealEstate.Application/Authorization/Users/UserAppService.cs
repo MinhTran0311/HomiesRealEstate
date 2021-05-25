@@ -30,6 +30,8 @@ using Homies.RealEstate.Dto;
 using Homies.RealEstate.Notifications;
 using Homies.RealEstate.Url;
 using Homies.RealEstate.Organizations.Dto;
+using Homies.RealEstate.Server.Dtos;
+using Homies.RealEstate.Server;
 
 namespace Homies.RealEstate.Authorization.Users
 {
@@ -55,6 +57,9 @@ namespace Homies.RealEstate.Authorization.Users
         private readonly UserManager _userManager;
         private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
         private readonly IRepository<OrganizationUnitRole, long> _organizationUnitRoleRepository;
+        private readonly IRepository<BaiDang> _baiDangRepository;
+        private readonly IRepository<LichSuGiaoDich,Guid> _lichSuGiaoDichRepository;
+
 
         public UserAppService(
             RoleManager roleManager,
@@ -73,7 +78,10 @@ namespace Homies.RealEstate.Authorization.Users
             IRoleManagementConfig roleManagementConfig,
             UserManager userManager,
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository)
+            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository,
+            IRepository<BaiDang> baiDangRepository,
+            IRepository<LichSuGiaoDich, Guid> lichSuGiaoDichRepository)
+
         {
             _roleManager = roleManager;
             _userEmailer = userEmailer;
@@ -92,6 +100,8 @@ namespace Homies.RealEstate.Authorization.Users
             _userOrganizationUnitRepository = userOrganizationUnitRepository;
             _organizationUnitRoleRepository = organizationUnitRoleRepository;
             _roleRepository = roleRepository;
+            _baiDangRepository = baiDangRepository;
+            _lichSuGiaoDichRepository = lichSuGiaoDichRepository;
 
             AppUrlService = NullAppUrlService.Instance;
         }
@@ -115,6 +125,127 @@ namespace Homies.RealEstate.Authorization.Users
                 userCount,
                 userListDtos
             );
+        }
+
+        public async Task<PagedResultDto<YearReportByUser>> GetReportByUser()
+        {
+            var user = await GetCurrentUserAsync();
+            DateTime currentTime = DateTime.Now;
+            var filteredtbaidang = _baiDangRepository.GetAll()
+                    .Include(e => e.UserFk)
+                    //.WhereIf(user.Id != 10, e => e.UserId == user.Id)
+                    .Where(e => e.ThoiDiemDang.CompareTo(currentTime.AddYears(-1)) > 0);
+
+
+            var baiDangs = from o in filteredtbaidang
+                           select new GetBaiDangForViewDto()
+                           {
+                               BaiDang = new BaiDangDto {
+                                   ThoiDiemDang = o.ThoiDiemDang,
+                                   Id = o.Id,
+                                   UserId = o.UserId,
+                               },
+                               UserName = o.UserFk.UserName,
+                           };
+
+            var filteredLSGD = _lichSuGiaoDichRepository.GetAll()
+                .Include(e => e.UserFk)
+                .Where(e => e.ThoiDiem.CompareTo(currentTime.AddYears(-1)) > 0);
+            var lsgds = from o in filteredLSGD
+                        select new GetLichSuGiaoDichForViewDto()
+                        {
+                            LichSuGiaoDich = new LichSuGiaoDichDto
+                            {
+                                ThoiDiem = o.ThoiDiem,
+                                Id = o.Id,
+                                UserId = o.UserId,
+                                ChiTietHoaDonBaiDangId = o.ChiTietHoaDonBaiDangId,
+                                KiemDuyetVienId = o.KiemDuyetVienId,
+                                SoTien = o.SoTien
+                            }
+                        };
+
+            bool isAdmin = user.Id == 2;
+
+            var listBaiDang = await baiDangs.ToListAsync();
+            var listLSGD = await lsgds.ToListAsync();
+            var monthReport = new List<MothReportDto>();
+
+            List<int> countBaiDang = Enumerable.Repeat(0, 12).ToList();
+            List<double> countTienNap = Enumerable.Repeat(0.0, 12).ToList();
+            List<double> countTienChi = Enumerable.Repeat(0.0, 12).ToList();
+
+
+            //Duyệt bài đăng
+            for (int i=0; i< listBaiDang.Count; i++)
+            {
+                if (listBaiDang[i].BaiDang.ThoiDiemDang != DateTime.MinValue)
+                    if (!(listBaiDang[i].BaiDang.ThoiDiemDang.Month == currentTime.Month && listBaiDang[i].BaiDang.ThoiDiemDang.Year < currentTime.Year))
+                    {
+                        if (isAdmin)
+                            countBaiDang[listBaiDang[i].BaiDang.ThoiDiemDang.Month - 1]++;
+                        else if (!isAdmin)
+                            if (listBaiDang[i].BaiDang.UserId == user.Id)
+                            countBaiDang[listBaiDang[i].BaiDang.ThoiDiemDang.Month - 1]++;
+                    }
+                    else continue;
+            }
+
+            // Duyệt LSGD
+            for (int i = 0; i < listLSGD.Count; i++)
+            {
+                if (listLSGD[i].LichSuGiaoDich.ThoiDiem != DateTime.MinValue)
+                {
+                    if (!(listLSGD[i].LichSuGiaoDich.ThoiDiem.Month == currentTime.Month && listLSGD[i].LichSuGiaoDich.ThoiDiem.Year < currentTime.Year))
+                    {
+                        if (isAdmin)
+                        {
+                            if (listLSGD[i].LichSuGiaoDich.ChiTietHoaDonBaiDangId != null)
+                                countTienChi[listLSGD[i].LichSuGiaoDich.ThoiDiem.Month - 1] += listLSGD[i].LichSuGiaoDich.SoTien;
+                            else if (listLSGD[i].LichSuGiaoDich.KiemDuyetVienId != null)
+                                countTienNap[listLSGD[i].LichSuGiaoDich.ThoiDiem.Month - 1] += listLSGD[i].LichSuGiaoDich.SoTien;
+                        }
+                        else if (!isAdmin && listLSGD[i].LichSuGiaoDich.UserId == user.Id)
+                        {
+                            if (listLSGD[i].LichSuGiaoDich.ChiTietHoaDonBaiDangId != null)
+                                countTienChi[listLSGD[i].LichSuGiaoDich.ThoiDiem.Month - 1] += listLSGD[i].LichSuGiaoDich.SoTien;
+                            else if (listLSGD[i].LichSuGiaoDich.KiemDuyetVienId != null)
+                                countTienNap[listLSGD[i].LichSuGiaoDich.ThoiDiem.Month - 1] += listLSGD[i].LichSuGiaoDich.SoTien;
+                        }
+                    }
+                    else continue;
+                }
+            }
+
+            for (int i=0; i < 12; i++)
+            {
+                var month = new MothReportDto() {
+                    SoBaiDang = countBaiDang[i],
+                    SoTienChi = countTienChi[i],
+                    SoTienNap = countTienNap[i],
+                    ThangGhiNhan = i + 1,
+                    NamGhiNhan = (i + 1) > DateTime.Now.Month ? (DateTime.Now.Year - 1) : DateTime.Now.Year
+                };
+                monthReport.Add(month);
+            }
+
+            List<YearReportByUser> result = new List<YearReportByUser>();
+            var report = new YearReportByUser
+            {
+                YearReport= monthReport,
+                UserId = user.Id,
+                Username=user.UserName,
+            };
+
+            result.Add(report);
+
+            return new PagedResultDto<YearReportByUser>(1, result);
+
+
+            //return new pagedresultdto<yearreportbyuser>(
+            //    usercount,
+            //    userlistdtos
+            //);
         }
 
         public async Task<FileDto> GetUsersToExcel(GetUsersToExcelInput input)
