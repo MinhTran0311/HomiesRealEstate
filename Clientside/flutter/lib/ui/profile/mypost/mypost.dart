@@ -1,4 +1,8 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
@@ -21,6 +25,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyPostScreen extends StatefulWidget {
   final UserStore userStore;
@@ -36,31 +41,39 @@ class _MyPostScreenState extends State<MyPostScreen> {
   final PostStore postStore;
   _MyPostScreenState({@required this.userStore, this.postStore});
   TownStore _townStore;
+  GlobalKey _refresherKey1 = GlobalKey();
+  GlobalKey _contentKey1 = GlobalKey();
+  bool isRefreshing1 = false;
+  RefreshController _refreshController1 =
+      RefreshController(initialRefresh: false);
+  final ScrollController _scrollController1 =
+      ScrollController(keepScrollOffset: true);
   List<DateTime> selectedDatefl = new List<DateTime>();
   @override
   void initState() {
     super.initState();
     selectedDatefl = new List<DateTime>(postStore.postForCurList.posts.length);
-    songay=new List<int>(postStore.postForCurList.posts.length);
+    songay = new List<int>(postStore.postForCurList.posts.length);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _townStore = Provider.of<TownStore>(context);
-    if (!_townStore.loading) {
-      _townStore.getTowns();
-    }
-    if (!_townStore.loadingCommune) {
-      _townStore.getCommunes();
-    }
-    if (!postStore.loadingPack) {
-      postStore.getPacks();
-    }
-    if (!postStore.loadingThuocTinh) {
-      postStore.getThuocTinhs();
-    }
+    // if (!_townStore.loading) {
+    //   _townStore.getTowns();
+    // }
+    // if (!_townStore.loadingCommune) {
+    //   _townStore.getCommunes();
+    // }
+    // if (!postStore.loadingPack) {
+    //   postStore.getPacks();
+    // }
+    // if (!postStore.loadingThuocTinh) {
+    //   postStore.getThuocTinhs();
+    // }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +85,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
           style: Theme.of(context).textTheme.button.copyWith(
               color: Colors.amber,
               fontSize: 23,
-              // backgroundColor:Colors.amber ,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.0),
         ),
@@ -106,23 +118,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
     );
   }
 
-  // Widget _buildLogoutButton() {
-  //   return IconButton(
-  //     onPressed: () {
-  //       SharedPreferences.getInstance().then((preference) {
-  //         preference.setBool(Preferences.is_logged_in, false);
-  //         preference.setBool(Preferences.auth_token, false);
-  //         //_authTokenStore.loggedIn=false;
-  //         Navigator.of(context).pushReplacementNamed(Routes.login);
-  //       });
-  //     },
-  //     icon: Icon(
-  //       Icons.power_settings_new,
-  //     ),
-  //   );
-  // }
-
-  // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(children: <Widget>[
       _handleErrorMessage(),
@@ -142,112 +137,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget _buildPostsList() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        // Padding(
-        //   padding: EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 16),
-        //   child: TextField(
-        //     style: TextStyle(
-        //       fontSize: 28,
-        //       height: 1,
-        //       color: Colors.black,
-        //       fontWeight: FontWeight.bold,
-        //     ),
-        //     decoration: InputDecoration(
-        //         hintText: "Search",
-        //         hintStyle: TextStyle(
-        //           fontSize: 28,
-        //           color: Colors.grey[400],
-        //         ),
-        //         enabledBorder: UnderlineInputBorder(
-        //           borderSide: BorderSide(color: Colors.red[400]),
-        //         ),
-        //         focusedBorder: UnderlineInputBorder(
-        //           borderSide: BorderSide(color: Colors.orange[400]),
-        //         ),
-        //         border: UnderlineInputBorder(
-        //             borderSide: BorderSide(color: Colors.black)),
-        //         suffixIcon: Padding(
-        //           padding: EdgeInsets.only(left: 16),
-        //           child: Icon(
-        //             Icons.search,
-        //             color: Colors.grey[400],
-        //             size: 28,
-        //           ),
-        //         )),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: EdgeInsets.only(top: 16),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Expanded(
-        //         child: Container(
-        //           height: 32,
-        //           child: Stack(
-        //             children: [
-        //               ListView(
-        //                 physics: BouncingScrollPhysics(),
-        //                 scrollDirection: Axis.horizontal,
-        //                 children: [
-        //                   SizedBox(
-        //                     width: 24,
-        //                   ),
-        //                   buildFilter('Loại nhà'),
-        //                   buildFilter('Giá'),
-        //                   buildFilter('Phòng ngủ'),
-        //                   buildFilter('Hồ bơi'),
-        //                   SizedBox(
-        //                     width: 8,
-        //                   ),
-        //                 ],
-        //               ),
-        //               Align(
-        //                 alignment: Alignment.centerRight,
-        //                 child: Container(
-        //                   width: 28,
-        //                   decoration: BoxDecoration(
-        //                       gradient: LinearGradient(
-        //                           begin: Alignment.centerRight,
-        //                           end: Alignment.centerLeft,
-        //                           stops: [
-        //                         0.0,
-        //                         0.1
-        //                       ],
-        //                           colors: [
-        //                         Theme.of(context).scaffoldBackgroundColor,
-        //                         Theme.of(context)
-        //                             .scaffoldBackgroundColor
-        //                             .withOpacity(0.0),
-        //                       ])),
-        //                 ),
-        //               )
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //       GestureDetector(
-        //         onTap: () {
-        //           _showBottomSheet();
-        //         },
-        //         child: Padding(
-        //           padding: EdgeInsets.only(left: 16, right: 24),
-        //           child: Text(
-        //             'filters',
-        //             style: TextStyle(
-        //               fontSize: 18,
-        //               fontWeight: FontWeight.bold,
-        //             ),
-        //           ),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: 6,
-        // ),
         _buildListView(),
       ],
     );
@@ -255,19 +147,74 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget _buildListView() {
     return postStore.postForCurList != null
-        ? Expanded(
-            child: ListView.separated(
-              itemCount: postStore.postForCurList.posts.length,
-              separatorBuilder: (context, position) {
-                return Divider();
+        ? Container(
+      height: 450,
+          alignment: Alignment.topCenter,
+          child: SmartRefresher(
+              key: _refresherKey1,
+              controller: _refreshController1,
+              enablePullUp: true,
+              enablePullDown: true,
+              header: WaterDropHeader(
+                refresh: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                idleIcon: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                waterDropColor: Colors.amber,
+              ),
+              physics: BouncingScrollPhysics(),
+              footer: ClassicFooter(
+                loadStyle: LoadStyle.ShowWhenLoading,
+                completeDuration: Duration(milliseconds: 500),
+              ),
+              onLoading: () async {
+                print("loading");
+                postStore.getPostForCurs(true);
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) {
+                  setState(() {});
+                }
+                _scrollController1.jumpTo(
+                  _scrollController1.position.maxScrollExtent,
+                );
+                _refreshController1.loadComplete();
               },
-              itemBuilder: (context, position) {
-                return _buildPostPoster(
-                    postStore.postForCurList.posts[position], position);
-                //_buildListItem(position);
+              onRefresh: () async {
+                print("refresh");
+                postStore.getPostForCurs(false);
+
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) setState(() {});
+                isRefreshing1 = true;
+                _refreshController1.refreshCompleted();
               },
+              scrollController: _scrollController1,
+              primary: false,
+              child: ListView.builder(
+                key: _contentKey1,
+                controller: _scrollController1,
+                itemCount: postStore.postForCurList.posts.length,
+                itemBuilder: (context, position) {
+                  return _buildPostPoster(
+                      postStore.postForCurList.posts[position], position);
+                },
+              ),
             ),
-          )
+        )
         : Center(
             child: Text(
               "chưa có bài đăng",
@@ -275,34 +222,39 @@ class _MyPostScreenState extends State<MyPostScreen> {
           );
   }
 
-  List<int> songay=new List<int>();
+  List<int> songay = new List<int>();
   _selectDatefl(
     BuildContext context,
     DateTime ngayhethan,
     int index,
   ) async {
-    if (selectedDatefl[index] == null)
+    if (selectedDatefl[index] == null) if (DateTime.now().isAfter(ngayhethan))
+      selectedDatefl[index] = DateTime.now().add(Duration(days: 2));
+    else
       selectedDatefl[index] = ngayhethan.add(Duration(days: 2));
-    final DateTime picked= await showDatePicker(
+    final DateTime picked = await showDatePicker(
       context: context,
       locale: const Locale('en', ''),
-      initialDate: selectedDatefl[index].subtract(Duration(days: 1)),
-      firstDate: ngayhethan.add(Duration(days: 1)),
-      lastDate: ngayhethan.add(const Duration(days: 100)),
+      initialDate: selectedDatefl[index].subtract(Duration(days: 0)),
+      firstDate: DateTime.now().isAfter(ngayhethan)
+          ? DateTime.now().add(Duration(days: 1))
+          : ngayhethan.add(Duration(days: 1)),
+      lastDate: DateTime.now().add(const Duration(days: 100)),
     );
     if (picked != null && picked != selectedDatefl[index])
       setState(() {
         songay[index] = 0;
         if (DateTime.now().isAfter(
             DateTime.parse(postStore.postForCurList.posts[index].thoiHan))) {
-          while (picked.isAfter(DateTime.now().add(Duration(days: songay[index]))))
+          while (
+              picked.isAfter(DateTime.now().add(Duration(days: songay[index]))))
             songay[index]++;
-          selectedDatefl[index] = DateTime.now().add(Duration(days: songay[index]));
+          selectedDatefl[index] =
+              DateTime.now().add(Duration(days: songay[index]));
         } else {
           while (picked.isAfter(
               DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
-                  .add(Duration(days: songay[index]))))
-            songay[index]++;
+                  .add(Duration(days: songay[index])))) songay[index]++;
           selectedDatefl[index] =
               DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
                   .add(Duration(days: songay[index]));
@@ -312,326 +264,339 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
-    return Observer(
-        builder: (context) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-      ),
-      child: Column(children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Detail(post: post)));
-          },
-          child: Container(
-            height: 190,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: post.featuredImage != null
-                  ? NetworkImage(post.featuredImage)
-                  : AssetImage(Assets.front_img),
-              fit: BoxFit.cover,
-            )),
+    return Observer(builder: (context) {
+      return Card(
+        margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+        ),
+        child: Column(children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Detail(post: post)));
+            },
             child: Container(
-              padding: EdgeInsets.all(20),
+              height: 190,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [
-                    0.5,
-                    1.0
-                  ],
-                      colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.7),
-                  ])),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.yellow[700],
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        width: 80,
-                        padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Center(
-                          child: Text(
-                            post.tagLoaiBaidang,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                  image: DecorationImage(
+                image: post.featuredImage != null
+                    ? NetworkImage(post.featuredImage)
+                    : AssetImage(Assets.front_img),
+                fit: BoxFit.cover,
+              )),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [
+                      0.5,
+                      1.0
+                    ],
+                        colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.7),
+                    ])),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow[700],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          width: 80,
+                          padding: EdgeInsets.symmetric(vertical: 4),
+                          child: Center(
+                            child: Text(
+                              post.tagLoaiBaidang,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: DateTime.now()
-                                    .isAfter(DateTime.parse(post.thoiHan))
-                                ? Colors.red[700]
-                                : Colors.green[600],
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        width: 80,
-                        padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Center(
-                            child: DateTime.now()
-                                    .isAfter(DateTime.parse(post.thoiHan))
-                                ? Text("Hết hạn",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ))
-                                : Text("Còn Hạn",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ))),
-                      ),
-                    ],
-                  ),
-                  Expanded(child: Container()),
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              post.tieuDe,
-                              overflow: TextOverflow.ellipsis,
+                        Container(
+                          decoration: BoxDecoration(
+                              color: DateTime.now()
+                                      .isAfter(DateTime.parse(post.thoiHan))
+                                  ? Colors.red[700]
+                                  : Colors.green[600],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          width: 80,
+                          padding: EdgeInsets.symmetric(vertical: 4),
+                          child: Center(
+                              child: DateTime.now()
+                                      .isAfter(DateTime.parse(post.thoiHan))
+                                  ? Text("Hết hạn",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ))
+                                  : Text("Còn Hạn",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ))),
+                        ),
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                post.tieuDe,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              priceFormat(post.gia),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  post.tenXa,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Icon(
+                                  Icons.zoom_out_map,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  post.dienTich.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            post.gia.toString() + "VND",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  post.diemBaiDang.toString(),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                post.tenXa,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Icon(
-                                Icons.zoom_out_map,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                post.dienTich.toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                                size: 14,
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                post.diemBaiDang.toString(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    // height:24,
-                    children: [
-                      IconButton(
-                          icon: const Icon(
-                            Icons.edit,
-                            color: (Colors.amber),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditpostScreen(
-                                          post: post,
-                                          townStore: _townStore,
-                                          postStore: postStore,
-                                          userStore: userStore,
-                                        )));
-                          }),
-                      IconButton(
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.amber,
-                          ),
-                          onPressed: (){
-                            var futureValue =
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      "Bạn có chắc chắn muốn xóa bài đăng?",
-                                      style: TextStyle(
-                                          fontSize: 24, color: Colors.black, fontFamily: 'intel'),
-                                    ),
-                                    content: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        RoundedButtonWidget(
-                                            buttonText:"Đồng ý",
-                                          buttonColor: Colors.green,
-                                          onPressed: (){
-                                            Navigator.of(context).pop(true);
-                                          },
-                                        ),
-                                        RoundedButtonWidget(
-                                          buttonColor: Colors.grey,
-                                          buttonText:"Hủy",
-                                          onPressed: (){
-                                            Navigator.of(context).pop(false);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
-                            futureValue.then( (value) {
-                              post.trangThai="Off";
-                              if(value)postStore.Delete(post);
+                          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      // height:24,
+                      children: [
+                        IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: (Colors.amber),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditpostScreen(
+                                            post: post,
+                                            townStore: _townStore,
+                                            postStore: postStore,
+                                            userStore: userStore,
+                                          )));
+                            }),
+                        IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () {
+                              var futureValue = showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Bạn có chắc chắn muốn xóa bài đăng?",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.black,
+                                            fontFamily: 'intel'),
+                                      ),
+                                      content: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          RoundedButtonWidget(
+                                            buttonText: "Đồng ý",
+                                            buttonColor: Colors.green,
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                          ),
+                                          RoundedButtonWidget(
+                                            buttonColor: Colors.grey,
+                                            buttonText: "Hủy",
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  });
+                              futureValue.then((value) {
+                                post.trangThai = "Off";
+                                if (value) postStore.Delete(post);
                                 // true/false
-                            });
-                          }),
-                    ],
-                  ),
-                ],
+                              });
+                            }),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        ExpansionTile(
-          title: Text(
-            "Gia hạn",
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+          ExpansionTile(
+            title: Text(
+              "Gia hạn",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+            ),
+            tilePadding: EdgeInsets.only(top: 0.0),
+            //.all(0),
+            children: <Widget>[
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                        "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                    if (selectedDatefl[index] != null) (SizedBox(height: 12)),
+                    if (selectedDatefl[index] != null)
+                      (Text(
+                          "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
+                    SizedBox(height: 12),
+                    if (selectedDatefl[index] != null)
+                      (Text(
+                          "Phí gia hạn:    ${songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi}")),
+                    SizedBox(height: 12),
+                    RoundedButtonWidget(
+                      onPressed: () async => {
+                        _selectDatefl(
+                            context, DateTime.parse(post.thoiHan), index)
+                      },
+                      buttonColor: Colors.orangeAccent,
+                      textColor: Colors.white,
+                      buttonText: ('Chọn ngày kết thúc'),
+                    ),
+                    if (selectedDatefl[index] != null)
+                      RoundedButtonWidget(
+                        onPressed: () => {
+                          newpost = new Newpost(),
+                          if (post.giagoi == null) post.giagoi = 5000,
+                          if (post.goiBaiDangId == null) post.goiBaiDangId = 1,
+                          post.thoiHan =
+                              selectedDatefl[index].toIso8601String(),
+                          newpost.post = post,
+                          newpost.lichsugiaodichs = new lichsugiaodich(),
+                          newpost.lichsugiaodichs.userId = post.userId,
+                          newpost.lichsugiaodichs.ghiChu =
+                              "${post.tieuDe} gia hạn",
+                          newpost.lichsugiaodichs.thoiDiem =
+                              DateTime.now().toIso8601String(),
+                          newpost.lichsugiaodichs.soTien =
+                              songay[index] * post.giagoi,
+                          newpost.hoadonbaidang = new Hoadonbaidang(),
+                          newpost.hoadonbaidang.thoiDiem =
+                              newpost.lichsugiaodichs.thoiDiem,
+                          newpost.hoadonbaidang.giaGoi = post.giagoi,
+                          newpost.hoadonbaidang.soNgayMua = songay[index],
+                          newpost.hoadonbaidang.tongTien =
+                              newpost.lichsugiaodichs.soTien,
+                          newpost.hoadonbaidang.ghiChu =
+                              "Gia hạn bài đăng \"${post.tieuDe}\"",
+                          newpost.hoadonbaidang.baiDangId = post.id,
+                          newpost.hoadonbaidang.goiBaiDangId =
+                              post.goiBaiDangId,
+                          newpost.hoadonbaidang.userId = post.userId,
+                          selectedDatefl[index] = null,
+                          postStore.giahan(newpost),
+                        },
+                        buttonColor: Colors.orangeAccent,
+                        textColor: Colors.white,
+                        buttonText: ('Gia hạn'),
+                      ),
+                  ]),
+            ],
           ),
-          tilePadding: EdgeInsets.only(top: 0.0),
-          //.all(0),
-          children: <Widget>[
-            Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                      "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
-                  if (selectedDatefl[index] != null) (SizedBox(height: 12)),
-                  if (selectedDatefl[index] != null)
-                    (Text(
-                        "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}")),
-                  SizedBox(height: 12),
-                  RoundedButtonWidget(
-                    onPressed: () async => {
-                      if (post.giagoi==null)
-                        post.giagoi= await postStore.getpackprice(post.goiBaiDangId)  ,
-                      _selectDatefl(
-                          context, DateTime.parse(post.thoiHan), index)
-                    },
-                    buttonColor: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    buttonText: ('Chọn ngày kết thúc'),
-                  ),
-                  if (selectedDatefl[index] != null)
-                  RoundedButtonWidget(
-                    onPressed: ()=>{newpost= new Newpost(),
-                      if(post.giagoi==null)
-                      post.giagoi=5000,
-                      if(post.goiBaiDangId==null)
-                      post.goiBaiDangId=1,
-                      post.thoiHan=selectedDatefl[index].toIso8601String(),
-                      newpost.post=post,
-                      newpost.lichsugiaodichs=new lichsugiaodich(),
-                      newpost.lichsugiaodichs.userId=post.userId,
-                      newpost.lichsugiaodichs.ghiChu="${post.tieuDe} gia hạn",
-                      newpost.lichsugiaodichs.thoiDiem=DateTime.now().toIso8601String(),
-                      newpost.lichsugiaodichs.soTien=songay[index]*post.giagoi,
-                      newpost.hoadonbaidang=new Hoadonbaidang(),
-                      newpost.hoadonbaidang.thoiDiem=newpost.lichsugiaodichs.thoiDiem,
-                      newpost.hoadonbaidang.giaGoi=post.giagoi,
-                      newpost.hoadonbaidang.soNgayMua=songay[index],
-                      newpost.hoadonbaidang.tongTien=newpost.lichsugiaodichs.soTien,
-                      newpost.hoadonbaidang.ghiChu="Gia hạn bài đăng \"${post.tieuDe}\"",
-                      newpost.hoadonbaidang.baiDangId=post.id,
-                      newpost.hoadonbaidang.goiBaiDangId=post.goiBaiDangId,
-                      newpost.hoadonbaidang.userId=post.userId,
-                      selectedDatefl[index]=null,
-                      postStore.giahan(newpost),
-                    },
-                    buttonColor: Colors.orangeAccent,
-                    textColor: Colors.white,
-                    buttonText: ('Gia hạn'),
-                  ),
-                ]),
-          ],
-        ),
-      ]),
-    );});
+        ]),
+      );
+    });
   }
 
   Widget _handleErrorMessage() {

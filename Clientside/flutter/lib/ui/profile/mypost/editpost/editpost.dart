@@ -192,7 +192,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       _imageStore.imageListpost = new List<String>();
       if(postStore.propertyList!=null)
       for(var item in postStore.propertyList.properties)
-        _ThuocTinhController[item.thuocTinhId-2]= TextEditingController(text:item.giaTri);
+        _ThuocTinhController[item.thuocTinhId-3]= TextEditingController(text:item.giaTri);
       for (var i in _imageStore.imageList.images) {
         _imageStore.imageListpost.add(i.duongDan);
         _image.add(null);
@@ -806,7 +806,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   child: ListView.builder(
                     itemCount: postStore.thuocTinhList.thuocTinhs.length - 2,
                     itemBuilder: (context, i) {
-                      _ThuocTinhController.add(new TextEditingController());
+                      //_ThuocTinhController.add(new TextEditingController());
                       return _buildThuocTinh(
                           postStore.thuocTinhList.thuocTinhs[i + 2], i);
                     },
@@ -850,7 +850,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     decimal: false, signed: false)
                     : TextInputType.text,
                 controller: _ThuocTinhController[index],
-                onChanged: (value) {},
+                onChanged: (value) {_ThuocTinhController[index]=new TextEditingController(text: value);},
               ),
               SizedBox(height: 24.0),
             ]);
@@ -1180,7 +1180,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
               var j=0;
               if (_ThuocTinhController != null)
                 for (int i = 0; i < _ThuocTinhController.length; i++)
-                  if (_ThuocTinhController[i]!=null) {
+                  if (_ThuocTinhController[i]!=null)
+                  if (_ThuocTinhController[i].text.isNotEmpty) {
                     //j++;
                     Property value = new Property();
                     if (j<postStore.propertyList.properties.length)

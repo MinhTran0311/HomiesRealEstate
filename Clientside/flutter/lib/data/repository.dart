@@ -80,11 +80,11 @@ class Repository {
   //     return postsList;
   //   }).catchError((error) => throw error);
   // }
-  Future<PostList> getPostsforcur() async {
+  Future<PostList> getPostsforcur(int skipCount, int maxResultCount) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postApi.getPostsforcur().then((postsList) {
+    return await _postApi.getPostsforcur(skipCount,maxResultCount).then((postsList) {
       // postsList.posts.forEach((post) {
       //   _postDataSource.insert(post);
       // });
