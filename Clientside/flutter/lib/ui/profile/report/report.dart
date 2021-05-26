@@ -93,7 +93,7 @@ class _ReportPageState extends State<ReportPage>{
     );
   }
   Widget buildBarChart() {
-    return
+    return null;
   }
   Widget buildLineChart() {
     List<FlSpot> listBaiDang=[];
