@@ -750,7 +750,7 @@ namespace Homies.RealEstate.Server
             );
         }
         [AbpAuthorize]
-        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser()
+        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser(PagedAndSortedResultRequestDto input)
         {
             var user = await GetCurrentUserAsync();
             var filteredBaiDangs = _baiDangRepository.GetAll()
@@ -759,10 +759,9 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.XaFk)
                         .Where(e => e.UserId == user.Id);
 
-
-
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy("id asc");
+                .OrderBy("id asc")
+                .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
                            join o1 in _lookup_userRepository.GetAll() on o.UserId equals o1.Id into j1
@@ -782,8 +781,6 @@ namespace Homies.RealEstate.Server
 
                            join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
                            from s6 in j6.DefaultIfEmpty()
-
-
 
                            select new GetBaiDangForViewDto()
                            {
@@ -827,42 +824,50 @@ namespace Homies.RealEstate.Server
                 return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
                 list
-            );
+                );
             }
             else
             {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    for (int j = 0; j < list.Count; j++)
-                    {
-                        if (list[j].ChiTietHoaDon.BaiDangId == list[i].ChiTietHoaDon.BaiDangId && list[j].ChiTietHoaDon.ThoiDiem < list[i].ChiTietHoaDon.ThoiDiem)
-                            list.RemoveAt(j);
-                    }
-                }
+                //for (int i = 0; i < list.Count; i++)
+                //{
+                //    for (int j = 0; j < list.Count; j++)
+                //    {
+                //        if (list[j].ChiTietHoaDon.BaiDangId == list[i].ChiTietHoaDon.BaiDangId && list[j].ChiTietHoaDon.ThoiDiem < list[i].ChiTietHoaDon.ThoiDiem && j != i)
+                //            list.RemoveAt(j);
+                //        else continue;
+                //    }
+                //}
 
                 List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
                 for (int i = 0; i < list.Count; i++)
                 {
                     var e = list[i];
-                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id) || isSoonerDate(list,e.BaiDang.Id, e.ChiTietHoaDon.ThoiDiem))
                     {
                         continue;
                     }
                     else
                     {
-
-                        //var duc = _lookup_chiTietHoaDonBaiDangRepository.GetAll().Where(ee => ee.BaiDangId == e.BaiDang.Id).OrderByDescending(r => r.ThoiDiem).First();
-                        //var ducc = await _lookup_chiTietHoaDonBaiDangRepository.FirstOrDefaultAsync(ee => ee.ThoiDiem == duc && ee.BaiDangId == e.BaiDang.Id);
-                        //e.ChiTietHoaDon = ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(duc);
                         filteredList.Add(e);
                     }
                 }
-
                 return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
                 filteredList
             );
             }
         }
+        private bool isSoonerDate(List<GetBaiDangForViewDto> list, int baidangId, DateTime date)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].BaiDang.Id == baidangId && list[i].ChiTietHoaDon.ThoiDiem > date)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }
