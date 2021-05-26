@@ -490,11 +490,13 @@ abstract class _PostStore with Store {
   static ObservableFuture<PostList> emptyPostforcursResponse =
   ObservableFuture.value(null);
   @observable
+  bool isIntialLoadingpostforcur = true;
+  @observable
   ObservableFuture<PostList> fetchPostForCursFuture = ObservableFuture<PostList>(emptyPostforcursResponse);
   @observable
-  PostList postForCurList;
+  PostList postForCurList=new PostList();
   @computed
-  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending;
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending && isIntialLoadingpostforcur;
   @observable
   bool successPostForCur = false;
   @observable
@@ -508,7 +510,41 @@ abstract class _PostStore with Store {
     fetchPostForCursFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForCur = true;
-      this.postForCurList = postList;
+      if (!isLoadMore) {
+        this.postForCurList = postList;
+        if (isIntialLoadingpostforcur) isIntialLoadingpostforcur = false;
+      }
+      else {
+        for(var i in postList.posts)
+          this.postForCurList.posts.add(i);
+      }
+      }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  ///////////////////////////getsobaidang
+  static ObservableFuture<String> emptysobaidangResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchsobaidangFuture = ObservableFuture<String>(emptysobaidangResponse);
+  @observable
+  String sobaidang="";
+  @computed
+  bool get loadingsobaidang => fetchsobaidangFuture.status == FutureStatus.pending ;
+  @observable
+  Future getsobaidang() async {
+    final future = _repository.getsobaidang();
+    fetchsobaidangFuture = ObservableFuture(future);
+    future.then((sobaidang) {
+        this.sobaidang = sobaidang;
+        return sobaidang;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -606,6 +642,8 @@ abstract class _PostStore with Store {
   static ObservableFuture<PostList> emptypostfavResponse =
   ObservableFuture.value(null);
   @observable
+  bool isIntialLoadingpostfavo=true;
+  @observable
   ObservableFuture<PostList> fetchpostfavoFuture = ObservableFuture<PostList>(emptypostfavResponse);
   @observable
   PostList favopost;
@@ -614,12 +652,23 @@ abstract class _PostStore with Store {
   @observable
   bool successfavopost = false;
   @observable
-  Future getfavopost(int iduser) async {
-    final future = _repository.getfavopost(iduser);
+  Future getfavopost(int iduser,bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCountmypost = 0;
+    }
+    else
+      skipCountmypost += Preferences.skipIndex;
+    final future = _repository.getfavopost(iduser,skipCountmypost,Preferences.maxCount);
     fetchpostfavoFuture = ObservableFuture(future);
     future.then((favopost) {
-      //successPostForCur = true;
+      if (!isLoadMore) {
       this.favopost = favopost;
+      if (isIntialLoadingpostfavo) isIntialLoadingpostfavo = false;
+      }
+      else {
+        for(var i in favopost.posts)
+          this.favopost.posts.add(i);
+      }
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

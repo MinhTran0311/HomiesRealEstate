@@ -583,6 +583,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingpostforcurAtom =
+      Atom(name: '_PostStore.isIntialLoadingpostforcur');
+
+  @override
+  bool get isIntialLoadingpostforcur {
+    _$isIntialLoadingpostforcurAtom.reportRead();
+    return super.isIntialLoadingpostforcur;
+  }
+
+  @override
+  set isIntialLoadingpostforcur(bool value) {
+    _$isIntialLoadingpostforcurAtom
+        .reportWrite(value, super.isIntialLoadingpostforcur, () {
+      super.isIntialLoadingpostforcur = value;
+    });
+  }
+
   final _$fetchPostForCursFutureAtom =
       Atom(name: '_PostStore.fetchPostForCursFuture');
 
@@ -774,6 +791,10 @@ mixin _$PostStore on _PostStore, Store {
     final _$future = super.getPostForCurs(isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
+  ObservableFuture<dynamic> getsobaidang() {
+    final _$future = super.getsobaidang();
+    return ObservableFuture<dynamic>(_$future);
+  }
 
   @override
   ObservableFuture<dynamic> Delete(Post post) {
@@ -794,8 +815,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getfavopost(int iduser) {
-    final _$future = super.getfavopost(iduser);
+  ObservableFuture<dynamic> getfavopost(int iduser, bool isloadmore) {
+    final _$future = super.getfavopost(iduser,isloadmore);
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -921,6 +942,7 @@ fetchNewpostsFuture: ${fetchNewpostsFuture},
 successNewpost: ${successNewpost},
 fetcheditpostsFuture: ${fetcheditpostsFuture},
 successeditpost: ${successeditpost},
+isIntialLoadingpostforcur: ${isIntialLoadingpostforcur},
 fetchPostForCursFuture: ${fetchPostForCursFuture},
 postForCurList: ${postForCurList},
 successPostForCur: ${successPostForCur},

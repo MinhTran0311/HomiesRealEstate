@@ -7,6 +7,7 @@ import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -49,10 +50,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
   final ScrollController _scrollController1 =
       ScrollController(keepScrollOffset: true);
   List<DateTime> selectedDatefl = new List<DateTime>();
+  List<Pack> selectedPack = new List<Pack>();
   @override
   void initState() {
     super.initState();
     selectedDatefl = new List<DateTime>(postStore.postForCurList.posts.length);
+    selectedPack = new List<Pack>(postStore.postForCurList.posts.length);
     songay = new List<int>(postStore.postForCurList.posts.length);
   }
 
@@ -148,9 +151,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
   Widget _buildListView() {
     return postStore.postForCurList != null
         ? Container(
-      height: 450,
-          alignment: Alignment.topCenter,
-          child: SmartRefresher(
+            height: 450,
+            alignment: Alignment.topCenter,
+            child: SmartRefresher(
               key: _refresherKey1,
               controller: _refreshController1,
               enablePullUp: true,
@@ -185,6 +188,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 print("loading");
                 postStore.getPostForCurs(true);
                 await Future.delayed(Duration(milliseconds: 2000));
+                selectedDatefl =
+                    new List<DateTime>(postStore.postForCurList.posts.length);
+                selectedPack =
+                    new List<Pack>(postStore.postForCurList.posts.length);
+                songay = new List<int>(postStore.postForCurList.posts.length);
                 if (mounted) {
                   setState(() {});
                 }
@@ -214,7 +222,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 },
               ),
             ),
-        )
+          )
         : Center(
             child: Text(
               "chưa có bài đăng",
@@ -229,9 +237,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
     int index,
   ) async {
     if (selectedDatefl[index] == null) if (DateTime.now().isAfter(ngayhethan))
-      selectedDatefl[index] = DateTime.now().add(Duration(days: 2));
+      selectedDatefl[index] = DateTime.now().add(Duration(days: 1));
     else
-      selectedDatefl[index] = ngayhethan.add(Duration(days: 2));
+      selectedDatefl[index] = ngayhethan.add(Duration(days: 1));
     final DateTime picked = await showDatePicker(
       context: context,
       locale: const Locale('en', ''),
@@ -452,23 +460,46 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       mainAxisSize: MainAxisSize.max,
                       // height:24,
                       children: [
-                        IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              color: (Colors.amber),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditpostScreen(
-                                            post: post,
-                                            townStore: _townStore,
-                                            postStore: postStore,
-                                            userStore: userStore,
-                                          )));
-                            }),
-                        IconButton(
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            width: 38,
+                            height: 38,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: (Colors.amber),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditpostScreen(
+                                                      post: post,
+                                                      townStore: _townStore,
+                                                      postStore: postStore,
+                                                      userStore: userStore,
+                                                    )));
+                                      }),
+                                )),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(100))),
+                          // width: 24,
+                          // height: 24,
+                          // padding: EdgeInsets.symmetric(vertical: 4),
+                          width: 38,
+                          height: 38,
+                          child: Padding(
+                              padding: const EdgeInsets.all(0.0),
+                          child:IconButton(
                             icon: const Icon(
                               Icons.delete,
                               color: Colors.amber,
@@ -513,7 +544,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                 if (value) postStore.Delete(post);
                                 // true/false
                               });
-                            }),
+                            }))),
                       ],
                     ),
                   ],
@@ -537,13 +568,52 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     Text(
                         "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
                     if (selectedDatefl[index] != null) (SizedBox(height: 12)),
+                    if (selectedDatefl[index] != null &&
+                        DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
+                      DropdownButtonFormField<Pack>(
+                        hint: Text("Chọn gói bài đăng mới"),
+                        value: selectedPack[index],
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                          onPressed: () => setState(() {
+                            selectedPack[index] = null;
+                          }),
+                          icon: Icon(Icons.clear),
+                        )),
+                        onChanged: (Pack Value) {
+                          setState(() {
+                            selectedPack[index] = Value;
+                          });
+                        },
+                        items: postStore.packList.packs.map((Pack type) {
+                          return DropdownMenuItem<Pack>(
+                            value: type,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.account_circle,
+                                  color: const Color(0xFF167F67),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  type.tenGoi,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    if (selectedDatefl[index] != null) (SizedBox(height: 12)),
                     if (selectedDatefl[index] != null)
                       (Text(
                           "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
                     SizedBox(height: 12),
                     if (selectedDatefl[index] != null)
                       (Text(
-                          "Phí gia hạn:    ${songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi}")),
+                          "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
                     SizedBox(height: 12),
                     RoundedButtonWidget(
                       onPressed: () async => {
@@ -556,36 +626,89 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     ),
                     if (selectedDatefl[index] != null)
                       RoundedButtonWidget(
-                        onPressed: () => {
-                          newpost = new Newpost(),
-                          if (post.giagoi == null) post.giagoi = 5000,
-                          if (post.goiBaiDangId == null) post.goiBaiDangId = 1,
-                          post.thoiHan =
-                              selectedDatefl[index].toIso8601String(),
-                          newpost.post = post,
-                          newpost.lichsugiaodichs = new lichsugiaodich(),
-                          newpost.lichsugiaodichs.userId = post.userId,
-                          newpost.lichsugiaodichs.ghiChu =
-                              "${post.tieuDe} gia hạn",
-                          newpost.lichsugiaodichs.thoiDiem =
-                              DateTime.now().toIso8601String(),
-                          newpost.lichsugiaodichs.soTien =
-                              songay[index] * post.giagoi,
-                          newpost.hoadonbaidang = new Hoadonbaidang(),
-                          newpost.hoadonbaidang.thoiDiem =
-                              newpost.lichsugiaodichs.thoiDiem,
-                          newpost.hoadonbaidang.giaGoi = post.giagoi,
-                          newpost.hoadonbaidang.soNgayMua = songay[index],
-                          newpost.hoadonbaidang.tongTien =
-                              newpost.lichsugiaodichs.soTien,
-                          newpost.hoadonbaidang.ghiChu =
-                              "Gia hạn bài đăng \"${post.tieuDe}\"",
-                          newpost.hoadonbaidang.baiDangId = post.id,
-                          newpost.hoadonbaidang.goiBaiDangId =
-                              post.goiBaiDangId,
-                          newpost.hoadonbaidang.userId = post.userId,
-                          selectedDatefl[index] = null,
-                          postStore.giahan(newpost),
+                        onPressed: () {
+                          var futureValue = showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    "Gia hạn bài đăng?",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.black,
+                                        fontFamily: 'intel'),
+                                  ),
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RoundedButtonWidget(
+                                        buttonText: "Đồng ý",
+                                        buttonColor: Colors.green,
+                                        onPressed: () {
+                                          Navigator.of(context).pop(true);
+                                        },
+                                      ),
+                                      RoundedButtonWidget(
+                                        buttonColor: Colors.grey,
+                                        buttonText: "Hủy",
+                                        onPressed: () {
+                                          Navigator.of(context).pop(false);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              });
+                          futureValue.then((value) {
+                            if (value) {
+                              newpost = new Newpost();
+                              post.giagoi = selectedPack[index] == null
+                                  ? postStore
+                                      .packList.packs[post.goiBaiDangId - 1].phi
+                                  : selectedPack[index].phi;
+                              post.goiBaiDangId = selectedPack[index] == null
+                                  ? post.goiBaiDangId
+                                  : selectedPack[index].id;
+                              post.thoiHan =
+                                  selectedDatefl[index].toIso8601String();
+                              newpost.post = post;
+                              newpost.lichsugiaodichs = new lichsugiaodich();
+                              newpost.lichsugiaodichs.userId = post.userId;
+                              newpost.lichsugiaodichs.ghiChu =
+                                  "${post.tieuDe} gia hạn";
+                              newpost.lichsugiaodichs.thoiDiem =
+                                  DateTime.now().toIso8601String();
+                              newpost.lichsugiaodichs.soTien =
+                                  selectedPack[index] == null
+                                      ? songay[index] * post.giagoi
+                                      : songay[index] * selectedPack[index].phi;
+                              newpost.hoadonbaidang = new Hoadonbaidang();
+                              newpost.hoadonbaidang.thoiDiem =
+                                  newpost.lichsugiaodichs.thoiDiem;
+                              newpost.hoadonbaidang.giaGoi =
+                                  selectedPack[index] == null
+                                      ? post.giagoi
+                                      : selectedPack[index].phi;
+                              newpost.hoadonbaidang.soNgayMua = songay[index];
+                              newpost.hoadonbaidang.tongTien =
+                                  newpost.lichsugiaodichs.soTien;
+                              newpost.hoadonbaidang.ghiChu =
+                                  "Gia hạn bài đăng \"${post.tieuDe}\"";
+                              newpost.hoadonbaidang.baiDangId = post.id;
+                              newpost.hoadonbaidang.goiBaiDangId =
+                                  selectedPack[index] == null
+                                      ? post.goiBaiDangId
+                                      : selectedPack[index].id;
+                              newpost.hoadonbaidang.userId = post.userId;
+                              postStore.giahan(newpost);
+                              setState(() {
+                                selectedDatefl[index] = null;
+                                selectedPack[index] = null;
+                              });
+                            }
+                          });
                         },
                         buttonColor: Colors.orangeAccent,
                         textColor: Colors.white,

@@ -330,6 +330,13 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  final _$getUserByIDAsyncAction = AsyncAction('_UserStore.getUserByID');
+
+  @override
+  Future<dynamic> getUserByID(int userID) {
+    return _$getUserByIDAsyncAction.run(() => super.getUserByID(userID));
+  }
+
   final _$getCurrentUserAsyncAction = AsyncAction('_UserStore.getCurrentUser');
 
   @override

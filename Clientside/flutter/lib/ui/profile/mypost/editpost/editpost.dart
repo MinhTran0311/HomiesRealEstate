@@ -1051,7 +1051,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                               width: 80,
                               height: 80,
                               child: FlatButton(
-                                padding: EdgeInsets.fromLTRB(90,10,100,100),
+                                padding: EdgeInsets.only(left: 70.0,bottom: 70.0),
                                 // shape: RoundedRectangleBorder(
                                 //     borderRadius: BorderRadius.circular(20),
                                 //     side: BorderSide(color: Colors.white)),

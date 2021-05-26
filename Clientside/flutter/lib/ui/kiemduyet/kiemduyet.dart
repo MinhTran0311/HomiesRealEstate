@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
@@ -30,11 +31,14 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     Key key,this.UserID
   }) : super();
   LSGDStore _lsgdStore;final int UserID;
+  List<bool> isexpanded = [];
+  UserStore _userStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _lsgdStore = Provider.of<LSGDStore>(context);
+    _userStore = Provider.of<UserStore>(context);
 
     if (!_lsgdStore.Allloading) {
       _lsgdStore.getAllLSGD();
@@ -73,22 +77,65 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
 
   Widget _buildBody() {
+    for(int i =0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
+      isexpanded.add(false);
+    }
+    List<ExpansionPanel> myList = [];
+    for(int i=0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
+      var expansionData  = _lsgdStore.listlsgdAll.listLSGDs[i];
+      myList.add(ExpansionPanel(
+        headerBuilder: (BuildContext context,bool isExpanded){
+          return buildCardKiemDuyetheaderBuilder(expansionData);
+        },
+        body: buildCardKiemDuyetBody(expansionData),
+        isExpanded: isexpanded[i]
+      )
+      );
+    }
     return Container(
       color: Colors.grey[200],
-      child: RefreshIndicator(
-        child: ListView.builder(
-            shrinkWrap: true, // 1st add
-               physics: ClampingScrollPhysics(), // 2nd add
-               itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-               itemBuilder: (_, i) => ListTile(
-                   title: _buildCardKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i])
-               )
+      child:
+      RefreshIndicator(
+        child:
+        Observer(builder: (context) {
+          return
+            _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? SingleChildScrollView(
+              child: ExpansionPanelList(
+                animationDuration: Duration(seconds: 2),
+                dividerColor: Colors.grey[400],
+                elevation: 1,
+                expandedHeaderPadding: EdgeInsets.all(0),
+                children: myList,
+                expansionCallback: (int i, bool e) {
+                  setState(() {
+                    isexpanded[i] = !isexpanded[i];
+                  });
+
+                },
+              ),
+            ) :
+            Container(
+                child:
+                  Center(child:
+                    Text("Không có dữ liệu")
+                  )
+            );
+          }
         ),
+        // ListView.builder(
+        //     shrinkWrap: true, // 1st add
+        //        physics: ClampingScrollPhysics(), // 2nd add
+        //        itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+        //        itemBuilder: (_, i) => ListTile(
+        //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
+        //        )
+        // ),
         onRefresh: (){
           setState(() {
             _lsgdStore.getAllLSGD();
           });
         },
+
       ),
     );
   }
@@ -129,7 +176,6 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                     Text(lsgd.soTien.toString(),style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
                   ],
                   ),
-
 
                   lsgd.UserName.isNotEmpty?Row(children: [
                     Icon(Icons.account_circle_outlined,color: Colors.black,),
@@ -240,6 +286,8 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                 setState(() {
                   lsgd.kiemDuyetVienId = UserID;
                   print("Duongdebug: ${_lsgdStore.KiemDuyetGiaoDich(lsgd.id)}");
+                  if(_userStore.userCurrent.UserID==lsgd.userId)
+                    _userStore.userCurrent.wallet += lsgd.soTien;
                   // _showSuccssfullMesssage("Cập nhật thành công");
                   Navigator.of(context).pop();
                 });
@@ -249,6 +297,304 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
         );
       },
     );
+  }
+  Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,bool isexpand,int i){
+    return  ExpansionPanelList(
+            animationDuration: Duration(seconds: 2),
+            dividerColor: Colors.grey[400],
+            elevation: 1,
+            expandedHeaderPadding: EdgeInsets.all(0),
+          children: [
+            ExpansionPanel(
+                headerBuilder: (BuildContext context,bool isexpanded){
+                 return buildCardKiemDuyetheaderBuilder(lsgd);
+                },
+                body: buildCardKiemDuyetBody(lsgd),
+              isExpanded:isexpand
+            )
+          ],
+        expansionCallback: (int i,bool e){setState(() {
+          isexpanded[i] =! isexpanded[i];
+        });} ,
+        // ),
+      // ),
+    );
+  }
+  Widget buildCardKiemDuyetBody(lichsugiaodich lsgd){
+    bool naptien;
+    final ButtonStyle styleActive =
+    ElevatedButton.styleFrom(primary: Colors.lightGreen);
+    final ButtonStyle style =
+    ElevatedButton.styleFrom(onPrimary: Colors.redAccent);
+    if(lsgd.chiTietHoaDonBaiDangId!=null){
+      return Container(
+        width: double.infinity,
+        height: 100,
+        padding: const EdgeInsets.all(5),
+        child:
+        Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                  width: double.infinity,
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  child:
+                  Stack(
+                    children: [
+                      //top
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: buildText("Số tiền",Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: buildText("-${priceFormat(lsgd.soTien)}",Colors.grey),
+                      ),
+                      //center
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: buildText("Người dùng",Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: buildText("${lsgd.UserName}",Colors.grey),
+                      ),
+                      // bottom
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: buildText("Bài đăng",Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(width:200,child: buildText("${lsgd.chiTietHoaDonBaiDangName}",Colors.grey)),
+                      ),
+                    ],
+                  )
+              ),
+            ),
+          ],
+        )
+    );
+    }
+    else{ //true
+      return Container(
+        width: double.infinity,
+        height: 160,
+        padding: const EdgeInsets.all(5),
+        child:
+        Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                  width: double.infinity,
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  child:
+                  Stack(
+                    children: [
+                      //top
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: buildText("Số tiền",Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: buildText("+${priceFormat(lsgd.soTien)}",Colors.grey),
+                      ),
+                      //center
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: buildText("Người dùng",Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: buildText("${lsgd.UserName}",Colors.grey),
+                      ),
+                      // bottom
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: buildText("Kiểm Duyệt viên",Colors.black),
+                      ),
+                      lsgd.kiemDuyetVienId!=null?Align(
+                        alignment: Alignment.bottomRight,
+                        child: buildText("${lsgd.UserNameKiemDuyet}",Colors.grey),
+                      ): Align(
+                        alignment: Alignment.bottomRight,
+                        child: buildText("...",Colors.grey),
+                      ),
+                    ],
+                  )
+              ),
+            ),
+            lsgd.kiemDuyetVienId!=null?
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  child: Container(
+                    width: 300,
+                    height: 30,
+                    child: Center(
+                      child: Text(
+                          "Đã kiểm duyệt",
+                          style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.lightGreen),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            side: BorderSide(color: Colors.red),
+                          )
+                      )
+                  ),
+                  onPressed:null,
+                )
+            ):
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  child: Container(
+                    width: 300,
+                    height: 30,
+                    child: Center(
+                      child: Text(
+                          "Chưa kiểm duyệt",
+                          style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                            side: BorderSide(color: Colors.red),
+                          )
+                      )
+                  ),
+                  onPressed:(){
+                    setState(() {_showMyDialog(lsgd, UserID);  });
+                  },
+                )
+            )
+          ],
+        )
+    );
+    }
+
+  }
+  Widget buildCardKiemDuyetheaderBuilder(lichsugiaodich lsgd){
+    String datetime;
+    bool naptien;
+
+    if(lsgd.kiemDuyetVienId==null){ datetime = "Đang chờ";}
+    else{     datetime = DatetimeToString(lsgd.thoiDiem);    }
+    if(lsgd.chiTietHoaDonBaiDangId!=null){  naptien = false;  datetime = DatetimeToString(lsgd.thoiDiem); }
+    else{     naptien = true;   }
+    return
+      // Card(
+      // shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(10),
+      //     side: BorderSide(color: Colors.white)
+      // ),
+      // child:
+      Container(
+        width: double.infinity,
+        height: 60,
+        padding: const EdgeInsets.all(5),
+        child:
+
+        Stack(
+          children: [
+            naptien==true?Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all( Radius.circular(50)),
+                    border: Border.all(color: Colors.grey[400],width: 1.0),
+                  ),
+                  child: Icon(Icons.arrow_upward,color: Colors.blue,size: 30,)
+              ),
+            ):Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all( Radius.circular(50)),
+                    border: Border.all(color: Colors.grey[400],width: 1.0),
+                  ),
+                  child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
+              ),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child:
+              // Icon(Icons.add_circle_outline,color: Colors.blue,),
+              Padding(
+                padding: const EdgeInsets.only(left: 55),
+                child: buildText(lsgd.UserName,Colors.black),
+              ),
+            ),
+
+            Positioned(
+              top: 30,
+              left: 30,
+              child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
+              Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
+            ),
+            SizedBox(height: 5,),
+            Align(alignment: Alignment.topLeft,child: Padding(
+              padding: const EdgeInsets.only(top: 25,left: 55),
+              child: buildDateConfirm(datetime,naptien),
+            )),
+          ],
+        ),
+      // ),
+    );
+  }
+  Widget buildText(String text,Color c){
+    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
+  }
+  Widget buildDateConfirm(String date,bool naptien){
+    if(naptien == true){
+      if(date!="Đang chờ"){
+        return Row(
+          children: [
+            // Icon(Icons.access_time,color: Colors.grey,size: 16,),
+            // buildText("Ngày xác nhận: ",Colors.grey),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          ],
+        );
+      }
+      else{
+        return Row(
+          children: [
+            // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
+            // buildText("Ngày xác nhận: ",Colors.grey),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+          ],
+        );
+      }
+    }
+    else{
+      return Row(
+        children: [
+          // Icon(Icons.access_time,color: Colors.grey,size: 16,),
+          // buildText("Ngày thanh toán: ",Colors.grey),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+        ],
+      );
+    }
   }
 }
 
