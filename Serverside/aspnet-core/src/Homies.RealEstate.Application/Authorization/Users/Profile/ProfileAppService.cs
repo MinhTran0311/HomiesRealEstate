@@ -26,6 +26,12 @@ using Homies.RealEstate.Net.Sms;
 using Homies.RealEstate.Security;
 using Homies.RealEstate.Storage;
 using Homies.RealEstate.Timing;
+using System.Collections.Generic;
+using Abp.Domain.Repositories;
+using Abp.Authorization.Users;
+using Homies.RealEstate.Authorization.Roles;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Authorization.Users.Profile
 {
@@ -42,6 +48,9 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         private readonly ITempFileCacheManager _tempFileCacheManager;
         private readonly IBackgroundJobManager _backgroundJobManager;
         private readonly ProfileImageServiceFactory _profileImageServiceFactory;
+        private readonly IRepository<UserRole, long> _userRoleRepository;
+        private readonly RoleManager _roleManager;
+
 
         public ProfileAppService(
             IAppFolders appFolders,
@@ -53,7 +62,9 @@ namespace Homies.RealEstate.Authorization.Users.Profile
             ICacheManager cacheManager,
             ITempFileCacheManager tempFileCacheManager,
             IBackgroundJobManager backgroundJobManager,
-            ProfileImageServiceFactory profileImageServiceFactory)
+            ProfileImageServiceFactory profileImageServiceFactory,
+            IRepository<UserRole, long> userRoleRepository,
+            RoleManager roleManager)
         {
             _binaryObjectManager = binaryObjectManager;
             _timeZoneService = timezoneService;
@@ -64,6 +75,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile
             _tempFileCacheManager = tempFileCacheManager;
             _backgroundJobManager = backgroundJobManager;
             _profileImageServiceFactory = profileImageServiceFactory;
+            _userRoleRepository = userRoleRepository;
+            _roleManager = roleManager;
         }
 
         [DisableAuditing]
@@ -92,8 +105,48 @@ namespace Homies.RealEstate.Authorization.Users.Profile
                     userProfileEditDto.Timezone = string.Empty;
                 }
             }
+            await FillRoleNames(userProfileEditDto);
+
 
             return userProfileEditDto;
+        }
+
+        private async Task FillRoleNames(CurrentUserProfileEditDto userListDto)
+        {
+            /* This method is optimized to fill role names to given list. */
+            var userIds = userListDto.UserId;
+
+            var userRoles = await _userRoleRepository.GetAll()
+                .Where(userRole => userIds.Equals(userRole.UserId))
+                .Select(userRole => userRole).ToListAsync();
+
+            var distinctRoleIds = userRoles.Select(userRole => userRole.RoleId).Distinct();
+
+
+            var rolesOfUser = userRoles.Where(userRole => userRole.UserId == userListDto.UserId).ToList();
+            userListDto.Roles = ObjectMapper.Map<List<UserListRoleDto>>(rolesOfUser);
+            
+
+            var roleNames = new Dictionary<int, string>();
+            foreach (var roleId in distinctRoleIds)
+            {
+                var role = await _roleManager.FindByIdAsync(roleId.ToString());
+                if (role != null)
+                {
+                    roleNames[roleId] = role.DisplayName;
+                }
+            }
+
+            foreach (var userListRoleDto in userListDto.Roles)
+            {
+                if (roleNames.ContainsKey(userListRoleDto.RoleId))
+                {
+                    userListRoleDto.RoleName = roleNames[userListRoleDto.RoleId];
+                }
+            }
+
+            userListDto.Roles = userListDto.Roles.Where(r => r.RoleName != null).OrderBy(r => r.RoleName).ToList();
+            
         }
 
         public async Task DisableGoogleAuthenticator()

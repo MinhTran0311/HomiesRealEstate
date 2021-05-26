@@ -487,6 +487,9 @@ namespace Homies.RealEstate.Server
             input.HoaDonBaiDangDto.BaiDangId = baiDangId;
             var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
+            var user = await _lookup_userRepository.FirstOrDefaultAsync((long)input.BaiDang.UserId);
+            user.Wallet -= input.HoaDonBaiDangDto.TongTien;
+
             input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
             var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
             await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
@@ -542,12 +545,14 @@ namespace Homies.RealEstate.Server
             {
                 baiDang.ThoiHan = input.ThoiHan;
 
-                
                 var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
                 input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
                 var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
                 await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
+
+                var user = await _lookup_userRepository.FirstOrDefaultAsync((long)baiDang.UserId);
+                user.Wallet -= input.HoaDonBaiDangDto.TongTien;
             }
         }
 

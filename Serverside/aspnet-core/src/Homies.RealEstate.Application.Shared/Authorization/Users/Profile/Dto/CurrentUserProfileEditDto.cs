@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
+using Homies.RealEstate.Authorization.Users.Dto;
 
 namespace Homies.RealEstate.Authorization.Users.Profile.Dto
 {
@@ -40,6 +42,6 @@ namespace Homies.RealEstate.Authorization.Users.Profile.Dto
 
         public long? UserId { get; set; }
 
-
+        public List<UserListRoleDto> Roles { get; set; }
     }
 }

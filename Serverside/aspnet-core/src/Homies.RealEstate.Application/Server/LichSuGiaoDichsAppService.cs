@@ -345,14 +345,6 @@ namespace Homies.RealEstate.Server
                 lsgd.KiemDuyetVienId = user.Id;
                 lsgd.UserFk.Wallet += lsgd.SoTien;
             }
-            
-
-
-
-
-        }
-
-
-        
+        } 
     }
 }
