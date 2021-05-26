@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
+    [AbpAllowAnonymous]
     public class BaiDangsAppService : RealEstateAppServiceBase, IBaiDangsAppService
     {
         private readonly IRepository<BaiDang> _baiDangRepository;
@@ -281,7 +281,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
-        
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllByFilter(GetAllBaiDangByFilterInput input)
         {
             var filteredBaiDangs = _baiDangRepository.GetAll()
@@ -468,6 +468,7 @@ namespace Homies.RealEstate.Server
             return output;
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task CreateBaiDangAndDetails(CreateBaiDangAndDetailsDto input)
         {
             if (input.BaiDang.TagTimKiem.IsNullOrEmpty())
@@ -502,6 +503,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task EditBaiDangAndDetails(EditBaiDangAndDetailsDto input)
         {
             if (input.BaiDang != null && input.BaiDang.Id != null)
@@ -539,6 +541,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task GiaHanBaiDang(GiaHanInput input)
         {
             var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
