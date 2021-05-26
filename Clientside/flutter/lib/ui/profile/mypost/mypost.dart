@@ -460,23 +460,46 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       mainAxisSize: MainAxisSize.max,
                       // height:24,
                       children: [
-                        IconButton(
-                            icon: const Icon(
-                              Icons.edit,
-                              color: (Colors.amber),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditpostScreen(
-                                            post: post,
-                                            townStore: _townStore,
-                                            postStore: postStore,
-                                            userStore: userStore,
-                                          )));
-                            }),
-                        IconButton(
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            width: 38,
+                            height: 38,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: (Colors.amber),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditpostScreen(
+                                                      post: post,
+                                                      townStore: _townStore,
+                                                      postStore: postStore,
+                                                      userStore: userStore,
+                                                    )));
+                                      }),
+                                )),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(100))),
+                          // width: 24,
+                          // height: 24,
+                          // padding: EdgeInsets.symmetric(vertical: 4),
+                          width: 38,
+                          height: 38,
+                          child: Padding(
+                              padding: const EdgeInsets.all(0.0),
+                          child:IconButton(
                             icon: const Icon(
                               Icons.delete,
                               color: Colors.amber,
@@ -521,7 +544,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                 if (value) postStore.Delete(post);
                                 // true/false
                               });
-                            }),
+                            }))),
                       ],
                     ),
                   ],
@@ -679,11 +702,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       ? post.goiBaiDangId
                                       : selectedPack[index].id;
                               newpost.hoadonbaidang.userId = post.userId;
-                              selectedDatefl[index] = null;
-                              selectedPack[index] = null;
                               postStore.giahan(newpost);
+                              setState(() {
+                                selectedDatefl[index] = null;
+                                selectedPack[index] = null;
+                              });
                             }
-                            // true/false
                           });
                         },
                         buttonColor: Colors.orangeAccent,
