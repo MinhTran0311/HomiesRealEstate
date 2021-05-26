@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
@@ -254,12 +255,12 @@ class _WalletPageState extends State<WalletPage>{
                   child: SizedBox(width:280,child: buildText("Thanh toán ${lsgd.chiTietHoaDonBaiDangName}",Colors.black)),
                 ),
             ),
-            naptien==true ? Align(
+            naptien==true?Align(
               alignment: Alignment.bottomRight,
-                child: buildText("+${lsgd.soTien.toString()}",Colors.black),
-            ): Align(
+              child: buildText("+${priceFormat(lsgd.soTien)}",Colors.black),
+            ):Align(
               alignment: Alignment.bottomRight,
-              child: buildText("-${lsgd.soTien.toString()}",Colors.black),
+              child: buildText("-${priceFormat(lsgd.soTien)}",Colors.black),
             ),
             // Row(
             //   children: [
@@ -352,7 +353,7 @@ class _WalletPageState extends State<WalletPage>{
     )
         : Center(
       child: Text(
-        "Không có bài đăng",
+        "Không có dữ liệu",
       ),
     );
   }

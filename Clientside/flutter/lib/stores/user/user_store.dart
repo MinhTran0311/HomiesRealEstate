@@ -117,28 +117,28 @@ abstract class _UserStore with Store {
   ObservableFuture<User> UserByIDFuturess = emptyUserByIDResponsess;
 
 
-  // @action
-  // Future getUserByID(int userID) async {
-  //   final future = _repository.getUserByID(userID);
-  //   fetchUsersByIDFutures = ObservableFuture(future);
-  //
-  //   fetchUsersByIDFutures.then((userByID) {
-  //     this.userByID = userByID;
-  //   }).catchError((error) {
-  //     if (error is DioError) {
-  //       errorStore.errorMessage = DioErrorUtil.handleError(error);
-  //       throw error;
-  //     }
-  //     else{
-  //       errorStore.errorMessage="Please check your internet connection and try again!";
-  //       throw error;
-  //     }
-  //     //log("error ne: ");
-  //     //log(DioErrorUtil.handleError(error));
-  //     //errorStore.errorMessage = DioErrorUtil.handleError(error);
-  //     //throw error;
-  //   });
-  // }
+  @action
+  Future getUserByID(int userID) async {
+    final future = _repository.getUserByID(userID);
+    fetchUsersByIDFutures = ObservableFuture(future);
+
+    fetchUsersByIDFutures.then((userByID) {
+      this.userByID = userByID;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Please check your internet connection and try again!";
+        throw error;
+      }
+      //log("error ne: ");
+      //log(DioErrorUtil.handleError(error));
+      //errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //throw error;
+    });
+  }
 
   @observable
   CurrentUserForEditdto user;
@@ -188,6 +188,7 @@ abstract class _UserStore with Store {
     fetchUserCurrentFuture = ObservableFuture(future);
     fetchUserCurrentFuture.then((user) {
       this.userCurrent = user;
+      // this.getUserByID(user.UserID);
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

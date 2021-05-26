@@ -16,6 +16,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
+import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/models/town/commune_list.dart';
 import 'package:boilerplate/models/town/province_list.dart';
 import 'package:boilerplate/models/town/town_list.dart';
@@ -182,7 +183,15 @@ class Repository {
       throw error;
     });
   }
-
+  // report: ---------------------------------------------------------------------
+  Future<listitemReport> getReportData() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getReportData().then((itemlist) {
+      return itemlist;
+    }).catchError((error) => throw error);
+  }
   // Post: ---------------------------------------------------------------------
   Future<listLSGD> getLSGD() async {
     // check to see if posts are present in database, then fetch from database
@@ -229,6 +238,12 @@ class Repository {
     return await _userApi.getAllUsers().then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
+    }).catchError((error) => throw error);
+  }
+  Future<User> getUserByID(int id) async {
+    return await _userApi.getUserByID(id).then((user) {
+      // log('dataUserTest: $usersList');
+      return user;
       }).catchError((error) => throw error);
   }
   Future<CurrentUserForEditdto> getCurrentUser() async {

@@ -583,6 +583,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingpostforcurAtom =
+      Atom(name: '_PostStore.isIntialLoadingpostforcur');
+
+  @override
+  bool get isIntialLoadingpostforcur {
+    _$isIntialLoadingpostforcurAtom.reportRead();
+    return super.isIntialLoadingpostforcur;
+  }
+
+  @override
+  set isIntialLoadingpostforcur(bool value) {
+    _$isIntialLoadingpostforcurAtom
+        .reportWrite(value, super.isIntialLoadingpostforcur, () {
+      super.isIntialLoadingpostforcur = value;
+    });
+  }
+
   final _$fetchPostForCursFutureAtom =
       Atom(name: '_PostStore.fetchPostForCursFuture');
 
@@ -925,6 +942,7 @@ fetchNewpostsFuture: ${fetchNewpostsFuture},
 successNewpost: ${successNewpost},
 fetcheditpostsFuture: ${fetcheditpostsFuture},
 successeditpost: ${successeditpost},
+isIntialLoadingpostforcur: ${isIntialLoadingpostforcur},
 fetchPostForCursFuture: ${fetchPostForCursFuture},
 postForCurList: ${postForCurList},
 successPostForCur: ${successPostForCur},
