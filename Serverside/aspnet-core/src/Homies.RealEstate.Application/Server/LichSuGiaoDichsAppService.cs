@@ -55,7 +55,7 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserName2Filter), e => e.KiemDuyetVienFk != null && e.KiemDuyetVienFk.Name == input.UserName2Filter);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
-                .OrderBy(input.Sorting ?? "id asc")
+                .OrderBy(input.Sorting ?? "thoiDiem desc")
                 .PageBy(input);
 
             var lichSuGiaoDichs = from o in pagedAndFilteredLichSuGiaoDichs
