@@ -12,8 +12,10 @@ namespace Homies.RealEstate.Server.Dtos
         [StringLength(BaiDangConsts.MaxTagLoaiBaiDangLength, MinimumLength = BaiDangConsts.MinTagLoaiBaiDangLength)]
         public string TagLoaiBaiDang { get; set; }
 
+        [Required]
         public DateTime ThoiDiemDang { get; set; }
 
+        [Required]
         public DateTime ThoiHan { get; set; }
 
         [Required]
@@ -39,18 +41,20 @@ namespace Homies.RealEstate.Server.Dtos
         [Required]
         [StringLength(BaiDangConsts.MaxTrangThaiLength, MinimumLength = BaiDangConsts.MinTrangThaiLength)]
         public string TrangThai { get; set; }
-
+        
         public string TagTimKiem { get; set; }
 
         [Required]
         [StringLength(BaiDangConsts.MaxTieuDeLength, MinimumLength = BaiDangConsts.MinTieuDeLength)]
         public string TieuDe { get; set; }
 
-        public long? UserId { get; set; }
+        [Required]
+        public long UserId { get; set; }
 
         public int? DanhMucId { get; set; }
 
-        public int? XaId { get; set; }
+        [Required]
+        public int XaId { get; set; }
 
         [Required]
         public String FeaturedImage { get; set; }

@@ -791,6 +791,10 @@ mixin _$PostStore on _PostStore, Store {
     final _$future = super.getPostForCurs(isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
+  ObservableFuture<dynamic> getsobaidang() {
+    final _$future = super.getsobaidang();
+    return ObservableFuture<dynamic>(_$future);
+  }
 
   @override
   ObservableFuture<dynamic> Delete(Post post) {
@@ -811,8 +815,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getfavopost(int iduser) {
-    final _$future = super.getfavopost(iduser);
+  ObservableFuture<dynamic> getfavopost(int iduser, bool isloadmore) {
+    final _$future = super.getfavopost(iduser,isloadmore);
     return ObservableFuture<dynamic>(_$future);
   }
 

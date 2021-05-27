@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
+    [AbpAllowAnonymous]
     public class BaiDangsAppService : RealEstateAppServiceBase, IBaiDangsAppService
     {
         private readonly IRepository<BaiDang> _baiDangRepository;
@@ -281,6 +281,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllByFilter(GetAllBaiDangByFilterInput input)
         {
             var filteredBaiDangs = _baiDangRepository.GetAll()
@@ -467,6 +468,7 @@ namespace Homies.RealEstate.Server
             return output;
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task CreateBaiDangAndDetails(CreateBaiDangAndDetailsDto input)
         {
             if (input.BaiDang.TagTimKiem.IsNullOrEmpty())
@@ -487,6 +489,9 @@ namespace Homies.RealEstate.Server
             input.HoaDonBaiDangDto.BaiDangId = baiDangId;
             var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
+            var user = await _lookup_userRepository.FirstOrDefaultAsync((long)input.BaiDang.UserId);
+            if (user!=null) user.Wallet -= input.HoaDonBaiDangDto.TongTien;
+
             input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
             var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
             await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
@@ -498,6 +503,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task EditBaiDangAndDetails(EditBaiDangAndDetailsDto input)
         {
             if (input.BaiDang != null && input.BaiDang.Id != null)
@@ -535,6 +541,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task GiaHanBaiDang(GiaHanInput input)
         {
             var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
@@ -542,12 +549,14 @@ namespace Homies.RealEstate.Server
             {
                 baiDang.ThoiHan = input.ThoiHan;
 
-                
                 var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
                 input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
                 var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
                 await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
+
+                var user = await _lookup_userRepository.FirstOrDefaultAsync((long)baiDang.UserId);
+                if (user != null) user.Wallet -= input.HoaDonBaiDangDto.TongTien;
             }
         }
 
@@ -760,7 +769,7 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy("id asc")
+                .OrderBy(input.Sorting ?? "thoiDiemDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
@@ -781,6 +790,8 @@ namespace Homies.RealEstate.Server
 
                            join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
                            from s6 in j6.DefaultIfEmpty()
+                           
+                           orderby o.ThoiDiemDang descending
 
                            select new GetBaiDangForViewDto()
                            {

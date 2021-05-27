@@ -92,6 +92,11 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+  Future<String> getsobaidang() async {
+    return await _postApi.getsobaidang().then((sobaidang) {
+      return sobaidang;
+    }).catchError((error) => throw error);
+  }
   Future<PostCategoryList> getPostCategorys() async {
     return await _postApi.getPostCategorys().then((postCategoryList) {
       return postCategoryList;
@@ -138,8 +143,8 @@ class Repository {
   Future<double> getpackprice(int idpost) async {
     return await _postApi.getpackprice(idpost);
   }
-  Future<PostList> getfavopost(int iduser) async {
-    return await _postApi.getfavopost(iduser).then((postsList) {
+  Future<PostList> getfavopost(int iduser, int skipCountmypost, int maxCount) async {
+    return await _postApi.getfavopost(iduser,skipCountmypost,maxCount).then((postsList) {
 
       return postsList;
     }).catchError((error) => throw error);
