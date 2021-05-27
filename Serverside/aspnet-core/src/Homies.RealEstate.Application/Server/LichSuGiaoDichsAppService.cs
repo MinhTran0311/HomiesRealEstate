@@ -55,7 +55,7 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserName2Filter), e => e.KiemDuyetVienFk != null && e.KiemDuyetVienFk.Name == input.UserName2Filter);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
-                .OrderBy(input.Sorting ?? "id desc")
+                .OrderBy(input.Sorting ?? "thoiDiem desc")
                 .PageBy(input);
 
             var lichSuGiaoDichs = from o in pagedAndFilteredLichSuGiaoDichs
@@ -340,11 +340,11 @@ namespace Homies.RealEstate.Server
             var user = await GetCurrentUserAsync();
 
             var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
-            if (lsgd.KiemDuyetVienId==null)
-            {
+            //if (lsgd.KiemDuyetVienId==null)
+            //{
                 lsgd.KiemDuyetVienId = user.Id;
                 lsgd.UserFk.Wallet += lsgd.SoTien;
-            }
-        } 
+            // }
+        }
     }
 }

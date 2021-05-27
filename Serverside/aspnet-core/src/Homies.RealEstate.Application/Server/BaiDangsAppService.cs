@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
+    [AbpAllowAnonymous]
     public class BaiDangsAppService : RealEstateAppServiceBase, IBaiDangsAppService
     {
         private readonly IRepository<BaiDang> _baiDangRepository;
@@ -281,6 +281,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllByFilter(GetAllBaiDangByFilterInput input)
         {
             var filteredBaiDangs = _baiDangRepository.GetAll()
@@ -467,6 +468,7 @@ namespace Homies.RealEstate.Server
             return output;
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task CreateBaiDangAndDetails(CreateBaiDangAndDetailsDto input)
         {
             if (input.BaiDang.TagTimKiem.IsNullOrEmpty())
@@ -488,7 +490,7 @@ namespace Homies.RealEstate.Server
             var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
             var user = await _lookup_userRepository.FirstOrDefaultAsync((long)input.BaiDang.UserId);
-            user.Wallet -= input.HoaDonBaiDangDto.TongTien;
+            if (user!=null) user.Wallet -= input.HoaDonBaiDangDto.TongTien;
 
             input.LichSuGiaoDichDto.ChiTietHoaDonBaiDangId = hoadonID;
             var lichSuGiaoDich = ObjectMapper.Map<LichSuGiaoDich>(input.LichSuGiaoDichDto);
@@ -501,6 +503,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task EditBaiDangAndDetails(EditBaiDangAndDetailsDto input)
         {
             if (input.BaiDang != null && input.BaiDang.Id != null)
@@ -538,6 +541,7 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs)]
         public async Task GiaHanBaiDang(GiaHanInput input)
         {
             var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
@@ -552,7 +556,7 @@ namespace Homies.RealEstate.Server
                 await _lookup_lichSuGiaoDichRepository.InsertAsync(lichSuGiaoDich);
 
                 var user = await _lookup_userRepository.FirstOrDefaultAsync((long)baiDang.UserId);
-                user.Wallet -= input.HoaDonBaiDangDto.TongTien;
+                if (user != null) user.Wallet -= input.HoaDonBaiDangDto.TongTien;
             }
         }
 
