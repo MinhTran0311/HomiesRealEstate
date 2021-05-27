@@ -243,6 +243,35 @@ abstract class _FormStore with Store {
   }
 
   @action
+  Future UpdateUser() async {
+    final futrue = _repository.registing(surname, name, username, password, userEmail);
+    fetchRegistFuture = ObservableFuture(futrue);
+
+    futrue.then((registRes) {
+      print("123" + registRes["result"]["canLogin"].toString());
+
+      if (registRes["result"]["canLogin"]) {
+        regist_success = true;
+      }
+      else{
+        regist_success = false;
+      }
+    }).catchError((error){
+      regist_success = false;
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
+  @action
   Future<dynamic> authLogIn (String username, String password) async {
     final future = _repository.authorizing(username, password);
     fetchTokenFuture = ObservableFuture(future);

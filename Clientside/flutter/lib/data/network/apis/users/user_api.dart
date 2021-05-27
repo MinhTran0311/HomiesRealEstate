@@ -324,4 +324,23 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
+  Future<int> coutAllUser() async {
+    // try {
+    //   final res = await _dioClient.get(Endpoints.getAllLSGD,
+    //     queryParameters: {
+    //       "MaxResultCount": 1000,
+    //     },
+    //     options: Options(
+    //         headers: {
+    //           "Abp.TenantId": 1,
+    //           "Authorization" : "Bearer ${Preferences.access_token}",
+    //         }
+    //     ),);
+    //   log("Get All LSGD Success");
+    //   return listLSGD.fromJson(res);
+    // } catch (e) {
+    //   print("lỗi" + e.toString());
+    //   throw e;
+    // }
+  }
 }

@@ -137,5 +137,14 @@ namespace Homies.RealEstate.Authorization.Roles
             var grantedPermissions = PermissionManager.GetPermissionsFromNamesByValidating(grantedPermissionNames);
             await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
         }
+
+        //Get tổng số vai trò
+        public async Task<int> CountAllRoles()
+        {
+            var query = _roleManager.Roles;
+
+            var roleCount = await query.CountAsync();
+            return roleCount;
+        }
     }
 }

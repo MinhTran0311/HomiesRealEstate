@@ -206,11 +206,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
             SizedBox(height: 24.0),
             _buildActiveCheckBox(),
             SizedBox(height: 24.0),
-            Container(
-              width: MediaQuery.of(context).size.width/1.3,
-              height: MediaQuery.of(context).size.height/2.5,
-              child: MapsScreen(),
-            ),
             _buildSignUpButton(),
           ],
         ),
@@ -276,6 +271,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           onChanged: (value) {
             _store.setUserId(_userNameController.text);
           },
+          enable: false,
           errorText: _store.formErrorStore.username,
         );
       },
