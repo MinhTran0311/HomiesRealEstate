@@ -769,7 +769,7 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy("id asc")
+                .OrderBy(input.Sorting ?? "thoiDiemDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs

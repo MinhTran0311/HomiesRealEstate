@@ -297,7 +297,7 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.UserId == user.Id);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
-                .OrderBy(input.Sorting ?? "id desc")
+                .OrderBy(input.Sorting ?? "thoiDiem desc")
                 .PageBy(input);
 
             var lichSuGiaoDichs = from o in pagedAndFilteredLichSuGiaoDichs
