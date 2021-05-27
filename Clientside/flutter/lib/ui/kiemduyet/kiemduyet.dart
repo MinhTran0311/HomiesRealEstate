@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 
@@ -33,6 +34,13 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   LSGDStore _lsgdStore;final int UserID;
   List<bool> isexpanded = [];
   UserStore _userStore;
+  final ScrollController _scrollController =
+  ScrollController(keepScrollOffset: true);
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  GlobalKey _contentKey = GlobalKey();
+  GlobalKey _refresherKey = GlobalKey();
+  bool isRefreshing = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -71,7 +79,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       //     onPressed: (){setState(() {
       //       _selectedIndex =0;
       //     });}):Container(),
-      title:  Center(child: Text("Kiểm Duyêt")),
+      title:  Text("Kiểm Duyêt"),
 
     );
   }
@@ -95,7 +103,8 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     return Container(
       color: Colors.grey[200],
       child:
-      RefreshIndicator(
+      SmartRefresher(
+
         child:
         Observer(builder: (context) {
           return

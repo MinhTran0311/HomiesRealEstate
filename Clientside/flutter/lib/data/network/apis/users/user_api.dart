@@ -7,6 +7,8 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
+import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:dio/dio.dart';
@@ -214,16 +216,19 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     // }
   }
 
-  Future<listLSGD> getLSGD() async {
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount, filter_Model filter_model) async {
+    if (filter_model==null)
+      filter_model = new filter_Model();
     try {
       final res = await _dioClient.get(Endpoints.getCurrenlichsugiaodich,
-
+        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount),
         options: Options(
             headers: {
               "Abp.TenantId": 1,
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
+
       log("Get All LSGD Success");
       return listLSGD.fromJson(res);
     } catch (e) {
@@ -305,10 +310,11 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   Future<listLSGD> getAllLSGD() async {
-    try {
+    try{
       final res = await _dioClient.get(Endpoints.getAllLSGD,
         queryParameters: {
           "MaxResultCount": 1000,
+          "Sorting": "thoiDiem desc",
         },
         options: Options(
             headers: {
@@ -323,24 +329,22 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       throw e;
     }
   }
+  //getReportData
+  Future<listitemReport> getReportData() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getReportDate,
 
-  Future<int> coutAllUser() async {
-    // try {
-    //   final res = await _dioClient.get(Endpoints.getAllLSGD,
-    //     queryParameters: {
-    //       "MaxResultCount": 1000,
-    //     },
-    //     options: Options(
-    //         headers: {
-    //           "Abp.TenantId": 1,
-    //           "Authorization" : "Bearer ${Preferences.access_token}",
-    //         }
-    //     ),);
-    //   log("Get All LSGD Success");
-    //   return listLSGD.fromJson(res);
-    // } catch (e) {
-    //   print("lỗi" + e.toString());
-    //   throw e;
-    // }
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      log("Get All LSGD Success");
+      return listitemReport.fromJson(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
   }
 }

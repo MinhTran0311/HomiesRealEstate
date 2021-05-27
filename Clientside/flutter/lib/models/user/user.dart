@@ -1,3 +1,5 @@
+import 'package:boilerplate/models/role/role.dart';
+
 class User {
   int id;
   String name;
@@ -99,6 +101,7 @@ class CurrentUserForEditdto{
   double wallet;
   int  UserID;
   String  picture;
+  List<RoleCurrent>  listRole;
 
   CurrentUserForEditdto({
     this.name,
@@ -111,9 +114,18 @@ class CurrentUserForEditdto{
     this.userName,
     this.UserID,
     this.picture,
+    this.listRole,
   });
 
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
+    List<RoleCurrent> listRoles = List<RoleCurrent>();
+    print("DuongLSGD");
+    print(json);
+    //posts = json["result"]["items"].map((post) => Post.fromMap(post)).toList();
+    //print(json["result"]["items"][0].runtimeType);
+    for (int i =0; i<json["result"]["roles"].length; i++) {
+      listRoles.add(RoleCurrent.fromjson(json["result"]["roles"][i]));
+    }
     return CurrentUserForEditdto(
       name: json["result"]["name"],
       surname: json["result"]["surname"],
@@ -123,6 +135,7 @@ class CurrentUserForEditdto{
       profilePicture: json["result"]["profilePicture"],
       creationTime: json["result"]["creationTime"],
       UserID: json["result"]["userId"],
+      listRole:listRoles,
     );
   }
 
@@ -132,7 +145,20 @@ class CurrentUserForEditdto{
     );
   }
 }
-
+class RoleCurrent{
+  int roleId;
+  String roleName;
+  RoleCurrent({
+    this.roleId,
+    this.roleName,
+  });
+  factory RoleCurrent.fromjson(Map<String, dynamic> json) {
+    return RoleCurrent(
+      roleId: json["roleId"],
+      roleName: json["roleName"],
+    );
+  }
+}
 // class CurrenUserForEditdyo{
 //   dynamic result;
 //   CurrenUserForEditdyo({

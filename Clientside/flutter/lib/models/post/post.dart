@@ -110,7 +110,7 @@ class Post {
     featuredImage: json["baiDang"]["featuredImage"],
     dienTich: json["baiDang"]["dienTich"],
     gia: json["baiDang"]["gia"],
-    giagoi: json["chiTietHoaDon"]["giagoi"],
+    giagoi: json["chiTietHoaDon"]["giaGoi"],
     goiBaiDangId: json["chiTietHoaDon"]["goiBaiDangId"]
   );
   factory Post.fromMapfavo(Map<String, dynamic> json) => Post(

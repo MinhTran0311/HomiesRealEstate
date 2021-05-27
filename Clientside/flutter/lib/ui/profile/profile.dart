@@ -43,13 +43,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState({
     Key key,
   }) : super();
-  String role="Khách";
+  String role=" Admin";
   String pathAvatar = "assets/images/img_login.jpg";
   File image;
   final picker = ImagePicker();
   int selected = 0;
   UserStore _userstore;
   PostStore _postStore;
+  int sobaidang;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -65,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies()  {
     super.didChangeDependencies();
 
     _userstore = Provider.of<UserStore>(context);
@@ -80,10 +81,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _userstore.getCurrentPictureUser();
     }
     if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
-
-
+    if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
+    //sobaidang = await _postStore.getsobaidang();
   }
-
 
   @override
   void initState() {
@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }),
                         Observer(builder: (context) {
                           return
-                            _userstore.userByID != null ? Row(
+                            _userstore.userCurrent != null ? Row(
                               children: [
                                 Icon(
                                   Icons.people,
@@ -413,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   semanticLabel:
                                   'Text to announce in accessibility modes',
                                 ),
-                                Text(role,
+                                Text(_userstore.userCurrent.listRole[0].roleName,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         // fontWeight: FontWeight.bold,
@@ -468,14 +468,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     //SizedBox(width: 70,),
-                    !_postStore.loadingPostForCur
+                    !_postStore.loadingsobaidang
                         ? MaterialButton(
                             padding: const EdgeInsets.only(top: 25, right: 50),
                             child: Column(
                               children: [
                                 Text(
-                                  _postStore.postForCurList.posts.length
-                                      .toString(),
+                                  _postStore.sobaidang.toString(),
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.white,

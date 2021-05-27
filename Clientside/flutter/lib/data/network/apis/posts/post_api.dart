@@ -147,27 +147,27 @@ class PostApi {
   }
 
   Future<String> postPost(Newpost newpost) async {
-    try {
-      final res = await _dioClient.post(
-          "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/CreateBaiDangAndDetails",
-          options: Options(
-            headers: {
-              "Abp.TenantId": 1,
-              "Authorization": "Bearer ${Preferences.access_token}",
-              "Content-Type": "application/json",
-            },
-          ),
-          data: {
-            "baiDang": (newpost.post.toMap()),
-            "chiTietBaiDangDtos": [
-              if (newpost.properties != null)
-                for (var item in newpost.properties) item.toMap()
-            ],
-            "hoaDonBaiDangDto": (newpost.hoadonbaidang.toMap()),
-            "lichSuGiaoDichDto": (newpost.lichsugiaodichs.toMap()),
-            "hinhAnhDtos": [for (var item in newpost.images) item.toMap()]
-          });
-    } catch (e) {
+      try {
+        final res = await _dioClient.post(
+            "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/CreateBaiDangAndDetails",
+            options: Options(
+              headers: {
+                "Abp.TenantId": 1,
+                "Authorization": "Bearer ${Preferences.access_token}",
+                "Content-Type": "application/json",
+              },
+            ),
+            data: {
+              "baiDang": (newpost.post.toMap()),
+              "chiTietBaiDangDtos": [
+                if (newpost.properties != null)
+                  for (var item in newpost.properties) item.toMap()
+              ],
+              "hoaDonBaiDangDto": (newpost.hoadonbaidang.toMap()),
+              "lichSuGiaoDichDto": (newpost.lichsugiaodichs.toMap()),
+              "hinhAnhDtos": [for (var item in newpost.images) item.toMap()]
+            });
+      } catch (e) {
       throw e;
     }
   }
@@ -189,7 +189,22 @@ class PostApi {
       throw e;
     }
   }
-
+  Future<String> getsobaidang() async {
+    try {
+      final res = await _dioClient.get(
+        "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllBaiDangsByCurrentUser",
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+        queryParameters:{"skipCount": 0, "maxResultCount":1},
+      );
+      return (res["result"]["totalCount"].toString());
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
   /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //
@@ -321,7 +336,7 @@ class PostApi {
       throw e;
     }
   }
-  Future<PostList> getfavopost(int iduser) async {
+  Future<PostList> getfavopost(int iduser, int skipCountmypost, int maxCount) async {
     try {
       final res = await _dioClient.get(
         "https://homies.exscanner.edu.vn/api/services/app/BaiGhimYeuThichs/GetAllBaiGhimByCurrentUser",
@@ -329,7 +344,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-        queryParameters: {"id": iduser},
+        queryParameters: {"id": iduser,"skipCount": skipCountmypost, "maxResultCount":maxCount},
       );
       return PostList.fromJsonfavopost(res);
     } catch (e) {

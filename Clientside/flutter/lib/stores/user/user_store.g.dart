@@ -330,6 +330,13 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  final _$getUserByIDAsyncAction = AsyncAction('_UserStore.getUserByID');
+
+  @override
+  Future<dynamic> getUserByID(int userID) {
+    return _$getUserByIDAsyncAction.run(() => super.getUserByID(userID));
+  }
+
   final _$getCurrentUserAsyncAction = AsyncAction('_UserStore.getCurrentUser');
 
   @override
@@ -381,14 +388,6 @@ mixin _$UserStore on _UserStore, Store {
   Future<dynamic> updatePictureCurrentUser(String fileToken) {
     return _$updatePictureCurrentUserAsyncAction
         .run(() => super.updatePictureCurrentUser(fileToken));
-  }
-  final _$getUserByIDAsyncAction =
-      AsyncAction('_UserStore.getUserByID');
-
-  @override
-  Future<dynamic> getUserByID(int userId) {
-    return _$getUserByIDAsyncAction
-        .run(() => super.getUserByID(userId));
   }
 
   @override

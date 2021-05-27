@@ -16,6 +16,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_category_list.dart';
 import 'package:boilerplate/models/post/postpack/pack_list.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
+import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/models/town/commune_list.dart';
 import 'package:boilerplate/models/town/province_list.dart';
 import 'package:boilerplate/models/town/town_list.dart';
@@ -91,6 +92,11 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+  Future<String> getsobaidang() async {
+    return await _postApi.getsobaidang().then((sobaidang) {
+      return sobaidang;
+    }).catchError((error) => throw error);
+  }
   Future<PostCategoryList> getPostCategorys() async {
     return await _postApi.getPostCategorys().then((postCategoryList) {
       return postCategoryList;
@@ -137,8 +143,8 @@ class Repository {
   Future<double> getpackprice(int idpost) async {
     return await _postApi.getpackprice(idpost);
   }
-  Future<PostList> getfavopost(int iduser) async {
-    return await _postApi.getfavopost(iduser).then((postsList) {
+  Future<PostList> getfavopost(int iduser, int skipCountmypost, int maxCount) async {
+    return await _postApi.getfavopost(iduser,skipCountmypost,maxCount).then((postsList) {
 
       return postsList;
     }).catchError((error) => throw error);
@@ -177,13 +183,21 @@ class Repository {
       throw error;
     });
   }
-
-  // Post: ---------------------------------------------------------------------
-  Future<listLSGD> getLSGD() async {
+  // report: ---------------------------------------------------------------------
+  Future<listitemReport> getReportData() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getLSGD().then((lsgdList) {
+    return await _userApi.getReportData().then((itemlist) {
+      return itemlist;
+    }).catchError((error) => throw error);
+  }
+  // Post: ---------------------------------------------------------------------
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount, filter_Model filter_model) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _userApi.getLSGD(skipCount, maxResultCount, filter_model).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }
