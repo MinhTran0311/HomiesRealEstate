@@ -653,7 +653,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text("Chỉnh sửa thông tin cá nhân"),),
+        title: Text("Chỉnh sửa thông tin cá nhân"),
         backgroundColor: Colors.white,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){setState(() {

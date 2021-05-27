@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState({
     Key key,
   }) : super();
-  String role="Khách";
+  String role=" Admin";
   String pathAvatar = "assets/images/img_login.jpg";
   File image;
   final picker = ImagePicker();
@@ -404,7 +404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }),
                         Observer(builder: (context) {
                           return
-                            _userstore.userByID != null ? Row(
+                            _userstore.userCurrent != null ? Row(
                               children: [
                                 Icon(
                                   Icons.people,
@@ -413,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   semanticLabel:
                                   'Text to announce in accessibility modes',
                                 ),
-                                Text(role,
+                                Text(_userstore.userCurrent.listRole[0].roleName,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         // fontWeight: FontWeight.bold,
