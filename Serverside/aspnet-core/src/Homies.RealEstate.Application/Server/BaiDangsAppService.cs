@@ -786,6 +786,8 @@ namespace Homies.RealEstate.Server
 
                            join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
                            from s6 in j6.DefaultIfEmpty()
+                           
+                           orderby o.ThoiDiemDang descending
 
                            select new GetBaiDangForViewDto()
                            {
