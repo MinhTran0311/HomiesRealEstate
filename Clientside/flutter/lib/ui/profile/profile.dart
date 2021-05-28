@@ -14,6 +14,7 @@ import 'package:boilerplate/ui/profile/report/report.dart';
 import 'package:boilerplate/ui/profile/setting/setting.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
@@ -193,6 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               setState(() {
                 // _first=!_first;
@@ -219,8 +221,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
-              setState(() {
+               setState(() {
                 // _first=!_first;
                 // selected = 1;
                 // _selectedIndex =2;
@@ -229,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           userID: _userstore.userCurrent.UserID,
                         ));
                 Navigator.push(context, route);
-              });
+               });
             },
           ),
           CardItem(
@@ -238,6 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               setState(() {
                 // _first=!_first;
@@ -255,6 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               colorbackgroud: Colors.grey[200],
               colortext: Colors.black,
               coloricon: Colors.orange,
+              isFunction: false,
               press: () {
                 setState(() {
                   Route route = MaterialPageRoute(
@@ -268,6 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               colorbackgroud: Colors.grey[200],
               colortext: Colors.black,
               coloricon: Colors.orange,
+              isFunction: false,
               press: () {
                 setState(() {
                   Route route =
@@ -281,6 +287,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               Navigator.push(
                 context,
@@ -509,64 +516,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ));
     });
-  }
-}
-
-class CardItem extends StatelessWidget {
-  const CardItem({
-    Key key,
-    @required this.text,
-    @required this.icon,
-    @required this.press,
-    @required this.colorbackgroud,
-    @required this.colortext,
-    @required this.coloricon,
-  }) : super(key: key);
-
-  final String text;
-  final IconData icon;
-  final VoidCallback press;
-  final Color colorbackgroud;
-  final Color colortext;
-  final Color coloricon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            onPressed: press,
-            color: colorbackgroud,
-            padding: EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 30,
-                  color: coloricon,
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  child: Text(text,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 20,
-                          fontFamily: FontFamily.roboto,
-                          color: colortext)),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: colortext,
-                )
-              ],
-            )),
-      ),
-    );
   }
 }

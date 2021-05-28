@@ -4,6 +4,7 @@ import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -147,7 +148,8 @@ class _WalletPageState extends State<WalletPage>{
           ),
           SizedBox(height: 20,),
           CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
-          press: (){
+            isFunction: false,
+            press: (){
             setState(() {
               Route route = MaterialPageRoute(builder: (context) => NapTienPage(userID: userID,));
               Navigator.push(context, route);
@@ -495,6 +497,7 @@ class _NapTienPageState extends State<NapTienPage> {
             SizedBox(height: 20,),
             createTransactionHistory(),
             CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+              isFunction: false,
               press: (){
                 setState(() {
                   if(Ctlmoneysend.text.length>3)
