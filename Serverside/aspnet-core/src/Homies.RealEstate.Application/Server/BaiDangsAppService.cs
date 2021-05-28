@@ -401,6 +401,14 @@ namespace Homies.RealEstate.Server
             }
         }
 
+        [AbpAllowAnonymous]
+        public async Task AddViewForBaiDang(int baidangId) 
+        {
+            var baidang = await _baiDangRepository.FirstOrDefaultAsync(baidangId);
+            baidang.DiemBaiDang += 1;
+            baidang.LuotXem += 1;
+        }
+
         private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
         {
             for (int i = 0; i < list.Count; i++)
@@ -784,6 +792,7 @@ namespace Homies.RealEstate.Server
 
                            join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
                            from s4 in j4.DefaultIfEmpty()
+
 
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()

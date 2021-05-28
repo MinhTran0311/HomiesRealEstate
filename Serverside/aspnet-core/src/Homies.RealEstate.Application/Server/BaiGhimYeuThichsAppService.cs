@@ -220,6 +220,7 @@ namespace Homies.RealEstate.Server
             {
                 await Create(input);
                 baiDang.LuotYeuThich += 1;
+                baiDang.DiemBaiDang += 10;
             }
             else
             {
@@ -227,10 +228,13 @@ namespace Homies.RealEstate.Server
                 if (input.TrangThai.Equals("On"))
                 {
                     baiDang.LuotYeuThich += 1;
+                    baiDang.DiemBaiDang += 10;
                 }
                 else if (input.TrangThai.Equals("Off"))
                 {
-                    baiDang.LuotYeuThich += -1;
+
+                    baiDang.LuotYeuThich = (baiDang.LuotYeuThich - 1) < 0 ? 0 : baiDang.LuotYeuThich - 1; 
+                    baiDang.DiemBaiDang = (baiDang.DiemBaiDang-10)<0 ? 0 : baiDang.DiemBaiDang - 10;
                 }
                 await Update(input);
             }
