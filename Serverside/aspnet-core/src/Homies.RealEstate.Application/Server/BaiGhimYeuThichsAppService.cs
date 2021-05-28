@@ -90,7 +90,8 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.UserFk)
                         .Include(e => e.BaiDangFk)
                         .Where(e => e.UserId == user.Id)
-                        .Where(e => e.TrangThai.Equals("On"));
+                        .Where(e => e.TrangThai.Equals("On"))
+                        .Where(e=>e.BaiDangFk.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiGhimYeuThichs = filteredBaiGhimYeuThichs
                 .OrderBy("id asc")

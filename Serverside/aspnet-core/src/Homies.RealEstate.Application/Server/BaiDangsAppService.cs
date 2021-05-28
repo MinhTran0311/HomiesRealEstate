@@ -313,7 +313,8 @@ namespace Homies.RealEstate.Server
                         .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Contains(input.XaTenXaFilter))
                         .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Contains(input.HuyenTenHuyenFilter))
                         .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter))
-                        .Where(e => e.ThoiHan >= DateTime.Now);
+                        .Where(e => e.ThoiHan >= DateTime.Now)
+                        .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "diemBaiDang desc")
@@ -775,7 +776,8 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
-                        .Where(e => e.UserId == user.Id);
+                        .Where(e => e.UserId == user.Id)
+                        .Where(e=>e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "thoiDiemDang desc")
