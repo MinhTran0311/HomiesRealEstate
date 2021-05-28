@@ -12,6 +12,7 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -183,7 +184,16 @@ class _NewpostScreenState extends State<NewpostScreen> {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return _showErrorMessage(_postStore.errorStore.errorMessage);
         }
-
+        if (_postStore.successNewpost) {
+          _showSuccssfullMesssage("Đăng tin thành công");
+          //dispose();.
+          _postStore.successNewpost=false;
+          _postStore.getPostForCurs(false);
+          Future.delayed(Duration(milliseconds: 3000), () {
+            Route route = MaterialPageRoute(builder: (context) => Detail(post:_postStore.postForCurList.posts.first ));
+            Navigator.push(context, route);
+          });
+        }
         return SizedBox.shrink();
       },
     );
@@ -1227,12 +1237,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
-            if(songay!=null&&selectedPack.phi!=null)
-          songay * selectedPack.phi > _userStore.userCurrent.wallet
-          ? Text('Vui lòng nạp thêm tiền để đăng bài')
-          : Container(
-          height: 0,
-          ),
     ]),
     );
     showDialog(
@@ -1242,27 +1246,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-
-  Dangtin(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      title: Text("Thông báo"),
-      content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-                Text('Vui lòng nạp thêm tiền')
-                //Text('Vui lòng bấm đăng tin trước')
-          ]),
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   var _newpost = new Newpost();
   var sc = false;
   Widget _buildUpButton() {
@@ -1453,6 +1436,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   // General Methods:-----------------------------------------------------------
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      //return SizedBox.shrink();
+    });
+  }
   _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {

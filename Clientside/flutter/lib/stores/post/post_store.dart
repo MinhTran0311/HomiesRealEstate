@@ -445,7 +445,8 @@ abstract class _PostStore with Store {
       final postPostFuture = _repository.postPost(post);
       fetchNewpostsFuture = ObservableFuture(postPostFuture);
       postPostFuture.then((newpost) {
-        print(newpost);
+        successNewpost=true;
+        //print(newpost);
       }).catchError((error) {
         if (error is DioError) {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
