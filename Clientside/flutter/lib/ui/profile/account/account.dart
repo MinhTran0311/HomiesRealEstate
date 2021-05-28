@@ -53,7 +53,7 @@ class _AccountPageState extends State<AccountPage>{
 
   int _selectedIndex=0;
   UserStore _userstore;
-
+  String pathAvatar = "assets/images/img_login.jpg";
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -212,13 +212,25 @@ class _AccountPageState extends State<AccountPage>{
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CircleAvatar(radius: (52),
-                                  backgroundColor: Colors.white,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
-                                  )
-                                ),
+                                Observer(builder: (context) {
+                                  return _userstore.userCurrent.picture != null
+                                      ? CircleAvatar(radius: (52),
+                                      backgroundColor: Colors.white,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
+                                      )
+                                      )
+                                      : CircleAvatar(
+                                      radius: (52),
+                                      backgroundColor: Colors.white,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(50),
+                                        child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                      ));
+                                }),
+
                                 // SizedBox(height: 10,),
                                 Text(
                                   "${SurName} " + "${Name}",
@@ -238,7 +250,7 @@ class _AccountPageState extends State<AccountPage>{
                                     ),
                                     SizedBox(width: 10,),
                                     Text(
-                                      "Admin",
+                                      _userstore.userCurrent.listRole[0].roleName,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,

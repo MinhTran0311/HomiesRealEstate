@@ -11,6 +11,7 @@ import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/favopost/favopost.dart';
 import 'package:boilerplate/ui/profile/help/help.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
+import 'package:boilerplate/ui/profile/setting/setting.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -257,9 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               press: () {
                 setState(() {
                   Route route = MaterialPageRoute(
-                      builder: (context) => KiemDuyetPage(
-                            UserID: _userstore.userCurrent.UserID,
-                          ));
+                      builder: (context) => SettingPage());
                   Navigator.push(context, route);
                 });
               }),
@@ -343,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            child: Image.asset(pathAvatar),
+                                            child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
                                           ));
                                 }),
                                 // CircularProfileAvatar(
