@@ -312,10 +312,11 @@ namespace Homies.RealEstate.Server
                         
                         .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Contains(input.XaTenXaFilter))
                         .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Contains(input.HuyenTenHuyenFilter))
-                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter));
+                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter))
+                        .Where(e => e.ThoiHan >= DateTime.Now);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "id asc")
+                .OrderBy(input.Sorting ?? "diemBaiDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
