@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -42,12 +43,13 @@ class _MapsScreenState extends State<MapsScreen> {
   CameraPosition _position1;
   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
-  // GoogleMapController _controller;
+  GoogleMapController _controllerMap;
   // Location _location = Location();
   // Location location;
   Position _position = Position();
   Post postClickMarker;
   bool permissionEnable = false;
+  Placemark placeMarkChoosen;
 
   PostStore _postStore;
   ApplicationBloc _applicationBloc;
@@ -137,30 +139,37 @@ class _MapsScreenState extends State<MapsScreen> {
     // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
   }
 
-  Future<void> _goToCurrentLocationSearch(String value) async {
-    this._applicationBloc.searchPlaces(value);
-    if (_applicationBloc.placemarks != null) {
-      final GoogleMapController controller = await _controller.future;
-      CameraPosition posotionSearch = CameraPosition(
+  Future<void> _searchPlacemarkFromCoordinates(String value) async {
+    await this._applicationBloc.searchPlaces(value);
+  }
+
+  Future<void> _goToCurrentLocationSearch() async {
+    final GoogleMapController controller = await _controller.future;
+    setState(() {
+      // _markers.removeAll(_markers);
+      _markers.clear();
+      _markers.add(
+          Marker(
+            markerId: MarkerId(this.placeMarkChoosen.postalCode),
+            // position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
+            // infoWindow: InfoWindow(
+            //   title: (this.placeMarkChoosen.street == null || this.placeMarkChoosen.street.isEmpty) ? '${this.placeMarkChoosen.country}' :'${this.placeMarkChoosen.street}',
+            //   snippet: '${this.placeMarkChoosen.country}',
+            // ),
+            // onTap: () {
+            //
+            // },
+            icon: BitmapDescriptor.defaultMarker,
+          ));
+      // controller.showMarkerInfoWindow(markerId)
+      CameraPosition searchLocation = CameraPosition(
         bearing: 192.833,
-        target: LatLng(_applicationBloc.lat, _applicationBloc.tit),
+        target: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
         tilt: 59.440,
-        zoom: 13.0,
+        zoom: 16.0,
       );
-      controller.animateCamera(CameraUpdate.newCameraPosition(posotionSearch));
-      _markers.add(Marker(
-        // markerId: MarkerId(postOrder.id.toString()),
-        position: new LatLng(_applicationBloc.lat, _applicationBloc.tit),
-        infoWindow: InfoWindow(
-          title: '${_applicationBloc.placemarks[0].street}',
-          // snippet: '${_applicationBloc.placemarks[0].country}' + '${_applicationBloc.placemarks[0].}',
-        ),
-        onTap: () {
-          // this.postClickMarker = postOrder;
-        },
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    }
+      controller.animateCamera(CameraUpdate.newCameraPosition(searchLocation));
+    });
   }
 
   _onMapCreated(GoogleMapController controller) {
@@ -400,7 +409,11 @@ class _MapsScreenState extends State<MapsScreen> {
                 ),
 
                 // onChanged: (value) => this._applicationBloc.searchPlaces(value),
-                onSubmitted: (value) => _goToCurrentLocationSearch(value),
+                onSubmitted: (value) => {
+                  _searchPlacemarkFromCoordinates(value),
+                  // _goToCurrentLocationDevice(),
+                  _showSimpleModalDialog(context),
+                },
               ),
             ),
             Stack(
@@ -542,6 +555,112 @@ class _MapsScreenState extends State<MapsScreen> {
         ),
       );
     }
+  }
 
+  _showSimpleModalDialog(context){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius:BorderRadius.circular(12.0)),
+          child: Container(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.5,),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0, left: 18,top: 12, bottom: 16),
+              child: _applicationBloc.getSuccess ? Container(
+                child: ListView.separated(
+                  itemCount: _applicationBloc.placemarks.length,
+                  separatorBuilder: (context, position) {
+                    return Divider();
+                  },
+                  itemBuilder: (context, position) {
+                    return _buildListItem(_applicationBloc.placemarks[position], context);
+                  },
+                ),
+              ) : Container(
+                child: Column(
+                  children: [
+                    Positioned(
+                      right: 0.0,
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: CircleAvatar(
+                            radius: 14.0,
+                            backgroundColor: Colors.grey.shade300,
+                            child: Icon(Icons.close, color: Colors.red),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.warning_rounded,
+                      size: MediaQuery.of(context).size.width*0.2,
+                      color: Colors.red,
+                    ),
+                    SizedBox(height: 10,),
+                    (_applicationBloc.latTit == null || _applicationBloc.longTit == null) ?
+                        Column(
+                          children: [
+                            Text(
+                              "Google Maps không tìm thấy ${_applicationBloc.inputSearch}",
+                              style: TextStyle(
+                                fontSize: 18,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              "Hãy đảm bảo rằng tìm kiếm của bạn đúng định dạng: (vĩ độ, kinh độ)",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                        )
+                        : Text(
+                      "Google Maps không tìm thấy địa chỉ từ tọa độ " + "${_applicationBloc.latTit}, ${_applicationBloc.longTit}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ]
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+  }
+
+  Widget _buildListItem(Placemark placemark, context) {
+    print(placemark);
+    // return Container();
+    return ListTile(
+      title: Text(
+        (placemark.street == null || placemark.street == "Unnamed Road") ? ((placemark.subAdministrativeArea == null || placemark.subAdministrativeArea.isEmpty) ? ((placemark.administrativeArea == null || placemark.administrativeArea.isEmpty) ? placemark.country : placemark.administrativeArea) : placemark.subAdministrativeArea) : placemark.street,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      subtitle: (placemark.subAdministrativeArea == null || placemark.subAdministrativeArea.isEmpty) ? (placemark.administrativeArea == null || placemark.administrativeArea.isEmpty) ? Text(placemark.country) : Text(placemark.administrativeArea + ", " + placemark.country)
+      : Text(placemark.subAdministrativeArea + ", " + placemark.administrativeArea + ", " + placemark.country),
+      onTap: (){
+        _clickPlaceMark(placemark, context);
+      },
+    );
+  }
+
+  _clickPlaceMark(Placemark placemarkGoTo, context) {
+    this.placeMarkChoosen = placemarkGoTo;
+    Navigator.of(context).pop();
+    _goToCurrentLocationSearch();
   }
 }

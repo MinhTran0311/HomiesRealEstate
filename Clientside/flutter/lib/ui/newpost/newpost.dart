@@ -12,6 +12,7 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -1284,10 +1285,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 )
               showAlertDialog(context);
             else {
-              if(songay * selectedPack.phi>_userStore.userCurrent.wallet) {
-                Dangtin(context);
-                return;
-              }
+
               var post = new Post();
               post.tenXa = selectedCommune.tenXa;
               post.xaId = selectedCommune.id;
@@ -1354,8 +1352,88 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 u.duongDan = item;
                 _newpost.images.add(u);
               }
-              _postStore.postPost(_newpost);
-            }
+              if(songay * selectedPack.phi>_userStore.userCurrent.wallet) {
+                  var futureValue = showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Bạn không đủ số dư để thực hiện giao dịch?",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                                fontFamily: 'intel'),
+                          ),
+                          content: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              RoundedButtonWidget(
+                                buttonText: "Nạp thêm tiền",
+                                buttonColor: Colors.green,
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              RoundedButtonWidget(
+                                buttonColor: Colors.grey,
+                                buttonText: "Hủy",
+                                onPressed: () {
+
+                                   Navigator.of(context).pop(false);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                  futureValue.then((value) {
+                    Route route = MaterialPageRoute(builder: (context) => NapTienPage(userID: _userStore.userCurrent.UserID,));
+                    Navigator.push(context, route);
+                  });
+              }
+              else
+                 {
+                var futureValue = showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Đăng tin và thực hiện thanh toán?",
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.black,
+                              fontFamily: 'intel'),
+                        ),
+                        content: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            RoundedButtonWidget(
+                              buttonText: "Đồng ý",
+                              buttonColor: Colors.green,
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                            RoundedButtonWidget(
+                              buttonColor: Colors.grey,
+                              buttonText: "Hủy",
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                futureValue.then((value) {
+                  _postStore.postPost(_newpost);
+                  // true/false
+                });
+            }}
           }
         },
       );

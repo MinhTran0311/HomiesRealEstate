@@ -18,6 +18,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool autoFocus;
   final TextInputAction inputAction;
   final double inputFontsize;
+  final bool enable;
 
   const TextFieldWidget({
     Key key,
@@ -37,6 +38,7 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
     this.inputFontsize=20,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -53,6 +55,7 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         maxLength: 25,
         keyboardType: this.inputType,
+        enabled: this.enable,
         style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.black),
         decoration: InputDecoration(
             hintText: this.hint,

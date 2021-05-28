@@ -564,7 +564,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                         children:[
                           Container(
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               // mainAxisSize: MainAxisSize.max,
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -721,6 +721,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                     Text(
                                       // alignment: Alignment.centerRight,
                                       "${user.userName}",
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),
@@ -763,20 +764,21 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      SizedBox(width: 5,),
                                     ],
                                   ),
                                 ),
-                                Row(
-                                  children: [
+                                Flexible(
+                                  child:
                                     Text(
                                       // alignment: Alignment.centerRight,
                                       "${user.email}",
+                                      // "00000000000000000000000000000000000000",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 18,
                                       ),
                                     ),
-                                  ],
                                 ),
                               ],
                             ),
