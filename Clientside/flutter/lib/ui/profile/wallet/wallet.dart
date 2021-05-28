@@ -13,6 +13,7 @@ import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../profile.dart';
 
@@ -40,6 +41,13 @@ class _WalletPageState extends State<WalletPage>{
   bool naptien = true;
   final Ctlmoneysend = TextEditingController();
   LSGDStore _lsgdStore;
+  final ScrollController _scrollController =
+  ScrollController(keepScrollOffset: true);
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  GlobalKey _contentKey = GlobalKey();
+  GlobalKey _refresherKey = GlobalKey();
+  bool isRefreshing = false;
 
   @override
   void didChangeDependencies() {
@@ -51,7 +59,8 @@ class _WalletPageState extends State<WalletPage>{
     // check to see if already called api
 
     if (!_lsgdStore.loading) {
-      _lsgdStore.getLSGD();
+      _lsgdStore.getLSGD(false);
+
     }
 
 
@@ -175,20 +184,73 @@ class _WalletPageState extends State<WalletPage>{
             height: 500, // give it a fixed height constraint
             // color: Colors.teal,
             // child ListView
-            child: RefreshIndicator(
+            child: SmartRefresher(
+              key: _refresherKey,
+              controller: _refreshController,
+              enablePullUp: true,
+              enablePullDown: true,
+              header: WaterDropHeader(
+                refresh: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                idleIcon: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                waterDropColor: Colors.amber,
+              ),
+              physics: BouncingScrollPhysics(),
+              footer: ClassicFooter(
+                loadStyle: LoadStyle.ShowWhenLoading,
+                completeDuration: Duration(milliseconds: 500),
+              ),
+              onLoading: () async {
+                print("loading");
+
+                _lsgdStore.getLSGD(true);
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) {
+                  setState(() {});
+                }
+                _scrollController.jumpTo(
+                  _scrollController.position.maxScrollExtent,
+                );
+                _refreshController.loadComplete();
+              },
+              onRefresh: () async {
+                print("refresh");
+
+                _lsgdStore.getLSGD(false);
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) setState(() {});
+                isRefreshing = true;
+                _refreshController.refreshCompleted();
+              },
+              scrollController: _scrollController,
+              primary: false,
               child: ListView.builder(
+                  key: _contentKey,
+                  controller: _scrollController,
                   shrinkWrap: true, // 1st add
                   physics: ClampingScrollPhysics(), // 2nd add
                   // physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: _lsgdStore.listlsgd.listLSGDs.length,
                   itemBuilder: (_, i) => ListTile(
-                      title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[_lsgdStore.listlsgd.listLSGDs.length - 1- i])
+                      title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[i])
                   )
               ),
-              onRefresh: (){setState(() {
-                _lsgdStore.getLSGD();
-              });
-              },
+
             ),
           ):Container(),
           // _buildListView(),
@@ -337,7 +399,6 @@ class _WalletPageState extends State<WalletPage>{
   }
 
   Widget _buildListView() {
-    _lsgdStore.listlsgd.listLSGDs.reversed;
     return _lsgdStore.listlsgd != null
         ? Expanded(
       child: ListView.separated(
@@ -417,7 +478,7 @@ class _NapTienPageState extends State<NapTienPage> {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-          appBar: AppBar(centerTitle:true,title: Center(child: Text("Nạp tiền",style: TextStyle(color: Colors.white),),),
+          appBar: AppBar(centerTitle:true,title: Text("Nạp tiền",style: TextStyle(color: Colors.white),),
             leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
                 onPressed: (){setState(() {
                   Navigator.pop(context);

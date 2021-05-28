@@ -122,6 +122,35 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+
+  final _$filter_modelAtom = Atom(name: '_LSGDStore.filter_model');
+
+  @override
+  filter_Model get filter_model {
+    _$filter_modelAtom.reportRead();
+    return super.filter_model;
+  }
+
+  @override
+  set filter_model(filter_Model value) {
+    _$filter_modelAtom.reportWrite(value, super.filter_model, () {
+      super.filter_model = value;
+    });
+  }
+  final _$skipCountAtom = Atom(name: '_LSGDStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
   final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
 
   @override
@@ -170,8 +199,8 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$getLSGDAsyncAction = AsyncAction('_LSGDStore.getLSGD');
 
   @override
-  Future<dynamic> getLSGD() {
-    return _$getLSGDAsyncAction.run(() => super.getLSGD());
+  Future<dynamic> getLSGD(bool isLoadMore) {
+    return _$getLSGDAsyncAction.run(() => super.getLSGD(isLoadMore));
   }
 
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
@@ -213,7 +242,9 @@ loading: ${loading},
 Allloading: ${Allloading},
 loadingNapTien: ${loadingNapTien},
 loadingKiemDuyetGiaoDich: ${loadingKiemDuyetGiaoDich},
-loadingKiemDuyetNapTien: ${loadingKiemDuyetNapTien}
+loadingKiemDuyetNapTien: ${loadingKiemDuyetNapTien},
+filter_model: ${filter_model},
+skipCount: ${skipCount},
     ''';
   }
 }

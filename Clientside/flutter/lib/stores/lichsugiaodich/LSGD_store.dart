@@ -1,5 +1,7 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -47,8 +49,10 @@ abstract class _LSGDStore with Store {
   @observable
   ObservableFuture<listLSGD> fetchKiemDuyetNapTienFuture =
   ObservableFuture<listLSGD>(emptyKiemDuyetNapTienResponse);
-
-
+  @observable
+  int skipCount = 0;
+  @observable
+  filter_Model filter_model = new filter_Model();
   @observable
   listLSGD listlsgd;
   @observable
@@ -57,8 +61,10 @@ abstract class _LSGDStore with Store {
   @observable
   bool success = false;
 
+  @observable
+  bool isIntialLoading = true;
   @computed
-  bool get loading => fetchLSGDFuture.status == FutureStatus.pending;
+  bool get loading => fetchLSGDFuture.status == FutureStatus.pending && isIntialLoading;
   @computed
   bool get Allloading => fetchAllLSGDFuture.status == FutureStatus.pending;
   @computed
@@ -70,12 +76,25 @@ abstract class _LSGDStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getLSGD() async {
-    final future = _repository.getLSGD();
+  Future getLSGD(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCount = 0;
+    }
+    else
+      skipCount += Preferences.skipIndex;
+    final future = _repository.getLSGD(skipCount, Preferences.maxCount, filter_model);
     fetchLSGDFuture = ObservableFuture(future);
 
     future.then((listLSGD) {
-      this.listlsgd = listLSGD;
+      success = true;
+      if (!isLoadMore){
+        this.listlsgd = listLSGD;
+        if (isIntialLoading) isIntialLoading=false;
+      }
+      else {
+        for (int i=0; i< listLSGD.listLSGDs.length; i++)
+          this.listlsgd.listLSGDs.add(listLSGD.listLSGDs[i]);
+      }
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

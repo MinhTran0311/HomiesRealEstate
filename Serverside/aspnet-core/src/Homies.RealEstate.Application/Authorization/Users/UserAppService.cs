@@ -126,6 +126,50 @@ namespace Homies.RealEstate.Authorization.Users
                 userListDtos
             );
         }
+        //Get số người dùng mới trong tháng
+        public async Task<int> CountNewUsersInMonth()
+        {
+            var query = UserManager.Users
+                .Where(e => e.CreationTime.Month == DateTime.Now.Month && e.CreationTime.Year == DateTime.Now.Year);
+
+            var userCount = await query.CountAsync();
+            return userCount;
+
+            //var users = await query
+            //    .OrderBy(input.Sorting)
+            //    .PageBy(input)
+            //    .ToListAsync();
+
+            //var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
+            //await FillRoleNames(userListDtos);
+
+            //return new PagedResultDto<UserListDto>(
+            //    userCount,
+            //    userListDtos
+            //);
+        }
+
+        //Get tong so nguoi dung
+        public async Task<int> CountAllUsers()
+        {
+            var query = UserManager.Users;
+
+            var userCount = await query.CountAsync();
+            return userCount;
+
+            //var users = await query
+            //    .OrderBy(input.Sorting)
+            //    .PageBy(input)
+            //    .ToListAsync();
+
+            //var userListDtos = ObjectMapper.Map<List<UserListDto>>(users);
+            //await FillRoleNames(userListDtos);
+
+            //return new PagedResultDto<UserListDto>(
+            //    userCount,
+            //    userListDtos
+            //);
+        }
 
         public async Task<PagedResultDto<YearReportByUser>> GetReportByUser()
         {

@@ -1,8 +1,0 @@
-{
-  "asset": "asset:boilerplate/lib/services/geolocator_service.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}
