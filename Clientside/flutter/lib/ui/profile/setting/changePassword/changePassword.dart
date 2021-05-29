@@ -100,15 +100,15 @@ class _changePassWordPageState extends State<changePassWordPage> {
         Observer(
           builder: (context) {
             if (_store.changePassword_succes) {
-              print("12312312");
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setBool(Preferences.is_logged_in, false);
               });
               _showSuccssfullMesssage("Đổi mật khẩu thành công, vui lòng đăng nhập lại");
 
-              Future.delayed(Duration(milliseconds: 7), () {
+              Future.delayed(Duration(seconds: 6), () {
+                Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
               });
-              //Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen(loginAgain: true)));
 
 
               return Container(width: 0, height: 0);
