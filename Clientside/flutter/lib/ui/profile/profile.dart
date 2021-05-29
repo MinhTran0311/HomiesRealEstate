@@ -445,7 +445,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           Observer(builder: (context) {
-                            return _userstore.userCurrent != null
+                            return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
                                 ? Text(
                                 priceFormat(_userstore.userCurrent.wallet),
                                     style: TextStyle(
