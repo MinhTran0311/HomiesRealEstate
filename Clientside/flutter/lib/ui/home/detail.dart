@@ -83,6 +83,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       finishload=true;
     }
 
+
     super.didChangeDependencies();
 
   }
@@ -124,7 +125,22 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                 child: buildContent(size),
               ),
             ),
-            buildHeader()
+            buildHeader(),
+            Observer(
+              builder: (context) {
+                if (_postStore.createOrChangeSuccess && _postStore.isBaiGhimYeuThich){
+                    _showSuccssfullMesssage("Đã thêm bài đăng vào danh sách yêu thích");
+                    return Container(width: 0, height: 0);
+                }
+                else if (_postStore.createOrChangeSuccess && !_postStore.isBaiGhimYeuThich) {
+                  _showSuccssfullMesssage("Đã xóa bài đăng khỏi danh sách yêu thích");
+                  return Container(width: 0, height: 0);
+                }
+                 else {
+                  return _showErrorMessage(_postStore.errorStore.errorMessage);
+                }
+              },
+            ),
           ],
         ),
       )
@@ -449,7 +465,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       child: buildTagList(post.tagTimKiem),
                     ),
 
-                    _postStore.rcmPostList !=null ? Container(
+                    (_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -922,6 +938,20 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       //     (scrollInfo.metrics.pixels - 350) / 50);
       return true;
     }
+  }
+
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
   }
 }
 

@@ -6,6 +6,7 @@ class RoundedButtonWidget extends StatelessWidget {
   final Color textColor;
   final VoidCallback onPressed;
   final double textSize;
+  final double minWidth;
 
   const RoundedButtonWidget({
     Key key,
@@ -14,12 +15,14 @@ class RoundedButtonWidget extends StatelessWidget {
     this.textColor = Colors.white,
     this.onPressed,
     this.textSize = 17,
+    this.minWidth = 100,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       color: buttonColor,
+      minWidth: minWidth,
       shape: StadiumBorder(),
       onPressed: onPressed,
       child: Text(

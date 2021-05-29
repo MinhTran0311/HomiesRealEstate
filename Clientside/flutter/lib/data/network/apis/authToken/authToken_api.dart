@@ -59,6 +59,7 @@ class AuthTokenApi {
   }
 
 
+
 /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

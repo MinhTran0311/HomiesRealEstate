@@ -249,7 +249,7 @@ namespace Homies.RealEstate.Server
 
             return new BaiGhimYeuThichExistingOutput
             {
-                Exist = (baighim != null)
+                Exist = baighim.TrangThai.Equals("On"),
             };
         }
 

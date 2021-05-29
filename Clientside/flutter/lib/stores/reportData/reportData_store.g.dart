@@ -13,11 +13,11 @@ mixin _$ReportDataStore on _ReportDataStore, Store {
 
   @override
   bool get loading => (_$loadingComputed ??=
-      Computed<bool>(() => super.loading, name: '_ReportDataStore.loading'))
+          Computed<bool>(() => super.loading, name: '_ReportDataStore.loading'))
       .value;
 
-
-  final _$fetchReportDataFutureAtom = Atom(name: '_ReportDataStore.fetchReportDataFuture');
+  final _$fetchReportDataFutureAtom =
+      Atom(name: '_ReportDataStore.fetchReportDataFuture');
 
   @override
   ObservableFuture<listitemReport> get fetchReportDataFuture {
@@ -27,7 +27,8 @@ mixin _$ReportDataStore on _ReportDataStore, Store {
 
   @override
   set fetchReportDataFuture(ObservableFuture<listitemReport> value) {
-    _$fetchReportDataFutureAtom.reportWrite(value, super.fetchReportDataFuture, () {
+    _$fetchReportDataFutureAtom.reportWrite(value, super.fetchReportDataFuture,
+        () {
       super.fetchReportDataFuture = value;
     });
   }
@@ -62,7 +63,8 @@ mixin _$ReportDataStore on _ReportDataStore, Store {
     });
   }
 
-  final _$getReportDataAsyncAction = AsyncAction('_ReportDataStore.getReportData');
+  final _$getReportDataAsyncAction =
+      AsyncAction('_ReportDataStore.getReportData');
 
   @override
   Future<dynamic> getReportData() {
@@ -75,7 +77,7 @@ mixin _$ReportDataStore on _ReportDataStore, Store {
 fetchReportDataFuture: ${fetchReportDataFuture},
 listitemReports: ${listitemReports},
 success: ${success},
-loading: ${loading},
+loading: ${loading}
     ''';
   }
 }

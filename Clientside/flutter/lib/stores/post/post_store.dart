@@ -73,7 +73,15 @@ abstract class _PostStore with Store {
     ObservableFuture<dynamic> fetchSearchFuture =
     ObservableFuture<dynamic>(emptySearchResponse);
 
+    static ObservableFuture<dynamic> emptyCreateOrChangeBaiGhim =
+    ObservableFuture.value(null);
+
     @observable
+    ObservableFuture<dynamic> fetchCreateOrChangeBaiGhimFuture =
+    ObservableFuture<dynamic>(emptyCreateOrChangeBaiGhim);
+
+
+  @observable
     PostList postList;
 
     @observable
@@ -139,6 +147,9 @@ abstract class _PostStore with Store {
 
   @computed
   bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get createOrChangeStatusBaiGhimLoading => fetchCreateOrChangeBaiGhimFuture.status == FutureStatus.pending;
 
   @computed
   bool get hasFilter => filter_model!=null;
@@ -259,6 +270,7 @@ abstract class _PostStore with Store {
 
     @action
     Future getPostProperties(String postId) async {
+      createOrChangeSuccess=false;
       propertiesSuccess = false;
       final future = _repository.getPostProperties(postId);
       fetchPropertiesFuture = ObservableFuture(future);
@@ -307,12 +319,18 @@ abstract class _PostStore with Store {
       });
     }
 
+    @observable
+    bool createOrChangeSuccess = false;
+
     @action
     Future createOrChangeStatusBaiGhimYeuThich(String postId) async {
+      createOrChangeSuccess = false;
       final futrue = _repository.createOrChangeStatusBaiGhimYeuThich(postId,!isBaiGhimYeuThich);
+      fetchCreateOrChangeBaiGhimFuture = ObservableFuture(futrue);
 
       futrue.then((result) {
         isBaiGhimYeuThich =!isBaiGhimYeuThich;
+        createOrChangeSuccess = true;
       }).catchError((error){
         if (error is DioError) {
           if (error.response.data!=null)

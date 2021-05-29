@@ -122,6 +122,20 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_LSGDStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
 
   final _$filter_modelAtom = Atom(name: '_LSGDStore.filter_model');
 
@@ -137,20 +151,7 @@ mixin _$LSGDStore on _LSGDStore, Store {
       super.filter_model = value;
     });
   }
-  final _$skipCountAtom = Atom(name: '_LSGDStore.skipCount');
 
-  @override
-  int get skipCount {
-    _$skipCountAtom.reportRead();
-    return super.skipCount;
-  }
-
-  @override
-  set skipCount(int value) {
-    _$skipCountAtom.reportWrite(value, super.skipCount, () {
-      super.skipCount = value;
-    });
-  }
   final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
 
   @override
@@ -196,6 +197,21 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom = Atom(name: '_LSGDStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$getLSGDAsyncAction = AsyncAction('_LSGDStore.getLSGD');
 
   @override
@@ -235,16 +251,17 @@ fetchAllLSGDFuture: ${fetchAllLSGDFuture},
 fetchNaptienFuture: ${fetchNaptienFuture},
 fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
 fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
+skipCount: ${skipCount},
+filter_model: ${filter_model},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},
+isIntialLoading: ${isIntialLoading},
 loading: ${loading},
 Allloading: ${Allloading},
 loadingNapTien: ${loadingNapTien},
 loadingKiemDuyetGiaoDich: ${loadingKiemDuyetGiaoDich},
-loadingKiemDuyetNapTien: ${loadingKiemDuyetNapTien},
-filter_model: ${filter_model},
-skipCount: ${skipCount},
+loadingKiemDuyetNapTien: ${loadingKiemDuyetNapTien}
     ''';
   }
 }

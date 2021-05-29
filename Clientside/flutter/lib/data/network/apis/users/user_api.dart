@@ -347,4 +347,27 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       throw e;
     }
   }
+
+  //userChangePassword
+  Future<dynamic> changePassword(String password, String newPassword) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.changePassword,
+        data: {
+          "currentPassword": password,
+          "newPassword": newPassword
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
 }

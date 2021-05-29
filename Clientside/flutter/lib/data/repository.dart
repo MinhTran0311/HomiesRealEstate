@@ -355,6 +355,10 @@ class Repository {
     return await _authTokenApi.resetPassword(email).catchError((e)=>throw e);
   }
 
+  Future<dynamic> changePassword(String password, String newPassword) async
+  {
+    return await _userApi.changePassword(password, newPassword).catchError((e)=>throw e);
+  }
 
   //Image
   Future<String> postImageToImageBB(String path,String name) async {

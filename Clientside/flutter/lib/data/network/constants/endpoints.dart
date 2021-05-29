@@ -17,7 +17,7 @@ class Endpoints {
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";
   static const String resetPassword = homiesUrl + "/services/app/Account/SendPasswordResetCode";
-
+  static const String changePassword = homiesUrl + "/services/app/Profile/ChangePassword";
 
   //#endregion
 

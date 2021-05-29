@@ -41,7 +41,8 @@ abstract class _FormStore with Store {
       reaction((_) => username, validateUsername),
       reaction((_) => password, validatePassword),
       reaction((_) => confirmPassword, validateConfirmPassword),
-      reaction((_) => userEmail, validateUserEmail)
+      reaction((_) => userEmail, validateUserEmail),
+      reaction((_) => newPassword,validateNewPassword),
     ];
   }
 
@@ -58,28 +59,13 @@ abstract class _FormStore with Store {
   String confirmPassword = '';
   @observable
   String userEmail = '';
+  @observable
+  String newPassword = '';
 
   static ObservableFuture<AuthToken> emptyAuthResponse = ObservableFuture.value(null);
 
   @observable
   ObservableFuture<AuthToken> fetchTokenFuture = ObservableFuture<AuthToken>(emptyAuthResponse);
-
-  @observable
-  AuthToken authToken;
-
-  @observable
-  bool loggedIn = false;
-
-
-  @observable
-  bool success = false;
-
-  @observable
-  bool regist_success = false;
-
-  @observable
-  bool resetPassword_success = false;
-
 
   static ObservableFuture<dynamic> emptyRegistResponse = ObservableFuture.value(null);
 
@@ -92,14 +78,43 @@ abstract class _FormStore with Store {
   @observable
   ObservableFuture<dynamic> fetchResetCodeFuture = ObservableFuture<dynamic>(emptyResetCodeSent);
 
+  static ObservableFuture<dynamic> emptyChangePasswordResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchChangePasswordFuture = ObservableFuture<dynamic>(emptyChangePasswordResponse);
+
+  @observable
+  AuthToken authToken;
+
+  @observable
+  bool loggedIn = false;
+
+  @observable
+  bool success = false;
+
+  @observable
+  bool regist_success = false;
+
+  @observable
+  bool resetPassword_success = false;
+
+  @observable
+  bool changePassword_succes = false;
+
   //#region computed
   @computed
   bool get loading => fetchTokenFuture.status == FutureStatus.pending;
+
   @computed
   bool get canLogin =>
       !formErrorStore.hasErrorsInLogin && username.isNotEmpty && password.isNotEmpty;
+
   @computed
   bool get canSubmitResetPassword => !formErrorStore.hasErrorsInReset && userEmail.isNotEmpty;
+
+  @computed
+  bool get canChangePassword =>
+      !formErrorStore.hasErrorInChangePassword && password.isNotEmpty && newPassword.isNotEmpty && confirmPassword.isNotEmpty && newPassword.compareTo(confirmPassword)==0;
 
   @computed
   bool get canRegister =>
@@ -109,10 +124,13 @@ abstract class _FormStore with Store {
       confirmPassword.isNotEmpty &&
       surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty;
 
+
   @computed
   bool get sendingCode => fetchResetCodeFuture.status == FutureStatus.pending;
   @computed
   bool get regist_loading => fetchRegistFuture.status == FutureStatus.pending;
+  @computed
+  bool get changePasswordLoading => fetchChangePasswordFuture.status == FutureStatus.pending;
   //endregion
 
   //#region set value
@@ -143,6 +161,11 @@ abstract class _FormStore with Store {
   void setConfirmPassword(String value) {
     confirmPassword = value;
   }
+  @action
+  void setNewPassword(String value) {
+    newPassword = value;
+  }
+
   //endregion
 
   //#region element validation
@@ -189,13 +212,14 @@ abstract class _FormStore with Store {
 
   @action
   void validateConfirmPassword(String value) {
-    if (value.isEmpty) {
+    if (value.isEmpty)
       formErrorStore.confirmPassword = "Chưa điền mật khẩu xác nhận";
-    } else if (value != password) {
-      formErrorStore.confirmPassword = "Mật khẩu chưa đúng";
-    } else {
+    else if (newPassword.isEmpty && value.compareTo(password)!=0)
+      formErrorStore.confirmPassword = "Mật khẩu xác nhận chưa đúng";
+    else if (newPassword.isNotEmpty && value.compareTo(newPassword)!=0)
+          formErrorStore.confirmPassword = "Mật khẩu xác nhận chưa đúng";
+    else
       formErrorStore.confirmPassword = null;
-    }
   }
 
   @action
@@ -209,6 +233,19 @@ abstract class _FormStore with Store {
       formErrorStore.userEmail = null;
     }
   }
+  @action
+  void validateNewPassword(String value){
+    if (value.isEmpty){
+      formErrorStore.newPassword = "Chưa điền mật khẩu mới";
+    } else if(value.compareTo(password)==0){
+      formErrorStore.newPassword = "Mật khẩu mới không được trùng với mật khẩu hiện tại";
+    }
+    else if (value.length < 6) {
+      formErrorStore.password = "Mật khẩu phải có ít nhất 6 kí tự";
+    } else {
+      formErrorStore.password = null;
+    }
+  }
 
 //#endregion
 
@@ -219,8 +256,6 @@ abstract class _FormStore with Store {
     fetchRegistFuture = ObservableFuture(futrue);
 
     futrue.then((registRes) {
-      print("123" + registRes["result"]["canLogin"].toString());
-
       if (registRes["result"]["canLogin"]) {
         regist_success = true;
       }
@@ -296,16 +331,11 @@ abstract class _FormStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra lại kết nối mạng và thử lại!";
         throw error;
       }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
     });
   }
-
 
   @action
   Future<dynamic> resetPassword () async {
@@ -314,7 +344,7 @@ abstract class _FormStore with Store {
     fetchResetCodeFuture = ObservableFuture(future);
 
     future.then((res){
-      if (res["success"]){
+      if (res["result"]["canLogin"]){
         resetPassword_success=true;
       }
       else resetPassword_success=false;
@@ -329,14 +359,42 @@ abstract class _FormStore with Store {
           errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
-      else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
         throw error;
       }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
-      //errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //throw error;
+    });
+  }
+
+  @action
+  Future<dynamic> changePassword () async {
+    changePassword_succes=false;
+    final future = _repository.changePassword(this.password, this.newPassword);
+    fetchChangePasswordFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        changePassword_succes = true;
+      }
+      else {
+        changePassword_succes = false;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        changePassword_succes=false;
+        if (error.response.data!=null) {
+          errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
     });
   }
 
@@ -380,6 +438,7 @@ abstract class _FormStore with Store {
     validateUsername(username);
     validatePassword(password);
     validateUserEmail(userEmail);
+    validateNewPassword(newPassword);
   }
 }
 
@@ -398,6 +457,9 @@ abstract class _FormErrorStore with Store {
   String confirmPassword;
   @observable
   String userEmail;
+  @observable
+  String newPassword;
+
 
   @computed
   bool get hasErrorsInLogin => username != null || password != null;
@@ -407,7 +469,9 @@ abstract class _FormErrorStore with Store {
   @computed
   bool get hasErrorsInRegister =>
       surname != null || name != null ||username != null ||password != null || confirmPassword != null || userEmail != null;
-
+  @computed
+  bool get hasErrorInChangePassword =>
+      password != null || newPassword!= null || confirmPassword!= null;
   @computed
   bool get hasErrorInForgotPassword => username != null;
 }

@@ -51,6 +51,14 @@ mixin _$PostStore on _PostStore, Store {
           Computed<bool>(() => super.loadinggetcategorys,
               name: '_PostStore.loadinggetcategorys'))
       .value;
+  Computed<bool> _$createOrChangeStatusBaiGhimLoadingComputed;
+
+  @override
+  bool get createOrChangeStatusBaiGhimLoading =>
+      (_$createOrChangeStatusBaiGhimLoadingComputed ??= Computed<bool>(
+              () => super.createOrChangeStatusBaiGhimLoading,
+              name: '_PostStore.createOrChangeStatusBaiGhimLoading'))
+          .value;
   Computed<bool> _$hasFilterComputed;
 
   @override
@@ -91,6 +99,13 @@ mixin _$PostStore on _PostStore, Store {
   bool get loadingPostForCur => (_$loadingPostForCurComputed ??= Computed<bool>(
           () => super.loadingPostForCur,
           name: '_PostStore.loadingPostForCur'))
+      .value;
+  Computed<bool> _$loadingsobaidangComputed;
+
+  @override
+  bool get loadingsobaidang => (_$loadingsobaidangComputed ??= Computed<bool>(
+          () => super.loadingsobaidang,
+          name: '_PostStore.loadingsobaidang'))
       .value;
   Computed<bool> _$DeletepostComputed;
 
@@ -197,6 +212,23 @@ mixin _$PostStore on _PostStore, Store {
   set fetchSearchFuture(ObservableFuture<dynamic> value) {
     _$fetchSearchFutureAtom.reportWrite(value, super.fetchSearchFuture, () {
       super.fetchSearchFuture = value;
+    });
+  }
+
+  final _$fetchCreateOrChangeBaiGhimFutureAtom =
+      Atom(name: '_PostStore.fetchCreateOrChangeBaiGhimFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCreateOrChangeBaiGhimFuture {
+    _$fetchCreateOrChangeBaiGhimFutureAtom.reportRead();
+    return super.fetchCreateOrChangeBaiGhimFuture;
+  }
+
+  @override
+  set fetchCreateOrChangeBaiGhimFuture(ObservableFuture<dynamic> value) {
+    _$fetchCreateOrChangeBaiGhimFutureAtom
+        .reportWrite(value, super.fetchCreateOrChangeBaiGhimFuture, () {
+      super.fetchCreateOrChangeBaiGhimFuture = value;
     });
   }
 
@@ -428,6 +460,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$createOrChangeSuccessAtom =
+      Atom(name: '_PostStore.createOrChangeSuccess');
+
+  @override
+  bool get createOrChangeSuccess {
+    _$createOrChangeSuccessAtom.reportRead();
+    return super.createOrChangeSuccess;
+  }
+
+  @override
+  set createOrChangeSuccess(bool value) {
+    _$createOrChangeSuccessAtom.reportWrite(value, super.createOrChangeSuccess,
+        () {
+      super.createOrChangeSuccess = value;
+    });
+  }
+
   final _$fetchPacksFutureAtom = Atom(name: '_PostStore.fetchPacksFuture');
 
   @override
@@ -647,6 +696,38 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchsobaidangFutureAtom =
+      Atom(name: '_PostStore.fetchsobaidangFuture');
+
+  @override
+  ObservableFuture<String> get fetchsobaidangFuture {
+    _$fetchsobaidangFutureAtom.reportRead();
+    return super.fetchsobaidangFuture;
+  }
+
+  @override
+  set fetchsobaidangFuture(ObservableFuture<String> value) {
+    _$fetchsobaidangFutureAtom.reportWrite(value, super.fetchsobaidangFuture,
+        () {
+      super.fetchsobaidangFuture = value;
+    });
+  }
+
+  final _$sobaidangAtom = Atom(name: '_PostStore.sobaidang');
+
+  @override
+  String get sobaidang {
+    _$sobaidangAtom.reportRead();
+    return super.sobaidang;
+  }
+
+  @override
+  set sobaidang(String value) {
+    _$sobaidangAtom.reportWrite(value, super.sobaidang, () {
+      super.sobaidang = value;
+    });
+  }
+
   final _$fetchdeleteFutureAtom = Atom(name: '_PostStore.fetchdeleteFuture');
 
   @override
@@ -740,6 +821,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingpostfavoAtom =
+      Atom(name: '_PostStore.isIntialLoadingpostfavo');
+
+  @override
+  bool get isIntialLoadingpostfavo {
+    _$isIntialLoadingpostfavoAtom.reportRead();
+    return super.isIntialLoadingpostfavo;
+  }
+
+  @override
+  set isIntialLoadingpostfavo(bool value) {
+    _$isIntialLoadingpostfavoAtom
+        .reportWrite(value, super.isIntialLoadingpostfavo, () {
+      super.isIntialLoadingpostfavo = value;
+    });
+  }
+
   final _$fetchpostfavoFutureAtom =
       Atom(name: '_PostStore.fetchpostfavoFuture');
 
@@ -791,6 +889,8 @@ mixin _$PostStore on _PostStore, Store {
     final _$future = super.getPostForCurs(isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
+
+  @override
   ObservableFuture<dynamic> getsobaidang() {
     final _$future = super.getsobaidang();
     return ObservableFuture<dynamic>(_$future);
@@ -815,8 +915,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getfavopost(int iduser, bool isloadmore) {
-    final _$future = super.getfavopost(iduser,isloadmore);
+  ObservableFuture<dynamic> getfavopost(int iduser, bool isLoadMore) {
+    final _$future = super.getfavopost(iduser, isLoadMore);
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -917,6 +1017,7 @@ fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 fetchisGetRecommendPostsFuture: ${fetchisGetRecommendPostsFuture},
 fetchSearchFuture: ${fetchSearchFuture},
+fetchCreateOrChangeBaiGhimFuture: ${fetchCreateOrChangeBaiGhimFuture},
 postList: ${postList},
 rcmPostList: ${rcmPostList},
 isIntialLoading: ${isIntialLoading},
@@ -932,6 +1033,7 @@ postCategoryList: ${postCategoryList},
 searchContent: ${searchContent},
 scrollController: ${scrollController},
 successgetcategorys: ${successgetcategorys},
+createOrChangeSuccess: ${createOrChangeSuccess},
 fetchPacksFuture: ${fetchPacksFuture},
 packList: ${packList},
 successPack: ${successPack},
@@ -946,12 +1048,15 @@ isIntialLoadingpostforcur: ${isIntialLoadingpostforcur},
 fetchPostForCursFuture: ${fetchPostForCursFuture},
 postForCurList: ${postForCurList},
 successPostForCur: ${successPostForCur},
+fetchsobaidangFuture: ${fetchsobaidangFuture},
+sobaidang: ${sobaidang},
 fetchdeleteFuture: ${fetchdeleteFuture},
 successdelete: ${successdelete},
 fetchgiahanFuture: ${fetchgiahanFuture},
 successgiahan: ${successgiahan},
 fetchgetpackpriceFuture: ${fetchgetpackpriceFuture},
 successgetpackprice: ${successgetpackprice},
+isIntialLoadingpostfavo: ${isIntialLoadingpostfavo},
 fetchpostfavoFuture: ${fetchpostfavoFuture},
 favopost: ${favopost},
 successfavopost: ${successfavopost},
@@ -961,12 +1066,14 @@ isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
 getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
 loadinggetcategorys: ${loadinggetcategorys},
+createOrChangeStatusBaiGhimLoading: ${createOrChangeStatusBaiGhimLoading},
 hasFilter: ${hasFilter},
 loadingPack: ${loadingPack},
 loadingThuocTinh: ${loadingThuocTinh},
 loadingNewpost: ${loadingNewpost},
 loadingeditpost: ${loadingeditpost},
 loadingPostForCur: ${loadingPostForCur},
+loadingsobaidang: ${loadingsobaidang},
 Deletepost: ${Deletepost},
 giahanpost: ${giahanpost},
 getpackpricepost: ${getpackpricepost},

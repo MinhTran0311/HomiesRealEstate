@@ -24,6 +24,7 @@ import 'package:boilerplate/stores/token/authToken_store.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
+
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -229,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _store.authLogIn(_userNameController.text,_passwordController.text);
           //_authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
-          _showErrorMessage('Please fill in all fields');
+          _showErrorMessage('Hãy điền đầy đủ thông tin');
         }
       },
     );
@@ -313,6 +314,20 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     return SizedBox.shrink();
+  }
+
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
   }
 
   // dispose:-------------------------------------------------------------------
