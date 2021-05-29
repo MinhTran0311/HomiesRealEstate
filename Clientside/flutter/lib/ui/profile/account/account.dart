@@ -23,12 +23,13 @@ class AccountPage extends StatefulWidget {
     @required this.Name,
     @required this.creationTime,
     @required this.UserName,
+    @required this.UserID,
   }) : super(key: key);
 
   final String Phone,Email,Address,SurName,Name,creationTime,UserName;
-
+  final int UserID;
   @override
-  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,UserName: UserName,creationTime: creationTime);
+  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,UserName: UserName,creationTime: creationTime,UserID: UserID);
 }
 
 
@@ -42,9 +43,11 @@ class _AccountPageState extends State<AccountPage>{
     @required this.Name,
     @required this.creationTime,
     @required this.UserName,
+    @required this.UserID,
   }) : super();
 
   String Phone,Email,Address,SurName,Name,creationTime,UserName;
+  final int UserID;
 
   final CtlPhone = TextEditingController();
   final CtlEmail = TextEditingController();
@@ -620,12 +623,13 @@ class AccountEditPage extends StatefulWidget {
     @required this.SurName,
     @required this.Name,
     @required this.creationTime,
+    @required this.UserID,
   }) : super(key: key);
 
   final String Phone,Email,SurName,Name,creationTime;
-
+  final int UserID;
   @override
-  _AccountEditPageState createState() => _AccountEditPageState(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime);
+  _AccountEditPageState createState() => _AccountEditPageState(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime,UserID: UserID);
 }
 
 
@@ -637,10 +641,11 @@ class _AccountEditPageState extends State<AccountEditPage> {
     @required this.SurName,
     @required this.Name,
     @required this.creationTime,
+    @required this.UserID,
   }) : super();
 
   String Phone, Email,  SurName, Name, creationTime;
-
+  final int UserID;
   final CtlPhone = TextEditingController();
   final CtlEmail = TextEditingController();
   final CtlAddress = TextEditingController();
@@ -777,7 +782,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     setState(() {
-      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,_userstore.user.UserID);
+      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
       _showSuccssfullMesssage("Cập nhật thành công");
     });
 

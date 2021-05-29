@@ -137,7 +137,7 @@ abstract class _LSGDStore with Store {
     final future = _repository.NapTien(soTien, thoiDiem, userId);
     fetchNaptienFuture = ObservableFuture(future);
 
-    fetchNaptienFuture.then((listLSGD) {
+    future.then((listLSGD) {
       // this.listlsgd = listLSGD;
     }).catchError((error) {
       if (error is DioError) {
