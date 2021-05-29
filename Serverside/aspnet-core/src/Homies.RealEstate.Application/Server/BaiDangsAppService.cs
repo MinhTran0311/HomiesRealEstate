@@ -312,10 +312,12 @@ namespace Homies.RealEstate.Server
                         
                         .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Contains(input.XaTenXaFilter))
                         .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Contains(input.HuyenTenHuyenFilter))
-                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter));
+                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter))
+                        .Where(e => e.ThoiHan >= DateTime.Now)
+                        .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "id asc")
+                .OrderBy(input.Sorting ?? "diemBaiDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
@@ -399,6 +401,14 @@ namespace Homies.RealEstate.Server
                 filteredList
             );
             }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task AddViewForBaiDang(int baidangId) 
+        {
+            var baidang = await _baiDangRepository.FirstOrDefaultAsync(baidangId);
+            baidang.DiemBaiDang += 1;
+            baidang.LuotXem += 1;
         }
 
         private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
@@ -766,7 +776,8 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
-                        .Where(e => e.UserId == user.Id);
+                        .Where(e => e.UserId == user.Id)
+                        .Where(e=>e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "thoiDiemDang desc")
@@ -784,6 +795,7 @@ namespace Homies.RealEstate.Server
 
                            join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
                            from s4 in j4.DefaultIfEmpty()
+
 
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()

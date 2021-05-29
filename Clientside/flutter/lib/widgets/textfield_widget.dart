@@ -19,6 +19,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputAction inputAction;
   final double inputFontsize;
   final bool enable;
+  final VoidCallback onEditingComplete;
 
   const TextFieldWidget({
     Key key,
@@ -39,6 +40,7 @@ class TextFieldWidget extends StatelessWidget {
     this.inputAction,
     this.inputFontsize=20,
     this.enable = true,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -47,6 +49,7 @@ class TextFieldWidget extends StatelessWidget {
       padding: padding,
       child: TextFormField(
         controller: textController,
+        onEditingComplete: this.onEditingComplete,
         focusNode: focusNode,
         onFieldSubmitted: onFieldSubmitted,
         onChanged: onChanged,

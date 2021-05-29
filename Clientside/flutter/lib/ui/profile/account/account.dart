@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -157,6 +158,7 @@ class _AccountPageState extends State<AccountPage>{
           ),
         ),
         CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
+          isFunction: false,
           press: (){
             setState(() {
               Route route = MaterialPageRoute(builder: (context) => AccountEditPage(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime));
