@@ -362,6 +362,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildTypeField() {
     List<Postcategory> type = [];
+    if(_postStore.postCategoryList.categorys.length==0)
+      return Container(height: 0,);
     var _formKey;
     for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
       if (_postStore.postCategoryList.categorys[i].danhMucCha ==
