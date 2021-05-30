@@ -721,7 +721,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
           },
           items: commune.map((Commune type) {
             return DropdownMenuItem<Commune>(
-              value: type,
+              value:type,
               child: Row(
                 children: <Widget>[
                   Icon(
@@ -729,10 +729,10 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     color: const Color(0xFF167F67),
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 8,
                   ),
                   Text(
-                    type.tenXa,
+                    type.tenXa.length<=22? type.tenXa:type.tenXa=type.tenXa.substring(0,20)+"..",
                     style: TextStyle(color: Colors.black),
                   ),
                 ],

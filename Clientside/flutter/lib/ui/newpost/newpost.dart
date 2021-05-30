@@ -753,10 +753,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     color: const Color(0xFF167F67),
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 8,
                   ),
                   Text(
-                    type.tenXa,
+                    type.tenXa.length<=22? type.tenXa:type.tenXa=type.tenXa.substring(0,20)+"..",
                     style: TextStyle(color: Colors.black),
                   ),
                 ],
