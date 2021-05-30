@@ -15,6 +15,13 @@ mixin _$RoleManagementStore on _RoleManagementStore, Store {
   bool get loading => (_$loadingComputed ??= Computed<bool>(() => super.loading,
           name: '_RoleManagementStore.loading'))
       .value;
+  Computed<bool> _$loadingCountAllRolesComputed;
+
+  @override
+  bool get loadingCountAllRoles => (_$loadingCountAllRolesComputed ??=
+          Computed<bool>(() => super.loadingCountAllRoles,
+              name: '_RoleManagementStore.loadingCountAllRoles'))
+      .value;
 
   final _$fetchRolesFutureAtom =
       Atom(name: '_RoleManagementStore.fetchRolesFuture');
@@ -29,6 +36,23 @@ mixin _$RoleManagementStore on _RoleManagementStore, Store {
   set fetchRolesFuture(ObservableFuture<RoleList> value) {
     _$fetchRolesFutureAtom.reportWrite(value, super.fetchRolesFuture, () {
       super.fetchRolesFuture = value;
+    });
+  }
+
+  final _$fetchCountAllRolesFutureAtom =
+      Atom(name: '_RoleManagementStore.fetchCountAllRolesFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCountAllRolesFuture {
+    _$fetchCountAllRolesFutureAtom.reportRead();
+    return super.fetchCountAllRolesFuture;
+  }
+
+  @override
+  set fetchCountAllRolesFuture(ObservableFuture<dynamic> value) {
+    _$fetchCountAllRolesFutureAtom
+        .reportWrite(value, super.fetchCountAllRolesFuture, () {
+      super.fetchCountAllRolesFuture = value;
     });
   }
 
@@ -63,6 +87,21 @@ mixin _$RoleManagementStore on _RoleManagementStore, Store {
     });
   }
 
+  final _$countAllRolesAtom = Atom(name: '_RoleManagementStore.countAllRoles');
+
+  @override
+  int get countAllRoles {
+    _$countAllRolesAtom.reportRead();
+    return super.countAllRoles;
+  }
+
+  @override
+  set countAllRoles(int value) {
+    _$countAllRolesAtom.reportWrite(value, super.countAllRoles, () {
+      super.countAllRoles = value;
+    });
+  }
+
   final _$getRolesAsyncAction = AsyncAction('_RoleManagementStore.getRoles');
 
   @override
@@ -70,13 +109,24 @@ mixin _$RoleManagementStore on _RoleManagementStore, Store {
     return _$getRolesAsyncAction.run(() => super.getRoles());
   }
 
+  final _$fCountAllRolesAsyncAction =
+      AsyncAction('_RoleManagementStore.fCountAllRoles');
+
+  @override
+  Future<dynamic> fCountAllRoles() {
+    return _$fCountAllRolesAsyncAction.run(() => super.fCountAllRoles());
+  }
+
   @override
   String toString() {
     return '''
 fetchRolesFuture: ${fetchRolesFuture},
+fetchCountAllRolesFuture: ${fetchCountAllRolesFuture},
 roleList: ${roleList},
 successGetRoles: ${successGetRoles},
-loading: ${loading}
+countAllRoles: ${countAllRoles},
+loading: ${loading},
+loadingCountAllRoles: ${loadingCountAllRoles}
     ''';
   }
 }

@@ -68,6 +68,8 @@ class Endpoints {
   static const String getAllTowns = homiesUrl + "/services/app/Huyens/GetAll";
   static const String getAllCommunes = homiesUrl + "/services/app/Xas/GetAll";
 
+  //Cout all role
+  static const String coutAllRole = homiesUrl + "/services/app/Role/CountAllRoles";
   //Cout all user
   static const String coutAllUser = homiesUrl + "/services/app/User/CountAllUsers";
   //Cout new user in month

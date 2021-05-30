@@ -9,12 +9,12 @@ import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/role/role_list.dart';
 import 'package:dio/dio.dart';
 
-class RoleApi {
+class DanhMucApi {
   final DioClient _dioClient;
 
   final RestClient _restClient;
 
-  RoleApi(this._dioClient, this._restClient);
+  DanhMucApi(this._dioClient, this._restClient);
 
   Future<RoleList> getAllRoles() async {
     try {
@@ -22,10 +22,10 @@ class RoleApi {
         data: {
         },
         options: Options(
-          headers: {
-            "Abp.TenantId": 1,
-            "Authorization" : "Bearer ${Preferences.access_token}",
-          }
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
         ),);
       print("Get All Role success" + res.toString());
       return RoleList.fromJson(res);

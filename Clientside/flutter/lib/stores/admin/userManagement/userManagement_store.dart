@@ -51,10 +51,10 @@ abstract class _UserManagementStore with Store {
   ObservableFuture<dynamic>(emptyCountNewUsersInMonthResponse);
 
   @observable
-  int countAllUsers;
+  int countAllUsers = 0;
 
   @observable
-  int countNewUsersInMonth;
+  int countNewUsersInMonth = 0;
 
   @observable
   UserList userList;

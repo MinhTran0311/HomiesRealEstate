@@ -140,5 +140,14 @@ namespace Homies.RealEstate.Server
             return _thuocTinhsExcelExporter.ExportToFile(thuocTinhListDtos);
         }
 
+        //Get tổng số thuộc tính
+        public async Task<int> CountAllThuocTinhs()
+        {
+            var query = _thuocTinhRepository.GetAll();
+
+            var thuocTinhsCount = await query.CountAsync();
+            return thuocTinhsCount;
+        }
+
     }
 }

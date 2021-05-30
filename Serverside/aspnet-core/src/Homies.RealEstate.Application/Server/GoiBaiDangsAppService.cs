@@ -158,5 +158,14 @@ namespace Homies.RealEstate.Server
             return _goiBaiDangsExcelExporter.ExportToFile(goiBaiDangListDtos);
         }
 
+        //Get tổng số gói bài đăng
+        public async Task<int> CountAllGoiBaiDangs()
+        {
+            var query = _goiBaiDangRepository.GetAll();
+
+            var goiBaiDangsCount = await query.CountAsync();
+            return goiBaiDangsCount;
+        }
+
     }
 }

@@ -407,6 +407,13 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  //Count all users
+  Future<dynamic> countAllRoles() async
+  {
+    return await _roleApi.countAllRoles().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

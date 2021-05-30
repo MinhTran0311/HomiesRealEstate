@@ -146,5 +146,14 @@ namespace Homies.RealEstate.Server
             return _danhMucsExcelExporter.ExportToFile(danhMucListDtos);
         }
 
+
+        //Get tổng số danh mục
+        public async Task<int> CountAllDanhMucs()
+        {
+            var query = _danhMucRepository.GetAll();
+
+            var danhMucsCount = await query.CountAsync();
+            return danhMucsCount;
+        }
     }
 }
