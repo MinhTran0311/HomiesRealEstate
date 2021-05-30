@@ -3,6 +3,7 @@ import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -35,11 +36,34 @@ abstract class _UserManagementStore with Store {
   ObservableFuture<dynamic> fetchAvatarUserFuture =
   ObservableFuture<dynamic>(emptyUserResponseAvatar);
 
+  static ObservableFuture<dynamic> emptyCountAllUsersResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCountAllUsersFuture =
+  ObservableFuture<dynamic>(emptyCountAllUsersResponse);
+
+  static ObservableFuture<dynamic> emptyCountNewUsersInMonthResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCountNewUsersInMonthFuture =
+  ObservableFuture<dynamic>(emptyCountNewUsersInMonthResponse);
+
+  @observable
+  int countAllUsers;
+
+  @observable
+  int countNewUsersInMonth;
+
   @observable
   UserList userList;
 
   @observable
   String avatarUser;
+
+  @observable
+  DateTime dateCurrent = DateTime.now();
 
   @observable
   bool successGetUsers = false;
@@ -50,7 +74,11 @@ abstract class _UserManagementStore with Store {
   @computed
   bool get loadingAvatar => fetchAvatarUserFuture.status == FutureStatus.pending;
 
-  bool getAvatarCpl = false;
+  @computed
+  bool get loadingCountAllUser => fetchCountAllUsersFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get loadingCountNewUsersInMonth => fetchCountNewUsersInMonthFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -88,6 +116,7 @@ abstract class _UserManagementStore with Store {
     // this.userList = userList;
 
 
+
     // future.then((userList) async{
     //   this.userList = userList;
     //   if (this.userList != null) {
@@ -117,17 +146,59 @@ abstract class _UserManagementStore with Store {
     // });
   }
 
-// @action
-// Future<String> getAvatarUsers(int Id, int index) async {
-//   var id = await _repository.getAvatarUsers(Id);
-//   userList.users[index].avatar = id;
-//   // fetchAvatarUserFuture = ObservableFuture(futureAvatar);
-//   // var id = await methodThatLoadsId();
-//   // return futureAvatar.then((getAvatarUser) {
-//   //   userList.users[index].avatar = getAvatarUser;
-//   //   //return getAvatarUser;
-//   // }).catchError((error) {
-//   //   errorStore.errorMessage = DioErrorUtil.handleError(error);
-//   // });
-// }
+  @action
+  Future deleteUser(int id) async{
+    var future = await _repository.deleteUser(id);
+  }
+
+  @action
+  Future fCountAllUsers() async {
+    final future = _repository.countAllUsers();
+    fetchCountAllUsersFuture = ObservableFuture(future);
+
+
+    future.then((totalUsers) {
+      // print("123213123");
+      this.countAllUsers = totalUsers;
+      // print("totalUsers: " + totalUsers.toString());
+      }
+    ).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future fCountNewUsersInMonth() async {
+    final future = _repository.countNewUsersInMonth();
+    fetchCountNewUsersInMonthFuture = ObservableFuture(future);
+
+
+    future.then((totalUsersInMonth) {
+      // print("123213123");
+      this.countNewUsersInMonth = totalUsersInMonth;
+      // print("totalUsers: " + totalUsersInMonth.toString());
+    }
+    ).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
+  }
+
 }

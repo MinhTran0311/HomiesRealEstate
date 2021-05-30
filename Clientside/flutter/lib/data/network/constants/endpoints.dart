@@ -68,9 +68,13 @@ class Endpoints {
   static const String getAllTowns = homiesUrl + "/services/app/Huyens/GetAll";
   static const String getAllCommunes = homiesUrl + "/services/app/Xas/GetAll";
 
-  // //Cout all user
-  // static const String coutAllUser = homiesUrl + "/services/app/User/CountAllUsers";
-  // //Cout new user in month
-  // static const String coutNewUserInMonth = homiesUrl + "/services/app/User/CountNewUsersInMonth";
+  //Cout all user
+  static const String coutAllUser = homiesUrl + "/services/app/User/CountAllUsers";
+  //Cout new user in month
+  static const String coutNewUserInMonth = homiesUrl + "/services/app/User/CountNewUsersInMonth";
+  //Update user
+  static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
+  // //Delete user
+  // static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
 
 }

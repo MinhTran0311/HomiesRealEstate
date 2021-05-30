@@ -375,6 +375,38 @@ class Repository {
     });
   }
 
+  //Update user
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive) async
+  {
+    return await _userApi.updateUser(id, userName, surname, name, email, phoneNumber, isActive).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Delete user
+  Future<dynamic> deleteUser(int id) async
+  {
+    return await _userApi.deleteUser(id).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all users
+  Future<dynamic> countAllUsers() async
+  {
+    return await _userApi.countAllUsers().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count new users in month
+  Future<dynamic> countNewUsersInMonth() async
+  {
+    return await _userApi.countNewUsersInMonth().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

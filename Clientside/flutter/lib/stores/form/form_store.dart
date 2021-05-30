@@ -42,6 +42,7 @@ abstract class _FormStore with Store {
       reaction((_) => password, validatePassword),
       reaction((_) => confirmPassword, validateConfirmPassword),
       reaction((_) => userEmail, validateUserEmail),
+      reaction((_) => phoneNumber, validatePhoneNumber),
       reaction((_) => newPassword,validateNewPassword),
     ];
   }
@@ -59,6 +60,12 @@ abstract class _FormStore with Store {
   String confirmPassword = '';
   @observable
   String userEmail = '';
+  @observable
+  int idUser = 0;
+  @observable
+  bool isActive = true;
+  @observable
+  String phoneNumber = '';
   @observable
   String newPassword = '';
 
@@ -126,6 +133,15 @@ abstract class _FormStore with Store {
 
 
   @computed
+  bool get canUpdate =>
+      !formErrorStore.hasErrorsInUpdate &&
+      userEmail.isNotEmpty &&
+      // password.isNotEmpty &&
+      // confirmPassword.isNotEmpty &&
+      surname.isNotEmpty && name.isNotEmpty;
+          // && username.isNotEmpty;
+
+  @computed
   bool get sendingCode => fetchResetCodeFuture.status == FutureStatus.pending;
   @computed
   bool get regist_loading => fetchRegistFuture.status == FutureStatus.pending;
@@ -160,6 +176,21 @@ abstract class _FormStore with Store {
   @action
   void setConfirmPassword(String value) {
     confirmPassword = value;
+  }
+
+  @action
+  void setIdUser(int value) {
+    idUser = value;
+  }
+
+  @action
+  void setIsActive(bool value) {
+    isActive = value;
+  }
+
+  @action
+  void setPhoneNumber(String value) {
+    phoneNumber = value;
   }
   @action
   void setNewPassword(String value) {
@@ -247,6 +278,18 @@ abstract class _FormStore with Store {
     }
   }
 
+  @action
+  void validatePhoneNumber(String value) {
+    if (value.isEmpty) {
+      formErrorStore.phoneNumber = "Chưa điền số điện thoại";
+    } else if (double.tryParse(value) == null) {
+      formErrorStore.phoneNumber = 'Hãy nhập số điện thoại hợp lệ';
+    }
+    else {
+      formErrorStore.phoneNumber = null;
+    }
+  }
+
 //#endregion
 
   @action
@@ -279,31 +322,33 @@ abstract class _FormStore with Store {
 
   @action
   Future UpdateUser() async {
-    final futrue = _repository.registing(surname, name, username, password, userEmail);
-    fetchRegistFuture = ObservableFuture(futrue);
+    final futrue = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive);
 
-    futrue.then((registRes) {
-      print("123" + registRes["result"]["canLogin"].toString());
 
-      if (registRes["result"]["canLogin"]) {
-        regist_success = true;
-      }
-      else{
-        regist_success = false;
-      }
-    }).catchError((error){
-      regist_success = false;
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
-    });
+    // fetchRegistFuture = ObservableFuture(futrue);
+    //
+    // futrue.then((registRes) {
+    //   print("123" + registRes["result"]["canLogin"].toString());
+    //
+    //   if (registRes["result"]["canLogin"]) {
+    //     regist_success = true;
+    //   }
+    //   else{
+    //     regist_success = false;
+    //   }
+    // }).catchError((error){
+    //   regist_success = false;
+    //   if (error is DioError) {
+    //     if (error.response.data!=null)
+    //       errorStore.errorMessage = error.response.data["error"]["message"];
+    //     else
+    //       errorStore.errorMessage = DioErrorUtil.handleError(error);
+    //     throw error;
+    //   }
+    //   else{
+    //     throw error;
+    //   }
+    // });
   }
 
   @action
@@ -438,6 +483,7 @@ abstract class _FormStore with Store {
     validateUsername(username);
     validatePassword(password);
     validateUserEmail(userEmail);
+    validatePhoneNumber(phoneNumber);
     validateNewPassword(newPassword);
   }
 }
@@ -458,6 +504,8 @@ abstract class _FormErrorStore with Store {
   @observable
   String userEmail;
   @observable
+  String phoneNumber;
+  @observable
   String newPassword;
 
 
@@ -472,6 +520,10 @@ abstract class _FormErrorStore with Store {
   @computed
   bool get hasErrorInChangePassword =>
       password != null || newPassword!= null || confirmPassword!= null;
+  @computed
+  bool get hasErrorsInUpdate =>
+      surname != null || name != null ||username != null || userEmail != null;
+
   @computed
   bool get hasErrorInForgotPassword => username != null;
 }

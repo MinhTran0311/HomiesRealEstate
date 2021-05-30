@@ -115,8 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
         appBar: _buildAppBar(),
         body: Observer(builder: (context) {
-          return !_userstore.loadingCurrentUser &&
-                  !_userstore.loadingCurrentUserWallet &&
+          return !_userstore.loadingCurrentUser ||
+                  !_userstore.loadingCurrentUserWallet ||
                   !_userstore.loadingCurrentUserPicture
               ? _buildBody()
               : CustomProgressIndicatorWidget();
@@ -208,6 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Address: "Address",
                           SurName: _userstore.userCurrent.surname,
                           Name: _userstore.userCurrent.name,
+                          UserID:  _userstore.userCurrent.UserID,
                           creationTime: DatetimeToString(
                               _userstore.userCurrent.creationTime),
                         ));

@@ -10,6 +10,7 @@ import 'dart:async';
 // import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/maps/map_store.dart';
 import 'package:provider/provider.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,21 +26,24 @@ class MapsScreen extends StatefulWidget {
   // MapsScreen(): super();
   // final String title = "Bản đồ";
   final Post post;
+  final String type;
 
   @override
-  MapsScreen({@required this.post});
-  _MapsScreenState createState() => _MapsScreenState(post: post);
+  MapsScreen({@required this.post, this.type});
+  _MapsScreenState createState() => _MapsScreenState(post: post, type: type);
 }
 
 class _MapsScreenState extends State<MapsScreen> {
   final Post post;
-  _MapsScreenState({@required this.post});
+  final String type;
+  _MapsScreenState({@required this.post, this.type});
 
   TextEditingController _autocompleteText= TextEditingController();
 
   Completer<GoogleMapController> _controller = Completer();
   static LatLng _center;
   final Set<Marker> _markers = {};
+  final Set<Marker> _markersDangBai = {};
   CameraPosition _position1;
   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
@@ -52,6 +56,8 @@ class _MapsScreenState extends State<MapsScreen> {
   Placemark placeMarkChoosen;
 
   PostStore _postStore;
+  MapsStore _mapsStore;
+  // Map
   ApplicationBloc _applicationBloc;
 
   @override
@@ -67,6 +73,7 @@ class _MapsScreenState extends State<MapsScreen> {
 
     // initializing stores
     _postStore = Provider.of<PostStore>(context);
+    _mapsStore = Provider.of<MapsStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (this.post == null) {
@@ -77,6 +84,7 @@ class _MapsScreenState extends State<MapsScreen> {
       }
     }
     else {
+      if (this.type == "Xem bản đồ")
        _addMarkerButtonProcessed();
     }
     _setCameraPositon();
@@ -84,20 +92,6 @@ class _MapsScreenState extends State<MapsScreen> {
 
   _getCurrentLocationDevice() async {
 
-  }
-
-  _checkPermission() async {
-    LocationPermission checkPermission = await Geolocator.checkPermission();
-    if (checkPermission == LocationPermission.denied)
-    {
-      LocationPermission permission = await Geolocator.requestPermission();
-    }
-    // print(checkPermission);
-    else if (checkPermission == LocationPermission.always || checkPermission == LocationPermission.whileInUse)
-    {
-      bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
-      // if ()
-    }
   }
 
   _setCameraPositon() {
@@ -133,9 +127,19 @@ class _MapsScreenState extends State<MapsScreen> {
   //   zoom: 11.0,
   // );
 
-  Future<void> _goToCurrentLocationDevice() async {
+  Future<void> _goToCurrentLocationPostCurrent() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_position1));
+    // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
+  }
+
+  Future<void> _goToCurrentLocationDevice() async {
+    final GoogleMapController controller = await _controller.future;
+    await _mapsStore.checkPermission();
+    if(_mapsStore.isLocationServiceEnabled)
+    {
+      // controller.animateCamera(CameraUpdate.newCameraPosition(_mapsStore.positionCurrent));
+    }
     // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
   }
 
@@ -147,26 +151,28 @@ class _MapsScreenState extends State<MapsScreen> {
     final GoogleMapController controller = await _controller.future;
     setState(() {
       // _markers.removeAll(_markers);
-      _markers.clear();
-      _markers.add(
-          Marker(
-            markerId: MarkerId(this.placeMarkChoosen.postalCode),
-            // position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
-            // infoWindow: InfoWindow(
-            //   title: (this.placeMarkChoosen.street == null || this.placeMarkChoosen.street.isEmpty) ? '${this.placeMarkChoosen.country}' :'${this.placeMarkChoosen.street}',
-            //   snippet: '${this.placeMarkChoosen.country}',
-            // ),
-            // onTap: () {
-            //
-            // },
-            icon: BitmapDescriptor.defaultMarker,
-          ));
+      if (this.type == "Đăng bài") {
+        _markersDangBai.clear();
+        _markersDangBai.add(
+            Marker(
+              markerId: MarkerId(this.placeMarkChoosen.postalCode),
+              // position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
+              // infoWindow: InfoWindow(
+              //   title: (this.placeMarkChoosen.street == null || this.placeMarkChoosen.street.isEmpty) ? '${this.placeMarkChoosen.country}' :'${this.placeMarkChoosen.street}',
+              //   snippet: '${this.placeMarkChoosen.country}',
+              // ),
+              // onTap: () {
+              //
+              // },
+              icon: BitmapDescriptor.defaultMarker,
+            ));
+      }
       // controller.showMarkerInfoWindow(markerId)
       CameraPosition searchLocation = CameraPosition(
         bearing: 192.833,
         target: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
         tilt: 59.440,
-        zoom: 16.0,
+        zoom: 14.5,
       );
       controller.animateCamera(CameraUpdate.newCameraPosition(searchLocation));
     });
@@ -368,7 +374,48 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (this.post == null) {
+    if (this.post != null) {
+      return Scaffold(
+        primary: true,
+        body: Stack(
+          children: <Widget>[
+            GoogleMap(
+              gestureRecognizers: Set()
+                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                ..add(Factory<VerticalDragGestureRecognizer>(
+                        () => VerticalDragGestureRecognizer())),
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 15.0,
+              ),
+              mapType: _currentMapType,
+              markers: _markers,
+              onCameraMove: _onCameraMove,
+            ),
+            // _addMarkerButtonProcessed(),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                    // SizedBox(
+                    //   height: 16.0,
+                    // ),
+                    button(_goToCurrentLocationPostCurrent, Icons.my_location),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    else if (this.type == "Xem bản đồ"){
       return Scaffold(
         primary: true,
         appBar: AppBar(
@@ -404,8 +451,8 @@ class _MapsScreenState extends State<MapsScreen> {
               child: TextField(
                 controller: _autocompleteText,
                 decoration: InputDecoration(
-                  hintText: "Nhập kinh độ và vĩ độ",
-                  suffixIcon: Icon(Icons.search)
+                    hintText: "Nhập kinh độ và vĩ độ",
+                    suffixIcon: Icon(Icons.search)
                 ),
 
                 // onChanged: (value) => this._applicationBloc.searchPlaces(value),
@@ -517,40 +564,145 @@ class _MapsScreenState extends State<MapsScreen> {
     else {
       return Scaffold(
         primary: true,
-        body: Stack(
+        appBar: AppBar(
+          title: Text(
+            "Bản đồ",
+            style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colors.amber,
+          // actions: [
+          //   IconButton(
+          //     padding: EdgeInsets.only(right: 10),
+          //     icon: Icon(
+          //       Icons.refresh,
+          //       color: Colors.white,
+          //       size: 28,
+          //     ),
+          //     onPressed: () {
+          //       setState(() {});
+          //     },
+          //   ),
+          // ],
+        ),
+        body:
+        // (applicationBloc.currentLocation == null) ? Center(
+        //   child: CircularProgressIndicator(),
+        // )
+        // :
+        ListView(
           children: <Widget>[
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 15.0,
-              ),
-              mapType: _currentMapType,
-              markers: _markers,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
             Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _autocompleteText,
+                decoration: InputDecoration(
+                    hintText: "Nhập kinh độ và vĩ độ",
+                    suffixIcon: Icon(Icons.search)
                 ),
+
+                // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                onSubmitted: (value) => {
+                  _searchPlacemarkFromCoordinates(value),
+                  // _goToCurrentLocationDevice(),
+                  _showSimpleModalDialog(context),
+                },
               ),
             ),
+            Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.7,
+                  child: Stack(
+                    children: [
+                      GoogleMap(
+                        gestureRecognizers: Set()
+                          ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                          ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
+                          ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                          ..add(Factory<VerticalDragGestureRecognizer>(
+                                  () => VerticalDragGestureRecognizer())),
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                          target: _center,
+                          zoom: 11.0,
+                        ),
+                        mapType: _currentMapType,
+                        markers: _markersDangBai,
+                        onCameraMove: _onCameraMove,
+                      ),
+                      // _addMarkerButtonProcessed(),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Column(
+                            children: <Widget>[
+                              button(_onMapTypeButtonProcessed, Icons.map),
+                              SizedBox(
+                                height: 16.0,
+                              ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        // height: MediaQuery.of(context).size.height,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            children: <Widget>[
+                              containerBaseInfor(),
+                              // button(_onMapTypeButtonProcessed, Icons.map),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                              // SizedBox(
+                              //   height: 16.0,
+                              // ),
+                              // button(_goToCurrentLocationDevice, Icons.my_location),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // (_autocompleteText == null || _autocompleteText.toString().isEmpty) ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(.6),
+                //     backgroundBlendMode: BlendMode.darken
+                //   ),
+                // ),
+                // applicationBloc.searchResults == null ? Container()
+                //     : Container(
+                //   height: MediaQuery.of(context).size.height*0.8,
+                //   child: ListView.builder(
+                //     itemCount: applicationBloc.searchResults.length,
+                //     itemBuilder: (context, index) {
+                //       return ListTile(
+                //         title: Text(applicationBloc.searchResults[index].description,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //         ),)
+                //       );
+                //     },
+                //   ),
+                // ),
+              ],
+            ),
+
           ],
         ),
       );
@@ -565,7 +717,7 @@ class _MapsScreenState extends State<MapsScreen> {
           shape: RoundedRectangleBorder(
             borderRadius:BorderRadius.circular(12.0)),
           child: Container(
-            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.5,),
+            constraints:  _applicationBloc.getSuccess ? BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.5,) : BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.4,),
             child: Padding(
               padding: const EdgeInsets.only(right: 12.0, left: 18,top: 12, bottom: 16),
               child: _applicationBloc.getSuccess ? Container(
@@ -579,7 +731,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   },
                 ),
               ) : Container(
-                child: Column(
+                child: Stack(
                   children: [
                     Positioned(
                       right: 0.0,
@@ -597,13 +749,15 @@ class _MapsScreenState extends State<MapsScreen> {
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.warning_rounded,
-                      size: MediaQuery.of(context).size.width*0.2,
-                      color: Colors.red,
-                    ),
-                    SizedBox(height: 10,),
-                    (_applicationBloc.latTit == null || _applicationBloc.longTit == null) ?
+                    Column(
+                      children: [
+                        Icon(
+                          Icons.warning_rounded,
+                          size: MediaQuery.of(context).size.width*0.2,
+                          color: Colors.red,
+                        ),
+                        SizedBox(height: 10,),
+                        (_applicationBloc.latTit == null || _applicationBloc.longTit == null) ?
                         Column(
                           children: [
                             Text(
@@ -623,12 +777,14 @@ class _MapsScreenState extends State<MapsScreen> {
                             ),
                           ],
                         )
-                        : Text(
-                      "Google Maps không tìm thấy địa chỉ từ tọa độ " + "${_applicationBloc.latTit}, ${_applicationBloc.longTit}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
+                            : Text(
+                          "Google Maps không tìm thấy địa chỉ từ tọa độ " + "${_applicationBloc.latTit}, ${_applicationBloc.longTit}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ]
                 ),
