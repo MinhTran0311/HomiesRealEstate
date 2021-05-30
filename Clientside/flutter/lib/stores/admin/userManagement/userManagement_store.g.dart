@@ -29,6 +29,14 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
           Computed<bool>(() => super.loadingCountAllUser,
               name: '_UserManagementStore.loadingCountAllUser'))
       .value;
+  Computed<bool> _$loadingCountNewUsersInMonthComputed;
+
+  @override
+  bool get loadingCountNewUsersInMonth =>
+      (_$loadingCountNewUsersInMonthComputed ??= Computed<bool>(
+              () => super.loadingCountNewUsersInMonth,
+              name: '_UserManagementStore.loadingCountNewUsersInMonth'))
+          .value;
 
   final _$fetchUsersFutureAtom =
       Atom(name: '_UserManagementStore.fetchUsersFuture');
@@ -159,6 +167,21 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$dateCurrentAtom = Atom(name: '_UserManagementStore.dateCurrent');
+
+  @override
+  DateTime get dateCurrent {
+    _$dateCurrentAtom.reportRead();
+    return super.dateCurrent;
+  }
+
+  @override
+  set dateCurrent(DateTime value) {
+    _$dateCurrentAtom.reportWrite(value, super.dateCurrent, () {
+      super.dateCurrent = value;
+    });
+  }
+
   final _$successGetUsersAtom =
       Atom(name: '_UserManagementStore.successGetUsers');
 
@@ -195,7 +218,7 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
       AsyncAction('_UserManagementStore.fCountNewUsersInMonth');
 
   @override
-  Future<int> fCountNewUsersInMonth() {
+  Future<dynamic> fCountNewUsersInMonth() {
     return _$fCountNewUsersInMonthAsyncAction
         .run(() => super.fCountNewUsersInMonth());
   }
@@ -225,10 +248,12 @@ countAllUsers: ${countAllUsers},
 countNewUsersInMonth: ${countNewUsersInMonth},
 userList: ${userList},
 avatarUser: ${avatarUser},
+dateCurrent: ${dateCurrent},
 successGetUsers: ${successGetUsers},
 loading: ${loading},
 loadingAvatar: ${loadingAvatar},
-loadingCountAllUser: ${loadingCountAllUser}
+loadingCountAllUser: ${loadingCountAllUser},
+loadingCountNewUsersInMonth: ${loadingCountNewUsersInMonth}
     ''';
   }
 }

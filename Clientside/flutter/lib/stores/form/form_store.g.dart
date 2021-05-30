@@ -202,6 +202,9 @@ mixin _$FormStore on _FormStore, Store {
   set phoneNumber(String value) {
     _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
       super.phoneNumber = value;
+    });
+  }
+
   final _$newPasswordAtom = Atom(name: '_FormStore.newPassword');
 
   @override
@@ -506,9 +509,17 @@ mixin _$FormStore on _FormStore, Store {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.setPhoneNumber');
     try {
+      return super.setPhoneNumber(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setNewPassword(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.setNewPassword');
+    try {
       return super.setNewPassword(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
@@ -582,16 +593,22 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
-  void validatePhoneNumber(String value) {
-    final _$actionInfo = _$_FormStoreActionController.startAction(
-        name: '_FormStore.validatePhoneNumber');
-    try {
-      return super.validatePhoneNumber(value);
   void validateNewPassword(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.validateNewPassword');
     try {
       return super.validateNewPassword(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validatePhoneNumber(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validatePhoneNumber');
+    try {
+      return super.validatePhoneNumber(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }
@@ -655,18 +672,19 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
           Computed<bool>(() => super.hasErrorsInRegister,
               name: '_FormErrorStore.hasErrorsInRegister'))
       .value;
-  Computed<bool> _$hasErrorsInUpdateComputed;
-
-  @override
-  bool get hasErrorsInUpdate => (_$hasErrorsInUpdateComputed ??= Computed<bool>(
-          () => super.hasErrorsInUpdate,
-          name: '_FormErrorStore.hasErrorsInUpdate'))
   Computed<bool> _$hasErrorInChangePasswordComputed;
 
   @override
   bool get hasErrorInChangePassword => (_$hasErrorInChangePasswordComputed ??=
           Computed<bool>(() => super.hasErrorInChangePassword,
               name: '_FormErrorStore.hasErrorInChangePassword'))
+      .value;
+  Computed<bool> _$hasErrorsInUpdateComputed;
+
+  @override
+  bool get hasErrorsInUpdate => (_$hasErrorsInUpdateComputed ??= Computed<bool>(
+          () => super.hasErrorsInUpdate,
+          name: '_FormErrorStore.hasErrorsInUpdate'))
       .value;
   Computed<bool> _$hasErrorInForgotPasswordComputed;
 
@@ -778,6 +796,9 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   set phoneNumber(String value) {
     _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
       super.phoneNumber = value;
+    });
+  }
+
   final _$newPasswordAtom = Atom(name: '_FormErrorStore.newPassword');
 
   @override
@@ -803,15 +824,12 @@ password: ${password},
 confirmPassword: ${confirmPassword},
 userEmail: ${userEmail},
 phoneNumber: ${phoneNumber},
-hasErrorsInLogin: ${hasErrorsInLogin},
-hasErrorsInReset: ${hasErrorsInReset},
-hasErrorsInRegister: ${hasErrorsInRegister},
-hasErrorsInUpdate: ${hasErrorsInUpdate},
 newPassword: ${newPassword},
 hasErrorsInLogin: ${hasErrorsInLogin},
 hasErrorsInReset: ${hasErrorsInReset},
 hasErrorsInRegister: ${hasErrorsInRegister},
 hasErrorInChangePassword: ${hasErrorInChangePassword},
+hasErrorsInUpdate: ${hasErrorsInUpdate},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
     ''';
   }

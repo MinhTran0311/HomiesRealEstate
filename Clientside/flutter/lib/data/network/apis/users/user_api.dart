@@ -354,7 +354,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       final res = await _dioClient.post(
         Endpoints.createOrUpdateUser,
         data: {
-          "user" : {
+          "user": {
             "id": id,
             "userName": userName,
             "name": name,
@@ -363,11 +363,13 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
             "phoneNumber": phoneNumber,
             "isActive": isActive,
           },
-          options: Options(
-            headers: {
-              "Abp.TenantId": 1,
-              "Authorization" : "Bearer ${Preferences.access_token}",
-      );
+        },
+        options: Options(
+          headers: {
+            "Abp.TenantId": 1,
+            "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+          ),);
       // bool resistingSuccess = res["canLogin"];
       return res;
     } catch (e) {
@@ -387,8 +389,9 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
         options: Options(
             headers: {
               "Abp.TenantId": 1,
-              "Authorization" : "Bearer ${Preferences.access_token}",
-      );
+              "Authorization": "Bearer ${Preferences.access_token}",
+            }
+        ),);
       // bool resistingSuccess = res["canLogin"];
       return res;
     } catch (e) {

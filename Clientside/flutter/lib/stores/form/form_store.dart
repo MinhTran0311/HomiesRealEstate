@@ -42,7 +42,7 @@ abstract class _FormStore with Store {
       reaction((_) => password, validatePassword),
       reaction((_) => confirmPassword, validateConfirmPassword),
       reaction((_) => userEmail, validateUserEmail),
-      reaction((_) => phoneNumber, validatePhoneNumber)
+      reaction((_) => phoneNumber, validatePhoneNumber),
       reaction((_) => newPassword,validateNewPassword),
     ];
   }
@@ -99,7 +99,6 @@ abstract class _FormStore with Store {
   @observable
   bool success = false;
 
-  static ObservableFuture<dynamic> emptyResetCodeSent = ObservableFuture.value(null);
   @observable
   bool regist_success = false;
 
