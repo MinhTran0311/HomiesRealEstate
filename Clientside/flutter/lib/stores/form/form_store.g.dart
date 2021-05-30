@@ -35,6 +35,12 @@ mixin _$FormStore on _FormStore, Store {
       (_$canRegisterComputed ??= Computed<bool>(() => super.canRegister,
               name: '_FormStore.canRegister'))
           .value;
+  Computed<bool> _$canUpdateComputed;
+
+  @override
+  bool get canUpdate => (_$canUpdateComputed ??=
+          Computed<bool>(() => super.canUpdate, name: '_FormStore.canUpdate'))
+      .value;
   Computed<bool> _$sendingCodeComputed;
 
   @override
@@ -137,6 +143,51 @@ mixin _$FormStore on _FormStore, Store {
   set userEmail(String value) {
     _$userEmailAtom.reportWrite(value, super.userEmail, () {
       super.userEmail = value;
+    });
+  }
+
+  final _$idUserAtom = Atom(name: '_FormStore.idUser');
+
+  @override
+  int get idUser {
+    _$idUserAtom.reportRead();
+    return super.idUser;
+  }
+
+  @override
+  set idUser(int value) {
+    _$idUserAtom.reportWrite(value, super.idUser, () {
+      super.idUser = value;
+    });
+  }
+
+  final _$isActiveAtom = Atom(name: '_FormStore.isActive');
+
+  @override
+  bool get isActive {
+    _$isActiveAtom.reportRead();
+    return super.isActive;
+  }
+
+  @override
+  set isActive(bool value) {
+    _$isActiveAtom.reportWrite(value, super.isActive, () {
+      super.isActive = value;
+    });
+  }
+
+  final _$phoneNumberAtom = Atom(name: '_FormStore.phoneNumber');
+
+  @override
+  String get phoneNumber {
+    _$phoneNumberAtom.reportRead();
+    return super.phoneNumber;
+  }
+
+  @override
+  set phoneNumber(String value) {
+    _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
+      super.phoneNumber = value;
     });
   }
 
@@ -271,6 +322,13 @@ mixin _$FormStore on _FormStore, Store {
     return _$registerAsyncAction.run(() => super.register());
   }
 
+  final _$UpdateUserAsyncAction = AsyncAction('_FormStore.UpdateUser');
+
+  @override
+  Future<dynamic> UpdateUser() {
+    return _$UpdateUserAsyncAction.run(() => super.UpdateUser());
+  }
+
   final _$authLogInAsyncAction = AsyncAction('_FormStore.authLogIn');
 
   @override
@@ -355,6 +413,39 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  void setIdUser(int value) {
+    final _$actionInfo =
+        _$_FormStoreActionController.startAction(name: '_FormStore.setIdUser');
+    try {
+      return super.setIdUser(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsActive(bool value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setIsActive');
+    try {
+      return super.setIsActive(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPhoneNumber(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setPhoneNumber');
+    try {
+      return super.setPhoneNumber(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void validateSurname(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.validateSurname');
@@ -421,6 +512,17 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  void validatePhoneNumber(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validatePhoneNumber');
+    try {
+      return super.validatePhoneNumber(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 surname: ${surname},
@@ -429,6 +531,9 @@ username: ${username},
 password: ${password},
 confirmPassword: ${confirmPassword},
 userEmail: ${userEmail},
+idUser: ${idUser},
+isActive: ${isActive},
+phoneNumber: ${phoneNumber},
 fetchTokenFuture: ${fetchTokenFuture},
 authToken: ${authToken},
 loggedIn: ${loggedIn},
@@ -441,6 +546,7 @@ loading: ${loading},
 canLogin: ${canLogin},
 canSubmitResetPassword: ${canSubmitResetPassword},
 canRegister: ${canRegister},
+canUpdate: ${canUpdate},
 sendingCode: ${sendingCode},
 regist_loading: ${regist_loading}
     ''';
@@ -468,6 +574,13 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   bool get hasErrorsInRegister => (_$hasErrorsInRegisterComputed ??=
           Computed<bool>(() => super.hasErrorsInRegister,
               name: '_FormErrorStore.hasErrorsInRegister'))
+      .value;
+  Computed<bool> _$hasErrorsInUpdateComputed;
+
+  @override
+  bool get hasErrorsInUpdate => (_$hasErrorsInUpdateComputed ??= Computed<bool>(
+          () => super.hasErrorsInUpdate,
+          name: '_FormErrorStore.hasErrorsInUpdate'))
       .value;
   Computed<bool> _$hasErrorInForgotPasswordComputed;
 
@@ -567,6 +680,21 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
     });
   }
 
+  final _$phoneNumberAtom = Atom(name: '_FormErrorStore.phoneNumber');
+
+  @override
+  String get phoneNumber {
+    _$phoneNumberAtom.reportRead();
+    return super.phoneNumber;
+  }
+
+  @override
+  set phoneNumber(String value) {
+    _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
+      super.phoneNumber = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
@@ -576,9 +704,11 @@ username: ${username},
 password: ${password},
 confirmPassword: ${confirmPassword},
 userEmail: ${userEmail},
+phoneNumber: ${phoneNumber},
 hasErrorsInLogin: ${hasErrorsInLogin},
 hasErrorsInReset: ${hasErrorsInReset},
 hasErrorsInRegister: ${hasErrorsInRegister},
+hasErrorsInUpdate: ${hasErrorsInUpdate},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
     ''';
   }

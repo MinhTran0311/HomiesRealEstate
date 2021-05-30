@@ -347,4 +347,94 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       throw e;
     }
   }
+
+  //Update user
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrUpdateUser,
+        data: {
+          "user" : {
+            "id": id,
+            "userName": userName,
+            "name": name,
+            "surname": surname,
+            "emailAddress": email,
+            "phoneNumber": phoneNumber,
+            "isActive": isActive,
+          },
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+
+      // bool resistingSuccess = res["canLogin"];
+
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Delete user
+  Future<dynamic> deleteUser(int id) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrUpdateUser,
+        queryParameters: {
+          "Id":id
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Count all users
+  Future<dynamic> countAllUsers() async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.coutAllUser,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Count new users in month
+  Future<dynamic> countNewUsersInMonth() async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.coutNewUserInMonth,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
 }

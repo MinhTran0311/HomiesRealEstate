@@ -41,6 +41,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
@@ -62,10 +63,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     _passwordFocusNode = FocusNode();
 
     if(this.user != null) {
-      _surnameController.text = "${this.user.surName}";
-      _nameController.text = "${this.user.name}";
-      _userNameController.text = "${this.user.userName}";
-      _userEmailController.text = "${this.user.email}";
+      _surnameController.text = this.user.surName;
+      _nameController.text = this.user.name;
+      _userNameController.text = this.user.userName;
+      _userEmailController.text = this.user.email;
+      _phoneNumberController.text = this.user.phoneNumber;
+      _checkbox = this.user.isActive;
       titleForm = "Chỉnh sửa tài khoản";
     }
   }
@@ -194,18 +197,20 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
             SizedBox(height: 24.0),
             _buildUserNameField(),
             SizedBox(height: 24.0),
+            _buildNumberPhoneField(),
+            SizedBox(height: 24.0),
             _buildPasswordField(),
-            !this._checkbox ? SizedBox(height: 24.0) : SizedBox(),
+            SizedBox(height: 24.0),
             _buildConfirmPasswordField(),
-            !this._checkbox ? SizedBox(height: 24.0) : SizedBox(),
-            _buildAutoPasswordCheckBox(),
-            SizedBox(height: 24.0),
-            _buildNeedChangePwCheckBox(),
-            SizedBox(height: 24.0),
-            _buildSendEmailConfirmCheckBox(),
             SizedBox(height: 24.0),
             _buildActiveCheckBox(),
             SizedBox(height: 24.0),
+            // _buildNeedChangePwCheckBox(),
+            // SizedBox(height: 24.0),
+            // _buildSendEmailConfirmCheckBox(),
+            // SizedBox(height: 24.0),
+            // _buildActiveCheckBox(),
+            // SizedBox(height: 24.0),
             _buildSignUpButton(),
           ],
         ),
@@ -255,6 +260,29 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       },
     );
   }
+
+  Widget _buildNumberPhoneField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Điện thoại'),
+          hintColor: Colors.white,
+          icon: Icons.phone,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _phoneNumberController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          onChanged: (value) {
+            _store.setPhoneNumber(_phoneNumberController.text);
+          },
+          errorText: _store.formErrorStore.name,
+        );
+      },
+    );
+  }
+
   Widget _buildUserNameField() {
     return Observer(
       builder: (context) {
@@ -278,87 +306,15 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     );
   }
 
-  Widget _buildAutoPasswordCheckBox() {
+  Widget _buildActiveCheckBox() {
     return Row(
       children: [
         Checkbox(
           value: _checkbox,
           onChanged: (value) {
             setState(() {
+              _store.setIsActive(!_checkbox);
               _checkbox = !_checkbox;
-            });
-          },
-        ),
-        Text(
-          'Đặt mật khẩu ngẫu nhiên',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNeedChangePwCheckBox() {
-    return Row(
-      children: [
-        Checkbox(
-          value: _checkboxNeedChangePs,
-          onChanged: (value) {
-            setState(() {
-              _checkboxNeedChangePs = !_checkboxNeedChangePs;
-            });
-          },
-        ),
-        Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Cần thay đổi mật khẩu vào lần đăng nhập tiếp theo',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            )
-        )
-      ],
-    );
-  }
-
-  Widget _buildSendEmailConfirmCheckBox() {
-    return Row(
-      children: [
-        Checkbox(
-          value: _checkboxSendEmailActive,
-          onChanged: (value) {
-            setState(() {
-              _checkboxSendEmailActive = !_checkboxSendEmailActive;
-            });
-          },
-        ),
-        Text(
-          'Gửi email kích hoạt',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActiveCheckBox() {
-    return Row(
-      children: [
-        Checkbox(
-          value: _checkboxActive,
-          onChanged: (value) {
-            setState(() {
-              _checkboxActive = !_checkboxActive;
             });
           },
         ),
@@ -373,44 +329,111 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     );
   }
 
+  // Widget _buildNeedChangePwCheckBox() {
+  //   return Row(
+  //     children: [
+  //       Checkbox(
+  //         value: _checkboxNeedChangePs,
+  //         onChanged: (value) {
+  //           setState(() {
+  //             _checkboxNeedChangePs = !_checkboxNeedChangePs;
+  //           });
+  //         },
+  //       ),
+  //       Flexible(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text(
+  //                 'Cần thay đổi mật khẩu vào lần đăng nhập tiếp theo',
+  //                 style: TextStyle(
+  //                   fontSize: 18,
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //             ],
+  //           )
+  //       )
+  //     ],
+  //   );
+  // }
+  //
+  // Widget _buildSendEmailConfirmCheckBox() {
+  //   return Row(
+  //     children: [
+  //       Checkbox(
+  //         value: _checkboxSendEmailActive,
+  //         onChanged: (value) {
+  //           setState(() {
+  //             _checkboxSendEmailActive = !_checkboxSendEmailActive;
+  //           });
+  //         },
+  //       ),
+  //       Text(
+  //         'Gửi email kích hoạt',
+  //         style: TextStyle(
+  //           fontSize: 18,
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+  //
+  // Widget _buildActiveCheckBox() {
+  //   return Row(
+  //     children: [
+  //       Checkbox(
+  //         value: _checkboxActive,
+  //         onChanged: (value) {
+  //           setState(() {
+  //             _checkboxActive = !_checkboxActive;
+  //           });
+  //         },
+  //       ),
+  //       Text(
+  //         'Kích hoạt',
+  //         style: TextStyle(
+  //           fontSize: 18,
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Widget _buildPasswordField() {
-    if (!this._checkbox) {
-      return TextFieldWidget(
-        inputFontsize: 22,
-        hint: ('Mật khẩu'),
-        hintColor: Colors.white,
-        isObscure: true,
-        icon: Icons.vpn_key,
-        iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-        textController: _passwordController,
-        focusNode: _passwordFocusNode,
-        errorText: _store.formErrorStore.password,
-        onChanged: (value) {
-          _store.setPassword(_passwordController.text);
-        },
-      );
-    }
-    else return Container();
+    return TextFieldWidget(
+      inputFontsize: 22,
+      hint: ('Mật khẩu'),
+      hintColor: Colors.white,
+      isObscure: true,
+      icon: Icons.vpn_key,
+      iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+      textController: _passwordController,
+      focusNode: _passwordFocusNode,
+      errorText: _store.formErrorStore.password,
+      onChanged: (value) {
+        _store.setPassword(_passwordController.text);
+      },
+    );
   }
 
   Widget _buildConfirmPasswordField() {
-    if (!this._checkbox) {
-      return TextFieldWidget(
-        inputFontsize: 22,
-        hint: ('Nhập lại mật khẩu'),
-        hintColor: Colors.white,
-        isObscure: true,
-        icon: Icons.vpn_key,
-        iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-        textController: _confirmPasswordController,
-        autoFocus: false,
-        errorText: _store.formErrorStore.confirmPassword,
-        onChanged: (value) {
-          _store.setConfirmPassword(_confirmPasswordController.text);
-        },
-      );
-    }
-    else return Container();
+    return TextFieldWidget(
+      inputFontsize: 22,
+      hint: ('Nhập lại mật khẩu'),
+      hintColor: Colors.white,
+      isObscure: true,
+      icon: Icons.vpn_key,
+      iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+      textController: _confirmPasswordController,
+      autoFocus: false,
+      errorText: _store.formErrorStore.confirmPassword,
+      onChanged: (value) {
+        _store.setConfirmPassword(_confirmPasswordController.text);
+      },
+    );
   }
 
 
@@ -440,14 +463,32 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       buttonText: ('Lưu thông tin'),
       buttonColor: Colors.black87,
       textColor: Colors.white,
-      onPressed: () {
-        if(_store.canRegister) {
+      onPressed: () async {
+         if(this.user != null) await {
+          _store.setSurname(_surnameController.text),
+          _store.setName(_nameController.text),
+           _store.setUserId(_userNameController.text),
+           _store.setUserEmail(_userEmailController.text),
+           if(_passwordController.text != null && _passwordController.text.isNotEmpty)
+             {
+               _store.setPassword(_passwordController.text),
+               _store.setConfirmPassword(_confirmPasswordController.text),
+             },
+          //  else {
+          //    _store.setPassword(this.user.),
+          //    _store.setConfirmPassword(_confirmPasswordController.text),
+          // },
+           _store.setIdUser(this.user.id),
+           _store.setPhoneNumber(_phoneNumberController.text),
+           _store.setIsActive(_checkbox),
+         };
+        if(_store.canUpdate) {
           DeviceUtils.hideKeyboard(context);
 
           //SharedPreferences.getInstance().then((preference) {
           // preference.setBool(Preferences.is_logged_in, false);
           //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
-          _store.register();
+          _store.UpdateUser();
         }
         else{
           _showErrorMessage('Please fill in all fields');

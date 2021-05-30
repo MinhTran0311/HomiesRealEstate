@@ -11,6 +11,7 @@ import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/maps/map_store.dart';
 import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/reportData/reportData_store.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
   final ImageStore _imageStore = ImageStore(appComponent.getRepository());
   final TownStore _townStore = TownStore(appComponent.getRepository());
   final FilterStore _filterStore = FilterStore(appComponent.getRepository());
+  final MapsStore _mapsStore = MapsStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
@@ -87,6 +89,7 @@ class MyApp extends StatelessWidget {
         Provider<LSGDStore>(create: (_) => _lsgdStore),
         Provider<ImageStore>(create: (_) => _imageStore),
         Provider<TownStore>(create: (_) => _townStore),
+        Provider<MapsStore>(create: (_) => _mapsStore),
       ],
       child: Observer(
         name: 'global-observer',
