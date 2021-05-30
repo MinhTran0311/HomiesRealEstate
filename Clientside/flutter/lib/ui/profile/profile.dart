@@ -11,8 +11,10 @@ import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/favopost/favopost.dart';
 import 'package:boilerplate/ui/profile/help/help.dart';
 import 'package:boilerplate/ui/profile/report/report.dart';
+import 'package:boilerplate/ui/profile/setting/setting.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:dio/dio.dart';
@@ -113,8 +115,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
         appBar: _buildAppBar(),
         body: Observer(builder: (context) {
-          return !_userstore.loadingCurrentUser &&
-                  !_userstore.loadingCurrentUserWallet &&
+          return !_userstore.loadingCurrentUser ||
+                  !_userstore.loadingCurrentUserWallet ||
                   !_userstore.loadingCurrentUserPicture
               ? _buildBody()
               : CustomProgressIndicatorWidget();
@@ -192,6 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               setState(() {
                 // _first=!_first;
@@ -205,6 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Address: "Address",
                           SurName: _userstore.userCurrent.surname,
                           Name: _userstore.userCurrent.name,
+                          UserID:  _userstore.userCurrent.UserID,
                           creationTime: DatetimeToString(
                               _userstore.userCurrent.creationTime),
                         ));
@@ -218,8 +222,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
-              setState(() {
+               setState(() {
                 // _first=!_first;
                 // selected = 1;
                 // _selectedIndex =2;
@@ -228,7 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           userID: _userstore.userCurrent.UserID,
                         ));
                 Navigator.push(context, route);
-              });
+               });
             },
           ),
           CardItem(
@@ -237,6 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               setState(() {
                 // _first=!_first;
@@ -254,12 +260,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               colorbackgroud: Colors.grey[200],
               colortext: Colors.black,
               coloricon: Colors.orange,
+              isFunction: false,
               press: () {
                 setState(() {
                   Route route = MaterialPageRoute(
-                      builder: (context) => KiemDuyetPage(
-                            UserID: _userstore.userCurrent.UserID,
-                          ));
+                      builder: (context) => SettingPage());
                   Navigator.push(context, route);
                 });
               }),
@@ -269,6 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               colorbackgroud: Colors.grey[200],
               colortext: Colors.black,
               coloricon: Colors.orange,
+              isFunction: false,
               press: () {
                 setState(() {
                   Route route =
@@ -282,6 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             colorbackgroud: Colors.grey[200],
             colortext: Colors.black,
             coloricon: Colors.orange,
+            isFunction: false,
             press: () {
               Navigator.push(
                 context,
@@ -343,7 +350,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            child: Image.asset(pathAvatar),
+                                            child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
                                           ));
                                 }),
                                 // CircularProfileAvatar(
@@ -439,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           Observer(builder: (context) {
-                            return _userstore.userCurrent != null
+                            return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
                                 ? Text(
                                 priceFormat(_userstore.userCurrent.wallet),
                                     style: TextStyle(
@@ -510,64 +517,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ));
     });
-  }
-}
-
-class CardItem extends StatelessWidget {
-  const CardItem({
-    Key key,
-    @required this.text,
-    @required this.icon,
-    @required this.press,
-    @required this.colorbackgroud,
-    @required this.colortext,
-    @required this.coloricon,
-  }) : super(key: key);
-
-  final String text;
-  final IconData icon;
-  final VoidCallback press;
-  final Color colorbackgroud;
-  final Color colortext;
-  final Color coloricon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: FlatButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            onPressed: press,
-            color: colorbackgroud,
-            padding: EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 30,
-                  color: coloricon,
-                ),
-                SizedBox(
-                  width: 40,
-                ),
-                Expanded(
-                  child: Text(text,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 20,
-                          fontFamily: FontFamily.roboto,
-                          color: colortext)),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: colortext,
-                )
-              ],
-            )),
-      ),
-    );
   }
 }

@@ -28,6 +28,13 @@ mixin _$FormStore on _FormStore, Store {
           Computed<bool>(() => super.canSubmitResetPassword,
               name: '_FormStore.canSubmitResetPassword'))
       .value;
+  Computed<bool> _$canChangePasswordComputed;
+
+  @override
+  bool get canChangePassword => (_$canChangePasswordComputed ??= Computed<bool>(
+          () => super.canChangePassword,
+          name: '_FormStore.canChangePassword'))
+      .value;
   Computed<bool> _$canRegisterComputed;
 
   @override
@@ -55,6 +62,13 @@ mixin _$FormStore on _FormStore, Store {
       (_$regist_loadingComputed ??= Computed<bool>(() => super.regist_loading,
               name: '_FormStore.regist_loading'))
           .value;
+  Computed<bool> _$changePasswordLoadingComputed;
+
+  @override
+  bool get changePasswordLoading => (_$changePasswordLoadingComputed ??=
+          Computed<bool>(() => super.changePasswordLoading,
+              name: '_FormStore.changePasswordLoading'))
+      .value;
 
   final _$surnameAtom = Atom(name: '_FormStore.surname');
 
@@ -188,6 +202,18 @@ mixin _$FormStore on _FormStore, Store {
   set phoneNumber(String value) {
     _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
       super.phoneNumber = value;
+  final _$newPasswordAtom = Atom(name: '_FormStore.newPassword');
+
+  @override
+  String get newPassword {
+    _$newPasswordAtom.reportRead();
+    return super.newPassword;
+  }
+
+  @override
+  set newPassword(String value) {
+    _$newPasswordAtom.reportWrite(value, super.newPassword, () {
+      super.newPassword = value;
     });
   }
 
@@ -203,6 +229,55 @@ mixin _$FormStore on _FormStore, Store {
   set fetchTokenFuture(ObservableFuture<AuthToken> value) {
     _$fetchTokenFutureAtom.reportWrite(value, super.fetchTokenFuture, () {
       super.fetchTokenFuture = value;
+    });
+  }
+
+  final _$fetchRegistFutureAtom = Atom(name: '_FormStore.fetchRegistFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchRegistFuture {
+    _$fetchRegistFutureAtom.reportRead();
+    return super.fetchRegistFuture;
+  }
+
+  @override
+  set fetchRegistFuture(ObservableFuture<dynamic> value) {
+    _$fetchRegistFutureAtom.reportWrite(value, super.fetchRegistFuture, () {
+      super.fetchRegistFuture = value;
+    });
+  }
+
+  final _$fetchResetCodeFutureAtom =
+      Atom(name: '_FormStore.fetchResetCodeFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchResetCodeFuture {
+    _$fetchResetCodeFutureAtom.reportRead();
+    return super.fetchResetCodeFuture;
+  }
+
+  @override
+  set fetchResetCodeFuture(ObservableFuture<dynamic> value) {
+    _$fetchResetCodeFutureAtom.reportWrite(value, super.fetchResetCodeFuture,
+        () {
+      super.fetchResetCodeFuture = value;
+    });
+  }
+
+  final _$fetchChangePasswordFutureAtom =
+      Atom(name: '_FormStore.fetchChangePasswordFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchChangePasswordFuture {
+    _$fetchChangePasswordFutureAtom.reportRead();
+    return super.fetchChangePasswordFuture;
+  }
+
+  @override
+  set fetchChangePasswordFuture(ObservableFuture<dynamic> value) {
+    _$fetchChangePasswordFutureAtom
+        .reportWrite(value, super.fetchChangePasswordFuture, () {
+      super.fetchChangePasswordFuture = value;
     });
   }
 
@@ -283,35 +358,20 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
-  final _$fetchRegistFutureAtom = Atom(name: '_FormStore.fetchRegistFuture');
+  final _$changePassword_succesAtom =
+      Atom(name: '_FormStore.changePassword_succes');
 
   @override
-  ObservableFuture<dynamic> get fetchRegistFuture {
-    _$fetchRegistFutureAtom.reportRead();
-    return super.fetchRegistFuture;
+  bool get changePassword_succes {
+    _$changePassword_succesAtom.reportRead();
+    return super.changePassword_succes;
   }
 
   @override
-  set fetchRegistFuture(ObservableFuture<dynamic> value) {
-    _$fetchRegistFutureAtom.reportWrite(value, super.fetchRegistFuture, () {
-      super.fetchRegistFuture = value;
-    });
-  }
-
-  final _$fetchResetCodeFutureAtom =
-      Atom(name: '_FormStore.fetchResetCodeFuture');
-
-  @override
-  ObservableFuture<dynamic> get fetchResetCodeFuture {
-    _$fetchResetCodeFutureAtom.reportRead();
-    return super.fetchResetCodeFuture;
-  }
-
-  @override
-  set fetchResetCodeFuture(ObservableFuture<dynamic> value) {
-    _$fetchResetCodeFutureAtom.reportWrite(value, super.fetchResetCodeFuture,
+  set changePassword_succes(bool value) {
+    _$changePassword_succesAtom.reportWrite(value, super.changePassword_succes,
         () {
-      super.fetchResetCodeFuture = value;
+      super.changePassword_succes = value;
     });
   }
 
@@ -342,6 +402,13 @@ mixin _$FormStore on _FormStore, Store {
   @override
   Future<dynamic> resetPassword() {
     return _$resetPasswordAsyncAction.run(() => super.resetPassword());
+  }
+
+  final _$changePasswordAsyncAction = AsyncAction('_FormStore.changePassword');
+
+  @override
+  Future<dynamic> changePassword() {
+    return _$changePasswordAsyncAction.run(() => super.changePassword());
   }
 
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
@@ -439,7 +506,10 @@ mixin _$FormStore on _FormStore, Store {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.setPhoneNumber');
     try {
-      return super.setPhoneNumber(value);
+  void setNewPassword(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setNewPassword');
+      return super.setNewPassword(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }
@@ -517,6 +587,11 @@ mixin _$FormStore on _FormStore, Store {
         name: '_FormStore.validatePhoneNumber');
     try {
       return super.validatePhoneNumber(value);
+  void validateNewPassword(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateNewPassword');
+    try {
+      return super.validateNewPassword(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }
@@ -534,21 +609,26 @@ userEmail: ${userEmail},
 idUser: ${idUser},
 isActive: ${isActive},
 phoneNumber: ${phoneNumber},
+newPassword: ${newPassword},
 fetchTokenFuture: ${fetchTokenFuture},
+fetchRegistFuture: ${fetchRegistFuture},
+fetchResetCodeFuture: ${fetchResetCodeFuture},
+fetchChangePasswordFuture: ${fetchChangePasswordFuture},
 authToken: ${authToken},
 loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
 resetPassword_success: ${resetPassword_success},
-fetchRegistFuture: ${fetchRegistFuture},
-fetchResetCodeFuture: ${fetchResetCodeFuture},
+changePassword_succes: ${changePassword_succes},
 loading: ${loading},
 canLogin: ${canLogin},
 canSubmitResetPassword: ${canSubmitResetPassword},
+canChangePassword: ${canChangePassword},
 canRegister: ${canRegister},
 canUpdate: ${canUpdate},
 sendingCode: ${sendingCode},
-regist_loading: ${regist_loading}
+regist_loading: ${regist_loading},
+changePasswordLoading: ${changePasswordLoading}
     ''';
   }
 }
@@ -581,6 +661,12 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   bool get hasErrorsInUpdate => (_$hasErrorsInUpdateComputed ??= Computed<bool>(
           () => super.hasErrorsInUpdate,
           name: '_FormErrorStore.hasErrorsInUpdate'))
+  Computed<bool> _$hasErrorInChangePasswordComputed;
+
+  @override
+  bool get hasErrorInChangePassword => (_$hasErrorInChangePasswordComputed ??=
+          Computed<bool>(() => super.hasErrorInChangePassword,
+              name: '_FormErrorStore.hasErrorInChangePassword'))
       .value;
   Computed<bool> _$hasErrorInForgotPasswordComputed;
 
@@ -692,6 +778,18 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   set phoneNumber(String value) {
     _$phoneNumberAtom.reportWrite(value, super.phoneNumber, () {
       super.phoneNumber = value;
+  final _$newPasswordAtom = Atom(name: '_FormErrorStore.newPassword');
+
+  @override
+  String get newPassword {
+    _$newPasswordAtom.reportRead();
+    return super.newPassword;
+  }
+
+  @override
+  set newPassword(String value) {
+    _$newPasswordAtom.reportWrite(value, super.newPassword, () {
+      super.newPassword = value;
     });
   }
 
@@ -709,6 +807,11 @@ hasErrorsInLogin: ${hasErrorsInLogin},
 hasErrorsInReset: ${hasErrorsInReset},
 hasErrorsInRegister: ${hasErrorsInRegister},
 hasErrorsInUpdate: ${hasErrorsInUpdate},
+newPassword: ${newPassword},
+hasErrorsInLogin: ${hasErrorsInLogin},
+hasErrorsInReset: ${hasErrorsInReset},
+hasErrorsInRegister: ${hasErrorsInRegister},
+hasErrorInChangePassword: ${hasErrorInChangePassword},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
     ''';
   }

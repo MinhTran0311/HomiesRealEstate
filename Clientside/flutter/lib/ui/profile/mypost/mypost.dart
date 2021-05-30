@@ -23,6 +23,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:http/http.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
@@ -728,13 +729,34 @@ class _MyPostScreenState extends State<MyPostScreen> {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
           return _showErrorMessage(postStore.errorStore.errorMessage);
         }
-
+        if (postStore.successgiahan) {
+          postStore.successgiahan=false;
+          _showSuccssfullMesssage("Gia hạn thành công");
+        }
+        if(postStore.successdelete)
+        {
+          postStore.successdelete=false;
+          _showSuccssfullMesssage("Xóa bài đăng thành công");
+        }
         return SizedBox.shrink();
       },
     );
   }
 
   // General Methods:-----------------------------------------------------------
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
+  }
   _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
@@ -747,32 +769,5 @@ class _MyPostScreenState extends State<MyPostScreen> {
     });
 
     return SizedBox.shrink();
-  }
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )),
-        builder: (BuildContext context) {
-          return Wrap(
-            children: [
-              Filter(),
-            ],
-          );
-        });
-  }
-
-  _showDialog<T>({BuildContext context, Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T value) {
-      // The value passed to Navigator.pop() or null.
-    });
   }
 }

@@ -107,7 +107,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Observer(
             builder: (context) {
               if (_store.regist_success) {
-
                 SharedPreferences.getInstance().then((prefs) {
                   prefs.setBool(Preferences.is_logged_in, false);
                 });
@@ -336,9 +335,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   // General Methods:-----------------------------------------------------------
-
-
-    _showErrorMessage( String message) {
+    _showErrorMessage(String message) {
       Future.delayed(Duration(milliseconds: 0), () {
         if (message != null && message.isNotEmpty) {
           FlushbarHelper.createError(

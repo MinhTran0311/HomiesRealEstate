@@ -236,8 +236,7 @@ class PostApi {
       String postId, bool status) async {
     try {
       DateTime now = DateTime.now();
-      String fomattedDate = DateFormat('yyyy-mm-dd').format(now);
-      print(fomattedDate);
+      String fomattedDate = DateTime.now().toIso8601String();
       final res =
           await _dioClient.post(Endpoints.createOrChangeStatusBaiGhimYeuThich,
               options: Options(headers: {
@@ -245,8 +244,9 @@ class PostApi {
                 "Authorization": "Bearer ${Preferences.access_token}",
               }),
               data: {
-            "trangThai": status ? "On" : "Off",
-            "baiDangId": postId,
+                "trangThai": status ? "On" : "Off",
+                "baiDangId": postId,
+                "thoiGian": fomattedDate,
           });
       return res;
     } catch (e) {

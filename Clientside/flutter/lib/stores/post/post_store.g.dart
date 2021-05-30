@@ -51,6 +51,14 @@ mixin _$PostStore on _PostStore, Store {
           Computed<bool>(() => super.loadinggetcategorys,
               name: '_PostStore.loadinggetcategorys'))
       .value;
+  Computed<bool> _$createOrChangeStatusBaiGhimLoadingComputed;
+
+  @override
+  bool get createOrChangeStatusBaiGhimLoading =>
+      (_$createOrChangeStatusBaiGhimLoadingComputed ??= Computed<bool>(
+              () => super.createOrChangeStatusBaiGhimLoading,
+              name: '_PostStore.createOrChangeStatusBaiGhimLoading'))
+          .value;
   Computed<bool> _$hasFilterComputed;
 
   @override
@@ -204,6 +212,23 @@ mixin _$PostStore on _PostStore, Store {
   set fetchSearchFuture(ObservableFuture<dynamic> value) {
     _$fetchSearchFutureAtom.reportWrite(value, super.fetchSearchFuture, () {
       super.fetchSearchFuture = value;
+    });
+  }
+
+  final _$fetchCreateOrChangeBaiGhimFutureAtom =
+      Atom(name: '_PostStore.fetchCreateOrChangeBaiGhimFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCreateOrChangeBaiGhimFuture {
+    _$fetchCreateOrChangeBaiGhimFutureAtom.reportRead();
+    return super.fetchCreateOrChangeBaiGhimFuture;
+  }
+
+  @override
+  set fetchCreateOrChangeBaiGhimFuture(ObservableFuture<dynamic> value) {
+    _$fetchCreateOrChangeBaiGhimFutureAtom
+        .reportWrite(value, super.fetchCreateOrChangeBaiGhimFuture, () {
+      super.fetchCreateOrChangeBaiGhimFuture = value;
     });
   }
 
@@ -432,6 +457,23 @@ mixin _$PostStore on _PostStore, Store {
   set successgetcategorys(bool value) {
     _$successgetcategorysAtom.reportWrite(value, super.successgetcategorys, () {
       super.successgetcategorys = value;
+    });
+  }
+
+  final _$createOrChangeSuccessAtom =
+      Atom(name: '_PostStore.createOrChangeSuccess');
+
+  @override
+  bool get createOrChangeSuccess {
+    _$createOrChangeSuccessAtom.reportRead();
+    return super.createOrChangeSuccess;
+  }
+
+  @override
+  set createOrChangeSuccess(bool value) {
+    _$createOrChangeSuccessAtom.reportWrite(value, super.createOrChangeSuccess,
+        () {
+      super.createOrChangeSuccess = value;
     });
   }
 
@@ -975,6 +1017,7 @@ fetchPropertiesFuture: ${fetchPropertiesFuture},
 fetchisBaiGhimYeuThichFuture: ${fetchisBaiGhimYeuThichFuture},
 fetchisGetRecommendPostsFuture: ${fetchisGetRecommendPostsFuture},
 fetchSearchFuture: ${fetchSearchFuture},
+fetchCreateOrChangeBaiGhimFuture: ${fetchCreateOrChangeBaiGhimFuture},
 postList: ${postList},
 rcmPostList: ${rcmPostList},
 isIntialLoading: ${isIntialLoading},
@@ -990,6 +1033,7 @@ postCategoryList: ${postCategoryList},
 searchContent: ${searchContent},
 scrollController: ${scrollController},
 successgetcategorys: ${successgetcategorys},
+createOrChangeSuccess: ${createOrChangeSuccess},
 fetchPacksFuture: ${fetchPacksFuture},
 packList: ${packList},
 successPack: ${successPack},
@@ -1022,6 +1066,7 @@ isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
 getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
 loadinggetcategorys: ${loadinggetcategorys},
+createOrChangeStatusBaiGhimLoading: ${createOrChangeStatusBaiGhimLoading},
 hasFilter: ${hasFilter},
 loadingPack: ${loadingPack},
 loadingThuocTinh: ${loadingThuocTinh},

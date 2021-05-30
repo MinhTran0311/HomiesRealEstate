@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -22,12 +23,13 @@ class AccountPage extends StatefulWidget {
     @required this.Name,
     @required this.creationTime,
     @required this.UserName,
+    @required this.UserID,
   }) : super(key: key);
 
   final String Phone,Email,Address,SurName,Name,creationTime,UserName;
-
+  final int UserID;
   @override
-  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,UserName: UserName,creationTime: creationTime);
+  _AccountPageState createState() => _AccountPageState(Phone: Phone,Email: Email,Address: Address,SurName: SurName,Name: Name,UserName: UserName,creationTime: creationTime,UserID: UserID);
 }
 
 
@@ -41,9 +43,11 @@ class _AccountPageState extends State<AccountPage>{
     @required this.Name,
     @required this.creationTime,
     @required this.UserName,
+    @required this.UserID,
   }) : super();
 
   String Phone,Email,Address,SurName,Name,creationTime,UserName;
+  final int UserID;
 
   final CtlPhone = TextEditingController();
   final CtlEmail = TextEditingController();
@@ -53,7 +57,7 @@ class _AccountPageState extends State<AccountPage>{
 
   int _selectedIndex=0;
   UserStore _userstore;
-
+  String pathAvatar = "assets/images/img_login.jpg";
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -157,6 +161,7 @@ class _AccountPageState extends State<AccountPage>{
           ),
         ),
         CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
+          isFunction: false,
           press: (){
             setState(() {
               Route route = MaterialPageRoute(builder: (context) => AccountEditPage(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime));
@@ -212,13 +217,25 @@ class _AccountPageState extends State<AccountPage>{
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CircleAvatar(radius: (52),
-                                  backgroundColor: Colors.white,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
-                                  )
-                                ),
+                                Observer(builder: (context) {
+                                  return _userstore.userCurrent.picture != null
+                                      ? CircleAvatar(radius: (52),
+                                      backgroundColor: Colors.white,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
+                                      )
+                                      )
+                                      : CircleAvatar(
+                                      radius: (52),
+                                      backgroundColor: Colors.white,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(50),
+                                        child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                      ));
+                                }),
+
                                 // SizedBox(height: 10,),
                                 Text(
                                   "${SurName} " + "${Name}",
@@ -238,7 +255,7 @@ class _AccountPageState extends State<AccountPage>{
                                     ),
                                     SizedBox(width: 10,),
                                     Text(
-                                      "Admin",
+                                      _userstore.userCurrent.listRole[0].roleName,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
@@ -606,12 +623,13 @@ class AccountEditPage extends StatefulWidget {
     @required this.SurName,
     @required this.Name,
     @required this.creationTime,
+    @required this.UserID,
   }) : super(key: key);
 
   final String Phone,Email,SurName,Name,creationTime;
-
+  final int UserID;
   @override
-  _AccountEditPageState createState() => _AccountEditPageState(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime);
+  _AccountEditPageState createState() => _AccountEditPageState(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime,UserID: UserID);
 }
 
 
@@ -623,10 +641,11 @@ class _AccountEditPageState extends State<AccountEditPage> {
     @required this.SurName,
     @required this.Name,
     @required this.creationTime,
+    @required this.UserID,
   }) : super();
 
   String Phone, Email,  SurName, Name, creationTime;
-
+  final int UserID;
   final CtlPhone = TextEditingController();
   final CtlEmail = TextEditingController();
   final CtlAddress = TextEditingController();
@@ -763,7 +782,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
     Email = CtlEmail.text;
     Phone = CtlPhone.text;
     setState(() {
-      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,_userstore.user.UserID);
+      _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
       _showSuccssfullMesssage("Cập nhật thành công");
     });
 

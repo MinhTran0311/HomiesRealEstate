@@ -12,6 +12,8 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/ui/home/detail.dart';
+import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -182,7 +184,16 @@ class _NewpostScreenState extends State<NewpostScreen> {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return _showErrorMessage(_postStore.errorStore.errorMessage);
         }
-
+        if (_postStore.successNewpost) {
+          _showSuccssfullMesssage("Đăng tin thành công");
+          //dispose();.
+          _postStore.successNewpost=false;
+          _postStore.getPostForCurs(false);
+          Future.delayed(Duration(milliseconds: 3000), () {
+            Route route = MaterialPageRoute(builder: (context) => Detail(post:_postStore.postForCurList.posts.first ));
+            Navigator.push(context, route);
+          });
+        }
         return SizedBox.shrink();
       },
     );
@@ -351,6 +362,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildTypeField() {
     List<Postcategory> type = [];
+    if(_postStore.postCategoryList.categorys.length==0)
+      return Container(height: 0,);
     var _formKey;
     for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
       if (_postStore.postCategoryList.categorys[i].danhMucCha ==
@@ -1226,12 +1239,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
-            if(songay!=null&&selectedPack.phi!=null)
-          songay * selectedPack.phi > _userStore.userCurrent.wallet
-          ? Text('Vui lòng nạp thêm tiền để đăng bài')
-          : Container(
-          height: 0,
-          ),
     ]),
     );
     showDialog(
@@ -1241,27 +1248,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       },
     );
   }
-
-  Dangtin(BuildContext context) {
-    AlertDialog alert = AlertDialog(
-      title: Text("Thông báo"),
-      content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-                Text('Vui lòng nạp thêm tiền')
-                //Text('Vui lòng bấm đăng tin trước')
-          ]),
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   var _newpost = new Newpost();
   var sc = false;
   Widget _buildUpButton() {
@@ -1284,10 +1270,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 )
               showAlertDialog(context);
             else {
-              if(songay * selectedPack.phi>_userStore.userCurrent.wallet) {
-                Dangtin(context);
-                return;
-              }
+
               var post = new Post();
               post.tenXa = selectedCommune.tenXa;
               post.xaId = selectedCommune.id;
@@ -1354,8 +1337,88 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 u.duongDan = item;
                 _newpost.images.add(u);
               }
-              _postStore.postPost(_newpost);
-            }
+              if(songay * selectedPack.phi>_userStore.userCurrent.wallet) {
+                  var futureValue = showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Bạn không đủ số dư để thực hiện giao dịch?",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                                fontFamily: 'intel'),
+                          ),
+                          content: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              RoundedButtonWidget(
+                                buttonText: "Nạp thêm tiền",
+                                buttonColor: Colors.green,
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              RoundedButtonWidget(
+                                buttonColor: Colors.grey,
+                                buttonText: "Hủy",
+                                onPressed: () {
+
+                                   Navigator.of(context).pop(false);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                  futureValue.then((value) {
+                    Route route = MaterialPageRoute(builder: (context) => NapTienPage(userID: _userStore.userCurrent.UserID,));
+                    Navigator.push(context, route);
+                  });
+              }
+              else
+                 {
+                var futureValue = showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Đăng tin và thực hiện thanh toán?",
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.black,
+                              fontFamily: 'intel'),
+                        ),
+                        content: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            RoundedButtonWidget(
+                              buttonText: "Đồng ý",
+                              buttonColor: Colors.green,
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                            RoundedButtonWidget(
+                              buttonColor: Colors.grey,
+                              buttonText: "Hủy",
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                futureValue.then((value) {
+                  _postStore.postPost(_newpost);
+                  // true/false
+                });
+            }}
           }
         },
       );
@@ -1375,6 +1438,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   // General Methods:-----------------------------------------------------------
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 5),
+        )
+            .show(context);
+      }
+      //return SizedBox.shrink();
+    });
+  }
   _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
