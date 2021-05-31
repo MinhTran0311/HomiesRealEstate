@@ -193,11 +193,11 @@ class Repository {
     }).catchError((error) => throw error);
   }
   // Post: ---------------------------------------------------------------------
-  Future<listLSGD> getLSGD(int skipCount, int maxResultCount, filter_Model filter_model) async {
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getLSGD(skipCount, maxResultCount, filter_model).then((lsgdList) {
+    return await _userApi.getLSGD(skipCount, maxResultCount).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }

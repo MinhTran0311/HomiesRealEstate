@@ -137,21 +137,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
-  final _$filter_modelAtom = Atom(name: '_LSGDStore.filter_model');
-
-  @override
-  filter_Model get filter_model {
-    _$filter_modelAtom.reportRead();
-    return super.filter_model;
-  }
-
-  @override
-  set filter_model(filter_Model value) {
-    _$filter_modelAtom.reportWrite(value, super.filter_model, () {
-      super.filter_model = value;
-    });
-  }
-
   final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
 
   @override
@@ -252,7 +237,6 @@ fetchNaptienFuture: ${fetchNaptienFuture},
 fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
 fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
 skipCount: ${skipCount},
-filter_model: ${filter_model},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},

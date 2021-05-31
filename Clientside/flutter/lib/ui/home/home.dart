@@ -139,11 +139,17 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 48, left: 24, right: 24, bottom: 16),
+          padding: EdgeInsets.only(top: 48, left: 24, right: 24, bottom: 12),
           child: TextField(
             autofocus: false,
+            keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
+              print(value);
+              //print(_searchController.text);
+              print(_postStore.searchContent);
+              _postStore.filter_model.searchContent = value;
+              print(_postStore.filter_model.searchContent);
               _postStore.setSearchContent(_searchController.text);
             },
             style: TextStyle(
@@ -182,75 +188,34 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  height: 32,
-                  child: Stack(
-                    children: [
-                      ListView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          SizedBox(
-                            width: 24,
-                          ),
-                          buildFilter('Loại nhà'),
-                          buildFilter('Giá'),
-                          buildFilter('Phòng ngủ'),
-                          buildFilter('Hồ bơi'),
-                          SizedBox(
-                            width: 8,
-                          ),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          width: 28,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.centerRight,
-                                  end: Alignment.centerLeft,
-                                  stops: [
-                                0.0,
-                                0.1
-                              ],
-                                  colors: [
-                                Theme.of(context).scaffoldBackgroundColor,
-                                Theme.of(context)
-                                    .scaffoldBackgroundColor
-                                    .withOpacity(0.0),
-                              ])),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _showBottomSheet();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16, right: 24),
-                  child: Text(
-                    'filters',
+          padding: EdgeInsets.only(top: 6),
+          child: GestureDetector(
+            onTap: () {
+              _showBottomSheet();
+            },
+            child: Padding(
+              padding: EdgeInsets.only(left: 16, right: 24),
+              child: Row(
+                children: [
+                  Text(
+                    'Hiển thị bộ lọc nâng cao',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              )
-            ],
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.black26,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
         SizedBox(
-          height: 6,
+          height: 12,
         ),
         Expanded(child: _buildListView()),
       ],
@@ -258,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildListView() {
-    return _postStore.postList != null
+    return (_postStore.postList != null)
         ? SmartRefresher(
             key: _refresherKey,
             controller: _refreshController,

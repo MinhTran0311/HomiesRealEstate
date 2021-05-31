@@ -1,7 +1,6 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
-import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -51,8 +50,7 @@ abstract class _LSGDStore with Store {
   ObservableFuture<listLSGD>(emptyKiemDuyetNapTienResponse);
   @observable
   int skipCount = 0;
-  @observable
-  filter_Model filter_model = new filter_Model();
+
   @observable
   listLSGD listlsgd;
   @observable
@@ -82,7 +80,7 @@ abstract class _LSGDStore with Store {
     }
     else
       skipCount += Preferences.skipIndex;
-    final future = _repository.getLSGD(skipCount, Preferences.maxCount, filter_model);
+    final future = _repository.getLSGD(skipCount, Preferences.maxCount);
     fetchLSGDFuture = ObservableFuture(future);
 
     future.then((listLSGD) {
