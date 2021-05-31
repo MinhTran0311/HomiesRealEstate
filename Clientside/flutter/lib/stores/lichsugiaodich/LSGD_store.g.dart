@@ -137,6 +137,21 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$skipCountAllAtom = Atom(name: '_LSGDStore.skipCountAll');
+
+  @override
+  int get skipCountAll {
+    _$skipCountAllAtom.reportRead();
+    return super.skipCountAll;
+  }
+
+  @override
+  set skipCountAll(int value) {
+    _$skipCountAllAtom.reportWrite(value, super.skipCountAll, () {
+      super.skipCountAll = value;
+    });
+  }
+
   final _$listlsgdAtom = Atom(name: '_LSGDStore.listlsgd');
 
   @override
@@ -196,6 +211,7 @@ mixin _$LSGDStore on _LSGDStore, Store {
       super.isIntialLoading = value;
     });
   }
+
   final _$successAllAtom = Atom(name: '_LSGDStore.successAll');
 
   @override
@@ -266,6 +282,7 @@ fetchNaptienFuture: ${fetchNaptienFuture},
 fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
 fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
 skipCount: ${skipCount},
+skipCountAll: ${skipCountAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},

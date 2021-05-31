@@ -53,8 +53,7 @@ abstract class _LSGDStore with Store {
 
   @observable
   int skipCountAll = 0;
-  @observable
-  filter_Model filter_modelAll = new filter_Model();
+
   @observable
   listLSGD listlsgd;
   @observable
