@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Endpoints {
   Endpoints._();
 
@@ -78,5 +80,23 @@ class Endpoints {
   static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
   // //Delete user
   // static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
+
+  //Danh mục
+  //Get all Danh Mục
+  static const String getAllDanhMucs = homiesUrl + "/services/app/DanhMucs/GetAll";
+  //Đếm tổng số danh mục
+  static const String countAllDanhMucs = homiesUrl + "/services/app/DanhMucs/CountAllDanhMucs";
+
+  //Gói bài đăng
+  //Get all Gói bài đăng
+  static const String getAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/GetAll";
+  //Đếm tổng số gói bài đăng
+  static const String countAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/CountAllGoiBaiDangs";
+
+  //Thuộc tính
+  //Get all Thuộc tính
+  static const String getAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/GetAll";
+  //Đếm tổng số thuộc tính
+  static const String countAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/CountAllThuocTinhs";
 
 }

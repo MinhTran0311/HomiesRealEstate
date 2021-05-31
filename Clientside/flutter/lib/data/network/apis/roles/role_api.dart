@@ -16,6 +16,7 @@ class RoleApi {
 
   RoleApi(this._dioClient, this._restClient);
 
+  //get all role
   Future<RoleList> getAllRoles() async {
     try {
       final res = await _dioClient.post(Endpoints.getAllRole,
@@ -35,7 +36,7 @@ class RoleApi {
     }
   }
 
-  //Count all users
+  //Count all role
   Future<dynamic> countAllRoles() async {
     try {
       final res = await _dioClient.post(

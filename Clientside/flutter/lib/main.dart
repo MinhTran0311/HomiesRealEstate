@@ -32,6 +32,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
+import 'package:boilerplate/stores/admin/goiBaiDangManagement/goiBaiDangManagement_store.dart';
+import 'package:boilerplate/stores/admin/thuocTinhManagement/thuocTinhManagement_store.dart';
+import 'package:boilerplate/stores/admin/danhMucManagement/danhMucManagement_store.dart';
 
 // global instance for app component
 AppComponent appComponent;
@@ -71,6 +74,9 @@ class MyApp extends StatelessWidget {
   final TownStore _townStore = TownStore(appComponent.getRepository());
   final FilterStore _filterStore = FilterStore(appComponent.getRepository());
   final MapsStore _mapsStore = MapsStore(appComponent.getRepository());
+  final GoiBaiDangManagementStore _goiBaiDangManagementStore = GoiBaiDangManagementStore(appComponent.getRepository());
+  final DanhMucManagementStore _danhMucManagementStore = DanhMucManagementStore(appComponent.getRepository());
+  final ThuocTinhManagementStore _thuocTinhManagementStore = ThuocTinhManagementStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
@@ -90,6 +96,9 @@ class MyApp extends StatelessWidget {
         Provider<ImageStore>(create: (_) => _imageStore),
         Provider<TownStore>(create: (_) => _townStore),
         Provider<MapsStore>(create: (_) => _mapsStore),
+        Provider<GoiBaiDangManagementStore>(create: (_) => _goiBaiDangManagementStore),
+        Provider<DanhMucManagementStore>(create: (_) => _danhMucManagementStore),
+        Provider<ThuocTinhManagementStore>(create: (_) => _thuocTinhManagementStore),
       ],
       child: Observer(
         name: 'global-observer',

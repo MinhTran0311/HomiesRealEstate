@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/data/network/apis/thuocTinhs/thuocTinh_api.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

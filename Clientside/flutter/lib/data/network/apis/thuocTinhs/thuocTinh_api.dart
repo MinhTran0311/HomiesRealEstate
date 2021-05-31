@@ -6,20 +6,20 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
-import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
+import 'package:boilerplate/models/thuocTinh/thuocTinh_list.dart';
 import 'package:dio/dio.dart';
 
-class DanhMucApi {
+class ThuocTinhApi {
   final DioClient _dioClient;
 
   final RestClient _restClient;
 
-  DanhMucApi(this._dioClient, this._restClient);
+  ThuocTinhApi(this._dioClient, this._restClient);
 
-  //Get all danh mục
-  Future<DanhMucList> getAllDanhMucs() async {
+  //Get all thuộc tính
+  Future<ThuocTinhManagementList> getAllThuocTinhs() async {
     try {
-      final res = await _dioClient.post(Endpoints.getAllDanhMucs,
+      final res = await _dioClient.post(Endpoints.getAllThuocTinhs,
         data: {
         },
         options: Options(
@@ -28,18 +28,18 @@ class DanhMucApi {
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
-      return DanhMucList.fromJson(res);
+      return ThuocTinhManagementList.fromJson(res);
     } catch(e) {
-      print("lỗi get all Danh Muc" + e.toString());
+      print("lỗi get all Thuoc Tinh" + e.toString());
       throw e;
     }
   }
 
-  //Count all danh mục
-  Future<dynamic> countAllDanhMucs() async {
+  //Count all thuộc tính
+  Future<dynamic> countAllThuocTinhs() async {
     try {
       final res = await _dioClient.post(
-        Endpoints.countAllDanhMucs,
+        Endpoints.countAllThuocTinhs,
         options: Options(
             headers: {
               "Abp.TenantId": 1,
