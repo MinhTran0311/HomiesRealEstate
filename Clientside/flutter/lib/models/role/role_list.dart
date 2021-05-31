@@ -11,9 +11,9 @@ class RoleList {
   });
 
   factory RoleList.fromJson(Map<String, dynamic> json) {
-    print("Json Role: " + json.toString());
+    // print("Json Role: " + json.toString());
     List<Role> roles = List<Role>();
-    print(json.toString());
+    // print(json.toString());
     if (json["result"]["items"].length > 0) {
       for (int i = 0; i < json["result"]["items"].length; i++) {
         roles.add(Role.fromMap(json["result"]["items"][i]));

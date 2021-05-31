@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/danhMucs/danhMuc_api.dart';
+import 'package:boilerplate/data/network/apis/goiBaiDangs/goiBaiDang_api.dart';
 import 'package:boilerplate/data/network/apis/image/image_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
+import 'package:boilerplate/data/network/apis/thuocTinhs/thuocTinh_api.dart';
 import 'package:boilerplate/data/network/apis/towns/town_api.dart';
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
@@ -90,6 +93,9 @@ class LocalModule extends NetworkModule {
     SharedPreferenceHelper preferenceHelper,
     PostDataSource postDataSource,
     RegistrationApi registrationApi,
+    DanhMucApi danhMucApi,
+    ThuocTinhApi thuocTinhApi,
+    GoiBaiDangApi goiBaiDangApi,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, roleApi, imageApi, townApi);
+      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, roleApi, imageApi, townApi, danhMucApi, thuocTinhApi, goiBaiDangApi);
 }

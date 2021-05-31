@@ -44,6 +44,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   var _roles = List<DropdownMenuItem>();
   var _listUserFilterFromRole = List<User>();
   var userChoosen;
+  // ↓ hold tap position, set during onTapDown, using getPosition() method
+  Offset tapXY;
+  // ↓ hold screen size, using first line in build() method
+  RenderBox overlay;
   // bool selectedRole = false;
 
   // bool visibilityFilter = false;
@@ -137,6 +141,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    overlay = Overlay.of(context).context.findRenderObject();
     return Scaffold(
       primary: true,
       appBar: AppBar(
@@ -558,9 +563,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   mainAxisSize: MainAxisSize.max,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
+                    Stack(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.max,
                         children:[
                           Container(
                             child: Column(
@@ -573,6 +578,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     IconButton(
                                       icon: Icon(
@@ -627,6 +633,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 ),
                                 SizedBox(height: 5,),
                                 Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.person_pin,
@@ -1066,11 +1074,13 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   _showPopupMenu(){
+    getPosition;
     showMenu<String>(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
+
       // builder: (BuildContext context){
       //   return Wrap(
       //     children: [
@@ -1078,7 +1088,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       //     ],
       //   );
       // }
-      position: RelativeRect.fromLTRB(25.0, 150.0, 0.0, 0.0),      //position where you want to show the menu on screen
+      position: RelativeRect.fromLTRB(25.0, 0.0, 0.0, 0.0),      //position where you want to show the menu on screen
+      // position: relRectSize,
       items: [
         PopupMenuItem<String>(
             child: Row(
@@ -1143,10 +1154,16 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       }else if(itemSelected == "2"){
         //code here
       }else{
-        //code here
+        _showSimpleModalDialogConfirmDelete(context, this.userChoosen);
       }
 
     });
+  }
+
+  RelativeRect get relRectSize => RelativeRect.fromSize(tapXY & const Size(40,40), overlay.size);
+
+  void getPosition(TapDownDetails detail) {
+    tapXY = detail.globalPosition;
   }
 
   String _handlingStringCreationTime(String time) {
@@ -1161,5 +1178,121 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       // String giay = time.substring(17,19);
       return ngay + "/" + thang + "/" + nam;
     }
+  }
+
+  _showSimpleModalDialogConfirmDelete(context, User user){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(12.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  // constraints: user.name == "admin" ? BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.25,) : BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.35,),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12.0, left: 18,top: 12, bottom: 16),
+                    child: Container(
+                      child: Stack(
+                          children: [
+                            user.name == "admin" ? Positioned(
+                              right: 0.0,
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.of(context).pop();
+                                },
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: CircleAvatar(
+                                    radius: 14.0,
+                                    backgroundColor: Colors.grey.shade300,
+                                    child: Icon(Icons.close, color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            ) : Container(),
+                            Column(
+                              children: [
+                                Icon(
+                                  Icons.warning_rounded,
+                                  size: MediaQuery.of(context).size.width*0.2,
+                                  color: Colors.red,
+                                ),
+                                SizedBox(height: 10,),
+                                (user.name == "admin") ?
+                                Text(
+                                  "Bạn không thể xóa người dùng này!",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                                    : Text(
+                                  "Bạn có chắc muốn xóa người dùng này?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10,),
+                                user.name != "admin" ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton(
+                                      child: Text(
+                                        "Xóa",
+                                        style: TextStyle(fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      style: ButtonStyle(
+                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                                side: BorderSide(color: Colors.red),
+                                              )
+                                          )
+                                      ),
+                                      onPressed: () {
+                                        _userManagementStore.deleteUser(user.id);
+                                      },
+                                    ),
+                                    // SizedBox(width: 10,),
+                                    ElevatedButton(
+                                      child: Text(
+                                        "Hủy bỏ",
+                                        style: TextStyle(fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      style: ButtonStyle(
+                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade400),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                                side: BorderSide(color: Colors.red),
+                                              )
+                                          )
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                ) : Container()
+                              ],
+                            ),
+                          ]
+                      ),
+                    )
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

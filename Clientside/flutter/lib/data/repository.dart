@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
+import 'package:boilerplate/data/network/apis/danhMucs/danhMuc_api.dart';
+import 'package:boilerplate/data/network/apis/goiBaiDangs/goiBaiDang_api.dart';
 import 'package:boilerplate/data/network/apis/image/image_api.dart';
+import 'package:boilerplate/data/network/apis/thuocTinhs/thuocTinh_api.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
@@ -30,6 +33,9 @@ import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/models/role/role_list.dart';
+import 'package:boilerplate/models/thuocTinh/thuocTinh_list.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
+import 'package:boilerplate/models/goiBaiDang/goiBaiDang_list.dart';
 import 'package:sembast/sembast.dart';
 import 'network/apis/authToken/authToken_api.dart';
 import 'dart:developer';
@@ -51,6 +57,9 @@ class Repository {
   final UserApi _userApi;
   final RoleApi _roleApi;
   final ImageApi _imageApi;
+  final DanhMucApi _danhMucApi;
+  final ThuocTinhApi _thuocTinhApi;
+  final GoiBaiDangApi _goiBaiDangApi;
 
   final RegistrationApi _registrationApi;
 
@@ -58,7 +67,7 @@ class Repository {
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi,this._townApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi,this._townApi, this._danhMucApi, this._thuocTinhApi, this._goiBaiDangApi);
 
 
   // Post: ---------------------------------------------------------------------
@@ -373,6 +382,94 @@ class Repository {
         .catchError((error) {
       throw error;
     });
+  }
+
+  //Update user
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive) async
+  {
+    return await _userApi.updateUser(id, userName, surname, name, email, phoneNumber, isActive).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Delete user
+  Future<dynamic> deleteUser(int id) async
+  {
+    return await _userApi.deleteUser(id).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all users
+  Future<dynamic> countAllUsers() async
+  {
+    return await _userApi.countAllUsers().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count new users in month
+  Future<dynamic> countNewUsersInMonth() async
+  {
+    return await _userApi.countNewUsersInMonth().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all users
+  Future<dynamic> countAllRoles() async
+  {
+    return await _roleApi.countAllRoles().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Danh mục
+  //Get all danh mục
+  Future<DanhMucList> getAllDanhMucs() async {
+    return await _danhMucApi.getAllDanhMucs().then((danhMucList) {
+      return danhMucList;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all danh mục
+  Future<dynamic> countAllDanhMucs() async
+  {
+    return await _danhMucApi.countAllDanhMucs().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Thuộc tính
+  //Get all Thuộc tính
+  Future<ThuocTinhManagementList> getAllThuocTinhs() async {
+    return await _thuocTinhApi.getAllThuocTinhs().then((thuocTinhList) {
+      return thuocTinhList;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all thuộc tính
+  Future<dynamic> countAllThuocTinhs() async
+  {
+    return await _thuocTinhApi.countAllThuocTinhs().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Gói bài đăng
+  //Get all gói bài đăng
+  Future<GoiBaiDangList> getAllGoiBaiDangs() async {
+    return await _goiBaiDangApi.getAllGoiBaiDangs().then((goiBaiDangList) {
+      return goiBaiDangList;
+    }).catchError((error) => throw error);
+  }
+
+  //Count all gói bài đăng
+  Future<dynamic> countAllGoiBaiDangs() async
+  {
+    return await _goiBaiDangApi.countAllGoiBaiDangs().then((res) {
+      return res;
+    }).catchError((error) => throw error);
   }
 
 
