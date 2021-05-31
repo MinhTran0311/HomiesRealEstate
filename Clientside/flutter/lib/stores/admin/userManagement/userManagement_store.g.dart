@@ -22,6 +22,21 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
       (_$loadingAvatarComputed ??= Computed<bool>(() => super.loadingAvatar,
               name: '_UserManagementStore.loadingAvatar'))
           .value;
+  Computed<bool> _$loadingCountAllUserComputed;
+
+  @override
+  bool get loadingCountAllUser => (_$loadingCountAllUserComputed ??=
+          Computed<bool>(() => super.loadingCountAllUser,
+              name: '_UserManagementStore.loadingCountAllUser'))
+      .value;
+  Computed<bool> _$loadingCountNewUsersInMonthComputed;
+
+  @override
+  bool get loadingCountNewUsersInMonth =>
+      (_$loadingCountNewUsersInMonthComputed ??= Computed<bool>(
+              () => super.loadingCountNewUsersInMonth,
+              name: '_UserManagementStore.loadingCountNewUsersInMonth'))
+          .value;
 
   final _$fetchUsersFutureAtom =
       Atom(name: '_UserManagementStore.fetchUsersFuture');
@@ -56,6 +71,72 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$fetchCountAllUsersFutureAtom =
+      Atom(name: '_UserManagementStore.fetchCountAllUsersFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCountAllUsersFuture {
+    _$fetchCountAllUsersFutureAtom.reportRead();
+    return super.fetchCountAllUsersFuture;
+  }
+
+  @override
+  set fetchCountAllUsersFuture(ObservableFuture<dynamic> value) {
+    _$fetchCountAllUsersFutureAtom
+        .reportWrite(value, super.fetchCountAllUsersFuture, () {
+      super.fetchCountAllUsersFuture = value;
+    });
+  }
+
+  final _$fetchCountNewUsersInMonthFutureAtom =
+      Atom(name: '_UserManagementStore.fetchCountNewUsersInMonthFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCountNewUsersInMonthFuture {
+    _$fetchCountNewUsersInMonthFutureAtom.reportRead();
+    return super.fetchCountNewUsersInMonthFuture;
+  }
+
+  @override
+  set fetchCountNewUsersInMonthFuture(ObservableFuture<dynamic> value) {
+    _$fetchCountNewUsersInMonthFutureAtom
+        .reportWrite(value, super.fetchCountNewUsersInMonthFuture, () {
+      super.fetchCountNewUsersInMonthFuture = value;
+    });
+  }
+
+  final _$countAllUsersAtom = Atom(name: '_UserManagementStore.countAllUsers');
+
+  @override
+  int get countAllUsers {
+    _$countAllUsersAtom.reportRead();
+    return super.countAllUsers;
+  }
+
+  @override
+  set countAllUsers(int value) {
+    _$countAllUsersAtom.reportWrite(value, super.countAllUsers, () {
+      super.countAllUsers = value;
+    });
+  }
+
+  final _$countNewUsersInMonthAtom =
+      Atom(name: '_UserManagementStore.countNewUsersInMonth');
+
+  @override
+  int get countNewUsersInMonth {
+    _$countNewUsersInMonthAtom.reportRead();
+    return super.countNewUsersInMonth;
+  }
+
+  @override
+  set countNewUsersInMonth(int value) {
+    _$countNewUsersInMonthAtom.reportWrite(value, super.countNewUsersInMonth,
+        () {
+      super.countNewUsersInMonth = value;
+    });
+  }
+
   final _$userListAtom = Atom(name: '_UserManagementStore.userList');
 
   @override
@@ -86,6 +167,21 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$dateCurrentAtom = Atom(name: '_UserManagementStore.dateCurrent');
+
+  @override
+  DateTime get dateCurrent {
+    _$dateCurrentAtom.reportRead();
+    return super.dateCurrent;
+  }
+
+  @override
+  set dateCurrent(DateTime value) {
+    _$dateCurrentAtom.reportWrite(value, super.dateCurrent, () {
+      super.dateCurrent = value;
+    });
+  }
+
   final _$successGetUsersAtom =
       Atom(name: '_UserManagementStore.successGetUsers');
 
@@ -100,6 +196,31 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     _$successGetUsersAtom.reportWrite(value, super.successGetUsers, () {
       super.successGetUsers = value;
     });
+  }
+
+  final _$deleteUserAsyncAction =
+      AsyncAction('_UserManagementStore.deleteUser');
+
+  @override
+  Future<dynamic> deleteUser(int id) {
+    return _$deleteUserAsyncAction.run(() => super.deleteUser(id));
+  }
+
+  final _$fCountAllUsersAsyncAction =
+      AsyncAction('_UserManagementStore.fCountAllUsers');
+
+  @override
+  Future<dynamic> fCountAllUsers() {
+    return _$fCountAllUsersAsyncAction.run(() => super.fCountAllUsers());
+  }
+
+  final _$fCountNewUsersInMonthAsyncAction =
+      AsyncAction('_UserManagementStore.fCountNewUsersInMonth');
+
+  @override
+  Future<dynamic> fCountNewUsersInMonth() {
+    return _$fCountNewUsersInMonthAsyncAction
+        .run(() => super.fCountNewUsersInMonth());
   }
 
   final _$_UserManagementStoreActionController =
@@ -121,11 +242,18 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     return '''
 fetchUsersFuture: ${fetchUsersFuture},
 fetchAvatarUserFuture: ${fetchAvatarUserFuture},
+fetchCountAllUsersFuture: ${fetchCountAllUsersFuture},
+fetchCountNewUsersInMonthFuture: ${fetchCountNewUsersInMonthFuture},
+countAllUsers: ${countAllUsers},
+countNewUsersInMonth: ${countNewUsersInMonth},
 userList: ${userList},
 avatarUser: ${avatarUser},
+dateCurrent: ${dateCurrent},
 successGetUsers: ${successGetUsers},
 loading: ${loading},
-loadingAvatar: ${loadingAvatar}
+loadingAvatar: ${loadingAvatar},
+loadingCountAllUser: ${loadingCountAllUser},
+loadingCountNewUsersInMonth: ${loadingCountNewUsersInMonth}
     ''';
   }
 }

@@ -303,7 +303,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                 children: [
                   Flexible(
                     child: Text(
-                      '${role.name}',
+                      '${role.displayName}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
@@ -404,9 +404,10 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
             ),
           )
               : Container(),
+          isStatic ? SizedBox(width: 10,) : SizedBox(),
           !isDefault ? Container()
               : Container(
-            padding: EdgeInsets.only(left: 20),
+            // padding: EdgeInsets.only(left: 20),
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.black,

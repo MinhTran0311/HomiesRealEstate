@@ -16,6 +16,7 @@ class RoleApi {
 
   RoleApi(this._dioClient, this._restClient);
 
+  //get all role
   Future<RoleList> getAllRoles() async {
     try {
       final res = await _dioClient.post(Endpoints.getAllRole,
@@ -31,6 +32,25 @@ class RoleApi {
       return RoleList.fromJson(res);
     } catch(e) {
       print("lỗi get all roles" + e.toString());
+      throw e;
+    }
+  }
+
+  //Count all role
+  Future<dynamic> countAllRoles() async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.coutAllRole,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+
+      return res["result"];
+    } catch (e) {
       throw e;
     }
   }

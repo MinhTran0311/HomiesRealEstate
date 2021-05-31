@@ -406,6 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
+
                             ),
                             SizedBox(
                               width: 8,

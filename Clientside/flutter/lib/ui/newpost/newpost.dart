@@ -362,6 +362,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildTypeField() {
     List<Postcategory> type = [];
+    if(_postStore.postCategoryList.categorys.length==0)
+      return Container(height: 0,);
     var _formKey;
     for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
       if (_postStore.postCategoryList.categorys[i].danhMucCha ==
@@ -751,10 +753,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     color: const Color(0xFF167F67),
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 8,
                   ),
                   Text(
-                    type.tenXa,
+                    type.tenXa.length<=22? type.tenXa:type.tenXa=type.tenXa.substring(0,20)+"..",
                     style: TextStyle(color: Colors.black),
                   ),
                 ],

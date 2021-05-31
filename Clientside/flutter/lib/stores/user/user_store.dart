@@ -122,7 +122,7 @@ abstract class _UserStore with Store {
     final future = _repository.getUserByID(userID);
     fetchUsersByIDFutures = ObservableFuture(future);
 
-    fetchUsersByIDFutures.then((userByID) {
+    future.then((userByID) {
       this.userByID = userByID;
     }).catchError((error) {
       if (error is DioError) {
@@ -186,7 +186,7 @@ abstract class _UserStore with Store {
   Future getCurrentUser() async {
     final future = _repository.getCurrentUser();
     fetchUserCurrentFuture = ObservableFuture(future);
-    fetchUserCurrentFuture.then((user) {
+    future.then((user) {
       this.userCurrent = user;
       // this.getUserByID(user.UserID);
     }).catchError((error) {
@@ -207,7 +207,7 @@ abstract class _UserStore with Store {
 
     fetchUserCurrentWalletFuture = ObservableFuture(future);
 
-    fetchUserCurrentWalletFuture.then((wallet) {
+    future.then((wallet) {
       this.userCurrent.wallet = wallet;
     }).catchError((error) {
       if (error is DioError) {
@@ -230,7 +230,7 @@ abstract class _UserStore with Store {
 
     fetchUserCurrentPictureFuture = ObservableFuture(future);
 
-    fetchUserCurrentPictureFuture.then((picture) {
+    future.then((picture) {
       this.userCurrent.picture = picture;
     }).catchError((error) {
       if (error is DioError) {
@@ -310,7 +310,7 @@ abstract class _UserStore with Store {
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
     fetchUpdateUserFutures = ObservableFuture(future);
 
-    fetchUpdateUserFutures.then((user) {
+    future.then((user) {
       this.userCurrent.name = name;
       this.userCurrent.surname = surname;
       this.userCurrent.phoneNumber = phonenumber;
@@ -343,7 +343,7 @@ abstract class _UserStore with Store {
     final future = _repository.updatePictureCurrentUser(fileToken);
     fetchUpdatePictureUserFutures = ObservableFuture(future);
 
-    fetchUpdatePictureUserFutures.then((image) {
+    future.then((image) {
       if(image==true)
         this.userCurrent.picture = fileToken;
     }).catchError((error) {
