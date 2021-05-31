@@ -494,8 +494,8 @@ class _ReportPageState extends State<ReportPage>{
     if (l != null) {
       for(int i=0,ii=12;i<ii;i++){
         soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang),);
-        soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soBaiDang).toInt()));
-        soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soBaiDang).toInt()));
+        soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
+        soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
       }
     }
     return [

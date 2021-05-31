@@ -132,7 +132,6 @@ class _WalletPageState extends State<WalletPage>{
     );
   }
 
-
   Widget buildWallet(){
     return Container(
       child: ListView(
@@ -239,7 +238,7 @@ class _WalletPageState extends State<WalletPage>{
                 isRefreshing = true;
                 _refreshController.refreshCompleted();
               },
-              scrollController: _scrollController,
+              // scrollController: _scrollController,
               primary: false,
               child: ListView.builder(
                   key: _contentKey,

@@ -309,19 +309,31 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
-  Future<listLSGD> getAllLSGD() async {
-    try{
+  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount, filter_Model filter_model) async {
+    if (filter_model==null)
+      filter_model = new filter_Model();
+    try {
       final res = await _dioClient.get(Endpoints.getAllLSGD,
-        queryParameters: {
-          "MaxResultCount": 1000,
-          "Sorting": "thoiDiem desc",
-        },
+        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount),
         options: Options(
             headers: {
               "Abp.TenantId": 1,
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
+
+    // try{
+    //   final res = await _dioClient.get(Endpoints.getAllLSGD,
+    //     queryParameters: {
+    //       "MaxResultCount": 1000,
+    //       "Sorting": "thoiDiem desc",
+    //     },
+    //     options: Options(
+    //         headers: {
+    //           "Abp.TenantId": 1,
+    //           "Authorization" : "Bearer ${Preferences.access_token}",
+    //         }
+    //     ),);
       log("Get All LSGD Success");
       return listLSGD.fromJson(res);
     } catch (e) {

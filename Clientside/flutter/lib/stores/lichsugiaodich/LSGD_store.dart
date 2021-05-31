@@ -54,6 +54,10 @@ abstract class _LSGDStore with Store {
   @observable
   filter_Model filter_model = new filter_Model();
   @observable
+  int skipCountAll = 0;
+  @observable
+  filter_Model filter_modelAll = new filter_Model();
+  @observable
   listLSGD listlsgd;
   @observable
   listLSGD listlsgdAll;
@@ -63,10 +67,15 @@ abstract class _LSGDStore with Store {
 
   @observable
   bool isIntialLoading = true;
+  @observable
+  bool successAll = false;
+
+  @observable
+  bool isIntialLoadingAll = true;
   @computed
   bool get loading => fetchLSGDFuture.status == FutureStatus.pending && isIntialLoading;
   @computed
-  bool get Allloading => fetchAllLSGDFuture.status == FutureStatus.pending;
+  bool get Allloading => fetchAllLSGDFuture.status == FutureStatus.pending && isIntialLoadingAll;
   @computed
   bool get loadingNapTien => fetchNaptienFuture.status == FutureStatus.pending;
   @computed
@@ -111,12 +120,29 @@ abstract class _LSGDStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getAllLSGD() async {
-    final future = _repository.getAllLSGD();
+  Future getAllLSGD(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCountAll = 0;
+    }
+    else
+      skipCountAll += Preferences.skipIndex;
+    final future = _repository.getAllLSGD(skipCountAll, Preferences.maxCount, filter_modelAll);
     fetchAllLSGDFuture = ObservableFuture(future);
 
+    // final future = _repository.getAllLSGD();
+    // fetchAllLSGDFuture = ObservableFuture(future);
+
     future.then((listlsgdAll) {
-      this.listlsgdAll = listlsgdAll;
+      successAll = true;
+      if (!isLoadMore){
+        this.listlsgdAll = listlsgdAll;
+        if (isIntialLoadingAll) isIntialLoadingAll=false;
+      }
+      else {
+        for (int i=0; i< listlsgdAll.listLSGDs.length; i++)
+          this.listlsgdAll.listLSGDs.add(listlsgdAll.listLSGDs[i]);
+      }
+      // this.listlsgdAll = listlsgdAll;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
