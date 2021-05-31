@@ -19,7 +19,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_ChiTietBaiDangs)]
+    [AbpAllowAnonymous]
     public class ChiTietBaiDangsAppService : RealEstateAppServiceBase, IChiTietBaiDangsAppService
     {
         private readonly IRepository<ChiTietBaiDang> _chiTietBaiDangRepository;
@@ -78,7 +78,7 @@ namespace Homies.RealEstate.Server
                 await chiTietBaiDangs.ToListAsync()
             );
         }
-
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetChiTietBaiDangForViewDto>> GetAllChiTietBaiDangByPostId(long postId)
         {
 
