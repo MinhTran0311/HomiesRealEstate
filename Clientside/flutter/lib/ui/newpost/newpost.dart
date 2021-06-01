@@ -1350,7 +1350,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                 color: Colors.black,
                                 fontFamily: 'intel'),
                           ),
-                          content: Row(
+                          content: Column(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: [

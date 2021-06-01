@@ -16,6 +16,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/ui/profile/mypost/editpost/editpost.dart';
+import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
@@ -468,84 +469,87 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     BorderRadius.all(Radius.circular(100))),
                             width: 38,
                             height: 38,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: IconButton(
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: (Colors.amber),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditpostScreen(
-                                                      post: post,
-                                                      townStore: _townStore,
-                                                      postStore: postStore,
-                                                      userStore: userStore,
-                                                    )));
-                                      }),
-                                )),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(100))),
-                          // width: 24,
-                          // height: 24,
-                          // padding: EdgeInsets.symmetric(vertical: 4),
-                          width: 38,
-                          height: 38,
-                          child: Padding(
+                            child: Padding(
                               padding: const EdgeInsets.all(0.0),
-                          child:IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.amber,
-                            ),
-                            onPressed: () {
-                              var futureValue = showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "Bạn có chắc chắn muốn xóa bài đăng?",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: Colors.black,
-                                            fontFamily: 'intel'),
-                                      ),
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          RoundedButtonWidget(
-                                            buttonText: "Đồng ý",
-                                            buttonColor: Colors.green,
-                                            onPressed: () {
-                                              Navigator.of(context).pop(true);
-                                            },
-                                          ),
-                                          RoundedButtonWidget(
-                                            buttonColor: Colors.grey,
-                                            buttonText: "Hủy",
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  });
-                              futureValue.then((value) {
-                                post.trangThai = "Off";
-                                if (value) postStore.Delete(post);
-                                // true/false
-                              });
-                            }))),
+                              child: IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: (Colors.amber),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditpostScreen(
+                                                  post: post,
+                                                  townStore: _townStore,
+                                                  postStore: postStore,
+                                                  userStore: userStore,
+                                                )));
+                                  }),
+                            )),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100))),
+                            // width: 24,
+                            // height: 24,
+                            // padding: EdgeInsets.symmetric(vertical: 4),
+                            width: 38,
+                            height: 38,
+                            child: Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.amber,
+                                    ),
+                                    onPressed: () {
+                                      var futureValue = showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "Bạn có chắc chắn muốn xóa bài đăng?",
+                                                style: TextStyle(
+                                                    fontSize: 24,
+                                                    color: Colors.black,
+                                                    fontFamily: 'intel'),
+                                              ),
+                                              content: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  RoundedButtonWidget(
+                                                    buttonText: "Đồng ý",
+                                                    buttonColor: Colors.green,
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    },
+                                                  ),
+                                                  RoundedButtonWidget(
+                                                    buttonColor: Colors.grey,
+                                                    buttonText: "Hủy",
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                      futureValue.then((value) {
+                                        post.trangThai = "Off";
+                                        if (value) postStore.Delete(post);
+                                        // true/false
+                                      });
+                                    }))),
                       ],
                     ),
                   ],
@@ -554,9 +558,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
             ),
           ),
           ExpansionTile(
-            title: Text(
-              "Gia hạn",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+            title: Padding(
+              padding: const EdgeInsets.only(left:12.0),
+              child: Text(
+                "Gia hạn",
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+              ),
             ),
             tilePadding: EdgeInsets.only(top: 0.0),
             //.all(0),
@@ -566,8 +573,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                        "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                    Padding(
+                      padding: const EdgeInsets.only(left:12.0),
+                      child: Text(
+                          "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                    ),
                     if (selectedDatefl[index] != null) (SizedBox(height: 12)),
                     if (selectedDatefl[index] != null &&
                         DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
@@ -609,12 +619,18 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       ),
                     if (selectedDatefl[index] != null) (SizedBox(height: 12)),
                     if (selectedDatefl[index] != null)
-                      (Text(
-                          "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
+                      Padding(
+                        padding: const EdgeInsets.only(left:12.0),
+                        child: (Text(
+                            "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
+                      ),
                     SizedBox(height: 12),
                     if (selectedDatefl[index] != null)
-                      (Text(
-                          "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
+                      Padding(
+                        padding: const EdgeInsets.only(left:12.0),
+                        child: (Text(
+                            "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
+                      ),
                     SizedBox(height: 12),
                     RoundedButtonWidget(
                       onPressed: () async => {
@@ -628,43 +644,91 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     if (selectedDatefl[index] != null)
                       RoundedButtonWidget(
                         onPressed: () {
-                          var futureValue = showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    "Gia hạn bài đăng?",
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        color: Colors.black,
-                                        fontFamily: 'intel'),
-                                  ),
-                                  content: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RoundedButtonWidget(
-                                        buttonText: "Đồng ý",
-                                        buttonColor: Colors.green,
-                                        onPressed: () {
-                                          Navigator.of(context).pop(true);
-                                        },
-                                      ),
-                                      RoundedButtonWidget(
-                                        buttonColor: Colors.grey,
-                                        buttonText: "Hủy",
-                                        onPressed: () {
-                                          Navigator.of(context).pop(false);
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
-                          futureValue.then((value) {
-                            if (value) {
-                              newpost = new Newpost();
+                          newpost = new Newpost();
+                          if (songay[index] *
+                                  (selectedPack[index] == null
+                                      ? postStore.packList
+                                          .packs[post.goiBaiDangId - 1].phi
+                                      : selectedPack[index].phi) >
+                              userStore.userCurrent.wallet) {
+                            var futureValue = showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "Bạn không đủ số dư để thực hiện giao dịch?",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: Colors.black,
+                                          fontFamily: 'intel'),
+                                    ),
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RoundedButtonWidget(
+                                          buttonText: "Nạp thêm tiền",
+                                          buttonColor: Colors.green,
+                                          onPressed: () {
+                                            Navigator.of(context).pop(true);
+                                          },
+                                        ),
+                                        RoundedButtonWidget(
+                                          buttonColor: Colors.grey,
+                                          buttonText: "Hủy",
+                                          onPressed: () {
+                                            Navigator.of(context).pop(false);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                });
+                            futureValue.then((value) {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => NapTienPage(
+                                        userID: userStore.userCurrent.UserID,
+                                      ));
+                              Navigator.push(context, route);
+                            });
+                          } else {
+                            var futureValue = showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "Gia hạn bài viết và thực hiện thanh toán?",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          color: Colors.black,
+                                          fontFamily: 'intel'),
+                                    ),
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RoundedButtonWidget(
+                                          buttonText: "Đồng ý",
+                                          buttonColor: Colors.green,
+                                          onPressed: () {
+                                            Navigator.of(context).pop(true);
+                                          },
+                                        ),
+                                        RoundedButtonWidget(
+                                          buttonColor: Colors.grey,
+                                          buttonText: "Hủy",
+                                          onPressed: () {
+                                            Navigator.of(context).pop(false);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                });
+                            futureValue.then((value) {
+                              //_postStore.postPost(_newpost);
                               post.giagoi = selectedPack[index] == null
                                   ? postStore
                                       .packList.packs[post.goiBaiDangId - 1].phi
@@ -708,8 +772,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                 selectedDatefl[index] = null;
                                 selectedPack[index] = null;
                               });
-                            }
-                          });
+                            });
+                          }
                         },
                         buttonColor: Colors.orangeAccent,
                         textColor: Colors.white,
@@ -730,12 +794,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
           return _showErrorMessage(postStore.errorStore.errorMessage);
         }
         if (postStore.successgiahan) {
-          postStore.successgiahan=false;
+          postStore.successgiahan = false;
           _showSuccssfullMesssage("Gia hạn thành công");
         }
-        if(postStore.successdelete)
-        {
-          postStore.successdelete=false;
+        if (postStore.successdelete) {
+          postStore.successdelete = false;
           _showSuccssfullMesssage("Xóa bài đăng thành công");
         }
         return SizedBox.shrink();
@@ -751,12 +814,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
           message: message,
           title: "Thông báo",
           duration: Duration(seconds: 5),
-        )
-            .show(context);
+        ).show(context);
       }
       return SizedBox.shrink();
     });
   }
+
   _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
