@@ -63,7 +63,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             builder: (context){
               return!_lsgdStore.Allloading?_buildBody():CustomProgressIndicatorWidget();
             }
-        )
+        ),
       ),
     );
   }

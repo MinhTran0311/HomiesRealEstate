@@ -149,21 +149,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
       color: Colors.orange,
       width: double.infinity,
       height: double.infinity,
-      child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: <Widget>[
-            _buildUserInformation(),
-            MenuItem(),
-            // IndexedStack(
-            //   children: [
-            //     MenuItem(),
-            //     _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
-            //     WalletPage(),
-            //     ReportPage(title: "Doanh Thu",)
-            //   ],
-            //   index: _selectedIndex,
-            // ),
-          ]),
+      child: RefreshIndicator(
+        onRefresh: (){
+          setState(() {
+            _userstore.getCurrentUser();
+            _userstore.getCurrentWalletUser();
+            _userstore.getCurrentPictureUser();
+            _postStore.getPostForCurs(false);
+            _postStore.getsobaidang();
+          });
+        },
+        child:!_userstore.loadingCurrentUser ||
+            !_userstore.loadingCurrentUserWallet ||
+            !_userstore.loadingCurrentUserPicture? ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: <Widget>[
+              _buildUserInformation(),
+              MenuItem(),
+              // IndexedStack(
+              //   children: [
+              //     MenuItem(),
+              //     _userstore.user!=null?AccountPage(Phone: _userstore.user.phoneNumber,Email: _userstore.user.emailAddress,Address: "Address",SurName: _userstore.user.surname,Name: _userstore.user.name,creationTime: _userstore.user.creationTime,):Container(),
+              //     WalletPage(),
+              //     ReportPage(title: "Doanh Thu",)
+              //   ],
+              //   index: _selectedIndex,
+              // ),
+            ])
+        : CustomProgressIndicatorWidget(),
+      ),
     );
   }
 
