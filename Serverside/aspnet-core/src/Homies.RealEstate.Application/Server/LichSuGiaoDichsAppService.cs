@@ -337,13 +337,15 @@ namespace Homies.RealEstate.Server
 
         public async Task KiemDuyetGiaoDich(EntityDto<Guid> input)
         {
-            var user = await GetCurrentUserAsync();
+            var currentuser = await GetCurrentUserAsync();
 
             var lsgd = await _lichSuGiaoDichRepository.GetAsync(input.Id);
             //if (lsgd.KiemDuyetVienId==null)
             //{
-                lsgd.KiemDuyetVienId = user.Id;
-                lsgd.UserFk.Wallet += lsgd.SoTien;
+                lsgd.KiemDuyetVienId = currentuser.Id;
+                //lsgd.UserFk.Wallet += lsgd.SoTien;
+            var user = await _lookup_userRepository.GetAsync((long)lsgd.UserId);
+            user.Wallet += lsgd.SoTien;
             // }
         }
     }
