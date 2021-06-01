@@ -23,7 +23,7 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
-
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 
 class Detail extends StatefulWidget {
   final Post post;
@@ -62,6 +62,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   }
 
   void didChangeDependencies() {
+    super.didChangeDependencies();
+
     _postStore = Provider.of<PostStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
     _userStore = Provider.of<UserStore>(context);
@@ -77,14 +79,13 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     if(!_postStore.getRecommendPostsFutureLoading && !finishload) {
       _postStore.getRecommendPosts(post.tagTimKiem,false);
     }
-    if (!_postStore.isBaiGhimYeuThichLoading && !finishload)
+    if (Preferences.access_token.isNotEmpty && !_postStore.isBaiGhimYeuThichLoading && !finishload)
     {
       _postStore.isBaiGhimYeuThichOrNot(this.post.id.toString());
       finishload=true;
     }
 
 
-    super.didChangeDependencies();
 
   }
 
@@ -96,7 +97,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         Observer(
           builder: (context)
           {
-            return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || _postStore.isBaiGhimYeuThichLoading || _postStore.propertiesLoading)
+            return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || (Preferences.access_token.isNotEmpty && _postStore.isBaiGhimYeuThichLoading) || _postStore.propertiesLoading)
                 ? CustomProgressIndicatorWidget()
                 : Material(child: _buildContent());
           }
@@ -223,7 +224,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                             ),
                                           ),
                                         ),
-                                        Container(
+                                        Preferences.access_token.isNotEmpty ? Container(
                                           height: 50,
                                           width: 50,
                                           decoration: BoxDecoration(
@@ -242,7 +243,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                               },
                                             ),
                                           ),
-                                        )
+                                        ):Container(width: 0, height: 0,)
                                       ],
                                     ),
                                   ),
@@ -869,10 +870,10 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   Widget buildTag(String filterName){
     return GestureDetector(
       onTap: (){
-        _postStore.setSearchContent(post.tagTimKiem);
-        _postStore.getRecommendPosts(post.tagTimKiem,true);
+        //_postStore.setSearchContent(post.tagTimKiem);
+        _postStore.setTagFilterModel(filterName);
+        _postStore.getRecommendPosts(filterName,true);
         Navigator.popUntil(context, (route) => route.isFirst);
-
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 6),

@@ -59,12 +59,6 @@ mixin _$PostStore on _PostStore, Store {
               () => super.createOrChangeStatusBaiGhimLoading,
               name: '_PostStore.createOrChangeStatusBaiGhimLoading'))
           .value;
-  Computed<bool> _$hasFilterComputed;
-
-  @override
-  bool get hasFilter => (_$hasFilterComputed ??=
-          Computed<bool>(() => super.hasFilter, name: '_PostStore.hasFilter'))
-      .value;
   Computed<bool> _$loadingPackComputed;
 
   @override
@@ -988,11 +982,22 @@ mixin _$PostStore on _PostStore, Store {
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
-  void setSearchContent(String value, {bool isTag = false}) {
+  void setSearchContent(String value) {
     final _$actionInfo = _$_PostStoreActionController.startAction(
         name: '_PostStore.setSearchContent');
     try {
-      return super.setSearchContent(value, isTag: isTag);
+      return super.setSearchContent(value);
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTagFilterModel(String value) {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.setTagFilterModel');
+    try {
+      return super.setTagFilterModel(value);
     } finally {
       _$_PostStoreActionController.endAction(_$actionInfo);
     }
@@ -1067,7 +1072,6 @@ getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
 loadinggetcategorys: ${loadinggetcategorys},
 createOrChangeStatusBaiGhimLoading: ${createOrChangeStatusBaiGhimLoading},
-hasFilter: ${hasFilter},
 loadingPack: ${loadingPack},
 loadingThuocTinh: ${loadingThuocTinh},
 loadingNewpost: ${loadingNewpost},

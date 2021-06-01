@@ -18,6 +18,9 @@ import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dart';
 import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
+import 'package:boilerplate/stores/admin/danhMucManagement/danhMucManagement_store.dart';
+import 'package:boilerplate/stores/admin/thuocTinhManagement/thuocTinhManagement_store.dart';
+import 'package:boilerplate/stores/admin/goiBaiDangManagement/goiBaiDangManagement_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 
 class ManagementScreen extends StatefulWidget {
@@ -30,6 +33,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
   UserManagementStore _userManagementStore;
   ThemeStore _themeStore;
   RoleManagementStore _roleManagementStore;
+  DanhMucManagementStore _danhMucManagementStore;
+  ThuocTinhManagementStore _thuocTinhManagementStore;
+  GoiBaiDangManagementStore _goiBaiDangManagementStore;
 
   @override
   void initState() {
@@ -43,6 +49,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _userManagementStore = Provider.of<UserManagementStore>(context);
     _roleManagementStore = Provider.of<RoleManagementStore>(context);
+    _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
+    _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
+    _goiBaiDangManagementStore = Provider.of<GoiBaiDangManagementStore>(context);
     if(!_userManagementStore.loadingCountAllUser) {
       _userManagementStore.fCountAllUsers();
     }
@@ -51,6 +60,15 @@ class _ManagementScreenState extends State<ManagementScreen> {
     }
     if(!_roleManagementStore.loadingCountAllRoles) {
       _roleManagementStore.fCountAllRoles();
+    }
+    if(!_danhMucManagementStore.loadingCountAllDanhMucs) {
+      _danhMucManagementStore.fCountAllDanhMucs();
+    }
+    if(!_thuocTinhManagementStore.loadingCountAllThuocTinhs) {
+      _thuocTinhManagementStore.fCountAllThuocTinhs();
+    }
+    if(!_goiBaiDangManagementStore.loadingCountAllGoiBaiDangs) {
+      _goiBaiDangManagementStore.fCountAllGoiBaiDangs();
     }
   }
 
@@ -84,7 +102,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
       builder: (context) {
         return (_userManagementStore.loadingCountAllUser
         || _userManagementStore.loadingCountNewUsersInMonth
-        || _roleManagementStore.loadingCountAllRoles)
+        || _roleManagementStore.loadingCountAllRoles
+        || _danhMucManagementStore.loadingCountAllDanhMucs
+        || _thuocTinhManagementStore.loadingCountAllThuocTinhs
+        || _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs)
             ? CustomProgressIndicatorWidget()
             : Material(child: _buildMenuItems(),
           color: Color.fromRGBO(236, 236, 238, 1),
@@ -219,9 +240,11 @@ class _ManagementScreenState extends State<ManagementScreen> {
             SizedBox(height: 25,),
             _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
-            _buildListItem("Danh mục", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            _buildListItem("Danh mục", "assets/images/project-management.png", _danhMucManagementStore.countAllDanhMucs, "Danh sách danh mụcc", _clickBtnListRole, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
-            _buildListItem("Gói bài đăng", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            _buildListItem("Gói bài đăng", "assets/images/project-management.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            SizedBox(height: 25,),
+            _buildListItem("Thuộc tính", "assets/images/project-management.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListRole, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
             // _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
             // SizedBox(height: 25,),

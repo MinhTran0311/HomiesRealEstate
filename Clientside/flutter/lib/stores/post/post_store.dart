@@ -109,7 +109,7 @@ abstract class _PostStore with Store {
   List<String> imageUrlList;
 
   @observable
-  filter_Model filter_model = new filter_Model();
+  filter_Model filter_model = filter_Model.instance;
 
   @observable
   bool success = false;
@@ -151,19 +151,19 @@ abstract class _PostStore with Store {
   @computed
   bool get createOrChangeStatusBaiGhimLoading => fetchCreateOrChangeBaiGhimFuture.status == FutureStatus.pending;
 
-  @computed
-  bool get hasFilter => filter_model!=null;
-
   // actions:-------------------------------------------------------------------
   @action
-  void setSearchContent(String value, {bool isTag=false}) {
+  void setSearchContent(String value) {
     searchContent = value;
-    if (!hasFilter) filter_model = new filter_Model();
+    filter_model.searchContent = value;
+    print("helloooo");
+    print(filter_model.searchContent);
+  }
 
-    if (isTag)
+  @action
+  void setTagFilterModel(String value) {
+    filter_model=filter_Model.instance;
       filter_model.tagTimKiem = value;
-    else
-      filter_model.searchContent = searchContent;
   }
 
   @action
@@ -224,9 +224,8 @@ abstract class _PostStore with Store {
   @action
   Future getRecommendPosts(String tag, bool isSearchInHome) async {
 
-    final futrue = _repository.getPosts(0,3,new filter_Model(tagTimKiem: tag));
+    final futrue = _repository.getPosts(0,10,new filter_Model(tagTimKiem: tag));
     fetchisGetRecommendPostsFuture = ObservableFuture(futrue);
-    setSearchContent(tag, isTag: true);
     futrue.then((result) {
       if(!isSearchInHome)
         this.rcmPostList = result;

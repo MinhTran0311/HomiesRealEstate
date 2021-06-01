@@ -6,7 +6,7 @@ import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
-import 'package:boilerplate/models/role/role_list.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 import 'package:dio/dio.dart';
 
 class DanhMucApi {
@@ -16,9 +16,10 @@ class DanhMucApi {
 
   DanhMucApi(this._dioClient, this._restClient);
 
-  Future<RoleList> getAllRoles() async {
+  //Get all danh mục
+  Future<DanhMucList> getAllDanhMucs() async {
     try {
-      final res = await _dioClient.post(Endpoints.getAllRole,
+      final res = await _dioClient.post(Endpoints.getAllDanhMucs,
         data: {
         },
         options: Options(
@@ -27,19 +28,18 @@ class DanhMucApi {
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
         ),);
-      print("Get All Role success" + res.toString());
-      return RoleList.fromJson(res);
+      return DanhMucList.fromJson(res);
     } catch(e) {
-      print("lỗi get all roles" + e.toString());
+      print("lỗi get all Danh Muc" + e.toString());
       throw e;
     }
   }
 
-  //Count all users
-  Future<dynamic> countAllRoles() async {
+  //Count all danh mục
+  Future<dynamic> countAllDanhMucs() async {
     try {
       final res = await _dioClient.post(
-        Endpoints.coutAllRole,
+        Endpoints.countAllDanhMucs,
         options: Options(
             headers: {
               "Abp.TenantId": 1,

@@ -137,18 +137,18 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
-  final _$filter_modelAtom = Atom(name: '_LSGDStore.filter_model');
+  final _$skipCountAllAtom = Atom(name: '_LSGDStore.skipCountAll');
 
   @override
-  filter_Model get filter_model {
-    _$filter_modelAtom.reportRead();
-    return super.filter_model;
+  int get skipCountAll {
+    _$skipCountAllAtom.reportRead();
+    return super.skipCountAll;
   }
 
   @override
-  set filter_model(filter_Model value) {
-    _$filter_modelAtom.reportWrite(value, super.filter_model, () {
-      super.filter_model = value;
+  set skipCountAll(int value) {
+    _$skipCountAllAtom.reportWrite(value, super.skipCountAll, () {
+      super.skipCountAll = value;
     });
   }
 
@@ -212,6 +212,36 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$successAllAtom = Atom(name: '_LSGDStore.successAll');
+
+  @override
+  bool get successAll {
+    _$successAllAtom.reportRead();
+    return super.successAll;
+  }
+
+  @override
+  set successAll(bool value) {
+    _$successAllAtom.reportWrite(value, super.successAll, () {
+      super.successAll = value;
+    });
+  }
+
+  final _$isIntialLoadingAllAtom = Atom(name: '_LSGDStore.isIntialLoadingAll');
+
+  @override
+  bool get isIntialLoadingAll {
+    _$isIntialLoadingAllAtom.reportRead();
+    return super.isIntialLoadingAll;
+  }
+
+  @override
+  set isIntialLoadingAll(bool value) {
+    _$isIntialLoadingAllAtom.reportWrite(value, super.isIntialLoadingAll, () {
+      super.isIntialLoadingAll = value;
+    });
+  }
+
   final _$getLSGDAsyncAction = AsyncAction('_LSGDStore.getLSGD');
 
   @override
@@ -222,8 +252,8 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
 
   @override
-  Future<dynamic> getAllLSGD() {
-    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD());
+  Future<dynamic> getAllLSGD(bool isLoadMore) {
+    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore));
   }
 
   final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
@@ -252,11 +282,13 @@ fetchNaptienFuture: ${fetchNaptienFuture},
 fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
 fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
 skipCount: ${skipCount},
-filter_model: ${filter_model},
+skipCountAll: ${skipCountAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},
 isIntialLoading: ${isIntialLoading},
+successAll: ${successAll},
+isIntialLoadingAll: ${isIntialLoadingAll},
 loading: ${loading},
 Allloading: ${Allloading},
 loadingNapTien: ${loadingNapTien},

@@ -35,7 +35,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Authorization.Users.Profile
 {
-    [AbpAuthorize]
+    [AbpAllowAnonymous]
     public class ProfileAppService : RealEstateAppServiceBase, IProfileAppService
     {
         private const int MaxProfilPictureBytes = 5242880; //5MB
@@ -444,7 +444,7 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         }
 
 
-        [DisableAuditing]
+        [DisableAuditing,AbpAllowAnonymous]
         public async Task<CurrentUserProfileEditDto> GetUserProfileById(long Id)
         {
             var user = await UserManager.GetUserByIdAsync(Id);
