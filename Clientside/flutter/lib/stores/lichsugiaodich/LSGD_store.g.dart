@@ -137,13 +137,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
-  final _$filter_modelAtom = Atom(name: '_LSGDStore.filter_model');
-
-  @override
-  filter_Model get filter_model {
-    _$filter_modelAtom.reportRead();
-    return super.filter_model;
-  }
   final _$skipCountAllAtom = Atom(name: '_LSGDStore.skipCountAll');
 
   @override
@@ -156,21 +149,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
   set skipCountAll(int value) {
     _$skipCountAllAtom.reportWrite(value, super.skipCountAll, () {
       super.skipCountAll = value;
-    });
-  }
-
-  final _$filter_modelAllAtom = Atom(name: '_LSGDStore.filter_modelAll');
-
-  @override
-  filter_Model get filter_modelAll {
-    _$filter_modelAllAtom.reportRead();
-    return super.filter_modelAll;
-  }
-
-  @override
-  set filter_modelAll(filter_Model value) {
-    _$filter_modelAllAtom.reportWrite(value, super.filter_modelAll, () {
-      super.filter_modelAll = value;
     });
   }
 
@@ -233,6 +211,7 @@ mixin _$LSGDStore on _LSGDStore, Store {
       super.isIntialLoading = value;
     });
   }
+
   final _$successAllAtom = Atom(name: '_LSGDStore.successAll');
 
   @override
@@ -304,9 +283,7 @@ fetchNaptienFuture: ${fetchNaptienFuture},
 fetchKiemDuyetGiaoDichFuture: ${fetchKiemDuyetGiaoDichFuture},
 fetchKiemDuyetNapTienFuture: ${fetchKiemDuyetNapTienFuture},
 skipCount: ${skipCount},
-filter_model: ${filter_model},
 skipCountAll: ${skipCountAll},
-filter_modelAll: ${filter_modelAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},

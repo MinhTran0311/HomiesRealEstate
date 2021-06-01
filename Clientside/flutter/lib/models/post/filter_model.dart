@@ -1,20 +1,24 @@
 class filter_Model {
-  String loaiBaiDang;
-  String searchContent;
-  String giaMin;
-  String giaMax;
-  String dienTichMin;
-  String dienTichMax;
-  String tenTinh;
-  String tenHuyen;
-  String tenXa;
-  String diaChi;
-  String username;
-  String tagTimKiem;
-  String xMax;
-  String yMax;
-  String xMin;
-  String yMin;
+  filter_Model._privateConstructor();
+
+  static final filter_Model instance = filter_Model._privateConstructor();
+
+  String loaiBaiDang="";
+  String searchContent="";
+  String giaMin="";
+  String giaMax="";
+  String dienTichMin="";
+  String dienTichMax="";
+  String tenTinh="";
+  String tenHuyen="";
+  String tenXa="";
+  String diaChi="";
+  String username="";
+  String tagTimKiem="";
+  String xMax="";
+  String yMax="";
+  String xMin="";
+  String yMin="";
 
   filter_Model({
     this.searchContent="",

@@ -27,6 +27,7 @@ class _FilterState extends State<Filter> {
   TextEditingController _dienTichMinValueController = TextEditingController();
   TextEditingController _dienTichMaxValueController = TextEditingController();
   TextEditingController _diaChiController = TextEditingController();
+  TextEditingController _tagController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
 
   FocusNode _minGiaFocus;
@@ -49,6 +50,7 @@ class _FilterState extends State<Filter> {
       _filterStore.getAllProvince();
 
     _diaChiController.text = _filterStore.filter_model.diaChi;
+    _tagController.text = _filterStore.filter_model.tagTimKiem;
     _usernameController.text = _filterStore.filter_model.username;
     _giaMinValueController.text=_filterStore.filter_model.giaMin;
     _giaMaxValueController.text=_filterStore.filter_model.giaMax;
@@ -138,6 +140,7 @@ class _FilterState extends State<Filter> {
                     // ),
                     buiDienTichFilter(),
                     buildDiaChiFilter(),
+                    buildTagTimKiemFilter(),
                     buildProvinceFilter(),
                     SizedBox(height: 12,),
                     buildTownFilter(),
@@ -145,7 +148,7 @@ class _FilterState extends State<Filter> {
                     buildCommuneFilter(),
                     buildUsernameFilter(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         buildApplyButton(),
                         buildClearButton(),
@@ -535,7 +538,6 @@ class _FilterState extends State<Filter> {
               controller: _diaChiController,
               onChanged: (value){
                 _filterStore.setDiaChiContent(value);
-                // _filterStore.setMinGiaSlider(double.parse(value),value.isEmpty);
               },
               textAlign: TextAlign.start,
               style: TextStyle(
@@ -545,7 +547,72 @@ class _FilterState extends State<Filter> {
               decoration: InputDecoration(
                 hintText: "Địa chỉ bất kì",
                 suffixIcon: IconButton(
-                  onPressed: () => _diaChiController.clear(),
+                  onPressed: () {
+                    _diaChiController.clear();
+                    _filterStore.setDiaChiContent("");
+                  },
+                  icon: Icon(Icons.clear),
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[400],
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border:  UnderlineInputBorder(
+                    borderSide:  BorderSide(color: Colors.black)
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTagTimKiemFilter(){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 110,
+            child: Text("Tag",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          SizedBox(
+            width: 12,
+          ),
+          Expanded(
+            child: TextField(
+              autofocus: false,
+              keyboardType: TextInputType.text,
+              controller: _tagController,
+              onChanged: (value){
+                _filterStore.setTag(value);
+              },
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: "Tag bất kỳ",
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _filterStore.setTag("");
+                    _tagController.clear();
+                  },
                   icon: Icon(Icons.clear),
                 ),
                 hintStyle: TextStyle(
@@ -572,46 +639,63 @@ class _FilterState extends State<Filter> {
     return Container(
       child: Observer(
         builder: (context){
-          return  DropdownSearch<String>(
-
-            items: _filterStore.provinceListString,
-            hint: "Chọn tỉnh thành",
-            onChanged: (String Value) {
-              _filterStore.filter_model.tenTinh = Value;
-              if (Value!=null)
-                _filterStore.getTownByProvinceName(Value);
-            },
-            selectedItem: _filterStore.filter_model.tenTinh,
-            showSearchBox: true,
-            searchBoxDecoration: InputDecoration(
-              border: OutlineInputBorder(),
-              // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-              labelText: "Tìm tỉnh thành",
-            ),
-            showClearButton: true,
-            popupTitle: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Tỉnh thành',
+          return  Row(
+            children:[
+              Container(
+                width: 110,
+                child: Text("Tỉnh",
                   style: TextStyle(
-                    fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    fontSize: 22,
                   ),
+                  textAlign: TextAlign.start,
                 ),
               ),
-            ),
-          );
+              SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child:
+                  DropdownSearch<String>(
+                    items: _filterStore.provinceListString,
+                    hint: "Chọn tỉnh thành",
+                    onChanged: (String Value) {
+                      _filterStore.filter_model.tenTinh = Value;
+                      if (Value!=null)
+                        _filterStore.getTownByProvinceName(Value);
+                    },
+                    selectedItem: _filterStore.filter_model.tenTinh,
+                    showSearchBox: true,
+                    searchBoxDecoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                      labelText: "Tìm tỉnh thành",
+                    ),
+                    showClearButton: true,
+                    popupTitle: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColorDark,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Tỉnh thành',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                ),
+              ),
+          ]);
         },
-
       )
     );
   }
@@ -619,44 +703,63 @@ class _FilterState extends State<Filter> {
     return Observer(
       builder: (context){
         return (!_filterStore.loadingTown && _filterStore.townListString.length>0) ?
-        DropdownSearch<String>(
-          items: _filterStore.townListString,
-          hint: "Chọn quận/huyện",
-          onChanged: (String Value) {
-            if (_filterStore.filter_model.tenHuyen != Value){
-            _filterStore.filter_model.tenHuyen = Value;
-            if (Value!=null)
-              _filterStore.getCommuneByTownName(Value);
-            }
-          },
-          selectedItem: _filterStore.filter_model.tenHuyen,
-          showSearchBox: true,
-          searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
-            // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-            labelText: "Tìm quận/huyện",
-          ),
-          showClearButton: true,
-          popupTitle: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+        Row(
+          children: [
+            Container(
+              width: 110,
+              child: Text("Huyện",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+                textAlign: TextAlign.start,
               ),
             ),
-            child: Center(
-              child: Text(
-                'Quận/huyện',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: DropdownSearch<String>(
+                items: _filterStore.townListString,
+                hint: "Chọn quận/huyện",
+                onChanged: (String Value) {
+                  if (_filterStore.filter_model.tenHuyen != Value){
+                  _filterStore.filter_model.tenHuyen = Value;
+                  if (Value!=null)
+                    _filterStore.getCommuneByTownName(Value);
+                  }
+                },
+                selectedItem: _filterStore.filter_model.tenHuyen,
+                showSearchBox: true,
+                searchBoxDecoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                  labelText: "Tìm quận/huyện",
+                ),
+                showClearButton: true,
+                popupTitle: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorDark,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Quận/huyện',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ) : Container(height: 0,width: 0,);
       },
     );
@@ -665,43 +768,60 @@ class _FilterState extends State<Filter> {
     return Observer(
       builder: (context){
         return (!_filterStore.loadingCommune && _filterStore.communeListString.length>0) ?
-        DropdownSearch<String>(
-          items: _filterStore.communeListString,
-          hint: "Chọn phường/xã",
-          onChanged: (String Value) {
-            _filterStore.filter_model.tenXa = Value;
-            if (Value==null) {
-              _filterStore.communeListString.clear();
-            }
-          },
-          selectedItem: _filterStore.filter_model.tenXa,
-          showSearchBox: true,
-          searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
-            // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-            labelText: "Tìm phường/xã",
-          ),
-          showClearButton: true,
-          popupTitle: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
+        Row(
+          children: [
+            Container(
+          width: 110,
+          child: Text("Xã",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
             ),
-            child: Center(
-              child: Text(
-                'Phường/xã',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            textAlign: TextAlign.start,
+          ),
+        ),
+            SizedBox(width: 12),
+            Expanded(
+              child: DropdownSearch<String>(
+                items: _filterStore.communeListString,
+                hint: "Chọn phường/xã",
+                onChanged: (String Value) {
+                  _filterStore.filter_model.tenXa = Value;
+                  if (Value==null) {
+                    _filterStore.communeListString.clear();
+                  }
+                },
+                selectedItem: _filterStore.filter_model.tenXa,
+                showSearchBox: true,
+                searchBoxDecoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                  labelText: "Tìm phường/xã",
+                ),
+                showClearButton: true,
+                popupTitle: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorDark,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Phường/xã',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ) : Container(height: 0,width: 0,);
       },
     );
@@ -742,7 +862,10 @@ class _FilterState extends State<Filter> {
               decoration: InputDecoration(
                 hintText: "Username",
                 suffixIcon: IconButton(
-                  onPressed: () => _usernameController.clear(),
+                  onPressed: () {
+                    _filterStore.setUsernameContent("");
+                    _usernameController.clear();
+                  } ,
                   icon: Icon(Icons.clear),
                 ),
                 hintStyle: TextStyle(
@@ -798,6 +921,7 @@ class _FilterState extends State<Filter> {
             _giaMinValueController.clear();
           }
           _diaChiController.clear();
+          _tagController.clear();
           _usernameController.clear();
           _filterStore.resetValue();
         },
@@ -812,6 +936,7 @@ class _FilterState extends State<Filter> {
     _dienTichMaxValueController.dispose();
     _dienTichMinValueController.dispose();
     _diaChiController.dispose();
+    _tagController.dispose();
     _usernameController.dispose();
     super.dispose();
   }

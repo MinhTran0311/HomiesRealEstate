@@ -216,12 +216,10 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     // }
   }
 
-  Future<listLSGD> getLSGD(int skipCount, int maxResultCount, filter_Model filter_model) async {
-    if (filter_model==null)
-      filter_model = new filter_Model();
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount) async {
     try {
       final res = await _dioClient.get(Endpoints.getCurrenlichsugiaodich,
-        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount),
+        queryParameters: {"skipCount": skipCount, "maxCount": maxResultCount},
         options: Options(
             headers: {
               "Abp.TenantId": 1,
