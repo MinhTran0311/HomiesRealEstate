@@ -349,7 +349,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   //Update user
-  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive) async {
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async {
     try {
       final res = await _dioClient.post(
         Endpoints.createOrUpdateUser,
@@ -363,6 +363,9 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
             "phoneNumber": phoneNumber,
             "isActive": isActive,
           },
+          "assignedRoleNames": [
+            roleName
+          ],
         },
         options: Options(
           headers: {

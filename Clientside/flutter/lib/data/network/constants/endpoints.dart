@@ -99,4 +99,7 @@ class Endpoints {
   //Đếm tổng số thuộc tính
   static const String countAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/CountAllThuocTinhs";
 
+  //Đếm tổng số bài đăng trong tháng
+  static const String countNewBaiDangInMonth = homiesUrl + "/services/app/BaiDangs/CountNewBaiDangInMonth";
+
 }

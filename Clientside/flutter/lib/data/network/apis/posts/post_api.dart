@@ -352,4 +352,23 @@ class PostApi {
       throw e;
     }
   }
+
+  //Đếm số bài đăng mới trong tháng
+  Future<dynamic> countNewBaiDangInMonth() async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.countNewBaiDangInMonth,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
 }

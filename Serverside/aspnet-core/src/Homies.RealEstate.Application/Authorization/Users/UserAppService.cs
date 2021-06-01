@@ -571,12 +571,14 @@ namespace Homies.RealEstate.Authorization.Users
             }
 
             var roleNames = new Dictionary<int, string>();
+            var roleDisplayNames = new Dictionary<int, string>();
             foreach (var roleId in distinctRoleIds)
             {
                 var role = await _roleManager.FindByIdAsync(roleId.ToString());
                 if (role != null)
                 {
-                    roleNames[roleId] = role.DisplayName;
+                    roleNames[roleId] = role.Name;
+                    roleDisplayNames[roleId] = role.DisplayName;
                 }
             }
 
@@ -587,6 +589,7 @@ namespace Homies.RealEstate.Authorization.Users
                     if (roleNames.ContainsKey(userListRoleDto.RoleId))
                     {
                         userListRoleDto.RoleName = roleNames[userListRoleDto.RoleId];
+                        userListRoleDto.RoleDisplayName = roleDisplayNames[userListRoleDto.RoleId];
                     }
                 }
 

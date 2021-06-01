@@ -4,11 +4,7 @@ import 'dart:math';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
-// import 'package:boilerplate/stores/post/post_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
-// import 'package:boilerplate/stores/user/user_store.dart';
-// import 'package:boilerplate/models/user/user.dart';
-// import 'package:boilerplate/stores/admin/userManagement/userManagement_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
@@ -19,23 +15,22 @@ import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:boilerplate/ui/admin/userManagement/filterUser.dart';
-import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
-import 'package:boilerplate/models/role/role.dart';
-import 'package:boilerplate/models/role/role_list.dart';
+import 'package:boilerplate/stores/admin/danhMucManagement/danhMucManagement_store.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 
 import '../management.dart';
 
-class RoleManagementScreen extends StatefulWidget {
+class DanhMucManagementScreen extends StatefulWidget {
   @override
-  _RoleManagementScreenState createState() => _RoleManagementScreenState();
+  _DanhMucManagementScreenState createState() => _DanhMucManagementScreenState();
 }
 
-class _RoleManagementScreenState extends State<RoleManagementScreen> {
-  RoleManagementStore _roleManagementStore;
+class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
+  DanhMucManagementStore _danhMucManagementStore;
 
   var _selectedValue;
-  var _permissions;
+  // var _permissions;
 
   @override
   void initState() {
@@ -47,7 +42,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
     super.didChangeDependencies();
 
     // initializing stores
-    _roleManagementStore = Provider.of<RoleManagementStore>(context);
+    _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
 
     // initializing stores
 
@@ -56,27 +51,13 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
     //   _roleManagementStore.getRoles();
     // }
     // check to see if already called api
-    if (!_roleManagementStore.loading) {
-      _roleManagementStore.getRoles();
+    if (!_danhMucManagementStore.loading) {
+      _danhMucManagementStore.getDanhMucs();
     }
   }
 
   _clickButtonApDung() {
 
-  }
-
-  String _handlingStringCreationTime(String time) {
-    if (time.isEmpty)
-      return '';
-    else {
-      String nam = time.substring(0,4);
-      String thang = time.substring(5,7);
-      String ngay = time.substring(8,10);
-      String gio = time.substring(11,13);
-      String phut = time.substring(14,16);
-      String giay = time.substring(17,19);
-      return "Ngày tạo: " + ngay + "/" + thang + "/" + nam + ", " + gio + ":" + phut + ":" + giay;
-    }
   }
 
   @override
@@ -101,7 +82,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
           // alignment: Alignment.centerLeft,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Quản lý vai trò",
+            Text("Quản lý danh mục",
               style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
           ],
         ),
@@ -141,16 +122,16 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _roleManagementStore.loading
+        return _danhMucManagementStore.loading
             ? CustomProgressIndicatorWidget()
             : Material(
-          child: _buildRolesList(),
+          child: _buildDanhMucsList(),
           color: Color.fromRGBO(241, 242, 246, 1),);
       },
     );
   }
 
-  Widget _buildRolesList()
+  Widget _buildDanhMucsList()
   {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,22 +202,22 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   }
 
   Widget _buildListView() {
-    return _roleManagementStore.roleList != null
+    return _danhMucManagementStore.danhMucList != null
         ? Expanded(
         child: ListView.separated(
-          itemCount: _roleManagementStore.roleList.roles.length,
+          itemCount: _danhMucManagementStore.danhMucList.danhMucs.length,
           separatorBuilder: (context, position) {
             return Divider();
           },
           itemBuilder: (context, position) {
-            return _buildListItem(_roleManagementStore.roleList.roles[position], position);
+            return _buildListItem(_danhMucManagementStore.danhMucList.danhMucs[position], position);
           },
         )
     )
         : Center(
       child: Text(
         // AppLocalizations.of(context).translate('home_tv_no_post_found'),
-        "Không tìm thấy vai trò nào!",
+        "Không tìm thấy danh mục nào!",
       ),
     );
   }
@@ -262,7 +243,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   //   );
   // }
 
-  Widget _buildListItem(Role role, int position) {
+  Widget _buildListItem(DanhMuc danhMuc, int position) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
@@ -299,7 +280,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                   children: [
                     Flexible(
                       child: Text(
-                        '${role.displayName}',
+                        '${danhMuc.tenDanhMuc}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.black,
@@ -333,29 +314,37 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
                             size: 20,
                           ),
                           Container(
-                              padding: EdgeInsets.only(left: 5),
-                              child: Text(
-                                // '${role.creationTime}',
-                                _handlingStringCreationTime(role.creationTime),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              )
+                            padding: EdgeInsets.only(left: 5),
+                              // child: Text(
+                              //   // '${role.creationTime}',
+                              //   _handlingStringCreationTime(role.creationTime),
+                              //   overflow: TextOverflow.ellipsis,
+                              //   style: TextStyle(
+                              //     color: Colors.black,
+                              //     fontSize: 18,
+                              //     // fontWeight: FontWeight.bold,
+                              //   ),
+                              // )
+                            child: Text(
+                              danhMuc.tag,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                // fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    _isStaticAndDefault(role.isStatic, role.isDefault),
-                    SizedBox(height: 30.0,),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     _isStaticAndDefault(role.isStatic, role.isDefault),
+                //     SizedBox(height: 30.0,),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -368,8 +357,8 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
-        if (_roleManagementStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_roleManagementStore.errorStore.errorMessage);
+        if (_danhMucManagementStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_danhMucManagementStore.errorStore.errorMessage);
         }
 
         return SizedBox.shrink();
@@ -534,7 +523,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
   Widget _buildListDropdownItem() {
     return DropdownButtonFormField(
       value: _selectedValue,
-      items: _permissions,
+      // items: _permissions,
       hint: Text("Chọn quyền"),
       onChanged: (value) {
         setState(() {

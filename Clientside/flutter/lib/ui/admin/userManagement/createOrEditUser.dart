@@ -469,6 +469,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           _store.setName(_nameController.text),
            _store.setUserId(_userNameController.text),
            _store.setUserEmail(_userEmailController.text),
+           _store.setRoleName(this.user.permissions),
+           print(this.user.permissions),
            if(_passwordController.text != null && _passwordController.text.isNotEmpty)
              {
                _store.setPassword(_passwordController.text),

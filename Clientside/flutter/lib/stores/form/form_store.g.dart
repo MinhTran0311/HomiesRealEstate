@@ -205,6 +205,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$roleNameAtom = Atom(name: '_FormStore.roleName');
+
+  @override
+  String get roleName {
+    _$roleNameAtom.reportRead();
+    return super.roleName;
+  }
+
+  @override
+  set roleName(String value) {
+    _$roleNameAtom.reportWrite(value, super.roleName, () {
+      super.roleName = value;
+    });
+  }
+
   final _$newPasswordAtom = Atom(name: '_FormStore.newPassword');
 
   @override
@@ -284,6 +299,23 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchUpdateUserFutureAtom =
+      Atom(name: '_FormStore.fetchUpdateUserFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateUserFuture {
+    _$fetchUpdateUserFutureAtom.reportRead();
+    return super.fetchUpdateUserFuture;
+  }
+
+  @override
+  set fetchUpdateUserFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateUserFutureAtom.reportWrite(value, super.fetchUpdateUserFuture,
+        () {
+      super.fetchUpdateUserFuture = value;
+    });
+  }
+
   final _$authTokenAtom = Atom(name: '_FormStore.authToken');
 
   @override
@@ -341,6 +373,21 @@ mixin _$FormStore on _FormStore, Store {
   set regist_success(bool value) {
     _$regist_successAtom.reportWrite(value, super.regist_success, () {
       super.regist_success = value;
+    });
+  }
+
+  final _$updateUser_successAtom = Atom(name: '_FormStore.updateUser_success');
+
+  @override
+  bool get updateUser_success {
+    _$updateUser_successAtom.reportRead();
+    return super.updateUser_success;
+  }
+
+  @override
+  set updateUser_success(bool value) {
+    _$updateUser_successAtom.reportWrite(value, super.updateUser_success, () {
+      super.updateUser_success = value;
     });
   }
 
@@ -527,6 +574,17 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  void setRoleName(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setRoleName');
+    try {
+      return super.setRoleName(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void validateSurname(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.validateSurname');
@@ -626,15 +684,18 @@ userEmail: ${userEmail},
 idUser: ${idUser},
 isActive: ${isActive},
 phoneNumber: ${phoneNumber},
+roleName: ${roleName},
 newPassword: ${newPassword},
 fetchTokenFuture: ${fetchTokenFuture},
 fetchRegistFuture: ${fetchRegistFuture},
 fetchResetCodeFuture: ${fetchResetCodeFuture},
 fetchChangePasswordFuture: ${fetchChangePasswordFuture},
+fetchUpdateUserFuture: ${fetchUpdateUserFuture},
 authToken: ${authToken},
 loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
+updateUser_success: ${updateUser_success},
 resetPassword_success: ${resetPassword_success},
 changePassword_succes: ${changePassword_succes},
 loading: ${loading},

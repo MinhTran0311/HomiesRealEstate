@@ -892,5 +892,15 @@ namespace Homies.RealEstate.Server
             return false;
         }
 
+        //Get tổng số bài đăng trong tháng
+        public async Task<int> CountNewBaiDangInMonth()
+        {
+            var query = _baiDangRepository.GetAll()
+                .Where(e => e.ThoiDiemDang.Month == DateTime.Now.Month && e.ThoiDiemDang.Year == DateTime.Now.Year);
+
+            var newBaiDangInMonthCount = await query.CountAsync();
+            return newBaiDangInMonthCount;
+        }
+
     }
 }

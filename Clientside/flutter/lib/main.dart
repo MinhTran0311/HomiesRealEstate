@@ -35,6 +35,7 @@ import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dar
 import 'package:boilerplate/stores/admin/goiBaiDangManagement/goiBaiDangManagement_store.dart';
 import 'package:boilerplate/stores/admin/thuocTinhManagement/thuocTinhManagement_store.dart';
 import 'package:boilerplate/stores/admin/danhMucManagement/danhMucManagement_store.dart';
+import 'package:boilerplate/stores/admin/baiDangManagement/baiDangManagement_store.dart';
 
 // global instance for app component
 AppComponent appComponent;
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
   final GoiBaiDangManagementStore _goiBaiDangManagementStore = GoiBaiDangManagementStore(appComponent.getRepository());
   final DanhMucManagementStore _danhMucManagementStore = DanhMucManagementStore(appComponent.getRepository());
   final ThuocTinhManagementStore _thuocTinhManagementStore = ThuocTinhManagementStore(appComponent.getRepository());
+  final BaiDangManagementStore _baiDangManagementStore = BaiDangManagementStore(appComponent.getRepository());
   //final FormStore _formStore = FormStore(appComponent.getRepository());
 
   @override
@@ -99,6 +101,7 @@ class MyApp extends StatelessWidget {
         Provider<GoiBaiDangManagementStore>(create: (_) => _goiBaiDangManagementStore),
         Provider<DanhMucManagementStore>(create: (_) => _danhMucManagementStore),
         Provider<ThuocTinhManagementStore>(create: (_) => _thuocTinhManagementStore),
+        Provider<BaiDangManagementStore>(create: (_) => _baiDangManagementStore),
       ],
       child: Observer(
         name: 'global-observer',

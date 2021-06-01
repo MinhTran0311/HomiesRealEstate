@@ -12,11 +12,12 @@ class DanhMucList {
 
   factory DanhMucList.fromJson(Map<String, dynamic> json) {
     // print("Json Role: " + json.toString());
+    // print("123123123123");
     List<DanhMuc> danhMucs = List<DanhMuc>();
-    // print(json.toString());
-    if (json["result"]["items"].length > 0) {
-      for (int i = 0; i < json["result"]["items"].length; i++) {
-        danhMucs.add(DanhMuc.fromMap(json["result"]["items"][i]));
+    print(json.toString());
+    if (json["result"]["totalCount"] > 0) {
+      for (int i = 0; i < json["result"]["totalCount"]; i++) {
+        danhMucs.add(DanhMuc.fromMap(json["result"]["items"][i]["danhMuc"]));
       }
     }
     return DanhMucList(

@@ -67,6 +67,8 @@ abstract class _FormStore with Store {
   @observable
   String phoneNumber = '';
   @observable
+  String roleName = '';
+  @observable
   String newPassword = '';
 
   static ObservableFuture<AuthToken> emptyAuthResponse = ObservableFuture.value(null);
@@ -90,6 +92,11 @@ abstract class _FormStore with Store {
   @observable
   ObservableFuture<dynamic> fetchChangePasswordFuture = ObservableFuture<dynamic>(emptyChangePasswordResponse);
 
+  static ObservableFuture<dynamic> emptyUpdateUserResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateUserFuture = ObservableFuture<dynamic>(emptyUpdateUserResponse);
+
   @observable
   AuthToken authToken;
 
@@ -101,6 +108,9 @@ abstract class _FormStore with Store {
 
   @observable
   bool regist_success = false;
+
+  @observable
+  bool updateUser_success = false;
 
   @observable
   bool resetPassword_success = false;
@@ -192,9 +202,15 @@ abstract class _FormStore with Store {
   void setPhoneNumber(String value) {
     phoneNumber = value;
   }
+
   @action
   void setNewPassword(String value) {
     newPassword = value;
+  }
+
+  @action
+  void setRoleName(String value) {
+    roleName = value;
   }
 
   //endregion
@@ -322,8 +338,32 @@ abstract class _FormStore with Store {
 
   @action
   Future UpdateUser() async {
-    final futrue = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive);
+    updateUser_success = false;
+    final future = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive, roleName);
+    fetchUpdateUserFuture = ObservableFuture(future);
 
+    future.then((res){
+      if (res["success"]){
+        updateUser_success = true;
+      }
+      else updateUser_success = false;
+    }).catchError((error){
+      if (error is DioError) {
+        updateUser_success=false;
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
 
     // fetchRegistFuture = ObservableFuture(futrue);
     //

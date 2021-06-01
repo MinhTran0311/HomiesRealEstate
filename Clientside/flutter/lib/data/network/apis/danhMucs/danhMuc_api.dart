@@ -19,8 +19,12 @@ class DanhMucApi {
   //Get all danh mục
   Future<DanhMucList> getAllDanhMucs() async {
     try {
-      final res = await _dioClient.post(Endpoints.getAllDanhMucs,
-        data: {
+      // print("123123123123dat");
+      final res = await _dioClient.get(Endpoints.getAllDanhMucs,
+        // data: {
+        // },
+        queryParameters: {
+          "MaxResultCount": 100,
         },
         options: Options(
             headers: {

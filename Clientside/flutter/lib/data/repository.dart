@@ -385,9 +385,9 @@ class Repository {
   }
 
   //Update user
-  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive) async
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async
   {
-    return await _userApi.updateUser(id, userName, surname, name, email, phoneNumber, isActive).then((res) {
+    return await _userApi.updateUser(id, userName, surname, name, email, phoneNumber, isActive, roleName).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
@@ -412,6 +412,14 @@ class Repository {
   Future<dynamic> countNewUsersInMonth() async
   {
     return await _userApi.countNewUsersInMonth().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Count new bai dang in month
+  Future<dynamic> countNewBaiDangsInMonth() async
+  {
+    return await _postApi.countNewBaiDangInMonth().then((res) {
       return res;
     }).catchError((error) => throw error);
   }
