@@ -33,7 +33,7 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getPosts(int skipCount, int maxResultCount, filter_Model filter_model) async {
     if (filter_model==null)
-      filter_model = new filter_Model();
+      filter_model=filter_Model.instance;
     try {
       final res = await _dioClient.get(
         Endpoints.searchPosts,

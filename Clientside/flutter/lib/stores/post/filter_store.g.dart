@@ -272,6 +272,17 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
+  void setTag(String value) {
+    final _$actionInfo =
+        _$_FilterStoreActionController.startAction(name: '_FilterStore.setTag');
+    try {
+      return super.setTag(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setUsernameContent(String value) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.setUsernameContent');

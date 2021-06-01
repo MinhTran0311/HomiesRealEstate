@@ -33,7 +33,7 @@ abstract class _FilterStore with Store {
   // store variables:-----------------------------------------------------------
   // Post observer
   @observable
-  filter_Model filter_model= new filter_Model();
+  filter_Model filter_model = filter_Model.instance;
 
   @observable
   bool success = false;
@@ -60,6 +60,10 @@ abstract class _FilterStore with Store {
   @action
   void setDiaChiContent(String value) {
     filter_model.diaChi = value;
+  }
+  @action
+  void setTag(String value) {
+    filter_model.tagTimKiem = value;
   }
   @action
   void setUsernameContent(String value) {
@@ -107,32 +111,22 @@ abstract class _FilterStore with Store {
 
   @action
   filter_Model validateSearchContent() {
-    if (loaiBaiDangDropDownValue == "Bất kì" &&
+
+    if (filter_model == null || (loaiBaiDangDropDownValue == "Bất kì" &&
         filter_model.giaMin.isEmpty &&
         filter_model.giaMax.isEmpty &&
         filter_model.dienTichMin.isEmpty&&
         filter_model.dienTichMax.isEmpty&&
         filter_model.diaChi.isEmpty&&
-        filter_model.username.isEmpty
+        filter_model.username.isEmpty &&
+        filter_model.tagTimKiem.isEmpty)
     )
       return null;
     else {
-      filter_Model finalFilter = new filter_Model();
-      finalFilter.loaiBaiDang = loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
-      finalFilter.giaMin = filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(filter_model.giaMin, giaDropDownValue);
-      finalFilter.giaMax = filter_model.giaMax.isEmpty ? filter_model.giaMax : calculateActualValue(filter_model.giaMax, giaDropDownValue);
-      finalFilter.dienTichMin = filter_model.dienTichMin;
-      finalFilter.dienTichMax = filter_model.dienTichMax;
-      finalFilter.diaChi = filter_model.diaChi;
-      finalFilter.username = filter_model.username;
-      finalFilter.tenTinh = filter_model.tenTinh;
-      finalFilter.tenHuyen = filter_model.tenHuyen;
-      finalFilter.tenXa = filter_model.tenXa;
-
-      print(finalFilter.tenTinh);
-      print(finalFilter.tenHuyen);
-      print(finalFilter.tenXa);
-      return finalFilter;
+      filter_model.loaiBaiDang = loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
+      filter_model.giaMin = filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(filter_model.giaMin, giaDropDownValue);
+      filter_model.giaMax = filter_model.giaMax.isEmpty ? filter_model.giaMax : calculateActualValue(filter_model.giaMax, giaDropDownValue);
+      return filter_model;
     }
   }
 
@@ -141,8 +135,19 @@ abstract class _FilterStore with Store {
     loaiBaiDangDropDownValue = 'Bất kì';
     giaDropDownValue = 'Bất kì';
     dienTichDropDownValue = 'Bất kì';
-    var _searchContent = filter_model.searchContent;
-    filter_model = new filter_Model(searchContent: _searchContent);
+    //var _searchContent = filter_model.searchContent;
+    //filter_model = new filter_Model(searchContent: _searchContent);
+    filter_model.giaMin="";
+    filter_model.giaMax="";
+    filter_model.dienTichMin = "";
+    filter_model.dienTichMax = "";
+    filter_model.diaChi = "";
+    filter_model.username = "";
+    filter_model.tenTinh = "";
+    filter_model.tenHuyen = "";
+    filter_model.tenXa = "";
+    filter_model.tagTimKiem = "";
+    print(filter_model.username);
   }
   //#region Province
   @observable

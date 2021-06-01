@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Observer(
             builder: (context) {
               return _store.loggedIn
-                  ? navigate(context)
+                  ? navigate(context, true)
                   : _showErrorMessage(_store.errorStore.errorMessage);
             },
           ),
@@ -273,14 +273,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
-        onPressed: () {},
+        onPressed: () {
+          navigate(context, false);
+        },
       ),
     );
   }
 
-  Widget navigate(BuildContext context) {
+  Widget navigate(BuildContext context, bool isLoggedIn) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, true);
+      prefs.setBool(Preferences.is_logged_in, isLoggedIn);
     });
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pushNamedAndRemoveUntil(

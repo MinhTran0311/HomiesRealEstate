@@ -49,7 +49,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     _userStore = Provider.of<UserStore>(context);
 
     if (!_lsgdStore.Allloading) {
-      _lsgdStore.getAllLSGD();
+      _lsgdStore.getAllLSGD(false);
     }
 
   }
@@ -63,7 +63,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             builder: (context){
               return!_lsgdStore.Allloading?_buildBody():CustomProgressIndicatorWidget();
             }
-        )
+        ),
       ),
     );
   }
@@ -85,44 +85,93 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
 
   Widget _buildBody() {
-    for(int i =0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
-      isexpanded.add(false);
-    }
-    List<ExpansionPanel> myList = [];
-    for(int i=0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
-      var expansionData  = _lsgdStore.listlsgdAll.listLSGDs[i];
-      myList.add(ExpansionPanel(
-        headerBuilder: (BuildContext context,bool isExpanded){
-          return buildCardKiemDuyetheaderBuilder(expansionData);
-        },
-        body: buildCardKiemDuyetBody(expansionData),
-        isExpanded: isexpanded[i]
-      )
-      );
-    }
+    // for(int i =0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
+    //   isexpanded.add(false);
+    // }
+    // List<ExpansionPanel> myList = [];
+    // for(int i=0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
+    //   var expansionData  = _lsgdStore.listlsgdAll.listLSGDs[i];
+    //   myList.add(ExpansionPanel(
+    //     headerBuilder: (BuildContext context,bool isExpanded){
+    //       return buildCardKiemDuyetheaderBuilder(expansionData);
+    //     },
+    //     body: buildCardKiemDuyetBody(expansionData),
+    //     isExpanded: isexpanded[i]
+    //   )
+    //   );
+    // }
+    print("Leng: ${_lsgdStore.listlsgdAll.listLSGDs.length}");
     return Container(
       color: Colors.grey[200],
       child:
       SmartRefresher(
+        key: _refresherKey,
+        controller: _refreshController,
+        enablePullUp: true,
+        enablePullDown: true,
+        header: WaterDropHeader(
+          refresh: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          idleIcon: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          waterDropColor: Colors.amber,
+        ),
+        physics: BouncingScrollPhysics(),
+        footer: ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+        ),
+        onLoading: () async {
+          print("loading");
 
+          _lsgdStore.getAllLSGD(true);
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) {
+            setState(() {});
+          }
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
+          _refreshController.loadComplete();
+        },
+        onRefresh: () async {
+          print("refresh");
+
+          _lsgdStore.getAllLSGD(false);
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) setState(() {});
+          isRefreshing = true;
+          _refreshController.refreshCompleted();
+        },
+        //scrollController: _scrollController,
+        primary: false,
         child:
         Observer(builder: (context) {
           return
-            _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? SingleChildScrollView(
-              child: ExpansionPanelList(
-                animationDuration: Duration(seconds: 2),
-                dividerColor: Colors.grey[400],
-                elevation: 1,
-                expandedHeaderPadding: EdgeInsets.all(0),
-                children: myList,
-                expansionCallback: (int i, bool e) {
-                  setState(() {
-                    isexpanded[i] = !isexpanded[i];
-                  });
-
-                },
-              ),
-            ) :
+            _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? ListView.builder(
+                key: _contentKey,
+                controller: _scrollController,
+                shrinkWrap: true, // 1st add
+                physics: ClampingScrollPhysics(), // 2d add
+                     itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+                     itemBuilder: (_, i) => ListTile(
+                         title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i])
+                     )
+              ) :
             Container(
                 child:
                   Center(child:
@@ -139,11 +188,11 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
         //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
         //        )
         // ),
-        onRefresh: (){
-          setState(() {
-            _lsgdStore.getAllLSGD();
-          });
-        },
+        // onRefresh: (){
+        //   setState(() {
+        //     _lsgdStore.getAllLSGD();
+        //   });
+        // },
 
       ),
     );
@@ -307,27 +356,39 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       },
     );
   }
-  Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,bool isexpand,int i){
-    return  ExpansionPanelList(
-            animationDuration: Duration(seconds: 2),
-            dividerColor: Colors.grey[400],
-            elevation: 1,
-            expandedHeaderPadding: EdgeInsets.all(0),
+  Widget buildExpansionKiemDuyet(lichsugiaodich lsgd){
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: ExpansionTile(
+          title:  buildCardKiemDuyetheaderBuilder(lsgd),
           children: [
-            ExpansionPanel(
-                headerBuilder: (BuildContext context,bool isexpanded){
-                 return buildCardKiemDuyetheaderBuilder(lsgd);
-                },
-                body: buildCardKiemDuyetBody(lsgd),
-              isExpanded:isexpand
-            )
+            buildCardKiemDuyetBody(lsgd)
           ],
-        expansionCallback: (int i,bool e){setState(() {
-          isexpanded[i] =! isexpanded[i];
-        });} ,
-        // ),
-      // ),
+      ),
     );
+    // return  ExpansionPanelList(
+    //         animationDuration: Duration(seconds: 2),
+    //         dividerColor: Colors.grey[400],
+    //         elevation: 1,
+    //         expandedHeaderPadding: EdgeInsets.all(0),
+    //       children: [
+    //         ExpansionPanel(
+    //             headerBuilder: (BuildContext context,bool isexpanded){
+    //              return buildCardKiemDuyetheaderBuilder(lsgd);
+    //             },
+    //             body: buildCardKiemDuyetBody(lsgd),
+    //           isExpanded:isexpand
+    //         )
+    //       ],
+    //     expansionCallback: (int i,bool e){setState(() {
+    //       isexpanded[i] =! isexpanded[i];
+    //     });} ,
+    //     // ),
+    //   // ),
+    // );
   }
   Widget buildCardKiemDuyetBody(lichsugiaodich lsgd){
     bool naptien;

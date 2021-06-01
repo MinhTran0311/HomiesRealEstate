@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/stores/reportData/reportData_store.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -22,7 +23,8 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage>{
   bool showAvg = false;
   ReportDataStore _reportDataStore;
-
+  String dropdownValue = 'Số bài đăng';
+  List<String> type = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -72,18 +74,64 @@ class _ReportPageState extends State<ReportPage>{
         Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.grey[200],
+          // color: Colors.grey[200],
+          padding: const EdgeInsets.all(12.0),
           child: TabBarView(
             children: <Widget>[
               Center(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      // SizedBox(height: 10,),
+                      // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
                       SizedBox(height: 10,),
-                      Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-                      SizedBox(height: 10,),
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue;
+                                  });
+                                },
+                                items: <String>['Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+                                    .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       Observer(builder: (context) {
-                        return !_reportDataStore.loading? Card(color: Colors.grey[200], child: SizedBox(width: double.infinity,height: 400, child:StackedAreaLineChart())):CustomProgressIndicatorWidget();
+                        return !_reportDataStore.loading? Card(
+                            color: Colors.grey[200],
+                            child: SizedBox(
+                                width: 400,
+                                height: 400,
+                                child:StackedAreaLineChart()
+                            )
+                        )
+                            :CustomProgressIndicatorWidget();
                       }
                       ),
                     ],
@@ -95,8 +143,45 @@ class _ReportPageState extends State<ReportPage>{
                     child: Column(
                       children: [
                         SizedBox(height: 10,),
-                        Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-                        SizedBox(height: 10,),
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+                            ),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: DropdownButton<String>(
+                                  value: dropdownValue,
+                                  icon: const Icon(Icons.arrow_downward),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Colors.deepPurple),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Colors.deepPurpleAccent,
+                                  ),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      dropdownValue = newValue;
+                                    });
+                                  },
+                                  items: <String>['Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
+                        // SizedBox(height: 10,),
                         Observer(builder: (context) {
                           return !_reportDataStore.loading? Card(color: Colors.grey[200], child: SizedBox(width: double.infinity,height: 400, child: HorizontalPatternForwardHatchBarChart())):CustomProgressIndicatorWidget();
                         }
@@ -105,7 +190,9 @@ class _ReportPageState extends State<ReportPage>{
                     ),
                   )
               ),
-              Center(
+              Container(
+                width: double.infinity,
+                  height: 400,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -126,69 +213,155 @@ class _ReportPageState extends State<ReportPage>{
     );
   }
   Widget buildPieChart(){
-
-    return Observer(builder: (context){
-      return _reportDataStore.listitemReports!=null?Container(
-        child: AspectRatio(
-          aspectRatio: 1.3,
-          child: Card(
-            color: Colors.white,
-            child: Row(
-              children: <Widget>[
-                const SizedBox(
-                  height: 18,
-                ),
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                        pieTouchData: PieTouchData(touchCallback: (pieTouchResponse){
-                          setState(() {
-                            final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
-                                pieTouchResponse.touchInput is! PointerUpEvent;
-                            if (desiredTouch && pieTouchResponse.touchedSection != null) {
-                              touchedIndex = pieTouchResponse.touchedSectionIndex;
-                            } else {
-                              touchedIndex = -1;
-                            }
-                          });
-                        }),
-                          borderData: FlBorderData(
-                            show: false,
-                          ),
-                          sectionsSpace: 0,
-                          centerSpaceRadius: 40,
-                          sections: showingSections()),
-                      ),
-                    ),
-                  ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
-
-                  ],
-                ),
-                const SizedBox(
-                  width: 28,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ):Container(child: Text("Không có dữ liệu"),);
-    },
-  );
-  }
-  List<PieChartSectionData> showingSections() {
-    double sumTienNap=0,sumTienChi=0,sumBaiDang=0;
+    double sumTienNap=0,sumTienChi=0,sumBaiDang=0;double sum=0;
     for(int i=0,ii=11;i<ii;i++){
       sumTienNap+=_reportDataStore.listitemReports.listitemReports[0].listyearReports[i].soTienNap;
       sumTienChi+=_reportDataStore.listitemReports.listitemReports[0].listyearReports[i].soTienChi;
       sumBaiDang+=_reportDataStore.listitemReports.listitemReports[0].listyearReports[i].soBaiDang;
     }
+    sum = sumTienChi+sumTienNap;
+    double nap =double.parse ((sumTienNap/(sum)*100).toStringAsFixed(2));
+    double chi =100-nap;
+    return Observer(builder: (context){
+      return _reportDataStore.listitemReports!=null?Container(
+        height: 360,
+        child: Stack(
+          children: [
+
+            Align(
+              alignment: Alignment.topCenter,
+              child: Card(
+                color: Colors.white,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child: Container(
+                  width: double.infinity,
+                  height: 240,
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                          alignment: Alignment.topCenter,
+                          child: Container(width: double.infinity,height: 40,padding:const EdgeInsets.only(top: 10),child: Center(child: Text("Thống kê dòng tiền",style: TextStyle(fontFamily: FontFamily.roboto, fontSize: 24,fontWeight: FontWeight.bold),)))
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          child: Expanded(
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: PieChart(
+                                PieChartData(
+                                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse){
+                                    setState(() {
+                                      final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
+                                          pieTouchResponse.touchInput is! PointerUpEvent;
+                                      if (desiredTouch && pieTouchResponse.touchedSection != null) {
+                                        touchedIndex = pieTouchResponse.touchedSectionIndex;
+                                      } else {
+                                        touchedIndex = -1;
+                                      }
+                                    });
+                                  }),
+                                    borderData: FlBorderData(
+                                      show: false,
+                                    ),
+                                    sectionsSpace: 0,
+                                    centerSpaceRadius: 40,
+                                    sections: showingSections(nap,chi)),
+                                ),
+                              ),
+                            ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 50,
+                        left: 200,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:  <Widget>[
+                            Row(
+                              children: [
+                                SizedBox(width: 20,height: 20, child: CircleAvatar(backgroundColor: Color(0xfff8b250),)),
+                                Text(" %Đã thanh toán",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto ))
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              children: [
+                                SizedBox(width: 20,height: 20, child: CircleAvatar(backgroundColor: Color(0xff0293ee),)),
+                                Text(" %Đã nạp",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto ))
+                              ],
+                            )
+                            // Text("Đã nạp: ${priceFormat(sumTienNap)}",style: TextStyle(fontSize: 18,),),
+                            // Text("Đã thanh toán: ${priceFormat(sumTienChi)}",style: TextStyle(fontSize: 18,),),
+                            // Text("Tổng: ${priceFormat(sum)}",style: TextStyle(fontSize: 18,),),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Card(
+                color: Colors.white,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                child:   Container(
+                  width: double.infinity,
+                  height: 100,
+                  padding: const EdgeInsets.all(12.0),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Đã nạp",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Đã thanh toán",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text("Tổng",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text("${priceFormat(sumTienNap)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text("${priceFormat(sumTienChi)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text("${priceFormat(sum)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ):Container(child: Text("Không có dữ liệu"),);
+    },
+  );
+  }
+
+  List<PieChartSectionData> showingSections(double nap,double chi) {
+
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
@@ -197,8 +370,8 @@ class _ReportPageState extends State<ReportPage>{
         case 0:
           return PieChartSectionData(
             color: const Color(0xff0293ee),
-            value: 40,
-            title: '40%',
+            value: nap,
+            title: '${nap}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -206,8 +379,8 @@ class _ReportPageState extends State<ReportPage>{
         case 1:
           return PieChartSectionData(
             color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
+            value: chi,
+            title: '${chi}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -215,8 +388,8 @@ class _ReportPageState extends State<ReportPage>{
         case 2:
           return PieChartSectionData(
             color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
+            value: 0,
+            title: ' ',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -224,8 +397,8 @@ class _ReportPageState extends State<ReportPage>{
         case 3:
           return PieChartSectionData(
             color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
+            value: 0,
+            title: ' ',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -469,7 +642,7 @@ class _ReportPageState extends State<ReportPage>{
 
   Widget StackedAreaLineChart(){
     return new charts.LineChart(
-      _createLineChartData(_reportDataStore.listitemReports),
+      _createLineChartData(_reportDataStore.listitemReports,dropdownValue),
       animate: true,
       animationDuration: Duration(seconds: 2),
       defaultRenderer:
@@ -479,7 +652,7 @@ class _ReportPageState extends State<ReportPage>{
 
   Widget HorizontalPatternForwardHatchBarChart(){
     return new charts.BarChart(
-      _createBarChartData(_reportDataStore.listitemReports),
+      _createBarChartData(_reportDataStore.listitemReports,dropdownValue),
       animate: true,
       animationDuration: Duration(seconds: 2),
       barGroupingType: charts.BarGroupingType.grouped,
@@ -489,13 +662,26 @@ class _ReportPageState extends State<ReportPage>{
 
 
   /// Create series list with multiple series
-  static List<charts.Series<LinearSales, int>> _createLineChartData(listitemReport l) {
+  static List<charts.Series<LinearSales, int>> _createLineChartData(listitemReport l,String dropdownValue) {
     List<LinearSales> soBaiDang=[],soTienNap=[],soTienChi=[];
     if (l != null) {
       for(int i=0,ii=12;i<ii;i++){
-        soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang),);
-        soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soBaiDang).toInt()));
-        soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soBaiDang).toInt()));
+        if(dropdownValue == "Số bài đăng"){
+          soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang),);
+          soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
+          soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
+        }
+        else if(dropdownValue == "Số tiền nạp"){
+          soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang*0),);
+          soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
+          soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
+        }
+        else{
+          soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang*0),);
+          soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
+          soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
+        }
+
       }
     }
     return [
@@ -526,13 +712,28 @@ class _ReportPageState extends State<ReportPage>{
 
 
   /// Create series list with multiple series
-  static List<charts.Series<OrdinalSales, String>> _createBarChartData(listitemReport l) {
+  static List<charts.Series<OrdinalSales, String>> _createBarChartData(listitemReport l,String dropdownValue) {
+
+
     List<OrdinalSales> soBaiDang=[],soTienNap=[],soTienChi=[];
     if (l != null) {
       for(int i=0,ii=12;i<ii;i++){
-        soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang),);
-        soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
-        soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
+        if(dropdownValue == "Số bài đăng"){
+          soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang),);
+          soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
+          soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
+        }
+        else if(dropdownValue == "Số tiền nạp"){
+          soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang*0),);
+          soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
+          soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
+        }
+        else{
+          soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang*0),);
+          soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
+          soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
+        }
+
       }
     }
     return [
@@ -562,29 +763,29 @@ class _ReportPageState extends State<ReportPage>{
   static String ThangInttoString(int i){
     switch (i) {
       case 0:
-        return 'Jan\n2021';
+        return 'Jan';
       case 1:
-        return 'Feb\n2021';
+        return 'Feb';
       case 2:
-        return 'Mar\n2021';
+        return 'Mar';
       case 3:
-        return 'Apr\n2021';
+        return 'Apr';
       case 4:
-        return 'May\n2021';
+        return 'May';
       case 5:
-        return 'Jun\n2020';
+        return 'Jun';
       case 6:
-        return 'Jul\n2020';
+        return 'Jul';
       case 7:
-        return 'Aug\n2020';
+        return 'Aug';
       case 8:
-        return 'Sep\n2020';
+        return 'Sep';
       case 9:
-        return 'Oct\n2020';
+        return 'Oct';
       case 10:
-        return 'Nov\n2020';
+        return 'Nov';
       case 11:
-        return 'Dec\n2020';
+        return 'Dec';
       default:
         return '';
     }

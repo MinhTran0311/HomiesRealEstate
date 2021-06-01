@@ -310,9 +310,9 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
                         
-                        .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Contains(input.XaTenXaFilter))
-                        .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Contains(input.HuyenTenHuyenFilter))
-                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Contains(input.TinhTenTinhFilter))
+                        .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Equals(input.XaTenXaFilter))
+                        .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Equals(input.HuyenTenHuyenFilter))
+                        .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Equals(input.TinhTenTinhFilter))
                         .Where(e => e.ThoiHan >= DateTime.Now)
                         .Where(e => e.TrangThai.Equals("On"));
 

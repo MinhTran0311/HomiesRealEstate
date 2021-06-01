@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_HinhAnhs)]
+    [AbpAllowAnonymous]
     public class HinhAnhsAppService : RealEstateAppServiceBase, IHinhAnhsAppService
     {
         private readonly IRepository<HinhAnh> _hinhAnhRepository;
@@ -32,7 +32,7 @@ namespace Homies.RealEstate.Server
             _lookup_baiDangRepository = lookup_baiDangRepository;
 
         }
-
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetHinhAnhForViewDto>> GetAll(GetAllHinhAnhsInput input)
         {
 
@@ -68,7 +68,7 @@ namespace Homies.RealEstate.Server
                 await hinhAnhs.ToListAsync()
             );
         }
-
+        [AbpAllowAnonymous]
         public async Task<GetHinhAnhForViewDto> GetHinhAnhForView(int id)
         {
             var hinhAnh = await _hinhAnhRepository.GetAsync(id);
@@ -83,7 +83,7 @@ namespace Homies.RealEstate.Server
 
             return output;
         }
-
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetHinhAnhForViewDto>> GetAllByPostId(long postId)
         {
 
