@@ -264,7 +264,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
         .run(() => super.Naptien(thoiDiem, soTien, userId));
   }
 
-
   final _$KiemDuyetGiaoDichAsyncAction =
       AsyncAction('_LSGDStore.KiemDuyetGiaoDich');
 

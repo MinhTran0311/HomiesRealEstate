@@ -123,7 +123,7 @@ abstract class _LSGDStore with Store {
     }
     else
       skipCountAll += Preferences.skipIndex;
-    final future = _repository.getAllLSGD(skipCountAll, Preferences.maxCount, filter_modelAll);
+    final future = _repository.getAllLSGD(skipCountAll, Preferences.maxCount);
     fetchAllLSGDFuture = ObservableFuture(future);
 
     // final future = _repository.getAllLSGD();
