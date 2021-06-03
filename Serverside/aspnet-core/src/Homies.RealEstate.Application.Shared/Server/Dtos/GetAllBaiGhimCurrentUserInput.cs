@@ -5,10 +5,8 @@ using System.Text;
 
 namespace Homies.RealEstate.Server.Dtos
 {
-    public class GetAllBaiDangByCurrentUserInput : PagedAndSortedResultRequestDto
+    public class GetAllBaiGhimCurrentUserInput : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
-
-        public int? phanLoaiBaiDang { get; set; }
     }
 }

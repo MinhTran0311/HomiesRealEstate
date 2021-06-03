@@ -82,7 +82,7 @@ namespace Homies.RealEstate.Server
             );
         }
 
-        public async Task<PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>> GetAllBaiGhimByCurrentUser(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<GetBaiGhimYeuThichForViewByUserDto>> GetAllBaiGhimByCurrentUser(GetAllBaiGhimCurrentUserInput input)
         {
             var user = await GetCurrentUserAsync();
 
@@ -91,7 +91,9 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.BaiDangFk)
                         .Where(e => e.UserId == user.Id)
                         .Where(e => e.TrangThai.Equals("On"))
-                        .Where(e=>e.BaiDangFk.TrangThai.Equals("On"));
+                        .Where(e=>e.BaiDangFk.TrangThai.Equals("On"))
+                        .Where(e => e.BaiDangFk.ThoiHan > DateTime.Now)
+                        .WhereIf(input.Filter!=null, e=>e.BaiDangFk.TieuDe.Contains(input.Filter));
 
             var pagedAndFilteredBaiGhimYeuThichs = filteredBaiGhimYeuThichs
                 .OrderBy("id asc")

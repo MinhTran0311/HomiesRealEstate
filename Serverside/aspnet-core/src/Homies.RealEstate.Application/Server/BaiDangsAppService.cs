@@ -779,6 +779,7 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
+                        .WhereIf(input.Filter != null, e => e.TieuDe.Contains(input.Filter))
                         .Where(e => e.UserId == user.Id)
                         //.Where(e=>e.TrangThai.Equals("On"))
                         .WhereIf(input.phanLoaiBaiDang == 1, e=>e.ThoiHan > DateTime.Now)
