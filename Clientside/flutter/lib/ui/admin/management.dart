@@ -26,7 +26,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 
 import 'danhMucManagement/danhMucManagement.dart';
 
-class ManagementScreen extends StatefulWidget {
+class ManagementScreen extends StatefulWidget{
   @override
   _ManagementScreenState createState() => _ManagementScreenState();
 }
