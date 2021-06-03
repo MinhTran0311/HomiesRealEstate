@@ -371,6 +371,39 @@ mixin _$FilterStore on _FilterStore, Store {
   }
 
   @override
+  void setTenTinh(String value) {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_FilterStore.setTenTinh');
+    try {
+      return super.setTenTinh(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTenHuyen(String value) {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_FilterStore.setTenHuyen');
+    try {
+      return super.setTenHuyen(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTenXa(String value) {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_FilterStore.setTenXa');
+    try {
+      return super.setTenXa(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String calculateActualValue(String value, String option) {
     final _$actionInfo = _$_FilterStoreActionController.startAction(
         name: '_FilterStore.calculateActualValue');

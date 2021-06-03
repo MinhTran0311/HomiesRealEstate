@@ -21,5 +21,7 @@ namespace Homies.RealEstate.Server.Dtos
 
         public string UserName2Filter { get; set; }
 
+        public int? phanLoaiLSGD { get; set; }
+
     }
 }

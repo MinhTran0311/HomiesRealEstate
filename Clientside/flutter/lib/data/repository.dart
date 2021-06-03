@@ -82,6 +82,12 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+
+  Future<dynamic> addViewForPost(int postId) async {
+    return await _postApi.addViewForPost(postId).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
   // Future<PostList> searchPosts(filter_Model filter_model) async {
   //   return await _postApi.searchPosts(filter_model).then((postsList) {
   //     postsList.posts.forEach((post) {

@@ -52,7 +52,9 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.GhiChuFilter), e => e.GhiChu == input.GhiChuFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.ChiTietHoaDonBaiDangGhiChuFilter), e => e.ChiTietHoaDonBaiDangFk != null && e.ChiTietHoaDonBaiDangFk.GhiChu == input.ChiTietHoaDonBaiDangGhiChuFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserName2Filter), e => e.KiemDuyetVienFk != null && e.KiemDuyetVienFk.Name == input.UserName2Filter);
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserName2Filter), e => e.KiemDuyetVienFk != null && e.KiemDuyetVienFk.Name == input.UserName2Filter)
+                        .WhereIf(input.phanLoaiLSGD == 1, e => e.ChiTietHoaDonBaiDangId != null)
+                        .WhereIf(input.phanLoaiLSGD == -1, e => e.ChiTietHoaDonBaiDangId == null);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
                 .OrderBy(input.Sorting ?? "thoiDiem desc")
@@ -287,14 +289,16 @@ namespace Homies.RealEstate.Server
             );
         }
         [AbpAuthorize]
-        public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<GetLichSuGiaoDichForViewDto>> GetAllLSGDByCurrentUserAsync(GetAllLSGDCurrentUserInput input)
         {
             var user = await GetCurrentUserAsync();
             var filteredLichSuGiaoDichs = _lichSuGiaoDichRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.ChiTietHoaDonBaiDangFk)
                         .Include(e => e.KiemDuyetVienFk)
-                        .Where(e => e.UserId == user.Id);
+                        .Where(e => e.UserId == user.Id)
+                        .WhereIf(input.phanLoaiLSGD == 1, e => e.ChiTietHoaDonBaiDangId != null)
+                        .WhereIf(input.phanLoaiLSGD == -1, e => e.ChiTietHoaDonBaiDangId == null);
 
             var pagedAndFilteredLichSuGiaoDichs = filteredLichSuGiaoDichs
                 .OrderBy(input.Sorting ?? "thoiDiem desc")

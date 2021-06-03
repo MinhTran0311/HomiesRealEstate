@@ -58,7 +58,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
     _transTween = Tween(begin: Offset(-10, 40), end: Offset(-10, 0))
         .animate(_TextAnimationController);
-
   }
 
   void didChangeDependencies() {
@@ -69,6 +68,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     _userStore = Provider.of<UserStore>(context);
     if (!_imageStore.imageLoading && !finishload){
       _imageStore.getImagesForDetail(this.post.id.toString());
+    }
+    if (!finishload){
+      _postStore.addViewForPost(post.id);
     }
     if (!_userStore.loading && !finishload){
       _userStore.getUserOfCurrentDetailPost(post.userId);
@@ -84,9 +86,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       _postStore.isBaiGhimYeuThichOrNot(this.post.id.toString());
       finishload=true;
     }
-
-
-
   }
 
   @override
@@ -278,18 +277,18 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(right: 24),
                             child: Row(
                               children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 4,),
                                 Text(
-                                  post.diemBaiDang.toString() +" reviews",
+                                  post.diemBaiDang.toString().split(".")[0],
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey,
                                   ),
+                                ),
+                                SizedBox(width: 4,),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 16,
                                 )
                               ],
                             ),
@@ -305,7 +304,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           Flexible(
                             child: DefaultTextStyle(
                               child: SelectableText(post.tieuDe),
-                              maxLines: 3,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 28,

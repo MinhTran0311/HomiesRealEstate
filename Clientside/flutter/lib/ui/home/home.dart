@@ -201,6 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Hiển thị bộ lọc nâng cao',
                     style: TextStyle(
                       fontSize: 16,
+                      color: (_postStore.filter_model == null || _postStore.isNotUsingFilter) ? Colors.grey : Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -225,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildListView() {
     return (_postStore.postList != null)
         ? SmartRefresher(
-            key: _refresherKey,
+            //key: _refresherKey,
             controller: _refreshController,
             enablePullUp: true,
             enablePullDown: true,
@@ -280,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
             scrollController: _scrollController,
             primary: false,
             child: ListView.builder(
-              key: _contentKey,
+              //key: _contentKey,
               controller: _scrollController,
               itemCount: _postStore.postList.posts.length,
               // separatorBuilder: (context, position) {
@@ -329,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [
-                  0.5,
+                  0.3,
                   1.0
                 ],
                     colors: [
@@ -359,26 +360,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(child: Container()),
                 Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            post.tieuDe,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          priceFormat(post.gia),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                        child: Text(
+                          post.tieuDe,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                          ),
+
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            post.dienTich.toString() + ' m2',
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            priceFormat(post.gia),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         )
                       ],
@@ -387,66 +411,60 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 4,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                              size: 14,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              post.tenXa,
-                              style: TextStyle(
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.location_on,
                                 color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                                size: 14,
                               ),
-
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Icon(
-                              Icons.zoom_out_map,
-                              color: Colors.white,
-                              size: 14,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              post.dienTich.toString() + ' m2',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                              SizedBox(
+                                width: 4,
                               ),
-                            ),
-                          ],
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.only(right: 4),
+                                  child: Text(
+                                    post.tenXa,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 14,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              post.diemBaiDang.toString(),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
+                        Expanded(
+                          flex: 1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+
+                              Text(
+                                post.diemBaiDang.toString(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                )
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 14,
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     )
@@ -583,6 +601,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // The value passed to Navigator.pop() or null.
     });
   }
+
 
   @override
   void dispose() {
