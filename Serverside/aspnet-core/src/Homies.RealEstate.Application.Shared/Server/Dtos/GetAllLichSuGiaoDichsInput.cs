@@ -23,5 +23,8 @@ namespace Homies.RealEstate.Server.Dtos
 
         public int? phanLoaiLSGD { get; set; }
 
+        public DateTime? MaxThoiGianFilter { get; set; }
+        public DateTime? MinThoiGianFilter { get; set; }
+
     }
 }

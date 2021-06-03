@@ -53,6 +53,8 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.ChiTietHoaDonBaiDangGhiChuFilter), e => e.ChiTietHoaDonBaiDangFk != null && e.ChiTietHoaDonBaiDangFk.GhiChu == input.ChiTietHoaDonBaiDangGhiChuFilter)
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserName2Filter), e => e.KiemDuyetVienFk != null && e.KiemDuyetVienFk.Name == input.UserName2Filter)
+                        .WhereIf(input.MinThoiGianFilter != null, e => e.ThoiDiem >= input.MinThoiGianFilter)
+                        .WhereIf(input.MaxThoiGianFilter != null, e => e.ThoiDiem <= input.MaxThoiGianFilter)
                         .WhereIf(input.phanLoaiLSGD == 1, e => e.ChiTietHoaDonBaiDangId != null)
                         .WhereIf(input.phanLoaiLSGD == -1, e => e.ChiTietHoaDonBaiDangId == null);
 
@@ -297,6 +299,8 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.ChiTietHoaDonBaiDangFk)
                         .Include(e => e.KiemDuyetVienFk)
                         .Where(e => e.UserId == user.Id)
+                        .WhereIf(input.MinThoiGianFilter != null, e => e.ThoiDiem >= input.MinThoiGianFilter)
+                        .WhereIf(input.MaxThoiGianFilter != null, e => e.ThoiDiem <= input.MaxThoiGianFilter)
                         .WhereIf(input.phanLoaiLSGD == 1, e => e.ChiTietHoaDonBaiDangId != null)
                         .WhereIf(input.phanLoaiLSGD == -1, e => e.ChiTietHoaDonBaiDangId == null);
 
