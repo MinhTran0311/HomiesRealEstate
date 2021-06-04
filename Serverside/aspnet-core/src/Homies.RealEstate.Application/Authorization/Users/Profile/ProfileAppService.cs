@@ -83,7 +83,7 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         public async Task<CurrentUserProfileEditDto> GetCurrentUserProfileForEdit()
         {
             var user = await GetCurrentUserAsync();
-            
+
             var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
 
             userProfileEditDto.QrCodeSetupImageUrl = user.GoogleAuthenticatorKey != null
@@ -111,6 +111,12 @@ namespace Homies.RealEstate.Authorization.Users.Profile
             return userProfileEditDto;
         }
 
+        public async Task<List<UserListRoleDto>> GetCurrentUserRole()
+        {
+            var userProfile = await GetCurrentUserProfileForEdit();
+            return userProfile.Roles;
+        }
+
         private async Task FillRoleNames(CurrentUserProfileEditDto userListDto)
         {
             /* This method is optimized to fill role names to given list. */
@@ -128,12 +134,16 @@ namespace Homies.RealEstate.Authorization.Users.Profile
             
 
             var roleNames = new Dictionary<int, string>();
+            var roleDisplayNames = new Dictionary<int, string>();
+
             foreach (var roleId in distinctRoleIds)
             {
                 var role = await _roleManager.FindByIdAsync(roleId.ToString());
                 if (role != null)
                 {
-                    roleNames[roleId] = role.DisplayName;
+                    roleNames[roleId] = role.Name;
+                    roleDisplayNames[roleId] = role.DisplayName;
+
                 }
             }
 
@@ -142,6 +152,9 @@ namespace Homies.RealEstate.Authorization.Users.Profile
                 if (roleNames.ContainsKey(userListRoleDto.RoleId))
                 {
                     userListRoleDto.RoleName = roleNames[userListRoleDto.RoleId];
+                    userListRoleDto.RoleDisplayName = roleDisplayNames[userListRoleDto.RoleId];
+
+                    //userListRoleDto.RoleName = roleNames[userListRoleDto.RoleId];
                 }
             }
 
