@@ -382,10 +382,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           Container(
                               width: size.width-24-58,
                               height: 24,
-                              //child: Flexible(
-                              //child: SingleChildScrollView(
-
-                              //scrollDirection: Axis.horizontal,
                               child: Marquee(
                                 text:post.diaChi.isEmpty ? "" : post.diaChi +', '+ post.tenXa+
                                     (post.tenHuyen.isEmpty?"":", " + post.tenHuyen) + (post.tenTinh.isEmpty?"":", " + post.tenTinh),
@@ -407,17 +403,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 //decelerationCurve: Curves.easeOut,
                                 blankSpace: 20.0,
                               )
-
-                            //   Text(
-                            //     post.tenXa + ', ' + post.tenHuyen + ', ' + post.tenTinh,
-                            //     style: TextStyle(
-                            //       color:Colors.grey,
-                            //       fontSize: 18,
-                            //       fontWeight: FontWeight.bold,
-                            //     //),
-                            //   ),
-                            // ),
-                            //),
                           ),
                         ],
                       ),
@@ -441,12 +426,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         child: Html(
                           data: post.moTa,
                         )
-                      //   post.moTa,
-                      //   style: TextStyle(
-                      //     fontSize: 16,
-                      //     color: Colors.grey[500],
-                      //   ),
-                      // )
                     ),
                     buildMap(),
                     Padding(
@@ -463,7 +442,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
                       child: buildTagList(post.tagTimKiem),
                     ),
-
                     (_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -580,7 +558,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           child: IconButton(
                             icon: const Icon(Icons.message,
                               color: Colors.amber,
-                              size: 20,),
+                              size: 20,
+                            ),
                             onPressed: (){
                               _lauchURL("sms:"+_userStore.user.phoneNumber);
                             },

@@ -50,7 +50,9 @@ class _SettingPageState extends State<SettingPage> {
             Navigator.pop(context);
       }),
       centerTitle: true,
-      title: Text("Cài đặt")
+      title: Text("Cài đặt"),
+
+
     );
   }
 
