@@ -729,6 +729,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                     Text(
                                       // alignment: Alignment.centerRight,
                                       "${user.userName}",
+                                      // "00000000000000000000000000000000000000",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 18,
@@ -781,7 +782,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                     Text(
                                       // alignment: Alignment.centerRight,
                                       "${user.email}",
-                                      // "00000000000000000000000000000000000000",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 18,
@@ -1257,7 +1257,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                           )
                                       ),
                                       onPressed: () {
-                                        _userManagementStore.deleteUser(user.id);
+                                        // _userManagementStore.deleteUser(user.id);
                                       },
                                     ),
                                     // SizedBox(width: 10,),

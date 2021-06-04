@@ -392,13 +392,21 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  //Delete user
-  Future<dynamic> deleteUser(int id) async
+  //Create user
+  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async
   {
-    return await _userApi.deleteUser(id).then((res) {
+    return await _userApi.createUser(userName, surname, name, email, phoneNumber, isActive, roleName).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
+
+  // //Delete user
+  // Future<dynamic> deleteUser(int id) async
+  // {
+  //   return await _userApi.deleteUser(id).then((res) {
+  //     return res;
+  //   }).catchError((error) => throw error);
+  // }
 
   //Count all users
   Future<dynamic> countAllUsers() async
@@ -460,6 +468,22 @@ class Repository {
   Future<dynamic> countAllThuocTinhs() async
   {
     return await _thuocTinhApi.countAllThuocTinhs().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Create or edit thuộc tính
+  //Create
+  Future<dynamic> createThuocTinh(String name, String kieuDuLieu, String trangThai) async
+  {
+    return await _thuocTinhApi.createThuocTinh(name, kieuDuLieu, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+  //edit
+  Future<dynamic> updateThuocTinh(int id, String name, String kieuDuLieu, String trangThai) async
+  {
+    return await _thuocTinhApi.updateThuocTinh(id, name, kieuDuLieu, trangThai).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

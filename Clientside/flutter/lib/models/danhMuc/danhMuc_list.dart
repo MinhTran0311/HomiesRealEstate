@@ -14,7 +14,7 @@ class DanhMucList {
     // print("Json Role: " + json.toString());
     // print("123123123123");
     List<DanhMuc> danhMucs = List<DanhMuc>();
-    print(json.toString());
+    // print(json.toString());
     if (json["result"]["totalCount"] > 0) {
       for (int i = 0; i < json["result"]["totalCount"]; i++) {
         danhMucs.add(DanhMuc.fromMap(json["result"]["items"][i]["danhMuc"]));

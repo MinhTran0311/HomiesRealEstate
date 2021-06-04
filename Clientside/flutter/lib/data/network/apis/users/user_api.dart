@@ -392,6 +392,37 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
+  //Create user
+  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrUpdateUser,
+        data: {
+          "user": {
+            "userName": userName,
+            "name": name,
+            "surname": surname,
+            "emailAddress": email,
+            "phoneNumber": phoneNumber,
+            "isActive": isActive,
+          },
+          "assignedRoleNames": [
+            roleName
+          ],
+        },
+        options: Options(
+          headers: {
+            "Abp.TenantId": 1,
+            "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+          ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   //userChangePassword
   Future<dynamic> changePassword(String password, String newPassword) async {
     try {
@@ -414,26 +445,26 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
-  //Delete user
-  Future<dynamic> deleteUser(int id) async {
-    try {
-      final res = await _dioClient.post(
-        Endpoints.createOrUpdateUser,
-        queryParameters: {
-          "Id":id
-        },
-        options: Options(
-            headers: {
-              "Abp.TenantId": 1,
-              "Authorization" : "Bearer ${Preferences.access_token}",
-            }
-        ),
-      );
-      return res;
-    } catch (e) {
-      throw e;
-    }
-  }
+  // //Delete user
+  // Future<dynamic> deleteUser(int id) async {
+  //   try {
+  //     final res = await _dioClient.post(
+  //       Endpoints.createOrUpdateUser,
+  //       queryParameters: {
+  //         "Id":id
+  //       },
+  //       options: Options(
+  //           headers: {
+  //             "Abp.TenantId": 1,
+  //             "Authorization" : "Bearer ${Preferences.access_token}",
+  //           }
+  //       ),
+  //     );
+  //     return res;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   //Count all users
   Future<dynamic> countAllUsers() async {

@@ -14,9 +14,9 @@ class GoiBaiDangList {
     // print("Json Role: " + json.toString());
     List<GoiBaiDang> goiBaiDangs = List<GoiBaiDang>();
     // print(json.toString());
-    if (json["result"]["items"].length > 0) {
-      for (int i = 0; i < json["result"]["items"].length; i++) {
-        goiBaiDangs.add(GoiBaiDang.fromMap(json["result"]["items"][i]));
+    if (json["result"]["totalCount"] > 0) {
+      for (int i = 0; i < json["result"]["totalCount"]; i++) {
+        goiBaiDangs.add(GoiBaiDang.fromMap(json["result"]["items"][i]["goiBaiDang"]));
       }
     }
     return GoiBaiDangList(

@@ -1,7 +1,7 @@
 class GoiBaiDang {
   int id;
   String tenGoi;
-  int phi;
+  double phi;
   int doUuTien;
   int thoiGianToiThieu;
   String moTa;
