@@ -46,9 +46,9 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildAppBar(){
     return AppBar(
       leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
-          onPressed: (){setState(() {
+          onPressed: (){
             Navigator.pop(context);
-          });}),
+      }),
       centerTitle: true,
       title: Text("Cài đặt")
     );

@@ -313,8 +313,8 @@ namespace Homies.RealEstate.Server
                         .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Equals(input.XaTenXaFilter))
                         .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Equals(input.HuyenTenHuyenFilter))
                         .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Equals(input.TinhTenTinhFilter))
-                        .Where(e => e.ThoiHan >= DateTime.Now);
-                        //.Where(e => e.TrangThai.Equals("On"));
+                        .Where(e => e.ThoiHan >= DateTime.Now)
+                        .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "diemBaiDang desc")
@@ -781,7 +781,7 @@ namespace Homies.RealEstate.Server
                         .Include(e => e.XaFk)
                         .WhereIf(input.Filter != null, e => e.TieuDe.Contains(input.Filter))
                         .Where(e => e.UserId == user.Id)
-                        //.Where(e=>e.TrangThai.Equals("On"))
+                        .Where(e=>e.TrangThai.Equals("On"))
                         .WhereIf(input.phanLoaiBaiDang == 1, e=>e.ThoiHan > DateTime.Now)
                         .WhereIf(input.phanLoaiBaiDang == -1, e=>e.ThoiHan < DateTime.Now);
 

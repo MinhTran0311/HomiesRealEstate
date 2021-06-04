@@ -46,3 +46,14 @@ final ThemeData themeDataDark = ThemeData(
   accentColor: AppColors.orange[500],
   accentColorBrightness: Brightness.dark,
 );
+
+// final ThemeData themeDataLight = ThemeData(
+//   textTheme: TextTheme(
+//     subtitle1: GoogleFonts.marvel(fontSize: 16, fontStyle: FontStyle.italic),
+//
+//
+//
+//   ),
+//   brightness: Brightness.light,
+//
+// );
