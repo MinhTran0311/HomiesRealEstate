@@ -72,6 +72,8 @@ class Endpoints {
   static const String getAllCommunes = homiesUrl + "/services/app/Xas/GetAll";
 
   //Cout all role
+  static const String getCurrentUserRole = homiesUrl + "/services/app/Profile/GetCurrentUserRole";
+  //Cout all role
   static const String coutAllRole = homiesUrl + "/services/app/Role/CountAllRoles";
   //Cout all user
   static const String coutAllUser = homiesUrl + "/services/app/User/CountAllUsers";

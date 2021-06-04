@@ -510,6 +510,37 @@ abstract class _FormStore with Store {
     });
   }
 
+  @action
+  Future<dynamic> getCurrentUserRole () async {
+    final future = _repository.changePassword(this.password, this.newPassword);
+    fetchChangePasswordFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        changePassword_succes = true;
+      }
+      else {
+        changePassword_succes = false;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        changePassword_succes=false;
+        if (error.response.data!=null) {
+          errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+
   // @action
   // Future login() async {
   //   loading = true;

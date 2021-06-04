@@ -438,6 +438,14 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  //Get current user role
+  Future<dynamic> getCurrentUserRole() async
+  {
+    return await _roleApi.getCurrentUserRole().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
   //Count all users
   Future<dynamic> countAllRoles() async
   {
