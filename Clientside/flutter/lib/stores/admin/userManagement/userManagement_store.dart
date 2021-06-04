@@ -145,11 +145,11 @@ abstract class _UserManagementStore with Store {
     //   await getAvatarUsers(user.id,)
     // });
   }
-
-  @action
-  Future deleteUser(int id) async{
-    var future = await _repository.deleteUser(id);
-  }
+  //
+  // @action
+  // Future deleteUser(int id) async{
+  //   var future = await _repository.deleteUser(id);
+  // }
 
   @action
   Future fCountAllUsers() async {

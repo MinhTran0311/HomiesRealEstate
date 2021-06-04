@@ -156,7 +156,7 @@ class _MapsScreenState extends State<MapsScreen> {
         _markersDangBai.add(
             Marker(
               markerId: MarkerId(this.placeMarkChoosen.postalCode),
-              // position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
+              position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
               // infoWindow: InfoWindow(
               //   title: (this.placeMarkChoosen.street == null || this.placeMarkChoosen.street.isEmpty) ? '${this.placeMarkChoosen.country}' :'${this.placeMarkChoosen.street}',
               //   snippet: '${this.placeMarkChoosen.country}',

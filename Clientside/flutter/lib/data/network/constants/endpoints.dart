@@ -87,18 +87,24 @@ class Endpoints {
   static const String getAllDanhMucs = homiesUrl + "/services/app/DanhMucs/GetAll";
   //Đếm tổng số danh mục
   static const String countAllDanhMucs = homiesUrl + "/services/app/DanhMucs/CountAllDanhMucs";
+  //Update or edit danh mục
+  static const String createOrEditDanhMuc = homiesUrl + "/services/app/DanhMucs/CreateOrEdit";
 
   //Gói bài đăng
   //Get all Gói bài đăng
   static const String getAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/GetAll";
   //Đếm tổng số gói bài đăng
   static const String countAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/CountAllGoiBaiDangs";
+  //Update or edit gói bài đăng
+  static const String createOrEditGoiBaiDang = homiesUrl + "/services/app/GoiBaiDangs/CreateOrEdit";
 
   //Thuộc tính
   //Get all Thuộc tính
   static const String getAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/GetAll";
   //Đếm tổng số thuộc tính
   static const String countAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/CountAllThuocTinhs";
+  //Update or edit thuộc tính
+  static const String createOrEditThuocTinh = homiesUrl + "/services/app/ThuocTinhs/CreateOrEdit";
 
   //Đếm tổng số bài đăng trong tháng
   static const String countNewBaiDangInMonth = homiesUrl + "/services/app/BaiDangs/CountNewBaiDangInMonth";

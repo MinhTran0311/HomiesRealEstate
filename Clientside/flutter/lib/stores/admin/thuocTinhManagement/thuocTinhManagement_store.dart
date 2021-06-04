@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/thuocTinh/thuocTinh_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
@@ -11,8 +12,10 @@ class ThuocTinhManagementStore = _ThuocTinhManagementStore with _$ThuocTinhManag
 
 abstract class _ThuocTinhManagementStore with Store {
   Repository _repository;
+  final FormErrorStore formErrorStore = FormErrorStore();
 
   final ErrorStore errorStore = ErrorStore();
+
 
   _ThuocTinhManagementStore(Repository repository) : this._repository = repository;
 
@@ -28,17 +31,92 @@ abstract class _ThuocTinhManagementStore with Store {
   ObservableFuture<dynamic> fetchCountAllThuocTinhsFuture =
   ObservableFuture<dynamic>(emptyCountAllThuocTinhsResponse);
 
+  static ObservableFuture<dynamic> emptyUpdateThuocTinhResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateThuocTinhFuture =
+  ObservableFuture<dynamic>(emptyUpdateThuocTinhResponse);
+
+  static ObservableFuture<dynamic> emptyCreateThuocTinhResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCreateThuocTinhFuture =
+  ObservableFuture<dynamic>(emptyCreateThuocTinhResponse);
+
+
+  // store variables:-----------------------------------------------------------
+  @observable
+  String name='';
+
+  @observable
+  int idThuocTinh;
+
+  @observable
+  String active = '';
+
+  @observable
+  String KieuDuLieu = '';
+
   @observable
   ThuocTinhManagementList thuocTinhList;
 
   @observable
   int countAllThuocTinhs = 0;
 
+  @observable
+  bool updateThuocTinh_success = false;
+
+  @observable
+  bool createThuocTinh_success = false;
+
+  @computed
+  bool get canSubmit =>
+    name.isNotEmpty &&
+    name != null;
+
   @computed
   bool get loading => fetchThuocTinhsFuture.status == FutureStatus.pending;
 
   @computed
   bool get loadingCountAllThuocTinhs => fetchCountAllThuocTinhsFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get loadingUpdateThuocTinh => fetchUpdateThuocTinhFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get loadingCreateThuocTinh => fetchCreateThuocTinhFuture.status == FutureStatus.pending;
+
+  // actions:-------------------------------------------------------------------
+  @action
+  void setThuocTinhId(int value) {
+    idThuocTinh = value;
+  }
+
+  void setNameThuocTinh(String value) {
+    name = value;
+  }
+
+  void setTrangThaiThuocTinh(bool value) {
+    if (value) active = "On";
+    else active = "Off";
+  }
+
+  void setKieuDuLieu(String value) {
+    switch(value) {
+      case "Số nguyên": {
+        KieuDuLieu = "int";
+        break;
+      }
+      case "Số thực": {
+        KieuDuLieu = "double";
+        break;
+      }
+      default: {
+        KieuDuLieu = "String";
+        break;
+      }
+    }
+  }
 
   @action
   Future getThuocTinhs() async {
@@ -79,6 +157,62 @@ abstract class _ThuocTinhManagementStore with Store {
         throw error;
       }
       else {
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future UpdateThuocTinh() async {
+    updateThuocTinh_success = false;
+    final future = _repository.updateThuocTinh(idThuocTinh, name, KieuDuLieu, active);
+    fetchUpdateThuocTinhFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        updateThuocTinh_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future CreateThuocTinh() async {
+    createThuocTinh_success = false;
+    final future = _repository.createThuocTinh(name, KieuDuLieu, active);
+    fetchCreateThuocTinhFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        createThuocTinh_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
         throw error;
       }
     });

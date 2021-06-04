@@ -14,6 +14,7 @@ class User {
   List<dynamic> permissionsList;
   String permissions;
   String avatar;
+  String roleName;
 
   // List<String> permissions;
 
@@ -31,6 +32,7 @@ class User {
     this.permissionsList,
     this.permissions,
     this.avatar,
+    this.roleName,
   });
   factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
     id: json["result"]["user"]["id"],
@@ -45,7 +47,7 @@ class User {
     creationTime: json["result"]["user"]["creationTime"],
     // permissionsList: json["result"]["roles"],
   );
-  factory User.fromMap(Map<String, dynamic> json, String rolesName) => User(
+  factory User.fromMap(Map<String, dynamic> json, String rolesName, String rolesDisplayName) => User(
     id: json["id"],
     name: json["name"],
     surName: json["surname"],
@@ -56,8 +58,9 @@ class User {
     isActive: json["isActive"],
     isEmailConfirmed: json["isEmailConfirmed"],
     creationTime: json["creationTime"],
-    permissions: rolesName,
+    permissions: rolesDisplayName,
     permissionsList: json["roles"],
+    roleName: rolesName,
   );
 
   // factory User.fromJson(Map<String, dynamic> json) {

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
+import 'package:boilerplate/ui/admin/thuocTinhManagement/thuocTinhManagement.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -25,6 +26,7 @@ import 'package:boilerplate/stores/admin/baiDangManagement/baiDangManagement_sto
 import 'package:boilerplate/stores/theme/theme_store.dart';
 
 import 'danhMucManagement/danhMucManagement.dart';
+import 'goiBaiDangManagement/goiBaiDangManagement.dart';
 
 class ManagementScreen extends StatefulWidget{
   @override
@@ -220,24 +222,6 @@ class _ManagementScreenState extends State<ManagementScreen> {
                           )
                         ],
                       ),
-                      // Column(
-                      //   children: [
-                      //     Image.asset(
-                      //       'assets/images/map.png',
-                      //       width: MediaQuery.of(context).size.width*0.15,
-                      //     ),
-                      //     SizedBox(height: 10,),
-                      //     Text("Bài đăng mới"),
-                      //     SizedBox(height: 10,),
-                      //     Text(
-                      //       "1.055",
-                      //       style: TextStyle(
-                      //         fontWeight: FontWeight.bold,
-                      //         fontSize: 20,
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
                     ],
                   ),
                   SizedBox(height: 15,),
@@ -251,9 +235,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
             SizedBox(height: 25,),
             _buildListItem("Danh mục", "assets/images/project-management.png", _danhMucManagementStore.countAllDanhMucs, "Danh sách danh mục", _clickBtnListDanhMuc, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
-            _buildListItem("Gói bài đăng", "assets/images/project-management.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            _buildListItem("Gói bài đăng", "assets/images/project-management.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListGoiBaiDang, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
-            _buildListItem("Thuộc tính", "assets/images/project-management.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            _buildListItem("Thuộc tính", "assets/images/project-management.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListThuocTinh, Colors.lightBlueAccent, 0),
             SizedBox(height: 25,),
             // _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
             // SizedBox(height: 25,),
@@ -414,14 +398,14 @@ class _ManagementScreenState extends State<ManagementScreen> {
   _clickBtnListGoiBaiDang() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RoleManagementScreen()),
+      MaterialPageRoute(builder: (context) => GoiBaiDangManagementScreen()),
     );
   }
 
   _clickBtnListThuocTinh() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RoleManagementScreen()),
+      MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
     );
   }
 

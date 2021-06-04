@@ -25,7 +25,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CreateOrEditUserScreen extends StatefulWidget {
   final User user;
-  @override
+
+@override
   CreateOrEditUserScreen({@required this.user});
   _CreateOrEditUserScreenScreenState createState() => _CreateOrEditUserScreenScreenState(user: user);
 }
@@ -140,15 +141,14 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           ) : Center(child: _buildRightSide()),
           Observer(
             builder: (context) {
-              if (_store.regist_success) {
-
-                SharedPreferences.getInstance().then((prefs) {
-                  prefs.setBool(Preferences.is_logged_in, false);
-                });
+              if (_store.updateUser_success) {
                 Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserManagementScreen()),
+                  );
                 });
-                _showSuccssfullMesssage("Đăng ký thành công");
+                _showSuccssfullMesssage("Cập nhật thành công");
                 return Container(width: 0, height: 0);
 
               } else {
@@ -159,7 +159,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           Observer(
             builder: (context) {
               return Visibility(
-                visible: _store.regist_loading,
+                visible: _store.updateUserLoading,
                 child: CustomProgressIndicatorWidget(),
               );
             },
@@ -286,7 +286,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   Widget _buildUserNameField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
+        return this.user != null ? TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
           hintColor: Colors.white,
@@ -301,9 +301,52 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           },
           enable: false,
           errorText: _store.formErrorStore.username,
+        ) : TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Tên đăng nhập'),
+          hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.text,
+          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          textController: _userNameController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          onChanged: (value) {
+            _store.setUserId(_userNameController.text);
+          },
+          enable: true,
+          errorText: _store.formErrorStore.username,
         );
       },
     );
+  }
+
+  Widget buildRadioBtn(BuildContext context) {
+    // return Column(
+    //   children: <Widget>[
+    //     ListTile(
+    //       title: const Text('Lafayette'),
+    //       leading: Radio(
+    //         value: i,
+    //         groupValue: _value,
+    //         activeColor: Color(0xFF6200EE),
+    //         onChanged: ,
+    //       ),
+    //     ),
+    //     ListTile(
+    //       title: const Text('Thomas Jefferson'),
+    //       leading: Radio<SingingCharacter>(
+    //         value: SingingCharacter.jefferson,
+    //         groupValue: _character,
+    //         onChanged: (SingingCharacter? value) {
+    //           setState(() {
+    //             _character = value;
+    //           });
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 
   Widget _buildActiveCheckBox() {
@@ -328,79 +371,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       ],
     );
   }
-
-  // Widget _buildNeedChangePwCheckBox() {
-  //   return Row(
-  //     children: [
-  //       Checkbox(
-  //         value: _checkboxNeedChangePs,
-  //         onChanged: (value) {
-  //           setState(() {
-  //             _checkboxNeedChangePs = !_checkboxNeedChangePs;
-  //           });
-  //         },
-  //       ),
-  //       Flexible(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 'Cần thay đổi mật khẩu vào lần đăng nhập tiếp theo',
-  //                 style: TextStyle(
-  //                   fontSize: 18,
-  //                   color: Colors.white,
-  //                 ),
-  //               ),
-  //             ],
-  //           )
-  //       )
-  //     ],
-  //   );
-  // }
-  //
-  // Widget _buildSendEmailConfirmCheckBox() {
-  //   return Row(
-  //     children: [
-  //       Checkbox(
-  //         value: _checkboxSendEmailActive,
-  //         onChanged: (value) {
-  //           setState(() {
-  //             _checkboxSendEmailActive = !_checkboxSendEmailActive;
-  //           });
-  //         },
-  //       ),
-  //       Text(
-  //         'Gửi email kích hoạt',
-  //         style: TextStyle(
-  //           fontSize: 18,
-  //           color: Colors.white,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-  //
-  // Widget _buildActiveCheckBox() {
-  //   return Row(
-  //     children: [
-  //       Checkbox(
-  //         value: _checkboxActive,
-  //         onChanged: (value) {
-  //           setState(() {
-  //             _checkboxActive = !_checkboxActive;
-  //           });
-  //         },
-  //       ),
-  //       Text(
-  //         'Kích hoạt',
-  //         style: TextStyle(
-  //           fontSize: 18,
-  //           color: Colors.white,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildPasswordField() {
     return TextFieldWidget(
@@ -469,8 +439,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           _store.setName(_nameController.text),
            _store.setUserId(_userNameController.text),
            _store.setUserEmail(_userEmailController.text),
-           _store.setRoleName(this.user.permissions),
-           print(this.user.permissions),
+           _store.setRoleName(this.user.roleName),
            if(_passwordController.text != null && _passwordController.text.isNotEmpty)
              {
                _store.setPassword(_passwordController.text),
@@ -484,17 +453,25 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
            _store.setPhoneNumber(_phoneNumberController.text),
            _store.setIsActive(_checkbox),
          };
-        if(_store.canUpdate) {
-          DeviceUtils.hideKeyboard(context);
+         if(this.user != null) {
+           if(_store.canUpdate) {
+             DeviceUtils.hideKeyboard(context);
+             _store.UpdateUser();
+           }
+           else{
+             _showErrorMessage('Please fill in all fields');
+           }
+         }
+         else {
+           if(_store.canCreate) {
+             DeviceUtils.hideKeyboard(context);
+             _store.CreateUser();
+           }
+           else{
+             _showErrorMessage('Please fill in all fields');
+           }
+         }
 
-          //SharedPreferences.getInstance().then((preference) {
-          // preference.setBool(Preferences.is_logged_in, false);
-          //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
-          _store.UpdateUser();
-        }
-        else{
-          _showErrorMessage('Please fill in all fields');
-        }
         //});
       },
     );

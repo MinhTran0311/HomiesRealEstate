@@ -14,9 +14,9 @@ class ThuocTinhManagementList {
     // print("Json Role: " + json.toString());
     List<ThuocTinhManagement> thuocTinhs = List<ThuocTinhManagement>();
     // print(json.toString());
-    if (json["result"]["items"].length > 0) {
-      for (int i = 0; i < json["result"]["items"].length; i++) {
-        thuocTinhs.add(ThuocTinhManagement.fromMap(json["result"]["items"][i]));
+    if (json["result"]["totalCount"] > 0) {
+      for (int i = 0; i < json["result"]["totalCount"]; i++) {
+        thuocTinhs.add(ThuocTinhManagement.fromMap(json["result"]["items"][i]["thuocTinh"]));
       }
     }
     return ThuocTinhManagementList(
