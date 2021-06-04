@@ -59,6 +59,13 @@ mixin _$PostStore on _PostStore, Store {
               () => super.createOrChangeStatusBaiGhimLoading,
               name: '_PostStore.createOrChangeStatusBaiGhimLoading'))
           .value;
+  Computed<bool> _$isNotUsingFilterComputed;
+
+  @override
+  bool get isNotUsingFilter => (_$isNotUsingFilterComputed ??= Computed<bool>(
+          () => super.isNotUsingFilter,
+          name: '_PostStore.isNotUsingFilter'))
+      .value;
   Computed<bool> _$loadingPackComputed;
 
   @override
@@ -921,6 +928,13 @@ mixin _$PostStore on _PostStore, Store {
     return _$getPostsAsyncAction.run(() => super.getPosts(isLoadMore));
   }
 
+  final _$addViewForPostAsyncAction = AsyncAction('_PostStore.addViewForPost');
+
+  @override
+  Future<dynamic> addViewForPost(int postId) {
+    return _$addViewForPostAsyncAction.run(() => super.addViewForPost(postId));
+  }
+
   final _$getRecommendPostsAsyncAction =
       AsyncAction('_PostStore.getRecommendPosts');
 
@@ -1072,6 +1086,7 @@ getRecommendPostsFutureLoading: ${getRecommendPostsFutureLoading},
 searchLoading: ${searchLoading},
 loadinggetcategorys: ${loadinggetcategorys},
 createOrChangeStatusBaiGhimLoading: ${createOrChangeStatusBaiGhimLoading},
+isNotUsingFilter: ${isNotUsingFilter},
 loadingPack: ${loadingPack},
 loadingThuocTinh: ${loadingThuocTinh},
 loadingNewpost: ${loadingNewpost},

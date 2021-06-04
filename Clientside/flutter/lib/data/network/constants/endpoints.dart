@@ -64,6 +64,7 @@ class Endpoints {
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
   //search
   static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
+  static const String addViewForPost = homiesUrl + "/services/app/BaiDangs/AddViewForBaiDang";
   //# endregion
 
   static const String getAllProvinces = homiesUrl + "/services/app/Tinhs/GetAll";

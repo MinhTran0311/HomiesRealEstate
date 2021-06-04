@@ -197,7 +197,27 @@ abstract class _PostStore with Store {
       }
     });
   }
+  @action
+  Future addViewForPost(int postId) async {
+    final future = _repository.addViewForPost(postId);
 
+    future.then((res) {}).catchError((error) {
+      print(error);
+    });
+  }
+
+  @computed
+  bool get isNotUsingFilter => filter_model.giaMin.isEmpty &&
+      filter_model.giaMax.isEmpty &&
+      filter_model.dienTichMin.isEmpty&&
+      filter_model.dienTichMax.isEmpty&&
+      filter_model.diaChi.isEmpty&&
+      filter_model.username.isEmpty &&
+      filter_model.tagTimKiem.isEmpty &&
+      filter_model.loaiBaiDang.isEmpty&&
+      filter_model.tenHuyen.isEmpty&&
+      filter_model.tenXa.isEmpty&&
+      filter_model.tenTinh.isEmpty;
 
   // @action
   // Future searchPosts() async {

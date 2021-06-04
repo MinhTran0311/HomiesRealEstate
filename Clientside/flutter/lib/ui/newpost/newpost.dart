@@ -60,7 +60,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
   TextEditingController _keyEditor2 = TextEditingController();
-  var _ThuocTinhController = new List<TextEditingController>();
+  var _ThuocTinhController = new List<TextEditingController>(20);
 
   TextEditingController _LocateController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
@@ -79,6 +79,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Town selectedTown = null;
   Commune selectedCommune = null;
   String selectedCity = null;
+  String selectedhuongnha = null;
+  String selectedhuongbancong = null;
+  List<String> Huong = new List<String>();
+
   String result = "";
   List<Commune> commune = [];
 //endregion
@@ -141,6 +145,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   @override
   void initState() {
     super.initState();
+    Huong=["Đông","Đông bắc","Đông nam","Tây","Tây nam","Tây bắc","Nam","Bắc"];
     songay=0;
     // ifuserstore.loading
   }
@@ -830,7 +835,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     child: ListView.builder(
                       itemCount: _postStore.thuocTinhList.thuocTinhs.length - 2,
                       itemBuilder: (context, i) {
-                        _ThuocTinhController.add(new TextEditingController());
+                        //_ThuocTinhController.add(new TextEditingController());
                         return _buildThuocTinh(
                             _postStore.thuocTinhList.thuocTinhs[i + 2], i);
                       },
@@ -851,40 +856,84 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return thuocTinh != null
         ? Observer(
             builder: (context) {
-              return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.home_work),
-                        fillColor: Colors.white,
-                        labelText: '${thuocTinh.tenThuocTinh}',
-                        suffixIcon: IconButton(
-                          onPressed: ()=> _ThuocTinhController[index].clear(),
-                          icon: Icon(Icons.clear),
+              return
+                Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      thuocTinh.tenThuocTinh != "Hướng nhà" &&
+                          thuocTinh.tenThuocTinh != "Hướng ban công" ?
+                      TextFormField(
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.home_work),
+                          fillColor: Colors.white,
+                          labelText: '${thuocTinh.tenThuocTinh}',
+                          suffixIcon: IconButton(
+                            onPressed: () =>
+                                _ThuocTinhController[index].clear(),
+                            icon: Icon(Icons.clear),
+                          ),
+                          //hintText: "${thuocTinh.kieuDuLieu}",
                         ),
-                        //hintText: "${thuocTinh.kieuDuLieu}",
+                        onSaved: (value) {},
+                        keyboardType: thuocTinh.kieuDuLieu == "double" ||
+                            thuocTinh.kieuDuLieu == "int"
+                            ? TextInputType.numberWithOptions(
+                            decimal: false, signed: false)
+                            : TextInputType.text,
+                        controller: _ThuocTinhController[index],
+                        onChanged: (value) {
+                          _ThuocTinhController[index] =
+                          new TextEditingController(text: value);
+                        },
+                      ) :
+                      DropdownButtonFormField <String>(
+                          hint:thuocTinh.tenThuocTinh=="Hướng nhà"?Row(
+                            children: [
+                              Icon(Icons.directions,
+                                color: const Color(0xFF167F67),),
+                              SizedBox(width: 10,),
+                              Text("Chọn hướng nhà"),
+                            ],
+                          ):Row(
+                            children: [
+                            Icon(Icons.directions,
+                            color: const Color(0xFF167F67),),
+                        SizedBox(width: 10,),Text("Chọn hướng ban công")]),
+                          decoration: InputDecoration(suffixIcon: IconButton(
+                            onPressed: () =>
+                                setState(() {
+                                  _ThuocTinhController[index] = new TextEditingController();
+                                  thuocTinh.tenThuocTinh=="Hướng nhà"?selectedhuongnha=null:selectedhuongbancong=null;
+                                }),
+                            icon: Icon(Icons.clear),
+                          )),
+                        value:thuocTinh.tenThuocTinh=="Hướng nhà"?selectedhuongnha:selectedhuongbancong,
+                        onChanged: (String value) {setState(() {
+                          thuocTinh.tenThuocTinh=="Hướng nhà"?selectedhuongnha=value:selectedhuongbancong=value;
+                          _ThuocTinhController[index]=TextEditingController(text:value); });},
+                        items:
+                          Huong.map((String type) {
+                            return DropdownMenuItem<String>(
+                                value: type,
+                                child:
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.directions,
+                                      color: const Color(0xFF167F67),),
+                                    SizedBox(width: 10,),
+                                    Text(type, style: TextStyle(
+                                        color: Colors.black),),
+                                ],
+                                )
+                            );
+                          }).toList(),
                       ),
-                      onSaved: (value) {},
-                      keyboardType: thuocTinh.kieuDuLieu == "double" ||
-                              thuocTinh.kieuDuLieu == "int"
-                          ? TextInputType.numberWithOptions(
-                              decimal: false, signed: false)
-                          : TextInputType.text,
-                      controller: _ThuocTinhController[index],
-                      onChanged: (value) {_ThuocTinhController[index]=new TextEditingController(text: value);},
-                    ),
-                    SizedBox(height: 24.0),
-                  ]);
-            },
-          )
-        : Center(
-            child: Text(
-              "Không có thuộc tính thêm hiển thị",
-            ),
-          );
+                         SizedBox(height: 24.0),
+                    ]);
+            }
+            ):Container(height: 0,);
   }
 
   Widget _buildAcreageField() {

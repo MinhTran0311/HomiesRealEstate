@@ -40,7 +40,6 @@ class filter_Model {
   });
   Map<String, dynamic> toMap({int skipCount = 0 , int maxCount = 10}) => {
     "Filter": searchContent,
-    // "TieuDeFilter": searchContent,
     "TagLoaiBaiDangFilter": loaiBaiDang,
     "DiaChiFilter": diaChi,
     "MaxGiaFilter": giaMax,
@@ -48,9 +47,9 @@ class filter_Model {
     "MaxDienTichFilter": dienTichMin,
     "MinDienTichFilter": dienTichMax,
     "UserNameFilter": username,
-    "TenXaFilter": tenXa,
-    "TenHuyenFilter": tenHuyen,
-    "TenTinhFilter": tenTinh,
+    "XaTenXaFilter": tenXa,
+    "HuyenTenHuyenFilter": tenHuyen,
+    "TinhTenTinhFilter": tenTinh,
 
     "ToaDoXMinFilter": xMin,
     "ToaDoYMinFilter": yMin,

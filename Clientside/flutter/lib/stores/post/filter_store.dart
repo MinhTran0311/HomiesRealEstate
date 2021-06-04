@@ -97,6 +97,17 @@ abstract class _FilterStore with Store {
   void setXaId(String value) {
     filter_model.tenXa = value;
   }
+  @action
+  void setTenTinh(String value){
+    filter_model.tenTinh = value;
+  }
+  @action
+  void setTenHuyen(String value){
+    filter_model.tenHuyen = value;
+  }  @action
+  void setTenXa(String value){
+    filter_model.tenXa = value;
+  }
 
   @action String calculateActualValue(String value, String option){
     if (option == "Bất kì")
@@ -207,7 +218,6 @@ abstract class _FilterStore with Store {
 
     future.then((townList) {
       success = true;
-      print("111111111111111111");
       this.townListString.clear();
       for (int i=0; i< townList.towns.length; i++)
         this.townListString.add(townList.towns[i].tenHuyen);

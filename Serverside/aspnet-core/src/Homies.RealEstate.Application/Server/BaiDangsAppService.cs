@@ -309,12 +309,12 @@ namespace Homies.RealEstate.Server
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem.Contains(input.TagTimKiemFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe.Contains(input.TieuDeFilter))
                         .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name.Contains(input.UserNameFilter))
-                        
+
                         .WhereIf(input.XaTenXaFilter != null, e => e.XaFk.TenXa != null && e.XaFk.TenXa.Equals(input.XaTenXaFilter))
                         .WhereIf(input.HuyenTenHuyenFilter != null, e => e.XaFk.HuyenFk.TenHuyen != null && e.XaFk.HuyenFk.TenHuyen.Equals(input.HuyenTenHuyenFilter))
                         .WhereIf(input.TinhTenTinhFilter != null, e => e.XaFk.HuyenFk.TinhFk.TenTinh != null && e.XaFk.HuyenFk.TinhFk.TenTinh.Equals(input.TinhTenTinhFilter))
-                        .Where(e => e.ThoiHan >= DateTime.Now)
-                        .Where(e => e.TrangThai.Equals("On"));
+                        .Where(e => e.ThoiHan >= DateTime.Now);
+                        //.Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "diemBaiDang desc")
@@ -407,8 +407,11 @@ namespace Homies.RealEstate.Server
         public async Task AddViewForBaiDang(int baidangId) 
         {
             var baidang = await _baiDangRepository.FirstOrDefaultAsync(baidangId);
-            baidang.DiemBaiDang += 1;
-            baidang.LuotXem += 1;
+            if (baidang!=null)
+            {
+                baidang.DiemBaiDang += 1;
+                baidang.LuotXem += 1;
+            }
         }
 
         private bool lookupInListBaiDangs(List<GetBaiDangForViewDto> list, int baidangId)
@@ -769,15 +772,18 @@ namespace Homies.RealEstate.Server
             );
         }
         [AbpAuthorize]
-        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser(PagedAndSortedResultRequestDto input)
+        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllBaiDangsByCurrentUser(GetAllBaiDangByCurrentUserInput input)
         {
             var user = await GetCurrentUserAsync();
             var filteredBaiDangs = _baiDangRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
+                        .WhereIf(input.Filter != null, e => e.TieuDe.Contains(input.Filter))
                         .Where(e => e.UserId == user.Id)
-                        .Where(e=>e.TrangThai.Equals("On"));
+                        //.Where(e=>e.TrangThai.Equals("On"))
+                        .WhereIf(input.phanLoaiBaiDang == 1, e=>e.ThoiHan > DateTime.Now)
+                        .WhereIf(input.phanLoaiBaiDang == -1, e=>e.ThoiHan < DateTime.Now);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
                 .OrderBy(input.Sorting ?? "thoiDiemDang desc")

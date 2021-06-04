@@ -46,7 +46,7 @@ class _FilterState extends State<Filter> {
 
     _filterStore = Provider.of<FilterStore>(context);
 
-    if (!_filterStore.loadingProvince)
+    if (!_filterStore.loadingProvince && _filterStore.provinceListString.length==0)
       _filterStore.getAllProvince();
 
     _diaChiController.text = _filterStore.filter_model.diaChi;
@@ -219,10 +219,8 @@ class _FilterState extends State<Filter> {
                             }).toList(),
                           );
                         }),
-
                       ),
                     ),
-
                 ],
               )
           ),
@@ -660,7 +658,7 @@ class _FilterState extends State<Filter> {
                     items: _filterStore.provinceListString,
                     hint: "Chọn tỉnh thành",
                     onChanged: (String Value) {
-                      _filterStore.filter_model.tenTinh = Value;
+                      _filterStore.setTenTinh(Value);
                       if (Value!=null)
                         _filterStore.getTownByProvinceName(Value);
                     },
@@ -724,7 +722,7 @@ class _FilterState extends State<Filter> {
                 hint: "Chọn quận/huyện",
                 onChanged: (String Value) {
                   if (_filterStore.filter_model.tenHuyen != Value){
-                  _filterStore.filter_model.tenHuyen = Value;
+                    _filterStore.setTenHuyen(Value);
                   if (Value!=null)
                     _filterStore.getCommuneByTownName(Value);
                   }
@@ -788,7 +786,7 @@ class _FilterState extends State<Filter> {
                 onChanged: (String Value) {
                   _filterStore.filter_model.tenXa = Value;
                   if (Value==null) {
-                    _filterStore.communeListString.clear();
+                    _filterStore.setTenXa(Value);
                   }
                 },
                 selectedItem: _filterStore.filter_model.tenXa,
