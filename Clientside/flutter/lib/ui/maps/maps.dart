@@ -43,6 +43,7 @@ class _MapsScreenState extends State<MapsScreen> {
   Completer<GoogleMapController> _controller = Completer();
   static LatLng _center;
   final Set<Marker> _markers = {};
+  List<Marker> myMarker = [];
   final Set<Marker> _markersDangBai = {};
   CameraPosition _position1;
   LatLng _lastMapPosition = _center;
@@ -113,6 +114,21 @@ class _MapsScreenState extends State<MapsScreen> {
       );
       _center = LatLng(double.tryParse(this.post.toaDoX), double.tryParse(this.post.toaDoY));
     }
+  }
+
+  _handleTap(LatLng tappedPoint) {
+    print(tappedPoint);
+    setState(() {
+      myMarker = [];
+      myMarker.add(Marker(
+        markerId: MarkerId(tappedPoint.toString()),
+        position: tappedPoint,
+        draggable: true,
+        onDragEnd: (dragEndPosition) {
+          print(dragEndPosition);
+        }
+      ));
+    });
   }
 
   // static final CameraPosition _position1 = this.post == null ? CameraPosition(
@@ -629,7 +645,8 @@ class _MapsScreenState extends State<MapsScreen> {
                           zoom: 11.0,
                         ),
                         mapType: _currentMapType,
-                        markers: _markersDangBai,
+                        markers: Set.from(myMarker),
+                        onTap: _handleTap,
                         onCameraMove: _onCameraMove,
                       ),
                       // _addMarkerButtonProcessed(),
@@ -771,7 +788,7 @@ class _MapsScreenState extends State<MapsScreen> {
                             Text(
                               "Hãy đảm bảo rằng tìm kiếm của bạn đúng định dạng: (vĩ độ, kinh độ)",
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 16,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
