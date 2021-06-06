@@ -3,8 +3,10 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
+import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 part 'LSGD_store.g.dart';
@@ -58,6 +60,8 @@ abstract class _LSGDStore with Store {
   listLSGD listlsgd;
   @observable
   listLSGD listlsgdAll;
+  @observable
+  FilterData FilterDataLSGD = new FilterData("Tất cả", "2000", "2000");
 
   @observable
   bool success = false;
@@ -82,13 +86,23 @@ abstract class _LSGDStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getLSGD(bool isLoadMore) async {
+  void setLoaiLSGD(String value) {
+    FilterDataLSGD  = new FilterData("Tất cả", DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) , DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    print("debug ${FilterDataLSGD.LoaiLSGD}");
+  }
+  @action
+  void setSetThoiDiem(String MinThoiDiem,String MaxThoiDiem) {
+    FilterDataLSGD.MinThoiDiem = MinThoiDiem;
+    FilterDataLSGD.MaxThoiDiem = MaxThoiDiem;
+  }
+  @action
+  Future getLSGD(bool isLoadMore,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     if (!isLoadMore){
       skipCount = 0;
     }
     else
       skipCount += Preferences.skipIndex;
-    final future = _repository.getLSGD(skipCount, Preferences.maxCount);
+    final future = _repository.getLSGD(skipCount, Preferences.maxCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem);
     fetchLSGDFuture = ObservableFuture(future);
 
     future.then((listLSGD) {

@@ -126,6 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
+      centerTitle: true,
       leading: _selectedIndex != 0
           ? IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -135,10 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               })
           : Container(),
-      title: Padding(
-        padding: const EdgeInsets.only(left: 100),
-        child: Text("Cá nhân"),
-      ),
+      title: Text("Cá nhân"),
     );
   }
 
@@ -462,7 +460,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Observer(builder: (context) {
                             return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
                                 ? Text(
-                                priceFormat(_userstore.userCurrent.wallet),
+                                "${_userstore.userCurrent.wallet} Đ",
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,

@@ -4,8 +4,10 @@ import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/FilterLSGD.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
+import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import '../profile.dart';
 
 class WalletPage extends StatefulWidget {
@@ -49,7 +51,7 @@ class _WalletPageState extends State<WalletPage>{
   GlobalKey _contentKey = GlobalKey();
   GlobalKey _refresherKey = GlobalKey();
   bool isRefreshing = false;
-
+  String dropdownValue = 'Tất cả';
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -58,12 +60,11 @@ class _WalletPageState extends State<WalletPage>{
     _lsgdStore = Provider.of<LSGDStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
+    _lsgdStore.setLoaiLSGD("value");
 
     if (!_lsgdStore.loading) {
-      _lsgdStore.getLSGD(false);
-
+      _lsgdStore.getLSGD(false,"","","");
     }
-
 
   }
 
@@ -180,9 +181,47 @@ class _WalletPageState extends State<WalletPage>{
           //   child: Text("Lịch sử giao dịch",
           //     style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
           // ),
-          SizedBox(height: 10,),
-          _lsgdStore.listlsgd!=null?Container(
-            height: 500, // give it a fixed height constraint
+
+          Container(
+            width: double.infinity,
+            height: 50,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 24),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showBottomSheet();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16, right: 24),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Hiển thị bộ lọc nâng cao',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black26,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          _lsgdStore.listlsgd!=null?Expanded(
+            // height: 460, // give it a fixed height constraint
             // color: Colors.teal,
             // child ListView
             child: SmartRefresher(
@@ -219,7 +258,7 @@ class _WalletPageState extends State<WalletPage>{
               onLoading: () async {
                 print("loading");
 
-                _lsgdStore.getLSGD(true);
+                _lsgdStore.getLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) {
                   setState(() {});
@@ -232,7 +271,7 @@ class _WalletPageState extends State<WalletPage>{
               onRefresh: () async {
                 print("refresh");
 
-                _lsgdStore.getLSGD(false);
+                _lsgdStore.getLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) setState(() {});
                 isRefreshing = true;
@@ -243,9 +282,10 @@ class _WalletPageState extends State<WalletPage>{
               child: ListView.builder(
                   key: _contentKey,
                   controller: _scrollController,
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true, // 1st add
-                  physics: ClampingScrollPhysics(), // 2nd add
-                  // physics: const AlwaysScrollableScrollPhysics(),
+                  // physics: ClampingScrollPhysics(), // 2nd add
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: _lsgdStore.listlsgd.listLSGDs.length,
                   itemBuilder: (_, i) => ListTile(
                       title: buildCardTransactionHistory(_lsgdStore.listlsgd.listLSGDs[i])
@@ -260,6 +300,27 @@ class _WalletPageState extends State<WalletPage>{
     );
 
   }
+
+  void _showBottomSheet() {
+    showModalBottomSheet<String>(
+        context: context,
+        enableDrag: false,
+        isDismissible: false,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            )),
+        builder: (BuildContext context) {
+          return Wrap(
+            children: [
+              Filter(),
+            ],
+          );
+        });
+  }
+
   Widget buildCardTransactionHistory(lichsugiaodich lsgd){
     String datetime;
     bool naptien;
@@ -606,4 +667,16 @@ class _NapTienPageState extends State<NapTienPage> {
     Navigator.push(context, route);
     _showSuccssfullMesssage("Nạp tiền thành công");
   }
+}
+
+class FilterData{
+   String LoaiLSGD;
+   String MinThoiDiem;
+   String MaxThoiDiem;
+
+  FilterData(
+      this.LoaiLSGD,
+      this.MinThoiDiem,
+      this.MaxThoiDiem,
+      );
 }
