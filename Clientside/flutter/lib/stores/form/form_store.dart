@@ -147,6 +147,7 @@ abstract class _FormStore with Store {
   bool get canRegister =>
       !formErrorStore.hasErrorsInRegister &&
       userEmail.isNotEmpty &&
+      phoneNumber.isNotEmpty &&
       password.isNotEmpty &&
       confirmPassword.isNotEmpty &&
       surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty;
@@ -337,7 +338,7 @@ abstract class _FormStore with Store {
   @action
   Future register() async {
     regist_success = false;
-    final futrue = _repository.registing(surname, name, username, password, userEmail);
+    final futrue = _repository.registing(surname, name, username, password, userEmail, phoneNumber);
     fetchRegistFuture = ObservableFuture(futrue);
 
     futrue.then((registRes) {

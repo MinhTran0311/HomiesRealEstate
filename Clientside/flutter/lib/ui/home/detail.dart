@@ -265,7 +265,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 24,top:12,bottom: 12),
+                      padding: EdgeInsets.only(left: 24, top:12, bottom: 6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -297,7 +297,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 24,right: 24),
+                      padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -360,12 +360,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ),],
-
                           )
-
-
                         ],
-
                       ),
                     ),
                     Padding(
@@ -830,6 +826,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       ],
     );
   }
+
+
 
   Widget buildTagList(String tags){
     List<Widget> list=[];
