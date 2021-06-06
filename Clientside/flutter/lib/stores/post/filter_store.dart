@@ -122,7 +122,7 @@ abstract class _FilterStore with Store {
 
   @action
   filter_Model validateSearchContent() {
-
+    print("val" + loaiBaiDangDropDownValue);
     if (filter_model == null || (loaiBaiDangDropDownValue == "Bất kì" &&
         filter_model.giaMin.isEmpty &&
         filter_model.giaMax.isEmpty &&
@@ -131,8 +131,10 @@ abstract class _FilterStore with Store {
         filter_model.diaChi.isEmpty&&
         filter_model.username.isEmpty &&
         filter_model.tagTimKiem.isEmpty)
-    )
+    ) {
+      filter_model.loaiBaiDang="";
       return null;
+    }
     else {
       filter_model.loaiBaiDang = loaiBaiDangDropDownValue == "Bất kì" ? "" : loaiBaiDangDropDownValue;
       filter_model.giaMin = filter_model.giaMin.isEmpty ? filter_model.giaMin : calculateActualValue(filter_model.giaMin, giaDropDownValue);

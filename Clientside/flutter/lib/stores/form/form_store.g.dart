@@ -82,6 +82,14 @@ mixin _$FormStore on _FormStore, Store {
           () => super.updateUserLoading,
           name: '_FormStore.updateUserLoading'))
       .value;
+  Computed<bool> _$loadingsGetCurrentUserRoleComputed;
+
+  @override
+  bool get loadingsGetCurrentUserRole =>
+      (_$loadingsGetCurrentUserRoleComputed ??= Computed<bool>(
+              () => super.loadingsGetCurrentUserRole,
+              name: '_FormStore.loadingsGetCurrentUserRole'))
+          .value;
 
   final _$surnameAtom = Atom(name: '_FormStore.surname');
 
@@ -485,6 +493,40 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchGetCurrentUserRoleFuturesAtom =
+      Atom(name: '_FormStore.fetchGetCurrentUserRoleFutures');
+
+  @override
+  ObservableFuture<dynamic> get fetchGetCurrentUserRoleFutures {
+    _$fetchGetCurrentUserRoleFuturesAtom.reportRead();
+    return super.fetchGetCurrentUserRoleFutures;
+  }
+
+  @override
+  set fetchGetCurrentUserRoleFutures(ObservableFuture<dynamic> value) {
+    _$fetchGetCurrentUserRoleFuturesAtom
+        .reportWrite(value, super.fetchGetCurrentUserRoleFutures, () {
+      super.fetchGetCurrentUserRoleFutures = value;
+    });
+  }
+
+  final _$getCurrentUserRoleSuccessAtom =
+      Atom(name: '_FormStore.getCurrentUserRoleSuccess');
+
+  @override
+  bool get getCurrentUserRoleSuccess {
+    _$getCurrentUserRoleSuccessAtom.reportRead();
+    return super.getCurrentUserRoleSuccess;
+  }
+
+  @override
+  set getCurrentUserRoleSuccess(bool value) {
+    _$getCurrentUserRoleSuccessAtom
+        .reportWrite(value, super.getCurrentUserRoleSuccess, () {
+      super.getCurrentUserRoleSuccess = value;
+    });
+  }
+
   final _$registerAsyncAction = AsyncAction('_FormStore.register');
 
   @override
@@ -526,6 +568,15 @@ mixin _$FormStore on _FormStore, Store {
   @override
   Future<dynamic> changePassword() {
     return _$changePasswordAsyncAction.run(() => super.changePassword());
+  }
+
+  final _$getCurrentUserRoleAsyncAction =
+      AsyncAction('_FormStore.getCurrentUserRole');
+
+  @override
+  Future<dynamic> getCurrentUserRole() {
+    return _$getCurrentUserRoleAsyncAction
+        .run(() => super.getCurrentUserRole());
   }
 
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
@@ -768,6 +819,8 @@ updateUser_success: ${updateUser_success},
 resetPassword_success: ${resetPassword_success},
 changePassword_succes: ${changePassword_succes},
 createUser_success: ${createUser_success},
+fetchGetCurrentUserRoleFutures: ${fetchGetCurrentUserRoleFutures},
+getCurrentUserRoleSuccess: ${getCurrentUserRoleSuccess},
 loading: ${loading},
 canLogin: ${canLogin},
 canSubmitResetPassword: ${canSubmitResetPassword},
@@ -778,7 +831,8 @@ canCreate: ${canCreate},
 sendingCode: ${sendingCode},
 regist_loading: ${regist_loading},
 changePasswordLoading: ${changePasswordLoading},
-updateUserLoading: ${updateUserLoading}
+updateUserLoading: ${updateUserLoading},
+loadingsGetCurrentUserRole: ${loadingsGetCurrentUserRole}
     ''';
   }
 }

@@ -58,7 +58,7 @@ class RoleApi {
   //Get current user role
   Future<dynamic> getCurrentUserRole() async {
     try {
-      final res = await _dioClient.post(
+      final res = await _dioClient.get(
         Endpoints.getCurrentUserRole,
         options: Options(
             headers: {
@@ -67,7 +67,7 @@ class RoleApi {
             }
         ),
       );
-      return res["result"];
+      return res;
     } catch (e) {
       throw e;
     }

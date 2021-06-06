@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/models/post/post.dart';
@@ -204,7 +205,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-
                                         Container(
                                           decoration: BoxDecoration(
                                               color: Colors.yellow[700],

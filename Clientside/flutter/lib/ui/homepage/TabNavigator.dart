@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
@@ -19,7 +20,7 @@ class TabNavigator extends StatelessWidget {
       child = HomeScreen();
     else if(tabItem == "MapsScreen")
       child = Container();
-    else if(tabItem == "ManagementScreen")
+    else if(tabItem == "ManagementScreen" )
       child = ManagementScreen();
     else if(tabItem == "ProfileScreen")
       child = ProfileScreen();

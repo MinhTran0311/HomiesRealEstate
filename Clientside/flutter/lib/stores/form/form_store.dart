@@ -430,6 +430,8 @@ abstract class _FormStore with Store {
         SharedPreferences.getInstance().then((preference) {
           preference.setString(Preferences.access_token, this.authToken.accessToken);});
         Preferences.access_token = this.authToken.accessToken;
+        getCurrentUserRole();
+
       }
       else {
         loggedIn = false;
@@ -510,37 +512,76 @@ abstract class _FormStore with Store {
     });
   }
 
-  @action
-  Future<dynamic> getCurrentUserRole () async {
-    final future = _repository.changePassword(this.password, this.newPassword);
-    fetchChangePasswordFuture = ObservableFuture(future);
+  //Get current user role when log in
+  static ObservableFuture<dynamic> emptyGetCurrentUserRoleResponses =
+  ObservableFuture.value(null);
 
-    future.then((res){
-      if (res["success"]){
-        changePassword_succes = true;
+  @observable
+  ObservableFuture<dynamic> fetchGetCurrentUserRoleFutures =
+  ObservableFuture<dynamic>(emptyGetCurrentUserRoleResponses);
+
+  @computed
+  bool get loadingsGetCurrentUserRole => fetchGetCurrentUserRoleFutures.status == FutureStatus.pending;
+
+  @observable
+  bool getCurrentUserRoleSuccess = false;
+
+  @action
+  Future getCurrentUserRole() async {
+    final future = _repository.getCurrentUserRole();
+    fetchGetCurrentUserRoleFutures = ObservableFuture(future);
+    future.then((res) {
+
+      if (res["success"]!= true)
+      {
+        getCurrentUserRoleSuccess = false;
+        return null;
       }
-      else {
-        changePassword_succes = false;
-      }
-    }).catchError((error){
-      if (error is DioError) {
-        changePassword_succes=false;
-        if (error.response.data!=null) {
-          errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
+      else{
+        Preferences.userRole = res["result"]["role"][0]["roleName"];
+        Preferences.userRoleRank = rolePermission();
+        List<String> permission = new List<String>();
+        if ((res["result"]["grantedPermissionNames"] as List)?.length > 0)
+        {
+          for (int i=0; i<(res["result"]["grantedPermissionNames"] as List)?.length; i++)
+          {
+            permission.add(res["result"]["grantedPermissionNames"][i]);
+          }
+          Preferences.grantedPermissions = permission;
         }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        getCurrentUserRoleSuccess = true;
+        return res["result"]["role"][0]["roleName"];
+      }
+
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
       else {
         errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        "Please check your internet connection and try again!";
         throw error;
       }
     });
   }
+  @action
+  int rolePermission()
+  {
+    print("role" + Preferences.userRole);
 
-
+    switch(Preferences.userRole)
+    {
+      case "Admin":
+        return 3;
+      case "Censor":
+        return 2;
+      case "User":
+        return 1;
+      default:
+        return 0;
+    }
+  }
   // @action
   // Future login() async {
   //   loading = true;

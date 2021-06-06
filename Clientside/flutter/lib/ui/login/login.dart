@@ -101,15 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
           ) : Center(child: _buildRightSide()),
+
           Observer(
             builder: (context) {
-              return _store.loggedIn 
-                  ? _userStore.getCurrentUserRole() : Container(width: 0,height: 0,);
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return _store.loggedIn && _userStore.getCurrentUserRoleSuccess
+              return _store.loggedIn && _store.getCurrentUserRoleSuccess
                   ? navigate(context, true)
                   : _showErrorMessage(_store.errorStore.errorMessage);
             },
