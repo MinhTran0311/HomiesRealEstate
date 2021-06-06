@@ -66,7 +66,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         title: Text(
           "Đăng ký",
           style: Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold,letterSpacing: 1.0),),
-        automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
       ),
       body: _buildBody(),
     );

@@ -60,6 +60,7 @@ final ThemeData themeDataLight = ThemeData(
   accentColor: Colors.amber,
   accentColorBrightness: Brightness.light,
   scaffoldBackgroundColor: Colors.white,
+
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
     color: Colors.amber,
