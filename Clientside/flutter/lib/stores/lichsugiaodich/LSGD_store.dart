@@ -61,7 +61,7 @@ abstract class _LSGDStore with Store {
   @observable
   listLSGD listlsgdAll;
   @observable
-  FilterData FilterDataLSGD = new FilterData("Tất cả", "2000", "2000");
+  FilterData FilterDataLSGD;
 
   @observable
   bool success = false;
