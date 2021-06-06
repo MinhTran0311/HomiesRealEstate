@@ -221,7 +221,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     if(LoaiLSGD=="Nạp tiền"){
       Loai=-1;
     }
-    else if(LoaiLSGD == "Thanh Toán"){
+    else if(LoaiLSGD == "Thanh toán"){
       Loai=1;
     }
     else{
@@ -324,13 +324,25 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     }
   }
 
-  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount) async {
-
+  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
+    int Loai=0;
+    if(LoaiLSGD=="Nạp tiền"){
+      Loai=-1;
+    }
+    else if(LoaiLSGD == "Thanh toán"){
+      Loai=1;
+    }
+    else{
+      Loai=0;
+    }
     try {
       final res = await _dioClient.get(Endpoints.getAllLSGD,
         queryParameters: {
           "skipCount": skipCount,
           "maxCount": maxResultCount,
+          "phanLoaiLSGD":Loai,
+          "MinThoiGianFilter":MinThoiDiem,
+          "MaxThoiGianFilter":MaxThoiDiem,
         },
         options:
           Options(

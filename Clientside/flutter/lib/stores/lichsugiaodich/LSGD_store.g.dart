@@ -280,8 +280,8 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
 
   @override
-  Future<dynamic> getAllLSGD(bool isLoadMore) {
-    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore));
+  Future<dynamic> getAllLSGD(bool isLoadMore, String LoaiLSGD,String MinThoiDiem, String MaxThoiDiem) {
+    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore,LoaiLSGD,MinThoiDiem,MaxThoiDiem));
   }
 
   final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
