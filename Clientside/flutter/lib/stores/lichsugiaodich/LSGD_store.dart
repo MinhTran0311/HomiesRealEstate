@@ -131,13 +131,13 @@ abstract class _LSGDStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getAllLSGD(bool isLoadMore) async {
+  Future getAllLSGD(bool isLoadMore,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     if (!isLoadMore){
       skipCountAll = 0;
     }
     else
       skipCountAll += Preferences.skipIndex;
-    final future = _repository.getAllLSGD(skipCountAll, Preferences.maxCount);
+    final future = _repository.getAllLSGD(skipCountAll, Preferences.maxCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem);
     fetchAllLSGDFuture = ObservableFuture(future);
 
     // final future = _repository.getAllLSGD();

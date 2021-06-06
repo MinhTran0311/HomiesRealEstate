@@ -101,6 +101,7 @@ class _FilterState extends State<Filter> {
         textColor: Colors.white,
         onPressed: (){
           _lsgdStore.getLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+          _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
           Navigator.pop(context,LoaiLSGD);
         },
       ),
