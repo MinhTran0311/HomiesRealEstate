@@ -46,3 +46,34 @@ final ThemeData themeDataDark = ThemeData(
   accentColor: AppColors.orange[500],
   accentColorBrightness: Brightness.dark,
 );
+
+final ThemeData themeDataLight = ThemeData(
+  textTheme: TextTheme(
+    headline1: GoogleFonts.marvel(fontSize: 24, color: Colors.black,fontWeight: FontWeight.bold),
+    headline2: GoogleFonts.marvel(fontSize: 30),
+    headline3: GoogleFonts.marvel(fontSize: 26),
+    headline4: GoogleFonts.marvel(fontSize: 20),
+    headline5: GoogleFonts.marvel(fontSize: 18),
+    headline6: GoogleFonts.marvel(fontSize: 16),
+    subtitle1: GoogleFonts.marvel(fontSize: 16, fontStyle: FontStyle.italic, color: Colors.grey),
+
+  ).apply(
+    bodyColor: Colors.black,
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.amber,
+    size: 20,
+  ),
+  primaryColor: Colors.amber,
+  primaryColorBrightness: Brightness.light,
+  accentColor: Colors.white,
+  accentColorBrightness: Brightness.light,
+
+  appBarTheme: AppBarTheme(
+    brightness: Brightness.light,
+    color: Colors.white,
+    centerTitle: true,
+  ),
+  brightness: Brightness.light,
+
+);

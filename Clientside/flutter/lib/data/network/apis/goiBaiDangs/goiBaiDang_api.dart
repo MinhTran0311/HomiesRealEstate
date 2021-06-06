@@ -19,8 +19,9 @@ class GoiBaiDangApi {
   //Get all goi bai dang
   Future<GoiBaiDangList> getAllGoiBaiDangs() async {
     try {
-      final res = await _dioClient.post(Endpoints.getAllGoiBaiDangs,
-        data: {
+      final res = await _dioClient.get(Endpoints.getAllGoiBaiDangs,
+        queryParameters: {
+          "MaxResultCount": 100,
         },
         options: Options(
             headers: {

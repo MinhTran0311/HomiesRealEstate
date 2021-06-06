@@ -290,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               press: () {
                 setState(() {
                   Route route =
-                      MaterialPageRoute(builder: (context) => HelpPage());
+                      MaterialPageRoute(builder: (context) => HelpScreen());
                   Navigator.push(context, route);
                 });
               }),

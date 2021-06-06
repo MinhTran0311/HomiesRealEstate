@@ -48,6 +48,12 @@ mixin _$FormStore on _FormStore, Store {
   bool get canUpdate => (_$canUpdateComputed ??=
           Computed<bool>(() => super.canUpdate, name: '_FormStore.canUpdate'))
       .value;
+  Computed<bool> _$canCreateComputed;
+
+  @override
+  bool get canCreate => (_$canCreateComputed ??=
+          Computed<bool>(() => super.canCreate, name: '_FormStore.canCreate'))
+      .value;
   Computed<bool> _$sendingCodeComputed;
 
   @override
@@ -68,6 +74,13 @@ mixin _$FormStore on _FormStore, Store {
   bool get changePasswordLoading => (_$changePasswordLoadingComputed ??=
           Computed<bool>(() => super.changePasswordLoading,
               name: '_FormStore.changePasswordLoading'))
+      .value;
+  Computed<bool> _$updateUserLoadingComputed;
+
+  @override
+  bool get updateUserLoading => (_$updateUserLoadingComputed ??= Computed<bool>(
+          () => super.updateUserLoading,
+          name: '_FormStore.updateUserLoading'))
       .value;
 
   final _$surnameAtom = Atom(name: '_FormStore.surname');
@@ -235,6 +248,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$activeAtom = Atom(name: '_FormStore.active');
+
+  @override
+  bool get active {
+    _$activeAtom.reportRead();
+    return super.active;
+  }
+
+  @override
+  set active(bool value) {
+    _$activeAtom.reportWrite(value, super.active, () {
+      super.active = value;
+    });
+  }
+
   final _$fetchTokenFutureAtom = Atom(name: '_FormStore.fetchTokenFuture');
 
   @override
@@ -313,6 +341,23 @@ mixin _$FormStore on _FormStore, Store {
     _$fetchUpdateUserFutureAtom.reportWrite(value, super.fetchUpdateUserFuture,
         () {
       super.fetchUpdateUserFuture = value;
+    });
+  }
+
+  final _$fetchCreateUserFutureAtom =
+      Atom(name: '_FormStore.fetchCreateUserFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCreateUserFuture {
+    _$fetchCreateUserFutureAtom.reportRead();
+    return super.fetchCreateUserFuture;
+  }
+
+  @override
+  set fetchCreateUserFuture(ObservableFuture<dynamic> value) {
+    _$fetchCreateUserFutureAtom.reportWrite(value, super.fetchCreateUserFuture,
+        () {
+      super.fetchCreateUserFuture = value;
     });
   }
 
@@ -425,6 +470,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$createUser_successAtom = Atom(name: '_FormStore.createUser_success');
+
+  @override
+  bool get createUser_success {
+    _$createUser_successAtom.reportRead();
+    return super.createUser_success;
+  }
+
+  @override
+  set createUser_success(bool value) {
+    _$createUser_successAtom.reportWrite(value, super.createUser_success, () {
+      super.createUser_success = value;
+    });
+  }
+
   final _$registerAsyncAction = AsyncAction('_FormStore.register');
 
   @override
@@ -437,6 +497,13 @@ mixin _$FormStore on _FormStore, Store {
   @override
   Future<dynamic> UpdateUser() {
     return _$UpdateUserAsyncAction.run(() => super.UpdateUser());
+  }
+
+  final _$CreateUserAsyncAction = AsyncAction('_FormStore.CreateUser');
+
+  @override
+  Future<dynamic> CreateUser() {
+    return _$CreateUserAsyncAction.run(() => super.CreateUser());
   }
 
   final _$authLogInAsyncAction = AsyncAction('_FormStore.authLogIn');
@@ -686,11 +753,13 @@ isActive: ${isActive},
 phoneNumber: ${phoneNumber},
 roleName: ${roleName},
 newPassword: ${newPassword},
+active: ${active},
 fetchTokenFuture: ${fetchTokenFuture},
 fetchRegistFuture: ${fetchRegistFuture},
 fetchResetCodeFuture: ${fetchResetCodeFuture},
 fetchChangePasswordFuture: ${fetchChangePasswordFuture},
 fetchUpdateUserFuture: ${fetchUpdateUserFuture},
+fetchCreateUserFuture: ${fetchCreateUserFuture},
 authToken: ${authToken},
 loggedIn: ${loggedIn},
 success: ${success},
@@ -698,15 +767,18 @@ regist_success: ${regist_success},
 updateUser_success: ${updateUser_success},
 resetPassword_success: ${resetPassword_success},
 changePassword_succes: ${changePassword_succes},
+createUser_success: ${createUser_success},
 loading: ${loading},
 canLogin: ${canLogin},
 canSubmitResetPassword: ${canSubmitResetPassword},
 canChangePassword: ${canChangePassword},
 canRegister: ${canRegister},
 canUpdate: ${canUpdate},
+canCreate: ${canCreate},
 sendingCode: ${sendingCode},
 regist_loading: ${regist_loading},
-changePasswordLoading: ${changePasswordLoading}
+changePasswordLoading: ${changePasswordLoading},
+updateUserLoading: ${updateUserLoading}
     ''';
   }
 }
@@ -746,6 +818,13 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   bool get hasErrorsInUpdate => (_$hasErrorsInUpdateComputed ??= Computed<bool>(
           () => super.hasErrorsInUpdate,
           name: '_FormErrorStore.hasErrorsInUpdate'))
+      .value;
+  Computed<bool> _$hasErrorsInCreateComputed;
+
+  @override
+  bool get hasErrorsInCreate => (_$hasErrorsInCreateComputed ??= Computed<bool>(
+          () => super.hasErrorsInCreate,
+          name: '_FormErrorStore.hasErrorsInCreate'))
       .value;
   Computed<bool> _$hasErrorInForgotPasswordComputed;
 
@@ -891,6 +970,7 @@ hasErrorsInReset: ${hasErrorsInReset},
 hasErrorsInRegister: ${hasErrorsInRegister},
 hasErrorInChangePassword: ${hasErrorInChangePassword},
 hasErrorsInUpdate: ${hasErrorsInUpdate},
+hasErrorsInCreate: ${hasErrorsInCreate},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword}
     ''';
   }

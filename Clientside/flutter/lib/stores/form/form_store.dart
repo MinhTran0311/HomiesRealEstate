@@ -70,6 +70,8 @@ abstract class _FormStore with Store {
   String roleName = '';
   @observable
   String newPassword = '';
+  @observable
+  bool active = true;
 
   static ObservableFuture<AuthToken> emptyAuthResponse = ObservableFuture.value(null);
 
@@ -97,6 +99,11 @@ abstract class _FormStore with Store {
   @observable
   ObservableFuture<dynamic> fetchUpdateUserFuture = ObservableFuture<dynamic>(emptyUpdateUserResponse);
 
+  static ObservableFuture<dynamic> emptyCreateUserResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCreateUserFuture = ObservableFuture<dynamic>(emptyCreateUserResponse);
+
   @observable
   AuthToken authToken;
 
@@ -117,6 +124,9 @@ abstract class _FormStore with Store {
 
   @observable
   bool changePassword_succes = false;
+
+  @observable
+  bool createUser_success = false;
 
   //#region computed
   @computed
@@ -148,8 +158,21 @@ abstract class _FormStore with Store {
       userEmail.isNotEmpty &&
       // password.isNotEmpty &&
       // confirmPassword.isNotEmpty &&
-      surname.isNotEmpty && name.isNotEmpty;
+      surname.isNotEmpty &&
+      name.isNotEmpty &&
+      phoneNumber.isNotEmpty;
           // && username.isNotEmpty;
+
+  @computed
+  bool get canCreate =>
+      !formErrorStore.hasErrorsInCreate &&
+      userEmail.isNotEmpty &&
+      password.isNotEmpty &&
+      confirmPassword.isNotEmpty &&
+      surname.isNotEmpty &&
+      name.isNotEmpty &&
+      username.isNotEmpty &&
+      phoneNumber.isNotEmpty;
 
   @computed
   bool get sendingCode => fetchResetCodeFuture.status == FutureStatus.pending;
@@ -157,6 +180,9 @@ abstract class _FormStore with Store {
   bool get regist_loading => fetchRegistFuture.status == FutureStatus.pending;
   @computed
   bool get changePasswordLoading => fetchChangePasswordFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get updateUserLoading => fetchUpdateUserFuture.status == FutureStatus.pending;
   //endregion
 
   //#region set value
@@ -346,10 +372,8 @@ abstract class _FormStore with Store {
       if (res["success"]){
         updateUser_success = true;
       }
-      else updateUser_success = false;
     }).catchError((error){
       if (error is DioError) {
-        updateUser_success=false;
         if (error.response.data!=null) {
 
           errorStore.errorMessage = error.response.data["error"]["message"];
@@ -364,31 +388,34 @@ abstract class _FormStore with Store {
         throw error;
       }
     });
+  }
 
-    // fetchRegistFuture = ObservableFuture(futrue);
-    //
-    // futrue.then((registRes) {
-    //   print("123" + registRes["result"]["canLogin"].toString());
-    //
-    //   if (registRes["result"]["canLogin"]) {
-    //     regist_success = true;
-    //   }
-    //   else{
-    //     regist_success = false;
-    //   }
-    // }).catchError((error){
-    //   regist_success = false;
-    //   if (error is DioError) {
-    //     if (error.response.data!=null)
-    //       errorStore.errorMessage = error.response.data["error"]["message"];
-    //     else
-    //       errorStore.errorMessage = DioErrorUtil.handleError(error);
-    //     throw error;
-    //   }
-    //   else{
-    //     throw error;
-    //   }
-    // });
+  @action
+  Future CreateUser() async {
+    createUser_success = false;
+    final future = _repository.createUser(username, surname, name, userEmail, phoneNumber, isActive, roleName);
+    fetchCreateUserFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        createUser_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
   }
 
   @action
@@ -483,6 +510,37 @@ abstract class _FormStore with Store {
     });
   }
 
+  @action
+  Future<dynamic> getCurrentUserRole () async {
+    final future = _repository.changePassword(this.password, this.newPassword);
+    fetchChangePasswordFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        changePassword_succes = true;
+      }
+      else {
+        changePassword_succes = false;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        changePassword_succes=false;
+        if (error.response.data!=null) {
+          errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+
   // @action
   // Future login() async {
   //   loading = true;
@@ -562,8 +620,10 @@ abstract class _FormErrorStore with Store {
       password != null || newPassword!= null || confirmPassword!= null;
   @computed
   bool get hasErrorsInUpdate =>
-      surname != null || name != null ||username != null || userEmail != null;
-
+      surname != null || name != null ||username != null || userEmail != null || phoneNumber != null;
+  @computed
+  bool get hasErrorsInCreate =>
+      surname != null || name != null ||username != null ||password != null || confirmPassword != null || userEmail != null || phoneNumber != null;
   @computed
   bool get hasErrorInForgotPassword => username != null;
 }

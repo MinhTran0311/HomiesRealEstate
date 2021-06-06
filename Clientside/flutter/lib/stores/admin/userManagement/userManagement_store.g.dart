@@ -198,14 +198,6 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
-  final _$deleteUserAsyncAction =
-      AsyncAction('_UserManagementStore.deleteUser');
-
-  @override
-  Future<dynamic> deleteUser(int id) {
-    return _$deleteUserAsyncAction.run(() => super.deleteUser(id));
-  }
-
   final _$fCountAllUsersAsyncAction =
       AsyncAction('_UserManagementStore.fCountAllUsers');
 

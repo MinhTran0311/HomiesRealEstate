@@ -64,12 +64,15 @@ class Endpoints {
   static const String getImagesForDetail = homiesUrl + "/services/app/HinhAnhs/GetAllByPostId";
   //search
   static const String searchPosts = homiesUrl + "/services/app/BaiDangs/GetAllByFilter";
+  static const String addViewForPost = homiesUrl + "/services/app/BaiDangs/AddViewForBaiDang";
   //# endregion
 
   static const String getAllProvinces = homiesUrl + "/services/app/Tinhs/GetAll";
   static const String getAllTowns = homiesUrl + "/services/app/Huyens/GetAll";
   static const String getAllCommunes = homiesUrl + "/services/app/Xas/GetAll";
 
+  //Cout all role
+  static const String getCurrentUserRole = homiesUrl + "/services/app/Profile/GetCurrentUserRole";
   //Cout all role
   static const String coutAllRole = homiesUrl + "/services/app/Role/CountAllRoles";
   //Cout all user
@@ -86,18 +89,24 @@ class Endpoints {
   static const String getAllDanhMucs = homiesUrl + "/services/app/DanhMucs/GetAll";
   //Đếm tổng số danh mục
   static const String countAllDanhMucs = homiesUrl + "/services/app/DanhMucs/CountAllDanhMucs";
+  //Update or edit danh mục
+  static const String createOrEditDanhMuc = homiesUrl + "/services/app/DanhMucs/CreateOrEdit";
 
   //Gói bài đăng
   //Get all Gói bài đăng
   static const String getAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/GetAll";
   //Đếm tổng số gói bài đăng
   static const String countAllGoiBaiDangs = homiesUrl + "/services/app/GoiBaiDangs/CountAllGoiBaiDangs";
+  //Update or edit gói bài đăng
+  static const String createOrEditGoiBaiDang = homiesUrl + "/services/app/GoiBaiDangs/CreateOrEdit";
 
   //Thuộc tính
   //Get all Thuộc tính
   static const String getAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/GetAll";
   //Đếm tổng số thuộc tính
   static const String countAllThuocTinhs = homiesUrl + "/services/app/ThuocTinhs/CountAllThuocTinhs";
+  //Update or edit thuộc tính
+  static const String createOrEditThuocTinh = homiesUrl + "/services/app/ThuocTinhs/CreateOrEdit";
 
   //Đếm tổng số bài đăng trong tháng
   static const String countNewBaiDangInMonth = homiesUrl + "/services/app/BaiDangs/CountNewBaiDangInMonth";

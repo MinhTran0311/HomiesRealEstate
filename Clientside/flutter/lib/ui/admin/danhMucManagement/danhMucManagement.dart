@@ -291,7 +291,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-
+                        _showBottomSheetPopMenu(danhMuc);
                       },
                       child: Icon(
                         Icons.menu_outlined,
@@ -301,50 +301,106 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.more_time,
-                            color: Colors.amber,
-                            size: 20,
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 5),
-                              // child: Text(
-                              //   // '${role.creationTime}',
-                              //   _handlingStringCreationTime(role.creationTime),
-                              //   overflow: TextOverflow.ellipsis,
-                              //   style: TextStyle(
-                              //     color: Colors.black,
-                              //     fontSize: 18,
-                              //     // fontWeight: FontWeight.bold,
-                              //   ),
-                              // )
-                            child: Text(
-                              danhMuc.tag,
+                SizedBox(height: 6,),
+                Container(
+                  // padding: EdgeInsets.only(top: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.note,
+                              color: Colors.amber,
+                              size: 28,
+                            ),
+                            SizedBox(width: 10,),
+                            Text(
+                              "Nhãn:",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                // fontWeight: FontWeight.bold,
+                                // color: Colors.amber,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 5,),
+                          ],
+                        ),
                       ),
+                      Flexible(
+                        child:
+                        Text(
+                          // alignment: Alignment.centerRight,
+                          "${danhMuc.tag}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 6,),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.notifications_active,
+                          color: Colors.amber,
+                          size: 28,
+                        ),
+                        SizedBox(width: 10.0,),
+                        Text(
+                          "Trạng thái:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
                     ),
+                    SizedBox(width: 12,),
+                    danhMuc.trangThai == "On" ? Row(
+                      children: [
+                        Text(
+                          "On",
+                          style: TextStyle(
+                            // fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10.0,),
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 24,
+                        ),
+                      ],
+                    ) :  Row(
+                      children: [
+                        Text(
+                          "Off",
+                          style: TextStyle(
+                            // fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(width: 10.0,),
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.red,
+                          size: 24,
+                        ),
+                      ],
+                    )
                   ],
                 ),
-                // Row(
-                //   children: [
-                //     _isStaticAndDefault(role.isStatic, role.isDefault),
-                //     SizedBox(height: 30.0,),
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -363,59 +419,6 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
 
         return SizedBox.shrink();
       },
-    );
-  }
-
-  Widget _isStaticAndDefault(bool isStatic, bool isDefault) {
-    return Container(
-      padding: EdgeInsets.only(top: 10,),
-      child: Row(
-        children: [
-          isStatic ? Container(
-            decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.all(Radius.circular(5))
-            ),
-            width: 60,
-            padding: EdgeInsets.symmetric(vertical: 4),
-            child: Center(
-              child: Text(
-                "Tĩnh",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          )
-              : Container(),
-          isStatic ? SizedBox(width: 10,) : SizedBox(),
-          !isDefault ? Container()
-              : Container(
-            // padding: EdgeInsets.only(left: 20),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(5))
-              ),
-              width: 80,
-              // height: 30,
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: Text(
-                  "Mặc định",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -452,6 +455,92 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
             ],
           );
         }
+    );
+  }
+
+  void _showBottomSheetPopMenu(DanhMuc danhMuc) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )
+        ),
+        builder: (BuildContext context){
+          return Wrap(
+            children: [
+              buildPopMenuBottom(danhMuc),
+            ],
+          );
+        }
+    );
+  }
+
+  Widget buildPopMenuBottom(DanhMuc danhMuc) {
+    return Container(
+        padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.edit_sharp,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(width: 20,),
+                GestureDetector(
+                  child: Text(
+                    "Chỉnh sửa",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen(thuocTinh: thuocTinh,)),
+                    // );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                danhMuc.trangThai == "On" ? Icon(
+                  Icons.cancel,
+                  color: Colors.grey,
+                  size: 28,
+                ) : Icon(
+                  Icons.check_circle,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(width: 20,),
+                GestureDetector(
+                  child: Text(
+                    danhMuc.trangThai == "On" ? "Ngừng kích hoạt" : "Kích hoạt",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+
+                  },
+                ),
+              ],
+            ),
+          ],
+        )
     );
   }
 

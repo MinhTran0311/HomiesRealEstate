@@ -8,6 +8,8 @@ namespace Homies.RealEstate.Authorization.Roles.Dto
 
         [Required]
         public string DisplayName { get; set; }
+
+        public string Name { get; set; }
         
         public bool IsDefault { get; set; }
     }

@@ -19,8 +19,9 @@ class ThuocTinhApi {
   //Get all thuộc tính
   Future<ThuocTinhManagementList> getAllThuocTinhs() async {
     try {
-      final res = await _dioClient.post(Endpoints.getAllThuocTinhs,
-        data: {
+      final res = await _dioClient.get(Endpoints.getAllThuocTinhs,
+        queryParameters: {
+          "MaxResultCount": 100,
         },
         options: Options(
             headers: {
@@ -49,6 +50,53 @@ class ThuocTinhApi {
       );
 
       return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Update thuộc tính
+  Future<dynamic> updateThuocTinh(int id, String tenThuocTinh, String kieuDuLieu, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditThuocTinh,
+        data: {
+          "tenThuocTinh": tenThuocTinh,
+          "kieuDuLieu": kieuDuLieu,
+          "trangThai": trangThai,
+          "id": id,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Update thuộc tính
+  Future<dynamic> createThuocTinh(String tenThuocTinh, String kieuDuLieu, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditThuocTinh,
+        data: {
+          "tenThuocTinh": tenThuocTinh,
+          "kieuDuLieu": kieuDuLieu,
+          "trangThai": trangThai,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
     } catch (e) {
       throw e;
     }

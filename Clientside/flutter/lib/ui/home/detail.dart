@@ -58,7 +58,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
     _transTween = Tween(begin: Offset(-10, 40), end: Offset(-10, 0))
         .animate(_TextAnimationController);
-
   }
 
   void didChangeDependencies() {
@@ -69,6 +68,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     _userStore = Provider.of<UserStore>(context);
     if (!_imageStore.imageLoading && !finishload){
       _imageStore.getImagesForDetail(this.post.id.toString());
+    }
+    if (!finishload){
+      _postStore.addViewForPost(post.id);
     }
     if (!_userStore.loading && !finishload){
       _userStore.getUserOfCurrentDetailPost(post.userId);
@@ -84,9 +86,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       _postStore.isBaiGhimYeuThichOrNot(this.post.id.toString());
       finishload=true;
     }
-
-
-
   }
 
   @override
@@ -278,18 +277,18 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(right: 24),
                             child: Row(
                               children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 4,),
                                 Text(
-                                  post.diemBaiDang.toString() +" reviews",
+                                  post.diemBaiDang.toString().split(".")[0],
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey,
                                   ),
+                                ),
+                                SizedBox(width: 4,),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 16,
                                 )
                               ],
                             ),
@@ -305,7 +304,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           Flexible(
                             child: DefaultTextStyle(
                               child: SelectableText(post.tieuDe),
-                              maxLines: 3,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 28,
@@ -384,10 +382,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           Container(
                               width: size.width-24-58,
                               height: 24,
-                              //child: Flexible(
-                              //child: SingleChildScrollView(
-
-                              //scrollDirection: Axis.horizontal,
                               child: Marquee(
                                 text:post.diaChi.isEmpty ? "" : post.diaChi +', '+ post.tenXa+
                                     (post.tenHuyen.isEmpty?"":", " + post.tenHuyen) + (post.tenTinh.isEmpty?"":", " + post.tenTinh),
@@ -409,17 +403,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                 //decelerationCurve: Curves.easeOut,
                                 blankSpace: 20.0,
                               )
-
-                            //   Text(
-                            //     post.tenXa + ', ' + post.tenHuyen + ', ' + post.tenTinh,
-                            //     style: TextStyle(
-                            //       color:Colors.grey,
-                            //       fontSize: 18,
-                            //       fontWeight: FontWeight.bold,
-                            //     //),
-                            //   ),
-                            // ),
-                            //),
                           ),
                         ],
                       ),
@@ -443,12 +426,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         child: Html(
                           data: post.moTa,
                         )
-                      //   post.moTa,
-                      //   style: TextStyle(
-                      //     fontSize: 16,
-                      //     color: Colors.grey[500],
-                      //   ),
-                      // )
                     ),
                     buildMap(),
                     Padding(
@@ -465,7 +442,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
                       child: buildTagList(post.tagTimKiem),
                     ),
-
                     (_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -582,7 +558,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           child: IconButton(
                             icon: const Icon(Icons.message,
                               color: Colors.amber,
-                              size: 20,),
+                              size: 20,
+                            ),
                             onPressed: (){
                               _lauchURL("sms:"+_userStore.user.phoneNumber);
                             },

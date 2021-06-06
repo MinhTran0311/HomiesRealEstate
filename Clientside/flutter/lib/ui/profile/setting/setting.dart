@@ -1,8 +1,11 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routes.dart';
@@ -22,9 +25,12 @@ class _SettingPageState extends State<SettingPage> {
   _SettingPageState({
     Key key,
   }) : super();
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _themeStore = Provider.of<ThemeStore>(context);
+
   }
   @override
   void initState() {
@@ -46,11 +52,11 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildAppBar(){
     return AppBar(
       leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
-          onPressed: (){setState(() {
+          onPressed: (){
             Navigator.pop(context);
-          });}),
+      }),
       centerTitle: true,
-      title: Text("Cài đặt")
+      title: Text("Cài đặt"),
     );
   }
 
@@ -58,11 +64,28 @@ class _SettingPageState extends State<SettingPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        _buildChangeBrightMode(),
         _buildChangePassword(),
         _buildLogOut(),
       ],
     );
+  }
 
+  Widget _buildChangeBrightMode(){
+    return Observer(
+      builder: (context){
+        return CardItem(
+          text: "Chế độ tối",
+          icon: Icons.security_outlined,
+          colorbackgroud: Colors.grey[200],
+          colortext: _themeStore.darkMode ? Colors.white : Colors.black,
+          coloricon: Colors.amber,
+          isFunction: false,
+          press: () {
+            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);},
+        );
+      }
+    );
   }
 
   Widget _buildChangePassword(){
@@ -92,7 +115,6 @@ class _SettingPageState extends State<SettingPage> {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
           preference.setString(Preferences.auth_token, "");
-          ///Navigator.of(context).pushReplacementNamed(Routes.login);
           Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
         });
       },

@@ -40,10 +40,28 @@ class PostApi {
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
-        }),queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount)
+        }),
+        queryParameters: filter_model.toMap(skipCount: skipCount, maxCount: maxResultCount)
         ,
       );
       return PostList.fromJson(res);
+    } catch (e) {
+      throw e;
+    }
+  }
+  Future<dynamic> addViewForPost(int postId) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.addViewForPost,
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+        }),
+        queryParameters: {
+          "baidangId": postId
+        }
+        ,
+      );
+      return res;
     } catch (e) {
       throw e;
     }
