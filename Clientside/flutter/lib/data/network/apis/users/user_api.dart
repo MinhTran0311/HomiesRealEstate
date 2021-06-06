@@ -216,10 +216,27 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     // }
   }
 
-  Future<listLSGD> getLSGD(int skipCount, int maxResultCount) async {
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
+    int Loai=0;
+    if(LoaiLSGD=="Nạp tiền"){
+      Loai=-1;
+    }
+    else if(LoaiLSGD == "Thanh Toán"){
+      Loai=1;
+    }
+    else{
+      Loai=0;
+    }
     try {
       final res = await _dioClient.get(Endpoints.getCurrenlichsugiaodich,
-        queryParameters: {"skipCount": skipCount, "maxCount": maxResultCount},
+        queryParameters: {
+        "skipCount": skipCount,
+          "maxCount": maxResultCount,
+          "phanLoaiLSGD":Loai,
+          "MinThoiGianFilter":MinThoiDiem,
+          "MaxThoiGianFilter":MaxThoiDiem,
+
+        },
         options: Options(
             headers: {
               "Abp.TenantId": 1,
@@ -308,11 +325,12 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount) async {
+
     try {
       final res = await _dioClient.get(Endpoints.getAllLSGD,
         queryParameters: {
           "skipCount": skipCount,
-          "maxCount": maxResultCount
+          "maxCount": maxResultCount,
         },
         options:
           Options(

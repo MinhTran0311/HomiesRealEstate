@@ -97,13 +97,13 @@ class _ReportPageState extends State<ReportPage>{
                               padding: const EdgeInsets.only(top: 10),
                               child: DropdownButton<String>(
                                 value: dropdownValue,
-                                icon: const Icon(Icons.arrow_downward),
+                                icon: const Icon(Icons.arrow_drop_down),
                                 iconSize: 24,
                                 elevation: 16,
-                                style: const TextStyle(color: Colors.deepPurple),
+                                style: const TextStyle(color: Colors.black),
                                 underline: Container(
                                   height: 2,
-                                  color: Colors.deepPurpleAccent,
+                                  color: Colors.black,
                                 ),
                                 onChanged: (String newValue) {
                                   setState(() {
@@ -155,13 +155,13 @@ class _ReportPageState extends State<ReportPage>{
                                 padding: const EdgeInsets.only(top: 10),
                                 child: DropdownButton<String>(
                                   value: dropdownValue,
-                                  icon: const Icon(Icons.arrow_downward),
+                                  icon: const Icon(Icons.arrow_drop_down),
                                   iconSize: 24,
                                   elevation: 16,
-                                  style: const TextStyle(color: Colors.deepPurple),
+                                  style: const TextStyle(color: Colors.black),
                                   underline: Container(
                                     height: 2,
-                                    color: Colors.deepPurpleAccent,
+                                    color: Colors.black,
                                   ),
                                   onChanged: (String newValue) {
                                     setState(() {
@@ -234,7 +234,7 @@ class _ReportPageState extends State<ReportPage>{
                 color: Colors.white,
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Container(
                   width: double.infinity,
@@ -243,7 +243,7 @@ class _ReportPageState extends State<ReportPage>{
                     children: <Widget>[
                       Align(
                           alignment: Alignment.topCenter,
-                          child: Container(width: double.infinity,height: 40,padding:const EdgeInsets.only(top: 10),child: Center(child: Text("Thống kê dòng tiền",style: TextStyle(fontFamily: FontFamily.roboto, fontSize: 24,fontWeight: FontWeight.bold),)))
+                          child: Container(width: double.infinity,height: 40,padding:const EdgeInsets.only(top: 10),child: Center(child: Text("Thống kê dòng tiền",style: TextStyle( fontSize: 24,fontWeight: FontWeight.bold),)))
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
@@ -288,14 +288,14 @@ class _ReportPageState extends State<ReportPage>{
                             Row(
                               children: [
                                 SizedBox(width: 20,height: 20, child: CircleAvatar(backgroundColor: Color(0xfff8b250),)),
-                                Text(" %Đã thanh toán",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto ))
+                                Text(" Đã thanh toán",style: TextStyle(fontSize: 18 ))
                               ],
                             ),
                             SizedBox(height: 20,),
                             Row(
                               children: [
                                 SizedBox(width: 20,height: 20, child: CircleAvatar(backgroundColor: Color(0xff0293ee),)),
-                                Text(" %Đã nạp",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto ))
+                                Text(" Đã nạp",style: TextStyle(fontSize: 18))
                               ],
                             )
                             // Text("Đã nạp: ${priceFormat(sumTienNap)}",style: TextStyle(fontSize: 18,),),
@@ -316,7 +316,7 @@ class _ReportPageState extends State<ReportPage>{
                 color: Colors.white,
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child:   Container(
                   width: double.infinity,
