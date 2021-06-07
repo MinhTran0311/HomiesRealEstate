@@ -53,7 +53,7 @@ namespace Homies.RealEstate.Authorization.Users
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
-        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink)
+        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink, string phoneNumber)
         {
             CheckForTenant();
             CheckSelfRegistrationIsEnabled();
@@ -72,7 +72,8 @@ namespace Homies.RealEstate.Authorization.Users
                 IsActive = isNewRegisteredUserActiveByDefault,
                 UserName = userName,
                 IsEmailConfirmed = isEmailConfirmed,
-                Wallet =0,
+                Wallet = 0,
+                PhoneNumber = phoneNumber,
                 Roles = new List<UserRole>()
             };
 

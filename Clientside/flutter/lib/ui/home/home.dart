@@ -70,6 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Trang chủ"),
+      ),
       body: _buildBody(),
     );
   }
@@ -137,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 48, left: 24, right: 24, bottom: 12),
+          padding: EdgeInsets.only(top: 6, left: 24, right: 24, bottom: 12),
           child: TextField(
             autofocus: false,
             keyboardType: TextInputType.text,
@@ -159,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
-                  fontSize: 28,
+                  fontSize: 24,
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
@@ -276,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isRefreshing = true;
               _refreshController.refreshCompleted();
             },
-            scrollController: _scrollController,
+            //scrollController: _scrollController,
             primary: false,
             child: ListView.builder(
               //key: _contentKey,
