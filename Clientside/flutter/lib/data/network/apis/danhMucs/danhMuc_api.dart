@@ -57,4 +57,53 @@ class DanhMucApi {
       throw e;
     }
   }
+
+  //Update danh mục
+  Future<dynamic> updateDanhMuc(int id, String tenDanhMuc, String tag, int danhMucCha, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditDanhMuc,
+        data: {
+          "tenDanhMuc": tenDanhMuc,
+          "tag": tag,
+          "danhMucCha": danhMucCha,
+          "trangThai": trangThai,
+          "id": id,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Create danh mục
+  Future<dynamic> createDanhMuc(String tenDanhMuc, String tag, int danhMucCha, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditDanhMuc,
+        data: {
+          "tenDanhMuc": tenDanhMuc,
+          "tag": tag,
+          "danhMucCha": danhMucCha,
+          "trangThai": trangThai,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

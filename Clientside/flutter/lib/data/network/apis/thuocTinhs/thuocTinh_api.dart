@@ -79,7 +79,7 @@ class ThuocTinhApi {
     }
   }
 
-  //Update thuộc tính
+  //Create thuộc tính
   Future<dynamic> createThuocTinh(String tenThuocTinh, String kieuDuLieu, String trangThai) async {
     try {
       final res = await _dioClient.post(

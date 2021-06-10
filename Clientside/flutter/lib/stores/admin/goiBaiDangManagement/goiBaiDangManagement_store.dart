@@ -28,8 +28,47 @@ abstract class _GoiBaiDangManagementStore with Store {
   ObservableFuture<dynamic> fetchCountAllGoiBaiDangsFuture =
   ObservableFuture<dynamic>(emptyCountAllGoiBaiDangsResponse);
 
+  static ObservableFuture<dynamic> emptyUpdateGoiBaiDangResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateGoiBaiDangFuture =
+  ObservableFuture<dynamic>(emptyUpdateGoiBaiDangResponse);
+
+  static ObservableFuture<dynamic> emptyCreateGoiBaiDangResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCreateGoiBaiDangFuture =
+  ObservableFuture<dynamic>(emptyCreateGoiBaiDangResponse);
+
+  @observable
+  int goiBaiDangID;
+
+  @observable
+  String tenGoi = '';
+
+  @observable
+  double phi;
+
+  @observable
+  int thoiGianToiThieu;
+
+  @observable
+  int doUuTien;
+
+  @observable
+  String moTa;
+
+  @observable
+  String trangThai;
+
   @observable
   GoiBaiDangList goiBaiDangList;
+
+  @observable
+  bool updateGoiBaiDang_success = false;
+
+  @observable
+  bool createGoiBaiDang_success = false;
 
   @observable
   int countAllGoiBaiDangs = 0;
@@ -83,4 +122,61 @@ abstract class _GoiBaiDangManagementStore with Store {
       }
     });
   }
+
+  @action
+  Future UpdateGoiBaiDang() async {
+    updateGoiBaiDang_success = false;
+    final future = _repository.updateGoiBaiDang(goiBaiDangID, tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai);
+    fetchUpdateGoiBaiDangFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        updateGoiBaiDang_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future CreateGoiBaiDang() async {
+    createGoiBaiDang_success = false;
+    final future = _repository.createGoiBaiDang(tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai);
+    fetchCreateGoiBaiDangFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        createGoiBaiDang_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
 }
