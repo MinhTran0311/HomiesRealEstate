@@ -196,7 +196,7 @@ class _FilterState extends State<Filter> {
                             icon: const Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
-                            style: TextStyle(color: Colors.black),
+                            //style: TextStyle(color: Colors.black),
                             underline: Container(
                               height: 2,
                               color: Colors.black,
@@ -212,7 +212,7 @@ class _FilterState extends State<Filter> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    //color: Colors.black,
                                   ),
                                 ),
                               );
@@ -267,7 +267,7 @@ class _FilterState extends State<Filter> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
+                            //color: Colors.black,
                           ),
                           decoration: InputDecoration(
                             hintText: "Min",
@@ -276,7 +276,7 @@ class _FilterState extends State<Filter> {
                               color: Colors.grey[400],
                             ),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[400]),
+                              borderSide: BorderSide(color: Colors.black),
                             ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange[400]),
@@ -293,7 +293,6 @@ class _FilterState extends State<Filter> {
                         width: 65,
                         child: TextField(
                           autofocus: false,
-
                           textInputAction: TextInputAction.done,
                           onSubmitted: (_) => FocusScope.of(context).unfocus(),
                           keyboardType: TextInputType.number,
@@ -304,7 +303,7 @@ class _FilterState extends State<Filter> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
+                            //color: Colors.black,
                           ),
                           decoration: InputDecoration(
                             hintText: "Max",
@@ -313,7 +312,7 @@ class _FilterState extends State<Filter> {
                               color: Colors.grey[400],
                             ),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[400]),
+                              borderSide: BorderSide(color: Colors.black),
                             ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.orange[400]),
@@ -328,7 +327,7 @@ class _FilterState extends State<Filter> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: SizedBox(
-                          width: 70,
+                          width: 75,
                           height: 60,
                           child: DropdownButton<String>(
                             isExpanded: true,
@@ -336,7 +335,7 @@ class _FilterState extends State<Filter> {
                             icon: const Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
-                            style: TextStyle(color: Colors.black),
+                            //style: TextStyle(color: Colors.black),
                             underline: Container(
                               height: 2,
                               color: Colors.black,
@@ -352,7 +351,7 @@ class _FilterState extends State<Filter> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    //color: Colors.black,
                                   ),
                                 ),
                               );
@@ -364,7 +363,6 @@ class _FilterState extends State<Filter> {
                   )
               );
             },
-
           ),
         ],
       ),
@@ -410,7 +408,7 @@ class _FilterState extends State<Filter> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          //color: Colors.black,
                         ),
                         decoration: InputDecoration(
                           hintText: "Min",
@@ -419,7 +417,7 @@ class _FilterState extends State<Filter> {
                             color: Colors.grey[400],
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]),
+                            borderSide: BorderSide(color: Colors.black),
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.orange[400]),
@@ -445,7 +443,7 @@ class _FilterState extends State<Filter> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          //color: Colors.black,
                         ),
                         decoration: InputDecoration(
                           hintText: "Max",
@@ -454,7 +452,7 @@ class _FilterState extends State<Filter> {
                             color: Colors.grey[400],
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]),
+                            borderSide: BorderSide(color: Colors.black),
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.orange[400]),
@@ -469,7 +467,7 @@ class _FilterState extends State<Filter> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: SizedBox(
-                        width: 70,
+                        width: 75,
                         height: 60,
                         child: DropdownButton<String>(
                           isExpanded: true,
@@ -477,7 +475,7 @@ class _FilterState extends State<Filter> {
                           icon: const Icon(Icons.arrow_drop_down),
                           iconSize: 24,
                           elevation: 16,
-                          style: TextStyle(color: Colors.black),
+                          //style: TextStyle(color: Colors.black),
                           underline: Container(
                             height: 2,
                             color: Colors.black,
@@ -493,7 +491,7 @@ class _FilterState extends State<Filter> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                               ),
                             );
@@ -540,7 +538,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Địa chỉ bất kì",
@@ -556,7 +554,7 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),
@@ -602,7 +600,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Tag bất kỳ",
@@ -618,7 +616,7 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),
@@ -674,10 +672,10 @@ class _FilterState extends State<Filter> {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColorDark,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+                        // borderRadius: BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
                       ),
                       child: Center(
                         child: Text(
@@ -739,10 +737,10 @@ class _FilterState extends State<Filter> {
                   height: 50,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(20),
+                    //   topRight: Radius.circular(20),
+                    // ),
                   ),
                   child: Center(
                     child: Text(
@@ -769,15 +767,15 @@ class _FilterState extends State<Filter> {
         Row(
           children: [
             Container(
-          width: 110,
-          child: Text("Xã",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
+              width: 110,
+              child: Text("Xã",
+                style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+                textAlign: TextAlign.start,
+              ),
             ),
-            textAlign: TextAlign.start,
-          ),
-        ),
             SizedBox(width: 12),
             Expanded(
               child: DropdownSearch<String>(
@@ -801,10 +799,10 @@ class _FilterState extends State<Filter> {
                   height: 50,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(20),
+                    //   topRight: Radius.circular(20),
+                    // ),
                   ),
                   child: Center(
                     child: Text(
@@ -855,7 +853,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Username",
@@ -871,7 +869,7 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),

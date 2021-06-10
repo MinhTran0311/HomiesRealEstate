@@ -9,6 +9,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/photoViewScreen.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
@@ -40,6 +41,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   PostStore _postStore;
   ImageStore _imageStore;
   UserStore _userStore;
+  ThemeStore _themeStore;
 
   AnimationController _ColorAnimationController;
   AnimationController _TextAnimationController;
@@ -67,6 +69,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     _postStore = Provider.of<PostStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
     _userStore = Provider.of<UserStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
     if (!_imageStore.imageLoading && !finishload){
       _imageStore.getImagesForDetail(this.post.id.toString());
     }
@@ -99,7 +102,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
           {
             return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || (Preferences.access_token.isNotEmpty && _postStore.isBaiGhimYeuThichLoading) || _postStore.propertiesLoading)
                 ? CustomProgressIndicatorWidget()
-                : Material(child: _buildContent());
+                :  _buildContent();
           }
         ),
     ]);
@@ -119,7 +122,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
               child: Container(
                 height: size.height,
                 decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
                 ),
                 child: buildContent(size),
@@ -201,7 +203,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                 padding: EdgeInsets.only(right: 24,left: 24,bottom: 24),
                 child: buildTagList(post.tagTimKiem),
               ),
-              (_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? buildRcmPost() :Container(width: 0,height:0,) ,
+              //(_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? buildRcmPost() :Container(width: 0,height:0,) ,
+              buildRcmPost(),
             ],
           ),
         ),
@@ -398,7 +401,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             child: DefaultTextStyle(
               child: SelectableText(post.tieuDe),
               style: TextStyle(
-                color: Colors.black,
+                color: _themeStore.darkMode? Colors.white : Colors.black,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -444,11 +447,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
-            children: [Icon(
-              Icons.attach_money_outlined,
-              color: Colors.amber,
-              size: 30,
-            ),
+            children: [
+              Icon(Icons.attach_money_outlined,),
               SizedBox(width: 4,),
               Flexible(
                 child: Text(
@@ -468,8 +468,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             children: [
               Icon(
                 Icons.zoom_out_map,
-                color: Colors.amber,
-                size: 30,
               ),
               SizedBox(width: 4,),
               Flexible(
@@ -495,8 +493,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         children: [
           Icon(
             Icons.location_on,
-            color: Colors.amber,
-            size: 30,
           ),
           SizedBox(width: 4,),
           Container(
@@ -645,7 +641,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   List<Widget> buildRecommendPosts(BuildContext context){
     List<Widget> list =[];
     for (int i=0; i<_postStore.rcmPostList.posts.length; i++){
-      if (_postStore.rcmPostList.posts[i].id!=post.id)
+      //if (_postStore.rcmPostList.posts[i].id!=post.id)
 
         list.add(buildRecommendPost(context,_postStore.rcmPostList.posts[i],i));
     }
@@ -658,7 +654,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(11),
-          color: Colors.grey[50],
+          color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) :  Colors.grey[50],
         ),
         child: AspectRatio(
           aspectRatio: 4 / 5,
@@ -669,6 +665,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                   MaterialPageRoute(builder: (context) => Detail(post: post)));
             },
             child: Container(
+
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children:[
@@ -720,7 +717,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                   maxLines: 2,
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: _themeStore.darkMode ? Colors.white : Colors.black,
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold
                                   ),
@@ -773,7 +770,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       flex: 1,
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) :  Colors.grey[100],
             borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
         ),
         child: Padding(
@@ -812,7 +809,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       Text(
                         "Property Owner",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.grey,
                           fontSize: 18,
                         ),
                       ),
@@ -883,7 +880,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createError(
           message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
+          title: "Lỗi",
           duration: Duration(seconds: 3),
         )
           ..show(context);

@@ -58,6 +58,147 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     });
   }
 
+  final _$fetchUpdateGoiBaiDangFutureAtom =
+      Atom(name: '_GoiBaiDangManagementStore.fetchUpdateGoiBaiDangFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateGoiBaiDangFuture {
+    _$fetchUpdateGoiBaiDangFutureAtom.reportRead();
+    return super.fetchUpdateGoiBaiDangFuture;
+  }
+
+  @override
+  set fetchUpdateGoiBaiDangFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateGoiBaiDangFutureAtom
+        .reportWrite(value, super.fetchUpdateGoiBaiDangFuture, () {
+      super.fetchUpdateGoiBaiDangFuture = value;
+    });
+  }
+
+  final _$fetchCreateGoiBaiDangFutureAtom =
+      Atom(name: '_GoiBaiDangManagementStore.fetchCreateGoiBaiDangFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCreateGoiBaiDangFuture {
+    _$fetchCreateGoiBaiDangFutureAtom.reportRead();
+    return super.fetchCreateGoiBaiDangFuture;
+  }
+
+  @override
+  set fetchCreateGoiBaiDangFuture(ObservableFuture<dynamic> value) {
+    _$fetchCreateGoiBaiDangFutureAtom
+        .reportWrite(value, super.fetchCreateGoiBaiDangFuture, () {
+      super.fetchCreateGoiBaiDangFuture = value;
+    });
+  }
+
+  final _$goiBaiDangIDAtom =
+      Atom(name: '_GoiBaiDangManagementStore.goiBaiDangID');
+
+  @override
+  int get goiBaiDangID {
+    _$goiBaiDangIDAtom.reportRead();
+    return super.goiBaiDangID;
+  }
+
+  @override
+  set goiBaiDangID(int value) {
+    _$goiBaiDangIDAtom.reportWrite(value, super.goiBaiDangID, () {
+      super.goiBaiDangID = value;
+    });
+  }
+
+  final _$tenGoiAtom = Atom(name: '_GoiBaiDangManagementStore.tenGoi');
+
+  @override
+  String get tenGoi {
+    _$tenGoiAtom.reportRead();
+    return super.tenGoi;
+  }
+
+  @override
+  set tenGoi(String value) {
+    _$tenGoiAtom.reportWrite(value, super.tenGoi, () {
+      super.tenGoi = value;
+    });
+  }
+
+  final _$phiAtom = Atom(name: '_GoiBaiDangManagementStore.phi');
+
+  @override
+  double get phi {
+    _$phiAtom.reportRead();
+    return super.phi;
+  }
+
+  @override
+  set phi(double value) {
+    _$phiAtom.reportWrite(value, super.phi, () {
+      super.phi = value;
+    });
+  }
+
+  final _$thoiGianToiThieuAtom =
+      Atom(name: '_GoiBaiDangManagementStore.thoiGianToiThieu');
+
+  @override
+  int get thoiGianToiThieu {
+    _$thoiGianToiThieuAtom.reportRead();
+    return super.thoiGianToiThieu;
+  }
+
+  @override
+  set thoiGianToiThieu(int value) {
+    _$thoiGianToiThieuAtom.reportWrite(value, super.thoiGianToiThieu, () {
+      super.thoiGianToiThieu = value;
+    });
+  }
+
+  final _$doUuTienAtom = Atom(name: '_GoiBaiDangManagementStore.doUuTien');
+
+  @override
+  int get doUuTien {
+    _$doUuTienAtom.reportRead();
+    return super.doUuTien;
+  }
+
+  @override
+  set doUuTien(int value) {
+    _$doUuTienAtom.reportWrite(value, super.doUuTien, () {
+      super.doUuTien = value;
+    });
+  }
+
+  final _$moTaAtom = Atom(name: '_GoiBaiDangManagementStore.moTa');
+
+  @override
+  String get moTa {
+    _$moTaAtom.reportRead();
+    return super.moTa;
+  }
+
+  @override
+  set moTa(String value) {
+    _$moTaAtom.reportWrite(value, super.moTa, () {
+      super.moTa = value;
+    });
+  }
+
+  final _$trangThaiAtom = Atom(name: '_GoiBaiDangManagementStore.trangThai');
+
+  @override
+  String get trangThai {
+    _$trangThaiAtom.reportRead();
+    return super.trangThai;
+  }
+
+  @override
+  set trangThai(String value) {
+    _$trangThaiAtom.reportWrite(value, super.trangThai, () {
+      super.trangThai = value;
+    });
+  }
+
   final _$goiBaiDangListAtom =
       Atom(name: '_GoiBaiDangManagementStore.goiBaiDangList');
 
@@ -71,6 +212,40 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
   set goiBaiDangList(GoiBaiDangList value) {
     _$goiBaiDangListAtom.reportWrite(value, super.goiBaiDangList, () {
       super.goiBaiDangList = value;
+    });
+  }
+
+  final _$updateGoiBaiDang_successAtom =
+      Atom(name: '_GoiBaiDangManagementStore.updateGoiBaiDang_success');
+
+  @override
+  bool get updateGoiBaiDang_success {
+    _$updateGoiBaiDang_successAtom.reportRead();
+    return super.updateGoiBaiDang_success;
+  }
+
+  @override
+  set updateGoiBaiDang_success(bool value) {
+    _$updateGoiBaiDang_successAtom
+        .reportWrite(value, super.updateGoiBaiDang_success, () {
+      super.updateGoiBaiDang_success = value;
+    });
+  }
+
+  final _$createGoiBaiDang_successAtom =
+      Atom(name: '_GoiBaiDangManagementStore.createGoiBaiDang_success');
+
+  @override
+  bool get createGoiBaiDang_success {
+    _$createGoiBaiDang_successAtom.reportRead();
+    return super.createGoiBaiDang_success;
+  }
+
+  @override
+  set createGoiBaiDang_success(bool value) {
+    _$createGoiBaiDang_successAtom
+        .reportWrite(value, super.createGoiBaiDang_success, () {
+      super.createGoiBaiDang_success = value;
     });
   }
 
@@ -107,12 +282,39 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
         .run(() => super.fCountAllGoiBaiDangs());
   }
 
+  final _$UpdateGoiBaiDangAsyncAction =
+      AsyncAction('_GoiBaiDangManagementStore.UpdateGoiBaiDang');
+
+  @override
+  Future<dynamic> UpdateGoiBaiDang() {
+    return _$UpdateGoiBaiDangAsyncAction.run(() => super.UpdateGoiBaiDang());
+  }
+
+  final _$CreateGoiBaiDangAsyncAction =
+      AsyncAction('_GoiBaiDangManagementStore.CreateGoiBaiDang');
+
+  @override
+  Future<dynamic> CreateGoiBaiDang() {
+    return _$CreateGoiBaiDangAsyncAction.run(() => super.CreateGoiBaiDang());
+  }
+
   @override
   String toString() {
     return '''
 fetchGoiBaiDangsFuture: ${fetchGoiBaiDangsFuture},
 fetchCountAllGoiBaiDangsFuture: ${fetchCountAllGoiBaiDangsFuture},
+fetchUpdateGoiBaiDangFuture: ${fetchUpdateGoiBaiDangFuture},
+fetchCreateGoiBaiDangFuture: ${fetchCreateGoiBaiDangFuture},
+goiBaiDangID: ${goiBaiDangID},
+tenGoi: ${tenGoi},
+phi: ${phi},
+thoiGianToiThieu: ${thoiGianToiThieu},
+doUuTien: ${doUuTien},
+moTa: ${moTa},
+trangThai: ${trangThai},
 goiBaiDangList: ${goiBaiDangList},
+updateGoiBaiDang_success: ${updateGoiBaiDang_success},
+createGoiBaiDang_success: ${createGoiBaiDang_success},
 countAllGoiBaiDangs: ${countAllGoiBaiDangs},
 loading: ${loading},
 loadingCountAllGoiBaiDangs: ${loadingCountAllGoiBaiDangs}

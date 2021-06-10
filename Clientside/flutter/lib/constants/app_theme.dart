@@ -38,12 +38,19 @@ final ThemeData themeData = new ThemeData(
 );
 
 final ThemeData themeDataDark = ThemeData(
-  textTheme: GoogleFonts.mavenProTextTheme(),
+  textTheme: GoogleFonts.mavenProTextTheme(
+  ).apply(
+    bodyColor: Colors.white,
+  ),
   iconTheme: IconThemeData(
     color: Colors.amber,
-    size: 20,
+    size: 24,
+
   ),
-  primaryColor: Color.fromRGBO(18, 22, 28, 1),
+
+  disabledColor: Colors.amber,
+
+  primaryColor: Colors.black,
   primaryColorBrightness: Brightness.dark,
   accentColor: Colors.amber,
   accentColorBrightness: Brightness.dark,
@@ -59,16 +66,11 @@ final ThemeData themeDataDark = ThemeData(
         size: 20,
       )
   ),
-
-  //fontFamily: FontFamily.marven,
-  //primaryColor: AppColors.orange[500],
-  //primaryColorBrightness: Brightness.dark,
-  //accentColor: AppColors.orange[500],
-  //accentColorBrightness: Brightness.dark,
 );
 
 final ThemeData themeDataLight = ThemeData(
-  textTheme: GoogleFonts.mavenProTextTheme().apply(
+  textTheme: GoogleFonts.mavenProTextTheme(
+  ).apply(
     bodyColor: Colors.black,
   ),
   iconTheme: IconThemeData(
@@ -80,15 +82,17 @@ final ThemeData themeDataLight = ThemeData(
   accentColor: Colors.amber,
   accentColorBrightness: Brightness.light,
   scaffoldBackgroundColor: Colors.white,
+  textSelectionColor: Colors.blueAccent,
 
   appBarTheme: AppBarTheme(
     brightness: Brightness.light,
     color: Colors.amber,
     centerTitle: true,
     iconTheme: IconThemeData(
-      color: Colors.white,
+      color: Colors.black,
       size: 20,
-    )
+    ),
   ),
+
   brightness: Brightness.light,
 );

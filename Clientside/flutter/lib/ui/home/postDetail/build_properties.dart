@@ -51,8 +51,8 @@ class Properties extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 14,
+                  color: Colors.grey,
+                  fontSize: 15,
                   ),
                 ),
               ),
@@ -65,7 +65,6 @@ class Properties extends StatelessWidget {
                   appImage.giaTri,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.black,
                     fontSize: 15,
                   ),
                 ),

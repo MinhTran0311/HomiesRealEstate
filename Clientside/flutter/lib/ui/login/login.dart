@@ -278,6 +278,12 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
         onPressed: () {
+          SharedPreferences.getInstance().then((preference) {
+            preference.setBool(Preferences.is_logged_in, false);
+            preference.setString(Preferences.auth_token, "");
+            preference.setString(Preferences.userRole, "");
+            preference.setInt(Preferences.userRoleRank.toString(), 0);
+          });
           navigate(context, false);
         },
       ),

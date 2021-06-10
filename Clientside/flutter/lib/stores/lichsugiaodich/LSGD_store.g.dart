@@ -182,6 +182,21 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$FilterDataLSGDAtom = Atom(name: '_LSGDStore.FilterDataLSGD');
+
+  @override
+  FilterData get FilterDataLSGD {
+    _$FilterDataLSGDAtom.reportRead();
+    return super.FilterDataLSGD;
+  }
+
+  @override
+  set FilterDataLSGD(FilterData value) {
+    _$FilterDataLSGDAtom.reportWrite(value, super.FilterDataLSGD, () {
+      super.FilterDataLSGD = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_LSGDStore.success');
 
   @override
@@ -227,34 +242,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
-  final _$FilterDataLSGDAtom = Atom(name: '_LSGDStore.FilterDataLSGD');
-
-  @override
-  FilterData get FilterDataLSGD {
-    _$FilterDataLSGDAtom.reportRead();
-    return super.FilterDataLSGD;
-  }
-
-  @override
-  set FilterDataLSGD(FilterData value) {
-    _$FilterDataLSGDAtom.reportWrite(value, super.FilterDataLSGD, () {
-      super.FilterDataLSGD = value;
-    });
-  }
-
-  final _$_FilterStoreActionController = ActionController(name: '_LSGDStore');
-
-  @override
-  void setLoaiLSGD(String value) {
-    final _$actionInfo = _$_FilterStoreActionController.startAction(
-        name: '_LSGDStore.setLoaiLSGD');
-    try {
-      return super.setLoaiLSGD(value);
-    } finally {
-      _$_FilterStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
   final _$isIntialLoadingAllAtom = Atom(name: '_LSGDStore.isIntialLoadingAll');
 
   @override
@@ -273,15 +260,19 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$getLSGDAsyncAction = AsyncAction('_LSGDStore.getLSGD');
 
   @override
-  Future<dynamic> getLSGD(bool isLoadMore, String LoaiLSGD,String MinThoiDiem, String MaxThoiDiem) {
-    return _$getLSGDAsyncAction.run(() => super.getLSGD(isLoadMore,LoaiLSGD,MinThoiDiem,MaxThoiDiem));
+  Future<dynamic> getLSGD(bool isLoadMore, String LoaiLSGD, String MinThoiDiem,
+      String MaxThoiDiem) {
+    return _$getLSGDAsyncAction.run(
+        () => super.getLSGD(isLoadMore, LoaiLSGD, MinThoiDiem, MaxThoiDiem));
   }
 
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
 
   @override
-  Future<dynamic> getAllLSGD(bool isLoadMore, String LoaiLSGD,String MinThoiDiem, String MaxThoiDiem) {
-    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore,LoaiLSGD,MinThoiDiem,MaxThoiDiem));
+  Future<dynamic> getAllLSGD(bool isLoadMore, String LoaiLSGD,
+      String MinThoiDiem, String MaxThoiDiem) {
+    return _$getAllLSGDAsyncAction.run(
+        () => super.getAllLSGD(isLoadMore, LoaiLSGD, MinThoiDiem, MaxThoiDiem));
   }
 
   final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
@@ -301,6 +292,30 @@ mixin _$LSGDStore on _LSGDStore, Store {
         .run(() => super.KiemDuyetGiaoDich(idLSGD));
   }
 
+  final _$_LSGDStoreActionController = ActionController(name: '_LSGDStore');
+
+  @override
+  void setLoaiLSGD(String value) {
+    final _$actionInfo = _$_LSGDStoreActionController.startAction(
+        name: '_LSGDStore.setLoaiLSGD');
+    try {
+      return super.setLoaiLSGD(value);
+    } finally {
+      _$_LSGDStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSetThoiDiem(String MinThoiDiem, String MaxThoiDiem) {
+    final _$actionInfo = _$_LSGDStoreActionController.startAction(
+        name: '_LSGDStore.setSetThoiDiem');
+    try {
+      return super.setSetThoiDiem(MinThoiDiem, MaxThoiDiem);
+    } finally {
+      _$_LSGDStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -313,8 +328,8 @@ skipCount: ${skipCount},
 skipCountAll: ${skipCountAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
-success: ${success},
 FilterDataLSGD: ${FilterDataLSGD},
+success: ${success},
 isIntialLoading: ${isIntialLoading},
 successAll: ${successAll},
 isIntialLoadingAll: ${isIntialLoadingAll},

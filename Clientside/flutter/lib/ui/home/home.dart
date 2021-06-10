@@ -82,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildActions(BuildContext context) {
     return <Widget>[
-      if (!Permission.instance.hasPermission("Pages")) _buildLogInButton(),
+      if (!Permission.instance.hasPermission("Pages") || Preferences.userRole.isEmpty || Preferences.userRoleRank==0)
+        _buildLogInButton(),
     ];
   }
 
@@ -93,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           preference.setBool(Preferences.is_logged_in, false);
           preference.setString(Preferences.auth_token, "");
           preference.setString(Preferences.userRole, "");
+          preference.setInt(Preferences.userRoleRank.toString(), 0);
         });
         Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
 
@@ -127,22 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget _buildLogoutButton() {
-  //   return IconButton(
-  //     onPressed: () {
-  //       SharedPreferences.getInstance().then((preference) {
-  //         preference.setBool(Preferences.is_logged_in, false);
-  //         preference.setBool(Preferences.auth_token, false);
-  //         //_authTokenStore.loggedIn=false;
-  //         Navigator.of(context).pushReplacementNamed(Routes.login);
-  //       });
-  //     },
-  //     icon: Icon(
-  //       Icons.power_settings_new,
-  //     ),
-  //   );
-  // }
-
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(children: <Widget>[
@@ -156,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context) {
         return _postStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
+            : _buildPostsList();
       },
     );
   }
@@ -182,7 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 28,
               height: 1,
-              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
             decoration: InputDecoration(
@@ -234,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: Colors.black26,
+                    color: (_postStore.filter_model == null || _postStore.isNotUsingFilter) ? Colors.grey : Colors.red,
                     size: 20,
                   ),
                 ],
@@ -284,8 +269,6 @@ class _HomeScreenState extends State<HomeScreen> {
               completeDuration: Duration(milliseconds: 500),
             ),
             onLoading: () async {
-              print("loading");
-
               _postStore.getPosts(true);
               await Future.delayed(Duration(milliseconds: 2000));
               if (mounted) {
@@ -297,7 +280,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _refreshController.loadComplete();
             },
             onRefresh: () async {
-              print("refresh");
               _postStore.getPosts(false);
 
               await Future.delayed(Duration(milliseconds: 2000));
@@ -305,7 +287,6 @@ class _HomeScreenState extends State<HomeScreen> {
               isRefreshing = true;
               _refreshController.refreshCompleted();
             },
-            //scrollController: _scrollController,
             primary: false,
             child: ListView.builder(
               //key: _contentKey,

@@ -791,6 +791,17 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  int rolePermission() {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.rolePermission');
+    try {
+      return super.rolePermission();
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 surname: ${surname},

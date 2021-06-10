@@ -556,8 +556,6 @@ class Repository {
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
 
   // Theme: --------------------------------------------------------------------
-  Future<void> changeBrightnessToDark(bool value) =>
-      _sharedPrefsHelper.changeBrightnessToDark(value);
 
   Future<bool> get isDarkMode => _sharedPrefsHelper.isDarkMode;
 

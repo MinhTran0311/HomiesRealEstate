@@ -125,8 +125,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
       leading: _selectedIndex != 0
           ? IconButton(
               icon: Icon(Icons.arrow_back_ios),

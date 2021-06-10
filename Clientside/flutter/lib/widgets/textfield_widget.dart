@@ -59,7 +59,7 @@ class TextFieldWidget extends StatelessWidget {
         maxLength: 25,
         keyboardType: this.inputType,
         enabled: this.enable,
-        style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.black),
+        style: GoogleFonts.mavenPro(fontSize: this.inputFontsize),
         decoration: InputDecoration(
             hintText: this.hint,
             hintStyle: GoogleFonts.mavenPro(fontSize:(this.inputFontsize-3),color: hintColor),
@@ -68,13 +68,10 @@ class TextFieldWidget extends StatelessWidget {
             counterText: '',
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null,
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: Colors.red),
             ),
-
         ),
-
       ),
     );
   }
-
 }
