@@ -137,7 +137,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               })
           : Container(),
       title: Text("Cá nhân"),
-      centerTitle: true,
     );
   }
 
