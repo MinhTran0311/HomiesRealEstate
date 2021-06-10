@@ -66,7 +66,13 @@ class TextFieldWidget extends StatelessWidget {
                 //Theme.of(context).textTheme.body1.copyWith(color: hintColor),
             errorText: errorText,
             counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null,
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+
+        ),
+
       ),
     );
   }

@@ -208,19 +208,19 @@ class Repository {
     }).catchError((error) => throw error);
   }
   // Post: ---------------------------------------------------------------------
-  Future<listLSGD> getLSGD(int skipCount, int maxResultCount) async {
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getLSGD(skipCount, maxResultCount).then((lsgdList) {
+    return await _userApi.getLSGD(skipCount, maxResultCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }
-  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount) async {
+  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getAllLSGD(skipCount, maxResultCount).then((lsgdList) {
+    return await _userApi.getAllLSGD(skipCount, maxResultCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }
@@ -345,9 +345,9 @@ class Repository {
 
 
   //registration
-  Future<dynamic> registing(String surname, String name, String username, String password, String email) async
+  Future<dynamic> registing(String surname, String name, String username, String password, String email, String phoneNumber) async
   {
-    return await _registrationApi.regist(surname, name, username, password, email).then((res) {
+    return await _registrationApi.regist(surname, name, username, password, email, phoneNumber).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
@@ -438,6 +438,14 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  //Get current user role
+  Future<dynamic> getCurrentUserRole() async
+  {
+    return await _roleApi.getCurrentUserRole().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
   //Count all users
   Future<dynamic> countAllRoles() async
   {
@@ -446,7 +454,7 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  //Danh mục
+  //Danh mục------------------------------------------------------------------
   //Get all danh mục
   Future<DanhMucList> getAllDanhMucs() async {
     return await _danhMucApi.getAllDanhMucs().then((danhMucList) {
@@ -462,7 +470,23 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  //Thuộc tính
+  //Create or edit danh mục
+  //Create
+  Future<dynamic> createDanhMuc(String tenDanhMuc, String tag, int danhMucCha, String trangThai) async
+  {
+    return await _danhMucApi.createDanhMuc(tenDanhMuc, tag, danhMucCha, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+  //Edit
+  Future<dynamic> updateDanhMuc(int id, String tenDanhMuc, String tag, int danhMucCha, String trangThai) async
+  {
+    return await _danhMucApi.updateDanhMuc(id, tenDanhMuc, tag, danhMucCha, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Thuộc tính------------------------------------------------------------------
   //Get all Thuộc tính
   Future<ThuocTinhManagementList> getAllThuocTinhs() async {
     return await _thuocTinhApi.getAllThuocTinhs().then((thuocTinhList) {
@@ -480,21 +504,21 @@ class Repository {
 
   //Create or edit thuộc tính
   //Create
-  Future<dynamic> createThuocTinh(String name, String kieuDuLieu, String trangThai) async
+  Future<dynamic> createThuocTinh(String tenThuocTinh, String kieuDuLieu, String trangThai) async
   {
-    return await _thuocTinhApi.createThuocTinh(name, kieuDuLieu, trangThai).then((res) {
+    return await _thuocTinhApi.createThuocTinh(tenThuocTinh, kieuDuLieu, trangThai).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
   //edit
-  Future<dynamic> updateThuocTinh(int id, String name, String kieuDuLieu, String trangThai) async
+  Future<dynamic> updateThuocTinh(int id, String tenThuocTinh, String kieuDuLieu, String trangThai) async
   {
-    return await _thuocTinhApi.updateThuocTinh(id, name, kieuDuLieu, trangThai).then((res) {
+    return await _thuocTinhApi.updateThuocTinh(id, tenThuocTinh, kieuDuLieu, trangThai).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
 
-  //Gói bài đăng
+  //Gói bài đăng------------------------------------------------------------------
   //Get all gói bài đăng
   Future<GoiBaiDangList> getAllGoiBaiDangs() async {
     return await _goiBaiDangApi.getAllGoiBaiDangs().then((goiBaiDangList) {
@@ -510,6 +534,21 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  //Create or edit gói bài đăng
+  //Create
+  Future<dynamic> createGoiBaiDang(String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async
+  {
+    return await _goiBaiDangApi.createGoiBaiDang(tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+  //Edit
+  Future<dynamic> updateGoiBaiDang(int id, String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async
+  {
+    return await _goiBaiDangApi.updateGoiBaiDang(id, tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

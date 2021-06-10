@@ -28,6 +28,10 @@ namespace Homies.RealEstate.Authorization.Accounts.Dto
         public string EmailAddress { get; set; }
 
         [Required]
+        [StringLength(AbpUserBase.MaxPhoneNumberLength)]
+        public string PhoneNumber { get; set; }
+
+        [Required]
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }

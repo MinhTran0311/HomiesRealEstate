@@ -11,6 +11,7 @@ class ApplicationBloc with ChangeNotifier {
   Position currentLocation;
   List<PlaceSearch> searchResults;
   List<Placemark> placemarks;
+  List<Placemark> placemark;
   double latTit;
   double longTit;
   bool getSuccess = false;
@@ -60,5 +61,21 @@ class ApplicationBloc with ChangeNotifier {
     // print(searchResults);
     // notifyListeners();
     // List<Location> locations = await locationFromAddress("searchTerm");
+  }
+
+  searchPlace(double lat, double long) async {
+    getSuccess = false;
+    if (lat != null || long != null) {
+      try {
+        placemark = await placemarkFromCoordinates(lat, long);
+      }
+      catch(e) {
+        throw e;
+      }
+      if (placemark != null) {
+        // print("placemarks" + placemarks.length.toString());
+        getSuccess = true;
+      }
+    }
   }
 }

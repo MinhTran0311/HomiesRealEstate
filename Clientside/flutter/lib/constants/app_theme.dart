@@ -47,13 +47,28 @@ final ThemeData themeDataDark = ThemeData(
   accentColorBrightness: Brightness.dark,
 );
 
-// final ThemeData themeDataLight = ThemeData(
-//   textTheme: TextTheme(
-//     subtitle1: GoogleFonts.marvel(fontSize: 16, fontStyle: FontStyle.italic),
-//
-//
-//
-//   ),
-//   brightness: Brightness.light,
-//
-// );
+final ThemeData themeDataLight = ThemeData(
+  textTheme: GoogleFonts.mavenProTextTheme().apply(
+    bodyColor: Colors.black,
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.amber,
+    size: 20,
+  ),
+  primaryColor: Colors.white,
+  primaryColorBrightness: Brightness.light,
+  accentColor: Colors.amber,
+  accentColorBrightness: Brightness.light,
+  scaffoldBackgroundColor: Colors.white,
+
+  appBarTheme: AppBarTheme(
+    brightness: Brightness.light,
+    color: Colors.amber,
+    centerTitle: true,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+      size: 20,
+    )
+  ),
+  brightness: Brightness.light,
+);

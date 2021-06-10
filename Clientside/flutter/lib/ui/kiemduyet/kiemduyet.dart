@@ -5,6 +5,7 @@ import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/FilterLSGD.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -47,9 +48,10 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
 
     _lsgdStore = Provider.of<LSGDStore>(context);
     _userStore = Provider.of<UserStore>(context);
+    _lsgdStore.setLoaiLSGD("value");
 
     if (!_lsgdStore.Allloading) {
-      _lsgdStore.getAllLSGD(false);
+      _lsgdStore.getAllLSGD(false,"","","");
     }
 
   }
@@ -85,119 +87,165 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
 
   Widget _buildBody() {
-    // for(int i =0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
-    //   isexpanded.add(false);
-    // }
-    // List<ExpansionPanel> myList = [];
-    // for(int i=0,ii=_lsgdStore.listlsgdAll.listLSGDs.length;i<ii;i++){
-    //   var expansionData  = _lsgdStore.listlsgdAll.listLSGDs[i];
-    //   myList.add(ExpansionPanel(
-    //     headerBuilder: (BuildContext context,bool isExpanded){
-    //       return buildCardKiemDuyetheaderBuilder(expansionData);
-    //     },
-    //     body: buildCardKiemDuyetBody(expansionData),
-    //     isExpanded: isexpanded[i]
-    //   )
-    //   );
-    // }
-    print("Leng: ${_lsgdStore.listlsgdAll.listLSGDs.length}");
     return Container(
       color: Colors.grey[200],
-      child:
-      SmartRefresher(
-        key: _refresherKey,
-        controller: _refreshController,
-        enablePullUp: true,
-        enablePullDown: true,
-        header: WaterDropHeader(
-          refresh: SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: Icon(
-              Icons.flight_takeoff_outlined,
-              color: Colors.amber,
-              size: 20,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 50,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 24),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showBottomSheet();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16, right: 24),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Hiển thị bộ lọc nâng cao',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black26,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          idleIcon: SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: Icon(
-              Icons.flight_takeoff_outlined,
-              color: Colors.amber,
-              size: 20,
+          Expanded(
+            child:
+            SmartRefresher(
+              key: _refresherKey,
+              controller: _refreshController,
+              enablePullUp: true,
+              enablePullDown: true,
+              header: WaterDropHeader(
+                refresh: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                idleIcon: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: Icon(
+                    Icons.flight_takeoff_outlined,
+                    color: Colors.amber,
+                    size: 20,
+                  ),
+                ),
+                waterDropColor: Colors.amber,
+              ),
+              physics: BouncingScrollPhysics(),
+              footer: ClassicFooter(
+                loadStyle: LoadStyle.ShowWhenLoading,
+                completeDuration: Duration(milliseconds: 500),
+              ),
+              onLoading: () async {
+                print("loading");
+
+                _lsgdStore.getAllLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) {
+                  setState(() {});
+                }
+                _scrollController.jumpTo(
+                  _scrollController.position.maxScrollExtent,
+                );
+                _refreshController.loadComplete();
+              },
+              onRefresh: () async {
+                print("refresh");
+
+                _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+                await Future.delayed(Duration(milliseconds: 2000));
+                if (mounted) setState(() {});
+                isRefreshing = true;
+                _refreshController.refreshCompleted();
+              },
+              //scrollController: _scrollController,
+              primary: false,
+              child:
+              Observer(builder: (context) {
+                return
+                  _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? ListView.builder(
+                      key: _contentKey,
+                      controller: _scrollController,
+                      shrinkWrap: true, // 1st add
+                      physics: ClampingScrollPhysics(), // 2d add
+                           itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+                           itemBuilder: (_, i) => ListTile(
+                               title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i])
+                           )
+                    ) :
+                  Container(
+                      child:
+                        Center(child:
+                          Text("Không có dữ liệu")
+                        )
+                  );
+                }
+              ),
+              // ListView.builder(
+              //     shrinkWrap: true, // 1st add
+              //        physics: ClampingScrollPhysics(), // 2nd add
+              //        itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+              //        itemBuilder: (_, i) => ListTile(
+              //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
+              //        )
+              // ),
+              // onRefresh: (){
+              //   setState(() {
+              //     _lsgdStore.getAllLSGD();
+              //   });
+              // },
+
             ),
           ),
-          waterDropColor: Colors.amber,
-        ),
-        physics: BouncingScrollPhysics(),
-        footer: ClassicFooter(
-          loadStyle: LoadStyle.ShowWhenLoading,
-          completeDuration: Duration(milliseconds: 500),
-        ),
-        onLoading: () async {
-          print("loading");
-
-          _lsgdStore.getAllLSGD(true);
-          await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) {
-            setState(() {});
-          }
-          _scrollController.jumpTo(
-            _scrollController.position.maxScrollExtent,
-          );
-          _refreshController.loadComplete();
-        },
-        onRefresh: () async {
-          print("refresh");
-
-          _lsgdStore.getAllLSGD(false);
-          await Future.delayed(Duration(milliseconds: 2000));
-          if (mounted) setState(() {});
-          isRefreshing = true;
-          _refreshController.refreshCompleted();
-        },
-        //scrollController: _scrollController,
-        primary: false,
-        child:
-        Observer(builder: (context) {
-          return
-            _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? ListView.builder(
-                key: _contentKey,
-                controller: _scrollController,
-                shrinkWrap: true, // 1st add
-                physics: ClampingScrollPhysics(), // 2d add
-                     itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-                     itemBuilder: (_, i) => ListTile(
-                         title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i])
-                     )
-              ) :
-            Container(
-                child:
-                  Center(child:
-                    Text("Không có dữ liệu")
-                  )
-            );
-          }
-        ),
-        // ListView.builder(
-        //     shrinkWrap: true, // 1st add
-        //        physics: ClampingScrollPhysics(), // 2nd add
-        //        itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-        //        itemBuilder: (_, i) => ListTile(
-        //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
-        //        )
-        // ),
-        // onRefresh: (){
-        //   setState(() {
-        //     _lsgdStore.getAllLSGD();
-        //   });
-        // },
-
+        ],
       ),
     );
   }
-
+  void _showBottomSheet() {
+    showModalBottomSheet<String>(
+        context: context,
+        enableDrag: false,
+        isDismissible: false,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            )),
+        builder: (BuildContext context) {
+          return Wrap(
+            children: [
+              Filter(),
+            ],
+          );
+        });
+  }
   Widget _buildCardKiemDuyet(lichsugiaodich lsgd){
     return Card(
       shape: RoundedRectangleBorder(

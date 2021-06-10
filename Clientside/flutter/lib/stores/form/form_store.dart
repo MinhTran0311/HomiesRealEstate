@@ -147,6 +147,7 @@ abstract class _FormStore with Store {
   bool get canRegister =>
       !formErrorStore.hasErrorsInRegister &&
       userEmail.isNotEmpty &&
+      phoneNumber.isNotEmpty &&
       password.isNotEmpty &&
       confirmPassword.isNotEmpty &&
       surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty;
@@ -337,7 +338,7 @@ abstract class _FormStore with Store {
   @action
   Future register() async {
     regist_success = false;
-    final futrue = _repository.registing(surname, name, username, password, userEmail);
+    final futrue = _repository.registing(surname, name, username, password, userEmail, phoneNumber);
     fetchRegistFuture = ObservableFuture(futrue);
 
     futrue.then((registRes) {
@@ -430,6 +431,8 @@ abstract class _FormStore with Store {
         SharedPreferences.getInstance().then((preference) {
           preference.setString(Preferences.access_token, this.authToken.accessToken);});
         Preferences.access_token = this.authToken.accessToken;
+        getCurrentUserRole();
+
       }
       else {
         loggedIn = false;
@@ -510,6 +513,76 @@ abstract class _FormStore with Store {
     });
   }
 
+  //Get current user role when log in
+  static ObservableFuture<dynamic> emptyGetCurrentUserRoleResponses =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchGetCurrentUserRoleFutures =
+  ObservableFuture<dynamic>(emptyGetCurrentUserRoleResponses);
+
+  @computed
+  bool get loadingsGetCurrentUserRole => fetchGetCurrentUserRoleFutures.status == FutureStatus.pending;
+
+  @observable
+  bool getCurrentUserRoleSuccess = false;
+
+  @action
+  Future getCurrentUserRole() async {
+    final future = _repository.getCurrentUserRole();
+    fetchGetCurrentUserRoleFutures = ObservableFuture(future);
+    future.then((res) {
+
+      if (res["success"]!= true)
+      {
+        getCurrentUserRoleSuccess = false;
+        return null;
+      }
+      else{
+        Preferences.userRole = res["result"]["role"][0]["roleName"];
+        Preferences.userRoleRank = rolePermission();
+        List<String> permission = new List<String>();
+        if ((res["result"]["grantedPermissionNames"] as List)?.length > 0)
+        {
+          for (int i=0; i<(res["result"]["grantedPermissionNames"] as List)?.length; i++)
+          {
+            permission.add(res["result"]["grantedPermissionNames"][i]);
+          }
+          Preferences.grantedPermissions = permission;
+        }
+        getCurrentUserRoleSuccess = true;
+        return res["result"]["role"][0]["roleName"];
+      }
+
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
+        throw error;
+      }
+    });
+  }
+  @action
+  int rolePermission()
+  {
+    print("role" + Preferences.userRole);
+
+    switch(Preferences.userRole)
+    {
+      case "Admin":
+        return 3;
+      case "Censor":
+        return 2;
+      case "User":
+        return 1;
+      default:
+        return 0;
+    }
+  }
   // @action
   // Future login() async {
   //   loading = true;

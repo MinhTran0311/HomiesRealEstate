@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
@@ -5,6 +6,7 @@ import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/repository.dart';
 import '../form/form_store.dart';
@@ -344,15 +346,16 @@ abstract class _UserStore with Store {
     fetchUpdatePictureUserFutures = ObservableFuture(future);
 
     future.then((image) {
-      if(image==true)
+      if (image == true)
         this.userCurrent.picture = fileToken;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
         throw error;
       }
-      else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+      else {
+        errorStore.errorMessage =
+        "Please check your internet connection and try again!";
         throw error;
       }
     });

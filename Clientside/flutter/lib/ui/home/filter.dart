@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/town/province.dart';
 import 'package:boilerplate/models/town/province_list.dart';
@@ -52,8 +53,8 @@ class _FilterState extends State<Filter> {
     _diaChiController.text = _filterStore.filter_model.diaChi;
     _tagController.text = _filterStore.filter_model.tagTimKiem;
     _usernameController.text = _filterStore.filter_model.username;
-    _giaMinValueController.text=_filterStore.filter_model.giaMin;
-    _giaMaxValueController.text=_filterStore.filter_model.giaMax;
+    _giaMinValueController.text = priceFormatForFilter(_filterStore.filter_model.giaMin);
+    _giaMaxValueController.text = priceFormatForFilter(_filterStore.filter_model.giaMax);
     _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
     _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
     if (_filterStore.filter_model.tenTinh!= null && _filterStore.filter_model.tenTinh.isNotEmpty){
@@ -63,7 +64,6 @@ class _FilterState extends State<Filter> {
       _filterStore.getCommuneByTownName(_filterStore.filter_model.tenHuyen);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
