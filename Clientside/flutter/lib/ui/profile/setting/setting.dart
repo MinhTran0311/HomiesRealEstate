@@ -74,15 +74,33 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildChangeBrightMode(){
     return Observer(
       builder: (context){
-        return CardItem(
-          text: "Chế độ tối",
-          icon: Icons.security_outlined,
-          colorbackgroud: Colors.grey[200],
-          colortext: _themeStore.darkMode ? Colors.white : Colors.black,
-          coloricon: Colors.amber,
-          isFunction: false,
-          press: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);},
+        return Stack(
+          children:[
+            CardItem(
+              text: "Đổi chế độ nền ${_themeStore.darkMode ? "sáng" : "tối"}",
+              icon: Icons.security_outlined,
+              colorbackgroud: Colors.grey[200],
+              colortext: Colors.black,
+              coloricon: Colors.amber,
+              isFunction: true,
+              press: () {
+                _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
+              },
+            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: Switch(
+            //     value: _themeStore.darkMode,
+            //     onChanged: (value){
+            //       _themeStore.changeBrightnessToDark(value);
+            //     },
+            //     activeColor: Colors.amber,
+            //     activeTrackColor: Colors.amberAccent,
+            //     inactiveThumbColor: Colors.redAccent,
+            //     inactiveTrackColor: Colors.orange,
+            //   ),
+            // ),
+          ] 
         );
       }
     );
