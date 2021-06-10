@@ -39,12 +39,32 @@ final ThemeData themeData = new ThemeData(
 
 final ThemeData themeDataDark = ThemeData(
   textTheme: GoogleFonts.mavenProTextTheme(),
-  fontFamily: FontFamily.marven,
-  brightness: Brightness.dark,
-  primaryColor: AppColors.orange[500],
+  iconTheme: IconThemeData(
+    color: Colors.amber,
+    size: 20,
+  ),
+  primaryColor: Color.fromRGBO(18, 22, 28, 1),
   primaryColorBrightness: Brightness.dark,
-  accentColor: AppColors.orange[500],
+  accentColor: Colors.amber,
   accentColorBrightness: Brightness.dark,
+  scaffoldBackgroundColor: Color.fromRGBO(18, 22, 28, 1),
+  brightness: Brightness.dark,
+
+  appBarTheme: AppBarTheme(
+      brightness: Brightness.dark,
+      color: Colors.amber,
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: Colors.white,
+        size: 20,
+      )
+  ),
+
+  //fontFamily: FontFamily.marven,
+  //primaryColor: AppColors.orange[500],
+  //primaryColorBrightness: Brightness.dark,
+  //accentColor: AppColors.orange[500],
+  //accentColorBrightness: Brightness.dark,
 );
 
 final ThemeData themeDataLight = ThemeData(
