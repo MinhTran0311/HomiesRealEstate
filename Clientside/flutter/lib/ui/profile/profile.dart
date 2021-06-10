@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -70,20 +72,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Future<void> didChangeDependencies()  {
     super.didChangeDependencies();
-
     _userstore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
-    if (!_userstore.loading) {
-      _userstore.getCurrentUser();
+    if(Preferences.userRoleRank >= 1){
+      if (!_userstore.loading) {
+        _userstore.getCurrentUser();
+      }
+      if (!_userstore.loadingCurrentUserWallet) {
+        _userstore.getCurrentWalletUser();
+      }
+      if (!_userstore.loadingCurrentUserPicture) {
+        _userstore.getCurrentPictureUser();
+      }
+      if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
+      if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     }
-    if (!_userstore.loadingCurrentUserWallet) {
-      _userstore.getCurrentWalletUser();
-    }
-    if (!_userstore.loadingCurrentUserPicture) {
-      _userstore.getCurrentPictureUser();
-    }
-    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
-    if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
+
     //sobaidang = await _postStore.getsobaidang();
   }
 
