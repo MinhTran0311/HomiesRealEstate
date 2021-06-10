@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
@@ -11,7 +12,7 @@ class TabNavigator extends StatelessWidget {
   TabNavigator({this.navigatorKey, this.tabItem});
   final GlobalKey<NavigatorState> navigatorKey;
   final String tabItem;
-
+  //${Preferences.access_token}
   @override
   Widget build(BuildContext context) {
     Widget child ;
@@ -19,7 +20,7 @@ class TabNavigator extends StatelessWidget {
       child = HomeScreen();
     else if(tabItem == "MapsScreen")
       child = Container();
-    else if(tabItem == "ManagementScreen")
+    else if(tabItem == "ManagementScreen" )
       child = ManagementScreen();
     else if(tabItem == "ProfileScreen")
       child = ProfileScreen();

@@ -6,6 +6,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
+  UserStore _userStore;
   //focus node:-----------------------------------------------------------------
   FocusNode _passwordFocusNode;
 
@@ -52,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
+    _userStore = Provider.of<UserStore>(context);
   }
 
   @override
@@ -98,9 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
           ) : Center(child: _buildRightSide()),
+
           Observer(
             builder: (context) {
-              return _store.loggedIn
+              return _store.loggedIn && _store.getCurrentUserRoleSuccess
                   ? navigate(context, true)
                   : _showErrorMessage(_store.errorStore.errorMessage);
             },

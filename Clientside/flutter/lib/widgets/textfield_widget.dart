@@ -62,11 +62,17 @@ class TextFieldWidget extends StatelessWidget {
         style: GoogleFonts.mavenPro(fontSize: this.inputFontsize,color: Colors.black),
         decoration: InputDecoration(
             hintText: this.hint,
-            hintStyle: GoogleFonts.mavenPro(fontSize: (this.inputFontsize-3),color: hintColor),
+            hintStyle: GoogleFonts.mavenPro(fontSize:(this.inputFontsize-3),color: hintColor),
                 //Theme.of(context).textTheme.body1.copyWith(color: hintColor),
             errorText: errorText,
             counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null,
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+
+        ),
+
       ),
     );
   }

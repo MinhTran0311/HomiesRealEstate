@@ -46,3 +46,29 @@ final ThemeData themeDataDark = ThemeData(
   accentColor: AppColors.orange[500],
   accentColorBrightness: Brightness.dark,
 );
+
+final ThemeData themeDataLight = ThemeData(
+  textTheme: GoogleFonts.mavenProTextTheme().apply(
+    bodyColor: Colors.black,
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.amber,
+    size: 20,
+  ),
+  primaryColor: Colors.white,
+  primaryColorBrightness: Brightness.light,
+  accentColor: Colors.amber,
+  accentColorBrightness: Brightness.light,
+  scaffoldBackgroundColor: Colors.white,
+
+  appBarTheme: AppBarTheme(
+    brightness: Brightness.light,
+    color: Colors.amber,
+    centerTitle: true,
+    iconTheme: IconThemeData(
+      color: Colors.white,
+      size: 20,
+    )
+  ),
+  brightness: Brightness.light,
+);

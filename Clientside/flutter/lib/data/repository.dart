@@ -208,19 +208,19 @@ class Repository {
     }).catchError((error) => throw error);
   }
   // Post: ---------------------------------------------------------------------
-  Future<listLSGD> getLSGD(int skipCount, int maxResultCount) async {
+  Future<listLSGD> getLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getLSGD(skipCount, maxResultCount).then((lsgdList) {
+    return await _userApi.getLSGD(skipCount, maxResultCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }
-  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount) async {
+  Future<listLSGD> getAllLSGD(int skipCount, int maxResultCount,String LoaiLSGD,String MinThoiDiem,String MaxThoiDiem) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _userApi.getAllLSGD(skipCount, maxResultCount).then((lsgdList) {
+    return await _userApi.getAllLSGD(skipCount, maxResultCount,LoaiLSGD,MinThoiDiem,MaxThoiDiem).then((lsgdList) {
       return lsgdList;
     }).catchError((error) => throw error);
   }
@@ -345,9 +345,9 @@ class Repository {
 
 
   //registration
-  Future<dynamic> registing(String surname, String name, String username, String password, String email) async
+  Future<dynamic> registing(String surname, String name, String username, String password, String email, String phoneNumber) async
   {
-    return await _registrationApi.regist(surname, name, username, password, email).then((res) {
+    return await _registrationApi.regist(surname, name, username, password, email, phoneNumber).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
@@ -434,6 +434,14 @@ class Repository {
   Future<dynamic> countNewBaiDangsInMonth() async
   {
     return await _postApi.countNewBaiDangInMonth().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Get current user role
+  Future<dynamic> getCurrentUserRole() async
+  {
+    return await _roleApi.getCurrentUserRole().then((res) {
       return res;
     }).catchError((error) => throw error);
   }

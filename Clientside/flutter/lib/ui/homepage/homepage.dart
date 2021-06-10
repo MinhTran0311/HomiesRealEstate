@@ -99,9 +99,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
           children: [
             _buildOffstageNavigator("HomeScreen"),
             _buildOffstageNavigator("MapsScreen"),
-            _buildOffstageNavigator("ManagementScreen"),
-            _buildOffstageNavigator("ProfileScreen"),
-            _buildOffstageNavigator("NewPost"),
+            if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
+            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
+            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("NewPost"),
           ],
         ),
         bottomNavigationBar: CurvedNavigationBar(
@@ -109,14 +109,13 @@ class _HomePageScreenState extends State<HomePageScreen> {
           backgroundColor: Colors.transparent,
           color: Colors.amber,
           items: <Widget>[
-            Icon(Icons.home, size: 30,color: Colors.black87,),
+            Icon(Icons.home_rounded, size: 30,color: Colors.black87,),
             Icon(Icons.location_pin, size: 30,color: Colors.black87,),
-            Icon(Icons.notifications, size: 30, color: Colors.black87,),
-            Icon(Icons.person, size: 30, color: Colors.black87,),
-            Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
+            if (Preferences.userRoleRank >= 2) Icon(Icons.admin_panel_settings_rounded, size: 30, color: Colors.black87,),
+            if (Preferences.userRoleRank >= 1) Icon(Icons.person, size: 30, color: Colors.black87,),
+            if (Preferences.userRoleRank >= 1) Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
           ],
           index: _currentIndex,
-
           onTap: (index) {
             setState(() {
               _selectTab(pageKeys[index], index);
@@ -148,5 +147,21 @@ class _HomePageScreenState extends State<HomePageScreen> {
         tabItem: tabItem,
       ),
     );
+  }
+  int rolePermission()
+  {
+    print("role" + Preferences.userRole);
+
+    switch(Preferences.userRole)
+    {
+      case "Admin":
+        return 3;
+      case "Censor":
+        return 2;
+      case "User":
+        return 1;
+      default:
+        return 0;
+    }
   }
 }

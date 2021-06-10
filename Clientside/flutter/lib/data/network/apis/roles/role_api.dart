@@ -54,4 +54,22 @@ class RoleApi {
       throw e;
     }
   }
+
+  //Get current user role
+  Future<dynamic> getCurrentUserRole() async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.getCurrentUserRole,
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

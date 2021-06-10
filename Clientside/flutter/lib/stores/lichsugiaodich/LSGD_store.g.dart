@@ -227,6 +227,34 @@ mixin _$LSGDStore on _LSGDStore, Store {
     });
   }
 
+  final _$FilterDataLSGDAtom = Atom(name: '_LSGDStore.FilterDataLSGD');
+
+  @override
+  FilterData get FilterDataLSGD {
+    _$FilterDataLSGDAtom.reportRead();
+    return super.FilterDataLSGD;
+  }
+
+  @override
+  set FilterDataLSGD(FilterData value) {
+    _$FilterDataLSGDAtom.reportWrite(value, super.FilterDataLSGD, () {
+      super.FilterDataLSGD = value;
+    });
+  }
+
+  final _$_FilterStoreActionController = ActionController(name: '_LSGDStore');
+
+  @override
+  void setLoaiLSGD(String value) {
+    final _$actionInfo = _$_FilterStoreActionController.startAction(
+        name: '_LSGDStore.setLoaiLSGD');
+    try {
+      return super.setLoaiLSGD(value);
+    } finally {
+      _$_FilterStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   final _$isIntialLoadingAllAtom = Atom(name: '_LSGDStore.isIntialLoadingAll');
 
   @override
@@ -245,15 +273,15 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$getLSGDAsyncAction = AsyncAction('_LSGDStore.getLSGD');
 
   @override
-  Future<dynamic> getLSGD(bool isLoadMore) {
-    return _$getLSGDAsyncAction.run(() => super.getLSGD(isLoadMore));
+  Future<dynamic> getLSGD(bool isLoadMore, String LoaiLSGD,String MinThoiDiem, String MaxThoiDiem) {
+    return _$getLSGDAsyncAction.run(() => super.getLSGD(isLoadMore,LoaiLSGD,MinThoiDiem,MaxThoiDiem));
   }
 
   final _$getAllLSGDAsyncAction = AsyncAction('_LSGDStore.getAllLSGD');
 
   @override
-  Future<dynamic> getAllLSGD(bool isLoadMore) {
-    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore));
+  Future<dynamic> getAllLSGD(bool isLoadMore, String LoaiLSGD,String MinThoiDiem, String MaxThoiDiem) {
+    return _$getAllLSGDAsyncAction.run(() => super.getAllLSGD(isLoadMore,LoaiLSGD,MinThoiDiem,MaxThoiDiem));
   }
 
   final _$NaptienAsyncAction = AsyncAction('_LSGDStore.Naptien');
@@ -286,6 +314,7 @@ skipCountAll: ${skipCountAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 success: ${success},
+FilterDataLSGD: ${FilterDataLSGD},
 isIntialLoading: ${isIntialLoading},
 successAll: ${successAll},
 isIntialLoadingAll: ${isIntialLoadingAll},
