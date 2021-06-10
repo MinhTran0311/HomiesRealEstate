@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
@@ -12,6 +13,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
+import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -72,8 +74,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Trang chủ"),
+        actions: _buildActions(context),
       ),
       body: _buildBody(),
+    );
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    return <Widget>[
+      if (!Permission.instance.hasPermission("Pages")) _buildLogInButton(),
+    ];
+  }
+
+  Widget _buildLogInButton() {
+    return IconButton(
+      onPressed: () {
+        SharedPreferences.getInstance().then((preference) {
+          preference.setBool(Preferences.is_logged_in, false);
+          preference.setString(Preferences.auth_token, "");
+          preference.setString(Preferences.userRole, "");
+        });
+        Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
+      },
+      icon: Icon(
+        Icons.login_outlined,
+      ),
     );
   }
 

@@ -115,7 +115,7 @@ class _SettingPageState extends State<SettingPage> {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
           preference.setString(Preferences.auth_token, "");
-            preference.setString(Preferences.userRole, "");
+          preference.setString(Preferences.userRole, "");
         });
         Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
       },

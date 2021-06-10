@@ -192,7 +192,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -281,7 +281,7 @@ abstract class _PostStore with Store {
   //       throw error;
   //     }
   //     else{
-  //       errorStore.errorMessage="Please check your internet connection and try again!";
+  //       errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
   //       throw error;
   //     }
   //   });
@@ -304,7 +304,7 @@ abstract class _PostStore with Store {
           throw error;
         }
         else{
-          errorStore.errorMessage="Please check your internet connection and try again!";
+          errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
           throw error;
         }
       });
@@ -384,7 +384,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -422,7 +422,7 @@ abstract class _PostStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -460,7 +460,7 @@ abstract class _PostStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -490,7 +490,7 @@ abstract class _PostStore with Store {
           throw error;
         }
         else{
-          errorStore.errorMessage="Please check your internet connection and try again!";
+          errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
           throw error;
         }
       });
@@ -519,7 +519,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -562,7 +562,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -589,7 +589,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -616,7 +616,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -643,7 +643,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -671,7 +671,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -713,7 +713,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
