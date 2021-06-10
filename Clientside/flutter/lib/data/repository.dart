@@ -446,7 +446,7 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  //Danh mục
+  //Danh mục------------------------------------------------------------------
   //Get all danh mục
   Future<DanhMucList> getAllDanhMucs() async {
     return await _danhMucApi.getAllDanhMucs().then((danhMucList) {
@@ -462,7 +462,23 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  //Thuộc tính
+  //Create or edit danh mục
+  //Create
+  Future<dynamic> createDanhMuc(String tenDanhMuc, String tag, int danhMucCha, String trangThai) async
+  {
+    return await _danhMucApi.createDanhMuc(tenDanhMuc, tag, danhMucCha, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+  //Edit
+  Future<dynamic> updateDanhMuc(int id, String tenDanhMuc, String tag, int danhMucCha, String trangThai) async
+  {
+    return await _danhMucApi.updateDanhMuc(id, tenDanhMuc, tag, danhMucCha, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //Thuộc tính------------------------------------------------------------------
   //Get all Thuộc tính
   Future<ThuocTinhManagementList> getAllThuocTinhs() async {
     return await _thuocTinhApi.getAllThuocTinhs().then((thuocTinhList) {
@@ -480,21 +496,21 @@ class Repository {
 
   //Create or edit thuộc tính
   //Create
-  Future<dynamic> createThuocTinh(String name, String kieuDuLieu, String trangThai) async
+  Future<dynamic> createThuocTinh(String tenThuocTinh, String kieuDuLieu, String trangThai) async
   {
-    return await _thuocTinhApi.createThuocTinh(name, kieuDuLieu, trangThai).then((res) {
+    return await _thuocTinhApi.createThuocTinh(tenThuocTinh, kieuDuLieu, trangThai).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
   //edit
-  Future<dynamic> updateThuocTinh(int id, String name, String kieuDuLieu, String trangThai) async
+  Future<dynamic> updateThuocTinh(int id, String tenThuocTinh, String kieuDuLieu, String trangThai) async
   {
-    return await _thuocTinhApi.updateThuocTinh(id, name, kieuDuLieu, trangThai).then((res) {
+    return await _thuocTinhApi.updateThuocTinh(id, tenThuocTinh, kieuDuLieu, trangThai).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
 
-  //Gói bài đăng
+  //Gói bài đăng------------------------------------------------------------------
   //Get all gói bài đăng
   Future<GoiBaiDangList> getAllGoiBaiDangs() async {
     return await _goiBaiDangApi.getAllGoiBaiDangs().then((goiBaiDangList) {
@@ -510,6 +526,21 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  //Create or edit gói bài đăng
+  //Create
+  Future<dynamic> createGoiBaiDang(String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async
+  {
+    return await _goiBaiDangApi.createGoiBaiDang(tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+  //Edit
+  Future<dynamic> updateGoiBaiDang(int id, String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async
+  {
+    return await _goiBaiDangApi.updateGoiBaiDang(id, tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
 
   Future<void> saveIsLoggedIn(bool value) =>
       _sharedPrefsHelper.saveIsLoggedIn(value);

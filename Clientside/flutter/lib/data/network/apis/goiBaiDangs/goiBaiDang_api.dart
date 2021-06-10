@@ -54,4 +54,57 @@ class GoiBaiDangApi {
       throw e;
     }
   }
+
+  //Update gói bài đăng
+  Future<dynamic> updateGoiBaiDang(int id, String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditGoiBaiDang,
+        data: {
+          "tenGoi": tenGoi,
+          "phi": phi,
+          "doUuTien": doUuTien,
+          "thoiGianToiThieu": thoiGianToiThieu,
+          "moTa": moTa,
+          "trangThai": trangThai,
+          "id": id,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  //Create gói bài đăng
+  Future<dynamic> createGoiBaiDang(String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.createOrEditGoiBaiDang,
+        data: {
+          "tenGoi": tenGoi,
+          "phi": phi,
+          "doUuTien": doUuTien,
+          "thoiGianToiThieu": thoiGianToiThieu,
+          "moTa": moTa,
+          "trangThai": trangThai,
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),);
+      // bool resistingSuccess = res["canLogin"];
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

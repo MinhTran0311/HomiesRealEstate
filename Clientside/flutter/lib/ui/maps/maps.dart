@@ -47,6 +47,7 @@ class _MapsScreenState extends State<MapsScreen> {
   final Set<Marker> _markersDangBai = {};
   CameraPosition _position1;
   LatLng _lastMapPosition = _center;
+  LatLng _tapPointClick = _center;
   MapType _currentMapType = MapType.normal;
   GoogleMapController _controllerMap;
   // Location _location = Location();
@@ -64,7 +65,6 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   void initState() {
     super.initState();
-    // _checkPermission();
     // location = new Location();
   }
 
@@ -75,6 +75,7 @@ class _MapsScreenState extends State<MapsScreen> {
     // initializing stores
     _postStore = Provider.of<PostStore>(context);
     _mapsStore = Provider.of<MapsStore>(context);
+    _mapsStore.checkPermission();
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (this.post == null) {
@@ -118,6 +119,7 @@ class _MapsScreenState extends State<MapsScreen> {
 
   _handleTap(LatLng tappedPoint) {
     print(tappedPoint);
+    _tapPointClick = tappedPoint;
     setState(() {
       myMarker = [];
       myMarker.add(Marker(
@@ -126,7 +128,8 @@ class _MapsScreenState extends State<MapsScreen> {
         draggable: true,
         onDragEnd: (dragEndPosition) {
           print(dragEndPosition);
-        }
+          _tapPointClick = dragEndPosition;
+        },
       ));
     });
   }
@@ -163,13 +166,17 @@ class _MapsScreenState extends State<MapsScreen> {
     await this._applicationBloc.searchPlaces(value);
   }
 
+  Future<void> _searchPlacemarkFromLatAndLong(double lat, double long) async {
+    await this._applicationBloc.searchPlace(lat, long);
+  }
+
   Future<void> _goToCurrentLocationSearch() async {
     final GoogleMapController controller = await _controller.future;
     setState(() {
       // _markers.removeAll(_markers);
       if (this.type == "Đăng bài") {
-        _markersDangBai.clear();
-        _markersDangBai.add(
+        myMarker.clear();
+        myMarker.add(
             Marker(
               markerId: MarkerId(this.placeMarkChoosen.postalCode),
               position: LatLng(_applicationBloc.latTit, _applicationBloc.longTit),
@@ -388,6 +395,59 @@ class _MapsScreenState extends State<MapsScreen> {
     else return Container();
   }
 
+  //Show when click maps
+  Widget containerLatngInfor() {
+    if (_tapPointClick != 0) {
+      // _searchPlacemarkFromLatAndLong(_tapPointClick.latitude, _tapPointClick.longitude);
+      return GestureDetector(
+        child: Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width/1.5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+            color: Colors.white,
+          ),
+          padding: EdgeInsets.all(6),
+          child: Column(
+            children: [
+              Flexible(
+                child: Text(
+                  // _applicationBloc.placemark[0].name,
+                  "Linh Trung",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 6,),
+              Flexible(
+                child: Text(
+                  // _applicationBloc.placemark[0].country,
+                  "Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam",
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              SizedBox(height: 6,),
+              Text(
+                  "${_tapPointClick.latitude.toStringAsFixed(6)}, ${_tapPointClick.longitude.toStringAsFixed(6)}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+    else return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (this.post != null) {
@@ -577,6 +637,7 @@ class _MapsScreenState extends State<MapsScreen> {
         ),
       );
     }
+    //Maps đăng bài
     else {
       return Scaffold(
         primary: true,
@@ -676,7 +737,7 @@ class _MapsScreenState extends State<MapsScreen> {
                           alignment: Alignment.bottomLeft,
                           child: Column(
                             children: <Widget>[
-                              containerBaseInfor(),
+                              containerLatngInfor(),
                               // button(_onMapTypeButtonProcessed, Icons.map),
                               // SizedBox(
                               //   height: 16.0,
