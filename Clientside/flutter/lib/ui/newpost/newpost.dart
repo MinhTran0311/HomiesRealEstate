@@ -166,7 +166,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             "Đăng tin bất động sản",
             style: Theme.of(context).textTheme.button.copyWith(
                 color: Colors.white,
-                fontSize: 23,
+                fontSize: 24,
                 // backgroundColor:Colors.amber ,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.0),
@@ -193,7 +193,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           _showSuccssfullMesssage("Đăng tin thành công");
           //dispose();.
           _postStore.successNewpost=false;
-          _postStore.getPostForCurs(false);
+          _postStore.getPostForCurs(false,"",0);
           Future.delayed(Duration(milliseconds: 3000), () {
             Route route = MaterialPageRoute(builder: (context) => Detail(post:_postStore.postForCurList.posts.first ));
             Navigator.push(context, route);
