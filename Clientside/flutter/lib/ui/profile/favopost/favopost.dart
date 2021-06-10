@@ -42,6 +42,8 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
       RefreshController(initialRefresh: false);
   final ScrollController _scrollController2 =
       ScrollController(keepScrollOffset: true);
+  TextEditingController _searchController11 = new TextEditingController();
+
   PostStore postStore;
   @override
   void initState() {
@@ -52,7 +54,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     postStore = Provider.of<PostStore>(context);
-    if (!postStore.loadingfavopost) postStore.getfavopost(userid, false);
+    if (!postStore.loadingfavopost) postStore.getfavopost(userid, false,_searchController11==null?"":_searchController11.text.toString());
   }
 
   @override
@@ -62,7 +64,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
         // Icon: Icons.app_registration,
         backgroundColor: Colors.white,
         title: Text(
-          "Bài đăng yêu thích của tôi",
+          "Bài đăng yêu thích",
           style: Theme.of(context).textTheme.button.copyWith(
               color: Colors.amber,
               fontSize: 23,
@@ -97,6 +99,52 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 12),
+          child: TextField(
+            autofocus: false,
+            keyboardType: TextInputType.text,
+            controller: _searchController11,
+            onChanged: (value) {},
+            style: TextStyle(
+              fontSize: 28,
+              height: 1,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: InputDecoration(
+                hintText: "Tìm kiếm",
+                hintStyle: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[400],
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black)),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,
+                    ),
+                    onPressed: () async {
+                      postStore.getfavopost(userid,false,_searchController11==null?"":_searchController11.text.toString());
+                      await Future.delayed(Duration(milliseconds: 2000));
+                      // if (mounted) setState(() {});
+                      isRefreshing2 = true;
+                      _refreshController2.refreshCompleted();
+                    },
+                  ),
+                )),
+          ),
+        ),
         _buildListView(),
       ],
     );
@@ -104,9 +152,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
 
   Widget _buildListView() {
     return postStore.favopost != null
-        ? Container(
-            height: 450,
-            alignment: Alignment.topCenter,
+        ? Expanded(
             child: SmartRefresher(
               key: _refresherKey2,
               controller: _refreshController2,
@@ -140,8 +186,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
               ),
               onLoading: () async {
                 print("loading");
-                //selectedDatefl.add(new DateTime(null));
-                postStore.getfavopost(userid,true);
+                postStore.getfavopost(userid,true,_searchController11==null?"":_searchController11.text.toString());
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) {
                   setState(() {});
@@ -153,7 +198,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
               },
               onRefresh: () async {
                 print("refresh");
-                postStore.getfavopost(userid,false);
+                postStore.getfavopost(userid,false,_searchController11==null?"":_searchController11.text.toString());
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) setState(() {});
                 isRefreshing2 = true;

@@ -82,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!_userstore.loadingCurrentUserPicture) {
       _userstore.getCurrentPictureUser();
     }
-    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
+    if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false,"",0);
     if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     //sobaidang = await _postStore.getsobaidang();
   }
@@ -135,10 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               })
           : Container(),
-      title: Padding(
-        padding: const EdgeInsets.only(left: 100),
-        child: Text("Cá nhân"),
-      ),
+      title: Text("Cá nhân"),
+      centerTitle: true,
     );
   }
 
@@ -155,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _userstore.getCurrentUser();
             _userstore.getCurrentWalletUser();
             _userstore.getCurrentPictureUser();
-            _postStore.getPostForCurs(false);
+            _postStore.getPostForCurs(false,"",0);
             _postStore.getsobaidang();
           });
         },
