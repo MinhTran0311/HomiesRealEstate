@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -178,4 +179,33 @@ abstract class _DanhMucManagementStore with Store {
       }
     });
   }
+
+  @action
+  Future IsActiveDanhMuc(DanhMuc danhMuc) async {
+    updateDanhMuc_success = false;
+    final future = _repository.updateDanhMuc(danhMuc.id, danhMuc.tenDanhMuc, danhMuc.tag, danhMuc.danhMucCha, danhMuc.trangThai);
+    fetchUpdateDanhMucFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        updateDanhMuc_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
 }

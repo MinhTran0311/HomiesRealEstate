@@ -60,6 +60,16 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
 
   }
 
+  _isActiveDanhMuc(DanhMuc danhMuc) async {
+    if(danhMuc.trangThai == "On")
+      {
+        danhMuc.trangThai = "Off";
+      }
+    else danhMuc.trangThai = "On";
+    await _danhMucManagementStore.IsActiveDanhMuc(danhMuc);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -534,7 +544,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ),
                   onTap: () {
-
+                    _isActiveDanhMuc(danhMuc);
                   },
                 ),
               ],
