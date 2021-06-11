@@ -53,6 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserStore _userstore;
   PostStore _postStore;
   int sobaidang;
+  bool finishload=false;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -529,3 +530,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 }
+

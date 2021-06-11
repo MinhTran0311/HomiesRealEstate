@@ -66,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _postStore.getPosts(false);
       //_postStore.isIntialLoading=false;
     }
-
   }
 
   @override

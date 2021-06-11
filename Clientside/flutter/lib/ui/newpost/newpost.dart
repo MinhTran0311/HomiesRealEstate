@@ -44,6 +44,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'add_image.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 
 class NewpostScreen extends StatefulWidget {
   @override
@@ -55,6 +56,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
   TownStore _townStore;
   ImageStore _imageStore;
   UserStore _userStore;
+  ThemeStore _themeStore;
+
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
@@ -118,6 +121,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     _townStore = Provider.of<TownStore>(context);
     _userStore = Provider.of<UserStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
 
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
@@ -250,21 +254,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ],
                 )
               : Center(child: _buildRightSide()),
-          Observer(
-            builder: (context) {
-              return _store.regist_success
-                  ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _store.regist_loading,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          )
         ],
       ),
     ));
