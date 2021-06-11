@@ -65,7 +65,6 @@ class Preferences {
   static const PagesXas = "Pages.Xas";
   static const PagesXasCreate = "Pages.Xas.Create";
   static const PagesXasEdit = "Pages.Xas.Edit";
-  static const PagesXasDelete = "Pages.Xas.Delete";
   static const PagesHuyens = "Pages.Huyens";
   static const PagesHuyensCreate = "Pages.Huyens.Create";
   static const PagesHuyensEdit = "Pages.Huyens.Edit";
