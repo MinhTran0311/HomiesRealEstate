@@ -8,6 +8,7 @@ import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:boilerplate/ui/profile/favopost/favopost.dart';
@@ -47,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _ProfileScreenState({
     Key key,
   }) : super();
-  String role=" Admin";
+  String role=" Khách";
   String pathAvatar = "assets/images/img_login.jpg";
   File image;
   final picker = ImagePicker();
@@ -55,6 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserStore _userstore;
   PostStore _postStore;
   int sobaidang;
+  ThemeStore _themeStore;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
@@ -74,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.didChangeDependencies();
     _userstore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
     if(Preferences.userRoleRank >= 1){
       if (!_userstore.loading) {
         _userstore.getCurrentUser();
@@ -144,7 +147,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  bool _first = true;
   int _selectedIndex = 0;
   Widget _buildBody() {
     return Container(
@@ -349,25 +351,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               overflow: Overflow.visible,
                               children: [
                                 Observer(builder: (context) {
-                                  return _userstore.userCurrent.picture != null
-                                      ? CircleAvatar(
-                                          radius: (52),
-                                          backgroundColor: Colors.white,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            child: Image.memory(Base64Decoder()
-                                                .convert(_userstore
-                                                    .userCurrent.picture)),
-                                          ))
-                                      : CircleAvatar(
-                                          radius: (52),
-                                          backgroundColor: Colors.white,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                          ));
+                                  if(_userstore.userCurrent != null){
+                                    return _userstore.userCurrent.picture != null
+                                        ? CircleAvatar(
+                                        radius: (52),
+                                        backgroundColor: Colors.white,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(50),
+                                          child: Image.memory(Base64Decoder()
+                                              .convert(_userstore
+                                              .userCurrent.picture)),
+                                        )): CircleAvatar(
+                                        radius: (52),
+                                        backgroundColor: Colors.white,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(50),
+                                          child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                        ));
+                                  }
+                                  else{
+                                    return CircleAvatar(
+                                        radius: (52),
+                                        backgroundColor: Colors.white,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(50),
+                                          child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                        ));
+                                  }
+
                                 }),
                                 // CircularProfileAvatar(
                                 //   _pathAvatar,
@@ -426,6 +440,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           }),
                         Observer(builder: (context) {
+                          if(_userstore.userCurrent != null){
+                            if(_userstore.userCurrent.listRole != null){
+                              role=" ${_userstore.userCurrent.listRole[0].roleName}";
+                              print("debug ${_userstore.userCurrent.listRole.length}");
+                              for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
+                                role += ", ${_userstore.userCurrent.listRole[i].roleName}";
+                              }
+                            }
+                          }
+
+
                           return
                             _userstore.userCurrent != null ? Row(
                               children: [
@@ -436,7 +461,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   semanticLabel:
                                   'Text to announce in accessibility modes',
                                 ),
-                                Text(_userstore.userCurrent.listRole[0].roleName,
+                                Text(role,
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         // fontWeight: FontWeight.bold,

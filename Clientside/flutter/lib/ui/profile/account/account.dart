@@ -54,7 +54,7 @@ class _AccountPageState extends State<AccountPage>{
   final CtlAddress = TextEditingController();
   final CtlSurName = TextEditingController();
   final CtlName = TextEditingController();
-
+  String role =" Khách";
   int _selectedIndex=0;
   UserStore _userstore;
   String pathAvatar = "assets/images/img_login.jpg";
@@ -248,19 +248,49 @@ class _AccountPageState extends State<AccountPage>{
                                 SizedBox(height: 5,),
                                 Row(
                                   children: [
-                                    Icon(
+                                    _userstore.userCurrent.listRole.length<=1?Icon(
                                       Icons.person_pin,
                                       color: Colors.white,
                                       size: 20,
+                                    ):
+                                    Icon(
+                                      Icons.people,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                      semanticLabel:
+                                      'Text to announce in accessibility modes',
                                     ),
                                     SizedBox(width: 10,),
-                                    Text(
-                                      _userstore.userCurrent.listRole[0].roleName,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
+                                    Observer(builder: (context) {
+                                      if(_userstore.userCurrent != null){
+                                        if(_userstore.userCurrent.listRole != null){
+                                          role="${_userstore.userCurrent.listRole[0].roleName}";
+                                          print("debug ${_userstore.userCurrent.listRole.length}");
+                                          for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
+                                            role += ", ${_userstore.userCurrent.listRole[i].roleName}";
+                                          }
+                                        }
+                                      }
+                                      return
+                                        _userstore.userCurrent != null ? Row(
+                                          children: [
+
+                                            Text(role,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    )),
+                                          ],
+                                        ) : Container();
+                                    }
                                     ),
+                                    // Text(
+                                    //   _userstore.userCurrent.listRole[0].roleName,
+                                    //   style: TextStyle(
+                                    //     color: Colors.white,
+                                    //     fontSize: 20,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],
