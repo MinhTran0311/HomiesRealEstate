@@ -87,10 +87,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!_userstore.loadingCurrentUserPicture) {
         _userstore.getCurrentPictureUser();
       }
-      if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false);
+     if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false,"",0);
       if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     }
-
+    
     //sobaidang = await _postStore.getsobaidang();
   }
 
@@ -132,8 +132,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
       leading: _selectedIndex != 0
           ? IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -159,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _userstore.getCurrentUser();
             _userstore.getCurrentWalletUser();
             _userstore.getCurrentPictureUser();
-            _postStore.getPostForCurs(false);
+            _postStore.getPostForCurs(false,"",0);
             _postStore.getsobaidang();
           });
         },
@@ -560,3 +558,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 }
+

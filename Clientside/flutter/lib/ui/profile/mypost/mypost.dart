@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
@@ -39,11 +40,17 @@ class MyPostScreen extends StatefulWidget {
       _MyPostScreenState(userStore: userStore, postStore: postStore);
 }
 
+enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
+
 class _MyPostScreenState extends State<MyPostScreen> {
+  BestTutorSite _site = BestTutorSite.javatpoint;
   final UserStore userStore;
   final PostStore postStore;
+  TextEditingController _searchController11 = new TextEditingController();
   _MyPostScreenState({@required this.userStore, this.postStore});
   TownStore _townStore;
+  String dropdownValue = "Tất cả";
+  int key = 0;
   GlobalKey _refresherKey1 = GlobalKey();
   GlobalKey _contentKey1 = GlobalKey();
   bool isRefreshing1 = false;
@@ -53,30 +60,20 @@ class _MyPostScreenState extends State<MyPostScreen> {
       ScrollController(keepScrollOffset: true);
   List<DateTime> selectedDatefl = new List<DateTime>();
   List<Pack> selectedPack = new List<Pack>();
+
   @override
   void initState() {
     super.initState();
-    selectedDatefl = new List<DateTime>(postStore.postForCurList.posts.length);
-    selectedPack = new List<Pack>(postStore.postForCurList.posts.length);
-    songay = new List<int>(postStore.postForCurList.posts.length);
+    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
+    selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
+    songay = new List<int>(int.parse(postStore.sobaidang));
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _townStore = Provider.of<TownStore>(context);
-    // if (!_townStore.loading) {
-    //   _townStore.getTowns();
-    // }
-    // if (!_townStore.loadingCommune) {
-    //   _townStore.getCommunes();
-    // }
-    // if (!postStore.loadingPack) {
-    //   postStore.getPacks();
-    // }
-    // if (!postStore.loadingThuocTinh) {
-    //   postStore.getThuocTinhs();
-    // }
+    if (!postStore.loadingPostForCur) postStore.getPostForCurs(false, "", key);
   }
 
   @override
@@ -84,16 +81,14 @@ class _MyPostScreenState extends State<MyPostScreen> {
     return Scaffold(
       appBar: AppBar(
         // Icon: Icons.app_registration,
-        backgroundColor: Colors.white,
         title: Text(
           "Bài đăng của tôi",
+          //size:24,
           style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.amber,
-              fontSize: 23,
               fontWeight: FontWeight.bold,
+              fontSize: 20,
               letterSpacing: 1.0),
         ),
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -101,7 +96,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget buildFilter(String filterName) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
       margin: EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
@@ -141,20 +135,96 @@ class _MyPostScreenState extends State<MyPostScreen> {
   }
 
   Widget _buildPostsList() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        _buildListView(),
-      ],
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 0),
+        child: TextField(
+          autofocus: false,
+          keyboardType: TextInputType.text,
+          controller: _searchController11,
+          onChanged: (value) {},
+          style: TextStyle(
+            fontSize: 28,
+            height: 1,
+            
+            fontWeight: FontWeight.bold,
+          ),
+          decoration: InputDecoration(
+              hintText: "Tìm kiếm",
+              hintStyle: TextStyle(
+                fontSize: 20,
+                color: Colors.grey[400],
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red[400]),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.orange[400]),
+              ),
+              border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black)),
+              suffixIcon: Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.grey[400],
+                    size: 28,
+                  ),
+                  onPressed: () async {
+                    postStore.getPostForCurs(
+                        false,
+                        _searchController11 != null
+                            ? _searchController11.text.toString()
+                            : "",
+                        key);
+                    await Future.delayed(Duration(milliseconds: 2000));
+                    // if (mounted) setState(() {});
+                    isRefreshing1 = true;
+                    _refreshController1.refreshCompleted();
+                  },
+                ),
+              )),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left:24.0),
+        child: DropdownButton<String>(
+          value: dropdownValue,
+        //  elevation: 16
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownValue = newValue;
+              if (newValue == "Tất cả")
+                key = 0;
+              else if (newValue == "Hết hạn")
+                key = -1;
+              else
+                key = 1;
+              postStore.getPostForCurs(
+                  false,
+                  _searchController11 != null
+                      ? _searchController11.text.toString()
+                      : "",
+                  key);
+            });
+          },
+          items: <String>["Tất cả", "Hết hạn", "Còn hạn"]
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+      ),
+      _buildListView()
+    ]);
   }
 
   Widget _buildListView() {
     return postStore.postForCurList != null
-        ? Container(
-            height: 450,
-            alignment: Alignment.topCenter,
+        ? Expanded(
             child: SmartRefresher(
               key: _refresherKey1,
               controller: _refreshController1,
@@ -188,13 +258,14 @@ class _MyPostScreenState extends State<MyPostScreen> {
               ),
               onLoading: () async {
                 print("loading");
-                postStore.getPostForCurs(true);
+                postStore.getPostForCurs(
+                    false,
+                    _searchController11 != null
+                        ? _searchController11.text.toString()
+                        : "",
+                    key);
                 await Future.delayed(Duration(milliseconds: 2000));
-                selectedDatefl =
-                    new List<DateTime>(postStore.postForCurList.posts.length);
-                selectedPack =
-                    new List<Pack>(postStore.postForCurList.posts.length);
-                songay = new List<int>(postStore.postForCurList.posts.length);
+
                 if (mounted) {
                   setState(() {});
                 }
@@ -205,8 +276,12 @@ class _MyPostScreenState extends State<MyPostScreen> {
               },
               onRefresh: () async {
                 print("refresh");
-                postStore.getPostForCurs(false);
-
+                postStore.getPostForCurs(
+                    false,
+                    _searchController11 != null
+                        ? _searchController11.text.toString()
+                        : "",
+                    key);
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) setState(() {});
                 isRefreshing1 = true;
@@ -516,7 +591,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                                 "Bạn có chắc chắn muốn xóa bài đăng?",
                                                 style: TextStyle(
                                                     fontSize: 24,
-                                                    color: Colors.black,
+                                                    
                                                     fontFamily: 'intel'),
                                               ),
                                               content: Row(
@@ -559,7 +634,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           ),
           ExpansionTile(
             title: Padding(
-              padding: const EdgeInsets.only(left:12.0),
+              padding: const EdgeInsets.only(left: 12.0),
               child: Text(
                 "Gia hạn",
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
@@ -574,60 +649,63 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(left:12.0),
+                      padding: const EdgeInsets.only(left: 12.0),
                       child: Text(
                           "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
                     ),
                     if (selectedDatefl[index] != null) (SizedBox(height: 12)),
                     if (selectedDatefl[index] != null &&
                         DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
-                      DropdownButtonFormField<Pack>(
-                        hint: Text("Chọn gói bài đăng mới"),
-                        value: selectedPack[index],
-                        decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                          onPressed: () => setState(() {
-                            selectedPack[index] = null;
-                          }),
-                          icon: Icon(Icons.clear),
-                        )),
-                        onChanged: (Pack Value) {
-                          setState(() {
-                            selectedPack[index] = Value;
-                          });
-                        },
-                        items: postStore.packList.packs.map((Pack type) {
-                          return DropdownMenuItem<Pack>(
-                            value: type,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.account_circle,
-                                  color: const Color(0xFF167F67),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  type.tenGoi,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                      Padding(
+                        padding: const EdgeInsets.only(left:12.0),
+                        child: DropdownButtonFormField<Pack>(
+                          hint: Text("Chọn gói bài đăng mới"),
+                          value: selectedPack[index],
+                          decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                            onPressed: () => setState(() {
+                              selectedPack[index] = null;
+                            }),
+                            icon: Icon(Icons.clear),
+                          )),
+                          onChanged: (Pack Value) {
+                            setState(() {
+                              selectedPack[index] = Value;
+                            });
+                          },
+                          items: postStore.packList.packs.map((Pack type) {
+                            return DropdownMenuItem<Pack>(
+                              value: type,
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.account_circle,
+                                    color: const Color(0xFF167F67),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    type.tenGoi,
+                                    style: TextStyle(),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     if (selectedDatefl[index] != null) (SizedBox(height: 12)),
                     if (selectedDatefl[index] != null)
                       Padding(
-                        padding: const EdgeInsets.only(left:12.0),
+                        padding: const EdgeInsets.only(left: 12.0),
                         child: (Text(
                             "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
                       ),
                     SizedBox(height: 12),
                     if (selectedDatefl[index] != null)
                       Padding(
-                        padding: const EdgeInsets.only(left:12.0),
+                        padding: const EdgeInsets.only(left: 12.0),
                         child: (Text(
                             "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
                       ),
@@ -660,7 +738,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Bạn không đủ số dư để thực hiện giao dịch?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          color: Colors.black,
+                                          
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(
@@ -702,7 +780,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Gia hạn bài viết và thực hiện thanh toán?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          color: Colors.black,
+                                          
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(

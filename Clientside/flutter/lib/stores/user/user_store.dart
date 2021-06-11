@@ -132,7 +132,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //log("error ne: ");
@@ -197,7 +197,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -217,7 +217,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //log("error ne: ");
@@ -240,7 +240,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //log("error ne: ");
@@ -280,7 +280,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //log("error ne: ");
@@ -324,7 +324,7 @@ abstract class _UserStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -355,7 +355,7 @@ abstract class _UserStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });

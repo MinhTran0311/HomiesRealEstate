@@ -148,20 +148,4 @@ class _HomePageScreenState extends State<HomePageScreen> {
       ),
     );
   }
-  int rolePermission()
-  {
-    print("role" + Preferences.userRole);
-
-    switch(Preferences.userRole)
-    {
-      case "Admin":
-        return 3;
-      case "Censor":
-        return 2;
-      case "User":
-        return 1;
-      default:
-        return 0;
-    }
-  }
 }

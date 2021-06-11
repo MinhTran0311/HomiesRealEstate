@@ -1,8 +1,11 @@
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CardItem extends StatelessWidget {
-  const CardItem({
+  CardItem({
     Key key,
     @required this.text,
     @required this.icon,
@@ -20,25 +23,25 @@ class CardItem extends StatelessWidget {
   final Color colortext;
   final Color coloricon;
   final bool isFunction;
-
+  ThemeStore _themeStore;
   @override
   Widget build(BuildContext context) {
+    _themeStore = Provider.of<ThemeStore>(context);
     return Container(
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: FlatButton(
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             onPressed: press,
-            color: colorbackgroud,
+            color: colorbackgroud ?? (_themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) : Colors.grey[200]),
             padding: EdgeInsets.all(20),
             child: Row(
               children: [
                 Icon(
                   icon,
                   size: 30,
-                  color: coloricon,
+                  color: coloricon ?? Colors.amber,
                 ),
                 SizedBox(
                   width: 40,
@@ -49,8 +52,8 @@ class CardItem extends StatelessWidget {
                       TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 20,
-                          fontFamily: FontFamily.roboto,
-                          color: colortext)
+                          color: colortext ?? ((_themeStore.darkMode ? Colors.white : Colors.black))
+                      )
                   ),
                 ),
                 !isFunction ? Icon(

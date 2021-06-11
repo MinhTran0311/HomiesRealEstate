@@ -190,7 +190,7 @@ class PostApi {
     }
   }
 
-  Future<PostList> getPostsforcur(int skipCount, int maxResultCount,) async {
+  Future<PostList> getPostsforcur(int skipCount, int maxResultCount, String filter, int key,) async {
     try {
       final res = await _dioClient.get(
         "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllBaiDangsByCurrentUser",
@@ -198,7 +198,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-          queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount},
+          queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount,"filter":filter,"phanLoaiBaiDang":key },
       );
 
       return PostList.fromJsonmypost(res);
@@ -354,7 +354,7 @@ class PostApi {
       throw e;
     }
   }
-  Future<PostList> getfavopost(int iduser, int skipCountmypost, int maxCount) async {
+  Future<PostList> getfavopost(int iduser, int skipCountmypost, int maxCount, String s) async {
     try {
       final res = await _dioClient.get(
         "https://homies.exscanner.edu.vn/api/services/app/BaiGhimYeuThichs/GetAllBaiGhimByCurrentUser",
@@ -362,7 +362,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-        queryParameters: {"id": iduser,"skipCount": skipCountmypost, "maxResultCount":maxCount},
+        queryParameters: {"id": iduser,"skipCount": skipCountmypost, "maxResultCount":maxCount,"filter":s},
       );
       return PostList.fromJsonfavopost(res);
     } catch (e) {

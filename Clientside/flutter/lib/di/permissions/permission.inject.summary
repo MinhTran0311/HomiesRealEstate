@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/di/permissions/permission.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

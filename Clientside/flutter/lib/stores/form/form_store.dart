@@ -561,7 +561,7 @@ abstract class _FormStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });

@@ -192,7 +192,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -281,7 +281,7 @@ abstract class _PostStore with Store {
   //       throw error;
   //     }
   //     else{
-  //       errorStore.errorMessage="Please check your internet connection and try again!";
+  //       errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
   //       throw error;
   //     }
   //   });
@@ -304,7 +304,7 @@ abstract class _PostStore with Store {
           throw error;
         }
         else{
-          errorStore.errorMessage="Please check your internet connection and try again!";
+          errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
           throw error;
         }
       });
@@ -384,7 +384,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -422,7 +422,7 @@ abstract class _PostStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -460,7 +460,7 @@ abstract class _PostStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -490,7 +490,7 @@ abstract class _PostStore with Store {
           throw error;
         }
         else{
-          errorStore.errorMessage="Please check your internet connection and try again!";
+          errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
           throw error;
         }
       });
@@ -519,7 +519,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -534,17 +534,18 @@ abstract class _PostStore with Store {
   @observable
   PostList postForCurList=new PostList();
   @computed
-  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending && isIntialLoadingpostforcur;
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending ;
   @observable
   bool successPostForCur = false;
   @observable
-  Future getPostForCurs(bool isLoadMore) async {
+  Future getPostForCurs(bool isLoadMore, String filter, int key) async {
     if (!isLoadMore){
       skipCountmypost = 0;
     }
     else
-      skipCountmypost += Preferences.skipIndex;
-    final future = _repository.getPostsforcur(skipCountmypost,Preferences.maxCount);
+      skipCountmypost +=
+          Preferences.skipIndex;
+    final future = _repository.getPostsforcur(skipCountmypost,Preferences.maxCount,filter,key);
     fetchPostForCursFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForCur = true;
@@ -562,7 +563,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -589,7 +590,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -616,7 +617,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -643,7 +644,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -671,7 +672,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -690,13 +691,13 @@ abstract class _PostStore with Store {
   @observable
   bool successfavopost = false;
   @observable
-  Future getfavopost(int iduser,bool isLoadMore) async {
+  Future getfavopost(int iduser,bool isLoadMore, String s) async {
     if (!isLoadMore){
       skipCountmypost = 0;
     }
     else
       skipCountmypost += Preferences.skipIndex;
-    final future = _repository.getfavopost(iduser,skipCountmypost,Preferences.maxCount);
+    final future = _repository.getfavopost(iduser,skipCountmypost,Preferences.maxCount,s);
     fetchpostfavoFuture = ObservableFuture(future);
     future.then((favopost) {
       if (!isLoadMore) {
@@ -713,7 +714,7 @@ abstract class _PostStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });

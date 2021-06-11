@@ -1,8 +1,10 @@
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpScreen extends StatefulWidget {
@@ -15,10 +17,12 @@ class _HelpScreenState extends State<HelpScreen> {
   void initState() {
     super.initState();
   }
-
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _themeStore = Provider.of<ThemeStore>(context);
+
   }
 
   @override
@@ -28,15 +32,7 @@ class _HelpScreenState extends State<HelpScreen> {
       appBar: AppBar(
         title: Text(
           "Trợ Giúp",
-          style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.white,
-              fontSize: 23,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.0),
-        ),
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-      ),
+      ),),
       body: _buildBody(),
     );
   }
@@ -56,7 +52,7 @@ class _HelpScreenState extends State<HelpScreen> {
       builder: (context) {
         return Material(
           child: _buildMenuItems(),
-          color: Color.fromRGBO(236, 236, 238, 1),
+          //color: Color.fromRGBO(236, 236, 238, 1),
           // color: Colors.white,
         );
       },
@@ -67,7 +63,7 @@ class _HelpScreenState extends State<HelpScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
-        decoration: BoxDecoration(
+        decoration:!_themeStore.darkMode? BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -80,7 +76,7 @@ class _HelpScreenState extends State<HelpScreen> {
             ],
             tileMode: TileMode.repeated,
           ),
-        ),
+        ):null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -96,7 +92,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 boxShadow: [
                   // color: Colors.white, //background color of box
                   BoxShadow(
-                    color: Color.fromRGBO(198, 199, 202, 1),
+                   color: Color.fromRGBO(198, 199, 202, 1),
                     blurRadius: 12, // soften the shadow
                     spreadRadius: 0.01, //extend the shadow
                     offset: Offset(
@@ -105,7 +101,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                   )
                 ],
-                color: Colors.white,
+                color: !_themeStore.darkMode?Colors.amber:Color.fromRGBO(18, 22, 28, 1),
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Column(
@@ -192,7 +188,7 @@ class _HelpScreenState extends State<HelpScreen> {
         ),
         child: Container(
           padding: EdgeInsets.all(5),
-          color: Colors.white,
+          color:!_themeStore.darkMode?Colors.white:null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

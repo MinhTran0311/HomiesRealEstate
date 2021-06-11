@@ -4,7 +4,7 @@ class Preferences {
   static const String is_logged_in = "isLoggedIn";
   static const String auth_token = "authToken";
   static String access_token = "";
-  static const String is_dark_mode = "is_dark_mode";
+  static bool is_dark_mode = false;
   static const String current_language = "current_language";
   static const String imgbb_api_key = "e654c99ecc0c0269a734e39f35249c8f";
   static String userRole = "";
@@ -65,7 +65,6 @@ class Preferences {
   static const PagesXas = "Pages.Xas";
   static const PagesXasCreate = "Pages.Xas.Create";
   static const PagesXasEdit = "Pages.Xas.Edit";
-  static const PagesXasDelete = "Pages.Xas.Delete";
   static const PagesHuyens = "Pages.Huyens";
   static const PagesHuyensCreate = "Pages.Huyens.Create";
   static const PagesHuyensEdit = "Pages.Huyens.Edit";
