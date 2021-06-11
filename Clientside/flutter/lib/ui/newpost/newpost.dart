@@ -117,6 +117,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
+    //set initialLoading = true ;
     _postStore = Provider.of<PostStore>(context);
     _townStore = Provider.of<TownStore>(context);
     _userStore = Provider.of<UserStore>(context);
@@ -164,20 +165,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Scaffold(
         primary: true,
         appBar: AppBar(
-          // Icon: Icons.app_registration,
-          backgroundColor: Colors.amber[600],
-          title: Text(
-            "Đăng tin bất động sản",
-            style: Theme.of(context).textTheme.button.copyWith(
-                color: Colors.white,
-                fontSize: 24,
-                // backgroundColor:Colors.amber ,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.0),
-          ),
+          title: Text("Đăng tin bất động sản"),
+          //actions: _buildActions(context),
           centerTitle: true,
-        ),
-        body: Material(child: _buildbody()));
+          ),
+        body: _buildbody());
   }
 
   Widget _buildbody() {
@@ -235,10 +227,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
+                    colors: !_themeStore.darkMode?[
                   Colors.amber[600],
                   Colors.amber[50],
-                ])),
+                ]:[
+                Colors.blue[800],
+                Color.fromRGBO(18, 22, 28, 1),
+                    ]
+                )),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
@@ -404,7 +400,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     ),
                     Text(
                       type.tenDanhMuc,
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(),
                     ),
                   ],
                 ),
@@ -467,7 +463,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         ),
                         Text(
                           type.tenDanhMuc,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(),
                         ),
                       ],
                     ),
@@ -526,7 +522,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         ),
                         Text(
                           type.tenDanhMuc,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(),
                         ),
                       ],
                     ),
@@ -636,10 +632,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
               height: 50,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+                // borderRadius: BorderRadius.only(
+                //   topLeft: Radius.circular(20),
+                //   topRight: Radius.circular(20),
+                // ),
               ),
               child: Center(
                 child: Text(
@@ -702,7 +698,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ),
                   Text(
                     type.tenHuyen,
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(),
                   ),
                 ],
               ),
@@ -751,7 +747,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ),
                   Text(
                     type.tenXa.length<=22? type.tenXa:type.tenXa=type.tenXa.substring(0,20)+"..",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(),
                   ),
                 ],
               ),
@@ -913,7 +909,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                       color: const Color(0xFF167F67),),
                                     SizedBox(width: 10,),
                                     Text(type, style: TextStyle(
-                                        color: Colors.black),),
+                                        ),),
                                 ],
                                 )
                             );
@@ -1070,7 +1066,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 ),
                 Text(
                   type.tenGoi,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ],
             ),
@@ -1186,7 +1182,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           child: _image.length == 0
               ? Center(
                   child: IconButton(
-                  icon: Icon(Icons.add_photo_alternate_rounded),
+                  icon: Icon(Icons.add_photo_alternate_rounded,color:!_themeStore.darkMode?Colors.amber:Color.fromRGBO(30, 32, 38, 1) ,),
                   iconSize: 150,
                   onPressed: () => getImage(true),
                 ))
@@ -1216,10 +1212,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               height: 80,
                               child: FlatButton(
                                 padding: EdgeInsets.only(left: 70.0,bottom: 70.0),
-                                // shape: RoundedRectangleBorder(
-                                //     borderRadius: BorderRadius.circular(20),
-                                //     side: BorderSide(color: Colors.white)),
-                                // color: Color(0xFFF5F6F9),
                                 onPressed: () => {clearimage(index)},
                                 child: Icon(
                                   Icons.dangerous,
@@ -1385,7 +1377,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             "Bạn không đủ số dư để thực hiện giao dịch?",
                             style: TextStyle(
                                 fontSize: 24,
-                                color: Colors.black,
+
                                 fontFamily: 'intel'),
                           ),
                           content: Column(
@@ -1427,7 +1419,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                           "Đăng tin và thực hiện thanh toán?",
                           style: TextStyle(
                               fontSize: 24,
-                              color: Colors.black,
+
                               fontFamily: 'intel'),
                         ),
                         content: Row(
@@ -1496,7 +1488,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           message: message,
           title: AppLocalizations.of(context).translate('home_tv_error'),
           duration: Duration(seconds: 3),
-        )..show(context);
+        ).show(context);
       }
     });
 

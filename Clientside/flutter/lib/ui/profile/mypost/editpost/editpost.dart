@@ -12,6 +12,7 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -62,6 +63,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
   final PostStore postStore;
   final TownStore townStore;
   final UserStore userStore;
+  ThemeStore _themeStore;
   _EditpostScreenState(
       {@required this.post, this.postStore, this.townStore, this.userStore});
 
@@ -92,10 +94,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _imageStore = Provider.of<ImageStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
+
     if (!_imageStore.imageLoading) {
       _imageStore.getImagesForDetail(post.id.toString());
     }
-
     if (!postStore.propertiesLoading)
       postStore.getPostProperties(post.id.toString());
   }
@@ -140,21 +143,12 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         primary: true,
-        appBar: AppBar(
-          // Icon: Icons.app_registration,
-          backgroundColor: Colors.amber[600],
-          title: Text(
-            "Chỉnh sửa thông tin bài đăng",
-            style: Theme.of(context).textTheme.button.copyWith(
-                color: Colors.white,
-                fontSize: 23,
-                // backgroundColor:Colors.amber ,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.0),
-          ),
-          centerTitle: true,
-        ),
-        body: Material(child: _buildbody()));
+      appBar: AppBar(
+        title: Text("Chỉnh sửa thông tin"),
+        //actions: _buildActions(context),
+        centerTitle: true,
+      ),
+        body: _buildbody());
   }
 
   Widget _buildbody() {
@@ -182,7 +176,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
         return
             !postStore.propertiesLoading&&!_imageStore.imageLoading
              ?
-            Material(child: _buildBody())
+            _buildBody()
         //;
           : CustomProgressIndicatorWidget();
       },
@@ -220,10 +214,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                  Colors.amber[600],
-                  Colors.amber[50],
-                ])),
+          colors: !_themeStore.darkMode?[
+          Colors.amber[600],
+          Colors.amber[50],
+          ]:[
+      Colors.blue[800],
+      Color.fromRGBO(18, 22, 28, 1),
+            ])),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
@@ -396,7 +393,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     ),
                     Text(
                       type.tenDanhMuc,
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(),
                     ),
                   ],
                 ),
@@ -459,7 +456,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                         ),
                         Text(
                           type.tenDanhMuc,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(),
                         ),
                       ],
                     ),
@@ -518,7 +515,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                         ),
                         Text(
                           type.tenDanhMuc,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(),
                         ),
                       ],
                     ),
@@ -694,7 +691,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   ),
                   Text(
                     type.tenHuyen,
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(),
                   ),
                 ],
               ),
@@ -743,7 +740,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   ),
                   Text(
                     type.tenXa.length<=21? type.tenXa:type.tenXa=type.tenXa.substring(0,19)+"..",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(),
                   ),
                 ],
               ),
@@ -905,7 +902,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                                 color: const Color(0xFF167F67),),
                               SizedBox(width: 10,),
                               Text(type, style: TextStyle(
-                                  color: Colors.black),),
+                                  ),),
                             ],
                           )
                       );
@@ -1073,7 +1070,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
           child: _image.length == 0
               ? Center(
                   child: IconButton(
-                  icon: Icon(Icons.add_photo_alternate_rounded),
+                    icon: Icon(Icons.add_photo_alternate_rounded,color:!_themeStore.darkMode?Colors.amber:Color.fromRGBO(30, 32, 38, 1) ,),
                   iconSize: 150,
                   onPressed: () => getImage(true),
                 ))

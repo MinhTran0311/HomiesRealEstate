@@ -583,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     color: _languageStore.locale == object.locale
                         ? Theme.of(context).primaryColor
-                        : _themeStore.darkMode
+                        :_themeStore.darkMode 
                             ? Colors.white
                             : Colors.black,
                   ),

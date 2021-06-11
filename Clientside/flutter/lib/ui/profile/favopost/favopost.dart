@@ -61,18 +61,13 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Icon: Icons.app_registration,
-        backgroundColor: Colors.white,
         title: Text(
           "Bài đăng yêu thích",
           style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.amber,
               fontSize: 23,
               // backgroundColor:Colors.amber ,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.0),
+              ),
         ),
-        centerTitle: true,
       ),
       body: _buildBody(),
     );

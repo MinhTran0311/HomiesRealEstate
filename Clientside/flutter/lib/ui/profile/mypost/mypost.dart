@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
@@ -80,16 +81,14 @@ class _MyPostScreenState extends State<MyPostScreen> {
     return Scaffold(
       appBar: AppBar(
         // Icon: Icons.app_registration,
-        backgroundColor: Colors.white,
         title: Text(
           "Bài đăng của tôi",
+          //size:24,
           style: Theme.of(context).textTheme.button.copyWith(
-              color: Colors.black,
-              fontSize: 23,
               fontWeight: FontWeight.bold,
+              fontSize: 20,
               letterSpacing: 1.0),
         ),
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -147,7 +146,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           style: TextStyle(
             fontSize: 28,
             height: 1,
-            color: Colors.black,
+            
             fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
@@ -192,14 +191,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
         padding: const EdgeInsets.only(left:24.0),
         child: DropdownButton<String>(
           value: dropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          iconSize: 24,
-          elevation: 16,
-          style: const TextStyle(color: Colors.deepPurple),
-          underline: Container(
-            height: 2,
-            color: Colors.deepPurpleAccent,
-          ),
+        //  elevation: 16
           onChanged: (String newValue) {
             setState(() {
               dropdownValue = newValue;
@@ -226,9 +218,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
           }).toList(),
         ),
       ),
-      // SizedBox(
-      //   height: 12,
-      // ),
       _buildListView()
     ]);
   }
@@ -602,7 +591,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                                 "Bạn có chắc chắn muốn xóa bài đăng?",
                                                 style: TextStyle(
                                                     fontSize: 24,
-                                                    color: Colors.black,
+                                                    
                                                     fontFamily: 'intel'),
                                               ),
                                               content: Row(
@@ -698,7 +687,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                   ),
                                   Text(
                                     type.tenGoi,
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(),
                                   ),
                                 ],
                               ),
@@ -749,7 +738,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Bạn không đủ số dư để thực hiện giao dịch?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          color: Colors.black,
+                                          
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(
@@ -791,7 +780,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Gia hạn bài viết và thực hiện thanh toán?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          color: Colors.black,
+                                          
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(
