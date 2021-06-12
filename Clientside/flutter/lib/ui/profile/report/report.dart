@@ -87,7 +87,7 @@ class _ReportPageState extends State<ReportPage>{
                         children: [
                           Align(
                             alignment: Alignment.topCenter,
-                            child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+                            child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
                           ),
                           Align(
                             alignment: Alignment.topLeft,
@@ -145,7 +145,7 @@ class _ReportPageState extends State<ReportPage>{
                           children: [
                             Align(
                               alignment: Alignment.topCenter,
-                              child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+                              child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
                             ),
                             Align(
                               alignment: Alignment.topLeft,

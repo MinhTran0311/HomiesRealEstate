@@ -443,13 +443,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             fontSize: 30.0,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily: FontFamily.roboto))
+                                            ))
                                         : Text("Người dùng ",
                                         style: TextStyle(
                                             fontSize: 30.0,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily: FontFamily.roboto));
+                                            ));
 
                                 }),
                               Observer(builder: (context) {
@@ -479,7 +479,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               fontSize: 17.0,
                                               // fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily: FontFamily.roboto)),
+                                              )),
                                     ],
                                   ) : Container();
                                 }
@@ -508,7 +508,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontSize: 20,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontFamily: FontFamily.roboto),
+                                                ),
                                           )
                                         : Text(
                                             "0",
@@ -516,7 +516,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontSize: 20,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontFamily: FontFamily.roboto),
+                                                ),
                                           );
                                   }),
                                   Text(
@@ -524,7 +524,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Colors.white,
-                                        fontFamily: FontFamily.roboto),
+                                        ),
                                   )
                                 ],
                               ),
@@ -549,14 +549,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             fontSize: 20,
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: FontFamily.roboto),
+                                            ),
                                       ),
                                       Text(
                                         "Bài đã đăng",
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.white,
-                                            fontFamily: FontFamily.roboto),
+                                            ),
                                       )
                                     ],
                                   ),

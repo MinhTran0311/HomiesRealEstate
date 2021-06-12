@@ -73,62 +73,30 @@ class _WalletPageState extends State<WalletPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 500,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
-        // border: Border.all(color: Colors.white,width: 250.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white,
-            spreadRadius: 5,
-            blurRadius: 0,
-            offset: Offset(0, 3), // changes position of shadow
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Ví tiền",),
+          bottom: TabBar(
+            labelColor: Colors.white,
+            tabs: [
+              Tab(child: Text("Nạp tiền",style: TextStyle(fontSize: 16),),),
+              Tab(child: Text("Lịch sử giao dịch",style: TextStyle(fontSize: 16),),),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            buildWallet(),
+            Observer(
+                builder: (context) {
+                  return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
+                }
+            )
+          ],
+        ),
       ),
-      child: Container(
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
-                //   // border: Border.all(color: Colors.white,width: 1.0),
-                //   boxShadow: [
-                //     BoxShadow(
-                //       color: Colors.black26,
-                //       spreadRadius: 5,
-                //       blurRadius: 7,
-                //       offset: Offset(0, 3), // changes position of shadow
-                //     ),
-                //   ],
-                // ),
-        // padding: const EdgeInsets.all(20),
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text("Ví tiền",),
-              bottom: TabBar(
-                labelColor: Colors.white,
-                tabs: [
-                  Tab(text: "Nạp tiền",),
-                  Tab(text: "Lịch sử giao dịch",),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                buildWallet(),
-                Observer(
-                    builder: (context) {
-                      return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
-                    }
-                )
-              ],
-            ),
-          ),
-        )
-
-      )
     );
   }
 
@@ -177,7 +145,7 @@ class _WalletPageState extends State<WalletPage>{
           // SizedBox(height: 20,),
           // Center(
           //   child: Text("Lịch sử giao dịch",
-          //     style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,fontFamily: FontFamily.roboto),),
+          //     style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,,),
           // ),
 
           Container(
@@ -366,7 +334,7 @@ class _WalletPageState extends State<WalletPage>{
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Colors.white)
+            // side: BorderSide(color: Colors.white)
         ),
         child: Container(
           height: 60,
@@ -450,7 +418,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.grey,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
           ],
         );
       }
@@ -459,7 +427,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.deepOrange),),
           ],
         );
       }
@@ -469,14 +437,14 @@ class _WalletPageState extends State<WalletPage>{
         children: [
           // Icon(Icons.access_time,color: Colors.grey,size: 16,),
           // buildText("Ngày thanh toán: ",Colors.grey),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
         ],
       );
     }
   }
 
   Widget buildText(String text,Color c){
-    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
+    return Text(text,style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
   }
 
   Widget buildSurnameField(String title,TextEditingController controller) {
@@ -614,7 +582,7 @@ class _NapTienPageState extends State<NapTienPage> {
       child: Column(
         children: [
           Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
-          Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
+          Text('Số tiền',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
           TextFormField(
               controller: Ctlmoneysend,
               keyboardType: TextInputType.number,
@@ -626,7 +594,7 @@ class _NapTienPageState extends State<NapTienPage> {
                   icon: Icon(Icons.attach_money,color: Colors.amber,)
               )
           ),
-          // Observer(builder: (context)=> Ctlmoneysend.text.length<4?Text("Số tiền tối thiểu là 1000",style: TextStyle(fontFamily: FontFamily.roboto,color: Colors.redAccent),):Container())
+          // Observer(builder: (context)=> Ctlmoneysend.text.length<4?Text("Số tiền tối thiểu là 1000",style: TextStyle(color: Colors.redAccent),):Container())
 
         ],
       ),

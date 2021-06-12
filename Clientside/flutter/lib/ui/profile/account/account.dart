@@ -152,8 +152,7 @@ class _AccountPageState extends State<AccountPage>{
                     children: <Widget>[
                       Text("Giới thiệu",
                         style: TextStyle(
-                            fontFamily: FontFamily.roboto,
-                            fontWeight: FontWeight.bold,
+                                                        fontWeight: FontWeight.bold,
                             color: Colors.black,
                             fontSize: 24
                         ),
@@ -639,8 +638,7 @@ class TextIcon extends StatelessWidget{
           Text(" "+text,
             style: TextStyle(
                 fontSize: 20,
-                fontFamily: FontFamily.roboto,
-                color: Colors.black
+                                color: Colors.black
             ),
           )
         ],

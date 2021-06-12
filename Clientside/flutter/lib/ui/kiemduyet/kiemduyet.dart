@@ -20,20 +20,19 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 class KiemDuyetPage extends StatefulWidget {
-  KiemDuyetPage({Key key, this.title,this.UserID}) : super(key: key);
+  KiemDuyetPage({Key key, this.title,}) : super(key: key);
 
   final String title;
-  final int UserID;
 
   @override
-  _KiemDuyetPageState createState() => _KiemDuyetPageState(UserID: UserID);
+  _KiemDuyetPageState createState() => _KiemDuyetPageState();
 }
 
 class _KiemDuyetPageState extends State<KiemDuyetPage>{
   _KiemDuyetPageState({
-    Key key,this.UserID
+    Key key,
   }) : super();
-  LSGDStore _lsgdStore;final int UserID;
+  LSGDStore _lsgdStore;
   List<bool> isexpanded = [];
   UserStore _userStore;
   final ScrollController _scrollController =
@@ -249,88 +248,88 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           );
         });
   }
-  Widget _buildCardKiemDuyet(lichsugiaodich lsgd,i){
-    return Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.white)
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: Column(
-                children: [
-                  lsgd.chiTietHoaDonBaiDangId ==null ?
-                  Row(children: [
-                      Icon(Icons.arrow_upward,color: Colors.blue,),
-                      Text("Nạp tiền",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                    ],
-                  ):
-                  Row(children: [
-                    Icon(Icons.arrow_upward,color: Colors.orangeAccent,),
-                    Text("Thanh Toán",style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                  ],
-                  ),
-                  Row(children: [
-                    Text(" "),
-                    Icon(Icons.access_time,color: Colors.grey,size: 16,),
-                    Text(" "+DatetimeToString(lsgd.thoiDiem),style: TextStyle(fontSize: 16,fontFamily: FontFamily.roboto,color: Colors.grey),)
-                  ],
-                  ),
-                  Row(children: [
-                    Icon(Icons.attach_money,color: Colors.black,),
-                    Text(lsgd.soTien.toString(),style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                  ],
-                  ),
-
-                  lsgd.UserName.isNotEmpty?Row(children: [
-                    Icon(Icons.account_circle_outlined,color: Colors.black,),
-                    Text(" "+lsgd.UserName,style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                  ],
-                  ):Container(),
-                  lsgd.UserNameKiemDuyet.isNotEmpty && lsgd.chiTietHoaDonBaiDangId ==null ?Row(children: [
-                    Icon(Icons.account_circle_outlined,color: Colors.black,),
-                    Text(" "+lsgd.UserNameKiemDuyet,style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                  ],
-                  ):Container(),
-                  Row(children: [
-                    Text(" "),
-                    Icon(Icons.edit_outlined,color: Colors.black,size: 16,),
-                    Text(" "+lsgd.ghiChu,style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),)
-                  ],
-                  ),
-
-                  lsgd.chiTietHoaDonBaiDangName.isNotEmpty ? Row(children: [
-                    Icon(Icons.article_outlined,color: Colors.black,),
-                    Container(width:300,child: Text(" "+lsgd.chiTietHoaDonBaiDangName,style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,color: Colors.black),overflow: TextOverflow.fade,))
-                  ],
-                  ):Container(),
-
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                // crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  lsgd.chiTietHoaDonBaiDangId ==null ? CupertinoSwitch(
-                    value:  !checkKiemDuyet(lsgd.kiemDuyetVienId),
-                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, UserID,i);  });},
-                  ):Container(),
-
-                ],
-              ),
-            ),
-          ],
-           ),
-      ),
-    );
-  }
+  // Widget _buildCardKiemDuyet(lichsugiaodich lsgd,i){
+  //   return Card(
+  //     shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(20),
+  //         side: BorderSide(color: Colors.white)
+  //     ),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(10.0),
+  //       child: Stack(
+  //         children: <Widget>[
+  //           Align(
+  //             alignment: Alignment.topLeft,
+  //             child: Column(
+  //               children: [
+  //                 lsgd.chiTietHoaDonBaiDangId ==null ?
+  //                 Row(children: [
+  //                     Icon(Icons.arrow_upward,color: Colors.blue,),
+  //                     Text("Nạp tiền",style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                   ],
+  //                 ):
+  //                 Row(children: [
+  //                   Icon(Icons.arrow_upward,color: Colors.orangeAccent,),
+  //                   Text("Thanh Toán",style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                 ],
+  //                 ),
+  //                 Row(children: [
+  //                   Text(" "),
+  //                   Icon(Icons.access_time,color: Colors.grey,size: 16,),
+  //                   Text(" "+DatetimeToString(lsgd.thoiDiem),style: TextStyle(fontSize: 16,color: Colors.grey),)
+  //                 ],
+  //                 ),
+  //                 Row(children: [
+  //                   Icon(Icons.attach_money,color: Colors.black,),
+  //                   Text(lsgd.soTien.toString(),style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                 ],
+  //                 ),
+  //
+  //                 lsgd.UserName.isNotEmpty?Row(children: [
+  //                   Icon(Icons.account_circle_outlined,color: Colors.black,),
+  //                   Text(" "+lsgd.UserName,style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                 ],
+  //                 ):Container(),
+  //                 lsgd.UserNameKiemDuyet.isNotEmpty && lsgd.chiTietHoaDonBaiDangId ==null ?Row(children: [
+  //                   Icon(Icons.account_circle_outlined,color: Colors.black,),
+  //                   Text(" "+lsgd.UserNameKiemDuyet,style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                 ],
+  //                 ):Container(),
+  //                 Row(children: [
+  //                   Text(" "),
+  //                   Icon(Icons.edit_outlined,color: Colors.black,size: 16,),
+  //                   Text(" "+lsgd.ghiChu,style: TextStyle(fontSize: 18,color: Colors.black),)
+  //                 ],
+  //                 ),
+  //
+  //                 lsgd.chiTietHoaDonBaiDangName.isNotEmpty ? Row(children: [
+  //                   Icon(Icons.article_outlined,color: Colors.black,),
+  //                   Container(width:300,child: Text(" "+lsgd.chiTietHoaDonBaiDangName,style: TextStyle(fontSize: 18,color: Colors.black),overflow: TextOverflow.fade,))
+  //                 ],
+  //                 ):Container(),
+  //
+  //               ],
+  //             ),
+  //           ),
+  //           Align(
+  //             alignment: Alignment.topRight,
+  //             child: Column(
+  //               // mainAxisAlignment: MainAxisAlignment.end,
+  //               // crossAxisAlignment: CrossAxisAlignment.end,
+  //               children: [
+  //                 lsgd.chiTietHoaDonBaiDangId ==null ? CupertinoSwitch(
+  //                   value:  !checkKiemDuyet(lsgd.kiemDuyetVienId),
+  //                   onChanged: (bool value) { setState(() {_showMyDialog(lsgd,_userStore.userCurrent.UserID,i);  });},
+  //                 ):Container(),
+  //
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //          ),
+  //     ),
+  //   );
+  // }
   String DatetimeToString(String datetime){
     return "${datetime.substring(8,10)}/${datetime.substring(5,7)}/${datetime.substring(0,4)}";
   }
@@ -354,12 +353,6 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     return SizedBox.shrink();
   }
   _showSuccssfullMesssage(String message,int UserID,int i) {
-    if(UserID== _lsgdStore.listlsgdAll.listLSGDs[i].userId){
-      _userStore.userCurrent.wallet +=  _lsgdStore.listlsgdAll.listLSGDs[i].soTien;
-    }
-    _lsgdStore.listlsgdAll.listLSGDs[i].kiemDuyetVienId = UserID;
-    _lsgdStore.setKiemDuyenVienID(UserID, i);
-    print("Duongdebug: ${_userStore.userCurrent.wallet}  , ${_lsgdStore.listlsgdAll.listLSGDs[i].soTien}  ,  ${UserID} ,  ${_lsgdStore.listlsgdAll.listLSGDs[i].kiemDuyetVienId}");
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createSuccess(
@@ -398,8 +391,10 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             TextButton(
               child: Text('Cập nhật'),
               onPressed: () {
+                _lsgdStore.setKiemDuyenVienID(UserID, i);
                 _lsgdStore.KiemDuyetGiaoDich(lsgd.id);
                 _showSuccssfullMesssage("Cập nhật thành công",UserID,i);
+                _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 Navigator.of(context).pop();
               },
             ),
@@ -410,6 +405,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
   Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,i){
     return Card(
+      
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -421,26 +417,6 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           ],
       ),
     );
-    // return  ExpansionPanelList(
-    //         animationDuration: Duration(seconds: 2),
-    //         dividerColor: Colors.grey[400],
-    //         elevation: 1,
-    //         expandedHeaderPadding: EdgeInsets.all(0),
-    //       children: [
-    //         ExpansionPanel(
-    //             headerBuilder: (BuildContext context,bool isexpanded){
-    //              return buildCardKiemDuyetheaderBuilder(lsgd);
-    //             },
-    //             body: buildCardKiemDuyetBody(lsgd),
-    //           isExpanded:isexpand
-    //         )
-    //       ],
-    //     expansionCallback: (int i,bool e){setState(() {
-    //       isexpanded[i] =! isexpanded[i];
-    //     });} ,
-    //     // ),
-    //   // ),
-    // );
   }
   Widget buildCardKiemDuyetBody(lichsugiaodich lsgd,i){
     bool naptien;
@@ -553,51 +529,55 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             ),
             Align(
                 alignment: Alignment.bottomCenter,
-                child: lsgd.kiemDuyetVienId!=null? ElevatedButton(
-                  child: Container(
-                    width: 300,
-                    height: 30,
-                    child: Center(
-                      child: Text(
-                          "Đã kiểm duyệt",
-                          style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
+                child:Observer(
+                  builder: (context){
+                    return lsgd.kiemDuyetVienId!=null? ElevatedButton(
+                      child: Container(
+                        width: 300,
+                        height: 30,
+                        child: Center(
+                          child: Text(
+                              "Đã kiểm duyệt",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.lightGreen),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            side: BorderSide(color: Colors.red),
+                      style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.lightGreen),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                side: BorderSide(color: Colors.red),
+                              )
                           )
-                      )
-                  ),
-                  onPressed:null,
-                ):ElevatedButton(
-                  child: Container(
-                    width: 300,
-                    height: 30,
-                    child: Center(
-                      child: Text(
-                          "Chưa kiểm duyệt",
-                          style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
                       ),
-                    ),
-                  ),
-                  style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                            side: BorderSide(color: Colors.red),
+                      onPressed:null,
+                    ):ElevatedButton(
+                      child: Container(
+                        width: 300,
+                        height: 30,
+                        child: Center(
+                          child: Text(
+                              "Chưa kiểm duyệt",
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: Colors.white)
+                          ),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                side: BorderSide(color: Colors.red),
+                              )
                           )
-                      )
-                  ),
-                  onPressed:(){
-                    setState(() {_showMyDialog(lsgd, UserID,i);  });
+                      ),
+                      onPressed:(){
+                        setState(() {_showMyDialog(lsgd, _userStore.userCurrent.UserID,i);  });
+                      },
+                    );
                   },
                 )
             )
@@ -616,18 +596,11 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     if(lsgd.chiTietHoaDonBaiDangId!=null){  naptien = false;  datetime = DatetimeToString(lsgd.thoiDiem); }
     else{     naptien = true;   }
     return
-      // Card(
-      // shape: RoundedRectangleBorder(
-      //     borderRadius: BorderRadius.circular(10),
-      //     side: BorderSide(color: Colors.white)
-      // ),
-      // child:
       Container(
         width: double.infinity,
         height: 60,
         padding: const EdgeInsets.all(5),
         child:
-
         Stack(
           children: [
             naptien==true?Align(
@@ -680,7 +653,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     );
   }
   Widget buildText(String text,Color c){
-    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
+    return Text(text,style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
   }
   Widget buildDateConfirm(String date,bool naptien){
     if(naptien == true){
@@ -689,7 +662,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.grey,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
           ],
         );
       }
@@ -698,7 +671,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.deepOrange),),
           ],
         );
       }
@@ -708,7 +681,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
         children: [
           // Icon(Icons.access_time,color: Colors.grey,size: 16,),
           // buildText("Ngày thanh toán: ",Colors.grey),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
         ],
       );
     }
