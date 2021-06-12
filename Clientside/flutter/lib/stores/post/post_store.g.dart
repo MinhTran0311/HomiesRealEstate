@@ -886,8 +886,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getPostForCurs(bool isLoadMore) {
-    final _$future = super.getPostForCurs(isLoadMore);
+  ObservableFuture<dynamic> getPostForCurs(bool isLoadMore, String filter, int key) {
+    final _$future = super.getPostForCurs(isLoadMore,filter,key);
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -916,8 +916,8 @@ mixin _$PostStore on _PostStore, Store {
   }
 
   @override
-  ObservableFuture<dynamic> getfavopost(int iduser, bool isLoadMore) {
-    final _$future = super.getfavopost(iduser, isLoadMore);
+  ObservableFuture<dynamic> getfavopost(int iduser, bool isLoadMore, String s) {
+    final _$future = super.getfavopost(iduser, isLoadMore,s);
     return ObservableFuture<dynamic>(_$future);
   }
 

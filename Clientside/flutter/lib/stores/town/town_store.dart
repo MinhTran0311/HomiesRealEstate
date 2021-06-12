@@ -54,7 +54,7 @@ abstract class _TownStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });
@@ -93,7 +93,7 @@ abstract class _TownStore with Store {
       }
       else {
         errorStore.errorMessage =
-        "Please check your internet connection and try again!";
+        "Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
     });

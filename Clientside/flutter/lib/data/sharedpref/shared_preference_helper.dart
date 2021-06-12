@@ -46,15 +46,15 @@ class SharedPreferenceHelper {
   // Theme:------------------------------------------------------
   Future<bool> get isDarkMode {
     return _sharedPreference.then((prefs) {
-      return prefs.getBool(Preferences.is_dark_mode) ?? false;
+      return Preferences.is_dark_mode;
     });
   }
 
-  Future<void> changeBrightnessToDark(bool value) {
-    return _sharedPreference.then((prefs) {
-      return prefs.setBool(Preferences.is_dark_mode, value);
-    });
-  }
+  // Future<void> changeBrightnessToDark(bool value) {
+  //   return _sharedPreference.then((prefs) {
+  //     return prefs.setBool(Preferences.is_dark_mode, value);
+  //   });
+  // }
 
   // Language:---------------------------------------------------
   Future<String> get currentLanguage {

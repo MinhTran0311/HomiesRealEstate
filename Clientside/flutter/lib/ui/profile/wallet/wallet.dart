@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/FilterLSGD.dart';
@@ -52,12 +53,14 @@ class _WalletPageState extends State<WalletPage>{
   GlobalKey _refresherKey = GlobalKey();
   bool isRefreshing = false;
   String dropdownValue = 'Tất cả';
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
 
     _lsgdStore = Provider.of<LSGDStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     _lsgdStore.setLoaiLSGD("value");
@@ -103,12 +106,8 @@ class _WalletPageState extends State<WalletPage>{
           length: 2,
           child: Scaffold(
             appBar: AppBar(
-              leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
-                  onPressed: (){setState(() {
-                    Navigator.pop(context);
-                  });}),
-              centerTitle: true,
-              title: TabBar(
+              title: Text("Ví tiền",),
+              bottom: TabBar(
                 labelColor: Colors.white,
                 tabs: [
                   Tab(text: "Nạp tiền",),
@@ -144,9 +143,8 @@ class _WalletPageState extends State<WalletPage>{
           SizedBox(height: 20,),
           Center(
             child: Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
-              style: TextStyle(fontSize: 24,fontFamily: FontFamily.roboto),),
+              style: TextStyle(fontSize: 24,),),
           ),
-          SizedBox(height: 20,),
           CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
             isFunction: false,
             press: (){
@@ -208,7 +206,7 @@ class _WalletPageState extends State<WalletPage>{
                             ),
                             Icon(
                               Icons.arrow_drop_down,
-                              color: Colors.black26,
+                              // color: Colors.black26,
                               size: 20,
                             ),
                           ],
@@ -320,7 +318,33 @@ class _WalletPageState extends State<WalletPage>{
           );
         });
   }
-
+  Future<void> _showMyDialog(String name,String date) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Chi tiết lịch sử giao dịch'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(date),
+                Text(name),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   Widget buildCardTransactionHistory(lichsugiaodich lsgd){
     String datetime;
     bool naptien;
@@ -329,81 +353,92 @@ class _WalletPageState extends State<WalletPage>{
     else{     datetime = DatetimeToString(lsgd.thoiDiem);    }
     if(lsgd.chiTietHoaDonBaiDangId!=null){  naptien = false;  datetime = DatetimeToString(lsgd.thoiDiem); }
     else{     naptien = true;   }
-    return Card(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.white)
-      ),
-      child: Container(
-        height: 60,
-        padding: const EdgeInsets.all(5),
-        child: Stack(
-          children: [
-            naptien==true?Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all( Radius.circular(50)),
-                    border: Border.all(color: Colors.grey[400],width: 1.0),
-                  ),
-                  child: Icon(Icons.arrow_upward,color: Colors.blue,size: 30,)
-              ),
-            ):Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all( Radius.circular(50)),
-                    border: Border.all(color: Colors.grey[400],width: 1.0),
-                  ),
-                  child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
-              ),
-            ),
-            naptien==true? Align(
-              alignment: Alignment.topLeft,
-              child:
-                // Icon(Icons.add_circle_outline,color: Colors.blue,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 55),
-                  child: buildText("Nạp tiền",Colors.black),
+    return GestureDetector(
+      onTap: () {
+        if(naptien!=true)
+          _showMyDialog(lsgd.chiTietHoaDonBaiDangName +"\n"+priceFormat(lsgd.soTien),datetime);
+        else{
+          _showMyDialog("Nạp tiền \n"+priceFormat(lsgd.soTien),datetime);
+        }
+
+
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Colors.white)
+        ),
+        child: Container(
+          height: 60,
+          padding: const EdgeInsets.all(5),
+          child: Stack(
+            children: [
+              naptien==true?Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all( Radius.circular(50)),
+                      border: Border.all(color: Colors.grey[400],width: 1.0),
+                    ),
+                    child: Icon(Icons.arrow_upward,color: Colors.blue,size: 30,)
                 ),
-            ):Align(
-              alignment: Alignment.topLeft,
-              child:
-              //Icon(Icons.add_shopping_cart,color: Colors.orange,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 55),
-                  child: SizedBox(width:280,child: buildText("Thanh toán ${lsgd.chiTietHoaDonBaiDangName}",Colors.black)),
+              ):Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all( Radius.circular(50)),
+                      border: Border.all(color: Colors.grey[400],width: 1.0),
+                    ),
+                    child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
                 ),
-            ),
-            naptien==true?Align(
-              alignment: Alignment.bottomRight,
-              child: buildText("+${priceFormat(lsgd.soTien)}",Colors.black),
-            ):Align(
-              alignment: Alignment.bottomRight,
-              child: buildText("-${priceFormat(lsgd.soTien)}",Colors.black),
-            ),
-            // Row(
-            //   children: [
-            //     Icon(Icons.attach_money,color: Colors.redAccent,),
-            //     buildText("Số tiền: "+moneysend+" VND",Colors.black),
-            //   ],
-            // ),
-            Positioned(
-              top: 30,
-                left: 30,
-                child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
-                Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
-            ),
-            SizedBox(height: 5,),
-            Align(alignment: Alignment.topLeft,child: Padding(
-              padding: const EdgeInsets.only(top: 25,left: 55),
-              child: buildDateConfirm(datetime,naptien),
-            )),
-          ],
+              ),
+              naptien==true? Align(
+                alignment: Alignment.topLeft,
+                child:
+                  // Icon(Icons.add_circle_outline,color: Colors.blue,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 55),
+                    child: buildText("Nạp tiền", _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+                  ),
+              ):Align(
+                alignment: Alignment.topLeft,
+                child:
+                //Icon(Icons.add_shopping_cart,color: Colors.orange,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 55),
+                    child: SizedBox(width:280,child: buildText("Thanh toán ${lsgd.chiTietHoaDonBaiDangName}", _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1))),
+                  ),
+              ),
+              naptien==true?Align(
+                alignment: Alignment.bottomRight,
+                child: buildText("+${priceFormat(lsgd.soTien)}", _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+              ):Align(
+                alignment: Alignment.bottomRight,
+                child: buildText("-${priceFormat(lsgd.soTien)}", _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+              ),
+              // Row(
+              //   children: [
+              //     Icon(Icons.attach_money,color: Colors.redAccent,),
+              //     buildText("Số tiền: "+moneysend+" VND",Colors.black),
+              //   ],
+              // ),
+              Positioned(
+                top: 30,
+                  left: 30,
+                  child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
+                  Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
+              ),
+              SizedBox(height: 5,),
+              Align(alignment: Alignment.topLeft,child: Padding(
+                padding: const EdgeInsets.only(top: 25,left: 55),
+                child: buildDateConfirm(datetime,naptien),
+              )),
+            ],
+          ),
         ),
       ),
     );

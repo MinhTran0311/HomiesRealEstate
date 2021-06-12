@@ -304,6 +304,16 @@ mixin _$LSGDStore on _LSGDStore, Store {
       _$_LSGDStoreActionController.endAction(_$actionInfo);
     }
   }
+  @override
+  void setKiemDuyenVienID(int value,int i) {
+    final _$actionInfo = _$_LSGDStoreActionController.startAction(
+        name: '_LSGDStore.setKiemDuyenVienID');
+    try {
+      return super.setKiemDuyenVienID( value, i);
+    } finally {
+      _$_LSGDStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setSetThoiDiem(String MinThoiDiem, String MaxThoiDiem) {

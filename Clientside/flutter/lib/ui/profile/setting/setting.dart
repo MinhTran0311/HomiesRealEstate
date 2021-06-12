@@ -38,24 +38,17 @@ class _SettingPageState extends State<SettingPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: _buildAppBar(),
-            body: _buildBody()
-          ),
-        )
-
-    );;
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buildBody()
+    );
   }
   Widget _buildAppBar(){
     return AppBar(
-      leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
+      leading: IconButton(icon: Icon(Icons.arrow_back_ios),
           onPressed: (){
             Navigator.pop(context);
       }),
-      centerTitle: true,
       title: Text("Cài đặt"),
     );
   }
@@ -74,15 +67,18 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildChangeBrightMode(){
     return Observer(
       builder: (context){
-        return CardItem(
-          text: "Chế độ tối",
-          icon: Icons.security_outlined,
-          colorbackgroud: Colors.grey[200],
-          colortext: _themeStore.darkMode ? Colors.white : Colors.black,
-          coloricon: Colors.amber,
-          isFunction: false,
-          press: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);},
+        return Stack(
+          children:[
+            CardItem(
+              text: "Đổi chế độ nền ${_themeStore.darkMode ? "sáng" : "tối"}",
+              icon: Icons.security_outlined,
+              isFunction: true,
+              press: () {
+                //Preferences.is_dark_mode=!_themeStore.darkMode;
+                _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
+              },
+            ),
+          ] 
         );
       }
     );
@@ -92,9 +88,6 @@ class _SettingPageState extends State<SettingPage> {
     return CardItem(
       text: "Đổi mật khẩu",
       icon: Icons.security_outlined,
-      colorbackgroud: Colors.grey[200],
-      colortext: Colors.black,
-      coloricon: Colors.amber,
       isFunction: false,
       press: () {
         Navigator.push(context,
@@ -107,16 +100,15 @@ class _SettingPageState extends State<SettingPage> {
     return CardItem(
       text: "Đăng xuất",
       icon: Icons.logout,
-      colorbackgroud: Colors.grey[200],
-      colortext: Colors.black,
-      coloricon: Colors.amber,
       isFunction: true,
       press: () {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
           preference.setString(Preferences.auth_token, "");
-            preference.setString(Preferences.userRole, "");
+          preference.setString(Preferences.userRole, "");
+          preference.setInt(Preferences.userRoleRank.toString(), 0);
         });
+        _themeStore.changeBrightnessToDark(false);
         Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
       },
     );

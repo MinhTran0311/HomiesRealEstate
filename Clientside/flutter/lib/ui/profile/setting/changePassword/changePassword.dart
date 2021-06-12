@@ -70,32 +70,30 @@ class _changePassWordPageState extends State<changePassWordPage> {
             onPressed: (){
               Navigator.pop(context);
             }),
-        centerTitle: true,
         title: Text("Đổi mật khẩu")
     );
   }
 
   Widget _buildBody(){
-    return Material(
-      child: Stack(
-        children:[ SingleChildScrollView(
+    return Stack(
+      children:[
+        SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _buildOldPasswordField(),
-                SizedBox(height: 24.0),
-                _buildNewPasswordField(),
-                SizedBox(height: 24.0),
-                _buildConfirmPasswordField(),
-                SizedBox(height: 24.0),
-                _buildSubmitButton(),
-
-              ],
-            ),
-          ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildOldPasswordField(),
+                  SizedBox(height: 24.0),
+                  _buildNewPasswordField(),
+                  SizedBox(height: 24.0),
+                  _buildConfirmPasswordField(),
+                  SizedBox(height: 24.0),
+                  _buildSubmitButton(),
+                  SizedBox(height: 60.0),
+                ],
+              ),
+         ),
         ),
         Observer(
           builder: (context) {
@@ -104,13 +102,9 @@ class _changePassWordPageState extends State<changePassWordPage> {
                 prefs.setBool(Preferences.is_logged_in, false);
               });
               _showSuccssfullMesssage("Đổi mật khẩu thành công, vui lòng đăng nhập lại");
-
               Future.delayed(Duration(seconds: 6), () {
                 Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-
               });
-
-
               return Container(width: 0, height: 0);
             } else {
               print("failed");
@@ -118,7 +112,7 @@ class _changePassWordPageState extends State<changePassWordPage> {
             }
           },
         ),
-      ]),
+      ]
     );
   }
 
@@ -189,7 +183,7 @@ class _changePassWordPageState extends State<changePassWordPage> {
   Widget _buildSubmitButton() {
     return RoundedButtonWidget(
       buttonText: ('Đổi mật khẩu'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       minWidth: size.width - 48,
       onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/post/post.dart';
@@ -12,6 +13,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
+import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -62,9 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts(false);
+      _postStore.isIntialLoading=true;
       //_postStore.isIntialLoading=false;
     }
-
   }
 
   @override
@@ -72,8 +74,34 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Trang chủ"),
+        actions: _buildActions(context),
       ),
       body: _buildBody(),
+    );
+  }
+
+  List<Widget> _buildActions(BuildContext context) {
+    return <Widget>[
+      if (!Permission.instance.hasPermission("Pages") || Preferences.userRole.isEmpty || Preferences.userRoleRank==0)
+        _buildLogInButton(),
+    ];
+  }
+
+  Widget _buildLogInButton() {
+    return IconButton(
+      onPressed: () {
+        SharedPreferences.getInstance().then((preference) {
+          preference.setBool(Preferences.is_logged_in, false);
+          preference.setString(Preferences.auth_token, "");
+          preference.setString(Preferences.userRole, "");
+          preference.setInt(Preferences.userRoleRank.toString(), 0);
+        });
+        Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
+      },
+      icon: Icon(
+        Icons.login_outlined,
+      ),
     );
   }
 
@@ -101,22 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget _buildLogoutButton() {
-  //   return IconButton(
-  //     onPressed: () {
-  //       SharedPreferences.getInstance().then((preference) {
-  //         preference.setBool(Preferences.is_logged_in, false);
-  //         preference.setBool(Preferences.auth_token, false);
-  //         //_authTokenStore.loggedIn=false;
-  //         Navigator.of(context).pushReplacementNamed(Routes.login);
-  //       });
-  //     },
-  //     icon: Icon(
-  //       Icons.power_settings_new,
-  //     ),
-  //   );
-  // }
-
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(children: <Widget>[
@@ -130,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context) {
         return _postStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
+            : _buildPostsList();
       },
     );
   }
@@ -146,17 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
             keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
-              print(value);
-              //print(_searchController.text);
-              print(_postStore.searchContent);
               _postStore.filter_model.searchContent = value;
-              print(_postStore.filter_model.searchContent);
               _postStore.setSearchContent(_searchController.text);
             },
             style: TextStyle(
               fontSize: 28,
               height: 1,
-              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
             decoration: InputDecoration(
@@ -166,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),
@@ -208,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: Colors.black26,
+                    color: (_postStore.filter_model == null || _postStore.isNotUsingFilter) ? Colors.grey : Colors.red,
                     size: 20,
                   ),
                 ],
@@ -258,8 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
               completeDuration: Duration(milliseconds: 500),
             ),
             onLoading: () async {
-              print("loading");
-
               _postStore.getPosts(true);
               await Future.delayed(Duration(milliseconds: 2000));
               if (mounted) {
@@ -271,7 +276,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _refreshController.loadComplete();
             },
             onRefresh: () async {
-              print("refresh");
               _postStore.getPosts(false);
 
               await Future.delayed(Duration(milliseconds: 2000));
@@ -279,7 +283,6 @@ class _HomeScreenState extends State<HomeScreen> {
               isRefreshing = true;
               _refreshController.refreshCompleted();
             },
-            //scrollController: _scrollController,
             primary: false,
             child: ListView.builder(
               //key: _contentKey,
@@ -577,7 +580,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     color: _languageStore.locale == object.locale
                         ? Theme.of(context).primaryColor
-                        : _themeStore.darkMode
+                        :_themeStore.darkMode 
                             ? Colors.white
                             : Colors.black,
                   ),

@@ -78,23 +78,23 @@ class _FilterState extends State<Filter> {
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Container(
-                padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
+                padding: EdgeInsets.only(right: 12,left: 12,top: 32,bottom: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 24),
-                      child: Text("Tạo bộ lọc tìm kiếm",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: Center(
+                        child: Text("Tạo bộ lọc tìm kiếm",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
+
                     buildLoaiBaiDang(),
                     buildGiaFilter(),
                     // _filterStore.suDungGiaFilter ? Observer(
@@ -147,8 +147,10 @@ class _FilterState extends State<Filter> {
                     SizedBox(height: 12,),
                     buildCommuneFilter(),
                     buildUsernameFilter(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         buildApplyButton(),
                         buildClearButton(),
@@ -178,51 +180,48 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
             ),
           ),
-          SizedBox(width: 12,),
-          Container(
-              child:  Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: 160,
-                      height: 60,
-                      child: Observer(
-                        builder: (context){
-                          return DropdownButton<String>(
-                            isExpanded: true,
-                            value: _filterStore.loaiBaiDangDropDownValue,
-                            icon: const Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.black),
-                            underline: Container(
-                              height: 2,
-                              color: Colors.black,
+          SizedBox(width: 6,),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Container(
+                  width: 160,
+                  height: 60,
+                  child: Observer(
+                    builder: (context){
+                      return DropdownButton<String>(
+                        isExpanded: true,
+                        value: _filterStore.loaiBaiDangDropDownValue,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        //style: TextStyle(color: Colors.black),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.black,
+                        ),
+                        onChanged: (String newValue) {
+                            _filterStore.loaiBaiDangDropDownValue = newValue;
+                        },
+                        items: <String>['Bất kì', 'Cho thuê', 'Bán']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                //color: Colors.black,
+                              ),
                             ),
-                            onChanged: (String newValue) {
-                                _filterStore.loaiBaiDangDropDownValue = newValue;
-                            },
-                            items: <String>['Bất kì', 'Cho thuê', 'Bán']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
                           );
-                        }),
-                      ),
-                    ),
-                ],
-              )
+                        }).toList(),
+                      );
+                    }),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -245,14 +244,14 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
             ),
           ),
-          SizedBox(width: 12,),
+          SizedBox(width: 6,),
           Observer(
             builder: (context){
               return Container(
                   child:  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _filterStore.suDungGiaFilter ? SizedBox(
+                      if (_filterStore.suDungGiaFilter) SizedBox(
                         width: 65,
                         child: TextField(
                           focusNode: _minGiaFocus,
@@ -267,7 +266,7 @@ class _FilterState extends State<Filter> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
+                            //color: Colors.black,
                           ),
                           decoration: InputDecoration(
                             hintText: "Min",
@@ -276,24 +275,22 @@ class _FilterState extends State<Filter> {
                               color: Colors.grey[400],
                             ),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[400]),
+                              borderSide: BorderSide(color: Colors.black),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange[400]),
+                              borderSide: BorderSide(color: Colors.amber),
                             ),
                             border:  UnderlineInputBorder(
                                 borderSide:  BorderSide(color: Colors.black)
                             ),
                           ),
                         ),
-                      )
-                          : Container(width: 0,height: 0,),
-                      _filterStore.suDungGiaFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
-                      _filterStore.suDungGiaFilter ? SizedBox(
+                      ),
+                      if (_filterStore.suDungGiaFilter) Text("-",style: TextStyle(fontSize: 18),),
+                      if (_filterStore.suDungGiaFilter) SizedBox(
                         width: 65,
                         child: TextField(
                           autofocus: false,
-
                           textInputAction: TextInputAction.done,
                           onSubmitted: (_) => FocusScope.of(context).unfocus(),
                           keyboardType: TextInputType.number,
@@ -304,7 +301,7 @@ class _FilterState extends State<Filter> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black,
+                            //color: Colors.black,
                           ),
                           decoration: InputDecoration(
                             hintText: "Max",
@@ -313,22 +310,22 @@ class _FilterState extends State<Filter> {
                               color: Colors.grey[400],
                             ),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red[400]),
+                              borderSide: BorderSide(color: Colors.black),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.orange[400]),
+                              borderSide: BorderSide(color: Colors.amber),
                             ),
                             border:  UnderlineInputBorder(
                                 borderSide:  BorderSide(color: Colors.black)
                             ),
                           ),
                         ),
-                      ): Container(width: 0,height: 0,),
-                      SizedBox(width: 6,),
+                      ),
+                      if (_filterStore.suDungGiaFilter) SizedBox(width: 6,),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: SizedBox(
-                          width: 70,
+                          width: 75,
                           height: 60,
                           child: DropdownButton<String>(
                             isExpanded: true,
@@ -336,7 +333,7 @@ class _FilterState extends State<Filter> {
                             icon: const Icon(Icons.arrow_drop_down),
                             iconSize: 24,
                             elevation: 16,
-                            style: TextStyle(color: Colors.black),
+                            //style: TextStyle(color: Colors.black),
                             underline: Container(
                               height: 2,
                               color: Colors.black,
@@ -352,7 +349,7 @@ class _FilterState extends State<Filter> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black,
+                                    //color: Colors.black,
                                   ),
                                 ),
                               );
@@ -364,7 +361,6 @@ class _FilterState extends State<Filter> {
                   )
               );
             },
-
           ),
         ],
       ),
@@ -387,7 +383,7 @@ class _FilterState extends State<Filter> {
             ),
           ),
           SizedBox(
-            width: 12,
+            width: 6,
           ),
           Observer(
             builder: (context)
@@ -396,7 +392,7 @@ class _FilterState extends State<Filter> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _filterStore.suDungDienTichFilter ? SizedBox(
+                    if (_filterStore.suDungDienTichFilter) SizedBox(
                       width: 65,
                       child: TextField(
                         focusNode: _minDienTichFocus,
@@ -410,7 +406,7 @@ class _FilterState extends State<Filter> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          //color: Colors.black,
                         ),
                         decoration: InputDecoration(
                           hintText: "Min",
@@ -419,19 +415,19 @@ class _FilterState extends State<Filter> {
                             color: Colors.grey[400],
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]),
+                            borderSide: BorderSide(color: Colors.black),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[400]),
+                            borderSide: BorderSide(color: Colors.amber),
                           ),
                           border:  UnderlineInputBorder(
                               borderSide:  BorderSide(color: Colors.black)
                           ),
                         ),
                       ),
-                    ) : Container(width: 0,height: 0,),
-                    _filterStore.suDungDienTichFilter ? Text("-",style: TextStyle(fontSize: 18),): Container(width: 0,height: 0,),
-                    _filterStore.suDungDienTichFilter ? SizedBox(
+                    ),
+                    if (_filterStore.suDungDienTichFilter) Text("-",style: TextStyle(fontSize: 18),),
+                    if (_filterStore.suDungDienTichFilter) SizedBox(
                       width: 65,
                       child: TextField(
                         textInputAction: TextInputAction.done,
@@ -445,7 +441,7 @@ class _FilterState extends State<Filter> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.black,
+                          //color: Colors.black,
                         ),
                         decoration: InputDecoration(
                           hintText: "Max",
@@ -454,22 +450,22 @@ class _FilterState extends State<Filter> {
                             color: Colors.grey[400],
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red[400]),
+                            borderSide: BorderSide(color: Colors.black),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.orange[400]),
+                            borderSide: BorderSide(color: Colors.amber),
                           ),
                           border:  UnderlineInputBorder(
                               borderSide:  BorderSide(color: Colors.black)
                           ),
                         ),
                       ),
-                    ): Container(width: 0,height: 0,),
-                    SizedBox(width: 6,),
+                    ),
+                    if (_filterStore.suDungDienTichFilter) SizedBox(width: 6,),
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: SizedBox(
-                        width: 70,
+                        width: 75,
                         height: 60,
                         child: DropdownButton<String>(
                           isExpanded: true,
@@ -477,7 +473,7 @@ class _FilterState extends State<Filter> {
                           icon: const Icon(Icons.arrow_drop_down),
                           iconSize: 24,
                           elevation: 16,
-                          style: TextStyle(color: Colors.black),
+                          //style: TextStyle(color: Colors.black),
                           underline: Container(
                             height: 2,
                             color: Colors.black,
@@ -493,7 +489,7 @@ class _FilterState extends State<Filter> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.black,
+                                  //color: Colors.black,
                                 ),
                               ),
                             );
@@ -527,7 +523,7 @@ class _FilterState extends State<Filter> {
             ),
           ),
           SizedBox(
-            width: 12,
+            width: 6,
           ),
           Expanded(
             child: TextField(
@@ -540,7 +536,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Địa chỉ bất kì",
@@ -556,10 +552,10 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
+                  borderSide: BorderSide(color: Colors.amber),
                 ),
                 border:  UnderlineInputBorder(
                     borderSide:  BorderSide(color: Colors.black)
@@ -589,7 +585,7 @@ class _FilterState extends State<Filter> {
             ),
           ),
           SizedBox(
-            width: 12,
+            width: 6,
           ),
           Expanded(
             child: TextField(
@@ -602,7 +598,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Tag bất kỳ",
@@ -618,10 +614,10 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
+                  borderSide: BorderSide(color: Colors.amber),
                 ),
                 border:  UnderlineInputBorder(
                     borderSide:  BorderSide(color: Colors.black)
@@ -650,7 +646,7 @@ class _FilterState extends State<Filter> {
                 ),
               ),
               SizedBox(
-                width: 12,
+                width: 6,
               ),
               Expanded(
                 child:
@@ -674,10 +670,10 @@ class _FilterState extends State<Filter> {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColorDark,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+                        // borderRadius: BorderRadius.only(
+                        //   topLeft: Radius.circular(20),
+                        //   topRight: Radius.circular(20),
+                        // ),
                       ),
                       child: Center(
                         child: Text(
@@ -714,7 +710,7 @@ class _FilterState extends State<Filter> {
               ),
             ),
             SizedBox(
-              width: 12,
+              width: 6,
             ),
             Expanded(
               child: DropdownSearch<String>(
@@ -739,10 +735,10 @@ class _FilterState extends State<Filter> {
                   height: 50,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(20),
+                    //   topRight: Radius.circular(20),
+                    // ),
                   ),
                   child: Center(
                     child: Text(
@@ -769,16 +765,16 @@ class _FilterState extends State<Filter> {
         Row(
           children: [
             Container(
-          width: 110,
-          child: Text("Xã",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
+              width: 110,
+              child: Text("Xã",
+                style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+                textAlign: TextAlign.start,
+              ),
             ),
-            textAlign: TextAlign.start,
-          ),
-        ),
-            SizedBox(width: 12),
+            SizedBox(width: 6),
             Expanded(
               child: DropdownSearch<String>(
                 items: _filterStore.communeListString,
@@ -801,10 +797,10 @@ class _FilterState extends State<Filter> {
                   height: 50,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(20),
+                    //   topRight: Radius.circular(20),
+                    // ),
                   ),
                   child: Center(
                     child: Text(
@@ -842,7 +838,7 @@ class _FilterState extends State<Filter> {
             ),
           ),
           SizedBox(
-            width: 12,
+            width: 6,
           ),
           Expanded(
             child: TextField(
@@ -855,7 +851,7 @@ class _FilterState extends State<Filter> {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                //color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Username",
@@ -871,10 +867,10 @@ class _FilterState extends State<Filter> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
+                  borderSide: BorderSide(color: Colors.amber),
                 ),
                 border:  UnderlineInputBorder(
                     borderSide:  BorderSide(color: Colors.black)
@@ -887,43 +883,37 @@ class _FilterState extends State<Filter> {
     );
   }
   Widget buildApplyButton(){
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: RoundedButtonWidget(
-        buttonText: "Sử dụng bộ lọc",
-        textSize: 20,
-        buttonColor: Colors.amber,
-        textColor: Colors.white,
-        onPressed: (){
-          Navigator.pop(context, _filterStore.validateSearchContent());
-        },
-      ),
+    return RoundedButtonWidget(
+      buttonText: "Sử dụng bộ lọc",
+      textSize: 20,
+      buttonColor: Colors.amber,
+      textColor: Colors.white,
+      onPressed: (){
+        Navigator.pop(context, _filterStore.validateSearchContent());
+      },
     );
   }
 
   Widget buildClearButton(){
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: RoundedButtonWidget(
-        buttonText: "Đặt lại giá trị",
-        textSize: 20,
-        buttonColor: Colors.amber,
-        textColor: Colors.white,
-        onPressed: (){
-          if (_filterStore.suDungDienTichFilter){
-            _dienTichMinValueController.clear();
-            _dienTichMaxValueController.clear();
-          }
-          if (_filterStore.suDungGiaFilter){
-            _giaMaxValueController.clear();
-            _giaMinValueController.clear();
-          }
-          _diaChiController.clear();
-          _tagController.clear();
-          _usernameController.clear();
-          _filterStore.resetValue();
-        },
-      ),
+    return RoundedButtonWidget(
+      buttonText: "Đặt lại giá trị",
+      textSize: 20,
+      buttonColor: Color.fromRGBO(30, 32, 38, 1),
+      textColor: Colors.white,
+      onPressed: (){
+        if (_filterStore.suDungDienTichFilter){
+          _dienTichMinValueController.clear();
+          _dienTichMaxValueController.clear();
+        }
+        if (_filterStore.suDungGiaFilter){
+          _giaMaxValueController.clear();
+          _giaMinValueController.clear();
+        }
+        _diaChiController.clear();
+        _tagController.clear();
+        _usernameController.clear();
+        _filterStore.resetValue();
+      },
     );
   }
   @override

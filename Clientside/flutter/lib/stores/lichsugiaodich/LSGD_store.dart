@@ -85,6 +85,12 @@ abstract class _LSGDStore with Store {
   bool get loadingKiemDuyetNapTien => fetchKiemDuyetNapTienFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
+
+  @action
+  void setKiemDuyenVienID(int value,int i) {
+      this.listlsgdAll.listLSGDs[i].kiemDuyetVienId = value;
+  }
+
   @action
   void setLoaiLSGD(String value) {
     FilterDataLSGD  = new FilterData("Tất cả", DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) , DateFormat('yyyy-MM-dd').format(DateTime.now()));
@@ -121,7 +127,7 @@ abstract class _LSGDStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -160,7 +166,7 @@ abstract class _LSGDStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -182,7 +188,7 @@ abstract class _LSGDStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -204,7 +210,7 @@ abstract class _LSGDStore with Store {
   //       throw error;
   //     }
   //     else{
-  //       errorStore.errorMessage="Please check your internet connection and try again!";
+  //       errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
   //       throw error;
   //     }
   //     //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -225,7 +231,7 @@ abstract class _LSGDStore with Store {
         throw error;
       }
       else{
-        errorStore.errorMessage="Please check your internet connection and try again!";
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
         throw error;
       }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
