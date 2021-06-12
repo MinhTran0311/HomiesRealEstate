@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts(false);
+      _postStore.isIntialLoading = true;
       //_postStore.isIntialLoading=false;
     }
   }
@@ -157,11 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
-              print(value);
-              //print(_searchController.text);
-              print(_postStore.searchContent);
               _postStore.filter_model.searchContent = value;
-              print(_postStore.filter_model.searchContent);
               _postStore.setSearchContent(_searchController.text);
             },
             style: TextStyle(
@@ -176,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),

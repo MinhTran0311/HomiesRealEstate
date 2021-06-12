@@ -17,14 +17,15 @@ class DanhMucApi {
   DanhMucApi(this._dioClient, this._restClient);
 
   //Get all danh mục
-  Future<DanhMucList> getAllDanhMucs() async {
+  Future<DanhMucList> getAllDanhMucs(int skipCount, int maxResultCount) async {
     try {
       // print("123123123123dat");
       final res = await _dioClient.get(Endpoints.getAllDanhMucs,
         // data: {
         // },
         queryParameters: {
-          "MaxResultCount": 100,
+          "MaxResultCount": maxResultCount,
+          "SkipCount": skipCount,
         },
         options: Options(
             headers: {

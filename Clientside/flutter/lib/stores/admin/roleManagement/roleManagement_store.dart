@@ -37,8 +37,11 @@ abstract class _RoleManagementStore with Store {
   @observable
   int countAllRoles = 0;
 
+  @observable
+  bool isIntialLoading = true;
+
   @computed
-  bool get loading => fetchRolesFuture.status == FutureStatus.pending;
+  bool get loading => fetchRolesFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllRoles => fetchCountAllRolesFuture.status == FutureStatus.pending;
@@ -50,6 +53,7 @@ abstract class _RoleManagementStore with Store {
 
     future.then((roleList) {
       this.roleList = roleList;
+      if (isIntialLoading) isIntialLoading=false;
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null)

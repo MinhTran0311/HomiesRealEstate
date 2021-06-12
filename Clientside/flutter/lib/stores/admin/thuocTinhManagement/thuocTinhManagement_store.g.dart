@@ -238,12 +238,74 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom =
+      Atom(name: '_ThuocTinhManagementStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
+  final _$skipCountAtom = Atom(name: '_ThuocTinhManagementStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$skipIndexAtom = Atom(name: '_ThuocTinhManagementStore.skipIndex');
+
+  @override
+  int get skipIndex {
+    _$skipIndexAtom.reportRead();
+    return super.skipIndex;
+  }
+
+  @override
+  set skipIndex(int value) {
+    _$skipIndexAtom.reportWrite(value, super.skipIndex, () {
+      super.skipIndex = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_ThuocTinhManagementStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
   final _$getThuocTinhsAsyncAction =
       AsyncAction('_ThuocTinhManagementStore.getThuocTinhs');
 
   @override
-  Future<dynamic> getThuocTinhs() {
-    return _$getThuocTinhsAsyncAction.run(() => super.getThuocTinhs());
+  Future<dynamic> getThuocTinhs(bool isLoadMore) {
+    return _$getThuocTinhsAsyncAction
+        .run(() => super.getThuocTinhs(isLoadMore));
   }
 
   final _$fCountAllThuocTinhsAsyncAction =
@@ -300,6 +362,10 @@ thuocTinhList: ${thuocTinhList},
 countAllThuocTinhs: ${countAllThuocTinhs},
 updateThuocTinh_success: ${updateThuocTinh_success},
 createThuocTinh_success: ${createThuocTinh_success},
+isIntialLoading: ${isIntialLoading},
+skipCount: ${skipCount},
+skipIndex: ${skipIndex},
+maxCount: ${maxCount},
 canSubmit: ${canSubmit},
 loading: ${loading},
 loadingCountAllThuocTinhs: ${loadingCountAllThuocTinhs},

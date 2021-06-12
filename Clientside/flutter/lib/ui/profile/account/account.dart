@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:boilerplate/constants/font_family.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -54,15 +55,17 @@ class _AccountPageState extends State<AccountPage>{
   final CtlAddress = TextEditingController();
   final CtlSurName = TextEditingController();
   final CtlName = TextEditingController();
-
+  String role =" Khách";
   int _selectedIndex=0;
   UserStore _userstore;
   String pathAvatar = "assets/images/img_login.jpg";
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _userstore = Provider.of<UserStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
 
 
   }
@@ -70,11 +73,15 @@ class _AccountPageState extends State<AccountPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true,title: Text("Tài khoản của tôi"),backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
-          onPressed: (){setState(() {
-            Navigator.pop(context);
-          });}),),
+      appBar: AppBar(
+        // centerTitle: true,
+        title: Text("Tài khoản của tôi"),
+        // backgroundColor: Colors.white,
+        // leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+        //   onPressed: (){setState(() {
+        //     Navigator.pop(context);
+        //   });}),
+      ),
       body: Container(
         decoration: BoxDecoration(
           // borderRadius: BorderRadius.only(
@@ -180,7 +187,6 @@ class _AccountPageState extends State<AccountPage>{
   }
 
   Widget _showSimpleModalDialog(){
-
           return Wrap(
             children: [
               Container(
@@ -248,19 +254,49 @@ class _AccountPageState extends State<AccountPage>{
                                 SizedBox(height: 5,),
                                 Row(
                                   children: [
-                                    Icon(
+                                    _userstore.userCurrent.listRole.length<=1?Icon(
                                       Icons.person_pin,
                                       color: Colors.white,
                                       size: 20,
+                                    ):
+                                    Icon(
+                                      Icons.people,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                      semanticLabel:
+                                      'Text to announce in accessibility modes',
                                     ),
                                     SizedBox(width: 10,),
-                                    Text(
-                                      _userstore.userCurrent.listRole[0].roleName,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
+                                    Observer(builder: (context) {
+                                      if(_userstore.userCurrent != null){
+                                        if(_userstore.userCurrent.listRole != null){
+                                          role="${_userstore.userCurrent.listRole[0].roleName}";
+                                          print("debug ${_userstore.userCurrent.listRole.length}");
+                                          for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
+                                            role += ", ${_userstore.userCurrent.listRole[i].roleName}";
+                                          }
+                                        }
+                                      }
+                                      return
+                                        _userstore.userCurrent != null ? Row(
+                                          children: [
+
+                                            Text(role,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    )),
+                                          ],
+                                        ) : Container();
+                                    }
                                     ),
+                                    // Text(
+                                    //   _userstore.userCurrent.listRole[0].roleName,
+                                    //   style: TextStyle(
+                                    //     color: Colors.white,
+                                    //     fontSize: 20,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -285,7 +321,7 @@ class _AccountPageState extends State<AccountPage>{
                         //     Colors.amberAccent.shade100,
                         //   ],
                         // )
-                        color: Colors.white,
+                        color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(18, 22, 28, 1),
                       ),
                       width: MediaQuery.of(context).size.width,
                       // margin: EdgeInsets.only(bottom: 10),
@@ -671,13 +707,13 @@ class _AccountEditPageState extends State<AccountEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        // centerTitle: true,
         title: Text("Chỉnh sửa thông tin cá nhân"),
-        backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
-            onPressed: (){setState(() {
-              Navigator.pop(context);
-            });}),
+        // backgroundColor: Colors.white,
+        // leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+        //     onPressed: (){setState(() {
+        //       Navigator.pop(context);
+        //     });}),
       ),
       body: Container(
         height: double.infinity,

@@ -295,6 +295,17 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$_LSGDStoreActionController = ActionController(name: '_LSGDStore');
 
   @override
+  void setKiemDuyenVienID(int value, int i) {
+    final _$actionInfo = _$_LSGDStoreActionController.startAction(
+        name: '_LSGDStore.setKiemDuyenVienID');
+    try {
+      return super.setKiemDuyenVienID(value, i);
+    } finally {
+      _$_LSGDStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setLoaiLSGD(String value) {
     final _$actionInfo = _$_LSGDStoreActionController.startAction(
         name: '_LSGDStore.setLoaiLSGD');

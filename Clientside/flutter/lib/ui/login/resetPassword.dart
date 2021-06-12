@@ -144,7 +144,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             SizedBox(height: 24.0),
             _buildForgotPasswordNoti(),
             _buildUserEmail(),
-            SizedBox(height: 12,),
+            SizedBox(height: 24,),
             _buildSubmitButton()
           ],
         ),
@@ -155,7 +155,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget _buildForgotPasswordNoti() {
     return Text(
         "Quên mật khẩu",
-        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26,color: Colors.white),
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,color: Colors.white),
       );
   }
 
@@ -168,7 +168,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           hintColor: Colors.white,
           icon: Icons.email_rounded,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.white,
           textController: _emailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -184,7 +184,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget _buildSubmitButton() {
     return RoundedButtonWidget(
       buttonText: ('Gửi'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: () async {
         if (_store.canSubmitResetPassword) {

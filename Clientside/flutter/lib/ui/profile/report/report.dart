@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/report/ListReport.dart';
 import 'package:boilerplate/stores/reportData/reportData_store.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,12 +25,14 @@ class _ReportPageState extends State<ReportPage>{
   bool showAvg = false;
   ReportDataStore _reportDataStore;
   String dropdownValue = 'Số bài đăng';
+  ThemeStore _themeStore;
   List<String> type = [];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _reportDataStore = Provider.of<ReportDataStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
 
     if (!_reportDataStore.loading) {
       _reportDataStore.getReportData();
@@ -50,12 +53,7 @@ class _ReportPageState extends State<ReportPage>{
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
-              onPressed: (){setState(() {
-                Navigator.pop(context);
-              });}),
-          centerTitle: true,
-          title: Text("Thống kê",style: TextStyle(color: Colors.white),),
+          title: Text("Thống kê",),
           bottom:  TabBar(
             tabs: <Widget>[
               Tab(
@@ -100,7 +98,7 @@ class _ReportPageState extends State<ReportPage>{
                                 icon: const Icon(Icons.arrow_drop_down),
                                 iconSize: 24,
                                 elevation: 16,
-                                style: const TextStyle(color: Colors.black),
+                                style:  TextStyle(color: this._themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                                 underline: Container(
                                   height: 2,
                                   color: Colors.black,
@@ -158,7 +156,7 @@ class _ReportPageState extends State<ReportPage>{
                                   icon: const Icon(Icons.arrow_drop_down),
                                   iconSize: 24,
                                   elevation: 16,
-                                  style: const TextStyle(color: Colors.black),
+                                  style:  TextStyle(color: _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                                   underline: Container(
                                     height: 2,
                                     color: Colors.black,
@@ -231,7 +229,7 @@ class _ReportPageState extends State<ReportPage>{
             Align(
               alignment: Alignment.topCenter,
               child: Card(
-                color: Colors.white,
+                color: _themeStore.darkMode !=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -243,7 +241,21 @@ class _ReportPageState extends State<ReportPage>{
                     children: <Widget>[
                       Align(
                           alignment: Alignment.topCenter,
-                          child: Container(width: double.infinity,height: 40,padding:const EdgeInsets.only(top: 10),child: Center(child: Text("Thống kê dòng tiền",style: TextStyle( fontSize: 24,fontWeight: FontWeight.bold),)))
+                          child: Container(
+                              width: double.infinity,
+                              height: 40,
+                              padding:const EdgeInsets.only(top: 10),
+                              child: Center(
+                                  child:
+                                  Text(
+                                    "Thống kê dòng tiền",
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                              )
+                          )
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
@@ -313,7 +325,7 @@ class _ReportPageState extends State<ReportPage>{
             Align(
               alignment: Alignment.bottomCenter,
               child: Card(
-                color: Colors.white,
+                color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -641,22 +653,28 @@ class _ReportPageState extends State<ReportPage>{
   }
 
   Widget StackedAreaLineChart(){
-    return new charts.LineChart(
-      _createLineChartData(_reportDataStore.listitemReports,dropdownValue),
-      animate: true,
-      animationDuration: Duration(seconds: 2),
-      defaultRenderer:
-      new charts.LineRendererConfig(includeArea: true, stacked: true),
+    return Container(
+      color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
+      child: new charts.LineChart(
+        _createLineChartData(_reportDataStore.listitemReports,dropdownValue),
+        animate: true,
+        animationDuration: Duration(seconds: 2),
+        defaultRenderer:
+        new charts.LineRendererConfig(includeArea: true, stacked: true),
+      ),
     );
   }
 
   Widget HorizontalPatternForwardHatchBarChart(){
-    return new charts.BarChart(
-      _createBarChartData(_reportDataStore.listitemReports,dropdownValue),
-      animate: true,
-      animationDuration: Duration(seconds: 2),
-      barGroupingType: charts.BarGroupingType.grouped,
-      vertical: false,
+    return Container(
+      color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
+      child: new charts.BarChart(
+        _createBarChartData(_reportDataStore.listitemReports,dropdownValue),
+        animate: true,
+        animationDuration: Duration(seconds: 2),
+        barGroupingType: charts.BarGroupingType.grouped,
+        vertical: false,
+      ),
     );
   }
 

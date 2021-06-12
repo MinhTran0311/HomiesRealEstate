@@ -73,19 +73,43 @@ abstract class _GoiBaiDangManagementStore with Store {
   @observable
   int countAllGoiBaiDangs = 0;
 
+  @observable
+  int skipCount = 0;
+
+  @observable
+  int skipIndex = 10;
+
+  @observable
+  int maxCount = 10;
+
+  @observable
+  bool isIntialLoading = true;
+
   @computed
-  bool get loading => fetchGoiBaiDangsFuture.status == FutureStatus.pending;
+  bool get loading => fetchGoiBaiDangsFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllGoiBaiDangs => fetchCountAllGoiBaiDangsFuture.status == FutureStatus.pending;
 
   @action
-  Future getGoiBaiDangs() async {
-    final future = _repository.getAllGoiBaiDangs();
+  Future getGoiBaiDangs(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCount = 0;
+    }
+    else
+      skipCount += skipIndex;
+    final future = _repository.getAllGoiBaiDangs(skipCount, maxCount);
     fetchGoiBaiDangsFuture = ObservableFuture(future);
 
     future.then((goiBaiDangList) {
-      this.goiBaiDangList = goiBaiDangList;
+      if (!isLoadMore){
+        this.goiBaiDangList = goiBaiDangList;
+        if (isIntialLoading) isIntialLoading=false;
+      }
+      else {
+        for (int i=0; i< goiBaiDangList.goiBaiDangs.length; i++)
+          this.goiBaiDangList.goiBaiDangs.add(goiBaiDangList.goiBaiDangs[i]);
+      }
     }).catchError((error) {
       if (error is DioError) {
         if (error.response.data != null)

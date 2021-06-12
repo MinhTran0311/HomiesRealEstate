@@ -576,7 +576,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       children: [
         Icon(
           iconData,
-          color: Colors.yellow[700],
           size:28,
         ),
         SizedBox(height: 8,),

@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.white,
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
           isObscure: true,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.vpn_key,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.white,
           textController: _passwordController,
           focusNode: _passwordFocusNode,
           errorText: _store.formErrorStore.password,
@@ -226,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignInButton() {
     return RoundedButtonWidget(
       buttonText: ('Đăng nhập'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: () async {
         if (_store.canLogin) {
