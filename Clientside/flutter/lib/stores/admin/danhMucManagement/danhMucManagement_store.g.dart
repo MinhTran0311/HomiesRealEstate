@@ -9,6 +9,13 @@ part of 'danhMucManagement_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
+  Computed<bool> _$canSubmitComputed;
+
+  @override
+  bool get canSubmit =>
+      (_$canSubmitComputed ??= Computed<bool>(() => super.canSubmit,
+              name: '_DanhMucManagementStore.canSubmit'))
+          .value;
   Computed<bool> _$loadingComputed;
 
   @override
@@ -346,6 +353,53 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
         .run(() => super.IsActiveDanhMuc(danhMuc));
   }
 
+  final _$_DanhMucManagementStoreActionController =
+      ActionController(name: '_DanhMucManagementStore');
+
+  @override
+  void setDanhMucId(int value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setDanhMucId');
+    try {
+      return super.setDanhMucId(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNameDanhMuc(String value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setNameDanhMuc');
+    try {
+      return super.setNameDanhMuc(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTrangThaiDanhMuc(bool value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setTrangThaiDanhMuc');
+    try {
+      return super.setTrangThaiDanhMuc(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTagDanhMuc(String value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setTagDanhMuc');
+    try {
+      return super.setTagDanhMuc(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -366,6 +420,7 @@ maxCount: ${maxCount},
 updateDanhMuc_success: ${updateDanhMuc_success},
 createDanhMuc_success: ${createDanhMuc_success},
 isIntialLoading: ${isIntialLoading},
+canSubmit: ${canSubmit},
 loading: ${loading},
 loadingCountAllDanhMucs: ${loadingCountAllDanhMucs},
 loadingUpdateDanhMuc: ${loadingUpdateDanhMuc},

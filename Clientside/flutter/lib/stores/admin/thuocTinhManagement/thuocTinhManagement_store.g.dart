@@ -157,6 +157,22 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     });
   }
 
+  final _$KieuDuLieuShowAtom =
+      Atom(name: '_ThuocTinhManagementStore.KieuDuLieuShow');
+
+  @override
+  String get KieuDuLieuShow {
+    _$KieuDuLieuShowAtom.reportRead();
+    return super.KieuDuLieuShow;
+  }
+
+  @override
+  set KieuDuLieuShow(String value) {
+    _$KieuDuLieuShowAtom.reportWrite(value, super.KieuDuLieuShow, () {
+      super.KieuDuLieuShow = value;
+    });
+  }
+
   final _$KieuDuLieuAtom = Atom(name: '_ThuocTinhManagementStore.KieuDuLieu');
 
   @override
@@ -348,6 +364,50 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
   }
 
   @override
+  void setNameThuocTinh(String value) {
+    final _$actionInfo = _$_ThuocTinhManagementStoreActionController
+        .startAction(name: '_ThuocTinhManagementStore.setNameThuocTinh');
+    try {
+      return super.setNameThuocTinh(value);
+    } finally {
+      _$_ThuocTinhManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTrangThaiThuocTinh(bool value) {
+    final _$actionInfo = _$_ThuocTinhManagementStoreActionController
+        .startAction(name: '_ThuocTinhManagementStore.setTrangThaiThuocTinh');
+    try {
+      return super.setTrangThaiThuocTinh(value);
+    } finally {
+      _$_ThuocTinhManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getKieuDuLieu(String value) {
+    final _$actionInfo = _$_ThuocTinhManagementStoreActionController
+        .startAction(name: '_ThuocTinhManagementStore.getKieuDuLieu');
+    try {
+      return super.getKieuDuLieu(value);
+    } finally {
+      _$_ThuocTinhManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setKieuDuLieu(String value) {
+    final _$actionInfo = _$_ThuocTinhManagementStoreActionController
+        .startAction(name: '_ThuocTinhManagementStore.setKieuDuLieu');
+    try {
+      return super.setKieuDuLieu(value);
+    } finally {
+      _$_ThuocTinhManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchThuocTinhsFuture: ${fetchThuocTinhsFuture},
@@ -357,6 +417,7 @@ fetchCreateThuocTinhFuture: ${fetchCreateThuocTinhFuture},
 name: ${name},
 idThuocTinh: ${idThuocTinh},
 active: ${active},
+KieuDuLieuShow: ${KieuDuLieuShow},
 KieuDuLieu: ${KieuDuLieu},
 thuocTinhList: ${thuocTinhList},
 countAllThuocTinhs: ${countAllThuocTinhs},

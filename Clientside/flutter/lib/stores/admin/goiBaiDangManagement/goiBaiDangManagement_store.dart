@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/goiBaiDang/goiBaiDang.dart';
 import 'package:boilerplate/models/goiBaiDang/goiBaiDang_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -33,6 +34,12 @@ abstract class _GoiBaiDangManagementStore with Store {
   @observable
   ObservableFuture<dynamic> fetchUpdateGoiBaiDangFuture =
   ObservableFuture<dynamic>(emptyUpdateGoiBaiDangResponse);
+
+  static ObservableFuture<dynamic> emptyUpdateActiveGoiBaiDangResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateActiveGoiBaiDangFuture =
+  ObservableFuture<dynamic>(emptyUpdateActiveGoiBaiDangResponse);
 
   static ObservableFuture<dynamic> emptyCreateGoiBaiDangResponse = ObservableFuture.value(null);
 
@@ -71,6 +78,21 @@ abstract class _GoiBaiDangManagementStore with Store {
   bool createGoiBaiDang_success = false;
 
   @observable
+  bool updateActiveGoiBaiDang_success = false;
+
+  @computed
+  bool get canSubmit =>
+          tenGoi.isNotEmpty &&
+          tenGoi != null &&
+          phi.toString().isNotEmpty &&
+          phi != null &&
+          doUuTien.toString().isNotEmpty &&
+          doUuTien != null &&
+          thoiGianToiThieu.toString().isNotEmpty &&
+          thoiGianToiThieu != null && moTa.isNotEmpty &&
+          moTa != null;
+
+  @observable
   int countAllGoiBaiDangs = 0;
 
   @observable
@@ -90,6 +112,48 @@ abstract class _GoiBaiDangManagementStore with Store {
 
   @computed
   bool get loadingCountAllGoiBaiDangs => fetchCountAllGoiBaiDangsFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get loadingUpdateGoiBaiDang => fetchUpdateGoiBaiDangFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get loadingCreateGoiBaiDang => fetchCreateGoiBaiDangFuture.status == FutureStatus.pending;
+
+  @action
+  void setGoiBaiDangId(int value) {
+    goiBaiDangID = value;
+  }
+
+  @action
+  void setNameGoiBaiDang(String value) {
+    tenGoi = value;
+  }
+
+  @action
+  void setTrangThaiGoiBaiDang(bool value) {
+    if (value) trangThai = "On";
+    else trangThai = "Off";
+  }
+
+  @action
+  void setPhiGoiBaiDang(double value) {
+    phi = value;
+  }
+
+  @action
+  void setThoiGianToiThieuGoiBaiDang(int value){
+    thoiGianToiThieu = value;
+  }
+
+  @action
+  void setDoUuTienGoiBaiDang(int value) {
+    doUuTien = value;
+  }
+
+  @action
+  void setMoTaGoiBaiDang(String value) {
+    moTa = value;
+  }
 
   @action
   Future getGoiBaiDangs(bool isLoadMore) async {
@@ -184,6 +248,34 @@ abstract class _GoiBaiDangManagementStore with Store {
     future.then((res){
       if (res["success"]){
         createGoiBaiDang_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future IsActiveGoiBaiDang(GoiBaiDang goiBaiDang) async {
+    updateActiveGoiBaiDang_success = false;
+    final future = _repository.updateGoiBaiDang(goiBaiDang.id, goiBaiDang.tenGoi, goiBaiDang.phi, goiBaiDang.doUuTien, goiBaiDang.thoiGianToiThieu, goiBaiDang.moTa, goiBaiDang.trangThai);
+    fetchUpdateActiveGoiBaiDangFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        updateActiveGoiBaiDang_success = true;
       }
     }).catchError((error){
       if (error is DioError) {

@@ -42,7 +42,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   bool _checkboxTrangThai = true;
   bool _radioBtnKDL = true;
   String titleForm = "Tạo thuộc tính mới";
-  String _kieuDuLieu = "Chuỗi";
 
   @override
   void initState() {
@@ -61,7 +60,10 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
-
+    if(this.thuocTinh != null) {
+      _thuocTinhManagementStore.KieuDuLieu = this.thuocTinh.kieuDuLieu;
+      _thuocTinhManagementStore.getKieuDuLieu(this.thuocTinh.kieuDuLieu);
+    }
   }
 
   @override
@@ -97,16 +99,16 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       child: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.amber,
-                      Colors.orange[700],
-                    ]
-                )
-            ),
+            // decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //         begin: Alignment.topCenter,
+            //         end: Alignment.bottomCenter,
+            //         colors: [
+            //           Colors.amber,
+            //           Colors.orange[700],
+            //         ]
+            //     )
+            // ),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
@@ -182,7 +184,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             //SizedBox(height: 24.0),
             _buildNameField(),
             SizedBox(height: 24.0),
-            buildLoaiBaiDang(),
+            buildKieuDuLieu(),
             SizedBox(height: 24.0),
             _buildActiveCheckBox(),
             SizedBox(height: 24.0),
@@ -200,162 +202,130 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   }
 //#region build TextFieldWidget
   Widget _buildNameField() {
-    Widget buildDiaChiFilter(){
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: 110,
-              child: Text("Địa chỉ",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-            SizedBox(
-              width: 12,
-            ),
-            Expanded(
-              // child: TextField(
-              //   autofocus: false,
-              //   keyboardType: TextInputType.text,
-              //   controller: _diaChiController,
-              //   onChanged: (value){
-              //     _filterStore.setDiaChiContent(value);
-              //   },
-              //   textAlign: TextAlign.start,
-              //   style: TextStyle(
-              //     fontSize: 18,
-              //     color: Colors.black,
-              //   ),
-              //   decoration: InputDecoration(
-              //     hintText: "Địa chỉ bất kì",
-              //     suffixIcon: IconButton(
-              //       onPressed: () {
-              //         _diaChiController.clear();
-              //         _filterStore.setDiaChiContent("");
-              //       },
-              //       icon: Icon(Icons.clear),
-              //     ),
-              //     hintStyle: TextStyle(
-              //       fontSize: 18,
-              //       color: Colors.grey[400],
-              //     ),
-              //     enabledBorder: UnderlineInputBorder(
-              //       borderSide: BorderSide(color: Colors.red[400]),
-              //     ),
-              //     focusedBorder: UnderlineInputBorder(
-              //       borderSide: BorderSide(color: Colors.orange[400]),
-              //     ),
-              //     border:  UnderlineInputBorder(
-              //         borderSide:  BorderSide(color: Colors.black)
-              //     ),
-              //   ),
-              // ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
-  Widget buildLoaiBaiDang(){
     return Padding(
-      padding: EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.loyalty,
-                size: 26,
-                color: Colors.white,
-              ),
-              SizedBox(width: 12,),
-              Text("Kiểu dữ liệu",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            ],
-          ),
-          SizedBox(width: 12,),
           Container(
-              child:  Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: 160,
-                      height: 60,
-                      child: DropdownButtonFormField(
-                        value: _kieuDuLieu,
-                        items: <String>['Chuỗi', 'Số nguyên', 'Số thực']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.black,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        hint: Text("Chọn vai trò"),
-                        onChanged: (value) {
-                          setState(() {
-                            _kieuDuLieu = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              )
+            width: 150,
+            child: Text("Tên",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Expanded(
+            child: TextField(
+              autofocus: false,
+              keyboardType: TextInputType.text,
+              controller: _nameController,
+              onChanged: (value){
+                _thuocTinhManagementStore.setNameThuocTinh(value);
+              },
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: "Tên thuộc tính",
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _nameController.clear();
+                    _thuocTinhManagementStore.setNameThuocTinh("");
+                  },
+                  icon: Icon(Icons.clear),
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 18,
+                  // color: Colors.grey[400],
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red[400]),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border:  UnderlineInputBorder(
+                    borderSide:  BorderSide(color: Colors.black)
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-
-  Widget buildRadioBtn(BuildContext context) {
-    // return Column(
-    //   children: <Widget>[
-    //     ListTile(
-    //       title: const Text('Lafayette'),
-    //       leading: Radio(
-    //         value: i,
-    //         groupValue: _value,
-    //         activeColor: Color(0xFF6200EE),
-    //         onChanged: ,
-    //       ),
-    //     ),
-    //     ListTile(
-    //       title: const Text('Thomas Jefferson'),
-    //       leading: Radio<SingingCharacter>(
-    //         value: SingingCharacter.jefferson,
-    //         groupValue: _character,
-    //         onChanged: (SingingCharacter? value) {
-    //           setState(() {
-    //             _character = value;
-    //           });
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    // );
+  Widget buildKieuDuLieu(){
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 150,
+            child: Text("Kiểu dữ liệu",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          SizedBox(width: 6,),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Container(
+                  width: 160,
+                  height: 60,
+                  child: Observer(
+                      builder: (context){
+                        return DropdownButton<String>(
+                          isExpanded: true,
+                          value: _thuocTinhManagementStore.KieuDuLieuShow,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          //style: TextStyle(color: Colors.black),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black,
+                          ),
+                          onChanged: (String newValue) {
+                            _thuocTinhManagementStore.KieuDuLieuShow = newValue;
+                            _thuocTinhManagementStore.setKieuDuLieu(newValue);
+                          },
+                          items: <String>['Chuỗi', 'Số nguyên', 'Số thực']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  //color: Colors.black,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      }),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildActiveCheckBox() {
@@ -374,7 +344,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
           'Kích hoạt',
           style: TextStyle(
             fontSize: 22,
-            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            // color: Colors.white,
           ),
         ),
       ],
@@ -395,7 +366,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
           // },
           _thuocTinhManagementStore.setThuocTinhId(this.thuocTinh.id),
           _thuocTinhManagementStore.setTrangThaiThuocTinh(_checkboxTrangThai),
-          _thuocTinhManagementStore.setKieuDuLieu(_kieuDuLieu),
+          _thuocTinhManagementStore.setKieuDuLieu(_thuocTinhManagementStore.KieuDuLieuShow),
         };
         if(this.thuocTinh != null) {
           if(_thuocTinhManagementStore.canSubmit) {

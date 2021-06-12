@@ -9,6 +9,13 @@ part of 'goiBaiDangManagement_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
+  Computed<bool> _$canSubmitComputed;
+
+  @override
+  bool get canSubmit =>
+      (_$canSubmitComputed ??= Computed<bool>(() => super.canSubmit,
+              name: '_GoiBaiDangManagementStore.canSubmit'))
+          .value;
   Computed<bool> _$loadingComputed;
 
   @override
@@ -23,6 +30,20 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
               () => super.loadingCountAllGoiBaiDangs,
               name: '_GoiBaiDangManagementStore.loadingCountAllGoiBaiDangs'))
           .value;
+  Computed<bool> _$loadingUpdateGoiBaiDangComputed;
+
+  @override
+  bool get loadingUpdateGoiBaiDang => (_$loadingUpdateGoiBaiDangComputed ??=
+          Computed<bool>(() => super.loadingUpdateGoiBaiDang,
+              name: '_GoiBaiDangManagementStore.loadingUpdateGoiBaiDang'))
+      .value;
+  Computed<bool> _$loadingCreateGoiBaiDangComputed;
+
+  @override
+  bool get loadingCreateGoiBaiDang => (_$loadingCreateGoiBaiDangComputed ??=
+          Computed<bool>(() => super.loadingCreateGoiBaiDang,
+              name: '_GoiBaiDangManagementStore.loadingCreateGoiBaiDang'))
+      .value;
 
   final _$fetchGoiBaiDangsFutureAtom =
       Atom(name: '_GoiBaiDangManagementStore.fetchGoiBaiDangsFuture');
@@ -360,6 +381,96 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     return _$CreateGoiBaiDangAsyncAction.run(() => super.CreateGoiBaiDang());
   }
 
+  final _$IsActiveGoiBaiDangAsyncAction =
+      AsyncAction('_GoiBaiDangManagementStore.IsActiveGoiBaiDang');
+
+  @override
+  Future<dynamic> IsActiveGoiBaiDang(GoiBaiDang goiBaiDang) {
+    return _$IsActiveGoiBaiDangAsyncAction
+        .run(() => super.IsActiveGoiBaiDang(goiBaiDang));
+  }
+
+  final _$_GoiBaiDangManagementStoreActionController =
+      ActionController(name: '_GoiBaiDangManagementStore');
+
+  @override
+  void setGoiBaiDangId(int value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setGoiBaiDangId');
+    try {
+      return super.setGoiBaiDangId(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setNameGoiBaiDang(String value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setNameGoiBaiDang');
+    try {
+      return super.setNameGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTrangThaiGoiBaiDang(bool value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setTrangThaiGoiBaiDang');
+    try {
+      return super.setTrangThaiGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPhiGoiBaiDang(double value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setPhiGoiBaiDang');
+    try {
+      return super.setPhiGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setThoiGianToiThieuGoiBaiDang(int value) {
+    final _$actionInfo =
+        _$_GoiBaiDangManagementStoreActionController.startAction(
+            name: '_GoiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang');
+    try {
+      return super.setThoiGianToiThieuGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDoUuTienGoiBaiDang(int value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setDoUuTienGoiBaiDang');
+    try {
+      return super.setDoUuTienGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMoTaGoiBaiDang(String value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setMoTaGoiBaiDang');
+    try {
+      return super.setMoTaGoiBaiDang(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -382,8 +493,11 @@ skipCount: ${skipCount},
 skipIndex: ${skipIndex},
 maxCount: ${maxCount},
 isIntialLoading: ${isIntialLoading},
+canSubmit: ${canSubmit},
 loading: ${loading},
-loadingCountAllGoiBaiDangs: ${loadingCountAllGoiBaiDangs}
+loadingCountAllGoiBaiDangs: ${loadingCountAllGoiBaiDangs},
+loadingUpdateGoiBaiDang: ${loadingUpdateGoiBaiDang},
+loadingCreateGoiBaiDang: ${loadingCreateGoiBaiDang}
     ''';
   }
 }
