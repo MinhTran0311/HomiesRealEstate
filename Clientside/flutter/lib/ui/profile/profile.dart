@@ -57,6 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PostStore _postStore;
   int sobaidang;
   ThemeStore _themeStore;
+  final oCcy = new NumberFormat("#,##0", "en_US");
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -502,7 +503,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Observer(builder: (context) {
                                     return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
                                         ? Text(
-                                        "${_userstore.userCurrent.wallet} Đ",
+                                        "${oCcy.format(_userstore.userCurrent.wallet)} Đ",
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white,

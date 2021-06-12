@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
@@ -405,7 +406,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
   Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,i){
     return Card(
-      
+      color: _themeStore.darkMode==true? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -448,7 +449,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: buildText("-${priceFormat(lsgd.soTien)}",Colors.grey),
+                        child: buildText("-${priceFormat(lsgd.soTien)}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       //center
                       Align(
@@ -457,7 +458,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: buildText("${lsgd.UserName}",Colors.grey),
+                        child: buildText("${lsgd.UserName}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       // bottom
                       Align(
@@ -466,7 +467,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: Container(width:200,child: buildText("${lsgd.chiTietHoaDonBaiDangName}",Colors.grey)),
+                        child: Container(width:200,child: buildText("${lsgd.chiTietHoaDonBaiDangName}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),)),
                       ),
                     ],
                   )
@@ -496,32 +497,32 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       //top
                       Align(
                         alignment: Alignment.topLeft,
-                        child: buildText("Số tiền",Colors.black),
+                        child: buildText("Số tiền",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: buildText("+${priceFormat(lsgd.soTien)}",Colors.grey),
+                        child: buildText("+${priceFormat(lsgd.soTien)}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       //center
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: buildText("Người dùng",Colors.black),
+                        child: buildText("Người dùng",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: buildText("${lsgd.UserName}",Colors.grey),
+                        child: buildText("${lsgd.UserName}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       // bottom
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: buildText("Kiểm Duyệt viên",Colors.black),
+                        child: buildText("Kiểm Duyệt viên",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       lsgd.kiemDuyetVienId!=null?Align(
                         alignment: Alignment.bottomRight,
-                        child: buildText("${lsgd.UserNameKiemDuyet}",Colors.grey),
+                        child: buildText("${lsgd.UserNameKiemDuyet}",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ): Align(
                         alignment: Alignment.bottomRight,
-                        child: buildText("...",Colors.grey),
+                        child: buildText("...",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                     ],
                   )
@@ -529,9 +530,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             ),
             Align(
                 alignment: Alignment.bottomCenter,
-                child:Observer(
-                  builder: (context){
-                    return lsgd.kiemDuyetVienId!=null? ElevatedButton(
+                child: lsgd.kiemDuyetVienId!=null? ElevatedButton(
                       child: Container(
                         width: 300,
                         height: 30,
@@ -577,9 +576,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       onPressed:(){
                         setState(() {_showMyDialog(lsgd, _userStore.userCurrent.UserID,i);  });
                       },
-                    );
-                  },
-                )
+                    )
             )
           ],
         )

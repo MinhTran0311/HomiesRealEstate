@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/town/province.dart';
@@ -77,8 +78,10 @@ class _FilterState extends State<Filter> {
                   ),
                   buildLoaiLSGD(),
                   buildThoiDiem(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildApplyButton(),
                       buildClearButton(),
@@ -114,10 +117,13 @@ class _FilterState extends State<Filter> {
       child: RoundedButtonWidget(
         buttonText: "Đặt lại giá trị",
         textSize: 20,
-        buttonColor: Colors.amber,
+        buttonColor: AppColors.lightDarkThemeColor,
         textColor: Colors.white,
         onPressed: (){
           _lsgdStore.setLoaiLSGD("value");
+          _lsgdStore.getLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+          _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+          Navigator.pop(context,LoaiLSGD);
         },
       ),
     );
@@ -155,7 +161,7 @@ class _FilterState extends State<Filter> {
                               icon: const Icon(Icons.arrow_drop_down),
                               iconSize: 24,
                               elevation: 16,
-                              style: const TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.grey),
                               underline: Container(
                                 height: 2,
                                 color: Colors.black,
@@ -173,7 +179,7 @@ class _FilterState extends State<Filter> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 18,
-                                      color: Colors.black,
+                                      // color: Colors.grey,
                                     ),
                                   ),
                                 );
@@ -221,7 +227,7 @@ class _FilterState extends State<Filter> {
                           builder: (context){
                             return IconButton(
                               icon: Icon(Icons.date_range),
-                              color: Colors.black,
+                              color: Colors.grey,
                               onPressed: () async {
                                 final List<DateTime> picked = await DateRangePicker.showDatePicker(
                                     context: context,

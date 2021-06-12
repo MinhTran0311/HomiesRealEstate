@@ -24,9 +24,10 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage>{
   bool showAvg = false;
   ReportDataStore _reportDataStore;
-  String dropdownValue = 'Số bài đăng';
+  String dropdownValue = 'Tất cả';
   ThemeStore _themeStore;
   List<String> type = [];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -50,15 +51,15 @@ class _ReportPageState extends State<ReportPage>{
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Thống kê",),
           bottom:  TabBar(
             tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.stacked_line_chart,color: Colors.white,),
-              ),
+              // Tab(
+              //   icon: Icon(Icons.stacked_line_chart,color: Colors.white,),
+              // ),
               Tab(
                 icon: Icon(Icons.bar_chart,color: Colors.white,),
               ),
@@ -76,131 +77,153 @@ class _ReportPageState extends State<ReportPage>{
           padding: const EdgeInsets.all(12.0),
           child: TabBarView(
             children: <Widget>[
-              Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // SizedBox(height: 10,),
-                      // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-                      SizedBox(height: 10,),
-                      Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: DropdownButton<String>(
-                                value: dropdownValue,
-                                icon: const Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                elevation: 16,
-                                style:  TextStyle(color: this._themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.black,
-                                ),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue;
-                                  });
-                                },
-                                items: <String>['Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
-                                    .map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Observer(builder: (context) {
-                        return !_reportDataStore.loading? Card(
-                            color: Colors.grey[200],
-                            child: SizedBox(
-                                width: 400,
-                                height: 400,
-                                child:StackedAreaLineChart()
-                            )
-                        )
-                            :CustomProgressIndicatorWidget();
-                      }
-                      ),
-                    ],
-                  ),
-                )
-              ),
-              Center(
-                  child: SingleChildScrollView(
-                    child: Column(
+              // Center(
+              //   child: SingleChildScrollView(
+              //     child: Column(
+              //       children: [
+              //         // SizedBox(height: 10,),
+              //         // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
+              //         SizedBox(height: 10,),
+              //         Stack(
+              //           children: [
+              //             Align(
+              //               alignment: Alignment.topCenter,
+              //               child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+              //             ),
+              //             Align(
+              //               alignment: Alignment.topLeft,
+              //               child: Padding(
+              //                 padding: const EdgeInsets.only(top: 10),
+              //                 child: DropdownButton<String>(
+              //                   value: dropdownValue,
+              //                   icon: const Icon(Icons.arrow_drop_down),
+              //                   iconSize: 24,
+              //                   elevation: 16,
+              //                   style:  TextStyle(color: this._themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+              //                   underline: Container(
+              //                     height: 2,
+              //                     color: Colors.black,
+              //                   ),
+              //                   onChanged: (String newValue) {
+              //                     setState(() {
+              //                       dropdownValue = newValue;
+              //                     });
+              //                   },
+              //                   items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+              //                       .map<DropdownMenuItem<String>>((String value) {
+              //                     return DropdownMenuItem<String>(
+              //                       value: value,
+              //                       child: Text(value),
+              //                     );
+              //                   }).toList(),
+              //                 ),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //         Observer(builder: (context) {
+              //           return !_reportDataStore.loading? Card(
+              //               color: Colors.grey[200],
+              //               child: SizedBox(
+              //                   width: 400,
+              //                   height: 400,
+              //                   child:ListView(
+              //                     physics: BouncingScrollPhysics(),
+              //                     scrollDirection: Axis.horizontal,
+              //                     shrinkWrap: true,
+              //                     children:<Widget>[
+              //                       StackedAreaLineChart()
+              //                     ] ,
+              //                   )
+              //
+              //               )
+              //           )
+              //               :CustomProgressIndicatorWidget();
+              //         }
+              //         ),
+              //       ],
+              //     ),
+              //   )
+              // ),
+              Expanded(
+                child: Wrap(
+                  children: [
+                    SizedBox(height: 10,),
+                    Stack(
                       children: [
-                        SizedBox(height: 10,),
-                        Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: DropdownButton<String>(
-                                  value: dropdownValue,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  style:  TextStyle(color: _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
-                                  underline: Container(
-                                    height: 2,
-                                    color: Colors.black,
-                                  ),
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      dropdownValue = newValue;
-                                    });
-                                  },
-                                  items: <String>['Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
-                                      .map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ],
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
                         ),
-                        // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-                        // SizedBox(height: 10,),
-                        Observer(builder: (context) {
-                          return !_reportDataStore.loading? Card(color: Colors.grey[200], child: SizedBox(width: double.infinity,height: 400, child: HorizontalPatternForwardHatchBarChart())):CustomProgressIndicatorWidget();
-                        }
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: const Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              elevation: 16,
+                              style:  TextStyle(color: _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                });
+                              },
+                              items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  )
+                    // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
+                    // SizedBox(height: 10,),
+                    Observer(builder: (context) {
+                      return _reportDataStore.listitemReports !=null?
+                      Card(
+                          color: Colors.grey[200],
+                          child:
+                          SizedBox(
+                              width:
+                              double.infinity,
+                              height: 400,
+                              child:ListView(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                children:<Widget>[
+                                  HorizontalPatternForwardHatchBarChart()
+                                ] ,
+                              )
+                              )):CustomProgressIndicatorWidget();
+                    }
+                    ),
+                  ],
+                ),
               ),
-              Container(
-                width: double.infinity,
-                  height: 400,
-                  child: SingleChildScrollView(
-                    child: Column(
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                    height: 400,
+                    child: Wrap(
                       children: [
                         Observer(builder: (context) {
-                          return !_reportDataStore.loading? buildPieChart():CustomProgressIndicatorWidget();
+                          return _reportDataStore.listitemReports !=null? buildPieChart():CustomProgressIndicatorWidget();
                         }
                         ),
                       ],
-                    ),
-                  )
+                    )
+                ),
               ),
             ],
           ),
@@ -219,7 +242,7 @@ class _ReportPageState extends State<ReportPage>{
     }
     sum = sumTienChi+sumTienNap;
     double nap =double.parse ((sumTienNap/(sum)*100).toStringAsFixed(2));
-    double chi =100-nap;
+    double chi = double.parse((100-nap).toStringAsFixed(2));
     return Observer(builder: (context){
       return _reportDataStore.listitemReports!=null?Container(
         height: 360,
@@ -350,15 +373,15 @@ class _ReportPageState extends State<ReportPage>{
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text("${priceFormat(sumTienNap)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                        child: Text("${priceFormat(sumTienNap)}",style: TextStyle(fontSize: 18,),),
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text("${priceFormat(sumTienChi)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                        child: Text("${priceFormat(sumTienChi)}",style: TextStyle(fontSize: 18,),),
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: Text("${priceFormat(sum)}",style: TextStyle(fontSize: 18,color: Colors.grey[600]),),
+                        child: Text("${priceFormat(sum)}",style: TextStyle(fontSize: 18,),),
                       ),
                     ],
                   ),
@@ -654,6 +677,7 @@ class _ReportPageState extends State<ReportPage>{
 
   Widget StackedAreaLineChart(){
     return Container(
+      width: 1000,
       color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
       child: new charts.LineChart(
         _createLineChartData(_reportDataStore.listitemReports,dropdownValue),
@@ -661,19 +685,48 @@ class _ReportPageState extends State<ReportPage>{
         animationDuration: Duration(seconds: 2),
         defaultRenderer:
         new charts.LineRendererConfig(includeArea: true, stacked: true),
+        behaviors: [new charts.SeriesLegend()],
       ),
     );
   }
 
   Widget HorizontalPatternForwardHatchBarChart(){
     return Container(
+      width: 1000,
       color: _themeStore.darkMode!=true? Colors.white: Color.fromRGBO(30, 32, 38, 1),
       child: new charts.BarChart(
         _createBarChartData(_reportDataStore.listitemReports,dropdownValue),
         animate: true,
         animationDuration: Duration(seconds: 2),
+        domainAxis: new charts.OrdinalAxisSpec(
+            renderSpec: new charts.SmallTickRendererSpec(
+
+              // Tick and Label styling here.
+                labelStyle: new charts.TextStyleSpec(
+                    fontSize: 14, // size in Pts.
+                    color: _themeStore.darkMode ==true ? charts.MaterialPalette.white: charts.MaterialPalette.black),
+
+                // Change the line colors to match text color.
+                lineStyle: new charts.LineStyleSpec(
+                    color: charts.MaterialPalette.black))),
+
+        /// Assign a custom style for the measure axis.
+        primaryMeasureAxis: new charts.NumericAxisSpec(
+            renderSpec: new charts.GridlineRendererSpec(
+
+              // Tick and Label styling here.
+                labelStyle: new charts.TextStyleSpec(
+                    fontSize: 14, // size in Pts.
+                    color: _themeStore.darkMode ==true ? charts.MaterialPalette.white: charts.MaterialPalette.black),
+
+                // Change the line colors to match text color.
+                lineStyle: new charts.LineStyleSpec(
+                    color: charts.MaterialPalette.black))),
         barGroupingType: charts.BarGroupingType.grouped,
-        vertical: false,
+        vertical: true,
+        // Add the series legend behavior to the chart to turn on series legends.
+        // By default the legend will display above the chart.
+        behaviors: [new charts.SeriesLegend()],
       ),
     );
   }
@@ -683,6 +736,7 @@ class _ReportPageState extends State<ReportPage>{
   static List<charts.Series<LinearSales, int>> _createLineChartData(listitemReport l,String dropdownValue) {
     List<LinearSales> soBaiDang=[],soTienNap=[],soTienChi=[];
     if (l != null) {
+
       for(int i=0,ii=12;i<ii;i++){
         if(dropdownValue == "Số bài đăng"){
           soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang),);
@@ -694,31 +748,37 @@ class _ReportPageState extends State<ReportPage>{
           soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
           soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
         }
-        else{
+        else if(dropdownValue == "Số tiền thanh toán"){
           soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang*0),);
           soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
           soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
         }
+        else{
+          soBaiDang.add(new LinearSales(i+1, l.listitemReports[0].listyearReports[i].soBaiDang),);
+          soTienNap.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
+          soTienChi.add(new LinearSales(i+1, (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
+        }
+
 
       }
     }
     return [
       new charts.Series<LinearSales, int>(
-        id: 'soBaiDang',
+        id: 'Số bài đăng',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: soBaiDang,
       ),
       new charts.Series<LinearSales, int>(
-        id: 'soTienChi',
+        id: 'Số tiền thanh toán',
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: soTienChi,
       ),
       new charts.Series<LinearSales, int>(
-        id: 'soTienNap',
+        id: 'Số tiền nạp',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
@@ -736,6 +796,7 @@ class _ReportPageState extends State<ReportPage>{
     List<OrdinalSales> soBaiDang=[],soTienNap=[],soTienChi=[];
     if (l != null) {
       for(int i=0,ii=12;i<ii;i++){
+
         if(dropdownValue == "Số bài đăng"){
           soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang),);
           soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
@@ -746,9 +807,14 @@ class _ReportPageState extends State<ReportPage>{
           soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
           soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()*0));
         }
-        else{
+        else if(dropdownValue == "Số tiền thanh toán"){
           soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang*0),);
           soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()*0));
+          soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
+        }
+        else{
+          soBaiDang.add(new OrdinalSales(ThangInttoString(i), l.listitemReports[0].listyearReports[i].soBaiDang),);
+          soTienNap.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienNap).toInt()));
           soTienChi.add(new OrdinalSales(ThangInttoString(i), (l.listitemReports[0].listyearReports[i].soTienChi).toInt()));
         }
 
@@ -756,19 +822,19 @@ class _ReportPageState extends State<ReportPage>{
     }
     return [
       new charts.Series<OrdinalSales, String>(
-        id: 'soBaiDang',
+        id: 'Số bài đăng',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: soBaiDang,
       ),
       new charts.Series<OrdinalSales, String>(
-        id: 'soTienChi',
+        id: 'Số tiền thanh toán',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: soTienChi,
       ),
       new charts.Series<OrdinalSales, String>(
-        id: 'soTienNap',
+        id: 'Sô tiền nạp',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: soTienNap,

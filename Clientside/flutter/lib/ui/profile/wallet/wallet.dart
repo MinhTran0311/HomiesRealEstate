@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
@@ -330,6 +331,7 @@ class _WalletPageState extends State<WalletPage>{
             // side: BorderSide(color: Colors.white),
 
         ),
+        color: _themeStore.darkMode==true? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
         child: Container(
           height: 60,
           padding: const EdgeInsets.all(5),
@@ -412,7 +414,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.grey,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
           ],
         );
       }
@@ -421,7 +423,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.deepOrange),),
           ],
         );
       }
@@ -431,14 +433,14 @@ class _WalletPageState extends State<WalletPage>{
         children: [
           // Icon(Icons.access_time,color: Colors.grey,size: 16,),
           // buildText("Ngày thanh toán: ",Colors.grey),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
         ],
       );
     }
   }
 
   Widget buildText(String text,Color c){
-    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
+    return Text(text,style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
   }
 
   Widget buildSurnameField(String title,TextEditingController controller) {
@@ -576,7 +578,7 @@ class _NapTienPageState extends State<NapTienPage> {
       child: Column(
         children: [
           Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
-          Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
+          Text('Số tiền',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
           TextFormField(
               controller: Ctlmoneysend,
               keyboardType: TextInputType.number,
