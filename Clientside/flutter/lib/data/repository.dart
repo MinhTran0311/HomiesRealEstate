@@ -249,8 +249,8 @@ class Repository {
     }).catchError((error) => throw error);
   }
   //User: ----------------------------------------------------------------------
-  Future<UserList> getAllUsers() async {
-    return await _userApi.getAllUsers().then((usersList) {
+  Future<UserList> getAllUsers(int skipCount, int maxCount) async {
+    return await _userApi.getAllUsers(skipCount, maxCount).then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
     }).catchError((error) => throw error);
@@ -456,8 +456,8 @@ class Repository {
 
   //Danh mục------------------------------------------------------------------
   //Get all danh mục
-  Future<DanhMucList> getAllDanhMucs() async {
-    return await _danhMucApi.getAllDanhMucs().then((danhMucList) {
+  Future<DanhMucList> getAllDanhMucs(int skipCount, int maxCount) async {
+    return await _danhMucApi.getAllDanhMucs(skipCount, maxCount).then((danhMucList) {
       return danhMucList;
     }).catchError((error) => throw error);
   }
@@ -488,8 +488,8 @@ class Repository {
 
   //Thuộc tính------------------------------------------------------------------
   //Get all Thuộc tính
-  Future<ThuocTinhManagementList> getAllThuocTinhs() async {
-    return await _thuocTinhApi.getAllThuocTinhs().then((thuocTinhList) {
+  Future<ThuocTinhManagementList> getAllThuocTinhs(int skipCount, int maxCount) async {
+    return await _thuocTinhApi.getAllThuocTinhs(skipCount, maxCount).then((thuocTinhList) {
       return thuocTinhList;
     }).catchError((error) => throw error);
   }
@@ -520,8 +520,8 @@ class Repository {
 
   //Gói bài đăng------------------------------------------------------------------
   //Get all gói bài đăng
-  Future<GoiBaiDangList> getAllGoiBaiDangs() async {
-    return await _goiBaiDangApi.getAllGoiBaiDangs().then((goiBaiDangList) {
+  Future<GoiBaiDangList> getAllGoiBaiDangs(int skipCount, int maxCount) async {
+    return await _goiBaiDangApi.getAllGoiBaiDangs(skipCount, maxCount).then((goiBaiDangList) {
       return goiBaiDangList;
     }).catchError((error) => throw error);
   }

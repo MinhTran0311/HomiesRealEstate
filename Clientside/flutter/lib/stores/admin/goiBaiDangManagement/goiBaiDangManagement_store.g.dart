@@ -265,12 +265,74 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_GoiBaiDangManagementStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$skipIndexAtom = Atom(name: '_GoiBaiDangManagementStore.skipIndex');
+
+  @override
+  int get skipIndex {
+    _$skipIndexAtom.reportRead();
+    return super.skipIndex;
+  }
+
+  @override
+  set skipIndex(int value) {
+    _$skipIndexAtom.reportWrite(value, super.skipIndex, () {
+      super.skipIndex = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_GoiBaiDangManagementStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
+  final _$isIntialLoadingAtom =
+      Atom(name: '_GoiBaiDangManagementStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$getGoiBaiDangsAsyncAction =
       AsyncAction('_GoiBaiDangManagementStore.getGoiBaiDangs');
 
   @override
-  Future<dynamic> getGoiBaiDangs() {
-    return _$getGoiBaiDangsAsyncAction.run(() => super.getGoiBaiDangs());
+  Future<dynamic> getGoiBaiDangs(bool isLoadMore) {
+    return _$getGoiBaiDangsAsyncAction
+        .run(() => super.getGoiBaiDangs(isLoadMore));
   }
 
   final _$fCountAllGoiBaiDangsAsyncAction =
@@ -316,6 +378,10 @@ goiBaiDangList: ${goiBaiDangList},
 updateGoiBaiDang_success: ${updateGoiBaiDang_success},
 createGoiBaiDang_success: ${createGoiBaiDang_success},
 countAllGoiBaiDangs: ${countAllGoiBaiDangs},
+skipCount: ${skipCount},
+skipIndex: ${skipIndex},
+maxCount: ${maxCount},
+isIntialLoading: ${isIntialLoading},
 loading: ${loading},
 loadingCountAllGoiBaiDangs: ${loadingCountAllGoiBaiDangs}
     ''';

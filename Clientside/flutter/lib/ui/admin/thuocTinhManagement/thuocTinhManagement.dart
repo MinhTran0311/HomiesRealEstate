@@ -14,6 +14,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/filter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/admin/thuocTinhManagement/thuocTinhManagement_store.dart';
 import 'package:boilerplate/models/thuocTinh/thuocTinh_list.dart';
@@ -32,6 +33,11 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
 
   var _selectedValue;
   // var _permissions;
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  final ScrollController _scrollController =
+  ScrollController(keepScrollOffset: true);
+  bool isRefreshing = false;
 
   @override
   void initState() {
@@ -53,7 +59,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     // }
     // check to see if already called api
     if (!_thuocTinhManagementStore.loading) {
-      _thuocTinhManagementStore.getThuocTinhs();
+      _thuocTinhManagementStore.getThuocTinhs(false);
     }
   }
 
@@ -197,23 +203,81 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
 
         ),
         // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
-        _buildListView(),
+        Expanded(child: _buildListView()),
       ],
     );
   }
 
   Widget _buildListView() {
     return _thuocTinhManagementStore.thuocTinhList != null
-        ? Expanded(
-        child: ListView.separated(
-          itemCount: _thuocTinhManagementStore.thuocTinhList.thuocTinhs.length,
-          separatorBuilder: (context, position) {
-            return Divider();
-          },
-          itemBuilder: (context, position) {
-            return _buildListItem(_thuocTinhManagementStore.thuocTinhList.thuocTinhs[position], position);
-          },
-        )
+        ?  SmartRefresher(
+      //key: _refresherKey,
+      controller: _refreshController,
+      enablePullUp: true,
+      enablePullDown: true,
+      header: WaterDropHeader(
+        refresh: SizedBox(
+          width: 25.0,
+          height: 25.0,
+          child: Icon(
+            Icons.flight_takeoff_outlined,
+            color: Colors.amber,
+            size: 20,
+          ),
+        ),
+        idleIcon: SizedBox(
+          width: 25.0,
+          height: 25.0,
+          child: Icon(
+            Icons.flight_takeoff_outlined,
+            color: Colors.amber,
+            size: 20,
+          ),
+        ),
+        waterDropColor: Colors.amber,
+      ),
+      physics: BouncingScrollPhysics(),
+      footer: ClassicFooter(
+        loadStyle: LoadStyle.ShowWhenLoading,
+        completeDuration: Duration(milliseconds: 500),
+      ),
+      onLoading: () async {
+        print("loading");
+
+        _thuocTinhManagementStore.getThuocTinhs(true);
+        await Future.delayed(Duration(milliseconds: 2000));
+        if (mounted) {
+          setState(() {});
+        }
+        _scrollController.jumpTo(
+          _scrollController.position.maxScrollExtent,
+        );
+        _refreshController.loadComplete();
+      },
+      onRefresh: () async {
+        print("refresh");
+        _thuocTinhManagementStore.getThuocTinhs(false);
+
+        await Future.delayed(Duration(milliseconds: 2000));
+        if (mounted) setState(() {});
+        isRefreshing = true;
+        _refreshController.refreshCompleted();
+      },
+      //scrollController: _scrollController,
+      primary: false,
+      child: ListView.builder(
+        //key: _contentKey,
+        controller: _scrollController,
+        itemCount: _thuocTinhManagementStore.thuocTinhList.thuocTinhs.length,
+        // separatorBuilder: (context, position) {
+        //   return Divider();
+        // },
+        itemBuilder: (context, position) {
+          return _buildListItem(
+              _thuocTinhManagementStore.thuocTinhList.thuocTinhs[position], position);
+          //_buildListItem(position);
+        },
+      ),
     )
         : Center(
       child: Text(

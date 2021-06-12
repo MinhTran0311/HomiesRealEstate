@@ -63,13 +63,25 @@ abstract class _DanhMucManagementStore with Store {
   int countAllDanhMucs = 0;
 
   @observable
+  int skipCount = 0;
+
+  @observable
+  int skipIndex = 10;
+
+  @observable
+  int maxCount = 10;
+
+  @observable
   bool updateDanhMuc_success = false;
 
   @observable
   bool createDanhMuc_success = false;
 
+  @observable
+  bool isIntialLoading = true;
+
   @computed
-  bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending;
+  bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllDanhMucs => fetchCountAllDanhMucsFuture.status == FutureStatus.pending;
@@ -81,12 +93,24 @@ abstract class _DanhMucManagementStore with Store {
   bool get loadingCreateDanhMuc => fetchCreateDanhMucFuture.status == FutureStatus.pending;
 
   @action
-  Future getDanhMucs() async {
-    final future = _repository.getAllDanhMucs();
+  Future getDanhMucs(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCount = 0;
+    }
+    else
+      skipCount += skipIndex;
+    final future = _repository.getAllDanhMucs(skipCount, maxCount);
     fetchDanhMucsFuture = ObservableFuture(future);
 
     future.then((danhMucList) {
-      this.danhMucList = danhMucList;
+      if (!isLoadMore){
+        this.danhMucList = danhMucList;
+        if (isIntialLoading) isIntialLoading=false;
+      }
+      else {
+        for (int i=0; i< danhMucList.danhMucs.length; i++)
+          this.danhMucList.danhMucs.add(danhMucList.danhMucs[i]);
+      }
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null)

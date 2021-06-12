@@ -20,11 +20,12 @@ class UserApi {
 
   UserApi(this._dioClient, this._restClient);
 
-  Future<UserList> getAllUsers() async {
+  Future<UserList> getAllUsers(int skipCount, int maxResultCount) async {
     try {
       final res = await _dioClient.post(Endpoints.getAllUsers,
         data: {
-
+          "maxResultCount":maxResultCount,
+          "skipCount": skipCount,
         },
         options: Options(
             headers: {

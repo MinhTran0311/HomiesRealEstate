@@ -17,11 +17,12 @@ class GoiBaiDangApi {
   GoiBaiDangApi(this._dioClient, this._restClient);
 
   //Get all goi bai dang
-  Future<GoiBaiDangList> getAllGoiBaiDangs() async {
+  Future<GoiBaiDangList> getAllGoiBaiDangs(int skipCount, int maxResultCount) async {
     try {
       final res = await _dioClient.get(Endpoints.getAllGoiBaiDangs,
         queryParameters: {
-          "MaxResultCount": 100,
+          "MaxResultCount": maxResultCount,
+          "SkipCount": skipCount,
         },
         options: Options(
             headers: {
