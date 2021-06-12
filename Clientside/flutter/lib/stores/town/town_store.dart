@@ -34,9 +34,9 @@ abstract class _TownStore with Store {
 
   @observable
   bool success = false;
-
+  bool isIntialLoading = true;
   @computed
-  bool get loading => fetchTownsFuture.status == FutureStatus.pending;
+  bool get loading => fetchTownsFuture.status == FutureStatus.pending && isIntialLoading;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -75,7 +75,7 @@ abstract class _TownStore with Store {
   bool successCommune = false;
 
   @computed
-  bool get loadingCommune => fetchCommunesFuture.status == FutureStatus.pending;
+  bool get loadingCommune => fetchCommunesFuture.status == FutureStatus.pending && isIntialLoading;
 
   // actions:-------------------------------------------------------------------
   @action
