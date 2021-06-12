@@ -50,11 +50,7 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return Material(
-          child: _buildMenuItems(),
-          //color: Color.fromRGBO(236, 236, 238, 1),
-          // color: Colors.white,
-        );
+        return _buildMenuItems();
       },
     );
   }
@@ -92,13 +88,13 @@ class _HelpScreenState extends State<HelpScreen> {
                 boxShadow: [
                   // color: Colors.white, //background color of box
                   BoxShadow(
-                   color: Color.fromRGBO(198, 199, 202, 1),
+                    color: Color.fromRGBO(198, 199, 202, 1),
                     blurRadius: 12, // soften the shadow
                     spreadRadius: 0.01, //extend the shadow
-                    offset: Offset(
-                      8.0, // Move to right 10  horizontally
-                      12.0, // Move to bottom 10 Vertically
-                    ),
+                    // offset: Offset(
+                    //   8.0, // Move to right 10  horizontally
+                    //   12.0, // Move to bottom 10 Vertically
+                    // ),
                   )
                 ],
                 color: !_themeStore.darkMode?Colors.amber:Color.fromRGBO(18, 22, 28, 1),
@@ -166,20 +162,6 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget _buildListItem(String nameItem, String pathPicture, String nameButton,
       Function function, Color colors, double leftPadding) {
     return Container(
-      decoration: new BoxDecoration(
-        boxShadow: [
-          // color: Colors.white, //background color of box
-          BoxShadow(
-            color: Color.fromRGBO(198, 199, 202, 1),
-            blurRadius: 20, // soften the shadow
-            spreadRadius: 0.01, //extend the shadow
-            offset: Offset(
-              8.0, // Move to right 10  horizontally
-              12.0, // Move to bottom 10 Vertically
-            ),
-          )
-        ],
-      ),
       child: Card(
         margin: EdgeInsets.only(top: 8, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -188,7 +170,7 @@ class _HelpScreenState extends State<HelpScreen> {
         ),
         child: Container(
           padding: EdgeInsets.all(5),
-          color:!_themeStore.darkMode?Colors.white:null,
+          color:!_themeStore.darkMode?Colors.white:Color.fromRGBO(18, 22, 28, 100),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -203,13 +185,13 @@ class _HelpScreenState extends State<HelpScreen> {
                     padding: EdgeInsets.only(left: leftPadding),
                     decoration: new BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.white, width: 2),
+                      border: Border.all(color: Colors.white, width: 3),
                       color: colors,
                     ),
-                    // backgroundColor: colors,
+                    //\\\ backgroundColor: colors,
                     child: Image.asset(
                       pathPicture,
-                      width: 60,
+                      width: 40,
                     ),
                   ),
                 ),

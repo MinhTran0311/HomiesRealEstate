@@ -200,25 +200,67 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   }
 //#region build TextFieldWidget
   Widget _buildNameField() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 26,
-          hint: ('Tên'),
-          hintColor: Colors.white,
-          icon: Icons.drive_file_rename_outline,
-          inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _nameController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            _thuocTinhManagementStore.setNameThuocTinh(_nameController.text);
-          },
-          errorText: _thuocTinhManagementStore.formErrorStore.name,
-        );
-      },
-    );
+    Widget buildDiaChiFilter(){
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: 110,
+              child: Text("Địa chỉ",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              // child: TextField(
+              //   autofocus: false,
+              //   keyboardType: TextInputType.text,
+              //   controller: _diaChiController,
+              //   onChanged: (value){
+              //     _filterStore.setDiaChiContent(value);
+              //   },
+              //   textAlign: TextAlign.start,
+              //   style: TextStyle(
+              //     fontSize: 18,
+              //     color: Colors.black,
+              //   ),
+              //   decoration: InputDecoration(
+              //     hintText: "Địa chỉ bất kì",
+              //     suffixIcon: IconButton(
+              //       onPressed: () {
+              //         _diaChiController.clear();
+              //         _filterStore.setDiaChiContent("");
+              //       },
+              //       icon: Icon(Icons.clear),
+              //     ),
+              //     hintStyle: TextStyle(
+              //       fontSize: 18,
+              //       color: Colors.grey[400],
+              //     ),
+              //     enabledBorder: UnderlineInputBorder(
+              //       borderSide: BorderSide(color: Colors.red[400]),
+              //     ),
+              //     focusedBorder: UnderlineInputBorder(
+              //       borderSide: BorderSide(color: Colors.orange[400]),
+              //     ),
+              //     border:  UnderlineInputBorder(
+              //         borderSide:  BorderSide(color: Colors.black)
+              //     ),
+              //   ),
+              // ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget buildLoaiBaiDang(){

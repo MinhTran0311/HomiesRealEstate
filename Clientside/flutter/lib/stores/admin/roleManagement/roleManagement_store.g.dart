@@ -102,6 +102,22 @@ mixin _$RoleManagementStore on _RoleManagementStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom =
+      Atom(name: '_RoleManagementStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$getRolesAsyncAction = AsyncAction('_RoleManagementStore.getRoles');
 
   @override
@@ -125,6 +141,7 @@ fetchCountAllRolesFuture: ${fetchCountAllRolesFuture},
 roleList: ${roleList},
 successGetRoles: ${successGetRoles},
 countAllRoles: ${countAllRoles},
+isIntialLoading: ${isIntialLoading},
 loading: ${loading},
 loadingCountAllRoles: ${loadingCountAllRoles}
     ''';

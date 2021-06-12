@@ -22,25 +22,23 @@ class UserList {
     List<User> users = List<User>();
     String roleName;
     String roleDisplayName;
-    if(json["result"]["totalCount"] > 0) {
-      for (int i=0; i<json["result"]["items"].length; i++) {
-        if (json["result"]["items"][i]["roles"].length > 0) {
-          roleName = "";
-          roleDisplayName = "";
-          for (int j=0; j<json["result"]["items"][i]["roles"].length; j++) {
-            if (j > 0) {
-              roleName = roleName + ", ";
-              roleDisplayName = roleDisplayName + ", ";
-            }
-            roleName = roleName + json["result"]["items"][i]["roles"][j]["roleName"];
-            roleDisplayName = roleDisplayName + json["result"]["items"][i]["roles"][j]["roleDisplayName"];
+    for (int i=0; i<json["result"]["items"].length; i++) {
+      if (json["result"]["items"][i]["roles"].length > 0) {
+        roleName = "";
+        roleDisplayName = "";
+        for (int j=0; j<json["result"]["items"][i]["roles"].length; j++) {
+          if (j > 0) {
+            roleName = roleName + ", ";
+            roleDisplayName = roleDisplayName + ", ";
           }
-          users.add(User.fromMap(json["result"]["items"][i], roleName.toString(), roleDisplayName.toString()));
+          roleName = roleName + json["result"]["items"][i]["roles"][j]["roleName"];
+          roleDisplayName = roleDisplayName + json["result"]["items"][i]["roles"][j]["roleDisplayName"];
         }
+        users.add(User.fromMap(json["result"]["items"][i], roleName.toString(), roleDisplayName.toString()));
       }
-      return UserList(
-        users: users,
-      );
     }
+    return UserList(
+      users: users,
+    );
   }
 }

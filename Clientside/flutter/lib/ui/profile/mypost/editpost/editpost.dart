@@ -214,12 +214,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-          colors: !_themeStore.darkMode?[
-          Colors.amber[600],
-          Colors.amber[50],
-          ]:[
-      Colors.blue[800],
-      Color.fromRGBO(18, 22, 28, 1),
+          colors: !_themeStore.darkMode? [
+            Colors.amber[600],
+            Colors.amber[50],
+          ]
+              : [
+          Color.fromRGBO(30, 22, 28, 50),
+            Color.fromRGBO(18, 22, 28, 1),
             ])),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
@@ -386,7 +387,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
-                      color: const Color(0xFF167F67),
+                      
                     ),
                     SizedBox(
                       width: 10,
@@ -449,7 +450,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: const Color(0xFF167F67),
+                          
                         ),
                         SizedBox(
                           width: 10,
@@ -508,7 +509,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: const Color(0xFF167F67),
+                          
                         ),
                         SizedBox(
                           width: 10,
@@ -684,7 +685,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: const Color(0xFF167F67),
+                    
                   ),
                   SizedBox(
                     width: 10,
@@ -733,7 +734,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: const Color(0xFF167F67),
+                    
                   ),
                   SizedBox(
                     width: 8,
@@ -870,14 +871,14 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     hint:thuocTinh.tenThuocTinh=="Hướng nhà"?Row(
                       children: [
                         Icon(Icons.directions,
-                          color: const Color(0xFF167F67),),
+                          ),
                         SizedBox(width: 10,),
                         Text("Chọn hướng nhà"),
                       ],
                     ):Row(
                         children: [
                           Icon(Icons.directions,
-                            color: const Color(0xFF167F67),),
+                            ),
                           SizedBox(width: 10,),Text("Chọn hướng ban công")]),
                     decoration: InputDecoration(suffixIcon: IconButton(
                       onPressed: () =>
@@ -899,7 +900,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                           Row(
                             children: <Widget>[
                               Icon(Icons.directions,
-                                color: const Color(0xFF167F67),),
+                                ),
                               SizedBox(width: 10,),
                               Text(type, style: TextStyle(
                                   ),),

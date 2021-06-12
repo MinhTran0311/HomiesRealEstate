@@ -17,11 +17,12 @@ class ThuocTinhApi {
   ThuocTinhApi(this._dioClient, this._restClient);
 
   //Get all thuộc tính
-  Future<ThuocTinhManagementList> getAllThuocTinhs() async {
+  Future<ThuocTinhManagementList> getAllThuocTinhs(int skipCount, int maxResultCount) async {
     try {
       final res = await _dioClient.get(Endpoints.getAllThuocTinhs,
         queryParameters: {
-          "MaxResultCount": 100,
+          "MaxResultCount": maxResultCount,
+          "SkipCount": skipCount,
         },
         options: Options(
             headers: {

@@ -182,6 +182,67 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_UserManagementStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$skipIndexAtom = Atom(name: '_UserManagementStore.skipIndex');
+
+  @override
+  int get skipIndex {
+    _$skipIndexAtom.reportRead();
+    return super.skipIndex;
+  }
+
+  @override
+  set skipIndex(int value) {
+    _$skipIndexAtom.reportWrite(value, super.skipIndex, () {
+      super.skipIndex = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_UserManagementStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
+  final _$isIntialLoadingAtom =
+      Atom(name: '_UserManagementStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$successGetUsersAtom =
       Atom(name: '_UserManagementStore.successGetUsers');
 
@@ -219,11 +280,11 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
       ActionController(name: '_UserManagementStore');
 
   @override
-  Future<dynamic> getUsers() {
+  Future<dynamic> getUsers(bool isLoadMore) {
     final _$actionInfo = _$_UserManagementStoreActionController.startAction(
         name: '_UserManagementStore.getUsers');
     try {
-      return super.getUsers();
+      return super.getUsers(isLoadMore);
     } finally {
       _$_UserManagementStoreActionController.endAction(_$actionInfo);
     }
@@ -241,6 +302,10 @@ countNewUsersInMonth: ${countNewUsersInMonth},
 userList: ${userList},
 avatarUser: ${avatarUser},
 dateCurrent: ${dateCurrent},
+skipCount: ${skipCount},
+skipIndex: ${skipIndex},
+maxCount: ${maxCount},
+isIntialLoading: ${isIntialLoading},
 successGetUsers: ${successGetUsers},
 loading: ${loading},
 loadingAvatar: ${loadingAvatar},

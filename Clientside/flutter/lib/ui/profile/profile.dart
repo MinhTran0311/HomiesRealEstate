@@ -59,7 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ThemeStore _themeStore;
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
     setState(() {
       if (pickedFile != null) {
         image = File(pickedFile.path);
@@ -90,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
      if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false,"",0);
       if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     }
-    
+    if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     //sobaidang = await _postStore.getsobaidang();
   }
 

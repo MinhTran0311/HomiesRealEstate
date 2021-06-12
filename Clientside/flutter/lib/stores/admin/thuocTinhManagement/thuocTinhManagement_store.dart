@@ -69,13 +69,25 @@ abstract class _ThuocTinhManagementStore with Store {
   @observable
   bool createThuocTinh_success = false;
 
+  @observable
+  bool isIntialLoading = true;
+
+  @observable
+  int skipCount = 0;
+
+  @observable
+  int skipIndex = 10;
+
+  @observable
+  int maxCount = 10;
+
   @computed
   bool get canSubmit =>
     name.isNotEmpty &&
     name != null;
 
   @computed
-  bool get loading => fetchThuocTinhsFuture.status == FutureStatus.pending;
+  bool get loading => fetchThuocTinhsFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllThuocTinhs => fetchCountAllThuocTinhsFuture.status == FutureStatus.pending;
@@ -119,12 +131,24 @@ abstract class _ThuocTinhManagementStore with Store {
   }
 
   @action
-  Future getThuocTinhs() async {
-    final future = _repository.getAllThuocTinhs();
+  Future getThuocTinhs(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCount = 0;
+    }
+    else
+      skipCount += skipIndex;
+    final future = _repository.getAllThuocTinhs(skipCount, maxCount);
     fetchThuocTinhsFuture = ObservableFuture(future);
 
     future.then((thuocTinhList) {
-      this.thuocTinhList = thuocTinhList;
+      if (!isLoadMore){
+        this.thuocTinhList = thuocTinhList;
+        if (isIntialLoading) isIntialLoading=false;
+      }
+      else {
+        for (int i=0; i< thuocTinhList.thuocTinhs.length; i++)
+          this.thuocTinhList.thuocTinhs.add(thuocTinhList.thuocTinhs[i]);
+      }
     }).catchError((error) {
       if (error is DioError) {
         if (error.response.data != null)

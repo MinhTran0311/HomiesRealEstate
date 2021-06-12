@@ -210,6 +210,51 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$skipCountAtom = Atom(name: '_DanhMucManagementStore.skipCount');
+
+  @override
+  int get skipCount {
+    _$skipCountAtom.reportRead();
+    return super.skipCount;
+  }
+
+  @override
+  set skipCount(int value) {
+    _$skipCountAtom.reportWrite(value, super.skipCount, () {
+      super.skipCount = value;
+    });
+  }
+
+  final _$skipIndexAtom = Atom(name: '_DanhMucManagementStore.skipIndex');
+
+  @override
+  int get skipIndex {
+    _$skipIndexAtom.reportRead();
+    return super.skipIndex;
+  }
+
+  @override
+  set skipIndex(int value) {
+    _$skipIndexAtom.reportWrite(value, super.skipIndex, () {
+      super.skipIndex = value;
+    });
+  }
+
+  final _$maxCountAtom = Atom(name: '_DanhMucManagementStore.maxCount');
+
+  @override
+  int get maxCount {
+    _$maxCountAtom.reportRead();
+    return super.maxCount;
+  }
+
+  @override
+  set maxCount(int value) {
+    _$maxCountAtom.reportWrite(value, super.maxCount, () {
+      super.maxCount = value;
+    });
+  }
+
   final _$updateDanhMuc_successAtom =
       Atom(name: '_DanhMucManagementStore.updateDanhMuc_success');
 
@@ -244,12 +289,28 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$isIntialLoadingAtom =
+      Atom(name: '_DanhMucManagementStore.isIntialLoading');
+
+  @override
+  bool get isIntialLoading {
+    _$isIntialLoadingAtom.reportRead();
+    return super.isIntialLoading;
+  }
+
+  @override
+  set isIntialLoading(bool value) {
+    _$isIntialLoadingAtom.reportWrite(value, super.isIntialLoading, () {
+      super.isIntialLoading = value;
+    });
+  }
+
   final _$getDanhMucsAsyncAction =
       AsyncAction('_DanhMucManagementStore.getDanhMucs');
 
   @override
-  Future<dynamic> getDanhMucs() {
-    return _$getDanhMucsAsyncAction.run(() => super.getDanhMucs());
+  Future<dynamic> getDanhMucs(bool isLoadMore) {
+    return _$getDanhMucsAsyncAction.run(() => super.getDanhMucs(isLoadMore));
   }
 
   final _$fCountAllDanhMucsAsyncAction =
@@ -276,6 +337,15 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     return _$CreateDanhMucAsyncAction.run(() => super.CreateDanhMuc());
   }
 
+  final _$IsActiveDanhMucAsyncAction =
+      AsyncAction('_DanhMucManagementStore.IsActiveDanhMuc');
+
+  @override
+  Future<dynamic> IsActiveDanhMuc(DanhMuc danhMuc) {
+    return _$IsActiveDanhMucAsyncAction
+        .run(() => super.IsActiveDanhMuc(danhMuc));
+  }
+
   @override
   String toString() {
     return '''
@@ -290,8 +360,12 @@ danhMucCha: ${danhMucCha},
 trangThai: ${trangThai},
 danhMucList: ${danhMucList},
 countAllDanhMucs: ${countAllDanhMucs},
+skipCount: ${skipCount},
+skipIndex: ${skipIndex},
+maxCount: ${maxCount},
 updateDanhMuc_success: ${updateDanhMuc_success},
 createDanhMuc_success: ${createDanhMuc_success},
+isIntialLoading: ${isIntialLoading},
 loading: ${loading},
 loadingCountAllDanhMucs: ${loadingCountAllDanhMucs},
 loadingUpdateDanhMuc: ${loadingUpdateDanhMuc},

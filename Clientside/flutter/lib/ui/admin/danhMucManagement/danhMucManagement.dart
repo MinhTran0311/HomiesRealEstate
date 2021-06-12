@@ -14,6 +14,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:boilerplate/ui/home/filter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/admin/danhMucManagement/danhMucManagement_store.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc.dart';
@@ -30,6 +31,11 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
   DanhMucManagementStore _danhMucManagementStore;
 
   var _selectedValue;
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  final ScrollController _scrollController =
+  ScrollController(keepScrollOffset: true);
+  bool isRefreshing = false;
   // var _permissions;
 
   @override
@@ -52,12 +58,23 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     // }
     // check to see if already called api
     if (!_danhMucManagementStore.loading) {
-      _danhMucManagementStore.getDanhMucs();
+      _danhMucManagementStore.getDanhMucs(false);
+      _danhMucManagementStore.isIntialLoading = true;
     }
   }
 
   _clickButtonApDung() {
 
+  }
+
+  _isActiveDanhMuc(DanhMuc danhMuc) async {
+    if(danhMuc.trangThai == "On")
+      {
+        danhMuc.trangThai = "Off";
+      }
+    else danhMuc.trangThai = "On";
+    await _danhMucManagementStore.IsActiveDanhMuc(danhMuc);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -196,24 +213,82 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
 
         ),
         // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
-        _buildListView(),
+        Expanded(child: _buildListView()),
       ],
     );
   }
 
   Widget _buildListView() {
     return _danhMucManagementStore.danhMucList != null
-        ? Expanded(
-        child: ListView.separated(
+        ? SmartRefresher(
+        //key: _refresherKey,
+        controller: _refreshController,
+        enablePullUp: true,
+        enablePullDown: true,
+        header: WaterDropHeader(
+          refresh: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          idleIcon: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: Icon(
+              Icons.flight_takeoff_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ),
+          waterDropColor: Colors.amber,
+        ),
+        physics: BouncingScrollPhysics(),
+        footer: ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+        ),
+        onLoading: () async {
+          print("loading");
+
+          _danhMucManagementStore.getDanhMucs(true);
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) {
+            setState(() {});
+          }
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
+          _refreshController.loadComplete();
+        },
+        onRefresh: () async {
+          print("refresh");
+          _danhMucManagementStore.getDanhMucs(false);
+
+          await Future.delayed(Duration(milliseconds: 2000));
+          if (mounted) setState(() {});
+          isRefreshing = true;
+          _refreshController.refreshCompleted();
+        },
+        //scrollController: _scrollController,
+        primary: false,
+        child: ListView.builder(
+          //key: _contentKey,
+          controller: _scrollController,
           itemCount: _danhMucManagementStore.danhMucList.danhMucs.length,
-          separatorBuilder: (context, position) {
-            return Divider();
-          },
+          // separatorBuilder: (context, position) {
+          //   return Divider();
+          // },
           itemBuilder: (context, position) {
-            return _buildListItem(_danhMucManagementStore.danhMucList.danhMucs[position], position);
+            return _buildListItem(
+                _danhMucManagementStore.danhMucList.danhMucs[position], position);
+            //_buildListItem(position);
           },
-        )
-    )
+        ),
+      )
         : Center(
       child: Text(
         // AppLocalizations.of(context).translate('home_tv_no_post_found'),
@@ -534,7 +609,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ),
                   onTap: () {
-
+                    _isActiveDanhMuc(danhMuc);
                   },
                 ),
               ],

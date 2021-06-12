@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/danhMuc/danhMuc.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -62,13 +63,25 @@ abstract class _DanhMucManagementStore with Store {
   int countAllDanhMucs = 0;
 
   @observable
+  int skipCount = 0;
+
+  @observable
+  int skipIndex = 10;
+
+  @observable
+  int maxCount = 10;
+
+  @observable
   bool updateDanhMuc_success = false;
 
   @observable
   bool createDanhMuc_success = false;
 
+  @observable
+  bool isIntialLoading = true;
+
   @computed
-  bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending;
+  bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllDanhMucs => fetchCountAllDanhMucsFuture.status == FutureStatus.pending;
@@ -80,12 +93,24 @@ abstract class _DanhMucManagementStore with Store {
   bool get loadingCreateDanhMuc => fetchCreateDanhMucFuture.status == FutureStatus.pending;
 
   @action
-  Future getDanhMucs() async {
-    final future = _repository.getAllDanhMucs();
+  Future getDanhMucs(bool isLoadMore) async {
+    if (!isLoadMore){
+      skipCount = 0;
+    }
+    else
+      skipCount += skipIndex;
+    final future = _repository.getAllDanhMucs(skipCount, maxCount);
     fetchDanhMucsFuture = ObservableFuture(future);
 
     future.then((danhMucList) {
-      this.danhMucList = danhMucList;
+      if (!isLoadMore){
+        this.danhMucList = danhMucList;
+        if (isIntialLoading) isIntialLoading=false;
+      }
+      else {
+        for (int i=0; i< danhMucList.danhMucs.length; i++)
+          this.danhMucList.danhMucs.add(danhMucList.danhMucs[i]);
+      }
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null)
@@ -178,4 +203,33 @@ abstract class _DanhMucManagementStore with Store {
       }
     });
   }
+
+  @action
+  Future IsActiveDanhMuc(DanhMuc danhMuc) async {
+    updateDanhMuc_success = false;
+    final future = _repository.updateDanhMuc(danhMuc.id, danhMuc.tenDanhMuc, danhMuc.tag, danhMuc.danhMucCha, danhMuc.trangThai);
+    fetchUpdateDanhMucFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        updateDanhMuc_success = true;
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
 }
