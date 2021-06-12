@@ -129,7 +129,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
       builder: (context) {
         return postStore.loadingPostForCur
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
+            : _buildPostsList();
       },
     );
   }
@@ -152,11 +152,11 @@ class _MyPostScreenState extends State<MyPostScreen> {
           decoration: InputDecoration(
               hintText: "Tìm kiếm",
               hintStyle: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 color: Colors.grey[400],
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.red[400]),
+                borderSide: BorderSide(color: Colors.black),
               ),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.orange[400]),
@@ -532,6 +532,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         )
                       ],
                     ),
+                    SizedBox(height: 16.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
@@ -545,7 +546,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                             width: 38,
                             height: 38,
                             child: Padding(
-                              padding: const EdgeInsets.all(0.0),
+                              padding: const EdgeInsets.only(),
                               child: IconButton(
                                   icon: const Icon(
                                     Icons.edit,
@@ -715,7 +716,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         _selectDatefl(
                             context, DateTime.parse(post.thoiHan), index)
                       },
-                      buttonColor: Colors.orangeAccent,
+                      buttonColor: Colors.amber,
                       textColor: Colors.white,
                       buttonText: ('Chọn ngày kết thúc'),
                     ),
@@ -738,7 +739,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Bạn không đủ số dư để thực hiện giao dịch?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          
+
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(
@@ -780,7 +781,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       "Gia hạn bài viết và thực hiện thanh toán?",
                                       style: TextStyle(
                                           fontSize: 24,
-                                          
+
                                           fontFamily: 'intel'),
                                     ),
                                     content: Row(
@@ -853,7 +854,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                             });
                           }
                         },
-                        buttonColor: Colors.orangeAccent,
+                        buttonColor: Colors.amber,
                         textColor: Colors.white,
                         buttonText: ('Gia hạn'),
                       ),

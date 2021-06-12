@@ -99,17 +99,16 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
             style: TextStyle(
               fontSize: 28,
               height: 1,
-              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   color: Colors.grey[400],
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orange[400]),

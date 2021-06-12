@@ -146,7 +146,7 @@ abstract class _PostStore with Store {
   bool get searchLoading => fetchSearchFuture.status == FutureStatus.pending;
 
   @computed
-  bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending;
+  bool get loadinggetcategorys => fetchPostCategorysFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get createOrChangeStatusBaiGhimLoading => fetchCreateOrChangeBaiGhimFuture.status == FutureStatus.pending;
@@ -404,7 +404,7 @@ abstract class _PostStore with Store {
   bool successPack = false;
 
   @computed
-  bool get loadingPack => fetchPacksFuture.status == FutureStatus.pending;
+  bool get loadingPack => fetchPacksFuture.status == FutureStatus.pending && isIntialLoading;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -442,7 +442,7 @@ abstract class _PostStore with Store {
   bool successThuocTinh = false;
 
   @computed
-  bool get loadingThuocTinh => fetchThuocTinhsFuture.status == FutureStatus.pending;
+  bool get loadingThuocTinh => fetchThuocTinhsFuture.status == FutureStatus.pending && isIntialLoading;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -534,7 +534,7 @@ abstract class _PostStore with Store {
   @observable
   PostList postForCurList=new PostList();
   @computed
-  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending ;
+  bool get loadingPostForCur => fetchPostForCursFuture.status == FutureStatus.pending && isIntialLoadingpostforcur ;
   @observable
   bool successPostForCur = false;
   @observable
@@ -576,7 +576,7 @@ abstract class _PostStore with Store {
   @observable
   String sobaidang="";
   @computed
-  bool get loadingsobaidang => fetchsobaidangFuture.status == FutureStatus.pending ;
+  bool get loadingsobaidang => fetchsobaidangFuture.status == FutureStatus.pending && isIntialLoading ;
   @observable
   Future getsobaidang() async {
     final future = _repository.getsobaidang();
@@ -687,7 +687,7 @@ abstract class _PostStore with Store {
   @observable
   PostList favopost;
   @computed
-  bool get loadingfavopost => fetchpostfavoFuture.status == FutureStatus.pending;
+  bool get loadingfavopost => fetchpostfavoFuture.status == FutureStatus.pending && isIntialLoadingpostfavo;
   @observable
   bool successfavopost = false;
   @observable
