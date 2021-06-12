@@ -18,7 +18,7 @@ class AppColors {
 
   static const Color lightDarkThemeColor = const Color.fromRGBO(30, 32, 38, 1);
   static const Color backgroundDarkThemeColor = const Color.fromRGBO(18, 22, 28, 1);
-  static const Color greyForCardLightTheme = const Color.fromRGBO(238, 238, 238, 1);
-  static const Color darkBlueForCardDarkTheme = const Color.fromRGBO(30, 32, 38, 1);
+  static const Color greyForCardLightTheme = const Color.fromRGBO(238, 238, 238, 1); //màu xám cho card theme sáng
+  static const Color darkBlueForCardDarkTheme = const Color.fromRGBO(30, 32, 38, 1); //màu xanh đen cho card theme tối
 
 }
