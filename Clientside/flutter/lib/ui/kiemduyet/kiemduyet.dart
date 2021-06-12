@@ -3,6 +3,7 @@ import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/FilterLSGD.dart';
@@ -42,12 +43,14 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   GlobalKey _contentKey = GlobalKey();
   GlobalKey _refresherKey = GlobalKey();
   bool isRefreshing = false;
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     _lsgdStore = Provider.of<LSGDStore>(context);
     _userStore = Provider.of<UserStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
     _lsgdStore.setLoaiLSGD("value");
 
     if (!_lsgdStore.Allloading) {
@@ -75,8 +78,8 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       //     onPressed: (){setState(() {
       //       Navigator.pop(context);
       //     });}),
-      centerTitle: true,
-      backgroundColor: Colors.white,
+      // centerTitle: true,
+      // backgroundColor: Colors.white,
       // leading: _selectedIndex !=0 ? IconButton(icon: Icon(Icons.arrow_back_ios),
       //     onPressed: (){setState(() {
       //       _selectedIndex =0;
@@ -88,7 +91,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
 
   Widget _buildBody() {
     return Container(
-      color: Colors.grey[200],
+      color: _themeStore.darkMode !=true? Colors.grey[200] : Color.fromRGBO(18, 22, 28, 1),
       child: Column(
         children: [
           Container(
@@ -196,7 +199,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       physics: ClampingScrollPhysics(), // 2d add
                            itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
                            itemBuilder: (_, i) => ListTile(
-                               title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i])
+                               title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i],i)
                            )
                     ) :
                   Container(
@@ -246,7 +249,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           );
         });
   }
-  Widget _buildCardKiemDuyet(lichsugiaodich lsgd){
+  Widget _buildCardKiemDuyet(lichsugiaodich lsgd,i){
     return Card(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -317,7 +320,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                 children: [
                   lsgd.chiTietHoaDonBaiDangId ==null ? CupertinoSwitch(
                     value:  !checkKiemDuyet(lsgd.kiemDuyetVienId),
-                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, UserID);  });},
+                    onChanged: (bool value) { setState(() {_showMyDialog(lsgd, UserID,i);  });},
                   ):Container(),
 
                 ],
@@ -350,7 +353,13 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
 
     return SizedBox.shrink();
   }
-  _showSuccssfullMesssage(String message) {
+  _showSuccssfullMesssage(String message,int UserID,int i) {
+    if(UserID== _lsgdStore.listlsgdAll.listLSGDs[i].userId){
+      _userStore.userCurrent.wallet +=  _lsgdStore.listlsgdAll.listLSGDs[i].soTien;
+    }
+    _lsgdStore.listlsgdAll.listLSGDs[i].kiemDuyetVienId = UserID;
+    _lsgdStore.setKiemDuyenVienID(UserID, i);
+    print("Duongdebug: ${_userStore.userCurrent.wallet}  , ${_lsgdStore.listlsgdAll.listLSGDs[i].soTien}  ,  ${UserID} ,  ${_lsgdStore.listlsgdAll.listLSGDs[i].kiemDuyetVienId}");
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createSuccess(
@@ -363,7 +372,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       return SizedBox.shrink();
     });
   }
-  Future<void> _showMyDialog(lichsugiaodich lsgd,int UserID) async {
+  Future<void> _showMyDialog(lichsugiaodich lsgd,int UserID,i) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -389,14 +398,9 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             TextButton(
               child: Text('Cập nhật'),
               onPressed: () {
-                setState(() {
-                  lsgd.kiemDuyetVienId = UserID;
-                  print("Duongdebug: ${_lsgdStore.KiemDuyetGiaoDich(lsgd.id)}");
-                  if(_userStore.userCurrent.UserID==lsgd.userId)
-                    _userStore.userCurrent.wallet += lsgd.soTien;
-                  // _showSuccssfullMesssage("Cập nhật thành công");
-                  Navigator.of(context).pop();
-                });
+                _lsgdStore.KiemDuyetGiaoDich(lsgd.id);
+                _showSuccssfullMesssage("Cập nhật thành công",UserID,i);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -404,7 +408,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       },
     );
   }
-  Widget buildExpansionKiemDuyet(lichsugiaodich lsgd){
+  Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,i){
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -413,7 +417,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       child: ExpansionTile(
           title:  buildCardKiemDuyetheaderBuilder(lsgd),
           children: [
-            buildCardKiemDuyetBody(lsgd)
+            buildCardKiemDuyetBody(lsgd,i)
           ],
       ),
     );
@@ -438,7 +442,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     //   // ),
     // );
   }
-  Widget buildCardKiemDuyetBody(lichsugiaodich lsgd){
+  Widget buildCardKiemDuyetBody(lichsugiaodich lsgd,i){
     bool naptien;
     final ButtonStyle styleActive =
     ElevatedButton.styleFrom(primary: Colors.lightGreen);
@@ -464,7 +468,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       //top
                       Align(
                         alignment: Alignment.topLeft,
-                        child: buildText("Số tiền",Colors.black),
+                        child: buildText("Số tiền",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       Align(
                         alignment: Alignment.topRight,
@@ -473,7 +477,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       //center
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: buildText("Người dùng",Colors.black),
+                        child: buildText("Người dùng",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
@@ -482,7 +486,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       // bottom
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: buildText("Bài đăng",Colors.black),
+                        child: buildText("Bài đăng",_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
@@ -547,10 +551,9 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                   )
               ),
             ),
-            lsgd.kiemDuyetVienId!=null?
             Align(
                 alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
+                child: lsgd.kiemDuyetVienId!=null? ElevatedButton(
                   child: Container(
                     width: 300,
                     height: 30,
@@ -572,11 +575,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       )
                   ),
                   onPressed:null,
-                )
-            ):
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
+                ):ElevatedButton(
                   child: Container(
                     width: 300,
                     height: 30,
@@ -598,7 +597,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                       )
                   ),
                   onPressed:(){
-                    setState(() {_showMyDialog(lsgd, UserID);  });
+                    setState(() {_showMyDialog(lsgd, UserID,i);  });
                   },
                 )
             )
@@ -660,7 +659,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
               // Icon(Icons.add_circle_outline,color: Colors.blue,),
               Padding(
                 padding: const EdgeInsets.only(left: 55),
-                child: buildText(lsgd.UserName,Colors.black),
+                child: buildText(lsgd.UserName,_themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
               ),
             ),
 
