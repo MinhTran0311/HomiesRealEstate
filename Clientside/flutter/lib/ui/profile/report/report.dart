@@ -70,163 +70,158 @@ class _ReportPageState extends State<ReportPage>{
           ),
         ),
         body:
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          // color: Colors.grey[200],
-          padding: const EdgeInsets.all(12.0),
-          child: TabBarView(
-            children: <Widget>[
-              // Center(
-              //   child: SingleChildScrollView(
-              //     child: Column(
-              //       children: [
-              //         // SizedBox(height: 10,),
-              //         // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-              //         SizedBox(height: 10,),
-              //         Stack(
-              //           children: [
-              //             Align(
-              //               alignment: Alignment.topCenter,
-              //               child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
-              //             ),
-              //             Align(
-              //               alignment: Alignment.topLeft,
-              //               child: Padding(
-              //                 padding: const EdgeInsets.only(top: 10),
-              //                 child: DropdownButton<String>(
-              //                   value: dropdownValue,
-              //                   icon: const Icon(Icons.arrow_drop_down),
-              //                   iconSize: 24,
-              //                   elevation: 16,
-              //                   style:  TextStyle(color: this._themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
-              //                   underline: Container(
-              //                     height: 2,
-              //                     color: Colors.black,
-              //                   ),
-              //                   onChanged: (String newValue) {
-              //                     setState(() {
-              //                       dropdownValue = newValue;
-              //                     });
-              //                   },
-              //                   items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
-              //                       .map<DropdownMenuItem<String>>((String value) {
-              //                     return DropdownMenuItem<String>(
-              //                       value: value,
-              //                       child: Text(value),
-              //                     );
-              //                   }).toList(),
-              //                 ),
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //         Observer(builder: (context) {
-              //           return !_reportDataStore.loading? Card(
-              //               color: Colors.grey[200],
-              //               child: SizedBox(
-              //                   width: 400,
-              //                   height: 400,
-              //                   child:ListView(
-              //                     physics: BouncingScrollPhysics(),
-              //                     scrollDirection: Axis.horizontal,
-              //                     shrinkWrap: true,
-              //                     children:<Widget>[
-              //                       StackedAreaLineChart()
-              //                     ] ,
-              //                   )
-              //
-              //               )
-              //           )
-              //               :CustomProgressIndicatorWidget();
-              //         }
-              //         ),
-              //       ],
-              //     ),
-              //   )
-              // ),
-              Expanded(
-                child: Wrap(
-                  children: [
-                    SizedBox(height: 10,),
-                    Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style:  TextStyle(color: _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.black,
-                              ),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  dropdownValue = newValue;
-                                });
-                              },
-                              items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
+        TabBarView(
+          children: <Widget>[
+            // Center(
+            //   child: SingleChildScrollView(
+            //     child: Column(
+            //       children: [
+            //         // SizedBox(height: 10,),
+            //         // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
+            //         SizedBox(height: 10,),
+            //         Stack(
+            //           children: [
+            //             Align(
+            //               alignment: Alignment.topCenter,
+            //               child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+            //             ),
+            //             Align(
+            //               alignment: Alignment.topLeft,
+            //               child: Padding(
+            //                 padding: const EdgeInsets.only(top: 10),
+            //                 child: DropdownButton<String>(
+            //                   value: dropdownValue,
+            //                   icon: const Icon(Icons.arrow_drop_down),
+            //                   iconSize: 24,
+            //                   elevation: 16,
+            //                   style:  TextStyle(color: this._themeStore.darkMode ==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+            //                   underline: Container(
+            //                     height: 2,
+            //                     color: Colors.black,
+            //                   ),
+            //                   onChanged: (String newValue) {
+            //                     setState(() {
+            //                       dropdownValue = newValue;
+            //                     });
+            //                   },
+            //                   items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+            //                       .map<DropdownMenuItem<String>>((String value) {
+            //                     return DropdownMenuItem<String>(
+            //                       value: value,
+            //                       child: Text(value),
+            //                     );
+            //                   }).toList(),
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         Observer(builder: (context) {
+            //           return !_reportDataStore.loading? Card(
+            //               color: Colors.grey[200],
+            //               child: SizedBox(
+            //                   width: 400,
+            //                   height: 400,
+            //                   child:ListView(
+            //                     physics: BouncingScrollPhysics(),
+            //                     scrollDirection: Axis.horizontal,
+            //                     shrinkWrap: true,
+            //                     children:<Widget>[
+            //                       StackedAreaLineChart()
+            //                     ] ,
+            //                   )
+            //
+            //               )
+            //           )
+            //               :CustomProgressIndicatorWidget();
+            //         }
+            //         ),
+            //       ],
+            //     ),
+            //   )
+            // ),
+            Expanded(
+              child: Wrap(
+                children: [
+                  SizedBox(height: 10,),
+                  Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            style:  TextStyle(color: _themeStore.darkMode==true? Colors.white: Color.fromRGBO(18, 22, 28, 1),),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.black,
                             ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dropdownValue = newValue;
+                              });
+                            },
+                            items: <String>['Tất cả','Số bài đăng', 'Số tiền nạp', 'Số tiền thanh toán']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                           ),
                         ),
-                      ],
-                    ),
-                    // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
-                    // SizedBox(height: 10,),
-                    Observer(builder: (context) {
-                      return _reportDataStore.listitemReports !=null?
-                      Card(
-                          color: Colors.grey[200],
-                          child:
-                          SizedBox(
-                              width:
-                              double.infinity,
-                              height: 400,
-                              child:ListView(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                children:<Widget>[
-                                  HorizontalPatternForwardHatchBarChart()
-                                ] ,
-                              )
-                              )):CustomProgressIndicatorWidget();
-                    }
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  // Text("Thống kê",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),),
+                  // SizedBox(height: 10,),
+                  Observer(builder: (context) {
+                    return _reportDataStore.listitemReports !=null?
+                    Card(
+                        color: Colors.grey[200],
+                        child:
+                        SizedBox(
+                            width:
+                            double.infinity,
+                            height: 400,
+                            child:ListView(
+                              physics: BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              children:<Widget>[
+                                HorizontalPatternForwardHatchBarChart()
+                              ] ,
+                            )
+                            )
+                    ):Container(child: Center(child: Text("Không có dữ liệu"),),);
+                  }
+                  ),
+                ],
               ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                    height: 400,
-                    child: Wrap(
-                      children: [
-                        Observer(builder: (context) {
-                          return _reportDataStore.listitemReports !=null? buildPieChart():CustomProgressIndicatorWidget();
-                        }
-                        ),
-                      ],
-                    )
-                ),
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                  height: 400,
+                  child: Wrap(
+                    children: [
+                      Observer(builder: (context) {
+                        return _reportDataStore.listitemReports !=null? buildPieChart():CustomProgressIndicatorWidget();
+                      }
+                      ),
+                    ],
+                  )
               ),
-            ],
-          ),
+            ),
+          ],
         )
 
 

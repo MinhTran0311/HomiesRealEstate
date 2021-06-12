@@ -82,8 +82,8 @@ class _WalletPageState extends State<WalletPage>{
           bottom: TabBar(
             labelColor: Colors.white,
             tabs: [
-              Tab(text: "Nạp tiền",),
-              Tab(text: "Lịch sử giao dịch",),
+              Tab(child: Text("Nạp tiền",style: TextStyle(fontSize: 16),)),
+              Tab(child: Text("Lịch sử giao dịch",style: TextStyle(fontSize: 16),)),
             ],
           ),
         ),
@@ -361,7 +361,7 @@ class _WalletPageState extends State<WalletPage>{
                       borderRadius: BorderRadius.all( Radius.circular(50)),
                       border: Border.all(color: Colors.grey[400],width: 1.0),
                     ),
-                    child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
+                    child: Icon(Icons.arrow_downward,color: Colors.amber,size: 30,)
                 ),
               ),
               naptien==true? Align(
@@ -398,7 +398,7 @@ class _WalletPageState extends State<WalletPage>{
                 top: 30,
                   left: 30,
                   child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
-                  Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
+                  Icon(Icons.swap_horizontal_circle,color: Colors.amberAccent,size: 20,),
               ),
               SizedBox(height: 5,),
               Align(alignment: Alignment.topLeft,child: Padding(
@@ -427,7 +427,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.deepOrange),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.amberAccent),),
           ],
         );
       }

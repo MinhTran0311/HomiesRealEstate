@@ -634,7 +634,7 @@ class TextIcon extends StatelessWidget{
       padding: const EdgeInsets.only(left: 10,top: 10),
       child: Row(
         children: [
-          Icon(icon,color: Colors.orange),
+          Icon(icon,color: Colors.amber),
           Text(" "+text,
             style: TextStyle(
                 fontSize: 20,

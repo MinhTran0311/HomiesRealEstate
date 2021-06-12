@@ -152,7 +152,7 @@ class _FilterState extends State<Filter> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: SizedBox(
-                      width: 115,
+                      width: 120,
                       height: 60,
                       child: Observer(
                           builder: (context){
@@ -161,7 +161,7 @@ class _FilterState extends State<Filter> {
                               icon: const Icon(Icons.arrow_drop_down),
                               iconSize: 24,
                               elevation: 16,
-                              style: const TextStyle(color: Colors.grey),
+                              // style: const TextStyle(color: Colors.grey),
                               underline: Container(
                                 height: 2,
                                 color: Colors.black,
@@ -227,7 +227,7 @@ class _FilterState extends State<Filter> {
                           builder: (context){
                             return IconButton(
                               icon: Icon(Icons.date_range),
-                              color: Colors.grey,
+                              // color: Colors.grey,
                               onPressed: () async {
                                 final List<DateTime> picked = await DateRangePicker.showDatePicker(
                                     context: context,
