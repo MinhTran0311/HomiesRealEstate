@@ -220,42 +220,42 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
               width: 12,
             ),
             Expanded(
-              child: TextField(
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                controller: _diaChiController,
-                onChanged: (value){
-                  _filterStore.setDiaChiContent(value);
-                },
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  hintText: "Địa chỉ bất kì",
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      _diaChiController.clear();
-                      _filterStore.setDiaChiContent("");
-                    },
-                    icon: Icon(Icons.clear),
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey[400],
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red[400]),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange[400]),
-                  ),
-                  border:  UnderlineInputBorder(
-                      borderSide:  BorderSide(color: Colors.black)
-                  ),
-                ),
-              ),
+              // child: TextField(
+              //   autofocus: false,
+              //   keyboardType: TextInputType.text,
+              //   controller: _diaChiController,
+              //   onChanged: (value){
+              //     _filterStore.setDiaChiContent(value);
+              //   },
+              //   textAlign: TextAlign.start,
+              //   style: TextStyle(
+              //     fontSize: 18,
+              //     color: Colors.black,
+              //   ),
+              //   decoration: InputDecoration(
+              //     hintText: "Địa chỉ bất kì",
+              //     suffixIcon: IconButton(
+              //       onPressed: () {
+              //         _diaChiController.clear();
+              //         _filterStore.setDiaChiContent("");
+              //       },
+              //       icon: Icon(Icons.clear),
+              //     ),
+              //     hintStyle: TextStyle(
+              //       fontSize: 18,
+              //       color: Colors.grey[400],
+              //     ),
+              //     enabledBorder: UnderlineInputBorder(
+              //       borderSide: BorderSide(color: Colors.red[400]),
+              //     ),
+              //     focusedBorder: UnderlineInputBorder(
+              //       borderSide: BorderSide(color: Colors.orange[400]),
+              //     ),
+              //     border:  UnderlineInputBorder(
+              //         borderSide:  BorderSide(color: Colors.black)
+              //     ),
+              //   ),
+              // ),
             ),
           ],
         ),
