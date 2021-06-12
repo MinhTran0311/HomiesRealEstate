@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // check to see if already called api
     if (!_postStore.loading) {
       _postStore.getPosts(false);
-      _postStore.isIntialLoading=true;
+      _postStore.isIntialLoading = true;
       //_postStore.isIntialLoading=false;
     }
   }

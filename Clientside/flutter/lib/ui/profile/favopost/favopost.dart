@@ -54,20 +54,15 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     postStore = Provider.of<PostStore>(context);
-    if (!postStore.loadingfavopost) postStore.getfavopost(userid, false,_searchController11==null?"":_searchController11.text.toString());
+    if (!postStore.loadingfavopost)
+      postStore.getfavopost(userid, false,_searchController11==null?"":_searchController11.text.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Bài đăng yêu thích",
-          style: Theme.of(context).textTheme.button.copyWith(
-              fontSize: 23,
-              // backgroundColor:Colors.amber ,
-              ),
-        ),
+        title: Text("Bài đăng yêu thích",),
       ),
       body: _buildBody(),
     );
@@ -85,7 +80,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
       builder: (context) {
         return postStore.loadingfavopost
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildPostsList());
+            :  _buildPostsList();
       },
     );
   }

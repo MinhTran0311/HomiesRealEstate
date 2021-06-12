@@ -218,7 +218,7 @@ class _WalletPageState extends State<WalletPage>{
               ],
             ),
           ),
-          _lsgdStore.listlsgd!=null?Expanded(
+          _lsgdStore.listlsgd!=null ? Expanded(
             // height: 460, // give it a fixed height constraint
             // color: Colors.teal,
             // child ListView
@@ -254,8 +254,6 @@ class _WalletPageState extends State<WalletPage>{
                 completeDuration: Duration(milliseconds: 500),
               ),
               onLoading: () async {
-                print("loading");
-
                 _lsgdStore.getLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) {
@@ -267,15 +265,12 @@ class _WalletPageState extends State<WalletPage>{
                 _refreshController.loadComplete();
               },
               onRefresh: () async {
-                print("refresh");
-
                 _lsgdStore.getLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) setState(() {});
                 isRefreshing = true;
                 _refreshController.refreshCompleted();
               },
-              // scrollController: _scrollController,
               primary: false,
               child: ListView.builder(
                   key: _contentKey,
@@ -360,13 +355,12 @@ class _WalletPageState extends State<WalletPage>{
         else{
           _showMyDialog("Nạp tiền \n"+priceFormat(lsgd.soTien),datetime);
         }
-
-
       },
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Colors.white)
+            side: BorderSide(color: Colors.white),
+
         ),
         child: Container(
           height: 60,
