@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/post/filter_model.dart';
@@ -898,7 +899,7 @@ class _FilterState extends State<Filter> {
     return RoundedButtonWidget(
       buttonText: "Đặt lại giá trị",
       textSize: 20,
-      buttonColor: Color.fromRGBO(30, 32, 38, 1),
+      buttonColor: AppColors.lightDarkThemeColor,
       textColor: Colors.white,
       onPressed: (){
         if (_filterStore.suDungDienTichFilter){
