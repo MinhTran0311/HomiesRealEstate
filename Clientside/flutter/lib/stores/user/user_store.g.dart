@@ -29,6 +29,13 @@ mixin _$UserStore on _UserStore, Store {
           Computed<bool>(() => super.loadingCurrentUser,
               name: '_UserStore.loadingCurrentUser'))
       .value;
+  Computed<bool> _$loadingUpdateCurrentUserComputed;
+
+  @override
+  bool get loadingUpdateCurrentUser => (_$loadingUpdateCurrentUserComputed ??=
+          Computed<bool>(() => super.loadingCurrentUser,
+              name: '_UserStore.loadingUpdateCurrentUser'))
+      .value;
   Computed<bool> _$loadingCurrentUserWalletComputed;
 
   @override
@@ -186,6 +193,14 @@ mixin _$UserStore on _UserStore, Store {
     _$fetchUserCurrentFutureAtom.reportRead();
     return super.fetchUserCurrentFuture;
   }
+  final _$fetchUpdateUserCurrentFutureAtom =
+      Atom(name: '_UserStore.fetchUpdateUserCurrentFuture');
+
+  @override
+  ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserCurrentFuture {
+    _$fetchUpdateUserCurrentFutureAtom.reportRead();
+    return super.fetchUpdateUserCurrentFuture;
+  }
 
   @override
   set fetchUserCurrentFuture(ObservableFuture<CurrentUserForEditdto> value) {
@@ -209,6 +224,20 @@ mixin _$UserStore on _UserStore, Store {
     _$fetchUserCurrentWalletFutureAtom
         .reportWrite(value, super.fetchUserCurrentWalletFuture, () {
       super.fetchUserCurrentWalletFuture = value;
+    });
+  }
+  final _$updateUser_successAtom = Atom(name: '_UserStore.updateUser_success');
+
+  @override
+  bool get updateUser_success {
+    _$updateUser_successAtom.reportRead();
+    return super.updateUser_success;
+  }
+
+  @override
+  set updateUser_success(bool value) {
+    _$updateUser_successAtom.reportWrite(value, super.updateUser_success, () {
+      super.updateUser_success = value;
     });
   }
 
@@ -294,13 +323,13 @@ mixin _$UserStore on _UserStore, Store {
   final _$UpdateUserFuturessAtom = Atom(name: '_UserStore.UpdateUserFuturess');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get UpdateUserFuturess {
+  ObservableFuture<dynamic> get UpdateUserFuturess {
     _$UpdateUserFuturessAtom.reportRead();
     return super.UpdateUserFuturess;
   }
 
   @override
-  set UpdateUserFuturess(ObservableFuture<CurrentUserForEditdto> value) {
+  set UpdateUserFuturess(ObservableFuture<dynamic> value) {
     _$UpdateUserFuturessAtom.reportWrite(value, super.UpdateUserFuturess, () {
       super.UpdateUserFuturess = value;
     });
@@ -401,6 +430,7 @@ UserByIDFuturess: ${UserByIDFuturess},
 user: ${user},
 userCurrent: ${userCurrent},
 fetchUserCurrentFuture: ${fetchUserCurrentFuture},
+fetchUserCurrentFuture: ${fetchUpdateUserCurrentFuture},
 fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
 fetchUserCurrentPictureFuture: ${fetchUserCurrentPictureFuture},
 CurrentUserFuture: ${CurrentUserFuture},
@@ -417,6 +447,7 @@ loadingCurrentUserPicture: ${loadingCurrentUserPicture},
 isLoadingCurrentUser: ${isLoadingCurrentUser},
 loading: ${loading},
 loadingsUpdateUser: ${loadingsUpdateUser},
+updateUser_success: ${updateUser_success},
 loadingsUpdatePictureUser: ${loadingsUpdatePictureUser}
     ''';
   }

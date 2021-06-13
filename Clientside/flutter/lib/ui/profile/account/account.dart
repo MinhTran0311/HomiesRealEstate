@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/admin/userManagement/createOrEditUser.dart';
+import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -607,9 +612,12 @@ class _AccountPageState extends State<AccountPage>{
   void _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
+
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>AccountEditPage(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime)),
+      MaterialPageRoute(builder: (context) =>
+          AccountEditPage(Phone: Phone,Email: Email,SurName: SurName,Name: Name,creationTime: creationTime,UserID: UserID,)
+      ),
     );
 
     // After the Selection Screen returns a result, hide any previous snackbars
@@ -688,11 +696,12 @@ class _AccountEditPageState extends State<AccountEditPage> {
 
   int _selectedIndex = 0;
   UserStore _userstore;
-
+  ThemeStore _themeStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    _themeStore = Provider.of<ThemeStore>(context);
     _userstore = Provider.of<UserStore>(context);
     CtlSurName.text = SurName;
     CtlName.text = Name;
@@ -713,84 +722,282 @@ class _AccountEditPageState extends State<AccountEditPage> {
         //       Navigator.pop(context);
         //     });}),
       ),
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          // borderRadius: BorderRadius.only(
-          //   // topLeft: Radius.circular(25),
-          //   // topRight: Radius.circular(25),
-          // ),
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                // Colors.blue,
-                // Colors.red,
-                Colors.orange.shade700,
-                Colors.amberAccent.shade100,
-              ],
-            )
-        ),
-        child: Wrap(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 20,right: 20),
-              child: Column(
-                  children:[
-                    Container(
-                      width: double.infinity,
-                      height: 380,
-                      child: ListView(
-                        children: [
-                          SizedBox(height: 20,),
-                          Text('Họ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
-                          buildSurnameField(SurName,CtlSurName),
-                          Text('Tên',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
-                          buildSurnameField(Name,CtlName),
-                          Text('Email',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
-                          buildSurnameField(Email,CtlEmail),
-                          Text('SĐT',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
-                          buildSurnameField(Phone,CtlPhone),
-                          // Text('Đại chỉ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
-                          // buildSurnameField(Address,CtlAddress),
+      body:_buildBody()
 
-                        ],
-                      ),
+    );
+  }
+  Widget buildbodyOLD(){
+    return Container(
+      height: double.infinity,
+      decoration: BoxDecoration(
+        // borderRadius: BorderRadius.only(
+        //   // topLeft: Radius.circular(25),
+        //   // topRight: Radius.circular(25),
+        // ),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              // Colors.blue,
+              // Colors.red,
+              Colors.orange.shade700,
+              Colors.amberAccent.shade100,
+            ],
+          )
+      ),
+      child: Wrap(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: Column(
+                children:[
+                  Container(
+                    width: double.infinity,
+                    height: 380,
+                    child: ListView(
+                      children: [
+                        SizedBox(height: 20,),
+                        Text('Họ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
+                        buildSurnameField(SurName,CtlSurName),
+                        Text('Tên',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
+                        buildSurnameField(Name,CtlName),
+                        Text('Email',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
+                        buildSurnameField(Email,CtlEmail),
+                        Text('SĐT',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18,color: Colors.white),),
+                        buildSurnameField(Phone,CtlPhone),
+                        // Text('Đại chỉ',style: TextStyle(fontFamily:FontFamily.roboto,fontSize: 18),),
+                        // buildSurnameField(Address,CtlAddress),
+
+                      ],
                     ),
-                    SizedBox(height:10),
-                    ElevatedButton(
-                      child: Text(
-                        "Chỉnh sửa thông tin",
-                        style: TextStyle(fontSize: 22,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                side: BorderSide(color: Colors.red),
-                              )
-                          )
-                      ),
-                      onPressed: () {
-                        _showMyDialog();
-                      },
-                    )
-                    // CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
-                    //   press: (){
-                    //     setState(() {
-                    //       _showMyDialog();
-                    //     });
-                    //   },
-                    // ),
-                  ]
-              ),
+                  ),
+                  SizedBox(height:10),
+                  ElevatedButton(
+                    child: Text(
+                      "Chỉnh sửa thông tin",
+                      style: TextStyle(fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(18)),
+                              side: BorderSide(color: Colors.red),
+                            )
+                        )
+                    ),
+                    onPressed: () {
+                      _showMyDialog();
+                    },
+                  )
+                  // CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
+                  //   press: (){
+                  //     setState(() {
+                  //       _showMyDialog();
+                  //     });
+                  //   },
+                  // ),
+                ]
             ),
+          ),
+        ],
+      ),
+    );
+  }
+  // body methods:--------------------------------------------------------------
+  Widget _buildBody() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          // decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [
+          //           Colors.amber,
+          //           Colors.orange[700],
+          //         ]
+          //     )
+          // ),
+        ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _buildLeftSide(),
+            ),
+            Expanded(
+              flex: 1,
+              child: _buildRightSide(),
+            ),
+          ],
+        ) : Center(child: _buildRightSide()),
+        Observer(
+          builder: (context) {
+            print("DuongDebug ${_userstore.updateUser_success}");
+            if (_userstore.updateUser_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.pop(context);
+              });
+              showSuccssfullMesssage("Cập nhật thành công",context);
+              _userstore.updateUser_success = false;
+              return Container(width: 0, height: 0);
+
+            } else {
+              return showErrorMessage(_userstore.errorStore.errorMessage,context);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _userstore.loadingUpdateCurrentUser,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
+    );
+  }
+  Widget _buildLeftSide() {
+    return SizedBox.expand(
+      child: Image.asset(
+        Assets.carBackground,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+  Widget _buildRightSide() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            //SizedBox(height: 24.0),
+            _buildSurnameField(),
+            SizedBox(height: 24.0),
+            _buildNameField(),
+            SizedBox(height: 24.0),
+            _buildUserEmail(),
+            SizedBox(height: 24.0),
+            _buildNumberPhoneField(),
+            SizedBox(height: 24.0),
+            _buildSignUpButton(),
           ],
         ),
       ),
+    );
+  }
+  Widget _buildSurnameField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Họ',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập họ'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.text,
+          iconColor: Colors.amber,
+          textController: CtlSurName,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+        );
+      },
+    );
+  }
+  Widget _buildNameField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Nhập tên'),
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          labelText: 'Tên',
+          // hintColor: Colors.white,
+          icon: Icons.person_add,
+          inputType: TextInputType.text,
+          iconColor: Colors.amber,
+          textController: CtlName,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+        );
+      },
+    );
+  }
+
+  Widget _buildNumberPhoneField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          hint: ('Nhập điện thoại'),
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Điện thoại',
+          suffixIcon: Icon(Icons.clear),
+          // hintColor: Colors.white,
+          icon: Icons.phone,
+          inputType: TextInputType.phone,
+          iconColor: Colors.amber,
+          textController: CtlPhone,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          // errorText: _store.formErrorStore.name,
+        );
+      },
+    );
+  }
+  Widget _buildUserEmail() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          labelText: 'Email',
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          hint: ('Nhập địa chỉ email'),
+          suffixIcon: Icon(Icons.clear),
+          // hintColor: Colors.white,
+          icon: Icons.email_rounded,
+          inputType: TextInputType.emailAddress,
+          iconColor: Colors.amber,
+          textController: CtlEmail,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+        );
+      },
+    );
+  }
+  Widget _buildSignUpButton() {
+    return RoundedButtonWidget(
+      buttonText: ('Lưu thông tin'),
+      buttonColor: Colors.amber,
+      textColor: Colors.white,
+      onPressed: () async {
+        SurName = CtlSurName.text;
+        Name = CtlName.text;
+        Email = CtlEmail.text;
+        Phone = CtlPhone.text;
+        if(SurName!=null && Name!=null && Email!=null && Phone!=null && SurName.isNotEmpty && Name.isNotEmpty && Email.isNotEmpty && Phone.isNotEmpty ) {
+          DeviceUtils.hideKeyboard(context);
+          _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
+        }
+        else{
+          showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
+        }
+
+
+        //});
+      },
     );
   }
   Widget buildSurnameField(String title,TextEditingController controller) {
