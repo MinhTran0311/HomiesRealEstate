@@ -85,9 +85,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           "Bài đăng của tôi",
           //size:24,
           style: Theme.of(context).textTheme.button.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              letterSpacing: 1.0),
+              fontWeight: FontWeight.bold, fontSize: 20, letterSpacing: 1.0),
         ),
       ),
       body: _buildBody(),
@@ -146,7 +144,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
           style: TextStyle(
             fontSize: 28,
             height: 1,
-            
             fontWeight: FontWeight.bold,
           ),
           decoration: InputDecoration(
@@ -188,10 +185,10 @@ class _MyPostScreenState extends State<MyPostScreen> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(left:24.0),
+        padding: const EdgeInsets.only(left: 24.0),
         child: DropdownButton<String>(
           value: dropdownValue,
-        //  elevation: 16
+          //  elevation: 16
           onChanged: (String newValue) {
             setState(() {
               dropdownValue = newValue;
@@ -363,7 +360,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   MaterialPageRoute(builder: (context) => Detail(post: post)));
             },
             child: Container(
-              height: 190,
+              height: 210,
               decoration: BoxDecoration(
                   image: DecorationImage(
                 image: post.featuredImage != null
@@ -440,26 +437,48 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     Expanded(child: Container()),
                     Column(
                       children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            post.tieuDe,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
+                              flex: 1,
                               child: Text(
-                                post.tieuDe,
-                                overflow: TextOverflow.ellipsis,
+                                post.dienTich.toString() + ' m2',
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.fade,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            Text(
-                              priceFormat(post.gia),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                priceFormat(post.gia),
+                                textAlign: TextAlign.end,
+                                overflow: TextOverflow.fade,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             )
                           ],
@@ -468,75 +487,68 @@ class _MyPostScreenState extends State<MyPostScreen> {
                           height: 4,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.tenXa,
-                                  style: TextStyle(
+                            Expanded(
+                              flex: 3,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
                                     color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    size: 14,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Icon(
-                                  Icons.zoom_out_map,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.dienTich.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    width: 4,
                                   ),
-                                ),
-                              ],
+                                  Flexible(
+                                    child: Container(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: Text(
+                                        post.tenXa,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.diemBaiDang.toString(),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(post.diemBaiDang.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      )),
+                                  SizedBox(
+                                    width: 4,
                                   ),
-                                )
-                              ],
-                            ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 14,
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         )
                       ],
                     ),
-                    SizedBox(height: 16.0,),
+                    SizedBox(
+                      height: 8.0,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
-                      // height:24,
                       children: [
                         Container(
                             decoration: BoxDecoration(
@@ -570,9 +582,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                 color: Colors.white,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(100))),
-                            // width: 24,
-                            // height: 24,
-                            // padding: EdgeInsets.symmetric(vertical: 4),
                             width: 38,
                             height: 38,
                             child: Padding(
@@ -592,7 +601,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                                 "Bạn có chắc chắn muốn xóa bài đăng?",
                                                 style: TextStyle(
                                                     fontSize: 24,
-                                                    
                                                     fontFamily: 'intel'),
                                               ),
                                               content: Row(
@@ -658,7 +666,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     if (selectedDatefl[index] != null &&
                         DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
                       Padding(
-                        padding: const EdgeInsets.only(left:12.0),
+                        padding: const EdgeInsets.only(left: 12.0),
                         child: DropdownButtonFormField<Pack>(
                           hint: Text("Chọn gói bài đăng mới"),
                           value: selectedPack[index],
@@ -738,9 +746,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     title: Text(
                                       "Bạn không đủ số dư để thực hiện giao dịch?",
                                       style: TextStyle(
-                                          fontSize: 24,
-
-                                          fontFamily: 'intel'),
+                                          fontSize: 24, fontFamily: 'intel'),
                                     ),
                                     content: Row(
                                       mainAxisAlignment:
@@ -780,9 +786,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     title: Text(
                                       "Gia hạn bài viết và thực hiện thanh toán?",
                                       style: TextStyle(
-                                          fontSize: 24,
-
-                                          fontFamily: 'intel'),
+                                          fontSize: 24, fontFamily: 'intel'),
                                     ),
                                     content: Row(
                                       mainAxisAlignment:
