@@ -84,10 +84,10 @@ class TextFieldWidget extends StatelessWidget {
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.red),
               ),
-              suffixIcon: IconButton(
+              suffixIcon: suffixIcon != null ? IconButton(
                 onPressed: () => textController.clear(),
-                icon: suffixIcon != null ? suffixIcon : Icon(Icons.clear),
-              ),
+                icon: Icon(Icons.clear),
+              ): null,
             labelText: labelText,
             labelStyle: TextStyle(
               color: (isDarkmode != null && isDarkmode) ? Colors.white : Colors.black,

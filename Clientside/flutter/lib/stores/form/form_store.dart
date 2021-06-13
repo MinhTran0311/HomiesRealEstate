@@ -245,10 +245,10 @@ abstract class _FormStore with Store {
   @action
   void validateSurname(String value) {
     if (value.isEmpty) {
-      formErrorStore.username = "Chưa điền họ";
+      formErrorStore.surname = "Chưa điền họ";
     }
     else {
-      formErrorStore.username = null;
+      formErrorStore.surname = null;
     }
   }
 
@@ -301,7 +301,7 @@ abstract class _FormStore with Store {
   @action
   void validateUserEmail(String value) {
     if (value.isEmpty) {
-      formErrorStore.userEmail = "Chưa điền tên đăng nhập";
+      formErrorStore.userEmail = "Chưa điền địa chỉ email";
     } else if (!isEmail(value)) {
       formErrorStore.userEmail = 'Hãy nhập địa chỉ email hợp lệ';
     }
