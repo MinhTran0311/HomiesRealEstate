@@ -191,6 +191,7 @@ class _AccountPageState extends State<AccountPage>{
   }
 
   Widget _showSimpleModalDialog(){
+    Size size =  MediaQuery.of(context).size;
           return Wrap(
             children: [
               Container(
@@ -247,13 +248,29 @@ class _AccountPageState extends State<AccountPage>{
                                 }),
 
                                 // SizedBox(height: 10,),
-                                Text(
-                                  "${SurName} " + "${Name}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
+                                Container(
+                                  width: size.width*0.9,
+                                  child:
+                                  SelectableText(
+                                    "${SurName} " + "${Name}",
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
+                                  // SelectableText(
+                                  //   "${SurName} " + "${Name}",
+                                  //   maxLines: 1,
+                                  //   textAlign: TextAlign.start,
+                                  //   style: TextStyle(
+                                  //     color: Colors.white,
+                                  //     fontSize: 30,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
                                 ),
                                 SizedBox(height: 5,),
                                 Row(
@@ -282,16 +299,11 @@ class _AccountPageState extends State<AccountPage>{
                                         }
                                       }
                                       return
-                                        _userstore.userCurrent != null ? Row(
-                                          children: [
-
-                                            Text(role,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white,
-                                                    )),
-                                          ],
-                                        ) : Container();
+                                        _userstore.userCurrent != null ? Text(role,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white,
+                                                )) : Container();
                                     }
                                     ),
                                     // Text(
