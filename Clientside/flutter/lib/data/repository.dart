@@ -345,9 +345,9 @@ class Repository {
 
 
   //registration
-  Future<dynamic> registing(String surname, String name, String username, String password, String email, String phoneNumber) async
+  Future<dynamic> registing(String surname, String name, String username, String password, String email) async
   {
-    return await _registrationApi.regist(surname, name, username, password, email, phoneNumber).then((res) {
+    return await _registrationApi.regist(surname, name, username, password, email).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
