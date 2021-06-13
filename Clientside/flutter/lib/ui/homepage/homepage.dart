@@ -36,7 +36,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   PageController _pageController;
   int _selectedIndex = 0;
 
-  List<String> pageKeys = ["HomeScreen", "MapsScreen", "ManagementScreen","ProfileScreen","NewPost"];
+  List<String> pageKeys = ["HomeScreen", "MapsScreen","ProfileScreen","NewPost", "ManagementScreen"];
   Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "HomeScreen": GlobalKey<NavigatorState>(),
     "MapsScreen": GlobalKey<NavigatorState>(),
@@ -99,9 +99,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
           children: [
             _buildOffstageNavigator("HomeScreen"),
             _buildOffstageNavigator("MapsScreen"),
-            if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
             if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
             if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("NewPost"),
+            if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
           ],
         ),
         bottomNavigationBar: CurvedNavigationBar(
@@ -111,9 +111,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
           items: <Widget>[
             Icon(Icons.home_rounded, size: 30,color: Colors.black87,),
             Icon(Icons.location_pin, size: 30,color: Colors.black87,),
-            if (Preferences.userRoleRank >= 2) Icon(Icons.admin_panel_settings_rounded, size: 30, color: Colors.black87,),
             if (Preferences.userRoleRank >= 1) Icon(Icons.person, size: 30, color: Colors.black87,),
             if (Preferences.userRoleRank >= 1) Icon(Icons.add_circle_rounded, size: 30, color: Colors.black87,),
+            if (Preferences.userRoleRank >= 2) Icon(Icons.admin_panel_settings_rounded, size: 30, color: Colors.black87,),
           ],
           index: _currentIndex,
           onTap: (index) {

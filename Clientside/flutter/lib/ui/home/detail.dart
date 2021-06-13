@@ -113,7 +113,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   Widget _buildContent(){
     size = MediaQuery.of(context).size;
-    Uint8List bytes = base64Decode(_userStore.user.profilePicture);
+    //Uint8List bytes = base64Decode(_userStore.user.profilePicture);
     return SafeArea(
       child: Scaffold(
         body: NotificationListener<ScrollNotification>(
@@ -787,27 +787,27 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       return Container(
                         height: 60,
                         width: 60,
-                        // decoration: BoxDecoration(
-                        //     // image: DecorationImage(
-                        //     //   //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
-                        //     //   image: _userStore.userOfCurrentPost.profilePicture.isNotEmpty ? imageFromBase64String(_userStore.user.profilePicture): AssetImage(Assets.front_img),
-                        //     //   fit: BoxFit.cover,
-                        //     // ),
-                        //     shape: BoxShape.circle
-                        // ),
-                        child: (_userStore.userOfCurrentPost==null || _userStore.userOfCurrentPost.profilePicture == null || _userStore.userOfCurrentPost.profilePicture.isEmpty) ? CircleAvatar(
-                          backgroundColor: Colors.amber.shade800,
-                          child: Text((
-                              _userStore.userOfCurrentPost.name.substring(0,1) +  _userStore.userOfCurrentPost.surname.substring(0,1)).toUpperCase(),
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                            : CircleAvatar(
-                          child: ClipOval(child: imageFromBase64String(_userStore.userOfCurrentPost.profilePicture)),
-                          backgroundColor: Colors.brown.shade800,
+                        decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //   //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
+                            //   image: _userStore.userOfCurrentPost.profilePicture.isNotEmpty ? imageFromBase64String(_userStore.user.profilePicture): AssetImage(Assets.front_img),
+                            //   fit: BoxFit.cover,
+                            // ),
+                            shape: BoxShape.circle
                         ),
+                        // child: (_userStore.userOfCurrentPost==null || _userStore.userOfCurrentPost.profilePicture == null || _userStore.userOfCurrentPost.profilePicture.isEmpty) ? CircleAvatar(
+                        //   backgroundColor: Colors.amber.shade800,
+                        //   child: Text((
+                        //       _userStore.userOfCurrentPost.name.substring(0,1) +  _userStore.userOfCurrentPost.surname.substring(0,1)).toUpperCase(),
+                        //     style: TextStyle(
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
+                        // )
+                        //     : CircleAvatar(
+                        //   child: ClipOval(child: imageFromBase64String(_userStore.userOfCurrentPost.profilePicture)),
+                        //   backgroundColor: Colors.brown.shade800,
+                        // ),
                       );
                     }
                   ),
@@ -817,7 +817,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SelectableText(post.userName,
+                        SelectableText(post.userName ,
                           maxLines: 1,
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -830,7 +830,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           height: 6,
                         ),
                         SelectableText(
-                          _userStore.user.phoneNumber ?? _userStore.user.emailAddress,
+                          _userStore.userOfCurrentPost.phoneNumber ?? _userStore.userOfCurrentPost.emailAddress,
                           maxLines: 1,
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -861,7 +861,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                  SizedBox(width: 12,),
+                  SizedBox(width: 6,),
                   Container(
                     height: 50,
                     width: 50,
