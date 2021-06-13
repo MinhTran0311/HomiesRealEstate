@@ -88,13 +88,9 @@ class _HelpScreenState extends State<HelpScreen> {
                 boxShadow: [
                   // color: Colors.white, //background color of box
                   BoxShadow(
-                    color: Color.fromRGBO(198, 199, 202, 1),
+                   // color: Color.fromRGBO(198, 199, 202, 1),
                     blurRadius: 12, // soften the shadow
                     spreadRadius: 0.01, //extend the shadow
-                    // offset: Offset(
-                    //   8.0, // Move to right 10  horizontally
-                    //   12.0, // Move to bottom 10 Vertically
-                    // ),
                   )
                 ],
                 color: !_themeStore.darkMode?Colors.amber:Color.fromRGBO(18, 22, 28, 1),
