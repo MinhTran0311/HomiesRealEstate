@@ -272,91 +272,88 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   }
 
   Widget buildBackGround(Size size){
-    return Hero(
-      tag: _imageStore.imageList.images[0].id,
-      child: Stack(
-          children: [
-            Observer(
-                builder: (context){
-                  return Container(
-                    height: size.height*0.3,
-                    width: size.width,
+    return Stack(
+        children: [
+          Observer(
+              builder: (context){
+                return Container(
+                  height: size.height*0.3,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(_imageStore.imageList.images[_imageStore.selectedIndex].duongDan),
+                        fit: BoxFit.cover,
+                      )
+                  ),
+                  child: Container(
                     decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(_imageStore.imageList.images[_imageStore.selectedIndex].duongDan),
-                          fit: BoxFit.cover,
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ]
                         )
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.7),
-                              ]
-                          )
-                      ),
-                    ),
-                  );}
-            ),
-            Container(
-              height: size.height * 0.3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.yellow[700],
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                          ),
-                          width: 100,
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Center(
-                            child: Text(
-                              post.tagLoaiBaidang,
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  ),
+                );}
+          ),
+          Container(
+            height: size.height * 0.3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 24,right: 24, bottom: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.yellow[700],
+                            borderRadius: BorderRadius.all(Radius.circular(5))
+                        ),
+                        width: 100,
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Center(
+                          child: Text(
+                            post.tagLoaiBaidang,
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Preferences.access_token.isNotEmpty ? Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              icon: Observer(
-                                  builder: (context){
-                                    return (_postStore.isBaiGhimYeuThich) ? Icon(Icons.favorite, color: Colors.amber, size: 30,)
-                                        : Icon(Icons.favorite_border_outlined, color: Colors.amber, size: 30,);}
-                              ),
-                              onPressed: () {
-                                _postStore.createOrChangeStatusBaiGhimYeuThich(post.id.toString());
-                              },
+                      ),
+                      Preferences.access_token.isNotEmpty ? Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: IconButton(
+                            icon: Observer(
+                                builder: (context){
+                                  return (_postStore.isBaiGhimYeuThich) ? Icon(Icons.favorite, color: Colors.amber, size: 30,)
+                                      : Icon(Icons.favorite_border_outlined, color: Colors.amber, size: 30,);}
                             ),
+                            onPressed: () {
+                              _postStore.createOrChangeStatusBaiGhimYeuThich(post.id.toString());
+                            },
                           ),
-                        ):Container(width: 0, height: 0,)
-                      ],
-                    ),
+                        ),
+                      ):Container(width: 0, height: 0,)
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ]
-      ),
+          ),
+        ]
     );
   }
 

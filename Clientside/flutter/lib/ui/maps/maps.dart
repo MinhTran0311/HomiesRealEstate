@@ -66,6 +66,7 @@ class _MapsScreenState extends State<MapsScreen> {
   void initState() {
     super.initState();
     // location = new Location();
+    print("Helloloooooo");
   }
 
   @override
@@ -86,7 +87,7 @@ class _MapsScreenState extends State<MapsScreen> {
       }
     }
     else {
-      if (this.type == "Xem bản đồ")
+      if (this.type == null)
        _addMarkerButtonProcessed();
     }
     _setCameraPositon();
@@ -278,6 +279,7 @@ class _MapsScreenState extends State<MapsScreen> {
 
   Widget button(Function function, IconData icon) {
     return FloatingActionButton(
+      heroTag: null,
       onPressed: function,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       backgroundColor: Colors.amber,
@@ -491,16 +493,13 @@ class _MapsScreenState extends State<MapsScreen> {
         ),
       );
     }
-    else if (this.type == "Xem bản đồ"){
+    else if (this.type == null){
       return Scaffold(
         primary: true,
         appBar: AppBar(
           title: Text(
-            "Bản đồ",
-            style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+            "Bản đồ",),
           automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colors.amber,
           // actions: [
           //   IconButton(
           //     padding: EdgeInsets.only(right: 10),
@@ -643,11 +642,8 @@ class _MapsScreenState extends State<MapsScreen> {
         primary: true,
         appBar: AppBar(
           title: Text(
-            "Bản đồ",
-            style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+            "Bản đồ",),
           automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colors.amber,
           // actions: [
           //   IconButton(
           //     padding: EdgeInsets.only(right: 10),
@@ -737,7 +733,7 @@ class _MapsScreenState extends State<MapsScreen> {
                           alignment: Alignment.bottomLeft,
                           child: Column(
                             children: <Widget>[
-                              containerLatngInfor(),
+                              // containerLatngInfor(),
                               // button(_onMapTypeButtonProcessed, Icons.map),
                               // SizedBox(
                               //   height: 16.0,

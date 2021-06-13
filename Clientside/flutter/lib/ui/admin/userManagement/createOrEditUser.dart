@@ -78,6 +78,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _store.setUserId(this.user.userName);
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
+      _store.setIsActive(this.user.isActive);
+      _store.setRoleName(this.user.roleName);
     }
   }
 
@@ -459,11 +461,11 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       textColor: Colors.white,
       onPressed: () async {
          if(this.user != null) await {
-          _store.setSurname(_surnameController.text),
-          _store.setName(_nameController.text),
-           _store.setUserId(_userNameController.text),
-           _store.setUserEmail(_userEmailController.text),
-           _store.setRoleName(this.user.roleName),
+          // _store.setSurname(_surnameController.text),
+          // _store.setName(_nameController.text),
+          //  _store.setUserId(_userNameController.text),
+          //  _store.setUserEmail(_userEmailController.text),
+          //  _store.setRoleName(this.user.roleName),
            if(_passwordController.text != null && _passwordController.text.isNotEmpty)
              {
                _store.setPassword(_passwordController.text),
@@ -473,9 +475,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           //    _store.setPassword(this.user.),
           //    _store.setConfirmPassword(_confirmPasswordController.text),
           // },
-           _store.setIdUser(this.user.id),
-           _store.setPhoneNumber(_phoneNumberController.text),
-           _store.setIsActive(_checkbox),
+          //  _store.setIdUser(this.user.id),
+          //  _store.setPhoneNumber(_phoneNumberController.text),
+          //  _store.setIsActive(_checkbox),
          };
          if(this.user != null) {
            if(_store.canUpdate) {

@@ -97,11 +97,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
         // ),
         body: Stack(
           children: [
-            _buildOffstageNavigator("HomeScreen"),
+            // _buildOffstageNavigator("HomeScreen"),
             _buildOffstageNavigator("MapsScreen"),
-            if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
-            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
-            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("NewPost"),
+            // if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
+            // if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
+            // if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("NewPost"),
           ],
         ),
         bottomNavigationBar: CurvedNavigationBar(

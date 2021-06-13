@@ -226,6 +226,22 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$danhMucListAllAtom =
+      Atom(name: '_DanhMucManagementStore.danhMucListAll');
+
+  @override
+  DanhMucList get danhMucListAll {
+    _$danhMucListAllAtom.reportRead();
+    return super.danhMucListAll;
+  }
+
+  @override
+  set danhMucListAll(DanhMucList value) {
+    _$danhMucListAllAtom.reportWrite(value, super.danhMucListAll, () {
+      super.danhMucListAll = value;
+    });
+  }
+
   final _$countAllDanhMucsAtom =
       Atom(name: '_DanhMucManagementStore.countAllDanhMucs');
 
@@ -354,6 +370,30 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$nameDanhMucListAtom =
+      Atom(name: '_DanhMucManagementStore.nameDanhMucList');
+
+  @override
+  List<String> get nameDanhMucList {
+    _$nameDanhMucListAtom.reportRead();
+    return super.nameDanhMucList;
+  }
+
+  @override
+  set nameDanhMucList(List<String> value) {
+    _$nameDanhMucListAtom.reportWrite(value, super.nameDanhMucList, () {
+      super.nameDanhMucList = value;
+    });
+  }
+
+  final _$getAllDanhMucsAsyncAction =
+      AsyncAction('_DanhMucManagementStore.getAllDanhMucs');
+
+  @override
+  Future<dynamic> getAllDanhMucs() {
+    return _$getAllDanhMucsAsyncAction.run(() => super.getAllDanhMucs());
+  }
+
   final _$getDanhMucsAsyncAction =
       AsyncAction('_DanhMucManagementStore.getDanhMucs');
 
@@ -467,6 +507,7 @@ tag: ${tag},
 danhMucCha: ${danhMucCha},
 trangThai: ${trangThai},
 danhMucList: ${danhMucList},
+danhMucListAll: ${danhMucListAll},
 countAllDanhMucs: ${countAllDanhMucs},
 skipCount: ${skipCount},
 skipIndex: ${skipIndex},
@@ -475,6 +516,7 @@ updateDanhMuc_success: ${updateDanhMuc_success},
 updateActiveDanhMuc_success: ${updateActiveDanhMuc_success},
 createDanhMuc_success: ${createDanhMuc_success},
 isIntialLoading: ${isIntialLoading},
+nameDanhMucList: ${nameDanhMucList},
 canSubmit: ${canSubmit},
 loading: ${loading},
 loadingCountAllDanhMucs: ${loadingCountAllDanhMucs},

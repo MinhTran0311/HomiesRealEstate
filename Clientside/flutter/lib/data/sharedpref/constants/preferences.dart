@@ -15,6 +15,7 @@ class Preferences {
   static const int maxProvinceCount = 64;
   static const int maxTownCount = 709;
   static const int maxCommuneCount = 11310;
+  static const int maxDanhMucCount = 100;
 
   static List<String> grantedPermissions = new List<String>();
   //#region permision

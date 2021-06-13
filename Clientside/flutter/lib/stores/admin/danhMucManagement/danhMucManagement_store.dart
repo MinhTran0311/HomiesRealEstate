@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -67,6 +68,9 @@ abstract class _DanhMucManagementStore with Store {
   DanhMucList danhMucList;
 
   @observable
+  DanhMucList danhMucListAll;
+
+  @observable
   int countAllDanhMucs = 0;
 
   @observable
@@ -89,6 +93,9 @@ abstract class _DanhMucManagementStore with Store {
 
   @observable
   bool isIntialLoading = true;
+
+  @observable
+  List<String> nameDanhMucList = new List<String>();
 
   @computed
   bool get canSubmit =>
@@ -136,6 +143,30 @@ abstract class _DanhMucManagementStore with Store {
   @action
   void setDanhMucCha(int value) {
     danhMucCha = value;
+  }
+
+  @action
+  Future getAllDanhMucs() async {
+    final future = _repository.getAllDanhMucs(0, Preferences.maxDanhMucCount);
+    fetchDanhMucsFuture = ObservableFuture(future);
+
+    future.then((danhMucList) {
+      this.danhMucListAll = danhMucList;
+      for(int i = 0; i < this.danhMucListAll.danhMucs.length; i++){
+        nameDanhMucList.add(this.danhMucListAll.danhMucs[i].tenDanhMuc);
+      }
+    }).catchError((error){
+      if (error is DioError) {
+        if (error.response.data!=null)
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        throw error;
+      }
+    });
   }
 
   @action

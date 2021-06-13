@@ -19,7 +19,7 @@ class TabNavigator extends StatelessWidget {
     if(tabItem == "HomeScreen")
       child = HomeScreen();
     else if(tabItem == "MapsScreen")
-      child = Container();
+      child = MapsScreen();
     else if(tabItem == "ManagementScreen" )
       child = ManagementScreen();
     else if(tabItem == "ProfileScreen")

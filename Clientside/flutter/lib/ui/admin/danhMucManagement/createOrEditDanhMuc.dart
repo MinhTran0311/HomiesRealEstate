@@ -14,6 +14,7 @@ import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -60,6 +61,13 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       // print
       _checkboxTrangThai = this.danhMuc.trangThai == "On" ? true : false;
       titleForm = "Chỉnh sửa danh mục";
+
+      _danhMucManagementStore.setTagDanhMuc(this.danhMuc.tag);
+      _danhMucManagementStore.setDanhMucId(this.danhMuc.id);
+      _danhMucManagementStore.setNameDanhMuc(this.danhMuc.tenDanhMuc);
+      _danhMucManagementStore.setDanhMucCha(this.danhMuc.danhMucCha);
+      // _danhMucManagementStore.set
+
     }
   }
 
@@ -386,6 +394,54 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       ),
     );
   }
+
+  // Widget _buildDanhMucChaComboBoxField() {
+  //   return Observer(
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+  //         child: DropdownSearch<String>(
+  //           autoValidateMode: AutovalidateMode.always,
+  //           items: _danhMucManagementStore.danhMucList.danhMucs,
+  //           showClearButton: true,
+  //           hint: "Chọn tỉnh/thành phố",
+  //           onChanged: (String Value) {
+  //             setState(() {
+  //               selectedCity = Value;
+  //               selectedTown = null;
+  //             });
+  //           },
+  //           selectedItem: null,
+  //           showSearchBox: true,
+  //           searchBoxDecoration: InputDecoration(
+  //             border: OutlineInputBorder(),
+  //             labelText: "Tìm tỉnh/thành phố",
+  //           ),
+  //           popupTitle: Container(
+  //             height: 50,
+  //             decoration: BoxDecoration(
+  //               color: Theme.of(context).primaryColorDark,
+  //               // borderRadius: BorderRadius.only(
+  //               //   topLeft: Radius.circular(20),
+  //               //   topRight: Radius.circular(20),
+  //               // ),
+  //             ),
+  //             child: Center(
+  //               child: Text(
+  //                 'Tỉnh/thành phố',
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.bold,
+  //                   color: Colors.white,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _buildActiveCheckBox() {
     return Row(
