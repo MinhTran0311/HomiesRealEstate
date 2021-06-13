@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
@@ -73,62 +74,30 @@ class _WalletPageState extends State<WalletPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 500,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
-        // border: Border.all(color: Colors.white,width: 250.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white,
-            spreadRadius: 5,
-            blurRadius: 0,
-            offset: Offset(0, 3), // changes position of shadow
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Ví tiền",),
+          bottom: TabBar(
+            labelColor: Colors.white,
+            tabs: [
+              Tab(child: Text("Nạp tiền",style: TextStyle(fontSize: 16),)),
+              Tab(child: Text("Lịch sử giao dịch",style: TextStyle(fontSize: 16),)),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            buildWallet(),
+            Observer(
+                builder: (context) {
+                  return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
+                }
+            )
+          ],
+        ),
       ),
-      child: Container(
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
-                //   // border: Border.all(color: Colors.white,width: 1.0),
-                //   boxShadow: [
-                //     BoxShadow(
-                //       color: Colors.black26,
-                //       spreadRadius: 5,
-                //       blurRadius: 7,
-                //       offset: Offset(0, 3), // changes position of shadow
-                //     ),
-                //   ],
-                // ),
-        // padding: const EdgeInsets.all(20),
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text("Ví tiền",),
-              bottom: TabBar(
-                labelColor: Colors.white,
-                tabs: [
-                  Tab(text: "Nạp tiền",),
-                  Tab(text: "Lịch sử giao dịch",),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                buildWallet(),
-                Observer(
-                    builder: (context) {
-                      return !_lsgdStore.loading ? buildLSGD():CustomProgressIndicatorWidget();
-                    }
-                )
-              ],
-            ),
-          ),
-        )
-
-      )
     );
   }
 
@@ -202,6 +171,10 @@ class _WalletPageState extends State<WalletPage>{
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: _lsgdStore.FilterDataLSGD.LoaiLSGD != "Tất cả" ||
+                                    _lsgdStore.FilterDataLSGD.MinThoiDiem !=DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) ||
+                                    _lsgdStore.FilterDataLSGD.MaxThoiDiem != DateFormat('yyyy-MM-dd').format(DateTime.now())
+                                    ? Colors.red : Colors.grey,
                               ),
                             ),
                             Icon(
@@ -359,9 +332,10 @@ class _WalletPageState extends State<WalletPage>{
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Colors.white),
+            // side: BorderSide(color: Colors.white),
 
         ),
+        color: _themeStore.darkMode==true? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
         child: Container(
           height: 60,
           padding: const EdgeInsets.all(5),
@@ -387,7 +361,7 @@ class _WalletPageState extends State<WalletPage>{
                       borderRadius: BorderRadius.all( Radius.circular(50)),
                       border: Border.all(color: Colors.grey[400],width: 1.0),
                     ),
-                    child: Icon(Icons.arrow_downward,color: Colors.orange,size: 30,)
+                    child: Icon(Icons.arrow_downward,color: Colors.amber,size: 30,)
                 ),
               ),
               naptien==true? Align(
@@ -424,7 +398,7 @@ class _WalletPageState extends State<WalletPage>{
                 top: 30,
                   left: 30,
                   child: datetime!="Đang chờ"?Icon(Icons.check_circle,color: Colors.greenAccent,size: 20,):
-                  Icon(Icons.swap_horizontal_circle,color: Colors.orangeAccent,size: 20,),
+                  Icon(Icons.swap_horizontal_circle,color: Colors.amberAccent,size: 20,),
               ),
               SizedBox(height: 5,),
               Align(alignment: Alignment.topLeft,child: Padding(
@@ -444,7 +418,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.grey,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
           ],
         );
       }
@@ -453,7 +427,7 @@ class _WalletPageState extends State<WalletPage>{
           children: [
             // Icon(Icons.access_time,color: Colors.deepOrange,size: 16,),
             // buildText("Ngày xác nhận: ",Colors.grey),
-            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.deepOrange),),
+            Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.amberAccent),),
           ],
         );
       }
@@ -463,14 +437,14 @@ class _WalletPageState extends State<WalletPage>{
         children: [
           // Icon(Icons.access_time,color: Colors.grey,size: 16,),
           // buildText("Ngày thanh toán: ",Colors.grey),
-          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontFamily: FontFamily.roboto,fontSize: 16,color: Colors.grey),),
+          Text(date, style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: Colors.grey),),
         ],
       );
     }
   }
 
   Widget buildText(String text,Color c){
-    return Text(text,style: TextStyle(fontFamily: FontFamily.roboto,fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
+    return Text(text,style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400,color: c),overflow: TextOverflow.ellipsis,);
   }
 
   Widget buildSurnameField(String title,TextEditingController controller) {
@@ -608,7 +582,7 @@ class _NapTienPageState extends State<NapTienPage> {
       child: Column(
         children: [
           Image.network('https://cdn.vietnambiz.vn/171464876016439296/2020/9/18/what-is-momo-wallet-thumb-hqna4qbgf-16004154205421224807436.jpg'),
-          Text('Số tiền',style: TextStyle(fontSize: 18,fontFamily: FontFamily.roboto,fontWeight: FontWeight.w400),),
+          Text('Số tiền',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
           TextFormField(
               controller: Ctlmoneysend,
               keyboardType: TextInputType.number,

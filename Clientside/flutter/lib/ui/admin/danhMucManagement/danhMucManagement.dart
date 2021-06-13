@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -21,6 +22,7 @@ import 'package:boilerplate/models/danhMuc/danhMuc.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 
 import '../management.dart';
+import 'createOrEditDanhMuc.dart';
 
 class DanhMucManagementScreen extends StatefulWidget {
   @override
@@ -29,6 +31,7 @@ class DanhMucManagementScreen extends StatefulWidget {
 
 class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
   DanhMucManagementStore _danhMucManagementStore;
+  ThemeStore _themeStore;
 
   var _selectedValue;
   RefreshController _refreshController =
@@ -49,7 +52,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
 
     // initializing stores
     _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
-
+    _themeStore = Provider.of<ThemeStore>(context);
     // initializing stores
 
     // check to see if already called api
@@ -67,14 +70,22 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
 
   }
 
-  _isActiveDanhMuc(DanhMuc danhMuc) async {
+  _isActiveDanhMuc(DanhMuc danhMuc, int position) async {
     if(danhMuc.trangThai == "On")
       {
         danhMuc.trangThai = "Off";
+        _danhMucManagementStore.danhMucList.danhMucs[position].trangThai = "Off";
+
       }
-    else danhMuc.trangThai = "On";
-    await _danhMucManagementStore.IsActiveDanhMuc(danhMuc);
-    Navigator.of(context).pop();
+    else {
+      danhMuc.trangThai = "On";
+      _danhMucManagementStore.danhMucList.danhMucs[position].trangThai = "On";
+
+    }
+      await _danhMucManagementStore.IsActiveDanhMuc(danhMuc);
+      Navigator.of(context).pop();
+      setState(() {});
+    _showSuccssfullMesssage(_danhMucManagementStore.danhMucList.danhMucs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công": "Kích hoạt thành công");
   }
 
   @override
@@ -112,10 +123,10 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
               size: 28,
             ),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateOrEditDanhMucScreen()),
+              );
             },
           ),
         ],
@@ -141,9 +152,8 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
       builder: (context) {
         return _danhMucManagementStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(
-          child: _buildDanhMucsList(),
-          color: Color.fromRGBO(241, 242, 246, 1),);
+            :
+           _buildDanhMucsList();
       },
     );
   }
@@ -275,19 +285,21 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
         },
         //scrollController: _scrollController,
         primary: false,
-        child: ListView.builder(
-          //key: _contentKey,
-          controller: _scrollController,
-          itemCount: _danhMucManagementStore.danhMucList.danhMucs.length,
-          // separatorBuilder: (context, position) {
-          //   return Divider();
-          // },
-          itemBuilder: (context, position) {
-            return _buildListItem(
-                _danhMucManagementStore.danhMucList.danhMucs[position], position);
-            //_buildListItem(position);
-          },
-        ),
+        child:  ListView.builder(
+              //key: _contentKey,
+              controller: _scrollController,
+              itemCount: _danhMucManagementStore.danhMucList.danhMucs.length,
+              // separatorBuilder: (context, position) {
+              //   return Divider();
+              // },
+              itemBuilder: (context, position) {
+                  return _buildListItem(
+                      _danhMucManagementStore.danhMucList.danhMucs[position],
+                      position);
+                  //_buildListItem(position);
+                },
+              ),
+
       )
         : Center(
       child: Text(
@@ -322,20 +334,20 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
-        decoration: new BoxDecoration(
-          boxShadow: [
-            // color: Colors.white, //background color of box
-            BoxShadow(
-              color: Color.fromRGBO(198, 199, 202, 1),
-              blurRadius: 10, // soften the shadow
-              spreadRadius: 0.01, //extend the shadow
-              offset: Offset(
-                8.0, // Move to right 10  horizontally
-                12.0, // Move to bottom 10 Vertically
-              ),
-            )
-          ],
-        ),
+        // decoration: new BoxDecoration(
+        //   boxShadow: [
+        //     // color: Colors.white, //background color of box
+        //     BoxShadow(
+        //       color: Color.fromRGBO(198, 199, 202, 1),
+        //       blurRadius: 10, // soften the shadow
+        //       spreadRadius: 0.01, //extend the shadow
+        //       offset: Offset(
+        //         8.0, // Move to right 10  horizontally
+        //         12.0, // Move to bottom 10 Vertically
+        //       ),
+        //     )
+        //   ],
+        // ),
         child: Card(
           margin: EdgeInsets.only(top: 8, right: 10, left: 10),
           clipBehavior: Clip.antiAlias,
@@ -346,7 +358,9 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
             padding: EdgeInsets.all(20),
             // height: 130,
             // color: Color.fromRGBO(242, 242, 242, 1),
-            color: Colors.white,
+            // color: Colors.white,
+            // AppColors.lightDarkThemeColor
+            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) : Colors.grey[200],
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -358,7 +372,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                         '${danhMuc.tenDanhMuc}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.black,
+                          // color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -366,7 +380,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        _showBottomSheetPopMenu(danhMuc);
+                        _showBottomSheetPopMenu(danhMuc, position);
                       },
                       child: Icon(
                         Icons.menu_outlined,
@@ -441,39 +455,58 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                       ],
                     ),
                     SizedBox(width: 12,),
-                    danhMuc.trangThai == "On" ? Row(
+                    Row(
                       children: [
                         Text(
-                          "On",
-                          style: TextStyle(
-                            // fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
+                          _danhMucManagementStore.danhMucList.danhMucs[position].trangThai=="On" ? "On" : "Off",
+                          style: TextStyle(fontSize: 20,),
                         ),
                         SizedBox(width: 10.0,),
-                        Icon(
-                          Icons.check_circle,
+                        _danhMucManagementStore.danhMucList.danhMucs[position].trangThai=="On" ? Icon(
+                          Icons.check_circle_outline,
                           color: Colors.green,
                           size: 24,
-                        ),
-                      ],
-                    ) :  Row(
-                      children: [
-                        Text(
-                          "Off",
-                          style: TextStyle(
-                            // fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(width: 10.0,),
-                        Icon(
-                          Icons.check_circle,
+                        ) : Icon(
+                          Icons.cancel_outlined,
                           color: Colors.red,
                           size: 24,
                         ),
                       ],
-                    )
+                    ),
+
+                    // danhMuc.trangThai == "On" ? Row(
+                    //   children: [
+                    //     Text(
+                    //       "On",
+                    //       style: TextStyle(
+                    //         // fontWeight: FontWeight.bold,
+                    //         fontSize: 20,
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 10.0,),
+                    //     Icon(
+                    //       Icons.check_circle,
+                    //       color: Colors.green,
+                    //       size: 24,
+                    //     ),
+                    //   ],
+                    // ) :  Row(
+                    //   children: [
+                    //     Text(
+                    //       "Off",
+                    //       style: TextStyle(
+                    //         // fontWeight: FontWeight.bold,
+                    //         fontSize: 20,
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 10.0,),
+                    //     Icon(
+                    //       Icons.check_circle,
+                    //       color: Colors.red,
+                    //       size: 24,
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 ),
               ],
@@ -533,7 +566,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     );
   }
 
-  void _showBottomSheetPopMenu(DanhMuc danhMuc) {
+  void _showBottomSheetPopMenu(DanhMuc danhMuc, int position) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -546,14 +579,14 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
         builder: (BuildContext context){
           return Wrap(
             children: [
-              buildPopMenuBottom(danhMuc),
+              buildPopMenuBottom(danhMuc, position),
             ],
           );
         }
     );
   }
 
-  Widget buildPopMenuBottom(DanhMuc danhMuc) {
+  Widget buildPopMenuBottom(DanhMuc danhMuc, int position) {
     return Container(
         padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
         child: Column(
@@ -577,10 +610,10 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen(thuocTinh: thuocTinh,)),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateOrEditDanhMucScreen(danhMuc: danhMuc,)),
+                    );
                   },
                 ),
               ],
@@ -609,7 +642,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ),
                   onTap: () {
-                    _isActiveDanhMuc(danhMuc);
+                    _isActiveDanhMuc(danhMuc, position);
                   },
                 ),
               ],
@@ -689,12 +722,26 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
       value: _selectedValue,
       // items: _permissions,
       hint: Text("Chọn quyền"),
-      onChanged: (value) {
-        setState(() {
-          _selectedValue = value;
-        });
-      },
+      // onChanged: (value) {
+      //   setState(() {
+      //     _selectedValue = value;
+      //   });
+      // },
     );
+  }
+
+  _showSuccssfullMesssage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title : "Thông báo",
+          duration : Duration(seconds : 5),
+        )
+            .show(context);
+      }
+      return SizedBox.shrink();
+    });
   }
 
   _showDialog<T>({BuildContext context, Widget child}) {

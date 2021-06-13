@@ -41,6 +41,13 @@ abstract class _DanhMucManagementStore with Store {
   ObservableFuture<dynamic> fetchCreateDanhMucFuture =
   ObservableFuture<dynamic>(emptyCreateDanhMucResponse);
 
+
+  static ObservableFuture<dynamic> emptyUpdateActiveDanhMucResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateActiveDanhMucFuture =
+  ObservableFuture<dynamic>(emptyUpdateActiveDanhMucResponse);
+
   @observable
   int danhMucId;
 
@@ -75,10 +82,20 @@ abstract class _DanhMucManagementStore with Store {
   bool updateDanhMuc_success = false;
 
   @observable
+  bool updateActiveDanhMuc_success = false;
+
+  @observable
   bool createDanhMuc_success = false;
 
   @observable
   bool isIntialLoading = true;
+
+  @computed
+  bool get canSubmit =>
+      tenDanhMuc.isNotEmpty &&
+      tenDanhMuc != null &&
+      tag.isNotEmpty &&
+      tag != null;
 
   @computed
   bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending && isIntialLoading;
@@ -90,7 +107,31 @@ abstract class _DanhMucManagementStore with Store {
   bool get loadingUpdateDanhMuc => fetchUpdateDanhMucFuture.status == FutureStatus.pending;
 
   @computed
+  bool get loadingUpdateActiveDanhMuc => fetchUpdateActiveDanhMucFuture.status == FutureStatus.pending;
+
+  @computed
   bool get loadingCreateDanhMuc => fetchCreateDanhMucFuture.status == FutureStatus.pending;
+
+  @action
+  void setDanhMucId(int value) {
+    danhMucId = value;
+  }
+
+  @action
+  void setNameDanhMuc(String value) {
+    tenDanhMuc = value;
+  }
+
+  @action
+  void setTrangThaiDanhMuc(bool value) {
+    if (value) trangThai = "On";
+    else trangThai = "Off";
+  }
+
+  @action
+  void setTagDanhMuc(String value) {
+    tag = value;
+  }
 
   @action
   Future getDanhMucs(bool isLoadMore) async {
@@ -206,13 +247,13 @@ abstract class _DanhMucManagementStore with Store {
 
   @action
   Future IsActiveDanhMuc(DanhMuc danhMuc) async {
-    updateDanhMuc_success = false;
+    updateActiveDanhMuc_success = false;
     final future = _repository.updateDanhMuc(danhMuc.id, danhMuc.tenDanhMuc, danhMuc.tag, danhMuc.danhMucCha, danhMuc.trangThai);
-    fetchUpdateDanhMucFuture = ObservableFuture(future);
+    fetchUpdateActiveDanhMucFuture = ObservableFuture(future);
 
     future.then((res){
       if (res["success"]){
-        updateDanhMuc_success = true;
+        updateActiveDanhMuc_success = true;
       }
     }).catchError((error){
       if (error is DioError) {

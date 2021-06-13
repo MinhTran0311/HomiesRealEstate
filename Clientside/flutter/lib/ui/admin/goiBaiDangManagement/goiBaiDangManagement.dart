@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/models/goiBaiDang/goiBaiDang_list.dart';
 import 'package:boilerplate/stores/admin/goiBaiDangManagement/goiBaiDangManagement_store.dart';
 import '../management.dart';
+import 'createOrEditGoiBaiDang.dart';
 
 class GoiBaiDangManagementScreen extends StatefulWidget {
   @override
@@ -65,6 +66,24 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
 
   }
 
+  _isActiveGoiBaiDang(GoiBaiDang goiBaiDang, int position) async {
+    if (goiBaiDang.trangThai == "On")
+    {
+      goiBaiDang.trangThai = "Off";
+      _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai = "Off";
+
+    }
+    else {
+      goiBaiDang.trangThai = "On";
+      _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai = "On";
+
+    }
+    await _goiBaiDangManagementStore.IsActiveGoiBaiDang(goiBaiDang);
+    Navigator.of(context).pop();
+    setState(() {});
+    // _showSuccssfullMesssage(_goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,10 +119,10 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
               size: 28,
             ),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen()),
+              );
             },
           ),
         ],
@@ -333,7 +352,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                     ),
                     GestureDetector(
                       onTap: (){
-
+                        _showBottomSheetPopMenu(goiBaiDang, position);
                       },
                       child: Icon(
                         Icons.menu_outlined,
@@ -498,6 +517,121 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
             ],
           );
         }
+    );
+  }
+
+  void _showBottomSheetPopMenu(GoiBaiDang goiBaiDang, int position) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )
+        ),
+        builder: (BuildContext context){
+          return Wrap(
+            children: [
+              buildPopMenuBottom(goiBaiDang, position),
+            ],
+          );
+        }
+    );
+  }
+
+  Widget buildPopMenuBottom(GoiBaiDang goiBaiDang, int position) {
+    return Container(
+        padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.edit_sharp,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(width: 20,),
+                GestureDetector(
+                  child: Text(
+                    "Chỉnh sửa",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.remove_red_eye,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(width: 20,),
+                GestureDetector(
+                  child: Text(
+                    "Xem chi tiết",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
+                    // );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                goiBaiDang.trangThai == "On" ? Icon(
+                  Icons.cancel,
+                  color: Colors.grey,
+                  size: 28,
+                ) : Icon(
+                  Icons.check_circle,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(width: 20,),
+                GestureDetector(
+                  child: Text(
+                    goiBaiDang.trangThai == "On" ? "Ngừng kích hoạt" : "Kích hoạt",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    _isActiveGoiBaiDang(goiBaiDang, position);
+                  },
+                ),
+              ],
+            ),
+          ],
+        )
     );
   }
 

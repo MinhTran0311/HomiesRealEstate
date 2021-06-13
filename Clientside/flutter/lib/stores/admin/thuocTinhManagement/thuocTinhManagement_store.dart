@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/thuocTinh/thuocTinh.dart';
 import 'package:boilerplate/models/thuocTinh/thuocTinh_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -37,6 +38,12 @@ abstract class _ThuocTinhManagementStore with Store {
   ObservableFuture<dynamic> fetchUpdateThuocTinhFuture =
   ObservableFuture<dynamic>(emptyUpdateThuocTinhResponse);
 
+  static ObservableFuture<dynamic> emptyUpdateActiveThuocTinhResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchUpdateActiveThuocTinhFuture =
+  ObservableFuture<dynamic>(emptyUpdateActiveThuocTinhResponse);
+
   static ObservableFuture<dynamic> emptyCreateThuocTinhResponse = ObservableFuture.value(null);
 
   @observable
@@ -55,7 +62,10 @@ abstract class _ThuocTinhManagementStore with Store {
   String active = '';
 
   @observable
-  String KieuDuLieu = '';
+  String KieuDuLieuShow = 'Chuỗi';
+
+  @observable
+  String KieuDuLieu = 'String';
 
   @observable
   ThuocTinhManagementList thuocTinhList;
@@ -68,6 +78,9 @@ abstract class _ThuocTinhManagementStore with Store {
 
   @observable
   bool createThuocTinh_success = false;
+
+  @observable
+  bool updateActiveThuocTinh_success = false;
 
   @observable
   bool isIntialLoading = true;
@@ -104,15 +117,36 @@ abstract class _ThuocTinhManagementStore with Store {
     idThuocTinh = value;
   }
 
+  @action
   void setNameThuocTinh(String value) {
     name = value;
   }
 
+  @action
   void setTrangThaiThuocTinh(bool value) {
     if (value) active = "On";
     else active = "Off";
   }
 
+  @action
+  void getKieuDuLieu(String value) {
+    switch(value) {
+      case "int": {
+        KieuDuLieuShow = "Số nguyên";
+        break;
+      }
+      case "double": {
+        KieuDuLieuShow = "Số thực";
+        break;
+      }
+      default: {
+        KieuDuLieuShow = "Chuỗi";
+        break;
+      }
+    }
+  }
+
+  @action
   void setKieuDuLieu(String value) {
     switch(value) {
       case "Số nguyên": {
@@ -227,6 +261,34 @@ abstract class _ThuocTinhManagementStore with Store {
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null) {
+
+          errorStore.errorMessage = error.response.data["error"]["message"];
+        }
+        else
+          errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else {
+        errorStore.errorMessage =
+        "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
+      }
+    });
+  }
+
+  @action
+  Future IsActiveThuocTinh(ThuocTinhManagement thuocTinh) async {
+    updateActiveThuocTinh_success = false;
+    final future = _repository.updateThuocTinh(thuocTinh.id, thuocTinh.tenThuocTinh, thuocTinh.kieuDuLieu, thuocTinh.trangThai);
+    fetchUpdateActiveThuocTinhFuture = ObservableFuture(future);
+
+    future.then((res) {
+      if (res["success"]) {
+        updateActiveThuocTinh_success = true;
+      }
+    }).catchError((error) {
+      if (error is DioError) {
+        if (error.response.data != null) {
 
           errorStore.errorMessage = error.response.data["error"]["message"];
         }

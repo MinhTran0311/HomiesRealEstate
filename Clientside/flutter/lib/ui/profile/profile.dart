@@ -57,6 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PostStore _postStore;
   int sobaidang;
   ThemeStore _themeStore;
+  final oCcy = new NumberFormat("#,##0", "en_US");
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 0;
   Widget _buildBody() {
     return Container(
-      color: Colors.orange,
+      color: Colors.amber,
       width: double.infinity,
       height: double.infinity,
       child: RefreshIndicator(
@@ -222,7 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.account_circle_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
-                coloricon: Colors.orange,
+                coloricon: Colors.amber,
                 isFunction: false,
                 press: () {
                   setState(() {
@@ -250,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.account_balance_wallet_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
-                coloricon: Colors.orange,
+                coloricon: Colors.amber,
                 isFunction: false,
                 press: () {
                    setState(() {
@@ -270,7 +271,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.article_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
-                coloricon: Colors.orange,
+                coloricon: Colors.amber,
                 isFunction: false,
                 press: () {
                   setState(() {
@@ -288,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.settings_outlined,
                   // colorbackgroud: Colors.grey[200],
                   // colortext: Colors.black,
-                  coloricon: Colors.orange,
+                  coloricon: Colors.amber,
                   isFunction: false,
                   press: () {
                     setState(() {
@@ -302,7 +303,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   icon: Icons.info_outline,
                   // colorbackgroud: Colors.grey[200],
                   // colortext: Colors.black,
-                  coloricon: Colors.orange,
+                  coloricon: Colors.amber,
                   isFunction: false,
                   press: () {
                     setState(() {
@@ -316,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.article_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
-                coloricon: Colors.orange,
+                coloricon: Colors.amber,
                 isFunction: false,
                 press: () {
                   Navigator.push(
@@ -341,12 +342,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Observer(builder: (context) {
             return Container(
-                height: 189,
+                height: 200,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.yellow, Colors.orange])),
+                        colors: [Colors.orange, Colors.amber])),
                 child: Container(
                   padding: const EdgeInsets.only(top: 30, left: 30),
                   child: Column(
@@ -434,21 +435,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Observer(builder: (context) {
                                   return
                                     _userstore.userCurrent != null
-                                        ? Text(
-                                        _userstore.userCurrent.surname +
-                                            " " +
-                                            _userstore.userCurrent.name,
-                                        style: TextStyle(
-                                            fontSize: 30.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontFamily: FontFamily.roboto))
+                                        ? Container(
+                                          width: 280,
+                                          child: Text(
+                                              _userstore.userCurrent.surname +
+                                              " " +
+                                              _userstore.userCurrent.name,
+                                              style: TextStyle(
+                                                fontSize: 30.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                              overflow: TextOverflow.clip,
+                                          ),
+                                        )
                                         : Text("Người dùng ",
                                         style: TextStyle(
                                             fontSize: 30.0,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
-                                            fontFamily: FontFamily.roboto));
+                                            ));
 
                                 }),
                               Observer(builder: (context) {
@@ -478,7 +484,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               fontSize: 17.0,
                                               // fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontFamily: FontFamily.roboto)),
+                                              )),
                                     ],
                                   ) : Container();
                                 }
@@ -502,12 +508,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Observer(builder: (context) {
                                     return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
                                         ? Text(
-                                        "${_userstore.userCurrent.wallet} Đ",
+                                        "${oCcy.format(_userstore.userCurrent.wallet)} Đ",
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontFamily: FontFamily.roboto),
+                                                ),
                                           )
                                         : Text(
                                             "0",
@@ -515,7 +521,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 fontSize: 20,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontFamily: FontFamily.roboto),
+                                                ),
                                           );
                                   }),
                                   Text(
@@ -523,7 +529,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: TextStyle(
                                         fontSize: 18,
                                         color: Colors.white,
-                                        fontFamily: FontFamily.roboto),
+                                        ),
                                   )
                                 ],
                               ),
@@ -548,14 +554,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             fontSize: 20,
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: FontFamily.roboto),
+                                            ),
                                       ),
                                       Text(
                                         "Bài đã đăng",
                                         style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.white,
-                                            fontFamily: FontFamily.roboto),
+                                            ),
                                       )
                                     ],
                                   ),

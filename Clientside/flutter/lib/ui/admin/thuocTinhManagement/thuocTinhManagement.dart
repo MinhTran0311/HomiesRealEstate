@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:math';
 
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh.dart';
 import 'package:boilerplate/routes.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -65,6 +66,24 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
 
   _clickButtonApDung() {
 
+  }
+
+  _isActiveThuocTinh(ThuocTinhManagement thuocTinh, int position) async {
+    if (thuocTinh.trangThai == "On")
+    {
+      thuocTinh.trangThai = "Off";
+      _thuocTinhManagementStore.thuocTinhList.thuocTinhs[position].trangThai = "Off";
+
+    }
+    else {
+      thuocTinh.trangThai = "On";
+      _thuocTinhManagementStore.thuocTinhList.thuocTinhs[position].trangThai = "On";
+
+    }
+    await _thuocTinhManagementStore.IsActiveThuocTinh(thuocTinh);
+    Navigator.of(context).pop();
+    setState(() {});
+    // _showSuccssfullMesssage(_thuocTinhManagementStore.thuocTinhList.thuocTinhs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công");
   }
 
   @override
@@ -335,7 +354,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        _showBottomSheetPopMenu(thuocTinh);
+                        _showBottomSheetPopMenu(thuocTinh, position);
                       },
                       child: Icon(
                         Icons.menu_outlined,
@@ -502,7 +521,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     );
   }
 
-  void _showBottomSheetPopMenu(ThuocTinhManagement thuocTinh) {
+  void _showBottomSheetPopMenu(ThuocTinhManagement thuocTinh, int position) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -515,14 +534,14 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
         builder: (BuildContext context){
           return Wrap(
             children: [
-              buildPopMenuBottom(thuocTinh),
+              buildPopMenuBottom(thuocTinh, position),
             ],
           );
         }
     );
   }
 
-  Widget buildPopMenuBottom(ThuocTinhManagement thuocTinh) {
+  Widget buildPopMenuBottom(ThuocTinhManagement thuocTinh, int position) {
     return Container(
         padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
         child: Column(
@@ -578,7 +597,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                     ),
                   ),
                   onTap: () {
-
+                    _isActiveThuocTinh(thuocTinh, position);
                   },
                 ),
               ],
