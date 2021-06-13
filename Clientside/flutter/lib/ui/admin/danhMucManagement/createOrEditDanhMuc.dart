@@ -10,6 +10,7 @@ import 'package:boilerplate/ui/admin/danhMucManagement/danhMucManagement.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -132,19 +133,19 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
               });
               if (_danhMucManagementStore.updateDanhMuc_success)
               {
-                _showSuccssfullMesssage("Cập nhật thành công");
+                showSuccssfullMesssage("Cập nhật thành công", context);
                 _danhMucManagementStore.updateDanhMuc_success = false;
               }
               else if (_danhMucManagementStore.createDanhMuc_success)
               {
-                _showSuccssfullMesssage("Thêm mới thành công");
+                showSuccssfullMesssage("Thêm mới thành công", context);
                 _danhMucManagementStore.createDanhMuc_success = false;
               }
               return Container(width: 0, height : 0);
 
             }
             else {
-              return _showErrorMessage(_danhMucManagementStore.errorStore.errorMessage);
+              return showErrorMessage(_danhMucManagementStore.errorStore.errorMessage, context);
             }
           },
         ),
@@ -231,7 +232,6 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Tên danh mục",
@@ -430,7 +430,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             _danhMucManagementStore.UpdateDanhMuc();
           }
           else {
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
           }
         }
         else {
@@ -439,7 +439,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             _danhMucManagementStore.CreateDanhMuc();
           }
           else {
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
           }
         }
 
@@ -449,35 +449,6 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   }
   //endregion
 
-  // General Methods:-----------------------------------------------------------
-
-
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title : AppLocalizations.of(context).translate('home_tv_error'),
-          duration : Duration(seconds : 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title : "Thông báo",
-          duration : Duration(seconds : 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

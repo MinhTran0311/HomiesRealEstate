@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
@@ -22,6 +23,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,7 +50,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   AnimationController _TextAnimationController;
   Animation _colorTween, _iconColorTween;
   Animation<Offset> _transTween;
-
+  Size size;
 
   @override
   void initState() {
@@ -77,7 +79,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     if (!finishload){
       _postStore.addViewForPost(post.id);
     }
-    if (!_userStore.loading && !finishload){
+    if (!_userStore.loadingUserPostDetail && !finishload){
       _userStore.getUserOfCurrentDetailPost(post.userId);
     }
     if (!_postStore.propertiesLoading && !finishload){
@@ -101,7 +103,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         Observer(
           builder: (context)
           {
-            return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || (Preferences.access_token.isNotEmpty && _postStore.isBaiGhimYeuThichLoading) || _postStore.propertiesLoading)
+            return (_postStore.loading || _imageStore.imageLoading || _postStore.getRecommendPostsFutureLoading || _userStore.loadingUserPostDetail || (Preferences.access_token.isNotEmpty && _postStore.isBaiGhimYeuThichLoading) || _postStore.propertiesLoading)
                 ? CustomProgressIndicatorWidget()
                 :  _buildContent();
           }
@@ -110,7 +112,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   }
 
   Widget _buildContent(){
-    Size size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
     Uint8List bytes = base64Decode(_userStore.user.profilePicture);
     return SafeArea(
       child: Scaffold(
@@ -140,7 +142,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                   return Container(width: 0, height: 0);
                 }
                  else {
-                  return _showErrorMessage(_postStore.errorStore.errorMessage);
+                  return showErrorMessage(_postStore.errorStore.errorMessage,context);
                 }
               },
             ),
@@ -770,7 +772,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       flex: 1,
       child: Container(
         decoration: BoxDecoration(
-            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) :  Colors.grey[200],
+            color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
             borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
         ),
         child: Padding(
@@ -780,40 +782,64 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             children: [
               Row(
                 children: [
-                  Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
-                            image: AssetImage(Assets.front_img),
-                            fit: BoxFit.cover,
+                  Observer(
+                    builder: (context) {
+                      return Container(
+                        height: 60,
+                        width: 60,
+                        // decoration: BoxDecoration(
+                        //     // image: DecorationImage(
+                        //     //   //image: _userStore.user.profilePicture.isNotEmpty ? Image.memory(bytes) : AssetImage(Assets.front_img),
+                        //     //   image: _userStore.userOfCurrentPost.profilePicture.isNotEmpty ? imageFromBase64String(_userStore.user.profilePicture): AssetImage(Assets.front_img),
+                        //     //   fit: BoxFit.cover,
+                        //     // ),
+                        //     shape: BoxShape.circle
+                        // ),
+                        child: (_userStore.userOfCurrentPost==null || _userStore.userOfCurrentPost.profilePicture == null || _userStore.userOfCurrentPost.profilePicture.isEmpty) ? CircleAvatar(
+                          backgroundColor: Colors.amber.shade800,
+                          child: Text((
+                              _userStore.userOfCurrentPost.name.substring(0,1) +  _userStore.userOfCurrentPost.surname.substring(0,1)).toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
-                          shape: BoxShape.circle
-                      )
+                        )
+                            : CircleAvatar(
+                          child: ClipOval(child: imageFromBase64String(_userStore.userOfCurrentPost.profilePicture)),
+                          backgroundColor: Colors.brown.shade800,
+                        ),
+                      );
+                    }
                   ),
-                  SizedBox(width: 16,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        post.userName,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  SizedBox(width: 12,),
+                  Container(
+                    width: size.width*0.4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SelectableText(post.userName,
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: _themeStore.darkMode ? Colors.white : Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        _userStore.user.phoneNumber,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18,
+                        SizedBox(
+                          height: 6,
                         ),
-                      ),
-                    ],
+                        SelectableText(
+                          _userStore.user.phoneNumber ?? _userStore.user.emailAddress,
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -835,7 +861,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-                  SizedBox(width: 16,),
+                  SizedBox(width: 12,),
                   Container(
                     height: 50,
                     width: 50,
@@ -861,37 +887,26 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       ),
     );
   }
+  Image imageFromBase64String(String base64String) {
+    Uint8List bytes = base64.decode(base64String);
+    return Image.memory(bytes);
+  }
 
 
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
         if (_imageStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_imageStore.errorStore.errorMessage);
+          return showErrorMessage(_imageStore.errorStore.errorMessage,context);
         }
         return SizedBox.shrink();
       },
     );
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: "Lỗi",
-          duration: Duration(seconds: 3),
-        )
-          ..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 
   void _lauchURL(String _url) async {
-    await canLaunch(_url) ? await launch(_url) : _showErrorMessage('Không thể kết nối $_url');
+    await canLaunch(_url) ? await launch(_url) : showErrorMessage('Không thể kết nối $_url',context);
   }
 
   bool _scrollListener(ScrollNotification scrollInfo) {

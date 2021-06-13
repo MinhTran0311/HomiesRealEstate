@@ -82,15 +82,17 @@ class TextFieldWidget extends StatelessWidget {
               counterText: '',
               icon: this.isIcon ? Icon(this.icon, color: iconColor) : null,
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
+                borderSide: BorderSide(color: Colors.amber),
               ),
               suffixIcon: suffixIcon != null ? IconButton(
                 onPressed: () => textController.clear(),
                 icon: Icon(Icons.clear),
+                color: Colors.grey,
               ): null,
             labelText: labelText,
             labelStyle: TextStyle(
               color: (isDarkmode != null && isDarkmode) ? Colors.white : Colors.black,
+              fontSize: 18,
             ),
           ),
           validator: errorMessage,

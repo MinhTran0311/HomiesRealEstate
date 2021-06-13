@@ -97,28 +97,22 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý vai trò",),
-          ],
-        ),
+        title: Text("Quản lý vai trò",),
         actions: [
-          IconButton(
-            padding: EdgeInsets.only(right: 10),
-            icon: Icon(
-              Icons.person_add_alt_1,
-            ),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
-              // );
-            },
-          ),
+          // IconButton(
+          //   padding: EdgeInsets.only(right: 10),
+          //   icon: Icon(
+          //     Icons.person_add_alt_1,
+          //   ),
+          //   onPressed: () {
+          //     // Navigator.push(
+          //     //   context,
+          //     //   MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
+          //     // );
+          //   },
+          // ),
         ],
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: _buildBody(),
     );

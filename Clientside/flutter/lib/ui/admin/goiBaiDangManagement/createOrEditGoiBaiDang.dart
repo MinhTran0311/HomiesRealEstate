@@ -554,6 +554,10 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
           //    _store.setConfirmPassword(_confirmPasswordController.text),
           // },
           _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
+          _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
+          _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(int.tryParse(_thoiGianToiThieuController.text)),
+          _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(int.tryParse(_doUuTienController.text)),
+          _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(_phiController.text)),
           _goiBaiDangManagementStore.setTrangThaiGoiBaiDang(_checkboxTrangThai),
         };
         if (this.goiBaiDang != null) {

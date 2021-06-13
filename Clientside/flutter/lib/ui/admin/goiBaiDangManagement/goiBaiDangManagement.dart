@@ -100,13 +100,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý gói bài đăng",),
-          ],
-        ),
+        title: Text("Quản lý gói bài đăng",),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),
@@ -345,8 +339,8 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                     ),
                     GestureDetector(
                       onTap: (){
-                        _showBottomSheetPopMenu(goiBaiDang, position);
-                      },
+        _showBottomSheetPopMenu(goiBaiDang, position);
+        },
                       child: Icon(
                         Icons.menu_outlined,
                         size: 25,

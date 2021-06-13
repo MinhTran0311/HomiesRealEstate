@@ -462,7 +462,8 @@ namespace Homies.RealEstate.Authorization.Users.Profile
         {
             var user = await UserManager.GetUserByIdAsync(Id);
             var userProfileEditDto = ObjectMapper.Map<CurrentUserProfileEditDto>(user);
-            userProfileEditDto.ProfilePicture = GetProfilePictureByUser(Id).Result.ProfilePicture;
+            var res = await GetProfilePictureByUser(Id);
+            userProfileEditDto.ProfilePicture = res.ProfilePicture;
             return userProfileEditDto;
         }
     }
