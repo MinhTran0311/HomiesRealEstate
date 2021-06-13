@@ -663,7 +663,6 @@ class _FilterState extends State<Filter> {
                     showSearchBox: true,
                     searchBoxDecoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      // contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
                       labelText: "Tìm tỉnh thành",
                     ),
                     showClearButton: true,
@@ -671,10 +670,6 @@ class _FilterState extends State<Filter> {
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColorDark,
-                        // borderRadius: BorderRadius.only(
-                        //   topLeft: Radius.circular(20),
-                        //   topRight: Radius.circular(20),
-                        // ),
                       ),
                       child: Center(
                         child: Text(

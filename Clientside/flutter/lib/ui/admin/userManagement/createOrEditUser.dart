@@ -216,7 +216,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Họ'),
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Họ',
+          hint: ('Nhập họ'),
           // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
@@ -237,7 +239,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Tên'),
+          hint: ('Nhập tên'),
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Tên',
           // hintColor: Colors.white,
           icon: Icons.person_add,
           inputType: TextInputType.text,
@@ -259,10 +263,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Điện thoại'),
+          hint: ('Nhập điện thoại'),
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Điện thoại',
           // hintColor: Colors.white,
           icon: Icons.phone,
-          inputType: TextInputType.text,
+          inputType: TextInputType.phone,
           iconColor: Colors.amber,
           textController: _phoneNumberController,
           inputAction: TextInputAction.next,
@@ -270,7 +276,14 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           onChanged: (value) {
             _store.setPhoneNumber(_phoneNumberController.text);
           },
-          errorText: _store.formErrorStore.name,
+          // errorText: _store.formErrorStore.name,
+          errorMessage: (value) {
+            if (value == null || value.isEmpty)
+            {
+              return "Vui lòng nhập số điện thoại";
+            }
+            return null;
+          },
         );
       },
     );
@@ -281,7 +294,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       builder: (context) {
         return this.user != null ? TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Tên đăng nhập'),
+          labelText: 'Tên đăng nhập',
           // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
@@ -296,7 +309,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           errorText: _store.formErrorStore.username,
         ) : TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Tên đăng nhập'),
+          labelText: 'Tên đăng nhập',
+          hint: ('Nhập tên đăng nhập'),
+          isDarkmode: _themeStore.darkMode,
           // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
@@ -369,7 +384,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   Widget _buildPasswordField() {
     return TextFieldWidget(
       inputFontsize: 22,
-      hint: ('Mật khẩu'),
+      labelText: ('Mật khẩu'),
+      hint: ('Nhập mật khẩu'),
+      isDarkmode: _themeStore.darkMode,
       // hintColor: Colors.white,
       isObscure: true,
       icon: Icons.vpn_key,
@@ -380,12 +397,25 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       onChanged: (value) {
         _store.setPassword(_passwordController.text);
       },
+      errorMessage: (value){
+        if (this.user == null)
+        {
+          if(value == null || value.isEmpty)
+            return "Vui lòng nhập mật khẩu";
+          else if (value.length < 6) {
+            return "Mật khẩu phải có ít nhất 6 ký tự";
+          }
+        }
+        return null;
+      },
     );
   }
 
   Widget _buildConfirmPasswordField() {
     return TextFieldWidget(
       inputFontsize: 22,
+      labelText: "Xác nhận mật khẩu",
+      isDarkmode: _themeStore.darkMode,
       hint: ('Nhập lại mật khẩu'),
       // hintColor: Colors.white,
       isObscure: true,
@@ -405,11 +435,13 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
+          labelText: 'Email',
           inputFontsize: 22,
-          hint: ('Email'),
+          isDarkmode: _themeStore.darkMode,
+          hint: ('Nhập địa chỉ email'),
           // hintColor: Colors.white,
           icon: Icons.email_rounded,
-          inputType: TextInputType.text,
+          inputType: TextInputType.emailAddress,
           iconColor: Colors.amber,
           textController: _userEmailController,
           inputAction: TextInputAction.next,
@@ -453,7 +485,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.UpdateUser();
            }
            else{
-             _showErrorMessage('Please fill in all fields');
+             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
            }
          }
          else {
@@ -462,7 +494,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.CreateUser();
            }
            else{
-             _showErrorMessage('Please fill in all fields');
+             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
            }
          }
 
