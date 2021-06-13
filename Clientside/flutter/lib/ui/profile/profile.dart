@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _postStore = Provider.of<PostStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     if(Preferences.userRoleRank >= 1){
-      if (!_userstore.loading) {
+      if (!_userstore.loadingCurrentUser) {
         _userstore.getCurrentUser();
       }
       if (!_userstore.loadingCurrentUserWallet) {

@@ -443,6 +443,17 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   }
 
   @override
+  void setDanhMucCha(int value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setDanhMucCha');
+    try {
+      return super.setDanhMucCha(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchDanhMucsFuture: ${fetchDanhMucsFuture},

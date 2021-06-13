@@ -251,29 +251,29 @@ abstract class _UserStore with Store {
   }
 
 
-  static ObservableFuture<CurrentUserForEditdto> emptyUserResponse =
+  static ObservableFuture<CurrentUserForEditdto> emptyUserPostDetailResponse =
   ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<CurrentUserForEditdto> fetchUsersFuture =
-  ObservableFuture<CurrentUserForEditdto>(emptyUserResponse);
+  ObservableFuture<CurrentUserForEditdto> fetchUsersPostDetailFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUserPostDetailResponse);
 
   @computed
-  bool get loading => fetchUsersFuture.status == FutureStatus.pending;
+  bool get loadingUserPostDetail => fetchUsersPostDetailFuture.status == FutureStatus.pending;
 
-  // empty responses:-----------------------------------------------------------
-  static ObservableFuture<CurrentUserForEditdto> emptyLoginResponses =
-  ObservableFuture.value(null);
   @observable
-  ObservableFuture<CurrentUserForEditdto> loginFutures = emptyLoginResponses;
+  CurrentUserForEditdto userOfCurrentPost;
 
   @action
   Future getUserOfCurrentDetailPost(int Id) async {
     final future = _repository.getUserOfCurrentDeatiaiPost(Id);
-    fetchUsersFuture = ObservableFuture(future);
+    fetchUsersPostDetailFuture = ObservableFuture(future);
 
     future.then((user) {
-      this.user = user;
+      print("12312312312312");
+      print(user.surname);
+      print(user.profilePicture);
+      this.userOfCurrentPost = user;
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
