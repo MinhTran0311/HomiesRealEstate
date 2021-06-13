@@ -50,6 +50,7 @@ class _ReportPageState extends State<ReportPage>{
   int touchedIndex = -1;
   @override
   Widget build(BuildContext context) {
+    Size size =  MediaQuery.of(context).size;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -140,7 +141,9 @@ class _ReportPageState extends State<ReportPage>{
             //     ),
             //   )
             // ),
-            Expanded(
+            Container(
+              width: size.width,
+              height: size.height,
               child: Wrap(
                 children: [
                   SizedBox(height: 10,),
@@ -148,12 +151,15 @@ class _ReportPageState extends State<ReportPage>{
                     children: [
                       Align(
                         alignment: Alignment.topCenter,
-                        child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text("Thống kê Tổng ${dropdownValue}",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,),),
+                        ),
                       ),
                       Align(
-                        alignment: Alignment.topLeft,
+                        alignment: Alignment.center,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 24),
                           child: DropdownButton<String>(
                             value: dropdownValue,
                             icon: const Icon(Icons.arrow_drop_down),
@@ -189,9 +195,8 @@ class _ReportPageState extends State<ReportPage>{
                         color: Colors.grey[200],
                         child:
                         SizedBox(
-                            width:
-                            double.infinity,
-                            height: 400,
+                            width: size.width,
+                            height: size.height*0.6,
                             child:ListView(
                               physics: BouncingScrollPhysics(),
                               scrollDirection: Axis.horizontal,

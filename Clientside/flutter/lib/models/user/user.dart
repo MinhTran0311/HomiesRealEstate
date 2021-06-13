@@ -151,14 +151,17 @@ class CurrentUserForEditdto{
 class RoleCurrent{
   int roleId;
   String roleName;
+  String roleDisplayName;
   RoleCurrent({
     this.roleId,
     this.roleName,
+    this.roleDisplayName,
   });
   factory RoleCurrent.fromjson(Map<String, dynamic> json) {
     return RoleCurrent(
       roleId: json["roleId"],
       roleName: json["roleName"],
+      roleDisplayName: json["roleDisplayName"],
     );
   }
 }
