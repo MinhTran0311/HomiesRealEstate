@@ -8,6 +8,7 @@ import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -64,69 +66,65 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       appBar: AppBar(
         title: Text(
           "Đăng ký",
-          style: Theme.of(context).textTheme.title.copyWith(fontWeight: FontWeight.bold,letterSpacing: 1.0),),
-          automaticallyImplyLeading: false,
-      ),
+      ),),
       body: _buildBody(),
     );
   }
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Material(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.amber,
-                      Colors.orange[700],
-                    ]
-                )
+    return Stack(
+      children: <Widget>[
+        // Container(
+        //   decoration: BoxDecoration(
+        //       gradient: LinearGradient(
+        //           begin: Alignment.topCenter,
+        //           end: Alignment.bottomCenter,
+        //           colors: [
+        //             Colors.amber,
+        //             Colors.orange[700],
+        //           ]
+        //       )
+        //   ),
+        // ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _buildLeftSide(),
             ),
-          ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: _buildLeftSide(),
-              ),
-              Expanded(
-                flex: 1,
-                child: _buildRightSide(),
-              ),
-            ],
-          ) : Center(child: _buildRightSide()),
-          Observer(
-            builder: (context) {
-              if (_store.regist_success) {
-                SharedPreferences.getInstance().then((prefs) {
-                  prefs.setBool(Preferences.is_logged_in, false);
-                });
-                Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.of(context).pop();
-                });
-                _showSuccssfullMesssage("Đăng ký thành công");
-                return Container(width: 0, height: 0);
-              } else {
-                return _showErrorMessage(_store.errorStore.errorMessage);
-              }
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _store.regist_loading,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
+            Expanded(
+              flex: 1,
+              child: _buildRightSide(),
+            ),
+          ],
+        ) : Center(child: _buildRightSide()),
+        Observer(
+          builder: (context) {
+            if (_store.regist_success) {
+              SharedPreferences.getInstance().then((prefs) {
+                prefs.setBool(Preferences.is_logged_in, false);
+              });
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.of(context).pop();
+              });
+              showSuccssfullMesssage("Đăng ký thành công",context);
+              return Container(width: 0, height: 0);
+            } else {
+              return showErrorMessage(_store.errorStore.errorMessage,context);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _store.regist_loading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
     );
   }
 
@@ -175,10 +173,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Họ'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -196,10 +194,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           icon: Icons.person_add,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _nameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -217,10 +215,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -239,10 +237,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Mật khẩu'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           isObscure: true,
           icon: Icons.vpn_key,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _passwordController,
           focusNode: _passwordFocusNode,
           errorText: _store.formErrorStore.password,
@@ -260,10 +258,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Nhập lại mật khẩu'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           isObscure: true,
           icon: Icons.vpn_key,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _confirmPasswordController,
           autoFocus: false,
           errorText: _store.formErrorStore.confirmPassword,
@@ -282,10 +280,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Email'),
-          hintColor: Colors.white,
+          hintColor: Colors.grey,
           icon: Icons.email_rounded,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -306,14 +304,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onPressed: () {
         if(_store.canRegister) {
           DeviceUtils.hideKeyboard(context);
-
-          //SharedPreferences.getInstance().then((preference) {
-          // preference.setBool(Preferences.is_logged_in, false);
-          //Navigator.of(context).pushNamedAndRemoveUntil(Routes.signup, (Route<dynamic> route) => false);
-          _store.register();
+          //_store.register();
+          showSuccssfullMesssage("Đăng ký thành công",context);
         }
         else{
-          _showErrorMessage('Please fill in all fields');
+          showErrorMessage('Hãy điền đủ thông tin',context);
         }
         //});
       },
@@ -331,33 +326,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Container();
   }
 
-  // General Methods:-----------------------------------------------------------
-    _showErrorMessage(String message) {
-      Future.delayed(Duration(milliseconds: 0), () {
-        if (message != null && message.isNotEmpty) {
-          FlushbarHelper.createError(
-            message: message,
-            title: AppLocalizations.of(context).translate('home_tv_error'),
-            duration: Duration(seconds: 5),
-          )..show(context);
-        }
-      });
-
-      return SizedBox.shrink();
-    }
-    _showSuccssfullMesssage(String message) {
-      Future.delayed(Duration(milliseconds: 0), () {
-        if (message != null && message.isNotEmpty) {
-          FlushbarHelper.createSuccess(
-            message: message,
-            title: "Thông báo",
-            duration: Duration(seconds: 5),
-          )
-            .show(context);
-        }
-        return SizedBox.shrink();
-      });
-    }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

@@ -11,6 +11,7 @@ import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/app_icon_widget.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -106,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (context) {
               return _store.loggedIn && _store.getCurrentUserRoleSuccess
                   ? navigate(context, true)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
+                  : showErrorMessage(_store.errorStore.errorMessage,context);
             },
           ),
           Observer(
@@ -234,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _store.authLogIn(_userNameController.text,_passwordController.text);
           //_authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
-          _showErrorMessage('Hãy điền đầy đủ thông tin');
+          showErrorMessage('Hãy điền đầy đủ thông tin',context);
         }
       },
     );
@@ -306,40 +307,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return Observer(
       builder: (context) {
         if (_store.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_store.errorStore.errorMessage);
+          return showErrorMessage(_store.errorStore.errorMessage,context);
         }
         return SizedBox.shrink();
       },
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
   }
 
   // dispose:-------------------------------------------------------------------

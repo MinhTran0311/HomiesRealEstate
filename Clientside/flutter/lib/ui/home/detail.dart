@@ -15,6 +15,7 @@ import 'package:boilerplate/ui/home/photoViewScreen.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -131,11 +132,11 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             Observer(
               builder: (context) {
                 if (_postStore.createOrChangeSuccess && _postStore.isBaiGhimYeuThich){
-                    _showSuccssfullMesssage("Đã thêm bài đăng vào danh sách yêu thích");
+                    showSuccssfullMesssage("Đã thêm bài đăng vào danh sách yêu thích",context);
                     return Container(width: 0, height: 0);
                 }
                 else if (_postStore.createOrChangeSuccess && !_postStore.isBaiGhimYeuThich) {
-                  _showSuccssfullMesssage("Đã xóa bài đăng khỏi danh sách yêu thích");
+                  showSuccssfullMesssage("Đã xóa bài đăng khỏi danh sách yêu thích",context);
                   return Container(width: 0, height: 0);
                 }
                  else {
@@ -903,18 +904,5 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
     }
   }
 
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
 }
 

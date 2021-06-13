@@ -14,6 +14,7 @@ import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -198,10 +199,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_postStore.errorStore.errorMessage);
+          return showErrorMessage(_postStore.errorStore.errorMessage,context);
         }
         if (_postStore.successNewpost) {
-          _showSuccssfullMesssage("Đăng tin thành công");
+          showSuccssfullMesssage("Đăng tin thành công",context);
           //dispose();.
           _postStore.successNewpost = false;
           _postStore.getPostForCurs(false, "", 0);
@@ -1524,31 +1525,5 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Container();
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        ).show(context);
-      }
-      //return SizedBox.shrink();
-    });
-  }
 
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        ).show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 }
