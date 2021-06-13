@@ -14,6 +14,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -414,7 +415,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(postStore.errorStore.errorMessage);
+          return showErrorMessage(postStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
@@ -422,19 +423,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
     );
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-    return SizedBox.shrink();
-  }
+
 
   void _showBottomSheet() {
     showModalBottomSheet(

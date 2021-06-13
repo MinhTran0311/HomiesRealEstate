@@ -19,6 +19,7 @@ import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/ui/profile/mypost/editpost/editpost.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -928,46 +929,18 @@ class _MyPostScreenState extends State<MyPostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(postStore.errorStore.errorMessage);
+          return showErrorMessage(postStore.errorStore.errorMessage,context);
         }
         if (postStore.successgiahan) {
           postStore.successgiahan = false;
-          _showSuccssfullMesssage("Gia hạn thành công");
+          showSuccssfullMesssage("Gia hạn thành công",context);
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          _showSuccssfullMesssage("Xóa bài đăng thành công");
+          showSuccssfullMesssage("Xóa bài đăng thành công",context);
         }
         return SizedBox.shrink();
       },
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        ).show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
-
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 }

@@ -9,6 +9,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -463,27 +464,12 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     return Observer(
       builder: (context) {
         if (_goiBaiDangManagementStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage);
+          return showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
       },
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 
   void _showBottomSheet() async {

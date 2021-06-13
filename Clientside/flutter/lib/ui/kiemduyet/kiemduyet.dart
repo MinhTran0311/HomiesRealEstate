@@ -8,6 +8,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/FilterLSGD.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -345,32 +346,8 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     if(id==null)return true;
     else return false;
   }
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
 
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message,int UserID,int i) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
+
   Future<void> _showMyDialog(lichsugiaodich lsgd,int UserID,i) async {
     return showDialog<void>(
       context: context,
@@ -399,7 +376,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
               onPressed: () {
                 _lsgdStore.setKiemDuyenVienID(UserID, i);
                 _lsgdStore.KiemDuyetGiaoDich(lsgd.id);
-                _showSuccssfullMesssage("Cập nhật thành công",UserID,i);
+                showSuccssfullMesssage("Cập nhật thành công",context);
                 _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                 Navigator.of(context).pop();
               },

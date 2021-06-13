@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: Theme.of(context)
               .textTheme
               .caption
-              .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
+              .copyWith(color: Colors.white),
         ),
         onPressed: () {
           SharedPreferences.getInstance().then((preference) {
@@ -277,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: Theme.of(context)
                   .textTheme
                   .caption
-                  .copyWith(color: _themeStore.darkMode ? Colors.amber : Colors.white),
+                  .copyWith(color: Colors.white),
             ),
           ],
         ),

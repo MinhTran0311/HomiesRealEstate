@@ -13,6 +13,7 @@ import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -172,7 +173,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(postStore.errorStore.errorMessage);
+          return showErrorMessage(postStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
@@ -236,7 +237,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
             builder: (context) {
               return _store.regist_success
                   ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
+                  : showErrorMessage(_store.errorStore.errorMessage,context);
             },
           ),
           Observer(
@@ -1361,9 +1362,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
 //endregion
 
   Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, false);
-    });
+
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pop();
     });
@@ -1371,18 +1370,4 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Container();
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 }

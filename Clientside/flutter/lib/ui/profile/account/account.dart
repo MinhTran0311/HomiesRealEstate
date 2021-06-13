@@ -1024,23 +1024,11 @@ class _AccountEditPageState extends State<AccountEditPage> {
     Phone = CtlPhone.text;
     setState(() {
       _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
-      _showSuccssfullMesssage("Cập nhật thành công");
+      showSuccssfullMesssage("Cập nhật thành công",context);
     });
 
   }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
