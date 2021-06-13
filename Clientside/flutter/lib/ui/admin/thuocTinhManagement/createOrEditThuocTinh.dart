@@ -10,6 +10,7 @@ import 'package:boilerplate/ui/admin/thuocTinhManagement/thuocTinhManagement.dar
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -127,18 +128,18 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
               });
               if(_thuocTinhManagementStore.updateThuocTinh_success)
                 {
-                  _showSuccssfullMesssage("Cập nhật thành công");
+                  showSuccssfullMesssage("Cập nhật thành công", context);
                   _thuocTinhManagementStore.updateThuocTinh_success = false;
                 }
               else if(_thuocTinhManagementStore.createThuocTinh_success)
                 {
-                  _showSuccssfullMesssage("Thêm mới thành công");
+                  showSuccssfullMesssage("Thêm mới thành công", context);
                   _thuocTinhManagementStore.createThuocTinh_success = false;
                 }
               return Container(width: 0, height: 0);
 
             } else {
-              return _showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage);
+              return showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage, context);
             }
           },
         ),
@@ -368,7 +369,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.UpdateThuocTinh();
           }
           else{
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
           }
         }
         else {
@@ -377,7 +378,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.CreateThuocTinh();
           }
           else{
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
           }
         }
 
@@ -386,36 +387,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     );
   }
 //endregion
-
-  // General Methods:-----------------------------------------------------------
-
-
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

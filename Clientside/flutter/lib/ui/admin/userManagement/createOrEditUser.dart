@@ -11,6 +11,7 @@ import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -71,6 +72,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _phoneNumberController.text = this.user.phoneNumber;
       _checkbox = this.user.isActive;
       titleForm = "Chỉnh sửa tài khoản";
+
+      _store.setName(this.user.name);
+      _store.setSurname(this.user.surName);
+      _store.setUserId(this.user.userName);
+      _store.setUserEmail(this.user.email);
+      _store.setPhoneNumber(this.user.phoneNumber);
     }
   }
 
@@ -133,18 +140,27 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         ) : Center(child: _buildRightSide()),
         Observer(
           builder: (context) {
-            if (_store.updateUser_success) {
+            if (_store.updateUser_success || _store.createUser_success) {
               Future.delayed(Duration(milliseconds: 0), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserManagementScreen()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => UserManagementScreen()),
+                // );
+                Navigator.pop(context);
               });
-              _showSuccssfullMesssage("Cập nhật thành công");
+              if (_store.updateUser_success)
+              {
+                showSuccssfullMesssage("Cập nhật thành công", context);
+                _store.updateUser_success = false;
+              }
+              else if(_store.createUser_success) {
+                showSuccssfullMesssage("Thêm mới thành công",context);
+                _store.createUser_success = false;
+              }
               return Container(width: 0, height: 0);
 
             } else {
-              return _showErrorMessage(_store.errorStore.errorMessage);
+              return showErrorMessage(_store.errorStore.errorMessage, context);
             }
           },
         ),
@@ -467,7 +483,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.UpdateUser();
            }
            else{
-             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
+             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
            }
          }
          else {
@@ -476,7 +492,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.CreateUser();
            }
            else{
-             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
+             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
            }
          }
 
@@ -496,35 +512,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return Container();
   }
 
-  // General Methods:-----------------------------------------------------------
-
-
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {
