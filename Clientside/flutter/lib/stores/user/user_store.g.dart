@@ -50,11 +50,12 @@ mixin _$UserStore on _UserStore, Store {
           Computed<bool>(() => super.isLoadingCurrentUser,
               name: '_UserStore.isLoadingCurrentUser'))
       .value;
-  Computed<bool> _$loadingComputed;
+  Computed<bool> _$loadingUserPostDetailComputed;
 
   @override
-  bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_UserStore.loading'))
+  bool get loadingUserPostDetail => (_$loadingUserPostDetailComputed ??=
+          Computed<bool>(() => super.loadingUserPostDetail,
+              name: '_UserStore.loadingUserPostDetail'))
       .value;
   Computed<bool> _$loadingsUpdateUserComputed;
 
@@ -244,33 +245,36 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$fetchUsersFutureAtom = Atom(name: '_UserStore.fetchUsersFuture');
+  final _$fetchUsersPostDetailFutureAtom =
+      Atom(name: '_UserStore.fetchUsersPostDetailFuture');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUsersFuture {
-    _$fetchUsersFutureAtom.reportRead();
-    return super.fetchUsersFuture;
+  ObservableFuture<CurrentUserForEditdto> get fetchUsersPostDetailFuture {
+    _$fetchUsersPostDetailFutureAtom.reportRead();
+    return super.fetchUsersPostDetailFuture;
   }
 
   @override
-  set fetchUsersFuture(ObservableFuture<CurrentUserForEditdto> value) {
-    _$fetchUsersFutureAtom.reportWrite(value, super.fetchUsersFuture, () {
-      super.fetchUsersFuture = value;
+  set fetchUsersPostDetailFuture(
+      ObservableFuture<CurrentUserForEditdto> value) {
+    _$fetchUsersPostDetailFutureAtom
+        .reportWrite(value, super.fetchUsersPostDetailFuture, () {
+      super.fetchUsersPostDetailFuture = value;
     });
   }
 
-  final _$loginFuturesAtom = Atom(name: '_UserStore.loginFutures');
+  final _$userOfCurrentPostAtom = Atom(name: '_UserStore.userOfCurrentPost');
 
   @override
-  ObservableFuture<CurrentUserForEditdto> get loginFutures {
-    _$loginFuturesAtom.reportRead();
-    return super.loginFutures;
+  CurrentUserForEditdto get userOfCurrentPost {
+    _$userOfCurrentPostAtom.reportRead();
+    return super.userOfCurrentPost;
   }
 
   @override
-  set loginFutures(ObservableFuture<CurrentUserForEditdto> value) {
-    _$loginFuturesAtom.reportWrite(value, super.loginFutures, () {
-      super.loginFutures = value;
+  set userOfCurrentPost(CurrentUserForEditdto value) {
+    _$userOfCurrentPostAtom.reportWrite(value, super.userOfCurrentPost, () {
+      super.userOfCurrentPost = value;
     });
   }
 
@@ -404,8 +408,8 @@ fetchUserCurrentFuture: ${fetchUserCurrentFuture},
 fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
 fetchUserCurrentPictureFuture: ${fetchUserCurrentPictureFuture},
 CurrentUserFuture: ${CurrentUserFuture},
-fetchUsersFuture: ${fetchUsersFuture},
-loginFutures: ${loginFutures},
+fetchUsersPostDetailFuture: ${fetchUsersPostDetailFuture},
+userOfCurrentPost: ${userOfCurrentPost},
 fetchUpdateUserFutures: ${fetchUpdateUserFutures},
 UpdateUserFuturess: ${UpdateUserFuturess},
 fetchUpdatePictureUserFutures: ${fetchUpdatePictureUserFutures},
@@ -415,7 +419,7 @@ loadingCurrentUser: ${loadingCurrentUser},
 loadingCurrentUserWallet: ${loadingCurrentUserWallet},
 loadingCurrentUserPicture: ${loadingCurrentUserPicture},
 isLoadingCurrentUser: ${isLoadingCurrentUser},
-loading: ${loading},
+loadingUserPostDetail: ${loadingUserPostDetail},
 loadingsUpdateUser: ${loadingsUpdateUser},
 loadingsUpdatePictureUser: ${loadingsUpdatePictureUser}
     ''';

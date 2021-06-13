@@ -180,10 +180,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
+          // onChanged: (value) {
+          //   _store.setSurname(_surnameController.text);
+          // },
+          // errorText: _store.formErrorStore.surname,
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setSurname(_surnameController.text);
-          },
-          errorText: _store.formErrorStore.surname,
+            return _store.formErrorStore.surname;},
         );
       },
     );
@@ -201,10 +206,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _nameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
+          // onChanged: (value) {
+          //   _store.setName(_nameController.text);
+          // },
+          // errorText: _store.formErrorStore.name,
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setName(_nameController.text);
-          },
-          errorText: _store.formErrorStore.name,
+            return _store.formErrorStore.name;},
         );
       },
     );
@@ -222,10 +232,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
+          // onChanged: (value) {
+          //   _store.setUserId(_userNameController.text);
+          // },
+          // errorText: _store.formErrorStore.username,
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setUserId(_userNameController.text);
-          },
-          errorText: _store.formErrorStore.username,
+            return _store.formErrorStore.username;},
         );
       },
     );
@@ -243,10 +258,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           iconColor: Colors.amber,
           textController: _passwordController,
           focusNode: _passwordFocusNode,
-          errorText: _store.formErrorStore.password,
-          onChanged: (value) {
+          // errorText: _store.formErrorStore.password,
+          // onChanged: (value) {
+          //   _store.setPassword(_passwordController.text);
+          // },
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setPassword(_passwordController.text);
-          },
+            return _store.formErrorStore.password;},
+
         );
       },
     );
@@ -264,10 +285,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           iconColor: Colors.amber,
           textController: _confirmPasswordController,
           autoFocus: false,
-          errorText: _store.formErrorStore.confirmPassword,
-          onChanged: (value) {
+          // errorText: _store.formErrorStore.confirmPassword,
+          // onChanged: (value) {
+          //   _store.setConfirmPassword(_confirmPasswordController.text);
+          // },
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setConfirmPassword(_confirmPasswordController.text);
-          },
+            return _store.formErrorStore.confirmPassword;},
         );
       },
     );
@@ -287,10 +313,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
+          // onChanged: (value) {
+          //   _store.setUserEmail(_userEmailController.text);
+          // },
+          // errorText: _store.formErrorStore.userEmail,
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
             _store.setUserEmail(_userEmailController.text);
-          },
-          errorText: _store.formErrorStore.userEmail,
+            return _store.formErrorStore.userEmail;},
         );
       },
     );
