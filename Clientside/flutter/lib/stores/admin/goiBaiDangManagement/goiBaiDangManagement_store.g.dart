@@ -96,6 +96,23 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     });
   }
 
+  final _$fetchUpdateActiveGoiBaiDangFutureAtom = Atom(
+      name: '_GoiBaiDangManagementStore.fetchUpdateActiveGoiBaiDangFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateActiveGoiBaiDangFuture {
+    _$fetchUpdateActiveGoiBaiDangFutureAtom.reportRead();
+    return super.fetchUpdateActiveGoiBaiDangFuture;
+  }
+
+  @override
+  set fetchUpdateActiveGoiBaiDangFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateActiveGoiBaiDangFutureAtom
+        .reportWrite(value, super.fetchUpdateActiveGoiBaiDangFuture, () {
+      super.fetchUpdateActiveGoiBaiDangFuture = value;
+    });
+  }
+
   final _$fetchCreateGoiBaiDangFutureAtom =
       Atom(name: '_GoiBaiDangManagementStore.fetchCreateGoiBaiDangFuture');
 
@@ -267,6 +284,23 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     _$createGoiBaiDang_successAtom
         .reportWrite(value, super.createGoiBaiDang_success, () {
       super.createGoiBaiDang_success = value;
+    });
+  }
+
+  final _$updateActiveGoiBaiDang_successAtom =
+      Atom(name: '_GoiBaiDangManagementStore.updateActiveGoiBaiDang_success');
+
+  @override
+  bool get updateActiveGoiBaiDang_success {
+    _$updateActiveGoiBaiDang_successAtom.reportRead();
+    return super.updateActiveGoiBaiDang_success;
+  }
+
+  @override
+  set updateActiveGoiBaiDang_success(bool value) {
+    _$updateActiveGoiBaiDang_successAtom
+        .reportWrite(value, super.updateActiveGoiBaiDang_success, () {
+      super.updateActiveGoiBaiDang_success = value;
     });
   }
 
@@ -477,6 +511,7 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
 fetchGoiBaiDangsFuture: ${fetchGoiBaiDangsFuture},
 fetchCountAllGoiBaiDangsFuture: ${fetchCountAllGoiBaiDangsFuture},
 fetchUpdateGoiBaiDangFuture: ${fetchUpdateGoiBaiDangFuture},
+fetchUpdateActiveGoiBaiDangFuture: ${fetchUpdateActiveGoiBaiDangFuture},
 fetchCreateGoiBaiDangFuture: ${fetchCreateGoiBaiDangFuture},
 goiBaiDangID: ${goiBaiDangID},
 tenGoi: ${tenGoi},
@@ -488,6 +523,7 @@ trangThai: ${trangThai},
 goiBaiDangList: ${goiBaiDangList},
 updateGoiBaiDang_success: ${updateGoiBaiDang_success},
 createGoiBaiDang_success: ${createGoiBaiDang_success},
+updateActiveGoiBaiDang_success: ${updateActiveGoiBaiDang_success},
 countAllGoiBaiDangs: ${countAllGoiBaiDangs},
 skipCount: ${skipCount},
 skipIndex: ${skipIndex},

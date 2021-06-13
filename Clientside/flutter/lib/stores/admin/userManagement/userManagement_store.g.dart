@@ -291,6 +291,17 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   }
 
   @override
+  int lastElementHasAvatar(UserList userList) {
+    final _$actionInfo = _$_UserManagementStoreActionController.startAction(
+        name: '_UserManagementStore.lastElementHasAvatar');
+    try {
+      return super.lastElementHasAvatar(userList);
+    } finally {
+      _$_UserManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchUsersFuture: ${fetchUsersFuture},

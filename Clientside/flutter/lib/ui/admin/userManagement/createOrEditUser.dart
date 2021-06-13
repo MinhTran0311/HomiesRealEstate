@@ -88,21 +88,14 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       primary: true,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined,
-            color: Colors.white,),
+          icon: Icon(Icons.arrow_back_ios_outlined,),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => UserManagementScreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
-          this.titleForm,
-          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+          this.titleForm,),
         automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colors.amber,
       ),
 
       body: _buildBody(),
@@ -115,16 +108,16 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       child: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.amber,
-                      Colors.orange[700],
-                    ]
-                )
-            ),
+            // decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //         begin: Alignment.topCenter,
+            //         end: Alignment.bottomCenter,
+            //         colors: [
+            //           Colors.amber,
+            //           Colors.orange[700],
+            //         ]
+            //     )
+            // ),
           ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
@@ -224,10 +217,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Họ'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -245,10 +238,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.person_add,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _nameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -267,10 +260,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Điện thoại'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.phone,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _phoneNumberController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -289,10 +282,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         return this.user != null ? TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -304,10 +297,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         ) : TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -353,6 +346,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return Row(
       children: [
         Checkbox(
+          activeColor: Colors.amber,
           value: _checkbox,
           onChanged: (value) {
             setState(() {
@@ -364,8 +358,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         Text(
           'Kích hoạt',
           style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
+            fontSize: 20,
+            // color: Colors.white,
           ),
         ),
       ],
@@ -376,10 +370,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return TextFieldWidget(
       inputFontsize: 22,
       hint: ('Mật khẩu'),
-      hintColor: Colors.white,
+      // hintColor: Colors.white,
       isObscure: true,
       icon: Icons.vpn_key,
-      iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+      iconColor: Colors.amber,
       textController: _passwordController,
       focusNode: _passwordFocusNode,
       errorText: _store.formErrorStore.password,
@@ -393,10 +387,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return TextFieldWidget(
       inputFontsize: 22,
       hint: ('Nhập lại mật khẩu'),
-      hintColor: Colors.white,
+      // hintColor: Colors.white,
       isObscure: true,
       icon: Icons.vpn_key,
-      iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+      iconColor: Colors.amber,
       textController: _confirmPasswordController,
       autoFocus: false,
       errorText: _store.formErrorStore.confirmPassword,
@@ -413,10 +407,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Email'),
-          hintColor: Colors.white,
+          // hintColor: Colors.white,
           icon: Icons.email_rounded,
           inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
+          iconColor: Colors.amber,
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
@@ -431,7 +425,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor: Colors.black87,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: () async {
          if(this.user != null) await {

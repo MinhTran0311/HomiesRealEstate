@@ -134,6 +134,11 @@ abstract class _DanhMucManagementStore with Store {
   }
 
   @action
+  void setDanhMucCha(int value) {
+    danhMucCha = value;
+  }
+
+  @action
   Future getDanhMucs(bool isLoadMore) async {
     if (!isLoadMore){
       skipCount = 0;
@@ -192,6 +197,7 @@ abstract class _DanhMucManagementStore with Store {
   @action
   Future UpdateDanhMuc() async {
     updateDanhMuc_success = false;
+    if (danhMucCha == 0) danhMucCha = null;
     final future = _repository.updateDanhMuc(danhMucId, tenDanhMuc, tag, danhMucCha, trangThai);
     fetchUpdateDanhMucFuture = ObservableFuture(future);
 
@@ -220,6 +226,7 @@ abstract class _DanhMucManagementStore with Store {
   @action
   Future CreateDanhMuc() async {
     createDanhMuc_success = false;
+    if (danhMucCha == 0) danhMucCha = null;
     final future = _repository.createDanhMuc(tenDanhMuc, tag, danhMucCha, trangThai);
     fetchCreateDanhMucFuture = ObservableFuture(future);
 

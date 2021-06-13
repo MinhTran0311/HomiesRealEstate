@@ -75,21 +75,15 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
       primary: true,
       appBar : AppBar(
         leading : IconButton(
-          icon : Icon(Icons.arrow_back_ios_outlined,
-            color: Colors.white, ),
+          icon : Icon(Icons.arrow_back_ios_outlined,),
           onPressed : () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GoiBaiDangManagementScreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
           this.titleForm,
-          style: Theme.of(context).textTheme.button.copyWith(color : Colors.white, fontSize : 23, fontWeight : FontWeight.bold, letterSpacing : 1.0), ),
+        ),
         automaticallyImplyLeading : false,
-        centerTitle : true,
-        backgroundColor : Colors.amber,
       ),
 
       body: _buildBody(),
@@ -98,71 +92,69 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Material(
-      child: Stack(
-        children : <Widget>[
-          Container(
-            // decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         colors: [
-            //           Colors.amber,
-            //           Colors.orange[700],
-            //         ]
-            //     )
-            // ),
-          ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-            children : <Widget>[
-              Expanded(
-                flex:1,
-                child : _buildLeftSide(),
-              ),
-              Expanded(
-                flex:1,
-                child : _buildRightSide(),
-              ),
-            ],
-          ) : Center(child : _buildRightSide()),
-          Observer(
-            builder : (context) {
-              if (_goiBaiDangManagementStore.updateGoiBaiDang_success || _goiBaiDangManagementStore.createGoiBaiDang_success) {
-                Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GoiBaiDangManagementScreen()),
-                  );
-                });
-                if (_goiBaiDangManagementStore.updateGoiBaiDang_success)
-                {
-                  _showSuccssfullMesssage("Cập nhật thành công");
-                  _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
-                }
-                else if (_goiBaiDangManagementStore.createGoiBaiDang_success)
-                {
-                  _showSuccssfullMesssage("Thêm mới thành công");
-                  _goiBaiDangManagementStore.createGoiBaiDang_success = false;
-                }
-                return Container(width: 0, height : 0);
+    return Stack(
+      children : <Widget>[
+        Container(
+          // decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [
+          //           Colors.amber,
+          //           Colors.orange[700],
+          //         ]
+          //     )
+          // ),
+        ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children : <Widget>[
+            Expanded(
+              flex:1,
+              child : _buildLeftSide(),
+            ),
+            Expanded(
+              flex:1,
+              child : _buildRightSide(),
+            ),
+          ],
+        ) : Center(child : _buildRightSide()),
+        Observer(
+          builder : (context) {
+            if (_goiBaiDangManagementStore.updateGoiBaiDang_success || _goiBaiDangManagementStore.createGoiBaiDang_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GoiBaiDangManagementScreen()),
+                );
+              });
+              if (_goiBaiDangManagementStore.updateGoiBaiDang_success)
+              {
+                _showSuccssfullMesssage("Cập nhật thành công");
+                _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
+              }
+              else if (_goiBaiDangManagementStore.createGoiBaiDang_success)
+              {
+                _showSuccssfullMesssage("Thêm mới thành công");
+                _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+              }
+              return Container(width: 0, height : 0);
 
-              }
-              else {
-                return _showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage);
-              }
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _goiBaiDangManagementStore.loadingUpdateGoiBaiDang || _goiBaiDangManagementStore.loadingCreateGoiBaiDang,
-                child : CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
+            }
+            else {
+              return _showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _goiBaiDangManagementStore.loadingUpdateGoiBaiDang || _goiBaiDangManagementStore.loadingCreateGoiBaiDang,
+              child : CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
     );
   }
 
@@ -241,7 +233,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Tên danh mục",
@@ -303,7 +295,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "VNĐ",
@@ -365,7 +357,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Độ ưu tiên",
@@ -427,7 +419,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Ngày",
@@ -489,7 +481,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Mô tả",
@@ -526,6 +518,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
     return Row(
       children: [
         Checkbox(
+          activeColor: Colors.amber,
           value:_checkboxTrangThai,
           onChanged : (value) {
             setState(() {
@@ -549,7 +542,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor : Colors.black87,
+      buttonColor : Colors.amber,
       textColor : Colors.white,
       onPressed : () async {
         if (this.goiBaiDang != null) await{

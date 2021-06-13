@@ -35,6 +35,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   //text controllers:-----------------------------------------------------------
   TextEditingController _nameController = TextEditingController();
   TextEditingController _tagController = TextEditingController();
+  TextEditingController _danhMucChaController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
@@ -50,6 +51,12 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     if (this.danhMuc != null) {
       _nameController.text = this.danhMuc.tenDanhMuc;
       _tagController.text = this.danhMuc.tag;
+      if (this.danhMuc.tag != null)
+      {
+        _danhMucChaController.text = this.danhMuc.danhMucCha.toString();
+      }
+      else _danhMucChaController.text = "";
+      // print
       _checkboxTrangThai = this.danhMuc.trangThai == "On" ? true : false;
       titleForm = "Chỉnh sửa danh mục";
     }
@@ -70,20 +77,15 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       appBar : AppBar(
         leading : IconButton(
           icon : Icon(Icons.arrow_back_ios_outlined,
-            color: Colors.white, ),
+          ),
           onPressed : () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DanhMucManagementScreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
           this.titleForm,
-          style: Theme.of(context).textTheme.button.copyWith(color : Colors.white, fontSize : 23, fontWeight : FontWeight.bold, letterSpacing : 1.0), ),
+        ),
         automaticallyImplyLeading : false,
-        centerTitle : true,
-        backgroundColor : Colors.amber,
       ),
 
       body: _buildBody(),
@@ -92,71 +94,69 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Material(
-      child: Stack(
-        children : <Widget>[
-          Container(
-            // decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         colors: [
-            //           Colors.amber,
-            //           Colors.orange[700],
-            //         ]
-            //     )
-            // ),
-          ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-            children : <Widget>[
-              Expanded(
-                flex:1,
-                child : _buildLeftSide(),
-              ),
-              Expanded(
-                flex:1,
-                child : _buildRightSide(),
-              ),
-            ],
-          ) : Center(child : _buildRightSide()),
-          Observer(
-            builder : (context) {
-              if (_danhMucManagementStore.updateDanhMuc_success || _danhMucManagementStore.createDanhMuc_success) {
-                Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DanhMucManagementScreen()),
-                  );
-                });
-                if (_danhMucManagementStore.updateDanhMuc_success)
-                {
-                  _showSuccssfullMesssage("Cập nhật thành công");
-                  _danhMucManagementStore.updateDanhMuc_success = false;
-                }
-                else if (_danhMucManagementStore.createDanhMuc_success)
-                {
-                  _showSuccssfullMesssage("Thêm mới thành công");
-                  _danhMucManagementStore.createDanhMuc_success = false;
-                }
-                return Container(width: 0, height : 0);
+    return Stack(
+      children : <Widget>[
+        Container(
+          // decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [
+          //           Colors.amber,
+          //           Colors.orange[700],
+          //         ]
+          //     )
+          // ),
+        ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children : <Widget>[
+            Expanded(
+              flex:1,
+              child : _buildLeftSide(),
+            ),
+            Expanded(
+              flex:1,
+              child : _buildRightSide(),
+            ),
+          ],
+        ) : Center(child : _buildRightSide()),
+        Observer(
+          builder : (context) {
+            if (_danhMucManagementStore.updateDanhMuc_success || _danhMucManagementStore.createDanhMuc_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DanhMucManagementScreen()),
+                );
+              });
+              if (_danhMucManagementStore.updateDanhMuc_success)
+              {
+                _showSuccssfullMesssage("Cập nhật thành công");
+                _danhMucManagementStore.updateDanhMuc_success = false;
+              }
+              else if (_danhMucManagementStore.createDanhMuc_success)
+              {
+                _showSuccssfullMesssage("Thêm mới thành công");
+                _danhMucManagementStore.createDanhMuc_success = false;
+              }
+              return Container(width: 0, height : 0);
 
-              }
-              else {
-                return _showErrorMessage(_danhMucManagementStore.errorStore.errorMessage);
-              }
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _danhMucManagementStore.loadingUpdateDanhMuc || _danhMucManagementStore.loadingCreateDanhMuc,
-                child : CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
+            }
+            else {
+              return _showErrorMessage(_danhMucManagementStore.errorStore.errorMessage);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _danhMucManagementStore.loadingUpdateDanhMuc || _danhMucManagementStore.loadingCreateDanhMuc,
+              child : CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
     );
   }
 
@@ -185,6 +185,8 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             _buildTagField(),
             SizedBox(height: 24.0),
             _buildActiveCheckBox(),
+            SizedBox(height: 24.0),
+            _buildDanhMucChaField(),
             SizedBox(height: 24.0),
             // _buildNeedChangePwCheckBox(),
             // SizedBox(height: 24.0),
@@ -229,7 +231,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Tên danh mục",
@@ -291,7 +293,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
               textAlign : TextAlign.start,
               style : TextStyle(
                 fontSize : 18,
-                color : Colors.black,
+                // color : Colors.black,
               ),
               decoration : InputDecoration(
                 hintText : "Gắn nhãn",
@@ -323,10 +325,73 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     );
   }
 
+  Widget _buildDanhMucChaField() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom : 12.0),
+      child : Row(
+        mainAxisAlignment : MainAxisAlignment.start,
+        children : [
+          Container(
+            width:150,
+            child : Text("Danh mục cha",
+              style: TextStyle(
+                fontWeight : FontWeight.bold,
+                fontSize : 22,
+              ),
+              textAlign : TextAlign.start,
+            ),
+          ),
+          SizedBox(
+            width: 6,
+          ),
+          Expanded(
+            child: TextField(
+              autofocus : false,
+              keyboardType : TextInputType.number,
+              controller : _danhMucChaController,
+              onChanged : (value) {
+                _danhMucManagementStore.setDanhMucCha(int.tryParse(value));
+              },
+              textAlign : TextAlign.start,
+              style : TextStyle(
+                fontSize : 18,
+                // color : Colors.black,
+              ),
+              decoration : InputDecoration(
+                hintText : "Danh mục cha",
+                suffixIcon : IconButton(
+                  onPressed : () {
+                    _danhMucChaController.clear();
+                    _danhMucManagementStore.setDanhMucCha(0);
+                  },
+                  icon : Icon(Icons.clear),
+                ),
+                hintStyle: TextStyle(
+                  fontSize : 18,
+                  // color: Colors.grey[400],
+                ),
+                enabledBorder : UnderlineInputBorder(
+                  borderSide : BorderSide(color : Colors.red[400]),
+                ),
+                focusedBorder : UnderlineInputBorder(
+                  borderSide : BorderSide(color : Colors.orange[400]),
+                ),
+                border : UnderlineInputBorder(
+                    borderSide : BorderSide(color : Colors.black)
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActiveCheckBox() {
     return Row(
       children: [
         Checkbox(
+          activeColor: Colors.amber,
           value:_checkboxTrangThai,
           onChanged : (value) {
             setState(() {
@@ -350,15 +415,12 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor : Colors.black87,
+      buttonColor : Colors.amber,
       textColor : Colors.white,
       onPressed : () async {
         if (this.danhMuc != null) await{
           _danhMucManagementStore.setNameDanhMuc(_nameController.text),
-          //  else {
-          //    _store.setPassword(this.user.),
-          //    _store.setConfirmPassword(_confirmPasswordController.text),
-          // },
+          _danhMucManagementStore.setDanhMucCha(int.tryParse(_danhMucChaController.text)),
           _danhMucManagementStore.setDanhMucId(this.danhMuc.id),
           _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai),
         };
@@ -422,6 +484,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     // Clean up the controller when the Widget is removed from the Widget tree
     _nameController.dispose();
     _tagController.dispose();
+    _danhMucChaController.dispose();
     super.dispose();
   }
 

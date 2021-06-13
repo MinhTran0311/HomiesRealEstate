@@ -72,21 +72,15 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       primary: true,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined,
-            color: Colors.white,),
+          icon: Icon(Icons.arrow_back_ios_outlined,),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: Text(
           this.titleForm,
-          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+        ),
         automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colors.amber,
       ),
 
       body: _buildBody(),
@@ -95,70 +89,68 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Material(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            // decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         colors: [
-            //           Colors.amber,
-            //           Colors.orange[700],
-            //         ]
-            //     )
-            // ),
-          ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: _buildLeftSide(),
-              ),
-              Expanded(
-                flex: 1,
-                child: _buildRightSide(),
-              ),
-            ],
-          ) : Center(child: _buildRightSide()),
-          Observer(
-            builder: (context) {
-              if (_thuocTinhManagementStore.updateThuocTinh_success || _thuocTinhManagementStore.createThuocTinh_success) {
-                Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
-                  );
-                });
-                if(_thuocTinhManagementStore.updateThuocTinh_success)
-                  {
-                    _showSuccssfullMesssage("Cập nhật thành công");
-                    _thuocTinhManagementStore.updateThuocTinh_success = false;
-                  }
-                else if(_thuocTinhManagementStore.createThuocTinh_success)
-                  {
-                    _showSuccssfullMesssage("Thêm mới thành công");
-                    _thuocTinhManagementStore.createThuocTinh_success = false;
-                  }
-                return Container(width: 0, height: 0);
+    return Stack(
+      children: <Widget>[
+        Container(
+          // decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [
+          //           Colors.amber,
+          //           Colors.orange[700],
+          //         ]
+          //     )
+          // ),
+        ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _buildLeftSide(),
+            ),
+            Expanded(
+              flex: 1,
+              child: _buildRightSide(),
+            ),
+          ],
+        ) : Center(child: _buildRightSide()),
+        Observer(
+          builder: (context) {
+            if (_thuocTinhManagementStore.updateThuocTinh_success || _thuocTinhManagementStore.createThuocTinh_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
+                );
+              });
+              if(_thuocTinhManagementStore.updateThuocTinh_success)
+                {
+                  _showSuccssfullMesssage("Cập nhật thành công");
+                  _thuocTinhManagementStore.updateThuocTinh_success = false;
+                }
+              else if(_thuocTinhManagementStore.createThuocTinh_success)
+                {
+                  _showSuccssfullMesssage("Thêm mới thành công");
+                  _thuocTinhManagementStore.createThuocTinh_success = false;
+                }
+              return Container(width: 0, height: 0);
 
-              } else {
-                return _showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage);
-              }
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _thuocTinhManagementStore.loadingUpdateThuocTinh || _thuocTinhManagementStore.loadingCreateThuocTinh,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
+            } else {
+              return _showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _thuocTinhManagementStore.loadingUpdateThuocTinh || _thuocTinhManagementStore.loadingCreateThuocTinh,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
     );
   }
 
@@ -231,7 +223,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                // color: Colors.black,
               ),
               decoration: InputDecoration(
                 hintText: "Tên thuộc tính",
@@ -250,7 +242,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
                   borderSide: BorderSide(color: Colors.red[400]),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.orange[400]),
+                  borderSide: BorderSide(color: Colors.amber),
                 ),
                 border:  UnderlineInputBorder(
                     borderSide:  BorderSide(color: Colors.black)
@@ -297,8 +289,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
                           elevation: 16,
                           //style: TextStyle(color: Colors.black),
                           underline: Container(
-                            height: 2,
-                            color: Colors.black,
+                            height: 1,
+                            color: _themeStore.darkMode ? Colors.red[400] : Colors.black,
                           ),
                           onChanged: (String newValue) {
                             _thuocTinhManagementStore.KieuDuLieuShow = newValue;
@@ -332,6 +324,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     return Row(
       children: [
         Checkbox(
+          activeColor: Colors.amber,
+          // checkColor: Colors.amber,
           value: _checkboxTrangThai,
           onChanged: (value) {
             setState(() {
@@ -355,7 +349,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor: Colors.black87,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: () async {
         if(this.thuocTinh != null) await {
@@ -374,7 +368,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.UpdateThuocTinh();
           }
           else{
-            _showErrorMessage('Please fill in all fields');
+            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
           }
         }
         else {
@@ -383,7 +377,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.CreateThuocTinh();
           }
           else{
-            _showErrorMessage('Please fill in all fields');
+            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
           }
         }
 

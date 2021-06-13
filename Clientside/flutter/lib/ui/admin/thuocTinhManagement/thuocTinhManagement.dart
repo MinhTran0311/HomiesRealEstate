@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -31,6 +33,7 @@ class ThuocTinhManagementScreen extends StatefulWidget {
 
 class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
   ThuocTinhManagementStore _thuocTinhManagementStore;
+  ThemeStore _themeStore;
 
   var _selectedValue;
   // var _permissions;
@@ -51,16 +54,11 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
 
     // initializing stores
     _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
 
-    // initializing stores
-
-    // check to see if already called api
-    // if (!_roleManagementStore.loading) {
-    //   _roleManagementStore.getRoles();
-    // }
-    // check to see if already called api
     if (!_thuocTinhManagementStore.loading) {
       _thuocTinhManagementStore.getThuocTinhs(false);
+      _thuocTinhManagementStore.isIntialLoading = true;
     }
   }
 
@@ -91,17 +89,10 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 28,
-            color: Colors.white,
-          ),
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementScreen()),
-            );
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined,),
+          onPressed: (){
+            Navigator.pop(context);
           },
         ),
         title: Row(
@@ -109,16 +100,17 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Quản lý thuộc tính",
-              style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+              // style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),
+            ),
           ],
         ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),
             icon: Icon(
-              Icons.person_add_alt_1,
-              color: Colors.white,
-              size: 28,
+              Icons.add,
+              // color: Colors.white,
+              // size: 28,
             ),
             onPressed: () {
               Navigator.push(
@@ -129,7 +121,6 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
           ),
         ],
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -150,9 +141,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
       builder: (context) {
         return _thuocTinhManagementStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(
-          child: _buildThuocTinhsList(),
-          color: Color.fromRGBO(241, 242, 246, 1),);
+            : _buildThuocTinhsList();
       },
     );
   }
@@ -310,7 +299,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
-        decoration: new BoxDecoration(
+        decoration: !_themeStore.darkMode ? new BoxDecoration(
           boxShadow: [
             // color: Colors.white, //background color of box
             BoxShadow(
@@ -323,7 +312,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
               ),
             )
           ],
-        ),
+        ) : new BoxDecoration(),
         child: Card(
           margin: EdgeInsets.only(top: 8, right: 10, left: 10),
           clipBehavior: Clip.antiAlias,
@@ -334,7 +323,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
             padding: EdgeInsets.all(20),
             // height: 130,
             // color: Color.fromRGBO(242, 242, 242, 1),
-            color: Colors.white,
+            color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -346,7 +335,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                         '${thuocTinh.tenThuocTinh}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.black,
+                          // color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -359,7 +348,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                       child: Icon(
                         Icons.menu_outlined,
                         size: 25,
-                        color: Colors.black,
+                        color: _themeStore.darkMode ? Colors.white : Colors.black,
                       ),
                     ),
                   ],
