@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/goiBaiDang/goiBaiDang.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -29,6 +31,7 @@ class GoiBaiDangManagementScreen extends StatefulWidget {
 
 class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen> {
   GoiBaiDangManagementStore _goiBaiDangManagementStore;
+  ThemeStore _themeStore;
 
   var _selectedValue;
   // var _permissions;
@@ -49,6 +52,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
 
     // initializing stores
     _goiBaiDangManagementStore = Provider.of<GoiBaiDangManagementStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
 
     // initializing stores
 
@@ -59,6 +63,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     // check to see if already called api
     if (!_goiBaiDangManagementStore.loading) {
       _goiBaiDangManagementStore.getGoiBaiDangs(false);
+      _goiBaiDangManagementStore.isIntialLoading = true;
     }
   }
 
@@ -89,33 +94,24 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 28,
-            color: Colors.white,
-          ),
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementScreen()),
-            );
+        leading: IconButton(
+          icon : Icon(Icons.arrow_back_ios_outlined,),
+          onPressed: (){
+            Navigator.pop(context);
           },
         ),
         title: Row(
           // alignment: Alignment.centerLeft,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Quản lý gói bài đăng",
-              style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+            Text("Quản lý gói bài đăng",),
           ],
         ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),
             icon: Icon(
-              Icons.person_add_alt_1,
-              color: Colors.white,
+              Icons.add,
               size: 28,
             ),
             onPressed: () {
@@ -127,7 +123,6 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
           ),
         ],
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -148,9 +143,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
       builder: (context) {
         return _goiBaiDangManagementStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(
-          child: _buildGoiBaiDangsList(),
-          color: Color.fromRGBO(241, 242, 246, 1),);
+            : _buildGoiBaiDangsList();
       },
     );
   }
@@ -308,7 +301,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
-        decoration: new BoxDecoration(
+        decoration: !_themeStore.darkMode ? new BoxDecoration(
           boxShadow: [
             // color: Colors.white, //background color of box
             BoxShadow(
@@ -321,7 +314,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
               ),
             )
           ],
-        ),
+        ) : new BoxDecoration(),
         child: Card(
           margin: EdgeInsets.only(top: 8, right: 10, left: 10),
           clipBehavior: Clip.antiAlias,
@@ -332,7 +325,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
             padding: EdgeInsets.all(20),
             // height: 130,
             // color: Color.fromRGBO(242, 242, 242, 1),
-            color: Colors.white,
+            color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -344,7 +337,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                         '${goiBaiDang.tenGoi}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.black,
+                          // color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -357,7 +350,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                       child: Icon(
                         Icons.menu_outlined,
                         size: 25,
-                        color: Colors.black,
+                        color: _themeStore.darkMode ? Colors.white : Colors.black,
                       ),
                     ),
                   ],

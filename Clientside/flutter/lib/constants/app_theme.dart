@@ -58,6 +58,7 @@ final ThemeData themeDataDark = ThemeData(
   brightness: Brightness.dark,
 
   appBarTheme: AppBarTheme(
+
       brightness: Brightness.dark,
       color: Colors.amber,
       centerTitle: true,

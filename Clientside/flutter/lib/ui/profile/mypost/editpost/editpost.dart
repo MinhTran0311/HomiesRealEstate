@@ -387,7 +387,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
-                      
+                      color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
                     ),
                     SizedBox(
                       width: 10,
@@ -450,7 +450,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          
+                          color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -492,7 +492,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
               child: DropdownButtonFormField<Postcategory>(
                 hint: Text("Chọn hình thức bổ sung"),
                 value: selectedTypeTypeType,
-                //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
                   setState(() {
                     selectedTypeTypeType = Value;
@@ -509,7 +508,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          
+                          color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -685,7 +684,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    
+                    color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
                   ),
                   SizedBox(
                     width: 10,
@@ -734,7 +733,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    
+                    color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
                   ),
                   SizedBox(
                     width: 8,
@@ -845,7 +844,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       thuocTinh.tenThuocTinh != "Hướng ban công" ?
                   TextFormField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.home_work),
+                      icon: Icon(Icons.home_work ,                      color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
+          ),
                       fillColor: Colors.white,
                       labelText: '${thuocTinh.tenThuocTinh}',
                       suffixIcon: IconButton(
@@ -871,7 +871,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     hint:thuocTinh.tenThuocTinh=="Hướng nhà"?Row(
                       children: [
                         Icon(Icons.directions,
-                          ),
+                          color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
+                        ),
                         SizedBox(width: 10,),
                         Text("Chọn hướng nhà"),
                       ],
@@ -900,7 +901,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                           Row(
                             children: <Widget>[
                               Icon(Icons.directions,
-                                ),
+                                color:!_themeStore.darkMode? const Color(0xFF167F67):Colors.amber,
+                              ),
                               SizedBox(width: 10,),
                               Text(type, style: TextStyle(
                                   ),),

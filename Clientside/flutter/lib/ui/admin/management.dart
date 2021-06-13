@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
@@ -88,12 +89,14 @@ class _ManagementScreenState extends State<ManagementScreen> {
       primary: true,
       appBar: AppBar(
         title: Text(
-          "Quản trị",
-          style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+          "Quản trị",),
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
-      body: _buildBody(),
+      body: WillPopScope(
+          onWillPop: () {
+            return;
+          },
+          child: _buildBody()),
     );
   }
 
@@ -118,10 +121,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
         || _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs
         || _baiDangManagementStore.loadingCountNewBaiDangsInMonth)
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildMenuItems(),
-          color: Color.fromRGBO(236, 236, 238, 1),
-          // color: Colors.white,
-        );
+            : _buildMenuItems();
       },
     );
   }
@@ -138,8 +138,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
             colors: [
               Color.fromRGBO(230, 145, 56, 1),
               Colors.amberAccent,
-              Color.fromRGBO(236, 236, 238, 1),
-              Color.fromRGBO(236, 236, 238, 1),
+              // Color.fromRGBO(236, 236, 238, 1),
+              // Color.fromRGBO(236, 236, 238, 1),
+              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
+              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
             ],
             tileMode: TileMode.repeated,
           ),
@@ -156,7 +158,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
               decoration: BoxDecoration(
                 boxShadow: [
                   // color: Colors.white, //background color of box
-                  BoxShadow(
+                  !_themeStore.darkMode ? BoxShadow(
                     color: Color.fromRGBO(198, 199, 202, 1),
                     blurRadius: 12, // soften the shadow
                     spreadRadius: 0.01, //extend the shadow
@@ -164,9 +166,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
                       8.0, // Move to right 10  horizontally
                       12.0, // Move to bottom 10 Vertically
                     ),
-                  )
+                  ) : BoxShadow(),
                 ],
-                color: Colors.white,
+                color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Column(
@@ -259,7 +261,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
 
   Widget _buildListItem(String nameItem, String pathPicture, int totalItems, String nameButton, Function function, Color colors, double leftPadding) {
     return Container(
-      decoration: new BoxDecoration(
+      decoration: !_themeStore.darkMode ? new BoxDecoration(
         boxShadow: [
           // color: Colors.white, //background color of box
           BoxShadow(
@@ -272,7 +274,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
             ),
           )
         ],
-      ),
+      ) : new BoxDecoration(),
       child: Card(
         margin: EdgeInsets.only(top: 8, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -283,7 +285,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
           padding: EdgeInsets.all(20),
           // height: 130,
           // color: Color.fromRGBO(242, 242, 242, 1),
-          color: Colors.white,
+          color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [

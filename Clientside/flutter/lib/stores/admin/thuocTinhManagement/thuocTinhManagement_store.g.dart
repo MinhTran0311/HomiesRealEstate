@@ -95,6 +95,23 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     });
   }
 
+  final _$fetchUpdateActiveThuocTinhFutureAtom =
+      Atom(name: '_ThuocTinhManagementStore.fetchUpdateActiveThuocTinhFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateActiveThuocTinhFuture {
+    _$fetchUpdateActiveThuocTinhFutureAtom.reportRead();
+    return super.fetchUpdateActiveThuocTinhFuture;
+  }
+
+  @override
+  set fetchUpdateActiveThuocTinhFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateActiveThuocTinhFutureAtom
+        .reportWrite(value, super.fetchUpdateActiveThuocTinhFuture, () {
+      super.fetchUpdateActiveThuocTinhFuture = value;
+    });
+  }
+
   final _$fetchCreateThuocTinhFutureAtom =
       Atom(name: '_ThuocTinhManagementStore.fetchCreateThuocTinhFuture');
 
@@ -254,6 +271,23 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     });
   }
 
+  final _$updateActiveThuocTinh_successAtom =
+      Atom(name: '_ThuocTinhManagementStore.updateActiveThuocTinh_success');
+
+  @override
+  bool get updateActiveThuocTinh_success {
+    _$updateActiveThuocTinh_successAtom.reportRead();
+    return super.updateActiveThuocTinh_success;
+  }
+
+  @override
+  set updateActiveThuocTinh_success(bool value) {
+    _$updateActiveThuocTinh_successAtom
+        .reportWrite(value, super.updateActiveThuocTinh_success, () {
+      super.updateActiveThuocTinh_success = value;
+    });
+  }
+
   final _$isIntialLoadingAtom =
       Atom(name: '_ThuocTinhManagementStore.isIntialLoading');
 
@@ -349,6 +383,15 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     return _$CreateThuocTinhAsyncAction.run(() => super.CreateThuocTinh());
   }
 
+  final _$IsActiveThuocTinhAsyncAction =
+      AsyncAction('_ThuocTinhManagementStore.IsActiveThuocTinh');
+
+  @override
+  Future<dynamic> IsActiveThuocTinh(ThuocTinhManagement thuocTinh) {
+    return _$IsActiveThuocTinhAsyncAction
+        .run(() => super.IsActiveThuocTinh(thuocTinh));
+  }
+
   final _$_ThuocTinhManagementStoreActionController =
       ActionController(name: '_ThuocTinhManagementStore');
 
@@ -413,6 +456,7 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
 fetchThuocTinhsFuture: ${fetchThuocTinhsFuture},
 fetchCountAllThuocTinhsFuture: ${fetchCountAllThuocTinhsFuture},
 fetchUpdateThuocTinhFuture: ${fetchUpdateThuocTinhFuture},
+fetchUpdateActiveThuocTinhFuture: ${fetchUpdateActiveThuocTinhFuture},
 fetchCreateThuocTinhFuture: ${fetchCreateThuocTinhFuture},
 name: ${name},
 idThuocTinh: ${idThuocTinh},
@@ -423,6 +467,7 @@ thuocTinhList: ${thuocTinhList},
 countAllThuocTinhs: ${countAllThuocTinhs},
 updateThuocTinh_success: ${updateThuocTinh_success},
 createThuocTinh_success: ${createThuocTinh_success},
+updateActiveThuocTinh_success: ${updateActiveThuocTinh_success},
 isIntialLoading: ${isIntialLoading},
 skipCount: ${skipCount},
 skipIndex: ${skipIndex},

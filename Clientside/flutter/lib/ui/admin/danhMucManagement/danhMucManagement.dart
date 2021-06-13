@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -53,13 +54,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     // initializing stores
     _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
-    // initializing stores
 
-    // check to see if already called api
-    // if (!_roleManagementStore.loading) {
-    //   _roleManagementStore.getRoles();
-    // }
-    // check to see if already called api
     if (!_danhMucManagementStore.loading) {
       _danhMucManagementStore.getDanhMucs(false);
       _danhMucManagementStore.isIntialLoading = true;
@@ -93,17 +88,10 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 28,
-            color: Colors.white,
-          ),
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementScreen()),
-            );
+        leading: IconButton(
+          icon : Icon(Icons.arrow_back_ios_outlined,),
+          onPressed: (){
+            Navigator.pop(context);
           },
         ),
         title: Row(
@@ -111,16 +99,15 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Quản lý danh mục",
-              style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+            ),
           ],
         ),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),
             icon: Icon(
-              Icons.person_add_alt_1,
-              color: Colors.white,
-              size: 28,
+              Icons.add,
+              // size: 28,
             ),
             onPressed: () {
               Navigator.push(
@@ -131,7 +118,6 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
           ),
         ],
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -152,8 +138,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
       builder: (context) {
         return _danhMucManagementStore.loading
             ? CustomProgressIndicatorWidget()
-            :
-           _buildDanhMucsList();
+            : _buildDanhMucsList();
       },
     );
   }
@@ -334,20 +319,20 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Container(
-        // decoration: new BoxDecoration(
-        //   boxShadow: [
-        //     // color: Colors.white, //background color of box
-        //     BoxShadow(
-        //       color: Color.fromRGBO(198, 199, 202, 1),
-        //       blurRadius: 10, // soften the shadow
-        //       spreadRadius: 0.01, //extend the shadow
-        //       offset: Offset(
-        //         8.0, // Move to right 10  horizontally
-        //         12.0, // Move to bottom 10 Vertically
-        //       ),
-        //     )
-        //   ],
-        // ),
+        decoration: !_themeStore.darkMode ? new BoxDecoration(
+          boxShadow: [
+            // color: Colors.white, //background color of box
+            BoxShadow(
+              color: Color.fromRGBO(198, 199, 202, 1),
+              blurRadius: 10, // soften the shadow
+              spreadRadius: 0.01, //extend the shadow
+              offset: Offset(
+                8.0, // Move to right 10  horizontally
+                12.0, // Move to bottom 10 Vertically
+              ),
+            )
+          ],
+        ) : new BoxDecoration(),
         child: Card(
           margin: EdgeInsets.only(top: 8, right: 10, left: 10),
           clipBehavior: Clip.antiAlias,
@@ -360,7 +345,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
             // color: Color.fromRGBO(242, 242, 242, 1),
             // color: Colors.white,
             // AppColors.lightDarkThemeColor
-            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) : Colors.grey[200],
+            color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -385,7 +370,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                       child: Icon(
                         Icons.menu_outlined,
                         size: 25,
-                        color: Colors.black,
+                        color: _themeStore.darkMode ? Colors.white : Colors.black,
                       ),
                     ),
                   ],

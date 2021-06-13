@@ -36,6 +36,14 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
           Computed<bool>(() => super.loadingUpdateDanhMuc,
               name: '_DanhMucManagementStore.loadingUpdateDanhMuc'))
       .value;
+  Computed<bool> _$loadingUpdateActiveDanhMucComputed;
+
+  @override
+  bool get loadingUpdateActiveDanhMuc =>
+      (_$loadingUpdateActiveDanhMucComputed ??= Computed<bool>(
+              () => super.loadingUpdateActiveDanhMuc,
+              name: '_DanhMucManagementStore.loadingUpdateActiveDanhMuc'))
+          .value;
   Computed<bool> _$loadingCreateDanhMucComputed;
 
   @override
@@ -108,6 +116,23 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     _$fetchCreateDanhMucFutureAtom
         .reportWrite(value, super.fetchCreateDanhMucFuture, () {
       super.fetchCreateDanhMucFuture = value;
+    });
+  }
+
+  final _$fetchUpdateActiveDanhMucFutureAtom =
+      Atom(name: '_DanhMucManagementStore.fetchUpdateActiveDanhMucFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateActiveDanhMucFuture {
+    _$fetchUpdateActiveDanhMucFutureAtom.reportRead();
+    return super.fetchUpdateActiveDanhMucFuture;
+  }
+
+  @override
+  set fetchUpdateActiveDanhMucFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateActiveDanhMucFutureAtom
+        .reportWrite(value, super.fetchUpdateActiveDanhMucFuture, () {
+      super.fetchUpdateActiveDanhMucFuture = value;
     });
   }
 
@@ -279,6 +304,23 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$updateActiveDanhMuc_successAtom =
+      Atom(name: '_DanhMucManagementStore.updateActiveDanhMuc_success');
+
+  @override
+  bool get updateActiveDanhMuc_success {
+    _$updateActiveDanhMuc_successAtom.reportRead();
+    return super.updateActiveDanhMuc_success;
+  }
+
+  @override
+  set updateActiveDanhMuc_success(bool value) {
+    _$updateActiveDanhMuc_successAtom
+        .reportWrite(value, super.updateActiveDanhMuc_success, () {
+      super.updateActiveDanhMuc_success = value;
+    });
+  }
+
   final _$createDanhMuc_successAtom =
       Atom(name: '_DanhMucManagementStore.createDanhMuc_success');
 
@@ -407,6 +449,7 @@ fetchDanhMucsFuture: ${fetchDanhMucsFuture},
 fetchCountAllDanhMucsFuture: ${fetchCountAllDanhMucsFuture},
 fetchUpdateDanhMucFuture: ${fetchUpdateDanhMucFuture},
 fetchCreateDanhMucFuture: ${fetchCreateDanhMucFuture},
+fetchUpdateActiveDanhMucFuture: ${fetchUpdateActiveDanhMucFuture},
 danhMucId: ${danhMucId},
 tenDanhMuc: ${tenDanhMuc},
 tag: ${tag},
@@ -418,12 +461,14 @@ skipCount: ${skipCount},
 skipIndex: ${skipIndex},
 maxCount: ${maxCount},
 updateDanhMuc_success: ${updateDanhMuc_success},
+updateActiveDanhMuc_success: ${updateActiveDanhMuc_success},
 createDanhMuc_success: ${createDanhMuc_success},
 isIntialLoading: ${isIntialLoading},
 canSubmit: ${canSubmit},
 loading: ${loading},
 loadingCountAllDanhMucs: ${loadingCountAllDanhMucs},
 loadingUpdateDanhMuc: ${loadingUpdateDanhMuc},
+loadingUpdateActiveDanhMuc: ${loadingUpdateActiveDanhMuc},
 loadingCreateDanhMuc: ${loadingCreateDanhMuc}
     ''';
   }

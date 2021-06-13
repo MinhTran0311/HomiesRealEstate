@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -83,7 +84,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     // check to see if already called api
     if (!_userManagementStore.loading) {
       _userManagementStore.getUsers(false);
+      _userManagementStore.isIntialLoading = true;
     }
+
     if (!_roleManagementStore.loading) {
       _roleManagementStore.getRoles();
     }
@@ -151,25 +154,17 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        leading: GestureDetector(
-          child: Icon(
-            Icons.arrow_back_ios_outlined,
-            size: 28,
-            color: Colors.white,
-          ),
-          onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ManagementScreen()),
-            );
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined),
+          onPressed: (){
+            Navigator.pop(context);
           },
         ),
         title: Row(
           // alignment: Alignment.centerLeft,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Quản lý người dùng",
-              style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),),
+            Text("Quản lý người dùng",),
           ],
         ),
         actions: [
@@ -177,8 +172,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             padding: EdgeInsets.only(right: 10),
             icon: Icon(
               Icons.person_add_alt_1,
-              color: Colors.white,
-              size: 28,
             ),
             onPressed: () {
               Navigator.push(
@@ -189,7 +182,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           ),
         ],
         automaticallyImplyLeading: false,
-        centerTitle: true,
       ),
       body: _buildBody(),
     );
@@ -236,13 +228,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return (_userManagementStore.loadingAvatar)
+        return (_userManagementStore.isIntialLoading && _userManagementStore.loadingAvatar)
             ? CustomProgressIndicatorWidget()
-            : Material(
-          child: _buildUsersList(),
-          color: Colors.white,
-        );
-        // return CustomProgressIndicatorWidget();
+            : _buildUsersList();
       },
     );
   }
@@ -354,6 +342,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           print("loading");
 
           _userManagementStore.getUsers(true);
+          while(_userManagementStore.loadingAvatar && !_userManagementStore.isIntialLoading){
+            print("dat ta vl");
+          }
           await Future.delayed(Duration(milliseconds: 2000));
           if (mounted) {
             setState(() {});
@@ -396,26 +387,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget _buildListViewFilter() {
-    return _listUserFilterFromRole != null
-        ? Expanded(
-        child: ListView.separated(
-          itemCount: _listUserFilterFromRole.length,
-          separatorBuilder: (context, position) {
-            return Divider();
-          },
-          itemBuilder: (context, position) {
-            return _buildListItem(_listUserFilterFromRole[position], position);
-          },
-        )
-    )
-        : Center(
-      child: Text(
-        // AppLocalizations.of(context).translate('home_tv_no_post_found'),
-        "Không tìm thấy người dùng nào!",
-      ),
-    );
-  }
 
   Widget _buildListItem(User user, int position) {
     // Uint8List bytes = base64Decode(user.profilePictureID);
@@ -442,7 +413,12 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           fontSize: 18,
         ),
       ),
-      subtitle: Text(user.email),
+      subtitle: Text(
+        user.email,
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
       onTap: (){
         this.userChoosen = user;
         _showSimpleModalDialog(context, user);
@@ -738,7 +714,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                         //     Colors.amberAccent.shade100,
                         //   ],
                         // )
-                        color: Colors.white,
+                        color: _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
                       ),
                       width: MediaQuery.of(context).size.width,
                       // margin: EdgeInsets.only(bottom: 10),
