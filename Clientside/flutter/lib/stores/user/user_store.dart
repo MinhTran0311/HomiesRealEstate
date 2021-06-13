@@ -270,9 +270,6 @@ abstract class _UserStore with Store {
     fetchUsersPostDetailFuture = ObservableFuture(future);
 
     future.then((user) {
-      print("12312312312312");
-      print(user.surname);
-      print(user.profilePicture);
       this.userOfCurrentPost = user;
     }).catchError((error) {
       if (error is DioError) {
