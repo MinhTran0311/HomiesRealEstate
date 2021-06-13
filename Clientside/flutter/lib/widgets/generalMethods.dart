@@ -8,7 +8,7 @@ dynamic showErrorMessage(String message, BuildContext context) {
       FlushbarHelper.createError(
         message: message,
         title: "Lỗi",
-        duration: Duration(seconds: 5),
+        duration: Duration(seconds: 3),
       )..show(context);
     }
   });
@@ -21,7 +21,7 @@ dynamic showSuccssfullMesssage(String message, BuildContext context) {
       FlushbarHelper.createSuccess(
         message: message,
         title: "Thông báo",
-        duration: Duration(seconds: 5),
+        duration: Duration(seconds: 3),
       )
           .show(context);
     }

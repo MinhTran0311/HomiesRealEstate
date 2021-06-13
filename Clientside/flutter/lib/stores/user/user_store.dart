@@ -97,7 +97,8 @@ abstract class _UserStore with Store {
     }
   }
 
-
+  @observable
+  bool updateUser_success = false;
 
   @observable
   User userByID;
@@ -150,7 +151,12 @@ abstract class _UserStore with Store {
   //User
   static ObservableFuture<CurrentUserForEditdto> emptyUserCurrentResponse =
   ObservableFuture.value(null);
+  static ObservableFuture<CurrentUserForEditdto> emptyUpdateUserCurrentResponse =
+  ObservableFuture.value(null);
 
+  @observable
+  ObservableFuture<dynamic> fetchUpdateUserCurrentFuture =
+  ObservableFuture<CurrentUserForEditdto>(emptyUpdateUserCurrentResponse);
   @observable
   ObservableFuture<CurrentUserForEditdto> fetchUserCurrentFuture =
   ObservableFuture<CurrentUserForEditdto>(emptyUserCurrentResponse);
@@ -169,6 +175,8 @@ abstract class _UserStore with Store {
   ObservableFuture<String> fetchUserCurrentPictureFuture =
   ObservableFuture<String>(emptyUserCurrentPictureResponse);
 
+  @computed
+  bool get loadingUpdateCurrentUser => UpdateUserFuturess.status == FutureStatus.pending;
   @computed
   bool get loadingCurrentUser => fetchUserCurrentFuture.status == FutureStatus.pending;
   @computed
@@ -270,9 +278,6 @@ abstract class _UserStore with Store {
     fetchUsersPostDetailFuture = ObservableFuture(future);
 
     future.then((user) {
-      print("12312312312312");
-      print(user.surname);
-      print(user.profilePicture);
       this.userOfCurrentPost = user;
     }).catchError((error) {
       if (error is DioError) {
@@ -305,19 +310,27 @@ abstract class _UserStore with Store {
   static ObservableFuture<CurrentUserForEditdto> emptyUpdateUserResponsess =
   ObservableFuture.value(null);
   @observable
-  ObservableFuture<CurrentUserForEditdto> UpdateUserFuturess = emptyUpdateUserResponsess;
+  ObservableFuture<dynamic> UpdateUserFuturess = emptyUpdateUserResponsess;
 
   @action
   Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName,int id) async {
+    updateUser_success = false;
+    print("DuongDebug2 ${updateUser_success}");
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
-    fetchUpdateUserFutures = ObservableFuture(future);
+    UpdateUserFuturess = ObservableFuture(future);
 
     future.then((user) {
-      this.userCurrent.name = name;
-      this.userCurrent.surname = surname;
-      this.userCurrent.phoneNumber = phonenumber;
-      this.userCurrent.emailAddress = email;
-      this.userCurrent.userName = userName;
+      print("DuongDebug1 ${user["success"]}");
+      if (user["success"]==true){
+
+        updateUser_success = true;
+        this.userCurrent.name = name;
+        this.userCurrent.surname = surname;
+        this.userCurrent.phoneNumber = phonenumber;
+        this.userCurrent.emailAddress = email;
+        this.userCurrent.userName = userName;
+      }
+
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

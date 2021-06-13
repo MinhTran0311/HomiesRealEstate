@@ -169,11 +169,10 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
               "Authorization" : "Bearer ${Preferences.access_token}",
             }
             ),);
-          log("updateUser Success");
           bool updateUserSuccess = res["success"];
 
           print(res);
-          return updateUserSuccess;
+          return res;
         } catch (e) {
           throw e;
         }
