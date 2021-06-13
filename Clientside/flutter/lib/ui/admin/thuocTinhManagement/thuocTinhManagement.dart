@@ -95,15 +95,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý thuộc tính",
-              // style: Theme.of(context).textTheme.button.copyWith(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold,letterSpacing: 1.0),
-            ),
-          ],
-        ),
+        title: Text("Quản lý thuộc tính",),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),

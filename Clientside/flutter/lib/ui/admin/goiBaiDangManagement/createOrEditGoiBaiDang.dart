@@ -10,6 +10,7 @@ import 'package:boilerplate/ui/admin/goiBaiDangManagement/goiBaiDangManagement.d
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -131,19 +132,19 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
               });
               if (_goiBaiDangManagementStore.updateGoiBaiDang_success)
               {
-                _showSuccssfullMesssage("Cập nhật thành công");
+                showSuccssfullMesssage("Cập nhật thành công",context);
                 _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
               }
               else if (_goiBaiDangManagementStore.createGoiBaiDang_success)
               {
-                _showSuccssfullMesssage("Thêm mới thành công");
+                showSuccssfullMesssage("Thêm mới thành công",context);
                 _goiBaiDangManagementStore.createGoiBaiDang_success = false;
               }
               return Container(width: 0, height : 0);
 
             }
             else {
-              return _showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage);
+              return showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage,context);
             }
           },
         ),
@@ -553,6 +554,10 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
           //    _store.setConfirmPassword(_confirmPasswordController.text),
           // },
           _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
+          _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
+          _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(int.tryParse(_thoiGianToiThieuController.text)),
+          _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(int.tryParse(_doUuTienController.text)),
+          _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(_phiController.text)),
           _goiBaiDangManagementStore.setTrangThaiGoiBaiDang(_checkboxTrangThai),
         };
         if (this.goiBaiDang != null) {
@@ -561,7 +566,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
             _goiBaiDangManagementStore.UpdateGoiBaiDang();
           }
           else {
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin',context);
           }
         }
         else {
@@ -570,7 +575,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
             _goiBaiDangManagementStore.CreateGoiBaiDang();
           }
           else {
-            _showErrorMessage('Vui lòng điền đầy đủ thông tin');
+            showErrorMessage('Vui lòng điền đầy đủ thông tin',context);
           }
         }
 
@@ -580,35 +585,6 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
   }
   //endregion
 
-  // General Methods:-----------------------------------------------------------
-
-
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title : AppLocalizations.of(context).translate('home_tv_error'),
-          duration : Duration(seconds : 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title : "Thông báo",
-          duration : Duration(seconds : 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

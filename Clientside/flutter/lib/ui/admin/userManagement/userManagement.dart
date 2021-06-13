@@ -160,13 +160,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý người dùng",),
-          ],
-        ),
+        title: Text("Quản lý người dùng",),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),
@@ -186,34 +180,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       body: _buildBody(),
     );
   }
-
-  // Widget buildFilter(String filterName){
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(horizontal: 12),
-  //     margin: EdgeInsets.only(right: 12),
-  //     decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.all(
-  //           Radius.circular(5),
-  //         ),
-  //         border: Border.all(
-  //           color: Colors.grey[300],
-  //           width: 1,
-  //         )
-  //     ),
-  //     child: Center(
-  //       child: Text(
-  //         filterName,
-  //         style: TextStyle(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.bold,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
-
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
@@ -1007,7 +973,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                         )
                                     )
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: user)),

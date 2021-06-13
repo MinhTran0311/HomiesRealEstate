@@ -100,13 +100,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý gói bài đăng",),
-          ],
-        ),
+        title: Text("Quản lý gói bài đăng",),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),

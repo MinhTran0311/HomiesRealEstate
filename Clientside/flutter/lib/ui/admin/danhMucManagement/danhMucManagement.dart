@@ -94,14 +94,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
-          // alignment: Alignment.centerLeft,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Quản lý danh mục",
-            ),
-          ],
-        ),
+        title: Text("Quản lý danh mục",),
         actions: [
           IconButton(
             padding: EdgeInsets.only(right: 10),

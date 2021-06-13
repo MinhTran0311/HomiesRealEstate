@@ -11,6 +11,7 @@ import 'package:boilerplate/ui/admin/userManagement/userManagement.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
@@ -71,6 +72,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _phoneNumberController.text = this.user.phoneNumber;
       _checkbox = this.user.isActive;
       titleForm = "Chỉnh sửa tài khoản";
+
+      _store.setName(this.user.name);
+      _store.setSurname(this.user.surName);
+      _store.setUserId(this.user.userName);
+      _store.setUserEmail(this.user.email);
+      _store.setPhoneNumber(this.user.phoneNumber);
     }
   }
 
@@ -104,61 +111,68 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Material(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            // decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //         begin: Alignment.topCenter,
-            //         end: Alignment.bottomCenter,
-            //         colors: [
-            //           Colors.amber,
-            //           Colors.orange[700],
-            //         ]
-            //     )
-            // ),
-          ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: _buildLeftSide(),
-              ),
-              Expanded(
-                flex: 1,
-                child: _buildRightSide(),
-              ),
-            ],
-          ) : Center(child: _buildRightSide()),
-          Observer(
-            builder: (context) {
-              if (_store.updateUser_success) {
-                Future.delayed(Duration(milliseconds: 0), () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserManagementScreen()),
-                  );
-                });
-                _showSuccssfullMesssage("Cập nhật thành công");
-                return Container(width: 0, height: 0);
-
-              } else {
-                return _showErrorMessage(_store.errorStore.errorMessage);
+    return Stack(
+      children: <Widget>[
+        Container(
+          // decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [
+          //           Colors.amber,
+          //           Colors.orange[700],
+          //         ]
+          //     )
+          // ),
+        ),
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? Row(
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: _buildLeftSide(),
+            ),
+            Expanded(
+              flex: 1,
+              child: _buildRightSide(),
+            ),
+          ],
+        ) : Center(child: _buildRightSide()),
+        Observer(
+          builder: (context) {
+            if (_store.updateUser_success || _store.createUser_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => UserManagementScreen()),
+                // );
+                Navigator.pop(context);
+              });
+              if (_store.updateUser_success)
+              {
+                showSuccssfullMesssage("Cập nhật thành công", context);
+                _store.updateUser_success = false;
               }
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _store.updateUserLoading,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
+              else if(_store.createUser_success) {
+                showSuccssfullMesssage("Thêm mới thành công",context);
+                _store.createUser_success = false;
+              }
+              return Container(width: 0, height: 0);
+
+            } else {
+              return showErrorMessage(_store.errorStore.errorMessage, context);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _store.updateUserLoading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        )
+      ],
     );
   }
 
@@ -218,6 +232,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           inputFontsize: 22,
           isDarkmode: _themeStore.darkMode,
           labelText: 'Họ',
+          suffixIcon: Icon(Icons.clear),
           hint: ('Nhập họ'),
           // hintColor: Colors.white,
           icon: Icons.person,
@@ -226,10 +241,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           textController: _surnameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setSurname(_surnameController.text);
+          errorMessage: (value) {
+             _store.setSurname(value);
+            return _store.formErrorStore.surname;
           },
-          errorText: _store.formErrorStore.surname,
         );
       },
     );
@@ -241,6 +256,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           inputFontsize: 22,
           hint: ('Nhập tên'),
           isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
           labelText: 'Tên',
           // hintColor: Colors.white,
           icon: Icons.person_add,
@@ -249,10 +265,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           textController: _nameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setName(_nameController.text);
+          errorMessage: (value) {
+            _store.setName(value);
+            return _store.formErrorStore.name;
           },
-          errorText: _store.formErrorStore.name,
         );
       },
     );
@@ -266,6 +282,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           hint: ('Nhập điện thoại'),
           isDarkmode: _themeStore.darkMode,
           labelText: 'Điện thoại',
+          suffixIcon: Icon(Icons.clear),
           // hintColor: Colors.white,
           icon: Icons.phone,
           inputType: TextInputType.phone,
@@ -273,16 +290,10 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           textController: _phoneNumberController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setPhoneNumber(_phoneNumberController.text);
-          },
           // errorText: _store.formErrorStore.name,
           errorMessage: (value) {
-            if (value == null || value.isEmpty)
-            {
-              return "Vui lòng nhập số điện thoại";
-            }
-            return null;
+            _store.setPhoneNumber(value);
+            return _store.formErrorStore.phoneNumber;
           },
         );
       },
@@ -313,48 +324,21 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           hint: ('Nhập tên đăng nhập'),
           isDarkmode: _themeStore.darkMode,
           // hintColor: Colors.white,
+          suffixIcon: Icon(Icons.clear),
           icon: Icons.person,
           inputType: TextInputType.text,
           iconColor: Colors.amber,
           textController: _userNameController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setUserId(_userNameController.text);
-          },
           enable: true,
-          errorText: _store.formErrorStore.username,
+          errorMessage: (value) {
+            _store.setUserId(value);
+            return _store.formErrorStore.username;
+          },
         );
       },
     );
-  }
-
-  Widget buildRadioBtn(BuildContext context) {
-    // return Column(
-    //   children: <Widget>[
-    //     ListTile(
-    //       title: const Text('Lafayette'),
-    //       leading: Radio(
-    //         value: i,
-    //         groupValue: _value,
-    //         activeColor: Color(0xFF6200EE),
-    //         onChanged: ,
-    //       ),
-    //     ),
-    //     ListTile(
-    //       title: const Text('Thomas Jefferson'),
-    //       leading: Radio<SingingCharacter>(
-    //         value: SingingCharacter.jefferson,
-    //         groupValue: _character,
-    //         onChanged: (SingingCharacter? value) {
-    //           setState(() {
-    //             _character = value;
-    //           });
-    //         },
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 
   Widget _buildActiveCheckBox() {
@@ -387,6 +371,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       labelText: ('Mật khẩu'),
       hint: ('Nhập mật khẩu'),
       isDarkmode: _themeStore.darkMode,
+      suffixIcon: Icon(Icons.clear),
       // hintColor: Colors.white,
       isObscure: true,
       icon: Icons.vpn_key,
@@ -395,15 +380,17 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       focusNode: _passwordFocusNode,
       errorText: _store.formErrorStore.password,
       onChanged: (value) {
-        _store.setPassword(_passwordController.text);
+
       },
       errorMessage: (value){
         if (this.user == null)
         {
-          if(value == null || value.isEmpty)
-            return "Vui lòng nhập mật khẩu";
-          else if (value.length < 6) {
-            return "Mật khẩu phải có ít nhất 6 ký tự";
+          _store.setPassword(value);
+          _store.formErrorStore.password;
+        }
+        else {
+          if(value != null || value.isNotEmpty) {
+            _store.formErrorStore.password;
           }
         }
         return null;
@@ -415,6 +402,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return TextFieldWidget(
       inputFontsize: 22,
       labelText: "Xác nhận mật khẩu",
+      suffixIcon: Icon(Icons.clear),
       isDarkmode: _themeStore.darkMode,
       hint: ('Nhập lại mật khẩu'),
       // hintColor: Colors.white,
@@ -423,9 +411,16 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       iconColor: Colors.amber,
       textController: _confirmPasswordController,
       autoFocus: false,
-      errorText: _store.formErrorStore.confirmPassword,
-      onChanged: (value) {
-        _store.setConfirmPassword(_confirmPasswordController.text);
+      errorMessage: (value) {
+        if (this.user == null)
+        {
+          _store.setConfirmPassword(value);
+          return _store.formErrorStore.confirmPassword;
+        }
+        else {
+
+        }
+        return null;
       },
     );
   }
@@ -439,6 +434,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           inputFontsize: 22,
           isDarkmode: _themeStore.darkMode,
           hint: ('Nhập địa chỉ email'),
+          suffixIcon: Icon(Icons.clear),
           // hintColor: Colors.white,
           icon: Icons.email_rounded,
           inputType: TextInputType.emailAddress,
@@ -446,10 +442,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           textController: _userEmailController,
           inputAction: TextInputAction.next,
           autoFocus: false,
-          onChanged: (value) {
-            _store.setUserEmail(_userEmailController.text);
+          errorMessage: (value) {
+            {
+              _store.setUserEmail(value);
+              return _store.formErrorStore.userEmail;
+            }
           },
-          errorText: _store.formErrorStore.userEmail,
         );
       },
     );
@@ -485,7 +483,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.UpdateUser();
            }
            else{
-             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
+             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
            }
          }
          else {
@@ -494,7 +492,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
              _store.CreateUser();
            }
            else{
-             _showErrorMessage('Vui lòng nhập đầy đủ thông tin');
+             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
            }
          }
 
@@ -514,35 +512,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     return Container();
   }
 
-  // General Methods:-----------------------------------------------------------
-
-
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

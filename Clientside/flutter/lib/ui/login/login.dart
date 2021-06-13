@@ -161,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return TextFieldWidget(
           inputFontsize: 22,
           hint: ('Tên đăng nhập'),
+          // labelText: ('Tên đăng nhập'),
           hintColor: Colors.white,
           icon: Icons.person,
           inputType: TextInputType.text,
@@ -174,7 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_passwordFocusNode);
           },
-          errorText: _store.formErrorStore.username,
+          //errorText: _store.formErrorStore.username,
+          errorMessage: (value){return  _store.formErrorStore.username;},
         );
       },
     );
@@ -193,7 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
           iconColor: Colors.white,
           textController: _passwordController,
           focusNode: _passwordFocusNode,
-          errorText: _store.formErrorStore.password,
+          // errorText: _store.formErrorStore.password,
+          errorMessage: (value){return  _store.formErrorStore.password;},
           onChanged: (value) {
             _store.setPassword(_passwordController.text);
           },

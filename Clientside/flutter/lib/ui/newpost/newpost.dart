@@ -223,7 +223,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 !_townStore.loadingCommune &&
                 !_postStore.loadingThuocTinh &&
                 !_postStore.loadingPack &&
-                !_userStore.loading
+                !_userStore.loadingCurrentUserWallet
             ? Material(child: _buildBody())
             : CustomProgressIndicatorWidget();
       },
