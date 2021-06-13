@@ -44,7 +44,6 @@ import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'add_image.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 
 class NewpostScreen extends StatefulWidget {
@@ -130,11 +129,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     }
     if (!_townStore.loading) {
       _townStore.getTowns();
-
     }
     if (!_townStore.loadingCommune) {
       _townStore.getCommunes();
-      _townStore.isIntialLoading=true;
+      _townStore.isIntialLoading = true;
     }
     if (!_postStore.loadingPack) {
       _postStore.getPacks();
@@ -199,10 +197,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
-          return showErrorMessage(_postStore.errorStore.errorMessage,context);
+          return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
         if (_postStore.successNewpost) {
-          showSuccssfullMesssage("Đăng tin thành công",context);
+          showSuccssfullMesssage("Đăng tin thành công", context);
           //dispose();.
           _postStore.successNewpost = false;
           _postStore.getPostForCurs(false, "", 0);
@@ -241,22 +239,22 @@ class _NewpostScreenState extends State<NewpostScreen> {
       child: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: !_themeStore.darkMode
-                        ? [
-                            Colors.amber[600],
-                            Colors.amber[50],
-                          ]
-                        : [
-                            Color.fromRGBO(30, 22, 28, 50),
-                            Color.fromRGBO(18, 22, 28, 1),
-                          ]
-        )
-    ),
-          ),
+              //         decoration: BoxDecoration(
+              //             gradient: LinearGradient(
+              //                 begin: Alignment.topCenter,
+              //                 end: Alignment.bottomCenter,
+              //                 colors: !_themeStore.darkMode
+              //                     ? [
+              //                         Colors.amber[600],
+              //                         Colors.amber[50],
+              //                       ]
+              //                     : [
+              //                         Color.fromRGBO(30, 22, 28, 50),
+              //                         Color.fromRGBO(18, 22, 28, 1),
+              //                       ]
+              //     )
+              // ),
+              ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -308,7 +306,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
             _buildTypeTypeTypeField(),
-            //_buildVilField(),
             _buildAcreageField(),
             SizedBox(height: 24.0),
             _buildPriceField(),
@@ -317,7 +314,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
             SizedBox(height: 24.0),
             _buildPackField(),
             SizedBox(height: 24.0),
-            //_textpackmota(),
             _buildPackinfoField(),
             SizedBox(height: 24.0),
             _buildEnddateField(),
@@ -345,14 +341,23 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                        icon: Icon(Icons.textsms_rounded),
-                        fillColor: Colors.white,
+                        icon: Icon(Icons.textsms_rounded,
+                            color: _themeStore.darkMode
+                                ? Colors.white
+                                : Colors.amber),
+                        labelStyle: TextStyle(
+                          color: (_themeStore.darkMode)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                         hintText: 'Tối đa 50 kí tự',
                         labelText: 'Tiêu đề',
                         suffixIcon: IconButton(
                           onPressed: () => _TileController.clear(),
-                          icon: Icon(Icons.clear),
-                        )),
+                          icon: Icon(Icons.clear,color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),),
+                        ),
                     onSaved: (value) {
                       // //  FormState.save();
                       //   print(value);
@@ -416,7 +421,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
-                      
                     ),
                     SizedBox(
                       width: 10,
@@ -482,7 +486,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          
                         ),
                         SizedBox(
                           width: 10,
@@ -544,7 +547,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          
                         ),
                         SizedBox(
                           width: 10,
@@ -723,7 +725,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    
                   ),
                   SizedBox(
                     width: 10,
@@ -775,7 +776,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    
                   ),
                   SizedBox(
                     width: 8,
@@ -811,14 +811,21 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.home),
-                      fillColor: Colors.white,
+                      icon: Icon(Icons.home,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                       hintText: 'Số nhà/tên khu phố',
                       suffixIcon: IconButton(
                         onPressed: () => _LocateController.clear(),
                         icon: Icon(Icons.clear),
                       ),
-                      labelText: 'Địa chỉ',
+                      labelText: ('Địa chỉ'),
                     ),
                     onSaved: (value) {
                       // //  FormState.save();
@@ -885,7 +892,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
                           decoration: InputDecoration(
-                            icon: Icon(Icons.home_work),
+                            icon: Icon(Icons.home_work,color: _themeStore.darkMode
+                            ? Colors.white
+                                : Colors.amber),
+                            labelStyle: TextStyle(
+                              color: (_themeStore.darkMode)
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                             fillColor: Colors.white,
                             labelText: '${thuocTinh.tenThuocTinh}',
                             suffixIcon: IconButton(
@@ -913,7 +927,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                   children: [
                                     Icon(
                                       Icons.directions,
-                                      
                                     ),
                                     SizedBox(
                                       width: 10,
@@ -924,7 +937,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               : Row(children: [
                                   Icon(
                                     Icons.directions,
-                                    
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -961,7 +973,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.directions,
-                                      
                                     ),
                                     SizedBox(
                                       width: 10,
@@ -994,8 +1005,15 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                        icon: Icon(Icons.api),
-                        fillColor: Colors.green,
+                        icon: Icon(Icons.api,
+                            color: _themeStore.darkMode
+                                ? Colors.white
+                                : Colors.amber),
+                        labelStyle: TextStyle(
+                          color: (_themeStore.darkMode)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                         labelText: 'Diện tích',
                         suffixIcon: IconButton(
                           onPressed: () => _AcreageController.clear(),
@@ -1005,7 +1023,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
-                    autofocus: false,
+                    
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng điền diện tích';
@@ -1030,8 +1048,15 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.money),
-                      fillColor: Colors.white,
+                      icon: Icon(Icons.money,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                       labelText: 'Giá bán',
                       suffixIcon: IconButton(
                         onPressed: () => _PriceController.clear(),
@@ -1066,8 +1091,15 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                      icon: Icon(Icons.textsms_rounded),
-                      fillColor: Colors.white,
+                      icon: Icon(Icons.textsms_rounded,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
                       labelText: 'Mô tả',
                       hintText: "Mô tả thêm về bài đăng",
                       suffixIcon: IconButton(
@@ -1121,7 +1153,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
               children: <Widget>[
                 Icon(
                   Icons.account_circle,
-                  
                 ),
                 SizedBox(
                   width: 10,
@@ -1524,6 +1555,4 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
     return Container();
   }
-
-
 }

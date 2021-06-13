@@ -49,6 +49,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   TextEditingController _searchController11 = new TextEditingController();
   _MyPostScreenState({@required this.userStore, this.postStore});
   TownStore _townStore;
+  ThemeStore _themeStore;
   String dropdownValue = "Tất cả";
   int key = 0;
   GlobalKey _refresherKey1 = GlobalKey();
@@ -72,6 +73,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
     if (!postStore.loadingPostForCur) postStore.getPostForCurs(false, "", key);
   }
@@ -344,6 +346,129 @@ class _MyPostScreenState extends State<MyPostScreen> {
       });
   }
 
+  void _showBottomSheetPopMenu(Post post, int position) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        )),
+        builder: (BuildContext context) {
+          return Wrap(
+            children: [
+              buildPopMenuBottom(post, position),
+            ],
+          );
+        });
+  }
+
+  Widget buildPopMenuBottom(Post post, int position) {
+    return Container(
+        padding: EdgeInsets.only(right: 24, left: 24, top: 32, bottom: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.edit_sharp,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Text(
+                    "Chỉnh sửa",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditpostScreen(
+                                  post: post,
+                                  townStore: _townStore,
+                                  postStore: postStore,
+                                  userStore: userStore,
+                                )));
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.delete,
+                  color: Colors.grey,
+                  size: 28,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  child: Text(
+                    "Xóa bài đăng",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    var futureValue = showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              "Bạn có chắc chắn muốn xóa bài đăng?",
+                              style:
+                                  TextStyle(fontSize: 24, fontFamily: 'intel'),
+                            ),
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RoundedButtonWidget(
+                                  buttonText: "Đồng ý",
+                                  buttonColor: Colors.green,
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                ),
+                                RoundedButtonWidget(
+                                  buttonColor: Colors.grey,
+                                  buttonText: "Hủy",
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                    futureValue.then((value) {
+                      post.trangThai = "Off";
+                      if (value) postStore.Delete(post);
+                      // true/false
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
+
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
     return Observer(builder: (context) {
@@ -432,6 +557,25 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                         fontWeight: FontWeight.bold,
                                       ))),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheetPopMenu(post, index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
+                            width: 38,
+                            height: 38,
+                            child: Icon(
+                            Icons.menu_outlined,
+                            size: 25,
+                            color: _themeStore.darkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        )),
                       ],
                     ),
                     Expanded(child: Container()),
@@ -545,97 +689,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     ),
                     SizedBox(
                       height: 8.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100))),
-                            width: 38,
-                            height: 38,
-                            child: Padding(
-                              padding: const EdgeInsets.only(),
-                              child: IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: (Colors.amber),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditpostScreen(
-                                                  post: post,
-                                                  townStore: _townStore,
-                                                  postStore: postStore,
-                                                  userStore: userStore,
-                                                )));
-                                  }),
-                            )),
-                        Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100))),
-                            width: 38,
-                            height: 38,
-                            child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.amber,
-                                    ),
-                                    onPressed: () {
-                                      var futureValue = showDialog(
-                                          barrierDismissible: false,
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: Text(
-                                                "Bạn có chắc chắn muốn xóa bài đăng?",
-                                                style: TextStyle(
-                                                    fontSize: 24,
-                                                    fontFamily: 'intel'),
-                                              ),
-                                              content: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  RoundedButtonWidget(
-                                                    buttonText: "Đồng ý",
-                                                    buttonColor: Colors.green,
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop(true);
-                                                    },
-                                                  ),
-                                                  RoundedButtonWidget(
-                                                    buttonColor: Colors.grey,
-                                                    buttonText: "Hủy",
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop(false);
-                                                    },
-                                                  )
-                                                ],
-                                              ),
-                                            );
-                                          });
-                                      futureValue.then((value) {
-                                        post.trangThai = "Off";
-                                        if (value) postStore.Delete(post);
-                                        // true/false
-                                      });
-                                    }))),
-                      ],
-                    ),
+                    )
                   ],
                 ),
               ),

@@ -345,8 +345,8 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                     ),
                     GestureDetector(
                       onTap: (){
-                        _showBottomSheetPopMenu(goiBaiDang, position);
-                      },
+        _showBottomSheetPopMenu(goiBaiDang, position);
+        },
                       child: Icon(
                         Icons.menu_outlined,
                         size: 25,
