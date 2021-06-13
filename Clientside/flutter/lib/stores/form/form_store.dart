@@ -147,10 +147,9 @@ abstract class _FormStore with Store {
   bool get canRegister =>
       !formErrorStore.hasErrorsInRegister &&
       userEmail.isNotEmpty &&
-      phoneNumber.isNotEmpty &&
       password.isNotEmpty &&
       confirmPassword.isNotEmpty &&
-      surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty;
+      surname.isNotEmpty && name.isNotEmpty && username.isNotEmpty && username.length<=20;
 
 
   @computed
@@ -268,6 +267,9 @@ abstract class _FormStore with Store {
     if (value.isEmpty) {
       formErrorStore.username = "Chưa điền tên đăng nhập";
     }
+    else if(value.length>20){
+      formErrorStore.username = "Tối đa 20 kí tự";
+    }
     else {
       formErrorStore.username = null;
     }
@@ -338,7 +340,7 @@ abstract class _FormStore with Store {
   @action
   Future register() async {
     regist_success = false;
-    final futrue = _repository.registing(surname, name, username, password, userEmail, phoneNumber);
+    final futrue = _repository.registing(surname, name, username, password, userEmail);
     fetchRegistFuture = ObservableFuture(futrue);
 
     futrue.then((registRes) {

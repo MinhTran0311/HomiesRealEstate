@@ -107,8 +107,7 @@ namespace Homies.RealEstate.Authorization.Accounts
                 input.UserName,
                 input.Password,
                 false,
-                AppUrlService.CreateEmailActivationUrlFormat(AbpSession.TenantId),
-                input.PhoneNumber
+                AppUrlService.CreateEmailActivationUrlFormat(AbpSession.TenantId)
             );
 
             var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);

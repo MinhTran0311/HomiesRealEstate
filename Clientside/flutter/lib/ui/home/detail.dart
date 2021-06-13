@@ -769,7 +769,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
       flex: 1,
       child: Container(
         decoration: BoxDecoration(
-            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) :  Colors.grey[100],
+            color: _themeStore.darkMode ? Color.fromRGBO(30, 32, 38, 1) :  Colors.grey[200],
             borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
         ),
         child: Padding(
@@ -806,7 +806,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         height: 5,
                       ),
                       Text(
-                        "Property Owner",
+                        _userStore.user.phoneNumber,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 18,

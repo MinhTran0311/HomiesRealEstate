@@ -18,7 +18,7 @@ class RegistrationApi {
   RegistrationApi(this._dioClient, this._restClient);
 
   /// Returns list of post in response
-  Future<dynamic> regist(String surname, String name, String username, String password, String email, String phoneNumber) async {
+  Future<dynamic> regist(String surname, String name, String username, String password, String email) async {
     try {
       final res = await _dioClient.post(
         Endpoints.signup,
@@ -28,7 +28,6 @@ class RegistrationApi {
           "userName": username,
           "emailAddress": email,
           "password": password,
-          "phoneNumber": phoneNumber,
         },
         options: Options(
             headers: {

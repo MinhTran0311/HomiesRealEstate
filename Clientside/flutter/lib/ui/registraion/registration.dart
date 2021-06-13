@@ -33,7 +33,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _userEmailController = TextEditingController();
-  TextEditingController _userPhoneNumberController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   ThemeStore _themeStore;
@@ -156,8 +155,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             _buildNameField(),
             SizedBox(height: 24.0),
             _buildUserEmail(),
-            SizedBox(height: 24.0),
-            _buildPhoneNumber(),
             SizedBox(height: 24.0),
             _buildUserNameField(),
             SizedBox(height: 24.0),
@@ -300,27 +297,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       },
     );
   }
-  Widget _buildPhoneNumber() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          inputFontsize: 22,
-          hint: ('Số điện thoại'),
-          hintColor: Colors.white,
-          icon: Icons.phone_rounded,
-          inputType: TextInputType.text,
-          iconColor: _themeStore.darkMode ? Colors.amber : Colors.white,
-          textController: _userPhoneNumberController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            _store.setPhoneNumber(_userPhoneNumberController.text);
-          },
-          errorText: _store.formErrorStore.phoneNumber,
-        );
-      },
-    );
-  }
+
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Đăng ký'),
