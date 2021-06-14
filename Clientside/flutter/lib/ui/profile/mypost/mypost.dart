@@ -486,7 +486,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                   MaterialPageRoute(builder: (context) => Detail(post: post)));
             },
             child: Container(
-              height: 210,
+              height: 190,
               decoration: BoxDecoration(
                   image: DecorationImage(
                 image: post.featuredImage != null
@@ -572,9 +572,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                             child: Icon(
                             Icons.menu_outlined,
                             size: 25,
-                            color: _themeStore.darkMode
-                                ? Colors.white
-                                : Colors.black,
+                            color:
+                                 Colors.black,
                           ),
                         )),
                       ],
@@ -688,9 +687,6 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 8.0,
-                    )
                   ],
                 ),
               ),

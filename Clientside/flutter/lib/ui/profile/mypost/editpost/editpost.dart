@@ -159,7 +159,47 @@ class _EditpostScreenState extends State<EditpostScreen> {
           //actions: _buildActions(context),
           centerTitle: true,
         ),
-        body: _buildbody());
+        body: WillPopScope(
+            onWillPop: () {
+              {
+                var futureValue = showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Bạn chưa lưu thông tin bạn thật sự có muốn thoát?",
+                          style:
+                          TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        ),
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RoundedButtonWidget(
+                              buttonText: "Đồng ý",
+                              buttonColor: Colors.green,
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                            RoundedButtonWidget(
+                              buttonColor: Colors.grey,
+                              buttonText: "Hủy",
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                futureValue.then((value) {
+                  if (value)  Navigator.of(context).pop();
+                });
+              };
+              return;
+            },
+            child: _buildbody()));
   }
 
   Widget _buildbody() {
@@ -173,7 +213,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return showErrorMessage(postStore.errorStore.errorMessage,context);
+          return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
 
         return SizedBox.shrink();
@@ -217,8 +257,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
-          Container(
-          ),
+          Container(),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -237,7 +276,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
             builder: (context) {
               return _store.regist_success
                   ? navigate(context)
-                  : showErrorMessage(_store.errorStore.errorMessage,context);
+                  : showErrorMessage(_store.errorStore.errorMessage, context);
             },
           ),
           Observer(
@@ -1362,12 +1401,10 @@ class _EditpostScreenState extends State<EditpostScreen> {
 //endregion
 
   Widget navigate(BuildContext context) {
-
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pop();
     });
 
     return Container();
   }
-
 }
