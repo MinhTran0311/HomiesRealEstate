@@ -72,14 +72,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _phoneNumberController.text = this.user.phoneNumber;
       _checkbox = this.user.isActive;
       titleForm = "Chỉnh sửa tài khoản";
-
-      _store.setName(this.user.name);
-      _store.setSurname(this.user.surName);
-      _store.setUserId(this.user.userName);
-      _store.setUserEmail(this.user.email);
-      _store.setPhoneNumber(this.user.phoneNumber);
-      _store.setIsActive(this.user.isActive);
-      _store.setRoleName(this.user.roleName);
     }
   }
 
@@ -89,6 +81,16 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     //_store = Provider.of<FormStore>(context);
     _authTokenStore = Provider.of<AuthTokenStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
+
+    if (this.user != null) {
+      _store.setName(this.user.name);
+      _store.setSurname(this.user.surName);
+      _store.setUserId(this.user.userName);
+      _store.setUserEmail(this.user.email);
+      _store.setPhoneNumber(this.user.phoneNumber);
+      _store.setIsActive(this.user.isActive);
+      _store.setRoleName(this.user.roleName);
+    }
   }
 
   @override
@@ -503,16 +505,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     );
   }
 //endregion
-
-  Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, false);
-    });
-    Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pop();
-    });
-    return Container();
-  }
 
   // dispose:-------------------------------------------------------------------
   @override

@@ -3,6 +3,7 @@ import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -31,7 +32,7 @@ abstract class _MapsStore with Store {
   Position positionCurrent;
 
   @observable
-  CameraPosition _cameraPositionCurrent;
+  CameraPosition cameraPositionCurrent;
 
   Future checkPermission() async {
     LocationPermission checkPermission = await Geolocator.checkPermission();
@@ -53,13 +54,13 @@ abstract class _MapsStore with Store {
       }
       else {
         this.positionCurrent =  await Geolocator.getCurrentPosition();
-        // _cameraPositionCurrent = CameraPosition(
-        //     target: Latlng(positionCurrent.latitude, positionCurrent.longitude),
-        // );
+        cameraPositionCurrent = CameraPosition(
+          target: LatLng(positionCurrent.latitude, positionCurrent.longitude),
+          tilt: 59.440,
+          zoom: 14.5,
+        );
       }
     }
   }
-
-
 
 }

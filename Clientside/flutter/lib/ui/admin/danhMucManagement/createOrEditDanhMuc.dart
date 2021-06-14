@@ -53,7 +53,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     if (this.danhMuc != null) {
       _nameController.text = this.danhMuc.tenDanhMuc;
       _tagController.text = this.danhMuc.tag;
-      if (this.danhMuc.tag != null)
+      if (this.danhMuc.danhMucCha != null)
       {
         _danhMucChaController.text = this.danhMuc.danhMucCha.toString();
       }
@@ -61,12 +61,6 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       // print
       _checkboxTrangThai = this.danhMuc.trangThai == "On" ? true : false;
       titleForm = "Chỉnh sửa danh mục";
-
-      _danhMucManagementStore.setTagDanhMuc(this.danhMuc.tag);
-      _danhMucManagementStore.setDanhMucId(this.danhMuc.id);
-      _danhMucManagementStore.setNameDanhMuc(this.danhMuc.tenDanhMuc);
-      _danhMucManagementStore.setDanhMucCha(this.danhMuc.danhMucCha);
-      // _danhMucManagementStore.set
 
     }
   }
@@ -77,6 +71,20 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
+
+    if (this.danhMuc != null) {
+      _danhMucManagementStore.setDanhMucId(this.danhMuc.id);
+      _danhMucManagementStore.setTagDanhMuc(this.danhMuc.tag);
+      _danhMucManagementStore.setNameDanhMuc(this.danhMuc.tenDanhMuc);
+      if (this.danhMuc.danhMucCha != null)
+        {
+          _danhMucManagementStore.setDanhMucCha(this.danhMuc.danhMucCha);
+        }
+      if (this.danhMuc.trangThai == "On") {
+        _danhMucManagementStore.setTrangThaiDanhMuc(true);
+      }
+      else _danhMucManagementStore.setTrangThaiDanhMuc(false);
+    }
   }
 
   @override

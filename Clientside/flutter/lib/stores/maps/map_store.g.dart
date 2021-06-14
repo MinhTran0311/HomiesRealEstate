@@ -41,20 +41,20 @@ mixin _$MapsStore on _MapsStore, Store {
     });
   }
 
-  final _$_cameraPositionCurrentAtom =
-      Atom(name: '_MapsStore._cameraPositionCurrent');
+  final _$cameraPositionCurrentAtom =
+      Atom(name: '_MapsStore.cameraPositionCurrent');
 
   @override
-  CameraPosition get _cameraPositionCurrent {
-    _$_cameraPositionCurrentAtom.reportRead();
-    return super._cameraPositionCurrent;
+  CameraPosition get cameraPositionCurrent {
+    _$cameraPositionCurrentAtom.reportRead();
+    return super.cameraPositionCurrent;
   }
 
   @override
-  set _cameraPositionCurrent(CameraPosition value) {
-    _$_cameraPositionCurrentAtom
-        .reportWrite(value, super._cameraPositionCurrent, () {
-      super._cameraPositionCurrent = value;
+  set cameraPositionCurrent(CameraPosition value) {
+    _$cameraPositionCurrentAtom.reportWrite(value, super.cameraPositionCurrent,
+        () {
+      super.cameraPositionCurrent = value;
     });
   }
 
@@ -62,7 +62,8 @@ mixin _$MapsStore on _MapsStore, Store {
   String toString() {
     return '''
 isLocationServiceEnabled: ${isLocationServiceEnabled},
-positionCurrent: ${positionCurrent}
+positionCurrent: ${positionCurrent},
+cameraPositionCurrent: ${cameraPositionCurrent}
     ''';
   }
 }
