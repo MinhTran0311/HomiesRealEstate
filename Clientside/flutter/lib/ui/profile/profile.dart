@@ -113,15 +113,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppBar(),
-        body: Observer(builder: (context) {
-          return !_userstore.loadingCurrentUser ||
-                  !_userstore.loadingCurrentUserWallet ||
-                  !_userstore.loadingCurrentUserPicture
-              ? _buildBody()
-              : CustomProgressIndicatorWidget();
-        }));
+    return WillPopScope(
+      onWillPop: (){
+        return;
+      },
+      child: Scaffold(
+          appBar: _buildAppBar(),
+          body: Observer(builder: (context) {
+            return !_userstore.loadingCurrentUser ||
+                    !_userstore.loadingCurrentUserWallet ||
+                    !_userstore.loadingCurrentUserPicture
+                ? _buildBody()
+                : CustomProgressIndicatorWidget();
+          })),
+    );
   }
 
   Widget _buildAppBar() {
