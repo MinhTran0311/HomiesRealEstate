@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +60,7 @@ class _HelpScreenState extends State<HelpScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
-        decoration:!_themeStore.darkMode? BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -67,12 +68,14 @@ class _HelpScreenState extends State<HelpScreen> {
             colors: [
               Color.fromRGBO(230, 145, 56, 1),
               Colors.amberAccent,
-              Color.fromRGBO(236, 236, 238, 1),
-              Color.fromRGBO(236, 236, 238, 1),
+              // Color.fromRGBO(236, 236, 238, 1),
+              // Color.fromRGBO(236, 236, 238, 1),
+              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
+              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
             ],
             tileMode: TileMode.repeated,
           ),
-        ):null,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -82,18 +85,22 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             Container(
               padding: EdgeInsets.only(top: 15, left: 18),
-              width: MediaQuery.of(context).size.width * 0.95,
+              width: MediaQuery.of(context).size.width*0.95,
               // height: 200,
               decoration: BoxDecoration(
                 boxShadow: [
                   // color: Colors.white, //background color of box
-                  BoxShadow(
-                   // color: Color.fromRGBO(198, 199, 202, 1),
+                  !_themeStore.darkMode ? BoxShadow(
+                    color: Color.fromRGBO(198, 199, 202, 1),
                     blurRadius: 12, // soften the shadow
                     spreadRadius: 0.01, //extend the shadow
-                  )
+                    offset: Offset(
+                      8.0, // Move to right 10  horizontally
+                      12.0, // Move to bottom 10 Vertically
+                    ),
+                  ) : BoxShadow(),
                 ],
-                color: !_themeStore.darkMode?Colors.amber:Color.fromRGBO(18, 22, 28, 1),
+                color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Column(
@@ -158,6 +165,20 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget _buildListItem(String nameItem, String pathPicture, String nameButton,
       Function function, Color colors, double leftPadding) {
     return Container(
+      decoration: !_themeStore.darkMode ? new BoxDecoration(
+        boxShadow: [
+          // color: Colors.white, //background color of box
+          BoxShadow(
+            color: Color.fromRGBO(198, 199, 202, 1),
+            blurRadius: 12, // soften the shadow
+            spreadRadius: 0.01, //extend the shadow
+            offset: Offset(
+              8.0, // Move to right 10  horizontally
+              12.0, // Move to bottom 10 Vertically
+            ),
+          )
+        ],
+      ) : new BoxDecoration(),
       child: Card(
         margin: EdgeInsets.only(top: 8, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,

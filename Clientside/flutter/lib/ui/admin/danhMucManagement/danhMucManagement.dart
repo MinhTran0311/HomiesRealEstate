@@ -8,6 +8,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -80,7 +81,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
       await _danhMucManagementStore.IsActiveDanhMuc(danhMuc);
       Navigator.of(context).pop();
       setState(() {});
-    _showSuccssfullMesssage(_danhMucManagementStore.danhMucList.danhMucs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công": "Kích hoạt thành công");
+    showSuccssfullMesssage(_danhMucManagementStore.danhMucList.danhMucs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công": "Kích hoạt thành công",context);
   }
 
   @override
@@ -500,7 +501,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     return Observer(
       builder: (context) {
         if (_danhMucManagementStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_danhMucManagementStore.errorStore.errorMessage);
+          return showErrorMessage(_danhMucManagementStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
@@ -508,20 +509,6 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     );
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 
   void _showBottomSheet() async {
     // await _loadRoleList();
@@ -708,19 +695,6 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     );
   }
 
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title : "Thông báo",
-          duration : Duration(seconds : 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
 
   _showDialog<T>({BuildContext context, Widget child}) {
     showDialog<T>(

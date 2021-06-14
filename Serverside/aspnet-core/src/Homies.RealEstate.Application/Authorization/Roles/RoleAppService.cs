@@ -213,7 +213,7 @@ namespace Homies.RealEstate.Authorization.Roles
             var role = await _roleManager.GetRoleByIdAsync(input.Role.Id.Value);
             role.DisplayName = input.Role.DisplayName;
             role.IsDefault = input.Role.IsDefault;
-            role.Name = input.Role.Name;
+            //role.Name = input.Role.Name;
 
             await UpdateGrantedPermissionsAsync(role, input.GrantedPermissionNames);
         }

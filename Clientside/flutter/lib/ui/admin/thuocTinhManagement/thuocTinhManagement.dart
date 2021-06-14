@@ -9,6 +9,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 // import 'package:boilerplate/stores/language/language_store.dart';
 // import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -458,7 +459,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     return Observer(
       builder: (context) {
         if (_thuocTinhManagementStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage);
+          return showErrorMessage(_thuocTinhManagementStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
@@ -466,20 +467,6 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     );
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 
   void _showBottomSheet() async {
     // await _loadRoleList();

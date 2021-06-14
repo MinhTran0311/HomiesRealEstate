@@ -88,6 +88,8 @@ dependencies:
       url: https://github.com/google/inject.dart.git
       path: package/inject
       ref: 7c3cbf6
+  connectivity: ^2.0.2
+  flutter_svg: ^0.18.1
 
 dev_dependencies:
   flutter_test:

@@ -11,10 +11,10 @@ class Endpoints {
   static const String imagebb = "https://api.imgbb.com";
 
   // receiveTimeout
-  static const int receiveTimeout = 30000;
+  static const int receiveTimeout = 25000;
 
   // connectTimeout
-  static const int connectionTimeout = 20000;
+  static const int connectionTimeout = 15000;
   //#region login & sign up
   static const String login = homiesUrl + "/TokenAuth/Authenticate";
   static const String signup = homiesUrl + "/services/app/Account/Register";

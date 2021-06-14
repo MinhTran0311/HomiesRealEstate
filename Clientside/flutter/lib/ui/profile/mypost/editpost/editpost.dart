@@ -13,6 +13,7 @@ import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
 import 'package:boilerplate/stores/image/image_store.dart';
@@ -158,7 +159,47 @@ class _EditpostScreenState extends State<EditpostScreen> {
           //actions: _buildActions(context),
           centerTitle: true,
         ),
-        body: _buildbody());
+        body: WillPopScope(
+            onWillPop: () {
+              {
+                var futureValue = showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Bạn chưa lưu thông tin bạn thật sự có muốn thoát?",
+                          style:
+                          TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        ),
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RoundedButtonWidget(
+                              buttonText: "Đồng ý",
+                              buttonColor: Colors.green,
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                            RoundedButtonWidget(
+                              buttonColor: Colors.grey,
+                              buttonText: "Hủy",
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                futureValue.then((value) {
+                  if (value)  Navigator.of(context).pop();
+                });
+              };
+              return;
+            },
+            child: _buildbody()));
   }
 
   Widget _buildbody() {
@@ -172,7 +213,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(postStore.errorStore.errorMessage);
+          return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
 
         return SizedBox.shrink();
@@ -216,8 +257,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
-          Container(
-          ),
+          Container(),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -236,7 +276,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
             builder: (context) {
               return _store.regist_success
                   ? navigate(context)
-                  : _showErrorMessage(_store.errorStore.errorMessage);
+                  : showErrorMessage(_store.errorStore.errorMessage, context);
             },
           ),
           Observer(
@@ -1361,28 +1401,10 @@ class _EditpostScreenState extends State<EditpostScreen> {
 //endregion
 
   Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, false);
-    });
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pop();
     });
 
     return Container();
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 }

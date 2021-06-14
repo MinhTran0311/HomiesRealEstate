@@ -14,6 +14,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -308,26 +309,48 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
                     Expanded(child: Container()),
                     Column(
                       children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            post.tieuDe,
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
+                              flex: 1,
                               child: Text(
-                                post.tieuDe,
-                                overflow: TextOverflow.ellipsis,
+                                post.dienTich.toString() + ' m2',
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.fade,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            Text(
-                              priceFormat(post.gia),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                priceFormat(post.gia),
+                                textAlign: TextAlign.end,
+                                overflow: TextOverflow.fade,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             )
                           ],
@@ -336,66 +359,58 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
                           height: 4,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.tenXa,
-                                  style: TextStyle(
+                            Expanded(
+                              flex: 3,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
                                     color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    size: 14,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Icon(
-                                  Icons.zoom_out_map,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.dienTich.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(
+                                    width: 4,
                                   ),
-                                ),
-                              ],
+                                  Flexible(
+                                    child: Container(
+                                      padding: EdgeInsets.only(right: 4),
+                                      child: Text(
+                                        post.tenXa,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 14,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  post.diemBaiDang.toString(),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(post.diemBaiDang.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      )),
+                                  SizedBox(
+                                    width: 4,
                                   ),
-                                )
-                              ],
-                            ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 14,
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         )
                       ],
@@ -414,7 +429,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(postStore.errorStore.errorMessage);
+          return showErrorMessage(postStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
@@ -422,19 +437,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
     );
   }
 
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-    return SizedBox.shrink();
-  }
+
 
   void _showBottomSheet() {
     showModalBottomSheet(

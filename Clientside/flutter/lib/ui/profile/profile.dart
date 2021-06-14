@@ -33,10 +33,6 @@ import 'account/account.dart';
 import 'mypost/mypost.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({
-    Key key,
-  }) : super(key: key);
-
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 
@@ -45,9 +41,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  _ProfileScreenState({
-    Key key,
-  }) : super();
   String role=" Khách";
   String pathAvatar = "assets/images/img_login.jpg";
   File image;
@@ -117,17 +110,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //   });
   // }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppBar(),
-        body: Observer(builder: (context) {
-          return !_userstore.loadingCurrentUser ||
-                  !_userstore.loadingCurrentUserWallet ||
-                  !_userstore.loadingCurrentUserPicture
-              ? _buildBody()
-              : CustomProgressIndicatorWidget();
-        }));
+    return WillPopScope(
+      onWillPop: (){
+        return;
+      },
+      child: Scaffold(
+          appBar: _buildAppBar(),
+          body: Observer(builder: (context) {
+            return !_userstore.loadingCurrentUser ||
+                    !_userstore.loadingCurrentUserWallet ||
+                    !_userstore.loadingCurrentUserPicture
+                ? _buildBody()
+                : CustomProgressIndicatorWidget();
+          })),
+    );
   }
 
   Widget _buildAppBar() {
@@ -152,14 +151,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       width: double.infinity,
       height: double.infinity,
       child: RefreshIndicator(
-        onRefresh: (){
-          setState(() {
-            _userstore.getCurrentUser();
-            _userstore.getCurrentWalletUser();
-            _userstore.getCurrentPictureUser();
-            _postStore.getPostForCurs(false,"",0);
-            _postStore.getsobaidang();
-          });
+        onRefresh: () async {
+          _userstore.getCurrentUser();
+          _userstore.getCurrentWalletUser();
+          _userstore.getCurrentPictureUser();
+          _postStore.getPostForCurs(false,"",0);
+          _postStore.getsobaidang();
+          return true;
         },
         child:!_userstore.loadingCurrentUser ||
             !_userstore.loadingCurrentUserWallet ||
@@ -337,7 +335,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUserInformation() {
-    return Expanded(
+    Size size =  MediaQuery.of(context).size;
+    return Container(
+      height: size.height*0.29,
+      width:  size.width,
       child: Wrap(
         children: [
           Observer(builder: (context) {
@@ -436,18 +437,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   return
                                     _userstore.userCurrent != null
                                         ? Container(
-                                          width: 280,
-                                          child: Text(
-                                              _userstore.userCurrent.surname +
-                                              " " +
-                                              _userstore.userCurrent.name,
-                                              style: TextStyle(
-                                                fontSize: 30.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                              overflow: TextOverflow.clip,
+                                          width: size.width*0.6,
+                                          child: "${_userstore.userCurrent.surname} ${_userstore.userCurrent.name}".length < 14 ? SelectableText(
+                                          _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                                    fontSize: 30.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                        ):
+                                          SelectableText(
+                                            _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontSize: 30.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
                                           ),
+                                        //   child: Text(
+                                        //       _userstore.userCurrent.surname +
+                                        //       " " +
+                                        //       _userstore.userCurrent.name,
+                                        //       style: TextStyle(
+                                        //         fontSize: 30.0,
+                                        //         fontWeight: FontWeight.bold,
+                                        //         color: Colors.white,
+                                        //       ),
+                                        //       overflow: TextOverflow.clip,
+                                        //   ),
                                         )
                                         : Text("Người dùng ",
                                         style: TextStyle(
@@ -463,7 +484,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     role=" ${_userstore.userCurrent.listRole[0].roleName}";
                                     print("debug ${_userstore.userCurrent.listRole.length}");
                                     for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
-                                      role += ", ${_userstore.userCurrent.listRole[i].roleName}";
+                                      role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
                                     }
                                   }
                                 }
@@ -479,12 +500,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         semanticLabel:
                                         'Text to announce in accessibility modes',
                                       ),
-                                      Text(role,
-                                          style: TextStyle(
-                                              fontSize: 17.0,
-                                              // fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              )),
+                                      SelectableText(
+                                        role ,
+                                        maxLines: 1,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                        fontSize: 17.0,
+                                        // fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        ),
+                                      ),
+                                      // Text(role,
+                                      //     style: TextStyle(
+                                      //         fontSize: 17.0,
+                                      //         // fontWeight: FontWeight.bold,
+                                      //         color: Colors.white,
+                                      //         )),
                                     ],
                                   ) : Container();
                                 }

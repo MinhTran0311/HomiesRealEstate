@@ -78,7 +78,7 @@ class _SettingPageState extends State<SettingPage> {
                 _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
               },
             ),
-          ] 
+          ]
         );
       }
     );
@@ -108,6 +108,7 @@ class _SettingPageState extends State<SettingPage> {
           preference.setString(Preferences.userRole, "");
           preference.setInt(Preferences.userRoleRank.toString(), 0);
         });
+        Preferences.userRole="";
         _themeStore.changeBrightnessToDark(false);
         Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
       },

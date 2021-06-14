@@ -6,6 +6,7 @@ import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -101,14 +102,14 @@ class _changePassWordPageState extends State<changePassWordPage> {
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setBool(Preferences.is_logged_in, false);
               });
-              _showSuccssfullMesssage("Đổi mật khẩu thành công, vui lòng đăng nhập lại");
+              showSuccssfullMesssage("Đổi mật khẩu thành công, vui lòng đăng nhập lại",context);
               Future.delayed(Duration(seconds: 6), () {
                 Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
               });
               return Container(width: 0, height: 0);
             } else {
               print("failed");
-              return _showErrorMessage(_store.errorStore.errorMessage);
+              return showErrorMessage(_store.errorStore.errorMessage,context);
             }
           },
         ),
@@ -192,37 +193,11 @@ class _changePassWordPageState extends State<changePassWordPage> {
           _store.changePassword();
         }
         else{
-          _showErrorMessage('Hãy điền đẩy đủ thông tin');
+          showErrorMessage('Hãy điền đẩy đủ thông tin',context);
         }
         //});
       },
     );
-  }
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
   }
 
   @override
