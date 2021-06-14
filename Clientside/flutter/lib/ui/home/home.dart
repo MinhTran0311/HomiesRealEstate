@@ -24,7 +24,7 @@ import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:boilerplate/widgets/generalMethods.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _buildActions(BuildContext context) {
     return <Widget>[
-      if (!Permission.instance.hasPermission("Pages") || Preferences.userRole.isEmpty || Preferences.userRoleRank==0)
+      if (!Permission.instance.hasPermission("Pages") || Preferences.userRole.isEmpty || Preferences.userRoleRank==0 || Preferences.auth_token.isEmpty)
         _buildLogInButton(),
     ];
   }
@@ -506,27 +506,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Observer(
       builder: (context) {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_postStore.errorStore.errorMessage);
+          return showErrorMessage(_postStore.errorStore.errorMessage,context);
         }
 
         return SizedBox.shrink();
       },
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 
   void _showBottomSheet() async {
@@ -548,55 +533,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         });
   }
-
-  _buildLanguageDialog() {
-    _showDialog<String>(
-      context: context,
-      child: MaterialDialog(
-        borderRadius: 5.0,
-        enableFullWidth: true,
-        title: Text(
-          AppLocalizations.of(context).translate('home_tv_choose_language'),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-          ),
-        ),
-        headerColor: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        closeButtonColor: Colors.white,
-        enableCloseButton: true,
-        enableBackButton: false,
-        onCloseButtonClicked: () {
-          Navigator.of(context).pop();
-        },
-        children: _languageStore.supportedLanguages
-            .map(
-              (object) => ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.all(0.0),
-                title: Text(
-                  object.language,
-                  style: TextStyle(
-                    color: _languageStore.locale == object.locale
-                        ? Theme.of(context).primaryColor
-                        :_themeStore.darkMode 
-                            ? Colors.white
-                            : Colors.black,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  // change user language based on selected locale
-                  _languageStore.changeLanguage(object.locale);
-                },
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-
   _showDialog<T>({BuildContext context, Widget child}) {
     showDialog<T>(
       context: context,
@@ -605,7 +541,6 @@ class _HomeScreenState extends State<HomeScreen> {
       // The value passed to Navigator.pop() or null.
     });
   }
-
 
   @override
   void dispose() {

@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/strings.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,7 @@ dynamic showErrorMessage(String message, BuildContext context) {
       FlushbarHelper.createError(
         message: message,
         title: "Lỗi",
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 4),
       )..show(context);
     }
   });
@@ -21,10 +22,18 @@ dynamic showSuccssfullMesssage(String message, BuildContext context) {
       FlushbarHelper.createSuccess(
         message: message,
         title: "Thông báo",
-        duration: Duration(seconds: 3),
+        duration: Duration(seconds: 4),
       )
           .show(context);
     }
     return SizedBox.shrink();
   });
+}
+
+String translateErrorMessage(String error){
+  print(error);
+  if (Strings.errorString.containsKey(error))
+    return Strings.errorString[error];
+  else
+    return "Hãy kiểm tra lại !";
 }
