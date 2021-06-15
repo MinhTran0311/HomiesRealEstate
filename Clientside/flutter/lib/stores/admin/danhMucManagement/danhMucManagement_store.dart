@@ -4,6 +4,7 @@ import 'package:boilerplate/models/danhMuc/danhMuc.dart';
 import 'package:boilerplate/models/danhMuc/danhMuc_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
@@ -156,16 +157,20 @@ abstract class _DanhMucManagementStore with Store {
         nameDanhMucList.add(this.danhMucListAll.danhMucs[i].tenDanhMuc);
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null)
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
     });
   }
 
@@ -189,16 +194,20 @@ abstract class _DanhMucManagementStore with Store {
           this.danhMucList.danhMucs.add(danhMucList.danhMucs[i]);
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null)
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
     });
   }
 
@@ -212,16 +221,21 @@ abstract class _DanhMucManagementStore with Store {
       // print("totalUsers: " + totalUsers.toString());
     }
     ).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null)
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -237,20 +251,26 @@ abstract class _DanhMucManagementStore with Store {
         updateDanhMuc_success = true;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null) {
-
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null) {
+      //
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   }
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -266,20 +286,26 @@ abstract class _DanhMucManagementStore with Store {
         createDanhMuc_success = true;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null) {
-
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null) {
+      //
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   }
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -294,20 +320,26 @@ abstract class _DanhMucManagementStore with Store {
         updateActiveDanhMuc_success = true;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null) {
-
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null) {
+      //
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   }
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
