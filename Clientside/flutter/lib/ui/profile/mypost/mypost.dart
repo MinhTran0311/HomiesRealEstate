@@ -746,7 +746,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     width: 10,
                                   ),
                                   Text(
-                                    type.tenGoi,
+                                    type.tenGoi+", phí: "+priceFormat(type.phi),
                                     style: TextStyle(),
                                   ),
                                 ],
