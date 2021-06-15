@@ -319,7 +319,8 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "diemBaiDang desc")
+                .OrderBy("doUuTien desc")
+                .ThenBy(input.Sorting ?? "diemBaiDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
@@ -361,7 +362,8 @@ namespace Homies.RealEstate.Server
                                    FeaturedImage = o.FeaturedImage,
                                    UserId = o.UserId,
                                    XaId = o.XaId,
-                                   DanhMucId = o.DanhMucId
+                                   DanhMucId = o.DanhMucId,
+                                   DoUuTien=o.DoUuTien
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
@@ -492,10 +494,11 @@ namespace Homies.RealEstate.Server
                 input.BaiDang.TagTimKiem = danhMucBaiDang.Tag != null ? danhMucBaiDang.Tag : "bai dang";
             }
 
-            //GoiBaiDang goiBaiDang = await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId);
-            //input.BaiDang.DoUuTien = goiBaiDang.DoUuTien;
-            
-            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
+            BaiDang baiDangForInsert = ObjectMapper.Map<BaiDang>(input.BaiDang);
+            baiDangForInsert.DoUuTien= (await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId)).DoUuTien;
+
+            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(baiDangForInsert);
+
             if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
             {
                 foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
@@ -566,10 +569,9 @@ namespace Homies.RealEstate.Server
             var baiDang = await _baiDangRepository.FirstOrDefaultAsync(input.baiDangId);
             if (baiDang != null)
             {
-                //GoiBaiDang goiBaiDang = await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId);
-
                 baiDang.ThoiHan = input.ThoiHan;
-                //baiDang.DoUuTien = goiBaiDang.DoUuTien;
+
+                baiDang.DoUuTien = (await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId)).DoUuTien;
 
                 var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 
