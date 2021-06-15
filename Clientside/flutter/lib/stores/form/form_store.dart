@@ -3,6 +3,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/token/authToken.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
@@ -352,16 +353,18 @@ abstract class _FormStore with Store {
       }
     }).catchError((error){
       regist_success = false;
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
+      if (error.response != null && error.response.data!=null)
+        {//errorStore.errorMessage = error.response.data["error"]["message"];
+        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
+          errorStore.errorMessage = translateErrorMessage("User name");
+        else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
+          errorStore.errorMessage = translateErrorMessage("Email");
         else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+          errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+        }
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
     });
   }
 
@@ -440,18 +443,24 @@ abstract class _FormStore with Store {
         loggedIn = false;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
-    });
+      // if (error is DioError) {
+      //   if (error.response.data!=null)
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+    }
+    );
   }
 
   @action

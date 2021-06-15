@@ -22,19 +22,19 @@ mixin _$UserStore on _UserStore, Store {
           () => super.loadingsUserByID,
           name: '_UserStore.loadingsUserByID'))
       .value;
+  Computed<bool> _$loadingUpdateCurrentUserComputed;
+
+  @override
+  bool get loadingUpdateCurrentUser => (_$loadingUpdateCurrentUserComputed ??=
+          Computed<bool>(() => super.loadingUpdateCurrentUser,
+              name: '_UserStore.loadingUpdateCurrentUser'))
+      .value;
   Computed<bool> _$loadingCurrentUserComputed;
 
   @override
   bool get loadingCurrentUser => (_$loadingCurrentUserComputed ??=
           Computed<bool>(() => super.loadingCurrentUser,
               name: '_UserStore.loadingCurrentUser'))
-      .value;
-  Computed<bool> _$loadingUpdateCurrentUserComputed;
-
-  @override
-  bool get loadingUpdateCurrentUser => (_$loadingUpdateCurrentUserComputed ??=
-          Computed<bool>(() => super.loadingCurrentUser,
-              name: '_UserStore.loadingUpdateCurrentUser'))
       .value;
   Computed<bool> _$loadingCurrentUserWalletComputed;
 
@@ -106,6 +106,21 @@ mixin _$UserStore on _UserStore, Store {
   set loginFuture(ObservableFuture<bool> value) {
     _$loginFutureAtom.reportWrite(value, super.loginFuture, () {
       super.loginFuture = value;
+    });
+  }
+
+  final _$updateUser_successAtom = Atom(name: '_UserStore.updateUser_success');
+
+  @override
+  bool get updateUser_success {
+    _$updateUser_successAtom.reportRead();
+    return super.updateUser_success;
+  }
+
+  @override
+  set updateUser_success(bool value) {
+    _$updateUser_successAtom.reportWrite(value, super.updateUser_success, () {
+      super.updateUser_success = value;
     });
   }
 
@@ -186,6 +201,23 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$fetchUpdateUserCurrentFutureAtom =
+      Atom(name: '_UserStore.fetchUpdateUserCurrentFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchUpdateUserCurrentFuture {
+    _$fetchUpdateUserCurrentFutureAtom.reportRead();
+    return super.fetchUpdateUserCurrentFuture;
+  }
+
+  @override
+  set fetchUpdateUserCurrentFuture(ObservableFuture<dynamic> value) {
+    _$fetchUpdateUserCurrentFutureAtom
+        .reportWrite(value, super.fetchUpdateUserCurrentFuture, () {
+      super.fetchUpdateUserCurrentFuture = value;
+    });
+  }
+
   final _$fetchUserCurrentFutureAtom =
       Atom(name: '_UserStore.fetchUserCurrentFuture');
 
@@ -193,14 +225,6 @@ mixin _$UserStore on _UserStore, Store {
   ObservableFuture<CurrentUserForEditdto> get fetchUserCurrentFuture {
     _$fetchUserCurrentFutureAtom.reportRead();
     return super.fetchUserCurrentFuture;
-  }
-  final _$fetchUpdateUserCurrentFutureAtom =
-      Atom(name: '_UserStore.fetchUpdateUserCurrentFuture');
-
-  @override
-  ObservableFuture<CurrentUserForEditdto> get fetchUpdateUserCurrentFuture {
-    _$fetchUpdateUserCurrentFutureAtom.reportRead();
-    return super.fetchUpdateUserCurrentFuture;
   }
 
   @override
@@ -225,20 +249,6 @@ mixin _$UserStore on _UserStore, Store {
     _$fetchUserCurrentWalletFutureAtom
         .reportWrite(value, super.fetchUserCurrentWalletFuture, () {
       super.fetchUserCurrentWalletFuture = value;
-    });
-  }
-  final _$updateUser_successAtom = Atom(name: '_UserStore.updateUser_success');
-
-  @override
-  bool get updateUser_success {
-    _$updateUser_successAtom.reportRead();
-    return super.updateUser_success;
-  }
-
-  @override
-  set updateUser_success(bool value) {
-    _$updateUser_successAtom.reportWrite(value, super.updateUser_success, () {
-      super.updateUser_success = value;
     });
   }
 
@@ -428,13 +438,14 @@ mixin _$UserStore on _UserStore, Store {
     return '''
 success: ${success},
 loginFuture: ${loginFuture},
+updateUser_success: ${updateUser_success},
 userByID: ${userByID},
 fetchUsersByIDFutures: ${fetchUsersByIDFutures},
 UserByIDFuturess: ${UserByIDFuturess},
 user: ${user},
 userCurrent: ${userCurrent},
+fetchUpdateUserCurrentFuture: ${fetchUpdateUserCurrentFuture},
 fetchUserCurrentFuture: ${fetchUserCurrentFuture},
-fetchUserCurrentFuture: ${fetchUpdateUserCurrentFuture},
 fetchUserCurrentWalletFuture: ${fetchUserCurrentWalletFuture},
 fetchUserCurrentPictureFuture: ${fetchUserCurrentPictureFuture},
 CurrentUserFuture: ${CurrentUserFuture},
@@ -445,13 +456,13 @@ UpdateUserFuturess: ${UpdateUserFuturess},
 fetchUpdatePictureUserFutures: ${fetchUpdatePictureUserFutures},
 isLoading: ${isLoading},
 loadingsUserByID: ${loadingsUserByID},
+loadingUpdateCurrentUser: ${loadingUpdateCurrentUser},
 loadingCurrentUser: ${loadingCurrentUser},
 loadingCurrentUserWallet: ${loadingCurrentUserWallet},
 loadingCurrentUserPicture: ${loadingCurrentUserPicture},
 isLoadingCurrentUser: ${isLoadingCurrentUser},
 loadingUserPostDetail: ${loadingUserPostDetail},
 loadingsUpdateUser: ${loadingsUpdateUser},
-updateUser_success: ${updateUser_success},
 loadingsUpdatePictureUser: ${loadingsUpdatePictureUser}
     ''';
   }

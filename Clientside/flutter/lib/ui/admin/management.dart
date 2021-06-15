@@ -421,7 +421,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
   _clickBtnMaps() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MapsScreen(type: "Xem bản đồ")),
+      MaterialPageRoute(builder: (context) => MapsScreen()),
     );
   }
 

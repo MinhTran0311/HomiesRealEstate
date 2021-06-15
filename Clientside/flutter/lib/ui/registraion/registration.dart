@@ -8,6 +8,7 @@ import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/app_icon_widget.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
@@ -99,7 +100,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: _buildRightSide(),
             ),
           ],
-        ) : Center(child: _buildRightSide()),
+        ) :  _buildRightSide(),
         Observer(
           builder: (context) {
             if (_store.regist_success) {
@@ -147,7 +148,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-            //SizedBox(height: 24.0),
             _buildSurnameField(),
             SizedBox(height: 24.0),
             _buildNameField(),
@@ -184,6 +184,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //   _store.setSurname(_surnameController.text);
           // },
           // errorText: _store.formErrorStore.surname,
+          labelText: "Họ",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -210,6 +211,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //   _store.setName(_nameController.text);
           // },
           // errorText: _store.formErrorStore.name,
+          labelText: "Tên",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -236,6 +238,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //   _store.setUserId(_userNameController.text);
           // },
           // errorText: _store.formErrorStore.username,
+          labelText: "Tên đăng nhập",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -262,6 +265,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           // onChanged: (value) {
           //   _store.setPassword(_passwordController.text);
           // },
+          labelText: "Mật khẩu",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -289,6 +293,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           // onChanged: (value) {
           //   _store.setConfirmPassword(_confirmPasswordController.text);
           // },
+          labelText: "Nhập lại mật khẩu",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -317,6 +322,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //   _store.setUserEmail(_userEmailController.text);
           // },
           // errorText: _store.formErrorStore.userEmail,
+          labelText: "Email",
           isDarkmode: _themeStore.darkMode,
           suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
@@ -335,11 +341,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       onPressed: () {
         if(_store.canRegister) {
           DeviceUtils.hideKeyboard(context);
-          //_store.register();
-          showSuccssfullMesssage("Đăng ký thành công",context);
+          _store.register();
+          //showSuccssfullMesssage("Đăng ký thành công",context);
         }
         else{
-          showErrorMessage('Hãy điền đủ thông tin',context);
+          showErrorMessage('Hãy điền đầy đủ thông tin',context);
         }
         //});
       },
