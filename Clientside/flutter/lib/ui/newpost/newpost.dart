@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
@@ -238,23 +239,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
-          Container(
-              //         decoration: BoxDecoration(
-              //             gradient: LinearGradient(
-              //                 begin: Alignment.topCenter,
-              //                 end: Alignment.bottomCenter,
-              //                 colors: !_themeStore.darkMode
-              //                     ? [
-              //                         Colors.amber[600],
-              //                         Colors.amber[50],
-              //                       ]
-              //                     : [
-              //                         Color.fromRGBO(30, 22, 28, 50),
-              //                         Color.fromRGBO(18, 22, 28, 1),
-              //                       ]
-              //     )
-              // ),
-              ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -341,28 +325,34 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                        icon: Icon(Icons.textsms_rounded,
+                      icon: Icon(Icons.textsms_rounded,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      hintText: 'Tối đa 50 kí tự',
+                      labelText: 'Tiêu đề',
+                      suffixIcon: IconButton(
+                        onPressed: () => _TileController.clear(),
+                        icon: Icon(Icons.clear,
                             color: _themeStore.darkMode
                                 ? Colors.white
                                 : Colors.amber),
-                        labelStyle: TextStyle(
-                          color: (_themeStore.darkMode)
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                        hintText: 'Tối đa 50 kí tự',
-                        labelText: 'Tiêu đề',
-                        suffixIcon: IconButton(
-                          onPressed: () => _TileController.clear(),
-                          icon: Icon(Icons.clear,color: _themeStore.darkMode
-                              ? Colors.white
-                              : Colors.amber),),
-                        ),
+                      ),
+
+                    ),
                     onSaved: (value) {
                       // //  FormState.save();
                       //   print(value);
                       //   // code when the user saves the form.
                     },
+                    cursorColor:  _themeStore.darkMode
+                      ? Colors.white
+                      : Colors.amber,
                     controller: _TileController,
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length > 50) {
@@ -892,9 +882,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
                           decoration: InputDecoration(
-                            icon: Icon(Icons.home_work,color: _themeStore.darkMode
-                            ? Colors.white
-                                : Colors.amber),
+                            icon: Icon(Icons.home_work,
+                                color: _themeStore.darkMode
+                                    ? Colors.white
+                                    : Colors.amber),
                             labelStyle: TextStyle(
                               color: (_themeStore.darkMode)
                                   ? Colors.white
@@ -1023,7 +1014,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
-                    
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng điền diện tích';
@@ -1100,11 +1090,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
+
                       labelText: 'Mô tả',
                       hintText: "Mô tả thêm về bài đăng",
                       suffixIcon: IconButton(
                         onPressed: () => _keyEditor2.clear(),
-                        icon: Icon(Icons.clear),
+                        icon: Icon(Icons.clear,color: _themeStore.darkMode
+                            ? Colors.white
+                            : Colors.black,),
                       ),
                     ),
                     onSaved: (value) {},
@@ -1158,9 +1151,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   width: 10,
                 ),
                 Text(
-                  type.tenGoi,
+                  type.tenGoi+", phí: "+priceFormat(type.phi),
                   style: TextStyle(),
                 ),
+
               ],
             ),
           );
@@ -1210,7 +1204,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Phí bài đăng:" + "${(selectedPack.phi * songay)}",
+                      "Phí bài đăng:" + "${priceFormat(selectedPack.phi * songay)}",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
