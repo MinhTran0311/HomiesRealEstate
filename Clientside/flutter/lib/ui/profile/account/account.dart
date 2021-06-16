@@ -195,6 +195,8 @@ class _AccountPageState extends State<AccountPage>{
           return Wrap(
             children: [
               Container(
+                height: size.height,
+                width: size.width,
                 decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   // topLeft: Radius.circular(25),
@@ -216,110 +218,117 @@ class _AccountPageState extends State<AccountPage>{
                   mainAxisSize: MainAxisSize.max,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children:[
-                          Container(
-                            child: Column(
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10,bottom: 10),
+                          child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
-                              // mainAxisSize: MainAxisSize.max,
-                              // crossAxisAlignment: CrossAxisAlignment.stretch,
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Observer(builder: (context) {
-                                  return _userstore.userCurrent.picture != null
-                                      ? CircleAvatar(radius: (52),
-                                      backgroundColor: Colors.white,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
-                                      )
-                                      )
-                                      : CircleAvatar(
-                                      radius: (52),
-                                      backgroundColor: Colors.white,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        BorderRadius.circular(50),
-                                        child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                      ));
-                                }),
-
-                                // SizedBox(height: 10,),
+                              children:[
                                 Container(
-                                  width: size.width*0.9,
-                                  child:
-                                  SelectableText(
-                                    "${SurName} " + "${Name}",
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  // SelectableText(
-                                  //   "${SurName} " + "${Name}",
-                                  //   maxLines: 1,
-                                  //   textAlign: TextAlign.start,
-                                  //   style: TextStyle(
-                                  //     color: Colors.white,
-                                  //     fontSize: 30,
-                                  //     fontWeight: FontWeight.bold,
-                                  //   ),
-                                  // ),
-                                ),
-                                SizedBox(height: 5,),
-                                Row(
-                                  children: [
-                                    _userstore.userCurrent.listRole.length<=1?Icon(
-                                      Icons.person_pin,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ):
-                                    Icon(
-                                      Icons.people,
-                                      color: Colors.white,
-                                      size: 20.0,
-                                      semanticLabel:
-                                      'Text to announce in accessibility modes',
-                                    ),
-                                    SizedBox(width: 10,),
-                                    Observer(builder: (context) {
-                                      if(_userstore.userCurrent != null){
-                                        if(_userstore.userCurrent.listRole != null){
-                                          role="${_userstore.userCurrent.listRole[0].roleName}";
-                                          print("debug ${_userstore.userCurrent.listRole.length}");
-                                          for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
-                                            role += ", ${_userstore.userCurrent.listRole[i].roleName}";
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    // mainAxisSize: MainAxisSize.max,
+                                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Observer(builder: (context) {
+                                        return _userstore.userCurrent.picture != null
+                                            ? CircleAvatar(radius: (52),
+                                            backgroundColor: Colors.white,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(50),
+                                              child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
+                                            )
+                                            )
+                                            : CircleAvatar(
+                                            radius: (52),
+                                            backgroundColor: Colors.white,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              BorderRadius.circular(50),
+                                              child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                            ));
+                                      }),
+
+                                      // SizedBox(height: 10,),
+                                      Container(
+                                        width: size.width*0.9,
+                                        child:
+                                        SelectableText(
+                                          "${SurName} " + "${Name}",
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 30.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        // SelectableText(
+                                        //   "${SurName} " + "${Name}",
+                                        //   maxLines: 1,
+                                        //   textAlign: TextAlign.start,
+                                        //   style: TextStyle(
+                                        //     color: Colors.white,
+                                        //     fontSize: 30,
+                                        //     fontWeight: FontWeight.bold,
+                                        //   ),
+                                        // ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Row(
+                                        children: [
+                                          _userstore.userCurrent.listRole.length<=1?Icon(
+                                            Icons.person_pin,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ):
+                                          Icon(
+                                            Icons.people,
+                                            color: Colors.white,
+                                            size: 20.0,
+                                            semanticLabel:
+                                            'Text to announce in accessibility modes',
+                                          ),
+                                          SizedBox(width: 10,),
+                                          Observer(builder: (context) {
+                                            if(_userstore.userCurrent != null){
+                                              if(_userstore.userCurrent.listRole != null){
+                                                role="${_userstore.userCurrent.listRole[0].roleName}";
+                                                print("debug ${_userstore.userCurrent.listRole.length}");
+                                                for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
+                                                  role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
+                                                }
+                                              }
+                                            }
+                                            return
+                                              _userstore.userCurrent != null ? Text(role,
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white,
+                                                      )) : Container();
                                           }
-                                        }
-                                      }
-                                      return
-                                        _userstore.userCurrent != null ? Text(role,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                                )) : Container();
-                                    }
-                                    ),
-                                    // Text(
-                                    //   _userstore.userCurrent.listRole[0].roleName,
-                                    //   style: TextStyle(
-                                    //     color: Colors.white,
-                                    //     fontSize: 20,
-                                    //   ),
-                                    // ),
-                                  ],
+                                          ),
+                                          // Text(
+                                          //   _userstore.userCurrent.listRole[0].roleName,
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontSize: 20,
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  // margin: EdgeInsets.all(20),
                                 ),
-                              ],
-                            ),
-                            margin: EdgeInsets.all(20),
+                              ]
                           ),
-                        ]
+                        ),
+                      ],
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -565,7 +574,7 @@ class _AccountPageState extends State<AccountPage>{
                                 ),
                                 Text(
                                   // alignment: Alignment.centerRight,
-                                  "${creationTime}",
+                                  "${creationTime.substring(8,16)}",
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -611,6 +620,7 @@ class _AccountPageState extends State<AccountPage>{
                                 },
                               )
                           ),
+                          SizedBox(height: 30,)
                         ],
                       ),
                     ),

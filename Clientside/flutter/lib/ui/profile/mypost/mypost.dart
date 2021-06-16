@@ -800,8 +800,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                           fontSize: 24, fontFamily: 'intel'),
                                     ),
                                     content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize:MainAxisSize.min,
                                       children: [
                                         RoundedButtonWidget(
                                           buttonText: "Nạp thêm tiền",
