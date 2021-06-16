@@ -225,7 +225,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 !_postStore.loadingThuocTinh &&
                 !_postStore.loadingPack &&
                 !_userStore.loadingCurrentUserWallet
-            ? Material(child: _buildBody())
+            ? _buildBody()
             : CustomProgressIndicatorWidget();
       },
     );
@@ -320,48 +320,37 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.textsms_rounded,
-                          color: _themeStore.darkMode
-                              ? Colors.white
-                              : Colors.amber),
-                      labelStyle: TextStyle(
-                        color: (_themeStore.darkMode)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      hintText: 'Tối đa 50 kí tự',
-                      labelText: 'Tiêu đề',
-                      suffixIcon: IconButton(
-                        onPressed: () => _TileController.clear(),
-                        icon: Icon(Icons.clear,
-                            color: _themeStore.darkMode
-                                ? Colors.white
-                                : Colors.amber),
-                      ),
-
-                    ),
-                    onSaved: (value) {
-                      // //  FormState.save();
-                      //   print(value);
-                      //   // code when the user saves the form.
-                    },
-                    cursorColor:  _themeStore.darkMode
-                      ? Colors.white
-                      : Colors.amber,
-                    controller: _TileController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length > 50) {
-                        return 'Vui lòng điền lại tiêu đề';
-                      }
-                      return null;
-                    },
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+              TextFormField(
+                autofocus: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.textsms_rounded,
+                      color:
+                          _themeStore.darkMode ? Colors.white : Colors.amber),
+                  labelStyle: TextStyle(
+                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
                   ),
-                ]));
+                  hintText: 'Tối đa 50 kí tự',
+                  labelText: 'Tiêu đề',
+                  suffixIcon: IconButton(
+                    onPressed: () => _TileController.clear(),
+                    icon: Icon(Icons.clear,
+                        color:
+                            _themeStore.darkMode ? Colors.white : Colors.amber),
+                  ),
+                ),
+                cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
+                controller: _TileController,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length > 50) {
+                    return 'Vui lòng điền lại tiêu đề';
+                  }
+                  return null;
+                },
+              ),
+            ]));
       },
     );
   }
@@ -401,7 +390,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             icon: Icon(Icons.clear),
           )),
           validator: (value) =>
-              value == null ? 'vui lòng chọn phương thức' : null,
+              value == null ? 'Vui lòng chọn phương thức' : null,
           items: type.map((Postcategory type) {
             if (type.danhMucCha == null)
               return DropdownMenuItem<Postcategory>(
@@ -452,7 +441,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hint: Text("Chọn hình thức nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'vui lòng chọn hình thức nhà đất' : null,
+                    value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                   onPressed: () => setState(() {
@@ -569,7 +558,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           child: DropdownSearch<String>(
             autoValidateMode: AutovalidateMode.always,
             validator: (value) =>
-                value == null ? 'vui lòng chọn tỉnh/thành' : null,
+                value == null ? 'Vui lòng chọn tỉnh/thành' : null,
             items: [
               "Thành phố Hà Nội",
               "Tỉnh Hà Giang",
@@ -688,7 +677,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           value: selectedTown,
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn quận huyện' : null,
+              value == null ? 'Vui lòng chọn quận huyện' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -744,7 +733,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           hint: Text("Chọn xã/phường"),
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn xã/phường' : null,
+              value == null ? 'Vui lòng chọn xã/phường' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -800,6 +789,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
@@ -881,6 +871,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   thuocTinh.tenThuocTinh != "Hướng nhà" &&
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
+                          autofocus: false,
                           decoration: InputDecoration(
                             icon: Icon(Icons.home_work,
                                 color: _themeStore.darkMode
@@ -995,6 +986,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                         icon: Icon(Icons.api,
                             color: _themeStore.darkMode
@@ -1037,6 +1029,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.money,
                           color: _themeStore.darkMode
@@ -1076,42 +1069,40 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.textsms_rounded,
-                          color: _themeStore.darkMode
-                              ? Colors.white
-                              : Colors.amber),
-                      labelStyle: TextStyle(
-                        color: (_themeStore.darkMode)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-
-                      labelText: 'Mô tả',
-                      hintText: "Mô tả thêm về bài đăng",
-                      suffixIcon: IconButton(
-                        onPressed: () => _keyEditor2.clear(),
-                        icon: Icon(Icons.clear,color: _themeStore.darkMode
-                            ? Colors.white
-                            : Colors.black,),
-                      ),
-                    ),
-                    onSaved: (value) {},
-                    //keyboardType: TextInputType.number,
-                    controller: _keyEditor2,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập mô tả';
-                      }
-                      if (value.length > 1000) return null;
-                      return null;
-                    },
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+              TextFormField(
+                autofocus: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.textsms_rounded,
+                      color:
+                          _themeStore.darkMode ? Colors.white : Colors.amber),
+                  labelStyle: TextStyle(
+                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
                   ),
-                ]));
+                  labelText: 'Mô tả',
+                  hintText: "Mô tả thêm về bài đăng",
+                  suffixIcon: IconButton(
+                    onPressed: () => _keyEditor2.clear(),
+                    icon: Icon(
+                      Icons.clear,
+                      color: _themeStore.darkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
+                onSaved: (value) {},
+                //keyboardType: TextInputType.number,
+                controller: _keyEditor2,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập mô tả';
+                  }
+                  if (value.length > 1000) return null;
+                  return null;
+                },
+              ),
+            ]));
       },
     );
   }
@@ -1123,7 +1114,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         hint: Text("Chọn gói bài đăng"),
         value: selectedPack,
         autovalidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'vui lòng gói bài đăng' : null,
+        validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
         decoration: InputDecoration(
             suffixIcon: IconButton(
           onPressed: () => setState(() {
@@ -1151,10 +1142,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   width: 10,
                 ),
                 Text(
-                  type.tenGoi+", phí: "+priceFormat(type.phi),
+                  type.tenGoi + ", phí: " + priceFormat(type.phi),
                   style: TextStyle(),
                 ),
-
               ],
             ),
           );
@@ -1204,7 +1194,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Phí bài đăng:" + "${priceFormat(selectedPack.phi * songay)}",
+                      "Phí bài đăng:" +
+                          "${priceFormat(selectedPack.phi * songay)}",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
