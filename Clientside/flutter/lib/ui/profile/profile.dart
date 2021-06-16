@@ -146,10 +146,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   int _selectedIndex = 0;
   Widget _buildBody() {
+    Size size =  MediaQuery.of(context).size;
     return Container(
       color: Colors.amber,
-      width: double.infinity,
-      height: double.infinity,
+      width: size.width,
+      height: size.height,
       child: RefreshIndicator(
         onRefresh: () async {
           _userstore.getCurrentUser();
@@ -161,7 +162,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         child:!_userstore.loadingCurrentUser ||
             !_userstore.loadingCurrentUserWallet ||
-            !_userstore.loadingCurrentUserPicture? ListView(
+            !_userstore.loadingCurrentUserPicture?
+        ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             children: <Widget>[
               _buildUserInformation(),
@@ -343,11 +345,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Observer(builder: (context) {
             return Container(
-                height: 200,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomRight,
                         colors: [Colors.orange, Colors.amber])),
                 child: Container(
                   padding: const EdgeInsets.only(top: 30, left: 30),
