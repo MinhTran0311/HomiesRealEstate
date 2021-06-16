@@ -604,7 +604,7 @@ abstract class _FormStore with Store {
     {
       case "Admin":
         return 3;
-      case "Censor":
+      case "Moderator":
         return 2;
       case "User":
         return 1;
