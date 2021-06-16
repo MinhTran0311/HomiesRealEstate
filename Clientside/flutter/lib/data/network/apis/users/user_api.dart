@@ -364,7 +364,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
     //           "Authorization" : "Bearer ${Preferences.access_token}",
     //         }
     //     ),);
-      log("Get All LSGD Success");
+      log("Get All LSGD Success ${res}");
       return listLSGD.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());

@@ -345,277 +345,291 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Observer(builder: (context) {
             return Container(
+                height: size.height,
+                width:  size.width,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomRight,
                         colors: [Colors.orange, Colors.amber])),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 30, left: 30),
-                  child: Column(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
                     children: [
-                      Row(
-                        children: <Widget>[
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 80,
-                                height: 80,
-                                child: Stack(
-                                    fit: StackFit.expand,
-                                    overflow: Overflow.visible,
-                                    children: [
-                                      Observer(builder: (context) {
-                                        if(_userstore.userCurrent != null){
-                                          return _userstore.userCurrent.picture != null
-                                              ? CircleAvatar(
-                                              radius: (52),
-                                              backgroundColor: Colors.white,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                BorderRadius.circular(50),
-                                                child: Image.memory(Base64Decoder()
-                                                    .convert(_userstore
-                                                    .userCurrent.picture)),
-                                              )): CircleAvatar(
-                                              radius: (52),
-                                              backgroundColor: Colors.white,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                BorderRadius.circular(50),
-                                                child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                              ));
-                                        }
-                                        else{
-                                          return CircleAvatar(
-                                              radius: (52),
-                                              backgroundColor: Colors.white,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                BorderRadius.circular(50),
-                                                child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                              ));
-                                        }
-
-                                      }),
-                                      // CircularProfileAvatar(
-                                      //   _pathAvatar,
-                                      //   borderWidth: 4.0,
-                                      // ),
-                                      Positioned(
-                                        right: -6,
-                                        bottom: 0,
-                                        child: SizedBox(
-                                          width: 25,
-                                          height: 25,
-                                          child: FlatButton(
-                                            padding: EdgeInsets.zero,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
+                      Padding(
+                        padding: EdgeInsets.only(top: size.height*0.01,left: size.width*0.04),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: size.width*0.2,
+                                    height:  size.width*0.2,
+                                    child: Stack(
+                                        fit: StackFit.expand,
+                                        overflow: Overflow.visible,
+                                        children: [
+                                          Observer(builder: (context) {
+                                            if(_userstore.userCurrent != null){
+                                              return _userstore.userCurrent.picture != null
+                                                  ? CircleAvatar(
+                                                  radius: (52),
+                                                  backgroundColor: Colors.white,
+                                                  child: ClipRRect(
+                                                    borderRadius:
                                                     BorderRadius.circular(50),
-                                                side:
-                                                    BorderSide(color: Colors.white)),
-                                            color: Color(0xFFF5F6F9),
-                                            onPressed: getImage,
-                                            child: Icon(
-                                              Icons.add_a_photo,
-                                              color: Colors.grey[700],
-                                              size: 12.0,
+                                                    child: Image.memory(Base64Decoder()
+                                                        .convert(_userstore
+                                                        .userCurrent.picture)),
+                                                  )): CircleAvatar(
+                                                  radius: (52),
+                                                  backgroundColor: Colors.white,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius.circular(50),
+                                                    child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                                  ));
+                                            }
+                                            else{
+                                              return CircleAvatar(
+                                                  radius: (52),
+                                                  backgroundColor: Colors.white,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius.circular(50),
+                                                    child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                                  ));
+                                            }
+
+                                          }),
+                                          // CircularProfileAvatar(
+                                          //   _pathAvatar,
+                                          //   borderWidth: 4.0,
+                                          // ),
+                                          Positioned(
+                                            right: -6,
+                                            bottom: 0,
+                                            child: SizedBox(
+                                              width: 25,
+                                              height: 25,
+                                              child: FlatButton(
+                                                padding: EdgeInsets.zero,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(50),
+                                                    side:
+                                                        BorderSide(color: Colors.white)),
+                                                color: Color(0xFFF5F6F9),
+                                                onPressed: getImage,
+                                                child: Icon(
+                                                  Icons.add_a_photo,
+                                                  color: Colors.grey[700],
+                                                  size: 12.0,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ]),
+                                        ]),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Observer(builder: (context) {
+                                      return
+                                        _userstore.userCurrent != null
+                                            ? Container(
+                                              width: size.width*0.65,
+                                              child: "${_userstore.userCurrent.surname} ${_userstore.userCurrent.name}".length < 20 ? SelectableText(
+                                              _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                        fontSize: 30.0,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                      ),
+                                            ):
+                                              SelectableText(
+                                                _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 30.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            //   child: Text(
+                                            //       _userstore.userCurrent.surname +
+                                            //       " " +
+                                            //       _userstore.userCurrent.name,
+                                            //       style: TextStyle(
+                                            //         fontSize: 30.0,
+                                            //         fontWeight: FontWeight.bold,
+                                            //         color: Colors.white,
+                                            //       ),
+                                            //       overflow: TextOverflow.clip,
+                                            //   ),
+                                            )
+                                            : Text("Người dùng ",
+                                            style: TextStyle(
+                                                fontSize: 30.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                ));
+
+                                    }),
+                                  Observer(builder: (context) {
+                                    if(_userstore.userCurrent != null){
+                                      if(_userstore.userCurrent.listRole != null){
+                                        role=" ${_userstore.userCurrent.listRole[0].roleName}";
+                                        print("debug ${_userstore.userCurrent.listRole.length}");
+                                        for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
+                                          role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
+                                        }
+                                      }
+                                    }
+
+
+                                    return
+                                      _userstore.userCurrent != null ? Row(
+                                        children: [
+                                          Icon(
+                                            Icons.people,
+                                            color: Colors.white,
+                                            size: 24.0,
+                                            semanticLabel:
+                                            'Text to announce in accessibility modes',
+                                          ),
+                                          SelectableText(
+                                            role ,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                            fontSize: 17.0,
+                                            // fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            ),
+                                          ),
+                                          // Text(role,
+                                          //     style: TextStyle(
+                                          //         fontSize: 17.0,
+                                          //         // fontWeight: FontWeight.bold,
+                                          //         color: Colors.white,
+                                          //         )),
+                                        ],
+                                      ) : Container();
+                                    }
+                                  ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Observer(builder: (context) {
-                                  return
-                                    _userstore.userCurrent != null
-                                        ? Container(
-                                          width: size.width*0.6,
-                                          child: "${_userstore.userCurrent.surname} ${_userstore.userCurrent.name}".length < 14 ? SelectableText(
-                                          _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
-                                          maxLines: 1,
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                                    fontSize: 30.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
-                                                  ),
-                                        ):
-                                          SelectableText(
-                                            _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 30.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        //   child: Text(
-                                        //       _userstore.userCurrent.surname +
-                                        //       " " +
-                                        //       _userstore.userCurrent.name,
-                                        //       style: TextStyle(
-                                        //         fontSize: 30.0,
-                                        //         fontWeight: FontWeight.bold,
-                                        //         color: Colors.white,
-                                        //       ),
-                                        //       overflow: TextOverflow.clip,
-                                        //   ),
-                                        )
-                                        : Text("Người dùng ",
-                                        style: TextStyle(
-                                            fontSize: 30.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            ));
-
-                                }),
-                              Observer(builder: (context) {
-                                if(_userstore.userCurrent != null){
-                                  if(_userstore.userCurrent.listRole != null){
-                                    role=" ${_userstore.userCurrent.listRole[0].roleName}";
-                                    print("debug ${_userstore.userCurrent.listRole.length}");
-                                    for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
-                                      role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
-                                    }
-                                  }
-                                }
-
-
-                                return
-                                  _userstore.userCurrent != null ? Row(
-                                    children: [
-                                      Icon(
-                                        Icons.people,
-                                        color: Colors.white,
-                                        size: 24.0,
-                                        semanticLabel:
-                                        'Text to announce in accessibility modes',
-                                      ),
-                                      SelectableText(
-                                        role ,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                        fontSize: 17.0,
-                                        // fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        ),
-                                      ),
-                                      // Text(role,
-                                      //     style: TextStyle(
-                                      //         fontSize: 17.0,
-                                      //         // fontWeight: FontWeight.bold,
-                                      //         color: Colors.white,
-                                      //         )),
-                                    ],
-                                  ) : Container();
-                                }
-                              ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                              top: 25,
-                              // left: 20,
-                            ),
-                            child: MaterialButton(
-                              child: Column(
-                                children: [
-                                  Observer(builder: (context) {
-                                    return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
-                                        ? Text(
-                                        "${oCcy.format(_userstore.userCurrent.wallet)} Đ",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                ),
-                                          )
-                                        : Text(
-                                            "0",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                ),
-                                          );
-                                  }),
-                                  Text(
-                                    "Số dư",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        ),
-                                  )
-                                ],
+                      Padding(
+                        padding: EdgeInsets.only(top: size.height*0.15,left: size.width*0.07),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(
+                                top: 25,
+                                // left: 20,
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => WalletPage()),
-                                );
-                              },
-                            ),
-                          ),
-                          //SizedBox(width: 70,),
-                          !_postStore.loadingsobaidang
-                              ? MaterialButton(
-                                  padding: const EdgeInsets.only(top: 25, right: 50),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        _postStore.sobaidang.toString(),
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Text(
-                                        "Bài đã đăng",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            ),
-                                      )
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyPostScreen(
-                                                userStore: _userstore,
-                                                postStore: _postStore,
-                                              )),
-                                    );
-                                  },
-                                )
-                              : Container(
-                                  height: 0,
+                              child: MaterialButton(
+                                child: Column(
+                                  children: [
+                                    Observer(builder: (context) {
+                                      return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
+                                          ? Text(
+                                          "${oCcy.format(_userstore.userCurrent.wallet)} Đ",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  ),
+                                            )
+                                          : Text(
+                                              "0",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  ),
+                                            );
+                                    }),
+                                    Text(
+                                      "Số dư",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          ),
+                                    )
+                                  ],
                                 ),
-                        ],
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WalletPage()),
+                                  );
+                                },
+                              ),
+                            ),
+                            //SizedBox(width: 70,),
+                            !_postStore.loadingsobaidang
+                                ? MaterialButton(
+                                    padding: const EdgeInsets.only(top: 25, right: 50),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          _postStore.sobaidang.toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        Text(
+                                          "Bài đã đăng",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              ),
+                                        )
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MyPostScreen(
+                                                  userStore: _userstore,
+                                                  postStore: _postStore,
+                                                )),
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    height: 0,
+                                  ),
+                          ],
+                        ),
                       )
                     ],
                   ),
-                ));
+                )
+            );
           }),
         ],
       ),

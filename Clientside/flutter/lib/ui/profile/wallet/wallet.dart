@@ -173,7 +173,7 @@ class _WalletPageState extends State<WalletPage>{
                                 fontWeight: FontWeight.bold,
                                 color: _lsgdStore.FilterDataLSGD.LoaiLSGD != "Tất cả" ||
                                     _lsgdStore.FilterDataLSGD.MinThoiDiem !=DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) ||
-                                    _lsgdStore.FilterDataLSGD.MaxThoiDiem != DateFormat('yyyy-MM-dd').format(DateTime.now())
+                                    _lsgdStore.FilterDataLSGD.MaxThoiDiem != DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)))
                                     ? Colors.red : Colors.grey,
                               ),
                             ),
