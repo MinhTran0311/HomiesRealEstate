@@ -92,148 +92,177 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
   }
 
   Widget _buildBody() {
-    return Container(
-      color: _themeStore.darkMode !=true? Colors.grey[200] : Color.fromRGBO(18, 22, 28, 1),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 50,
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showBottomSheet();
-                      },
+    return Stack(
+      children: <Widget>[
+        Observer(
+          builder: (context) {
+            print("DuongDebug ${_lsgdStore.kiemduyet_success}");
+            if (_lsgdStore.kiemduyet_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+              });
+              // _lsgdStore.setKiemDuyenVienID(UserID, i);
+              _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+              showSuccssfullMesssage("Cập nhật thành công",context);
+              _lsgdStore.kiemduyet_success = false;
+              return Container(width: 0, height: 0);
+
+            } else {
+              return showErrorMessage(_lsgdStore.errorStore.errorMessage,context);
+            }
+          },
+        ),
+        Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _lsgdStore.Allloading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        ),
+        Container(
+          color: _themeStore.darkMode !=true? Colors.grey[200] : Color.fromRGBO(18, 22, 28, 1),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 50,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 16, right: 24),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Hiển thị bộ lọc nâng cao',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: _lsgdStore.FilterDataLSGD.LoaiLSGD != "Tất cả" ||
-                                    _lsgdStore.FilterDataLSGD.MinThoiDiem !=DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) ||
-                                    _lsgdStore.FilterDataLSGD.MaxThoiDiem != DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)))
-                                    ? Colors.red : Colors.grey,
-                              ),
+                        padding: EdgeInsets.only(top: 24),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showBottomSheet();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 16, right: 24),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Hiển thị bộ lọc nâng cao',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _lsgdStore.FilterDataLSGD.LoaiLSGD != "Tất cả" ||
+                                        _lsgdStore.FilterDataLSGD.MinThoiDiem !=DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) ||
+                                        _lsgdStore.FilterDataLSGD.MaxThoiDiem != DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1)))
+                                        ? Colors.red : Colors.grey,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  // color: Colors.black26,
+                                  size: 20,
+                                ),
+                              ],
                             ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              // color: Colors.black26,
-                              size: 20,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child:
+                SmartRefresher(
+                  key: _refresherKey,
+                  controller: _refreshController,
+                  enablePullUp: true,
+                  enablePullDown: true,
+                  header: WaterDropHeader(
+                    refresh: SizedBox(
+                      width: 25.0,
+                      height: 25.0,
+                      child: Icon(
+                        Icons.flight_takeoff_outlined,
+                        color: Colors.amber,
+                        size: 20,
+                      ),
                     ),
+                    idleIcon: SizedBox(
+                      width: 25.0,
+                      height: 25.0,
+                      child: Icon(
+                        Icons.flight_takeoff_outlined,
+                        color: Colors.amber,
+                        size: 20,
+                      ),
+                    ),
+                    waterDropColor: Colors.amber,
                   ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child:
-            SmartRefresher(
-              key: _refresherKey,
-              controller: _refreshController,
-              enablePullUp: true,
-              enablePullDown: true,
-              header: WaterDropHeader(
-                refresh: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: Icon(
-                    Icons.flight_takeoff_outlined,
-                    color: Colors.amber,
-                    size: 20,
+                  physics: BouncingScrollPhysics(),
+                  footer: ClassicFooter(
+                    loadStyle: LoadStyle.ShowWhenLoading,
+                    completeDuration: Duration(milliseconds: 500),
                   ),
+                  onLoading: () async {
+                    print("loading");
+
+                    _lsgdStore.getAllLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+                    await Future.delayed(Duration(milliseconds: 2000));
+                    if (mounted) {
+                      setState(() {});
+                    }
+                    _scrollController.jumpTo(
+                      _scrollController.position.maxScrollExtent,
+                    );
+                    _refreshController.loadComplete();
+                  },
+                  onRefresh: () async {
+                    print("refresh");
+
+                    _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
+                    await Future.delayed(Duration(milliseconds: 2000));
+                    if (mounted) setState(() {});
+                    isRefreshing = true;
+                    _refreshController.refreshCompleted();
+                  },
+                  //scrollController: _scrollController,
+                  primary: false,
+                  child:
+                  Observer(builder: (context) {
+                    return
+                      _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? ListView.builder(
+                          key: _contentKey,
+                          controller: _scrollController,
+                          shrinkWrap: true, // 1st add
+                          physics: ClampingScrollPhysics(), // 2d add
+                               itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+                               itemBuilder: (_, i) => ListTile(
+                                   title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i],i)
+                               )
+                        ) :
+                      Container(
+                          child:
+                            Center(child:
+                              Text("Không có dữ liệu")
+                            )
+                      );
+                    }
+                  ),
+                  // ListView.builder(
+                  //     shrinkWrap: true, // 1st add
+                  //        physics: ClampingScrollPhysics(), // 2nd add
+                  //        itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
+                  //        itemBuilder: (_, i) => ListTile(
+                  //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
+                  //        )
+                  // ),
+                  // onRefresh: (){
+                  //   setState(() {
+                  //     _lsgdStore.getAllLSGD();
+                  //   });
+                  // },
+
                 ),
-                idleIcon: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: Icon(
-                    Icons.flight_takeoff_outlined,
-                    color: Colors.amber,
-                    size: 20,
-                  ),
-                ),
-                waterDropColor: Colors.amber,
               ),
-              physics: BouncingScrollPhysics(),
-              footer: ClassicFooter(
-                loadStyle: LoadStyle.ShowWhenLoading,
-                completeDuration: Duration(milliseconds: 500),
-              ),
-              onLoading: () async {
-                print("loading");
-
-                _lsgdStore.getAllLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
-                await Future.delayed(Duration(milliseconds: 2000));
-                if (mounted) {
-                  setState(() {});
-                }
-                _scrollController.jumpTo(
-                  _scrollController.position.maxScrollExtent,
-                );
-                _refreshController.loadComplete();
-              },
-              onRefresh: () async {
-                print("refresh");
-
-                _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
-                await Future.delayed(Duration(milliseconds: 2000));
-                if (mounted) setState(() {});
-                isRefreshing = true;
-                _refreshController.refreshCompleted();
-              },
-              //scrollController: _scrollController,
-              primary: false,
-              child:
-              Observer(builder: (context) {
-                return
-                  _lsgdStore.listlsgdAll.listLSGDs.length != 0 ? ListView.builder(
-                      key: _contentKey,
-                      controller: _scrollController,
-                      shrinkWrap: true, // 1st add
-                      physics: ClampingScrollPhysics(), // 2d add
-                           itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-                           itemBuilder: (_, i) => ListTile(
-                               title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[i],i)
-                           )
-                    ) :
-                  Container(
-                      child:
-                        Center(child:
-                          Text("Không có dữ liệu")
-                        )
-                  );
-                }
-              ),
-              // ListView.builder(
-              //     shrinkWrap: true, // 1st add
-              //        physics: ClampingScrollPhysics(), // 2nd add
-              //        itemCount: _lsgdStore.listlsgdAll.listLSGDs.length,
-              //        itemBuilder: (_, i) => ListTile(
-              //            title: buildExpansionKiemDuyet(_lsgdStore.listlsgdAll.listLSGDs[_lsgdStore.listlsgdAll.listLSGDs.length- 1- i],isexpanded[i],i)
-              //        )
-              // ),
-              // onRefresh: (){
-              //   setState(() {
-              //     _lsgdStore.getAllLSGD();
-              //   });
-              // },
-
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
   void _showBottomSheet() {
@@ -373,12 +402,11 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
             ),
             TextButton(
               child: Text('Cập nhật'),
-              onPressed: () {
-                _lsgdStore.setKiemDuyenVienID(UserID, i);
+              onPressed: () async {
+
                 _lsgdStore.KiemDuyetGiaoDich(lsgd.id);
-                showSuccssfullMesssage("Cập nhật thành công",context);
-                _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
-                Navigator.of(context).pop();
+                // showSuccssfullMesssage("Cập nhật thành công",context);
+                 Navigator.of(context).pop();
               },
             ),
           ],
@@ -555,7 +583,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                               )
                           )
                       ),
-                      onPressed:(){
+                      onPressed:() async {
                         setState(() {_showMyDialog(lsgd, _userStore.userCurrent.UserID,i);  });
                       },
                     )

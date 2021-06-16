@@ -272,7 +272,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       bool CreateLSGDSuccess = res["success"];
 
       print(res);
-      return CreateLSGDSuccess;
+      return res;
     } catch (e) {
       throw e;
     }

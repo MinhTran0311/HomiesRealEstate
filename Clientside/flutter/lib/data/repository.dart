@@ -224,7 +224,7 @@ class Repository {
       return lsgdList;
     }).catchError((error) => throw error);
   }
-  Future<bool> NapTien(double soTien,String thoiDiem,int userId) async {
+  Future<dynamic> NapTien(double soTien,String thoiDiem,int userId) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use

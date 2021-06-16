@@ -29,7 +29,7 @@ abstract class _LSGDStore with Store {
   ObservableFuture.value(null);
   static ObservableFuture<listLSGD> emptyAllLSGDResponse =
   ObservableFuture.value(null);
-  static ObservableFuture<bool> emptyNaptienResponse =
+  static ObservableFuture<dynamic> emptyNaptienResponse =
   ObservableFuture.value(null);
   static ObservableFuture<bool> emptyKiemDuyetGiaoDichResponse =
   ObservableFuture.value(null);
@@ -43,8 +43,8 @@ abstract class _LSGDStore with Store {
   ObservableFuture<listLSGD> fetchAllLSGDFuture =
   ObservableFuture<listLSGD>(emptyAllLSGDResponse);
   @observable
-  ObservableFuture<bool> fetchNaptienFuture =
-  ObservableFuture<bool>(emptyNaptienResponse);
+  ObservableFuture<dynamic> fetchNaptienFuture =
+  ObservableFuture<dynamic>(emptyNaptienResponse);
   @observable
   ObservableFuture<bool> fetchKiemDuyetGiaoDichFuture =
   ObservableFuture<bool>(emptyKiemDuyetGiaoDichResponse);
@@ -66,6 +66,11 @@ abstract class _LSGDStore with Store {
 
   @observable
   bool success = false;
+  @observable
+  bool naptien_success = false;
+
+  @observable
+  bool kiemduyet_success = false;
 
   @observable
   bool isIntialLoading = true;
@@ -184,10 +189,15 @@ abstract class _LSGDStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future Naptien(String thoiDiem,double soTien,int userId) async {
+    naptien_success = false;
     final future = _repository.NapTien(soTien, thoiDiem, userId);
     fetchNaptienFuture = ObservableFuture(future);
 
-    future.then((listLSGD) {
+    fetchNaptienFuture.then((res) {
+      print("XXX ${res}");
+      if(res["success"]==true){
+        naptien_success = true;
+      }
       // this.listlsgd = listLSGD;
     }).catchError((error) {
       // if (error is DioError) {
@@ -233,10 +243,12 @@ abstract class _LSGDStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future KiemDuyetGiaoDich(String idLSGD) async {
+    kiemduyet_success = false;
     final future = _repository.KiemDuyetGiaoDich(idLSGD);
     fetchKiemDuyetGiaoDichFuture = ObservableFuture(future);
 
     future.then((listLSGD) {
+      kiemduyet_success  = true;
       // this.listlsgd = listLSGD;
     }).catchError((error) {
       // if (error is DioError) {
