@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -55,16 +56,22 @@ abstract class _AuthTokenStore with Store{
         loggedIn = false;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-       throw error;
-      }
-      else{
-        throw error;
-      }
+      // if (error is DioError) {
+      //   if (error.response.data!=null)
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //  throw error;
+      // }
+      // else{
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //log("error ne: ");
       //log(DioErrorUtil.handleError(error));
       //errorStore.errorMessage = DioErrorUtil.handleError(error);

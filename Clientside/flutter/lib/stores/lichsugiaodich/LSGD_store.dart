@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
@@ -122,14 +123,20 @@ abstract class _LSGDStore with Store {
           this.listlsgd.listLSGDs.add(listLSGD.listLSGDs[i]);
       }
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
@@ -183,14 +190,20 @@ abstract class _LSGDStore with Store {
     future.then((listLSGD) {
       // this.listlsgd = listLSGD;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
@@ -226,14 +239,20 @@ abstract class _LSGDStore with Store {
     future.then((listLSGD) {
       // this.listlsgd = listLSGD;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });

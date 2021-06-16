@@ -3,6 +3,7 @@ import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/image/image_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
@@ -58,14 +59,20 @@ abstract class _ImageStore with Store {
       this.imageList = imageList;
     }).catchError((error) {
       success = false;
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -77,16 +84,21 @@ abstract class _ImageStore with Store {
       {imageListpost.add(imgId);
         fetchImageFuturepost = ObservableFuture(imageFuture);
       }).catchError((error) {
-        if (error is DioError) {
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-          throw error;
-        }
-        else{
-          errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-          throw error;
-        }
+        // if (error is DioError) {
+        //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+        //   throw error;
+        // }
+        // else{
+        //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+        //   throw error;
+        // }
+        if (error.response != null && error.response.data!=null)
+          //errorStore.errorMessage = error.response.data["error"]["message"];
+          errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+        else
+          errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+        throw error;
       });
-
-        }
+    }
   }
 }

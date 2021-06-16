@@ -73,5 +73,7 @@ namespace Homies.RealEstate.Server
         [Required]
         public virtual String FeaturedImage { get; set; }
 
+        [Required]
+        public virtual int DoUuTien { get; set; }
     }
 }
