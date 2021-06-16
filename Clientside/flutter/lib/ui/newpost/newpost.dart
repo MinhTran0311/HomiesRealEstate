@@ -46,6 +46,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/ui/profile/account/account.dart';
 
 class NewpostScreen extends StatefulWidget {
   @override
@@ -170,7 +171,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
   void dispose() {
     super.dispose();
   }
-
+  String DatetimeToString(String datetime) {
+    return "${datetime.substring(11, 13)}:${datetime.substring(14, 16)} - ${datetime.substring(8, 10)}/${datetime.substring(5, 7)}/${datetime.substring(0, 4)}";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -271,7 +274,38 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: Column(
+        child:
+        _userStore.userCurrent.phoneNumber==null?
+        AlertDialog(
+          title: Text(
+            "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
+            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RoundedButtonWidget(
+                buttonText: "ok",
+                buttonColor: Colors.green,
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => AccountPage(
+                        UserName: _userStore.userCurrent.userName,
+                        Phone: _userStore.userCurrent.phoneNumber,
+                        Email: _userStore.userCurrent.emailAddress,
+                        Address: "Address",
+                        SurName: _userStore.userCurrent.surname,
+                        Name: _userStore.userCurrent.name,
+                        UserID:  _userStore.userCurrent.UserID,
+                        creationTime: DatetimeToString(
+                            _userStore.userCurrent.creationTime),
+                      ));
+                  Navigator.push(context, route);
+                },
+              )
+            ],
+          ),
+        ):Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -306,6 +340,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             _buildImagepick2(),
             SizedBox(height: 24.0),
             _buildUpButton(),
+
           ],
         ),
       ),
@@ -1435,6 +1470,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               _newpost.properties = new List<Property>();
               if (_ThuocTinhController != null)
                 for (int i = 0; i < _ThuocTinhController.length; i++)
+                  if (_ThuocTinhController[i]!=null)
                   if (_ThuocTinhController[i].text.isNotEmpty) {
                     Property value = new Property();
                     value.giaTri = _ThuocTinhController[i].text;
@@ -1454,12 +1490,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+
                         title: Text(
                           "Bạn không đủ số dư để thực hiện giao dịch?",
                           style: TextStyle(fontSize: 24, fontFamily: 'intel'),
                         ),
                         content: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize:MainAxisSize.min,
                           children: [
                             RoundedButtonWidget(
                               buttonText: "Nạp thêm tiền",
@@ -1480,11 +1518,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       );
                     });
                 futureValue.then((value) {
-                  Route route = MaterialPageRoute(
-                      builder: (context) => NapTienPage(
-                            userID: _userStore.userCurrent.UserID,
-                          ));
-                  Navigator.push(context, route);
+                  if(value) {
+                    Route route = MaterialPageRoute(
+                        builder: (context) => NapTienPage(
+                              userID: _userStore.userCurrent.UserID,
+                            ));
+                    Navigator.push(context, route);
+                  }
                 });
               } else {
                 var futureValue = showDialog(
