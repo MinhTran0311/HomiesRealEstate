@@ -49,6 +49,26 @@ class PostApi {
       throw e;
     }
   }
+  /// Get all Posts
+  Future<PostList> getAllPosts() async {
+    try {
+      final res = await _dioClient.get(
+        Endpoints.searchPosts,
+        queryParameters: {
+          "MaxResultCount": Preferences.maxPostCount,
+        },
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+
+      );
+      return PostList.fromJson(res);
+    } catch (e) {
+      print("lỗi get all Post" + e.toString());
+      throw e;
+    }
+  }
   Future<dynamic> addViewForPost(int postId) async {
     try {
       final res = await _dioClient.post(

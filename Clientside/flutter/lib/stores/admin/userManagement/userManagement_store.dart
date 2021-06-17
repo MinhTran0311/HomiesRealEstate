@@ -108,38 +108,34 @@ abstract class _UserManagementStore with Store {
          int lastUserHasAvatar = lastElementHasAvatar(users);
         for (int i=0; i< this.userList.users.length; i++){
           if (this.userList.users[i].profilePictureID != null) {
-            if (this.userList.users[i].profilePictureID.isNotEmpty) {
-              final avtUserApi = _repository.getAvatarUsers(this.userList.users[i].id);
-              fetchAvatarUserFuture = ObservableFuture(avtUserApi);
-              avtUserApi.then((avt) {
-                this.userList.users[i].avatar = avt;
-                if(i == lastUserHasAvatar) {
-                  if (isIntialLoading) isIntialLoading = false;
-                }
-              }).catchError((error) {
-                errorStore.errorMessage = DioErrorUtil.handleError(error);
-              });
-            }
+            final avtUserApi = _repository.getAvatarUsers(this.userList.users[i].id);
+            fetchAvatarUserFuture = ObservableFuture(avtUserApi);
+            avtUserApi.then((avt) {
+              this.userList.users[i].avatar = avt;
+              if(i == lastUserHasAvatar) {
+                if (isIntialLoading) isIntialLoading = false;
+              }
+            }).catchError((error) {
+              errorStore.errorMessage = DioErrorUtil.handleError(error);
+            });
           }
         }
       }
       else {
-        for (int i=0; i< users.users.length; i++)
+        for (int i=skipCount; i< users.users.length + skipCount; i++)
           {
-            this.userList.users.add(users.users[i]);
-            if (this.userList.users.last.profilePictureID != null) {
-              if (this.userList.users.last.profilePictureID.isNotEmpty) {
-                final avtUserApi = _repository.getAvatarUsers(this.userList.users.last.id);
-                fetchAvatarUserFuture = ObservableFuture(avtUserApi);
-                avtUserApi.then((avt) {
-                  this.userList.users.last.avatar = avt;
-                }).catchError((error) {
-                  errorStore.errorMessage = DioErrorUtil.handleError(error);
-                });
-              }
+            this.userList.users.add(users.users[i-skipCount]);
+            if (this.userList.users[i].profilePictureID != null) {
+              final avtUserApi = _repository.getAvatarUsers(this.userList.users[i].id);
+              fetchAvatarUserFuture = ObservableFuture(avtUserApi);
+              avtUserApi.then((avt) {
+                this.userList.users[i].avatar = avt;
+              }).catchError((error) {
+                errorStore.errorMessage = DioErrorUtil.handleError(error);
+              });
             }
-          }
 
+          }
       }
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);

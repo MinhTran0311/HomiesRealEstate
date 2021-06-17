@@ -83,6 +83,15 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  Future<PostList> getAllPosts() async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _postApi.getAllPosts().then((postsList) {
+      return postsList;
+    }).catchError((error) => throw error);
+  }
+
   Future<dynamic> addViewForPost(int postId) async {
     return await _postApi.addViewForPost(postId).then((res) {
       return res;
