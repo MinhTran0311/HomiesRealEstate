@@ -643,7 +643,7 @@ class _MapsScreenState extends State<MapsScreen> {
         ),
         body: WillPopScope(
           onWillPop: () {
-          Navigator.pop(context, 'Hello,Holee');
+          Navigator.pop(context, 'pointx,pointy');
           },
           child:Stack(
           children: [

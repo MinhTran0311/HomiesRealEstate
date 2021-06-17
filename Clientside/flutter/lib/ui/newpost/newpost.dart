@@ -322,6 +322,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   SizedBox(height: 24.0),
                   _buildTownField(),
                   _buildCommuneField(),
+                  _buildCommuneField2(),
                   _buildLocateField(),
                   SizedBox(height: 24.0),
                   _buildTypeField(),
@@ -785,9 +786,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     MaterialPageRoute(
                       builder: (context) => MapsScreen(type: "Đăng bài"),
                     ));
-                pointx = result.split(',')[0];
-                pointy = result.split(',')[1];
+                setState(() {
+                  pointx = result.split(',')[0];
+                  pointy = result.split(',')[1];
+                });
                 print(pointx);
+                print(pointy);
               });
             });
           },
@@ -820,7 +824,20 @@ class _NewpostScreenState extends State<NewpostScreen> {
         width: 0,
       );
   }
-
+  Widget _buildCommuneField2() {
+    if (selectedCommune != null) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
+        child: Text(
+          pointx+','+pointy,
+          style: TextStyle(),
+        ));
+    } else
+      return Container(
+        height: 0,
+        width: 0,
+      );
+  }
   Widget _buildLocateField() {
     return Observer(
       builder: (context) {
