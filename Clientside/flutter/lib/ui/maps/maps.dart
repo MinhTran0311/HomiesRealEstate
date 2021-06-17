@@ -2,6 +2,7 @@ import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -509,7 +510,10 @@ class _MapsScreenState extends State<MapsScreen> {
             },
           );
         } else
-          return Container();
+          return Container(
+            width: 1.0,
+            height: 0.0,
+          );
       },
     );
   }
@@ -641,7 +645,10 @@ class _MapsScreenState extends State<MapsScreen> {
         leading: IconButton(
           icon : Icon(Icons.arrow_back_ios_outlined,),
           onPressed: (){
-            Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+            if(_mapsStore.tapPointClick == LatLng(0, 0)) {
+              showErrorMessage("Vui lòng chọn vị trí", context);
+            }
+            else Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
           },
         ),
         title: Text(
@@ -651,7 +658,10 @@ class _MapsScreenState extends State<MapsScreen> {
       ),
       body: WillPopScope(
         onWillPop: () {
-          Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+          if(_mapsStore.tapPointClick == LatLng(0, 0)) {
+            showErrorMessage("Vui lòng chọn vị trí", context);
+          }
+          else Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
         },
         child: Stack(
           children: [
