@@ -1466,8 +1466,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
               post.tagTimKiem = selectedTypeTypeType.tag;
               post.diaChi = _LocateController.text;
               post.userName = _userStore.userCurrent.userName;
-              post.toaDoX = "10.87042965917961";
-              post.toaDoY = "106.80213344451961";
+              post.toaDoX = pointx;
+              post.toaDoY = pointy;
               post.trangThai = "On";
               post.userId = _userStore.userCurrent.UserID;
               _newpost.post = post;
