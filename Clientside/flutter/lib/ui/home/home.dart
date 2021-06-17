@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: (_postStore.filter_model == null || _postStore.isNotUsingFilter) ? Colors.grey : Colors.red,
+                    color: (_postStore.filter_model == null || _postStore.isNotUsingFilter) ? Colors.amber : Colors.red,
                     size: 20,
                   ),
                 ],
