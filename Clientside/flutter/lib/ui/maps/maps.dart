@@ -139,8 +139,9 @@ class _MapsScreenState extends State<MapsScreen> {
     }
   }
 
-  _handleTap(LatLng tappedPoint) {
+  _handleTap(LatLng tappedPoint) async {
     _mapsStore.tapPointClick = tappedPoint;
+    _searchPlacemarkFromCoordinates("${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}");
     setState(() {
       myMarker = [];
       myMarker.add(Marker(
@@ -149,7 +150,7 @@ class _MapsScreenState extends State<MapsScreen> {
         draggable: true,
         onDragEnd: (dragEndPosition) {
           _mapsStore.tapPointClick = dragEndPosition;
-          print(_mapsStore.tapPointClick);
+          _searchPlacemarkFromCoordinates("${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}");
         },
       ));
     });
@@ -175,9 +176,9 @@ class _MapsScreenState extends State<MapsScreen> {
     await this._applicationBloc.searchPlaces(value);
   }
 
-  Future<void> _searchPlacemarkFromLatAndLong(double lat, double long) async {
-    await this._applicationBloc.searchPlace(lat, long);
-  }
+  // Future<void> _searchPlacemarkFromLatAndLong(double lat, double long) async {
+  //   await this._applicationBloc.searchPlace(lat, long);
+  // }
 
   Future<void> _goToCurrentLocationSearch() async {
     final GoogleMapController controller = await _controller.future;
@@ -460,27 +461,13 @@ class _MapsScreenState extends State<MapsScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(12)),
                 color: Colors.white,
               ),
-              padding: EdgeInsets.all(6),
+              padding: EdgeInsets.all(12),
               child: Column(
                 children: [
                   Flexible(
                     child: Text(
-                      // _applicationBloc.placemark[0].name,
-                      "Linh Trung",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Flexible(
-                    child: Text(
                       // _applicationBloc.placemark[0].country,
-                      "Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam",
+                      _handlingStringSubTitleLocation(_applicationBloc.placemarks[0]),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
@@ -497,9 +484,18 @@ class _MapsScreenState extends State<MapsScreen> {
                       fontStyle: FontStyle.italic,
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    child: Container(
+
+                    ),
+                  )
                 ],
               ),
             ),
+            onTap: () {
+              Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+            },
           );
         } else
           return Container();
@@ -717,7 +713,7 @@ class _MapsScreenState extends State<MapsScreen> {
                 onSubmitted: (value) => {
                   _searchPlacemarkFromCoordinates(value),
                   // _goToCurrentLocationDevice(),
-                  Future.delayed(const Duration(milliseconds: 1000), () {
+                  Future.delayed(const Duration(milliseconds: 1500), () {
                     setState(() {
                       _showSimpleModalDialog(context);
                     });
@@ -893,46 +889,18 @@ class _MapsScreenState extends State<MapsScreen> {
     // return Container();
     return ListTile(
       title: Text(
-        (placemark.street == null || placemark.street == "Unnamed Road")
-            ? ((placemark.subAdministrativeArea == null ||
-                    placemark.subAdministrativeArea.isEmpty)
-                ? ((placemark.administrativeArea == null ||
-                        placemark.administrativeArea.isEmpty)
-                    ? placemark.country
-                    : placemark.administrativeArea)
-                : placemark.subAdministrativeArea)
-            : placemark.street,
+        _handlingStringNameLocation(placemark),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
       ),
-      subtitle: (placemark.subAdministrativeArea == null ||
-              placemark.subAdministrativeArea.isEmpty)
-          ? (placemark.administrativeArea == null ||
-                  placemark.administrativeArea.isEmpty)
-              ? Text(
-                  placemark.country,
+      subtitle: Text(
+                  _handlingStringSubTitleLocation(placemark),
                   style: TextStyle(
                     color: Colors.grey,
                   ),
-                )
-              : Text(
-                  placemark.administrativeArea + ", " + placemark.country,
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                )
-          : Text(
-              placemark.subAdministrativeArea +
-                  ", " +
-                  placemark.administrativeArea +
-                  ", " +
-                  placemark.country,
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
+                ),
       onTap: () {
         _clickPlaceMark(placemark, context);
       },
@@ -945,8 +913,24 @@ class _MapsScreenState extends State<MapsScreen> {
     _goToCurrentLocationSearch();
   }
 
-  _handlingStringName(Placemark placemark)
+  String _handlingStringNameLocation(Placemark placemark)
   {
-    
+    return (placemark.street == null || placemark.street == "Unnamed Road")
+        ? ((placemark.subAdministrativeArea == null ||
+        placemark.subAdministrativeArea.isEmpty)
+        ? ((placemark.administrativeArea == null ||
+        placemark.administrativeArea.isEmpty)
+        ? placemark.country
+        : placemark.administrativeArea)
+        : placemark.subAdministrativeArea)
+        : placemark.street;
+  }
+
+  String _handlingStringSubTitleLocation(Placemark placemark)
+  {
+    return (placemark.subAdministrativeArea == null || placemark.subAdministrativeArea.isEmpty) ?
+        ((placemark.administrativeArea == null || placemark.administrativeArea.isEmpty) ? placemark.country
+            : placemark.administrativeArea + ", " + placemark.country)
+        : placemark.subAdministrativeArea + ", " + placemark.administrativeArea + ", " + placemark.country;
   }
 }

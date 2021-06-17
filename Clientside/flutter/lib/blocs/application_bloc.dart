@@ -3,30 +3,27 @@ import 'package:boilerplate/models/placeSearch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:mobx/mobx.dart';
 
 class ApplicationBloc with ChangeNotifier {
-  // final geoLocatorService = GeolocatorService();
-  // final placesService = PlacesService();
-  //Variables
-  Position currentLocation;
-  List<PlaceSearch> searchResults;
+
+  @observable
   List<Placemark> placemarks;
-  List<Placemark> placemark;
+
+  @observable
   double latTit;
+
+  @observable
   double longTit;
+
+  @observable
   bool getSuccess = false;
+
+  @observable
   String inputSearch;
 
-  //
-  // ApplicationBloc() {
-  //   setCurrentLocation();
-  // }
 
-  // setCurrentLocation() async {
-  //   currentLocation = await geoLocatorService.getCurrentLocation();
-  //   notifyListeners();
-  // }
-
+  @action
   searchPlaces(String searchTerm) async {
     getSuccess = false;
     latTit = null;
@@ -43,7 +40,7 @@ class ApplicationBloc with ChangeNotifier {
       getSuccess = false;
       if (latTit != null || longTit != null) {
         try {
-          placemarks = await placemarkFromCoordinates(latTit, longTit);
+         placemarks = await placemarkFromCoordinates(latTit, longTit);
         }
         catch(e) {
           throw e;
@@ -54,28 +51,6 @@ class ApplicationBloc with ChangeNotifier {
         }
       }
     }
-    // print(handlingResult);
-    // String latTit =
-    // searchResults = await placesService.getAutocomplete(searchTerm);
-    // print("SearchResult: " + searchResults.toString());
-    // print(searchResults);
-    // notifyListeners();
-    // List<Location> locations = await locationFromAddress("searchTerm");
   }
 
-  searchPlace(double lat, double long) async {
-    getSuccess = false;
-    if (lat != null || long != null) {
-      try {
-        placemark = await placemarkFromCoordinates(lat, long);
-      }
-      catch(e) {
-        throw e;
-      }
-      if (placemark != null) {
-        // print("placemarks" + placemarks.length.toString());
-        getSuccess = true;
-      }
-    }
-  }
 }
