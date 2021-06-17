@@ -8,6 +8,7 @@ import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/FilterLSGD.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -544,36 +545,57 @@ class _NapTienPageState extends State<NapTienPage> {
     return Container(
         child: Scaffold(
           appBar: AppBar(centerTitle:true,title: Text("Nạp tiền",style: TextStyle(color: Colors.white),),
-            leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
-                onPressed: (){setState(() {
-                  Navigator.pop(context);
-                });}),),
+            // leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
+            //     onPressed: (){setState(() {
+            //       Navigator.pop(context);
+            //     });}),
+          ),
             body: buildCreateTransactionHistory()
         )
     );
   }
   Widget buildCreateTransactionHistory(){
-    return Container(
-      child: Center(
-        child: Wrap(
-          children: [
-            SizedBox(height: 20,),
-            createTransactionHistory(),
-            CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
-              isFunction: false,
-              press: (){
-                setState(() {
-                  if(Ctlmoneysend.text.length>3)
-                  _showMyDialog();
-                  else(
-                  _showErrorMessage("Số tiền tối thiểu là 1000")
-                  );
-                });
-              },
-            ),
-          ],
+    return Stack(
+      children: [
+        Observer(
+          builder: (context) {
+            print("DuongDebug ${_lsgdStore.naptien_success}");
+            if (_lsgdStore.naptien_success) {
+              Future.delayed(Duration(milliseconds: 0), () {
+                Navigator.pop(context);
+              });
+              // _lsgdStore.setKiemDuyenVienID(UserID, i);
+              showSuccssfullMesssage("Nạp tiền thành công",context);
+              _lsgdStore.naptien_success = false;
+              return Container(width: 0, height: 0);
+            } else {
+              return showErrorMessage(_lsgdStore.errorStore.errorMessage,context);
+            }
+          },
         ),
-      ),
+        Container(
+          child: Center(
+            child: Wrap(
+              children: [
+                SizedBox(height: 20,),
+                createTransactionHistory(),
+                CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
+                  isFunction: false,
+                  press: (){
+                    setState(() {
+                      if(Ctlmoneysend.text.length>3)
+                      _showMyDialog();
+                      else(
+                      _showErrorMessage("Số tiền tối thiểu là 1000")
+                      );
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
   Widget createTransactionHistory(){
@@ -625,12 +647,9 @@ class _NapTienPageState extends State<NapTienPage> {
             ),
             TextButton(
               child: Text('Cập nhật'),
-              onPressed: () {
-                setState(() {
-
-                  update();
-                  Navigator.of(context).pop();
-                });
+              onPressed: () async {
+                update();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -664,11 +683,11 @@ class _NapTienPageState extends State<NapTienPage> {
       return SizedBox.shrink();
     });
   }
-  update(){
+  update() async {
     _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID);
-    Route route = MaterialPageRoute(builder: (context) => WalletPage(userID: userID,));
-    Navigator.push(context, route);
-    _showSuccssfullMesssage("Nạp tiền thành công");
+    // Route route = MaterialPageRoute(builder: (context) => WalletPage(userID: userID,));
+    // Navigator.push(context, route);
+    // _showSuccssfullMesssage("Nạp tiền thành công");
   }
 }
 

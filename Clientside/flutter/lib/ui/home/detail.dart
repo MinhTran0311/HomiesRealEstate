@@ -664,7 +664,6 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                   MaterialPageRoute(builder: (context) => Detail(post: post)));
             },
             child: Container(
-
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children:[
