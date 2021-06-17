@@ -120,7 +120,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
           },
         ),
         Container(
-          color: _themeStore.darkMode !=true? Colors.grey[200] : Color.fromRGBO(18, 22, 28, 1),
+          color: _themeStore.darkMode !=true? AppColors.backgroundLightThemeColor : AppColors.backgroundDarkThemeColor,
           child: Column(
             children: [
               Container(
