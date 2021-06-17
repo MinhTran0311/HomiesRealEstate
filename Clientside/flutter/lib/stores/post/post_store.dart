@@ -512,6 +512,7 @@ abstract class _PostStore with Store {
     final editpostFuture = _repository.editpost(post);
     fetchNewpostsFuture = ObservableFuture(editpostFuture);
     editpostFuture.then((newpost) {
+      successeditpost=true;
       print(newpost);
     }).catchError((error) {
       if (error is DioError) {

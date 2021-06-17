@@ -1504,12 +1504,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         _postStore.thuocTinhList.thuocTinhs[i + 2].id;
                     _newpost.properties.add(value);
                   }
-              _newpost.images = new List<AppImage>();
-              for (var item in _imageStore.imageListpost) {
-                AppImage u = new AppImage();
-                u.duongDan = item;
-                _newpost.images.add(u);
-              }
+
               if (songay * selectedPack.phi > _userStore.userCurrent.wallet) {
                 var futureValue = showDialog(
                     barrierDismissible: false,
@@ -1584,7 +1579,15 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       );
                     });
                 futureValue.then((value) {
-                  _postStore.postPost(_newpost);
+                  if(value) {
+                    _newpost.images = new List<AppImage>();
+                    for (var item in _imageStore.imageListpost) {
+                      AppImage u = new AppImage();
+                      u.duongDan = item;
+                      _newpost.images.add(u);
+                    }
+                    _postStore.postPost(_newpost);
+                  }
                   // true/false
                 });
               }

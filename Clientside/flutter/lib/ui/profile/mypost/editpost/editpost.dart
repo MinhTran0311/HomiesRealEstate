@@ -139,6 +139,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
       selectedTypeType = selectedTypeTypeType;
     }
     ;
+    pointx=post.toaDoX;
+    pointy=post.toaDoY;
     selectedCommune = townStore.communeList.communes[post.xaId - 14468];
     selectedTown = townStore.townList.towns[selectedCommune.huyenId - 896];
     selectedCity = selectedTown.tinhTenTinh;
@@ -217,7 +219,16 @@ class _EditpostScreenState extends State<EditpostScreen> {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
-
+        if (postStore.successeditpost) {
+          showSuccssfullMesssage("Chỉnh sửa thông tin thành công", context);
+          //dispose();.
+          postStore.successeditpost = false;
+          postStore.getPostForCurs(false, "", 0);
+          Future.delayed(Duration(milliseconds: 1000), () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+        }
         return SizedBox.shrink();
       },
     );
@@ -1411,16 +1422,50 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   }
               _newpost.images = new List<AppImage>();
               j = 0;
+              var futureValue = showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Chỉnh sửa bài đăng?",
+                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                      ),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RoundedButtonWidget(
+                            buttonText: "Đồng ý",
+                            buttonColor: Colors.green,
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                          RoundedButtonWidget(
+                            buttonColor: Colors.grey,
+                            buttonText: "Hủy",
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  });
+              futureValue.then((value) {
+                if(value) {
               for (var item in _imageStore.imageListpost) {
+
                 AppImage u = new AppImage();
-                if (j <= _imageStore.imageList.images.length)
+                if (j < _imageStore.imageList.images.length)
                   u.id = _imageStore.imageList.images[j].id;
                 j++;
                 u.baiDangId = this.post.id.toString();
                 u.duongDan = item;
                 _newpost.images.add(u);
-              }
-              postStore.editpost(_newpost);
+               }
+                postStore.editpost(_newpost);
+              }});
             }
           }
         },
