@@ -14,7 +14,6 @@ import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/ui/home/detail.dart';
-import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
@@ -88,8 +87,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
   String selectedhuongnha = null;
   String selectedhuongbancong = null;
   List<String> Huong = new List<String>();
-  String pointx = "";
-  String pointy = "";
+
   String result = "";
   List<Commune> commune = [];
 //endregion
@@ -173,11 +171,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
   void dispose() {
     super.dispose();
   }
-
   String DatetimeToString(String datetime) {
     return "${datetime.substring(11, 13)}:${datetime.substring(14, 16)} - ${datetime.substring(8, 10)}/${datetime.substring(5, 7)}/${datetime.substring(0, 4)}";
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -278,74 +274,75 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: _userStore.userCurrent.phoneNumber == null
-            ? AlertDialog(
-                title: Text(
-                  "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-                  style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                ),
-                content: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RoundedButtonWidget(
-                      buttonText: "ok",
-                      buttonColor: Colors.green,
-                      onPressed: () {
-                        Route route = MaterialPageRoute(
-                            builder: (context) => AccountPage(
-                                  UserName: _userStore.userCurrent.userName,
-                                  Phone: _userStore.userCurrent.phoneNumber,
-                                  Email: _userStore.userCurrent.emailAddress,
-                                  Address: "Address",
-                                  SurName: _userStore.userCurrent.surname,
-                                  Name: _userStore.userCurrent.name,
-                                  UserID: _userStore.userCurrent.UserID,
-                                  creationTime: DatetimeToString(
-                                      _userStore.userCurrent.creationTime),
-                                ));
-                        Navigator.push(context, route);
-                      },
-                    )
-                  ],
-                ),
+        child:
+        _userStore.userCurrent.phoneNumber==null?
+        AlertDialog(
+          title: Text(
+            "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
+            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RoundedButtonWidget(
+                buttonText: "ok",
+                buttonColor: Colors.green,
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => AccountPage(
+                        UserName: _userStore.userCurrent.userName,
+                        Phone: _userStore.userCurrent.phoneNumber,
+                        Email: _userStore.userCurrent.emailAddress,
+                        Address: "Address",
+                        SurName: _userStore.userCurrent.surname,
+                        Name: _userStore.userCurrent.name,
+                        UserID:  _userStore.userCurrent.UserID,
+                        creationTime: DatetimeToString(
+                            _userStore.userCurrent.creationTime),
+                      ));
+                  Navigator.push(context, route);
+                },
               )
-            : Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-                  SizedBox(height: 24.0),
-                  _buildTileField(),
-                  SizedBox(height: 24.0),
-                  _buildCityField(),
-                  SizedBox(height: 24.0),
-                  _buildTownField(),
-                  _buildCommuneField(),
-                  _buildLocateField(),
-                  SizedBox(height: 24.0),
-                  _buildTypeField(),
-                  SizedBox(height: 24.0),
-                  _buildTypeTypeField(),
-                  _buildTypeTypeTypeField(),
-                  _buildAcreageField(),
-                  SizedBox(height: 24.0),
-                  _buildPriceField(),
-                  SizedBox(height: 24.0),
-                  _buildListView(),
-                  SizedBox(height: 24.0),
-                  _buildPackField(),
-                  SizedBox(height: 24.0),
-                  _buildPackinfoField(),
-                  SizedBox(height: 24.0),
-                  _buildEnddateField(),
-                  _buildTileField2(),
-                  SizedBox(height: 24.0),
-                  _buildImagepick2(),
-                  SizedBox(height: 24.0),
-                  _buildUpButton(),
-                ],
-              ),
+            ],
+          ),
+        ):Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            SizedBox(height: 24.0),
+            _buildTileField(),
+            SizedBox(height: 24.0),
+            _buildCityField(),
+            SizedBox(height: 24.0),
+            _buildTownField(),
+            _buildCommuneField(),
+            _buildLocateField(),
+            SizedBox(height: 24.0),
+            _buildTypeField(),
+            SizedBox(height: 24.0),
+            _buildTypeTypeField(),
+            _buildTypeTypeTypeField(),
+            _buildAcreageField(),
+            SizedBox(height: 24.0),
+            _buildPriceField(),
+            SizedBox(height: 24.0),
+            _buildListView(),
+            SizedBox(height: 24.0),
+            _buildPackField(),
+            SizedBox(height: 24.0),
+            _buildPackinfoField(),
+            SizedBox(height: 24.0),
+            _buildEnddateField(),
+            _buildTileField2(),
+            SizedBox(height: 24.0),
+            _buildImagepick2(),
+            SizedBox(height: 24.0),
+            _buildUpButton(),
+
+          ],
+        ),
       ),
     );
   }
@@ -589,111 +586,116 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildCityField() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-      child: DropdownSearch<String>(
-        autoValidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'Vui lòng chọn tỉnh/thành' : null,
-        items: [
-          "Thành phố Hà Nội",
-          "Tỉnh Hà Giang",
-          "Tỉnh Cao Bằng",
-          "Tỉnh Bắc Kạn",
-          "Tỉnh Tuyên Quang",
-          "Tỉnh Lào Cai",
-          "Tỉnh Điện Biên",
-          "Tỉnh Lai Châu",
-          "Tỉnh Sơn La",
-          "Tỉnh Yên Bái",
-          "Tỉnh Hoà Bình",
-          "Tỉnh Thái Nguyên",
-          "Tỉnh Lạng Sơn",
-          "Tỉnh Quảng Ninh",
-          "Tỉnh Bắc Giang",
-          "Tỉnh Phú Thọ",
-          "Tỉnh Vĩnh Phúc",
-          "Tỉnh Bắc Ninh",
-          "Tỉnh Hải Dương",
-          "Thành phố Hải Phòng",
-          "Tỉnh Hưng Yên",
-          "Tỉnh Thái Bình",
-          "Tỉnh Hà Nam",
-          "Tỉnh Nam Định",
-          "Tỉnh Ninh Bình",
-          "Tỉnh Thanh Hóa",
-          "Tỉnh Nghệ An",
-          "Tỉnh Hà Tĩnh",
-          "Tỉnh Quảng Bình",
-          "Tỉnh Quảng Trị",
-          "Tỉnh Thừa Thiên Huế",
-          "Thành phố Đà Nẵng",
-          "Tỉnh Quảng Nam",
-          "Tỉnh Quảng Ngãi",
-          "Tỉnh Bình Định",
-          "Tỉnh Phú Yên",
-          "Tỉnh Khánh Hòa",
-          "Tỉnh Ninh Thuận",
-          "Tỉnh Bình Thuận",
-          "Tỉnh Kon Tum",
-          "Tỉnh Gia Lai",
-          "Tỉnh Đắk Lắk",
-          "Tỉnh Đắk Nông",
-          "Tỉnh Lâm Đồng",
-          "Tỉnh Bình Phước",
-          "Tỉnh Tây Ninh",
-          "Tỉnh Bình Dương",
-          "Tỉnh Đồng Nai",
-          "Tỉnh Bà Rịa - Vũng Tàu",
-          "Thành phố Hồ Chí Minh",
-          "Tỉnh Long An",
-          "Tỉnh Tiền Giang",
-          "Tỉnh Bến Tre",
-          "Tỉnh Trà Vinh",
-          "Tỉnh Vĩnh Long",
-          "Tỉnh Đồng Tháp",
-          "Tỉnh An Giang",
-          "Tỉnh Kiên Giang",
-          "Thành phố Cần Thơ",
-          "Tỉnh Hậu Giang",
-          "Tỉnh Sóc Trăng",
-          "Tỉnh Bạc Liêu",
-          "Tỉnh Cà Mau",
-        ],
-        showClearButton: true,
-        hint: "Chọn tỉnh/thành phố",
-        onChanged: (String Value) {
-          setState(() {
-            selectedCity = Value;
-            selectedTown = null;
-          });
-        },
-        selectedItem: null,
-        showSearchBox: true,
-        searchBoxDecoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "Tìm tỉnh/thành phố",
-        ),
-        popupTitle: Container(
-          height: 50,
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColorDark,
-            // borderRadius: BorderRadius.only(
-            //   topLeft: Radius.circular(20),
-            //   topRight: Radius.circular(20),
-            // ),
-          ),
-          child: Center(
-            child: Text(
-              'Tỉnh/thành phố',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return Observer(
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+          child: DropdownSearch<String>(
+            autoValidateMode: AutovalidateMode.always,
+            validator: (value) =>
+                value == null ? 'Vui lòng chọn tỉnh/thành' : null,
+            items: [
+              "Thành phố Hà Nội",
+              "Tỉnh Hà Giang",
+              "Tỉnh Cao Bằng",
+              "Tỉnh Bắc Kạn",
+              "Tỉnh Tuyên Quang",
+              "Tỉnh Lào Cai",
+              "Tỉnh Điện Biên",
+              "Tỉnh Lai Châu",
+              "Tỉnh Sơn La",
+              "Tỉnh Yên Bái",
+              "Tỉnh Hoà Bình",
+              "Tỉnh Thái Nguyên",
+              "Tỉnh Lạng Sơn",
+              "Tỉnh Quảng Ninh",
+              "Tỉnh Bắc Giang",
+              "Tỉnh Phú Thọ",
+              "Tỉnh Vĩnh Phúc",
+              "Tỉnh Bắc Ninh",
+              "Tỉnh Hải Dương",
+              "Thành phố Hải Phòng",
+              "Tỉnh Hưng Yên",
+              "Tỉnh Thái Bình",
+              "Tỉnh Hà Nam",
+              "Tỉnh Nam Định",
+              "Tỉnh Ninh Bình",
+              "Tỉnh Thanh Hóa",
+              "Tỉnh Nghệ An",
+              "Tỉnh Hà Tĩnh",
+              "Tỉnh Quảng Bình",
+              "Tỉnh Quảng Trị",
+              "Tỉnh Thừa Thiên Huế",
+              "Thành phố Đà Nẵng",
+              "Tỉnh Quảng Nam",
+              "Tỉnh Quảng Ngãi",
+              "Tỉnh Bình Định",
+              "Tỉnh Phú Yên",
+              "Tỉnh Khánh Hòa",
+              "Tỉnh Ninh Thuận",
+              "Tỉnh Bình Thuận",
+              "Tỉnh Kon Tum",
+              "Tỉnh Gia Lai",
+              "Tỉnh Đắk Lắk",
+              "Tỉnh Đắk Nông",
+              "Tỉnh Lâm Đồng",
+              "Tỉnh Bình Phước",
+              "Tỉnh Tây Ninh",
+              "Tỉnh Bình Dương",
+              "Tỉnh Đồng Nai",
+              "Tỉnh Bà Rịa - Vũng Tàu",
+              "Thành phố Hồ Chí Minh",
+              "Tỉnh Long An",
+              "Tỉnh Tiền Giang",
+              "Tỉnh Bến Tre",
+              "Tỉnh Trà Vinh",
+              "Tỉnh Vĩnh Long",
+              "Tỉnh Đồng Tháp",
+              "Tỉnh An Giang",
+              "Tỉnh Kiên Giang",
+              "Thành phố Cần Thơ",
+              "Tỉnh Hậu Giang",
+              "Tỉnh Sóc Trăng",
+              "Tỉnh Bạc Liêu",
+              "Tỉnh Cà Mau",
+            ],
+            showClearButton: true,
+            hint: "Chọn tỉnh/thành phố",
+            onChanged: (String Value) {
+              setState(() {
+                selectedCity = Value;
+                selectedTown = null;
+              });
+            },
+            selectedItem: null,
+            showSearchBox: true,
+            searchBoxDecoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: "Tìm tỉnh/thành phố",
+            ),
+            popupTitle: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColorDark,
+                // borderRadius: BorderRadius.only(
+                //   topLeft: Radius.circular(20),
+                //   topRight: Radius.circular(20),
+                // ),
+              ),
+              child: Center(
+                child: Text(
+                  'Tỉnh/thành phố',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -777,18 +779,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
           value: selectedCommune,
           //icon:Icons.attach_file ,
           onChanged: (Commune Value) {
-            setState(() async {
+            setState(() {
               selectedCommune = Value;
-              Future.delayed(Duration(milliseconds: 1000), () async {
-                final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapsScreen(type: "Đăng bài"),
-                    ));
-                pointx = result.split(',')[0];
-                pointy = result.split(',')[1];
-                print(pointx);
-              });
             });
           },
           items: commune.map((Commune type) {
@@ -1448,8 +1440,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
               post.tagTimKiem = selectedTypeTypeType.tag;
               post.diaChi = _LocateController.text;
               post.userName = _userStore.userCurrent.userName;
-              post.toaDoX = pointx;
-              post.toaDoY = pointy;
+              post.toaDoX = "10.87042965917961";
+              post.toaDoY = "106.80213344451961";
               post.trangThai = "On";
               post.userId = _userStore.userCurrent.UserID;
               _newpost.post = post;
@@ -1478,8 +1470,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
               _newpost.properties = new List<Property>();
               if (_ThuocTinhController != null)
                 for (int i = 0; i < _ThuocTinhController.length; i++)
-                  if (_ThuocTinhController[i] !=
-                      null) if (_ThuocTinhController[i].text.isNotEmpty) {
+                  if (_ThuocTinhController[i]!=null)
+                  if (_ThuocTinhController[i].text.isNotEmpty) {
                     Property value = new Property();
                     value.giaTri = _ThuocTinhController[i].text;
                     value.thuocTinhId =
@@ -1498,13 +1490,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+
                         title: Text(
                           "Bạn không đủ số dư để thực hiện giao dịch?",
                           style: TextStyle(fontSize: 24, fontFamily: 'intel'),
                         ),
                         content: Column(
                           //mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize:MainAxisSize.min,
                           children: [
                             RoundedButtonWidget(
                               buttonText: "Nạp thêm tiền",
@@ -1525,7 +1518,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       );
                     });
                 futureValue.then((value) {
-                  if (value) {
+                  if(value) {
                     Route route = MaterialPageRoute(
                         builder: (context) => NapTienPage(
                               userID: _userStore.userCurrent.UserID,

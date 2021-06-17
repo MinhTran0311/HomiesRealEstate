@@ -215,15 +215,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
-        if (postStore.successeditpost) {
-          showSuccssfullMesssage("Chỉnh sửa thông tin thành công", context);
-          postStore.successeditpost = false;
-          postStore.getPostForCurs(false, "", 0);
-          Future.delayed(Duration(milliseconds: 2000), () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-        }
+
         return SizedBox.shrink();
       },
     );

@@ -509,11 +509,10 @@ abstract class _PostStore with Store {
   @computed
   bool get loadingeditpost => fetcheditpostsFuture.status == FutureStatus.pending;
   Future editpost(Newpost post) async {
-    //successeditpost=true;
     final editpostFuture = _repository.editpost(post);
     fetchNewpostsFuture = ObservableFuture(editpostFuture);
     editpostFuture.then((newpost) {
-      successeditpost=true;
+      print(newpost);
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
