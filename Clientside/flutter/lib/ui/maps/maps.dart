@@ -641,7 +641,11 @@ class _MapsScreenState extends State<MapsScreen> {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: Stack(
+        body: WillPopScope(
+          onWillPop: () {
+          Navigator.pop(context, 'Hello,Holee');
+          },
+          child:Stack(
           children: [
             GoogleMap(
               gestureRecognizers: Set()
@@ -738,7 +742,7 @@ class _MapsScreenState extends State<MapsScreen> {
             ),
           ],
         ),
-      );
+      ));
     }
   }
 

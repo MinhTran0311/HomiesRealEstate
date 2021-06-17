@@ -390,8 +390,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditpostScreen(
@@ -400,6 +400,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                   postStore: postStore,
                                   userStore: userStore,
                                 )));
+                    Navigator.pop(context);
                   },
                 ),
               ],
