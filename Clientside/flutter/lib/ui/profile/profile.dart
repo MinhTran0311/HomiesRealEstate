@@ -27,6 +27,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 
 import 'account/account.dart';
@@ -447,7 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         _userstore.userCurrent != null
                                             ? Container(
                                               width: size.width*0.65,
-                                              child: "${_userstore.userCurrent.surname} ${_userstore.userCurrent.name}".length < 20 ? SelectableText(
+                                              child: "${_userstore.userCurrent.surname} ${_userstore.userCurrent.name}".length < 16 ? SelectableText(
                                               _userstore.userCurrent.surname + " " + _userstore.userCurrent.name ,
                                               maxLines: 1,
                                               textAlign: TextAlign.start,
@@ -509,14 +510,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             semanticLabel:
                                             'Text to announce in accessibility modes',
                                           ),
-                                          SelectableText(
-                                            role ,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                            fontSize: 17.0,
-                                            // fontWeight: FontWeight.bold,
-                                            color: Colors.white,
+                                          Container(
+                                            width: size.width*0.5,
+                                            height: 20,
+                                            child:
+                                            SelectableText(
+                                              role ,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                              fontSize: 17.0,
+                                              // fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                           // Text(role,
