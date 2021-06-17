@@ -611,7 +611,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         Navigator.popUntil(context, (route) => route.isFirst);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 6),
+        padding: EdgeInsets.symmetric(horizontal: 3),
         margin: EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
@@ -812,8 +812,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                     width: size.width*0.4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SelectableText(post.userName ,
+                        SelectableText(post.userName,
                           maxLines: 1,
                           textAlign: TextAlign.start,
                           style: TextStyle(

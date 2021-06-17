@@ -249,10 +249,18 @@ namespace Homies.RealEstate.Server
             var user = await GetCurrentUserAsync();
             var baighim = await _baiGhimYeuThichRepository.FirstOrDefaultAsync(e => e.UserId == user.Id && e.BaiDangId == postId);
 
-            return new BaiGhimYeuThichExistingOutput
+            if (baighim == null)
             {
-                Exist = baighim.TrangThai.Equals("On"),
-            };
+                return new BaiGhimYeuThichExistingOutput
+                {
+                    Exist = false,
+                };
+            }
+            else
+                return new BaiGhimYeuThichExistingOutput
+                {
+                    Exist = baighim.TrangThai.Equals("On"),
+                };
         }
 
         [AbpAuthorize(AppPermissions.Pages_BaiGhimYeuThichs_Create)]
