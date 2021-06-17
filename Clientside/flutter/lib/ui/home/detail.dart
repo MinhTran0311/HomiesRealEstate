@@ -814,7 +814,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SelectableText(post.userName + "121 12 12 12 12",
+                        SelectableText(post.userName,
                           maxLines: 1,
                           textAlign: TextAlign.start,
                           style: TextStyle(
