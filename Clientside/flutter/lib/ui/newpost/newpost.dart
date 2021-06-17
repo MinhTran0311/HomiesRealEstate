@@ -303,46 +303,44 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   Navigator.push(context, route);
                 },
               )
-            ],
-          ),
-        ):Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-            SizedBox(height: 24.0),
-            _buildTileField(),
-            SizedBox(height: 24.0),
-            _buildCityField(),
-            SizedBox(height: 24.0),
-            _buildTownField(),
-            _buildCommuneField(),
-            _buildLocateField(),
-            SizedBox(height: 24.0),
-            _buildTypeField(),
-            SizedBox(height: 24.0),
-            _buildTypeTypeField(),
-            _buildTypeTypeTypeField(),
-            _buildAcreageField(),
-            SizedBox(height: 24.0),
-            _buildPriceField(),
-            SizedBox(height: 24.0),
-            _buildListView(),
-            SizedBox(height: 24.0),
-            _buildPackField(),
-            SizedBox(height: 24.0),
-            _buildPackinfoField(),
-            SizedBox(height: 24.0),
-            _buildEnddateField(),
-            _buildTileField2(),
-            SizedBox(height: 24.0),
-            _buildImagepick2(),
-            SizedBox(height: 24.0),
-            _buildUpButton(),
-
-          ],
-        ),
+            : Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+                  SizedBox(height: 24.0),
+                  _buildTileField(),
+                  SizedBox(height: 24.0),
+                  _buildCityField(),
+                  SizedBox(height: 24.0),
+                  _buildTownField(),
+                  _buildCommuneField(),
+                  _buildCommuneField2(),
+                  _buildLocateField(),
+                  SizedBox(height: 24.0),
+                  _buildTypeField(),
+                  SizedBox(height: 24.0),
+                  _buildTypeTypeField(),
+                  _buildTypeTypeTypeField(),
+                  _buildAcreageField(),
+                  SizedBox(height: 24.0),
+                  _buildPriceField(),
+                  SizedBox(height: 24.0),
+                  _buildListView(),
+                  SizedBox(height: 24.0),
+                  _buildPackField(),
+                  SizedBox(height: 24.0),
+                  _buildPackinfoField(),
+                  SizedBox(height: 24.0),
+                  _buildEnddateField(),
+                  _buildTileField2(),
+                  SizedBox(height: 24.0),
+                  _buildImagepick2(),
+                  SizedBox(height: 24.0),
+                  _buildUpButton(),
+                ],
+              ),
       ),
     );
   }
@@ -781,6 +779,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
           onChanged: (Commune Value) {
             setState(() {
               selectedCommune = Value;
+              Future.delayed(Duration(milliseconds: 1000), () async {
+                final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapsScreen(type: "Đăng bài"),
+                    ));
+                setState(() {
+                  pointx = result.split(',')[0];
+                  pointy = result.split(',')[1];
+                });
+                print(pointx);
+                print(pointy);
+              });
             });
           },
           items: commune.map((Commune type) {
@@ -812,7 +823,20 @@ class _NewpostScreenState extends State<NewpostScreen> {
         width: 0,
       );
   }
-
+  Widget _buildCommuneField2() {
+    if (selectedCommune != null) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
+        child: Text(
+          pointx+','+pointy,
+          style: TextStyle(),
+        ));
+    } else
+      return Container(
+        height: 0,
+        width: 0,
+      );
+  }
   Widget _buildLocateField() {
     return Observer(
       builder: (context) {
