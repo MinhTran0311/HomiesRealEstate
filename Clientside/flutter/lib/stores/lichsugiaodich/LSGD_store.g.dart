@@ -76,13 +76,13 @@ mixin _$LSGDStore on _LSGDStore, Store {
   final _$fetchNaptienFutureAtom = Atom(name: '_LSGDStore.fetchNaptienFuture');
 
   @override
-  ObservableFuture<bool> get fetchNaptienFuture {
+  ObservableFuture<dynamic> get fetchNaptienFuture {
     _$fetchNaptienFutureAtom.reportRead();
     return super.fetchNaptienFuture;
   }
 
   @override
-  set fetchNaptienFuture(ObservableFuture<bool> value) {
+  set fetchNaptienFuture(ObservableFuture<dynamic> value) {
     _$fetchNaptienFutureAtom.reportWrite(value, super.fetchNaptienFuture, () {
       super.fetchNaptienFuture = value;
     });
@@ -209,6 +209,36 @@ mixin _$LSGDStore on _LSGDStore, Store {
   set success(bool value) {
     _$successAtom.reportWrite(value, super.success, () {
       super.success = value;
+    });
+  }
+
+  final _$naptien_successAtom = Atom(name: '_LSGDStore.naptien_success');
+
+  @override
+  bool get naptien_success {
+    _$naptien_successAtom.reportRead();
+    return super.naptien_success;
+  }
+
+  @override
+  set naptien_success(bool value) {
+    _$naptien_successAtom.reportWrite(value, super.naptien_success, () {
+      super.naptien_success = value;
+    });
+  }
+
+  final _$kiemduyet_successAtom = Atom(name: '_LSGDStore.kiemduyet_success');
+
+  @override
+  bool get kiemduyet_success {
+    _$kiemduyet_successAtom.reportRead();
+    return super.kiemduyet_success;
+  }
+
+  @override
+  set kiemduyet_success(bool value) {
+    _$kiemduyet_successAtom.reportWrite(value, super.kiemduyet_success, () {
+      super.kiemduyet_success = value;
     });
   }
 
@@ -341,6 +371,8 @@ listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 FilterDataLSGD: ${FilterDataLSGD},
 success: ${success},
+naptien_success: ${naptien_success},
+kiemduyet_success: ${kiemduyet_success},
 isIntialLoading: ${isIntialLoading},
 successAll: ${successAll},
 isIntialLoadingAll: ${isIntialLoadingAll},

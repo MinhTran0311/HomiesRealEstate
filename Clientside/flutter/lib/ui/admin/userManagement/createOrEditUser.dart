@@ -85,11 +85,12 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     if (this.user != null) {
       _store.setName(this.user.name);
       _store.setSurname(this.user.surName);
-      _store.setUserId(this.user.userName);
+      _store.setIdUser(this.user.id);
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
       _store.setIsActive(this.user.isActive);
       _store.setRoleName(this.user.roleName);
+      _store.setUserId(this.user.userName);
     }
   }
 

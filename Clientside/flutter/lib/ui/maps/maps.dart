@@ -2,6 +2,7 @@ import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -15,6 +16,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/maps/map_store.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -53,10 +55,8 @@ class _MapsScreenState extends State<MapsScreen> {
   static LatLng _center;
   final Set<Marker> _markers = {};
   List<Marker> myMarker = [];
-  final Set<Marker> _markersDangBai = {};
   CameraPosition _position1;
   LatLng _lastMapPosition = _center;
-  LatLng _tapPointClick = _center;
   MapType _currentMapType = MapType.normal;
   GoogleMapController _controllerMap;
 
@@ -66,11 +66,9 @@ class _MapsScreenState extends State<MapsScreen> {
   // Location _location = Location();
   // Location location;
   Position _position = Position();
-  Post postClickMarker;
   bool permissionEnable = false;
   Placemark placeMarkChoosen;
 
-  PostStore _postStore;
   MapsStore _mapsStore;
 
   // Map
@@ -88,27 +86,27 @@ class _MapsScreenState extends State<MapsScreen> {
     super.didChangeDependencies();
 
     // initializing stores
-    _postStore = Provider.of<PostStore>(context);
     _mapsStore = Provider.of<MapsStore>(context);
     _applicationBloc = Provider.of<ApplicationBloc>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (this.post == null) {
-      if (!_postStore.loading) {
-        // _postStore.getPostsFromXY();
-        if (this.type == null) _addMarkerButtonProcessed();
+      if (!_mapsStore.loading) {
+        _mapsStore.getAllPosts();
       }
       _mapsStore.checkPermission();
     } else {
       _addMarkerButtonProcessed();
     }
+    _mapsStore.tapPointClick = LatLng(0, 0);
     _setCameraPositon();
   }
 
   Future _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString('assets/map_styles/dark.json');
-    _lightMapStyle = await rootBundle.loadString('assets/map_styles/light.json');
+    _lightMapStyle =
+        await rootBundle.loadString('assets/map_styles/light.json');
   }
 
   Future _setMapStyle() async {
@@ -142,9 +140,9 @@ class _MapsScreenState extends State<MapsScreen> {
     }
   }
 
-  _handleTap(LatLng tappedPoint) {
-    print(tappedPoint);
-    _tapPointClick = tappedPoint;
+  _handleTap(LatLng tappedPoint) async {
+    _mapsStore.tapPointClick = tappedPoint;
+    _searchPlacemarkFromCoordinates("${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}");
     setState(() {
       myMarker = [];
       myMarker.add(Marker(
@@ -152,8 +150,8 @@ class _MapsScreenState extends State<MapsScreen> {
         position: tappedPoint,
         draggable: true,
         onDragEnd: (dragEndPosition) {
-          print(dragEndPosition);
-          _tapPointClick = dragEndPosition;
+          _mapsStore.tapPointClick = dragEndPosition;
+          _searchPlacemarkFromCoordinates("${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}");
         },
       ));
     });
@@ -169,7 +167,8 @@ class _MapsScreenState extends State<MapsScreen> {
     final GoogleMapController controller = await _controller.future;
     await _mapsStore.checkPermission();
     if (_mapsStore.isLocationServiceEnabled) {
-      controller.animateCamera(CameraUpdate.newCameraPosition(_mapsStore.cameraPositionCurrent));
+      controller.animateCamera(
+          CameraUpdate.newCameraPosition(_mapsStore.cameraPositionCurrent));
     }
     // controller.animateCamera(CameraUpdate.newLatLngZoom(13.0));
   }
@@ -178,15 +177,17 @@ class _MapsScreenState extends State<MapsScreen> {
     await this._applicationBloc.searchPlaces(value);
   }
 
-  Future<void> _searchPlacemarkFromLatAndLong(double lat, double long) async {
-    await this._applicationBloc.searchPlace(lat, long);
-  }
+  // Future<void> _searchPlacemarkFromLatAndLong(double lat, double long) async {
+  //   await this._applicationBloc.searchPlace(lat, long);
+  // }
 
   Future<void> _goToCurrentLocationSearch() async {
     final GoogleMapController controller = await _controller.future;
     setState(() {
       // _markers.removeAll(_markers);
       if (this.type == "Đăng bài") {
+        _mapsStore.tapPointClick =
+            LatLng(_applicationBloc.latTit, _applicationBloc.longTit);
         myMarker.clear();
         myMarker.add(Marker(
           markerId: MarkerId(this.placeMarkChoosen.postalCode),
@@ -248,44 +249,20 @@ class _MapsScreenState extends State<MapsScreen> {
   }
 
   _addMarkerButtonProcessed() {
-    setState(() {
-      if (this.post == null) {
-        if (_postStore.postList != null) {
-          for (int i = 0; i < _postStore.postList.posts.length; i++) {
-            var postOrder = _postStore.postList.posts[i];
-            LatLng _locationPost = LatLng(double.tryParse(postOrder.toaDoX),
-                double.tryParse(postOrder.toaDoY));
-            _markers.add(Marker(
-              markerId: MarkerId(postOrder.id.toString()),
-              position: _locationPost,
-              infoWindow: InfoWindow(
-                title: '${postOrder.tagLoaiBaidang}',
-                snippet: 'Số tiền',
-              ),
-              onTap: () {
-                this.postClickMarker = postOrder;
-              },
-              icon: BitmapDescriptor.defaultMarker,
-            ));
-          }
-        }
-      } else {
-        LatLng _locationPost = LatLng(double.tryParse(this.post.toaDoX),
-            double.tryParse(this.post.toaDoY));
-        _markers.add(Marker(
-          markerId: MarkerId(this.post.id.toString()),
-          position: _locationPost,
-          infoWindow: InfoWindow(
-            title: '${this.post.tagLoaiBaidang}',
-            snippet: priceFormat(this.post.gia),
-          ),
-          onTap: () {
-            // this.postClickMarker = postOrder;
-          },
-          icon: BitmapDescriptor.defaultMarker,
-        ));
-      }
-    });
+    LatLng _locationPost = LatLng(
+        double.tryParse(this.post.toaDoX), double.tryParse(this.post.toaDoY));
+    _markers.add(Marker(
+      markerId: MarkerId(this.post.id.toString()),
+      position: _locationPost,
+      infoWindow: InfoWindow(
+        title: '${this.post.tagLoaiBaidang}',
+        snippet: priceFormat(this.post.gia),
+      ),
+      onTap: () {
+        // this.postClickMarker = postOrder;
+      },
+      icon: BitmapDescriptor.defaultMarker,
+    ));
   }
 
   Widget button(Function function, IconData icon) {
@@ -303,442 +280,261 @@ class _MapsScreenState extends State<MapsScreen> {
   }
 
   Widget containerBaseInfor() {
-    if (this.postClickMarker != null) {
-      return GestureDetector(
-        child: Row(
-          children: [
-            Container(
-              height: 120,
-              width: MediaQuery.of(context).size.width / 3.2,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    bottomLeft: Radius.circular(12),
-                  ),
-                  image: DecorationImage(
-                    //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
-                    image: this.postClickMarker.featuredImage != null
-                        ? NetworkImage(this.postClickMarker.featuredImage)
-                        : AssetImage(Assets.front_img),
-                    fit: BoxFit.cover,
-                  )),
-            ),
-            Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+    if (this.post == null) {
+      if (_mapsStore.postClickMarker != null) {
+        return Observer(builder: (context) {
+          return GestureDetector(
+            child: Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width / 3.5,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                      ),
+                      image: DecorationImage(
+                        //image: NetworkImage("https://i.ibb.co/86vSMN3/download-2.jpg"),
+                        image: _mapsStore.postClickMarker.featuredImage != null
+                            ? NetworkImage(
+                                _mapsStore.postClickMarker.featuredImage)
+                            : AssetImage(Assets.front_img),
+                        fit: BoxFit.cover,
+                      )),
                 ),
-              ),
-              height: 120,
-              width: MediaQuery.of(context).size.width / 2.3,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
+                Container(
+                  padding:
+                      EdgeInsets.only(top: 12, right: 6, bottom: 12, left: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                  ),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "${this.postClickMarker.dienTich}" + " m2",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.lightBlue,
-                        ),
-                      ),
-                      Text(
-                        // "${this.postClickMarker.gia}"
-                        "22 tỷ",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.lightBlue,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        // color: Colors.yellow,
-                        width: MediaQuery.of(context).size.width / 2.8,
-                        child: Text(
-                          "${this.postClickMarker.tieuDe}",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        // padding: const EdgeInsets.all(16.0),
-                        width: MediaQuery.of(context).size.width / 2.8,
-                        child: new Column(
-                          mainAxisSize: MainAxisSize.max,
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                            child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text("${this.postClickMarker.moTa}"),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Text(
+                                    priceFormat(_mapsStore.postClickMarker.gia),
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 6),
+                                  child: Text(
+                                    _mapsStore.postClickMarker.dienTich
+                                            .toString() +
+                                        ' m2',
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                // IconButton(
+                                //   icon: Icon(Icons.cancel_outlined),
+                                //   onPressed: () {
+                                //     _mapsStore.postClickMarker = null;
+                                //   },
+                                // )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                              ),
+                              child: SelectableText(
+                                _mapsStore.postClickMarker.tieuDe,
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    color: _themeStore.darkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6),
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width / 2.5,
+                                  height: 16,
+                                  child: Marquee(
+                                    text: _mapsStore
+                                            .postClickMarker.diaChi.isEmpty
+                                        ? ""
+                                        : _mapsStore.postClickMarker.diaChi +
+                                            ', ' +
+                                            _mapsStore.postClickMarker.tenXa +
+                                            (_mapsStore.postClickMarker.tenHuyen
+                                                    .isEmpty
+                                                ? ""
+                                                : ", " +
+                                                    _mapsStore.postClickMarker
+                                                        .tenHuyen) +
+                                            (_mapsStore.postClickMarker.tenTinh
+                                                    .isEmpty
+                                                ? ""
+                                                : ", " +
+                                                    _mapsStore.postClickMarker
+                                                        .tenTinh),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    scrollAxis: Axis.horizontal,
+                                    pauseAfterRound: Duration(seconds: 1),
+                                    showFadingOnlyWhenScrolling: true,
+                                    fadingEdgeEndFraction: 0.1,
+                                    numberOfRounds: null,
+                                    velocity: 40.0,
+                                    accelerationDuration: Duration(seconds: 1),
+                                    accelerationCurve: Curves.linear,
+                                    //decelerationDuration: Duration(milliseconds: 500),
+                                    //decelerationCurve: Curves.easeOut,
+                                    blankSpace: 20.0,
+                                  ),
+                                )),
                           ],
-                        ),
+                        )),
                       )
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Detail(post: this.postClickMarker)));
-        },
-      );
-    } else
-      return Container();
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Detail(post: _mapsStore.postClickMarker)));
+            },
+          );
+        });
+      } else
+        return Container();
+    }
   }
 
   //Show when click maps
   Widget containerLatngInfor() {
-    if (_tapPointClick != 0) {
-      // _searchPlacemarkFromLatAndLong(_tapPointClick.latitude, _tapPointClick.longitude);
-      return GestureDetector(
-        child: Container(
-          height: 80,
-          width: MediaQuery.of(context).size.width / 1.5,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            color: Colors.white,
-          ),
-          padding: EdgeInsets.all(6),
-          child: Column(
-            children: [
-              Flexible(
-                child: Text(
-                  // _applicationBloc.placemark[0].name,
-                  "Linh Trung",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+    // _searchPlacemarkFromLatAndLong(_tapPointClick.latitude, _tapPointClick.longitude);
+    return Observer(
+      builder: (context) {
+        if (_mapsStore.tapPointClick != LatLng(0, 0)) {
+          return GestureDetector(
+            child: Container(
+              height: 100,
+              width: MediaQuery.of(context).size.width / 1.5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.white,
+              ),
+              padding: EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  Flexible(
+                    child: Text(
+                      // _applicationBloc.placemark[0].country,
+                      _handlingStringSubTitleLocation(_applicationBloc.placemarks[0]),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Flexible(
-                child: Text(
-                  // _applicationBloc.placemark[0].country,
-                  "Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
+                  SizedBox(
+                    height: 6,
                   ),
-                ),
+                  Flexible(
+                    child: Text(
+                      "${_mapsStore.tapPointClick.latitude.toStringAsFixed(6)}, ${_mapsStore.tapPointClick.longitude.toStringAsFixed(6)}",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 6,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: Container(
+                      decoration: new BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      padding: EdgeInsets.all(6),
+                      child: Text(
+                        "Xác nhận",
+                      ),
+                    ),
+                  )
+                ],
               ),
-              SizedBox(
-                height: 6,
-              ),
-              Text(
-                "${_tapPointClick.latitude.toStringAsFixed(6)}, ${_tapPointClick.longitude.toStringAsFixed(6)}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else
-      return Container();
+            ),
+            onTap: () {
+              Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+            },
+          );
+        } else
+          return Container(
+            width: 1.0,
+            height: 0.0,
+          );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     //Map khi xem chi tiết bài đăng
     if (this.post != null) {
-      return Scaffold(
-        primary: true,
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(
-                    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(
-                    () => ScaleGestureRecognizer()))
-                ..add(
-                    Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 15.0,
-              ),
-              mapType: _currentMapType,
-              markers: _markers,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    // button(_onAddMarkerButtonProcessed, Icons.add_location),
-                    // SizedBox(
-                    //   height: 16.0,
-                    // ),
-                    button(_goToCurrentLocationPostCurrent, Icons.my_location),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+      return _buildDetailPost();
     }
     //Map khi xem bản đồ
     else if (this.type == null) {
-      return Scaffold(
-        primary: true,
-        appBar: AppBar(
-          title: Text(
-            "Bản đồ",
-          ),
-          automaticallyImplyLeading: false,
-        ),
-        body: Stack(
-          children: [
-            Observer(
-              builder: (context) {
-              return Stack(
-                children: [
-                  GoogleMap(
-                    gestureRecognizers: Set()
-                      ..add(
-                          Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                      ..add(Factory<ScaleGestureRecognizer>(
-                              () => ScaleGestureRecognizer()))
-                      ..add(
-                          Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                      ..add(Factory<VerticalDragGestureRecognizer>(
-                              () => VerticalDragGestureRecognizer())),
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
-                      target: _center,
-                      zoom: 11.0,
-                    ),
-                    mapType: _currentMapType,
-                    markers: _markers,
-                    onCameraMove: _onCameraMove,
-                  ),
-                  // _addMarkerButtonProcessed(),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          button(_onMapTypeButtonProcessed, Icons.map),
-                          SizedBox(
-                            height: 24.0,
-                          ),
-                          button(_goToCurrentLocationDevice, Icons.my_location),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(12.0),
-                    // height: MediaQuery.of(context).size.height,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Column(
-                        children: <Widget>[
-                          containerBaseInfor(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Container(
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                        boxShadow: [
-                          _themeStore.darkMode
-                              ? BoxShadow()
-                              : BoxShadow(
-                            color: Color.fromRGBO(198, 199, 202, 1),
-                            blurRadius: 10, // soften the shadow
-                            spreadRadius: 0.01, //extend the shadow
-                            offset: Offset(
-                              8.0, // Move to right 10  horizontally
-                              12.0, // Move to bottom 10 Vertically
-                            ),
-                          )
-                        ],
-                        color: _themeStore.darkMode
-                            ? Color.fromRGBO(54, 55, 58, 1)
-                            : AppColors.backgroundLightThemeColor,
-                      ),
-                      padding: EdgeInsets.only(left: 12, top: 6),
-                      child: TextField(
-                        controller: _autocompleteText,
-                        decoration: InputDecoration(
-                          hintText: "Nhập kinh độ và vĩ độ",
-                          suffixIcon: Icon(Icons.search),
-                          border: InputBorder.none,
-                        ),
-
-                        // onChanged: (value) => this._applicationBloc.searchPlaces(value),
-                        onSubmitted: (value) => {
-                          _searchPlacemarkFromCoordinates(value),
-                          // _goToCurrentLocationDevice(),
-                          Future.delayed(const Duration(milliseconds: 1000), () {
-                            setState(() {
-                              _showSimpleModalDialog(context);
-                            });
-                          }),
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },)
-          ],
-        ),
-      );
+      return Observer(builder: (context) {
+        return _mapsStore.loading
+            ? CustomProgressIndicatorWidget()
+            : _buildAllPostMaps();
+      });
     }
     //Maps đăng bài
     else {
-      return Scaffold(
-        primary: true,
-        appBar: AppBar(
-          title: Text(
-            "Bản đồ",
-          ),
-          automaticallyImplyLeading: false,
-        ),
-        body: Stack(
-          children: [
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(
-                    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(
-                    () => ScaleGestureRecognizer()))
-                ..add(
-                    Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
-                target: _center,
-                zoom: 11.0,
-              ),
-              mapType: _currentMapType,
-              markers: Set.from(myMarker),
-              onTap: _handleTap,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
-            Padding(
-              padding: EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    button(_onMapTypeButtonProcessed, Icons.map),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(12.0),
-              // height: MediaQuery.of(context).size.height,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  children: <Widget>[
-                    containerBaseInfor(),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                  boxShadow: [
-                    _themeStore.darkMode
-                        ? BoxShadow()
-                        : BoxShadow(
-                            color: Color.fromRGBO(198, 199, 202, 1),
-                            blurRadius: 10, // soften the shadow
-                            spreadRadius: 0.01, //extend the shadow
-                            offset: Offset(
-                              8.0, // Move to right 10  horizontally
-                              12.0, // Move to bottom 10 Vertically
-                            ),
-                          )
-                  ],
-                  color: _themeStore.darkMode
-                      ? Color.fromRGBO(54, 55, 58, 1)
-                      : AppColors.backgroundLightThemeColor,
-                ),
-                padding: EdgeInsets.only(left: 12, top: 6),
-                child: TextField(
-                  controller: _autocompleteText,
-                  decoration: InputDecoration(
-                    hintText: "Nhập kinh độ và vĩ độ",
-                    suffixIcon: Icon(Icons.search),
-                    border: InputBorder.none,
-                  ),
-
-                  // onChanged: (value) => this._applicationBloc.searchPlaces(value),
-                  onSubmitted: (value) => {
-                    _searchPlacemarkFromCoordinates(value),
-                    // _goToCurrentLocationDevice(),
-                    Future.delayed(const Duration(milliseconds: 1000), () {
-                      setState(() {
-                        _showSimpleModalDialog(context);
-                      });
-                    }),
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+      return _buildMapsDangBai();
     }
   }
 
@@ -842,51 +638,301 @@ class _MapsScreenState extends State<MapsScreen> {
         });
   }
 
+  Widget _buildMapsDangBai() {
+    return Scaffold(
+      primary: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon : Icon(Icons.arrow_back_ios_outlined,),
+          onPressed: (){
+            if(_mapsStore.tapPointClick == LatLng(0, 0)) {
+              showErrorMessage("Vui lòng chọn vị trí", context);
+            }
+            else Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+          },
+        ),
+        title: Text(
+          "Bản đồ",
+        ),
+        automaticallyImplyLeading: false,
+      ),
+      body: WillPopScope(
+        onWillPop: () {
+          if(_mapsStore.tapPointClick == LatLng(0, 0)) {
+            showErrorMessage("Vui lòng chọn vị trí", context);
+          }
+          else Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
+        },
+        child: Stack(
+          children: [
+            GoogleMap(
+              gestureRecognizers: Set()
+                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                ..add(Factory<ScaleGestureRecognizer>(
+                    () => ScaleGestureRecognizer()))
+                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                ..add(Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer())),
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                target: _center,
+                zoom: 11.0,
+              ),
+              mapType: _currentMapType,
+              markers: Set.from(myMarker),
+              onTap: _handleTap,
+              onCameraMove: _onCameraMove,
+            ),
+            // _addMarkerButtonProcessed(),
+            Padding(
+              padding:
+                  EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    button(_onMapTypeButtonProcessed, Icons.map),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    button(_goToCurrentLocationDevice, Icons.my_location),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 96, left: 12),
+              child: Column(
+                children: <Widget>[
+                  containerLatngInfor(),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                decoration: new BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  boxShadow: [
+                    _themeStore.darkMode
+                        ? BoxShadow()
+                        : BoxShadow(
+                            color: Color.fromRGBO(198, 199, 202, 1),
+                            blurRadius: 10, // soften the shadow
+                            spreadRadius: 0.01, //extend the shadow
+                            offset: Offset(
+                              8.0, // Move to right 10  horizontally
+                              12.0, // Move to bottom 10 Vertically
+                            ),
+                          )
+                  ],
+                  color: _themeStore.darkMode
+                      ? Color.fromRGBO(54, 55, 58, 1)
+                      : AppColors.backgroundLightThemeColor,
+                ),
+                padding: EdgeInsets.only(left: 12, top: 6),
+                child: TextField(
+                  controller: _autocompleteText,
+                  decoration: InputDecoration(
+                    hintText: "Nhập kinh độ và vĩ độ",
+                    suffixIcon: Icon(Icons.search),
+                    border: InputBorder.none,
+                  ),
+
+                  // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                  onSubmitted: (value) => {
+                    _searchPlacemarkFromCoordinates(value),
+                    // _goToCurrentLocationDevice(),
+                    Future.delayed(const Duration(milliseconds: 1500), () {
+                      setState(() {
+                        _showSimpleModalDialog(context);
+                      });
+                    }),
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAllPostMaps() {
+    return Scaffold(
+      primary: true,
+      appBar: AppBar(
+        title: Text(
+          "Bản đồ",
+        ),
+        automaticallyImplyLeading: false,
+      ),
+      body: Stack(
+        children: [
+          Observer(
+            builder: (context) {
+              return Stack(
+                children: [
+                  GoogleMap(
+                    gestureRecognizers: Set()
+                      ..add(Factory<PanGestureRecognizer>(
+                          () => PanGestureRecognizer()))
+                      ..add(Factory<ScaleGestureRecognizer>(
+                          () => ScaleGestureRecognizer()))
+                      ..add(Factory<TapGestureRecognizer>(
+                          () => TapGestureRecognizer()))
+                      ..add(Factory<VerticalDragGestureRecognizer>(
+                          () => VerticalDragGestureRecognizer())),
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                      target: _center,
+                      zoom: 11.0,
+                    ),
+                    mapType: _currentMapType,
+                    markers: _mapsStore.markers,
+                    onCameraMove: _onCameraMove,
+                  ),
+                  // _addMarkerButtonProcessed(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: 12.0, left: 12.0, right: 12.0, top: 96),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          button(_onMapTypeButtonProcessed, Icons.map),
+                          SizedBox(
+                            height: 24.0,
+                          ),
+                          button(_goToCurrentLocationDevice, Icons.my_location),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 96, left: 12),
+                    child: Column(
+                      children: <Widget>[
+                        containerBaseInfor(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                        boxShadow: [
+                          _themeStore.darkMode
+                              ? BoxShadow()
+                              : BoxShadow(
+                                  color: Color.fromRGBO(198, 199, 202, 1),
+                                  blurRadius: 10, // soften the shadow
+                                  spreadRadius: 0.01, //extend the shadow
+                                  offset: Offset(
+                                    8.0, // Move to right 10  horizontally
+                                    12.0, // Move to bottom 10 Vertically
+                                  ),
+                                )
+                        ],
+                        color: _themeStore.darkMode
+                            ? Color.fromRGBO(54, 55, 58, 1)
+                            : AppColors.backgroundLightThemeColor,
+                      ),
+                      padding: EdgeInsets.only(left: 12, top: 6),
+                      child: TextField(
+                        controller: _autocompleteText,
+                        decoration: InputDecoration(
+                          hintText: "Nhập kinh độ và vĩ độ",
+                          suffixIcon: Icon(Icons.search),
+                          border: InputBorder.none,
+                        ),
+
+                        // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                        onSubmitted: (value) => {
+                          _searchPlacemarkFromCoordinates(value),
+                          // _goToCurrentLocationDevice(),
+                          Future.delayed(const Duration(milliseconds: 1000),
+                              () {
+                            setState(() {
+                              _showSimpleModalDialog(context);
+                            });
+                          }),
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailPost() {
+    return Scaffold(
+      primary: true,
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            gestureRecognizers: Set()
+              ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+              ..add(Factory<ScaleGestureRecognizer>(
+                  () => ScaleGestureRecognizer()))
+              ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+              ..add(Factory<VerticalDragGestureRecognizer>(
+                  () => VerticalDragGestureRecognizer())),
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: 15.0,
+            ),
+            mapType: _currentMapType,
+            markers: _markers,
+            onCameraMove: _onCameraMove,
+          ),
+          // _addMarkerButtonProcessed(),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Column(
+                children: <Widget>[
+                  // button(_onAddMarkerButtonProcessed, Icons.add_location),
+                  // SizedBox(
+                  //   height: 16.0,
+                  // ),
+                  button(_goToCurrentLocationPostCurrent, Icons.my_location),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildListItem(Placemark placemark, context) {
     print(placemark);
     // return Container();
     return ListTile(
       title: Text(
-        (placemark.street == null || placemark.street == "Unnamed Road")
-            ? ((placemark.subAdministrativeArea == null ||
-                    placemark.subAdministrativeArea.isEmpty)
-                ? ((placemark.administrativeArea == null ||
-                        placemark.administrativeArea.isEmpty)
-                    ? placemark.country
-                    : placemark.administrativeArea)
-                : placemark.subAdministrativeArea)
-            : placemark.street,
+        _handlingStringNameLocation(placemark),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
       ),
-      subtitle: (placemark.subAdministrativeArea == null ||
-              placemark.subAdministrativeArea.isEmpty)
-          ? (placemark.administrativeArea == null ||
-                  placemark.administrativeArea.isEmpty)
-              ? Text(
-                  placemark.country,
+      subtitle: Text(
+                  _handlingStringSubTitleLocation(placemark),
                   style: TextStyle(
                     color: Colors.grey,
                   ),
-                )
-              : Text(
-                  placemark.administrativeArea + ", " + placemark.country,
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                )
-          : Text(
-              placemark.subAdministrativeArea +
-                  ", " +
-                  placemark.administrativeArea +
-                  ", " +
-                  placemark.country,
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
+                ),
       onTap: () {
         _clickPlaceMark(placemark, context);
       },
@@ -897,5 +943,26 @@ class _MapsScreenState extends State<MapsScreen> {
     this.placeMarkChoosen = placemarkGoTo;
     Navigator.of(context).pop();
     _goToCurrentLocationSearch();
+  }
+
+  String _handlingStringNameLocation(Placemark placemark)
+  {
+    return (placemark.street == null || placemark.street == "Unnamed Road")
+        ? ((placemark.subAdministrativeArea == null ||
+        placemark.subAdministrativeArea.isEmpty)
+        ? ((placemark.administrativeArea == null ||
+        placemark.administrativeArea.isEmpty)
+        ? placemark.country
+        : placemark.administrativeArea)
+        : placemark.subAdministrativeArea)
+        : placemark.street;
+  }
+
+  String _handlingStringSubTitleLocation(Placemark placemark)
+  {
+    return (placemark.subAdministrativeArea == null || placemark.subAdministrativeArea.isEmpty) ?
+        ((placemark.administrativeArea == null || placemark.administrativeArea.isEmpty) ? placemark.country
+            : placemark.administrativeArea + ", " + placemark.country)
+        : placemark.subAdministrativeArea + ", " + placemark.administrativeArea + ", " + placemark.country;
   }
 }

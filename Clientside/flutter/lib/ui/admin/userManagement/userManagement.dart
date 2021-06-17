@@ -356,87 +356,43 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   Widget _buildListItem(User user, int position) {
     // Uint8List bytes = base64Decode(user.profilePictureID);
-    return ListTile(
-      leading: user.avatar == null ? CircleAvatar(
-        backgroundColor: Colors.amber.shade800,
-        child: Text((user.surName.substring(0,1) + user.name.substring(0,1)).toUpperCase(),
-          style: TextStyle(
-            color: Colors.white,
+    return Observer(
+      builder: (context) {
+        return ListTile(
+          leading: _userManagementStore.userList.users[position].avatar == null ? CircleAvatar(
+            backgroundColor: Colors.amber.shade800,
+            child: Text((_userManagementStore.userList.users[position].surName.substring(0,1) + _userManagementStore.userList.users[position].name.substring(0,1)).toUpperCase(),
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          )
+              : CircleAvatar(
+            // child: imageFromBase64String(user.profilePictureID),
+            child: ClipOval(child: imageFromBase64String(_userManagementStore.userList.users[position].avatar)),
+            backgroundColor: Colors.brown.shade800,
           ),
-        ),
-      )
-          : CircleAvatar(
-        // child: imageFromBase64String(user.profilePictureID),
-        child: ClipOval(child: imageFromBase64String(user.avatar)),
-        backgroundColor: Colors.brown.shade800,
-      ),
-      title: Text(
-        user.name,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
-      subtitle: Text(
-        user.email,
-        style: TextStyle(
-          color: Colors.grey,
-        ),
-      ),
-      onTap: (){
-        this.userChoosen = user;
-        _showSimpleModalDialog(context, user);
+          title: Text(
+            _userManagementStore.userList.users[position].name,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          subtitle: Text(
+            _userManagementStore.userList.users[position].email,
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+          onTap: (){
+            this.userChoosen = _userManagementStore.userList.users[position];
+            _showSimpleModalDialog(context, _userManagementStore.userList.users[position]);
+          },
+        );
       },
     );
   }
-
-  // Widget _buildListItem(User user, int position) {
-  //   return Container(
-  //     decoration: new BoxDecoration(
-  //       boxShadow: [
-  //         // color: Colors.white, //background color of box
-  //         BoxShadow(
-  //           color: Color.fromRGBO(198, 199, 202, 1),
-  //           blurRadius: 10, // soften the shadow
-  //           spreadRadius: 0.01, //extend the shadow
-  //           offset: Offset(
-  //             8.0, // Move to right 10  horizontally
-  //             12.0, // Move to bottom 10 Vertically
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //     child: Card(
-  //       margin: EdgeInsets.only(top: 8, right: 10, left: 10),
-  //       clipBehavior: Clip.antiAlias,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(15)),
-  //       ),
-  //       child: Container(
-  //         padding: EdgeInsets.all(20),
-  //         // height: 160,
-  //         // color: Color.fromRGBO(242, 242, 242, 1),
-  //         color: Colors.white,
-  //         child: Column(
-  //           children: [
-  //             Container(
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(50),
-  //                 color: Colors.white,
-  //                 // boxShadow: [
-  //                 //   BoxShadow(color: Colors.green, spreadRadius: 3),
-  //                 // ],
-  //               ),
-  //               height: 50,
-  //               width: 50,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //
-  //   );
-  // }
 
   Widget _handleErrorMessage() {
     return Observer(
@@ -585,7 +541,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                   children: [
                                     IconButton(
                                       icon: Icon(
-                                        Icons.arrow_back,
+                                        Icons.arrow_back_ios_outlined,
                                         color: Colors.white,
                                         size: 28,
                                       ),
