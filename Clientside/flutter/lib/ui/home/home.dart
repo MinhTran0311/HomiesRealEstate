@@ -154,7 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: EdgeInsets.only(top: 6, left: 24, right: 24, bottom: 12),
           child: TextField(
-            autofocus: false,
             keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
@@ -168,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
+
                 hintStyle: TextStyle(
                   fontSize: 24,
                   color: Colors.grey[400],
@@ -262,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: BouncingScrollPhysics(),
             footer: ClassicFooter(
               loadStyle: LoadStyle.ShowWhenLoading,
-              completeDuration: Duration(milliseconds: 500),
+              completeDuration: Duration(seconds: 2),
             ),
             onLoading: () async {
               _postStore.getPosts(true);

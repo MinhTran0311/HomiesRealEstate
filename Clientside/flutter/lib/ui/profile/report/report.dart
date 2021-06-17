@@ -196,7 +196,7 @@ class _ReportPageState extends State<ReportPage>{
                         child:
                         SizedBox(
                             width: size.width,
-                            height: size.height*0.6,
+                            height: size.height*0.58,
                             child:ListView(
                               physics: BouncingScrollPhysics(),
                               scrollDirection: Axis.horizontal,

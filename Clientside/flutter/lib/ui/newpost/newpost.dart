@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
@@ -45,6 +46,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/ui/profile/account/account.dart';
 
 class NewpostScreen extends StatefulWidget {
   @override
@@ -169,7 +171,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
   void dispose() {
     super.dispose();
   }
-
+  String DatetimeToString(String datetime) {
+    return "${datetime.substring(11, 13)}:${datetime.substring(14, 16)} - ${datetime.substring(8, 10)}/${datetime.substring(5, 7)}/${datetime.substring(0, 4)}";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,7 +228,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 !_postStore.loadingThuocTinh &&
                 !_postStore.loadingPack &&
                 !_userStore.loadingCurrentUserWallet
-            ? Material(child: _buildBody())
+            ? _buildBody()
             : CustomProgressIndicatorWidget();
       },
     );
@@ -238,23 +242,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
       autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
-          Container(
-              //         decoration: BoxDecoration(
-              //             gradient: LinearGradient(
-              //                 begin: Alignment.topCenter,
-              //                 end: Alignment.bottomCenter,
-              //                 colors: !_themeStore.darkMode
-              //                     ? [
-              //                         Colors.amber[600],
-              //                         Colors.amber[50],
-              //                       ]
-              //                     : [
-              //                         Color.fromRGBO(30, 22, 28, 50),
-              //                         Color.fromRGBO(18, 22, 28, 1),
-              //                       ]
-              //     )
-              // ),
-              ),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -287,7 +274,38 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: Column(
+        child:
+        _userStore.userCurrent.phoneNumber==null?
+        AlertDialog(
+          title: Text(
+            "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
+            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RoundedButtonWidget(
+                buttonText: "ok",
+                buttonColor: Colors.green,
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => AccountPage(
+                        UserName: _userStore.userCurrent.userName,
+                        Phone: _userStore.userCurrent.phoneNumber,
+                        Email: _userStore.userCurrent.emailAddress,
+                        Address: "Address",
+                        SurName: _userStore.userCurrent.surname,
+                        Name: _userStore.userCurrent.name,
+                        UserID:  _userStore.userCurrent.UserID,
+                        creationTime: DatetimeToString(
+                            _userStore.userCurrent.creationTime),
+                      ));
+                  Navigator.push(context, route);
+                },
+              )
+            ],
+          ),
+        ):Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -322,6 +340,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             _buildImagepick2(),
             SizedBox(height: 24.0),
             _buildUpButton(),
+
           ],
         ),
       ),
@@ -336,42 +355,37 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.textsms_rounded,
-                            color: _themeStore.darkMode
-                                ? Colors.white
-                                : Colors.amber),
-                        labelStyle: TextStyle(
-                          color: (_themeStore.darkMode)
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                        hintText: 'Tối đa 50 kí tự',
-                        labelText: 'Tiêu đề',
-                        suffixIcon: IconButton(
-                          onPressed: () => _TileController.clear(),
-                          icon: Icon(Icons.clear,color: _themeStore.darkMode
-                              ? Colors.white
-                              : Colors.amber),),
-                        ),
-                    onSaved: (value) {
-                      // //  FormState.save();
-                      //   print(value);
-                      //   // code when the user saves the form.
-                    },
-                    controller: _TileController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length > 50) {
-                        return 'Vui lòng điền lại tiêu đề';
-                      }
-                      return null;
-                    },
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+              TextFormField(
+                autofocus: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.textsms_rounded,
+                      color:
+                          _themeStore.darkMode ? Colors.white : Colors.amber),
+                  labelStyle: TextStyle(
+                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
                   ),
-                ]));
+                  hintText: 'Tối đa 50 kí tự',
+                  labelText: 'Tiêu đề',
+                  suffixIcon: IconButton(
+                    onPressed: () => _TileController.clear(),
+                    icon: Icon(Icons.clear,
+                        color:
+                            _themeStore.darkMode ? Colors.white : Colors.amber),
+                  ),
+                ),
+                cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
+                controller: _TileController,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length > 50) {
+                    return 'Vui lòng điền lại tiêu đề';
+                  }
+                  return null;
+                },
+              ),
+            ]));
       },
     );
   }
@@ -411,7 +425,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             icon: Icon(Icons.clear),
           )),
           validator: (value) =>
-              value == null ? 'vui lòng chọn phương thức' : null,
+              value == null ? 'Vui lòng chọn phương thức' : null,
           items: type.map((Postcategory type) {
             if (type.danhMucCha == null)
               return DropdownMenuItem<Postcategory>(
@@ -462,7 +476,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hint: Text("Chọn hình thức nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'vui lòng chọn hình thức nhà đất' : null,
+                    value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                   onPressed: () => setState(() {
@@ -579,7 +593,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           child: DropdownSearch<String>(
             autoValidateMode: AutovalidateMode.always,
             validator: (value) =>
-                value == null ? 'vui lòng chọn tỉnh/thành' : null,
+                value == null ? 'Vui lòng chọn tỉnh/thành' : null,
             items: [
               "Thành phố Hà Nội",
               "Tỉnh Hà Giang",
@@ -698,7 +712,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           value: selectedTown,
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn quận huyện' : null,
+              value == null ? 'Vui lòng chọn quận huyện' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -754,7 +768,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           hint: Text("Chọn xã/phường"),
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn xã/phường' : null,
+              value == null ? 'Vui lòng chọn xã/phường' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -810,6 +824,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
@@ -891,10 +906,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   thuocTinh.tenThuocTinh != "Hướng nhà" &&
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
+                          autofocus: false,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.home_work,color: _themeStore.darkMode
-                            ? Colors.white
-                                : Colors.amber),
+                            icon: Icon(Icons.home_work,
+                                color: _themeStore.darkMode
+                                    ? Colors.white
+                                    : Colors.amber),
                             labelStyle: TextStyle(
                               color: (_themeStore.darkMode)
                                   ? Colors.white
@@ -1004,6 +1021,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                         icon: Icon(Icons.api,
                             color: _themeStore.darkMode
@@ -1023,7 +1041,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
-                    
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng điền diện tích';
@@ -1047,6 +1064,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.money,
                           color: _themeStore.darkMode
@@ -1086,39 +1104,40 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.textsms_rounded,
-                          color: _themeStore.darkMode
-                              ? Colors.white
-                              : Colors.amber),
-                      labelStyle: TextStyle(
-                        color: (_themeStore.darkMode)
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      labelText: 'Mô tả',
-                      hintText: "Mô tả thêm về bài đăng",
-                      suffixIcon: IconButton(
-                        onPressed: () => _keyEditor2.clear(),
-                        icon: Icon(Icons.clear),
-                      ),
-                    ),
-                    onSaved: (value) {},
-                    //keyboardType: TextInputType.number,
-                    controller: _keyEditor2,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập mô tả';
-                      }
-                      if (value.length > 1000) return null;
-                      return null;
-                    },
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+              TextFormField(
+                autofocus: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.textsms_rounded,
+                      color:
+                          _themeStore.darkMode ? Colors.white : Colors.amber),
+                  labelStyle: TextStyle(
+                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
                   ),
-                ]));
+                  labelText: 'Mô tả',
+                  hintText: "Mô tả thêm về bài đăng",
+                  suffixIcon: IconButton(
+                    onPressed: () => _keyEditor2.clear(),
+                    icon: Icon(
+                      Icons.clear,
+                      color: _themeStore.darkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
+                onSaved: (value) {},
+                //keyboardType: TextInputType.number,
+                controller: _keyEditor2,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập mô tả';
+                  }
+                  if (value.length > 1000) return null;
+                  return null;
+                },
+              ),
+            ]));
       },
     );
   }
@@ -1130,7 +1149,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         hint: Text("Chọn gói bài đăng"),
         value: selectedPack,
         autovalidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'vui lòng gói bài đăng' : null,
+        validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
         decoration: InputDecoration(
             suffixIcon: IconButton(
           onPressed: () => setState(() {
@@ -1158,7 +1177,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   width: 10,
                 ),
                 Text(
-                  type.tenGoi,
+                  type.tenGoi + ", phí: " + priceFormat(type.phi),
                   style: TextStyle(),
                 ),
               ],
@@ -1210,7 +1229,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Phí bài đăng:" + "${(selectedPack.phi * songay)}",
+                      "Phí bài đăng:" +
+                          "${priceFormat(selectedPack.phi * songay)}",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
@@ -1450,6 +1470,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               _newpost.properties = new List<Property>();
               if (_ThuocTinhController != null)
                 for (int i = 0; i < _ThuocTinhController.length; i++)
+                  if (_ThuocTinhController[i]!=null)
                   if (_ThuocTinhController[i].text.isNotEmpty) {
                     Property value = new Property();
                     value.giaTri = _ThuocTinhController[i].text;
@@ -1469,12 +1490,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+
                         title: Text(
                           "Bạn không đủ số dư để thực hiện giao dịch?",
                           style: TextStyle(fontSize: 24, fontFamily: 'intel'),
                         ),
                         content: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize:MainAxisSize.min,
                           children: [
                             RoundedButtonWidget(
                               buttonText: "Nạp thêm tiền",
@@ -1495,11 +1518,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       );
                     });
                 futureValue.then((value) {
-                  Route route = MaterialPageRoute(
-                      builder: (context) => NapTienPage(
-                            userID: _userStore.userCurrent.UserID,
-                          ));
-                  Navigator.push(context, route);
+                  if(value) {
+                    Route route = MaterialPageRoute(
+                        builder: (context) => NapTienPage(
+                              userID: _userStore.userCurrent.UserID,
+                            ));
+                    Navigator.push(context, route);
+                  }
                 });
               } else {
                 var futureValue = showDialog(

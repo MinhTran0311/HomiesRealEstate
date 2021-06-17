@@ -4,6 +4,7 @@ import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -128,16 +129,20 @@ abstract class _UserStore with Store {
     future.then((userByID) {
       this.userByID = userByID;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
-      //log("error ne: ");
-      //log(DioErrorUtil.handleError(error));
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
@@ -200,14 +205,20 @@ abstract class _UserStore with Store {
       this.userCurrent = user;
       // this.getUserByID(user.UserID);
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -220,14 +231,20 @@ abstract class _UserStore with Store {
     future.then((wallet) {
       this.userCurrent.wallet = wallet;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //log("error ne: ");
       //log(DioErrorUtil.handleError(error));
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -243,14 +260,20 @@ abstract class _UserStore with Store {
     future.then((picture) {
       this.userCurrent.picture = picture;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //log("error ne: ");
       //log(DioErrorUtil.handleError(error));
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -280,14 +303,20 @@ abstract class _UserStore with Store {
     future.then((user) {
       this.userOfCurrentPost = user;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //log("error ne: ");
       //log(DioErrorUtil.handleError(error));
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -315,12 +344,10 @@ abstract class _UserStore with Store {
   @action
   Future updateCurrentUser(String name,String surname,String phonenumber,String email,String userName,int id) async {
     updateUser_success = false;
-    print("DuongDebug2 ${updateUser_success}");
     final future = _repository.updateCurrentUser(name, surname, phonenumber, email,userName,id);
     UpdateUserFuturess = ObservableFuture(future);
 
     future.then((user) {
-      print("DuongDebug1 ${user["success"]}");
       if (user["success"]==true){
 
         updateUser_success = true;
@@ -332,14 +359,20 @@ abstract class _UserStore with Store {
       }
 
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -362,15 +395,21 @@ abstract class _UserStore with Store {
       if (image == true)
         this.userCurrent.picture = fileToken;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 }

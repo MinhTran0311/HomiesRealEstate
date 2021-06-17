@@ -3,6 +3,7 @@ import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -138,7 +139,12 @@ abstract class _UserManagementStore with Store {
           }
       }
     }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
     // this.userList = userList;
   }

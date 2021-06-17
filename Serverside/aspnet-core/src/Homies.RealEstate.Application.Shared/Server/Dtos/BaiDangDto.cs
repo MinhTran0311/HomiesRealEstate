@@ -43,5 +43,7 @@ namespace Homies.RealEstate.Server.Dtos
 
         public double DienTich { get; set; }
 
+        public int DoUuTien { get; set; }
+
     }
 }

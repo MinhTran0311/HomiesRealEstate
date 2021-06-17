@@ -381,7 +381,6 @@ abstract class _FormStore with Store {
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null) {
-
           errorStore.errorMessage = error.response.data["error"]["message"];
         }
         else
@@ -459,6 +458,7 @@ abstract class _FormStore with Store {
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
         errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     }
     );
   }
@@ -475,21 +475,27 @@ abstract class _FormStore with Store {
       }
       else resetPassword_success=false;
     }).catchError((error){
-      if (error is DioError) {
-        resetPassword_success=false;
-        if (error.response.data!=null) {
-
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   resetPassword_success=false;
+      //   if (error.response.data!=null) {
+      //
+      //     errorStore.errorMessage = error.response.data["error"]["message"];
+      //   }
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -507,20 +513,26 @@ abstract class _FormStore with Store {
         changePassword_succes = false;
       }
     }).catchError((error){
-      if (error is DioError) {
-        changePassword_succes=false;
-        if (error.response.data!=null) {
-          errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
-        }
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   changePassword_succes=false;
+      //   if (error.response.data!=null) {
+      //     errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
+      //   }
+      //   else
+      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 
@@ -566,15 +578,21 @@ abstract class _FormStore with Store {
       }
 
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else {
+      //   errorStore.errorMessage =
+      //   "Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
   @action
@@ -586,7 +604,7 @@ abstract class _FormStore with Store {
     {
       case "Admin":
         return 3;
-      case "Censor":
+      case "Moderator":
         return 2;
       case "User":
         return 1;

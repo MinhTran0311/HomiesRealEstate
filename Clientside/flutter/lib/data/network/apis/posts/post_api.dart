@@ -120,8 +120,6 @@ class PostApi {
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
       );
-      print("111111111111111111");
-
       return PostCategoryList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());
@@ -138,8 +136,6 @@ class PostApi {
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
       );
-      print("111111111111111111");
-
       return PackList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());
@@ -156,8 +152,6 @@ class PostApi {
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
       );
-      print("111111111111111111");
-
       return ThuocTinhList.fromJson(res);
     } catch (e) {
       print("lỗi" + e.toString());
@@ -177,7 +171,6 @@ class PostApi {
           "postId": postId,
         },
       );
-
       return PropertyList.fromJson(res);
     } catch (e) {
       throw e;
@@ -220,7 +213,6 @@ class PostApi {
         }),
           queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount,"filter":filter,"phanLoaiBaiDang":key },
       );
-
       return PostList.fromJsonmypost(res);
     } catch (e) {
       print("lỗi" + e.toString());

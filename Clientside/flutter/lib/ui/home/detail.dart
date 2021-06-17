@@ -791,19 +791,19 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             // ),
                             shape: BoxShape.circle
                         ),
-                        // child: (_userStore.userOfCurrentPost==null || _userStore.userOfCurrentPost.profilePicture == null || _userStore.userOfCurrentPost.profilePicture.isEmpty) ? CircleAvatar(
-                        //   backgroundColor: Colors.amber.shade800,
-                        //   child: Text((
-                        //       _userStore.userOfCurrentPost.name.substring(0,1) +  _userStore.userOfCurrentPost.surname.substring(0,1)).toUpperCase(),
-                        //     style: TextStyle(
-                        //       color: Colors.white,
-                        //     ),
-                        //   ),
-                        // )
-                        //     : CircleAvatar(
-                        //   child: ClipOval(child: imageFromBase64String(_userStore.userOfCurrentPost.profilePicture)),
-                        //   backgroundColor: Colors.brown.shade800,
-                        // ),
+                        child: (_userStore.userOfCurrentPost==null || _userStore.userOfCurrentPost.profilePicture == null || _userStore.userOfCurrentPost.profilePicture.isEmpty) ? CircleAvatar(
+                          backgroundColor: Colors.amber.shade800,
+                          child: Text((
+                              _userStore.userOfCurrentPost.name.substring(0,1) +  _userStore.userOfCurrentPost.surname.substring(0,1)).toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                            : CircleAvatar(
+                          child: ClipOval(child: imageFromBase64String(_userStore.userOfCurrentPost.profilePicture)),
+                          backgroundColor: Colors.brown.shade800,
+                        ),
                       );
                     }
                   ),

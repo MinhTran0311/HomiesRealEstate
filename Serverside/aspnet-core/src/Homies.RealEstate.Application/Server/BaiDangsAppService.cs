@@ -34,8 +34,9 @@ namespace Homies.RealEstate.Server
         private readonly IRepository<ChiTietBaiDang, int> _lookup_chiTietBaiDangRepository;
         private readonly IRepository<ChiTietHoaDonBaiDang, Guid> _lookup_chiTietHoaDonBaiDangRepository;
         private readonly IRepository<LichSuGiaoDich, Guid> _lookup_lichSuGiaoDichRepository;
+        private readonly IRepository<GoiBaiDang, int> _lookup_goiBaiDangRepository;
 
-        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository, IRepository<ChiTietHoaDonBaiDang, Guid> lookup_chiTietHoaDonBaiDangRepository, IRepository<Huyen, int> lookup_huyenRepository, IRepository<Tinh, int> lookup_tinhRepository, IRepository<LichSuGiaoDich, Guid> lookup_lichSuGiaoDichRepository)
+        public BaiDangsAppService(IRepository<BaiDang> baiDangRepository, IBaiDangsExcelExporter baiDangsExcelExporter, IRepository<User, long> lookup_userRepository, IRepository<DanhMuc, int> lookup_danhMucRepository, IRepository<Xa, int> lookup_xaRepository, IRepository<HinhAnh, int> lookup_hinhAnhRepository, IRepository<ChiTietBaiDang, int> lookup_chiTietBaiDangRepository, IRepository<ChiTietHoaDonBaiDang, Guid> lookup_chiTietHoaDonBaiDangRepository, IRepository<Huyen, int> lookup_huyenRepository, IRepository<Tinh, int> lookup_tinhRepository, IRepository<LichSuGiaoDich, Guid> lookup_lichSuGiaoDichRepository, IRepository<GoiBaiDang, int> lookup_goiBaiDangRepository)
         {
             _baiDangRepository = baiDangRepository;
             _baiDangsExcelExporter = baiDangsExcelExporter;
@@ -48,6 +49,7 @@ namespace Homies.RealEstate.Server
             _lookup_huyenRepository = lookup_huyenRepository;
             _lookup_tinhRepository = lookup_tinhRepository;
             _lookup_lichSuGiaoDichRepository = lookup_lichSuGiaoDichRepository;
+            _lookup_goiBaiDangRepository = lookup_goiBaiDangRepository;
         }
 
         public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAll(GetAllBaiDangsInput input)
@@ -317,7 +319,8 @@ namespace Homies.RealEstate.Server
                         .Where(e => e.TrangThai.Equals("On"));
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "diemBaiDang desc")
+                .OrderBy("doUuTien desc")
+                .ThenBy(input.Sorting ?? "diemBaiDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
@@ -359,7 +362,8 @@ namespace Homies.RealEstate.Server
                                    FeaturedImage = o.FeaturedImage,
                                    UserId = o.UserId,
                                    XaId = o.XaId,
-                                   DanhMucId = o.DanhMucId
+                                   DanhMucId = o.DanhMucId,
+                                   DoUuTien=o.DoUuTien
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
@@ -489,7 +493,12 @@ namespace Homies.RealEstate.Server
                 var danhMucBaiDang = await _lookup_danhMucRepository.FirstOrDefaultAsync(e => e.Id == input.BaiDang.DanhMucId);
                 input.BaiDang.TagTimKiem = danhMucBaiDang.Tag != null ? danhMucBaiDang.Tag : "bai dang";
             }
-            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<BaiDang>(input.BaiDang));
+
+            BaiDang baiDangForInsert = ObjectMapper.Map<BaiDang>(input.BaiDang);
+            baiDangForInsert.DoUuTien= (await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId)).DoUuTien;
+
+            int baiDangId = await _baiDangRepository.InsertAndGetIdAsync(baiDangForInsert);
+
             if (input.ChiTietBaiDangDtos != null && input.ChiTietBaiDangDtos.Count > 0)
             {
                 foreach (CreateOrEditChiTietBaiDangDto chiTiet in input.ChiTietBaiDangDtos)
@@ -561,6 +570,8 @@ namespace Homies.RealEstate.Server
             if (baiDang != null)
             {
                 baiDang.ThoiHan = input.ThoiHan;
+
+                baiDang.DoUuTien = (await _lookup_goiBaiDangRepository.FirstOrDefaultAsync(input.HoaDonBaiDangDto.GoiBaiDangId)).DoUuTien;
 
                 var hoadonID = await _lookup_chiTietHoaDonBaiDangRepository.InsertAndGetIdAsync(ObjectMapper.Map<ChiTietHoaDonBaiDang>(input.HoaDonBaiDangDto));
 

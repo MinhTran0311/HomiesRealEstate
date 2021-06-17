@@ -22,7 +22,8 @@ namespace Homies.RealEstate.Server.Dtos
 
         public int? BaiDangId { get; set; }
 
-        public int? GoiBaiDangId { get; set; }
+        [Required]
+        public int GoiBaiDangId { get; set; }
 
         public long? UserId { get; set; }
 

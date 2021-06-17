@@ -746,7 +746,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     width: 10,
                                   ),
                                   Text(
-                                    type.tenGoi,
+                                    type.tenGoi+", phí: "+priceFormat(type.phi),
                                     style: TextStyle(),
                                   ),
                                 ],
@@ -800,8 +800,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                           fontSize: 24, fontFamily: 'intel'),
                                     ),
                                     content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize:MainAxisSize.min,
                                       children: [
                                         RoundedButtonWidget(
                                           buttonText: "Nạp thêm tiền",

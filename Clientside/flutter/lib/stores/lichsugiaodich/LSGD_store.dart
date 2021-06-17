@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
@@ -28,7 +29,7 @@ abstract class _LSGDStore with Store {
   ObservableFuture.value(null);
   static ObservableFuture<listLSGD> emptyAllLSGDResponse =
   ObservableFuture.value(null);
-  static ObservableFuture<bool> emptyNaptienResponse =
+  static ObservableFuture<dynamic> emptyNaptienResponse =
   ObservableFuture.value(null);
   static ObservableFuture<bool> emptyKiemDuyetGiaoDichResponse =
   ObservableFuture.value(null);
@@ -42,8 +43,8 @@ abstract class _LSGDStore with Store {
   ObservableFuture<listLSGD> fetchAllLSGDFuture =
   ObservableFuture<listLSGD>(emptyAllLSGDResponse);
   @observable
-  ObservableFuture<bool> fetchNaptienFuture =
-  ObservableFuture<bool>(emptyNaptienResponse);
+  ObservableFuture<dynamic> fetchNaptienFuture =
+  ObservableFuture<dynamic>(emptyNaptienResponse);
   @observable
   ObservableFuture<bool> fetchKiemDuyetGiaoDichFuture =
   ObservableFuture<bool>(emptyKiemDuyetGiaoDichResponse);
@@ -65,6 +66,11 @@ abstract class _LSGDStore with Store {
 
   @observable
   bool success = false;
+  @observable
+  bool naptien_success = false;
+
+  @observable
+  bool kiemduyet_success = false;
 
   @observable
   bool isIntialLoading = true;
@@ -93,7 +99,7 @@ abstract class _LSGDStore with Store {
 
   @action
   void setLoaiLSGD(String value) {
-    FilterDataLSGD  = new FilterData("Tất cả", DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) , DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    FilterDataLSGD  = new FilterData("Tất cả", DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) , DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))));
     print("debug ${FilterDataLSGD.LoaiLSGD}");
   }
   @action
@@ -122,14 +128,20 @@ abstract class _LSGDStore with Store {
           this.listlsgd.listLSGDs.add(listLSGD.listLSGDs[i]);
       }
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
@@ -177,20 +189,31 @@ abstract class _LSGDStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future Naptien(String thoiDiem,double soTien,int userId) async {
+    naptien_success = false;
     final future = _repository.NapTien(soTien, thoiDiem, userId);
     fetchNaptienFuture = ObservableFuture(future);
 
-    future.then((listLSGD) {
+    fetchNaptienFuture.then((res) {
+      print("XXX ${res}");
+      if(res["success"]==true){
+        naptien_success = true;
+      }
       // this.listlsgd = listLSGD;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
@@ -220,20 +243,28 @@ abstract class _LSGDStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future KiemDuyetGiaoDich(String idLSGD) async {
+    kiemduyet_success = false;
     final future = _repository.KiemDuyetGiaoDich(idLSGD);
     fetchKiemDuyetGiaoDichFuture = ObservableFuture(future);
 
     future.then((listLSGD) {
+      kiemduyet_success  = true;
       // this.listlsgd = listLSGD;
     }).catchError((error) {
-      if (error is DioError) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
-        throw error;
-      }
+      // if (error is DioError) {
+      //   errorStore.errorMessage = DioErrorUtil.handleError(error);
+      //   throw error;
+      // }
+      // else{
+      //   errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+      //   throw error;
+      // }
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
       //errorStore.errorMessage = DioErrorUtil.handleError(error);
       //throw error;
     });
