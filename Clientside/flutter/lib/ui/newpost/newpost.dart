@@ -14,6 +14,7 @@ import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/ui/home/detail.dart';
+import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
@@ -87,7 +88,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
   String selectedhuongnha = null;
   String selectedhuongbancong = null;
   List<String> Huong = new List<String>();
-
+  String pointx='';
+  String pointy='';
   String result = "";
   List<Commune> commune = [];
 //endregion
@@ -302,7 +304,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       ));
                   Navigator.push(context, route);
                 },
-              )
+              )]))
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
