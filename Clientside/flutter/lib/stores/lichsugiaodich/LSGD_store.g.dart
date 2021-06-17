@@ -211,6 +211,7 @@ mixin _$LSGDStore on _LSGDStore, Store {
       super.success = value;
     });
   }
+
   final _$naptien_successAtom = Atom(name: '_LSGDStore.naptien_success');
 
   @override
@@ -223,6 +224,21 @@ mixin _$LSGDStore on _LSGDStore, Store {
   set naptien_success(bool value) {
     _$naptien_successAtom.reportWrite(value, super.naptien_success, () {
       super.naptien_success = value;
+    });
+  }
+
+  final _$kiemduyet_successAtom = Atom(name: '_LSGDStore.kiemduyet_success');
+
+  @override
+  bool get kiemduyet_success {
+    _$kiemduyet_successAtom.reportRead();
+    return super.kiemduyet_success;
+  }
+
+  @override
+  set kiemduyet_success(bool value) {
+    _$kiemduyet_successAtom.reportWrite(value, super.kiemduyet_success, () {
+      super.kiemduyet_success = value;
     });
   }
 
@@ -253,20 +269,6 @@ mixin _$LSGDStore on _LSGDStore, Store {
   set successAll(bool value) {
     _$successAllAtom.reportWrite(value, super.successAll, () {
       super.successAll = value;
-    });
-  }
-  final _$kiemduyet_successAtom = Atom(name: '_LSGDStore.kiemduyet_success');
-
-  @override
-  bool get kiemduyet_success {
-    _$kiemduyet_successAtom.reportRead();
-    return super.kiemduyet_success;
-  }
-
-  @override
-  set kiemduyet_success(bool value) {
-    _$kiemduyet_successAtom.reportWrite(value, super.kiemduyet_success, () {
-      super.kiemduyet_success = value;
     });
   }
 
@@ -368,11 +370,11 @@ skipCountAll: ${skipCountAll},
 listlsgd: ${listlsgd},
 listlsgdAll: ${listlsgdAll},
 FilterDataLSGD: ${FilterDataLSGD},
-naptien_success: ${naptien_success},
 success: ${success},
+naptien_success: ${naptien_success},
+kiemduyet_success: ${kiemduyet_success},
 isIntialLoading: ${isIntialLoading},
 successAll: ${successAll},
-kiemduyet_success: ${kiemduyet_success},
 isIntialLoadingAll: ${isIntialLoadingAll},
 loading: ${loading},
 Allloading: ${Allloading},

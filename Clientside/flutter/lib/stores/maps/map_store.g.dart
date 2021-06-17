@@ -63,6 +63,36 @@ mixin _$MapsStore on _MapsStore, Store {
     });
   }
 
+  final _$postClickMarkerAtom = Atom(name: '_MapsStore.postClickMarker');
+
+  @override
+  Post get postClickMarker {
+    _$postClickMarkerAtom.reportRead();
+    return super.postClickMarker;
+  }
+
+  @override
+  set postClickMarker(Post value) {
+    _$postClickMarkerAtom.reportWrite(value, super.postClickMarker, () {
+      super.postClickMarker = value;
+    });
+  }
+
+  final _$tapPointClickAtom = Atom(name: '_MapsStore.tapPointClick');
+
+  @override
+  LatLng get tapPointClick {
+    _$tapPointClickAtom.reportRead();
+    return super.tapPointClick;
+  }
+
+  @override
+  set tapPointClick(LatLng value) {
+    _$tapPointClickAtom.reportWrite(value, super.tapPointClick, () {
+      super.tapPointClick = value;
+    });
+  }
+
   final _$cameraPositionCurrentAtom =
       Atom(name: '_MapsStore.cameraPositionCurrent');
 
@@ -77,6 +107,21 @@ mixin _$MapsStore on _MapsStore, Store {
     _$cameraPositionCurrentAtom.reportWrite(value, super.cameraPositionCurrent,
         () {
       super.cameraPositionCurrent = value;
+    });
+  }
+
+  final _$markersAtom = Atom(name: '_MapsStore.markers');
+
+  @override
+  Set<Marker> get markers {
+    _$markersAtom.reportRead();
+    return super.markers;
+  }
+
+  @override
+  set markers(Set<Marker> value) {
+    _$markersAtom.reportWrite(value, super.markers, () {
+      super.markers = value;
     });
   }
 
@@ -103,11 +148,17 @@ mixin _$MapsStore on _MapsStore, Store {
     return _$checkPermissionAsyncAction.run(() => super.checkPermission());
   }
 
-  final _$getAllPostsAsyncAction = AsyncAction('_MapsStore.getAllPosts');
+  final _$_MapsStoreActionController = ActionController(name: '_MapsStore');
 
   @override
   Future<dynamic> getAllPosts() {
-    return _$getAllPostsAsyncAction.run(() => super.getAllPosts());
+    final _$actionInfo = _$_MapsStoreActionController.startAction(
+        name: '_MapsStore.getAllPosts');
+    try {
+      return super.getAllPosts();
+    } finally {
+      _$_MapsStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
@@ -116,7 +167,10 @@ mixin _$MapsStore on _MapsStore, Store {
 isLocationServiceEnabled: ${isLocationServiceEnabled},
 positionCurrent: ${positionCurrent},
 postListAll: ${postListAll},
+postClickMarker: ${postClickMarker},
+tapPointClick: ${tapPointClick},
 cameraPositionCurrent: ${cameraPositionCurrent},
+markers: ${markers},
 fetchPostsFuture: ${fetchPostsFuture},
 loading: ${loading}
     ''';
