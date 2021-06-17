@@ -15,6 +15,7 @@ import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
+import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
@@ -114,9 +115,34 @@ class _NewpostScreenState extends State<NewpostScreen> {
             .isAfter(DateTime.now().add(Duration(days: songay)))) songay++;
       });
   }
-
-//endregion
-
+  reset(){
+      _image = [];
+     _TileController = TextEditingController();
+     _PriceController = TextEditingController();
+     _AcreageController = TextEditingController();
+     _keyEditor2 = TextEditingController();
+     _ThuocTinhController = new List<TextEditingController>(20);
+      _imageStore.imageListpost=[];
+     _LocateController = TextEditingController();
+     _DescribeController = TextEditingController();
+     _keyEditor = GlobalKey();
+     selectedType=null;
+     selectedTypeType=null;
+     selectedTypeTypeType=null;
+     selectedPack =null;
+     postId='';
+     songay = 0;
+     selectedTown = null;
+     selectedCommune = null;
+     selectedCity = null;
+     selectedhuongnha = null;
+     selectedhuongbancong = null;
+     pointx='';
+     pointy='';
+     result = "";
+     commune = [];
+     selectedDatefl = null;
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -147,9 +173,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_userStore.loadingCurrentUserWallet) {
       _userStore.getCurrentWalletUser();
     }
-    // if (!_userStore.loadingCurrentUserWallet) {
-    //   _userStore.getCurrentWalletUser();
-    // }
+    _imageStore.imageListpost=[];
   }
 
   @override
@@ -201,7 +225,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _handleErrorMessage() {
     return Observer(
-      builder: (context) {
+      builder: (context)  {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
@@ -209,13 +233,17 @@ class _NewpostScreenState extends State<NewpostScreen> {
           showSuccssfullMesssage("Đăng tin thành công", context);
           //dispose();.
           _postStore.successNewpost = false;
-          _postStore.getPostForCurs(false, "", 0);
+          _postStore.getPostForCurs(false,"", 0);
+          _postStore.getsobaidang();
+          _userStore.getCurrentWalletUser();
           Future.delayed(Duration(milliseconds: 3000), () {
+            reset();
             Route route = MaterialPageRoute(
                 builder: (context) =>
                     Detail(post: _postStore.postForCurList.posts.first));
             Navigator.push(context, route);
           });
+
         }
         return SizedBox.shrink();
       },
@@ -1101,7 +1129,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
-                      labelText: 'Giá bán',
+                      labelText: 'Giá bán/thuê',
                       suffixIcon: IconButton(
                         onPressed: () => _PriceController.clear(),
                         icon: Icon(Icons.clear),
@@ -1434,163 +1462,192 @@ class _NewpostScreenState extends State<NewpostScreen> {
         textColor: Colors.white,
         onPressed: () async {
           {
-            if (_TileController.value.text.isEmpty ||
-                _PriceController.value.text.isEmpty ||
-                _AcreageController.value.text.isEmpty ||
-                selectedCommune == null ||
-                selectedPack == null ||
-                selectedTypeTypeType == null ||
-                _image.length == 0)
-              showAlertDialog(context);
-            else {
-              var post = new Post();
-              post.tenXa = selectedCommune.tenXa;
-              post.xaId = selectedCommune.id;
-              post.danhMuc = selectedTypeTypeType.tenDanhMuc;
-              post.danhMucId = selectedTypeTypeType.id;
-              post.dienTich = double.parse(_AcreageController.text);
-              post.gia = double.parse(_PriceController.text);
-              post.tieuDe = _TileController.text;
-              post.thoiDiemDang = DateTime.now().toIso8601String().toString();
-              post.thoiHan = DateTime.parse(post.thoiDiemDang)
-                  .add(Duration(days: songay))
-                  .toIso8601String()
-                  .toString();
-              post.diemBaiDang = 0;
-              post.luotXem = 0;
-              post.luotYeuThich = 0;
-              if (selectedType.tenDanhMuc == "Nhà đất cho thuê")
-                post.tagLoaiBaidang = "Cho thuê";
-              else
-                post.tagLoaiBaidang = "Bán";
-              post.tagTimKiem = selectedTypeTypeType.tag;
-              post.diaChi = _LocateController.text;
-              post.userName = _userStore.userCurrent.userName;
-              post.toaDoX = pointx;
-              post.toaDoY = pointy;
-              post.trangThai = "On";
-              post.userId = _userStore.userCurrent.UserID;
-              _newpost.post = post;
-              _newpost.post.moTa = _keyEditor2.text;
-              _newpost.post.featuredImage = _imageStore.imageListpost.first;
-              lichsugiaodich lichsu = new lichsugiaodich();
-              lichsu.ghiChu =
-                  "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
-              lichsu.soTien = songay * selectedPack.phi;
-              if (_userStore.userCurrent.UserID != null)
-                lichsu.userId = _userStore.userCurrent.UserID;
-              else
-                lichsu.userId = 2;
-              lichsu.thoiDiem = _newpost.post.thoiDiemDang;
-              _newpost.lichsugiaodichs = lichsu;
-              Hoadonbaidang hoadon = new Hoadonbaidang();
-              hoadon.thoiDiem = _newpost.post.thoiDiemDang;
-              hoadon.giaGoi = selectedPack.phi;
-              hoadon.soNgayMua = songay;
-              hoadon.userId = _userStore.userCurrent.UserID;
-              print(_userStore.userCurrent.wallet.toString());
-              hoadon.ghiChu = lichsu.ghiChu;
-              hoadon.tongTien = lichsu.soTien;
-              hoadon.goiBaiDangId = selectedPack.id;
-              _newpost.hoadonbaidang = hoadon;
-              _newpost.properties = new List<Property>();
-              if (_ThuocTinhController != null)
-                for (int i = 0; i < _ThuocTinhController.length; i++)
-                  if (_ThuocTinhController[i]!=null)
-                  if (_ThuocTinhController[i].text.isNotEmpty) {
-                    Property value = new Property();
-                    value.giaTri = _ThuocTinhController[i].text;
-                    value.thuocTinhId =
-                        _postStore.thuocTinhList.thuocTinhs[i + 2].id;
-                    _newpost.properties.add(value);
-                  }
-
-              if (songay * selectedPack.phi > _userStore.userCurrent.wallet) {
-                var futureValue = showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-
-                        title: Text(
-                          "Bạn không đủ số dư để thực hiện giao dịch?",
-                          style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                        ),
-                        content: Column(
-                          //mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize:MainAxisSize.min,
-                          children: [
-                            RoundedButtonWidget(
-                              buttonText: "Nạp thêm tiền",
-                              buttonColor: Colors.green,
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                            ),
-                            RoundedButtonWidget(
-                              buttonColor: Colors.grey,
-                              buttonText: "Hủy",
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    });
-                futureValue.then((value) {
-                  if(value) {
-                    Route route = MaterialPageRoute(
-                        builder: (context) => NapTienPage(
-                              userID: _userStore.userCurrent.UserID,
-                            ));
-                    Navigator.push(context, route);
-                  }
-                });
-              } else {
-                var futureValue = showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          "Đăng tin và thực hiện thanh toán?",
-                          style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                        ),
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RoundedButtonWidget(
-                              buttonText: "Đồng ý",
-                              buttonColor: Colors.green,
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                            ),
-                            RoundedButtonWidget(
-                              buttonColor: Colors.grey,
-                              buttonText: "Hủy",
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    });
-                futureValue.then((value) {
-                  if(value) {
-                    _newpost.images = new List<AppImage>();
-                    for (var item in _imageStore.imageListpost) {
-                      AppImage u = new AppImage();
-                      u.duongDan = item;
-                      _newpost.images.add(u);
+            try{
+              if (_TileController.value.text.isEmpty ||
+                  _PriceController.value.text.isEmpty ||
+                  _AcreageController.value.text.isEmpty ||
+                  selectedCommune == null ||
+                  selectedPack == null ||
+                  selectedTypeTypeType == null ||
+                  _image.length == 0)
+                showAlertDialog(context);
+              else {
+                var post = new Post();
+                post.tenXa = selectedCommune.tenXa;
+                post.xaId = selectedCommune.id;
+                post.danhMuc = selectedTypeTypeType.tenDanhMuc;
+                post.danhMucId = selectedTypeTypeType.id;
+                post.dienTich = double.parse(_AcreageController.text);
+                post.gia = double.parse(_PriceController.text);
+                post.tieuDe = _TileController.text;
+                post.thoiDiemDang = DateTime.now().toIso8601String().toString();
+                post.thoiHan = DateTime.parse(post.thoiDiemDang)
+                    .add(Duration(days: songay))
+                    .toIso8601String()
+                    .toString();
+                post.diemBaiDang = 0;
+                post.luotXem = 0;
+                post.luotYeuThich = 0;
+                if (selectedType.tenDanhMuc == "Nhà đất cho thuê")
+                  post.tagLoaiBaidang = "Cho thuê";
+                else
+                  post.tagLoaiBaidang = "Bán";
+                post.tagTimKiem = selectedTypeTypeType.tag;
+                post.diaChi = _LocateController.text;
+                post.userName = _userStore.userCurrent.userName;
+                post.toaDoX = pointx;
+                post.toaDoY = pointy;
+                post.trangThai = "On";
+                post.userId = _userStore.userCurrent.UserID;
+                _newpost.post = post;
+                _newpost.post.moTa = _keyEditor2.text;
+                _newpost.post.featuredImage = _imageStore.imageListpost.first;
+                lichsugiaodich lichsu = new lichsugiaodich();
+                lichsu.ghiChu =
+                    "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
+                lichsu.soTien = songay * selectedPack.phi;
+                if (_userStore.userCurrent.UserID != null)
+                  lichsu.userId = _userStore.userCurrent.UserID;
+                else
+                  lichsu.userId = 2;
+                lichsu.thoiDiem = _newpost.post.thoiDiemDang;
+                _newpost.lichsugiaodichs = lichsu;
+                Hoadonbaidang hoadon = new Hoadonbaidang();
+                hoadon.thoiDiem = _newpost.post.thoiDiemDang;
+                hoadon.giaGoi = selectedPack.phi;
+                hoadon.soNgayMua = songay;
+                hoadon.userId = _userStore.userCurrent.UserID;
+                print(_userStore.userCurrent.wallet.toString());
+                hoadon.ghiChu = lichsu.ghiChu;
+                hoadon.tongTien = lichsu.soTien;
+                hoadon.goiBaiDangId = selectedPack.id;
+                _newpost.hoadonbaidang = hoadon;
+                _newpost.properties = new List<Property>();
+                if (_ThuocTinhController != null)
+                  for (int i = 0; i < _ThuocTinhController.length; i++)
+                    if (_ThuocTinhController[i] !=
+                        null) if (_ThuocTinhController[i].text.isNotEmpty) {
+                      Property value = new Property();
+                      value.giaTri = _ThuocTinhController[i].text;
+                      value.thuocTinhId =
+                          _postStore.thuocTinhList.thuocTinhs[i + 2].id;
+                      _newpost.properties.add(value);
                     }
-                    _postStore.postPost(_newpost);
-                  }
-                  // true/false
-                });
+
+                if (songay * selectedPack.phi > _userStore.userCurrent.wallet) {
+                  var futureValue = showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Bạn không đủ số dư để thực hiện giao dịch?",
+                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                          ),
+                          content: Column(
+                            //mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              RoundedButtonWidget(
+                                buttonText: "Nạp thêm tiền",
+                                buttonColor: Colors.green,
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              RoundedButtonWidget(
+                                buttonColor: Colors.grey,
+                                buttonText: "Hủy",
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                  futureValue.then((value) {
+                    if (value) {
+                      Route route = MaterialPageRoute(
+                          builder: (context) => NapTienPage(
+                                userID: _userStore.userCurrent.UserID,
+                              ));
+                      Navigator.push(context, route);
+                    }
+                  });
+                } else {
+                  var futureValue = showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            "Đăng tin và thực hiện thanh toán?",
+                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                          ),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RoundedButtonWidget(
+                                buttonText: "Đồng ý",
+                                buttonColor: Colors.green,
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                              ),
+                              RoundedButtonWidget(
+                                buttonColor: Colors.grey,
+                                buttonText: "Hủy",
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                  futureValue.then((value) {
+                    if (value) {
+                      _newpost.images = new List<AppImage>();
+                      for (var item in _imageStore.imageListpost) {
+                        AppImage u = new AppImage();
+                        u.duongDan = item;
+                        _newpost.images.add(u);
+                      }
+                      _postStore.postPost(_newpost);
+                    }
+                    // true/false
+                  });
+                }
               }
+            }
+            on Exception catch(_){ var futureValue = showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Vui lòng load lại trang cá nhân",
+                      style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                    ),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RoundedButtonWidget(
+                          buttonText: "Đồng ý",
+                          buttonColor: Colors.green,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProfileScreen(),
+                                ));
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                });
             }
           }
         },

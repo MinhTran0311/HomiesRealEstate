@@ -1125,7 +1125,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
-                      labelText: 'Giá bán',
+                      labelText: 'Giá bán/thuê',
                       suffixIcon: IconButton(
                         onPressed: () => _PriceController.clear(),
                         icon: Icon(Icons.clear),

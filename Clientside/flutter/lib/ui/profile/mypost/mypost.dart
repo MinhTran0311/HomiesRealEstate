@@ -800,7 +800,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       style: TextStyle(
                                           fontSize: 24, fontFamily: 'intel'),
                                     ),
-                                    content: Row(
+                                    content: Column(
                                       mainAxisSize:MainAxisSize.min,
                                       children: [
                                         RoundedButtonWidget(
@@ -822,11 +822,13 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                   );
                                 });
                             futureValue.then((value) {
-                              Route route = MaterialPageRoute(
-                                  builder: (context) => NapTienPage(
-                                        userID: userStore.userCurrent.UserID,
-                                      ));
-                              Navigator.push(context, route);
+                              if(value) {
+                                Route route = MaterialPageRoute(
+                                    builder: (context) => NapTienPage(
+                                          userID: userStore.userCurrent.UserID,
+                                        ));
+                                Navigator.push(context, route);
+                              }
                             });
                           } else {
                             var futureValue = showDialog(
@@ -929,6 +931,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
         }
         if (postStore.successgiahan) {
           postStore.successgiahan = false;
+          userStore.getCurrentWalletUser();
           showSuccssfullMesssage("Gia hạn thành công",context);
         }
         if (postStore.successdelete) {
