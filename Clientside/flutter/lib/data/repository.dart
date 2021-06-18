@@ -116,8 +116,24 @@ class Repository {
       return postsList;
     }).catchError((error) => throw error);
   }
+  Future<PostList> getPostsforcheck(int skipCount, int maxResultCount, String filter, int key) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _postApi.getPostsforcheck(skipCount,maxResultCount,filter,key).then((postsList) {
+      // postsList.posts.forEach((post) {
+      //   _postDataSource.insert(post);
+      // });
+      return postsList;
+    }).catchError((error) => throw error);
+  }
   Future<String> getsobaidang() async {
     return await _postApi.getsobaidang().then((sobaidang) {
+      return sobaidang;
+    }).catchError((error) => throw error);
+  }
+  Future<String> getsobaidangall() async {
+    return await _postApi.getsobaidangall().then((sobaidang) {
       return sobaidang;
     }).catchError((error) => throw error);
   }

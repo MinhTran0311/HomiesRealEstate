@@ -346,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.yellow[700],
+                      color: post.tagLoaiBaidang!="Cho thuê"?Colors.yellow[700]:Colors.lightBlueAccent,
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   width: 80,
                   padding: EdgeInsets.symmetric(vertical: 4),

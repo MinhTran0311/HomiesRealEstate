@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
-import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
 import 'package:boilerplate/models/post/newpost/newpost.dart';
@@ -13,10 +12,8 @@ import 'package:boilerplate/models/post/propertiesforpost/ThuocTinh_list.dart';
 import 'package:boilerplate/models/town/commune.dart';
 import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
-import 'package:boilerplate/ui/home/detail.dart';
+import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
-import 'package:boilerplate/ui/profile/profile.dart';
-import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -47,133 +44,66 @@ import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/ui/profile/account/account.dart';
 
-class NewpostScreen extends StatefulWidget {
+class EditpostScreen extends StatefulWidget {
+  final Post post;
+  final PostStore postStore;
+  final TownStore townStore;
+  final UserStore userStore;
+  EditpostScreen(
+      {@required this.post, this.postStore, this.townStore, this.userStore});
   @override
-  _NewpostScreenState createState() => _NewpostScreenState();
+  _EditpostScreenState createState() => _EditpostScreenState(
+      post: post,
+      postStore: postStore,
+      townStore: townStore,
+      userStore: userStore);
 }
 
-class _NewpostScreenState extends State<NewpostScreen> {
-  PostStore _postStore;
-  TownStore _townStore;
+class _EditpostScreenState extends State<EditpostScreen> {
+  final Post post;
+  final PostStore postStore;
+  final TownStore townStore;
+  final UserStore userStore;
+  ThemeStore _themeStore;
+  _EditpostScreenState(
+      {@required this.post, this.postStore, this.townStore, this.userStore});
+
   ImageStore _imageStore;
   UserStore _userStore;
-  ThemeStore _themeStore;
-
-  //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
-  TextEditingController _keyEditor2 = TextEditingController();
-  var _ThuocTinhController = new List<TextEditingController>(20);
-
+  var _ThuocTinhController = new List<TextEditingController>();
   TextEditingController _LocateController = TextEditingController();
-  TextEditingController _DescribeController = TextEditingController();
-  GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
-
-  //endregion
+  TextEditingController _keyEditor2 = new TextEditingController();
   final FormStore _store = new FormStore();
-
-  //region Item
   Postcategory selectedType;
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
-  Pack selectedPack;
-  String postId;
-  int songay = 0;
+  int songay;
+  String pointx='';
+  String pointy='';
   Town selectedTown = null;
   Commune selectedCommune = null;
   String selectedCity = null;
   String selectedhuongnha = null;
   String selectedhuongbancong = null;
   List<String> Huong = new List<String>();
-  String pointx='';
-  String pointy='';
   String result = "";
+  bool loading = null;
   List<Commune> commune = [];
-//endregion
-  //region Time
-  //region Time
-  DateFormat dateFormat = DateFormat("yyyy-MM-ddTHH:mm:ss");
-  DateTime selectedDatefl = null;
-  _selectDatefl(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      locale: const Locale('en', ''),
-      initialDate: selectedDatefl,
-      firstDate:
-          DateTime.now().add(Duration(days: selectedPack.thoiGianToiThieu)),
-      lastDate: DateTime.now().add(const Duration(days: 30)),
-    );
-    if (picked != null && picked != selectedDatefl)
-      setState(() {
-        selectedDatefl = picked;
-        songay = 0;
-        while (selectedDatefl
-            .isAfter(DateTime.now().add(Duration(days: songay)))) songay++;
-      });
-  }
-  reset(){
-      _image = [];
-     _TileController = TextEditingController();
-     _PriceController = TextEditingController();
-     _AcreageController = TextEditingController();
-     _keyEditor2 = TextEditingController();
-     _ThuocTinhController = new List<TextEditingController>(20);
-      _imageStore.imageListpost=[];
-     _LocateController = TextEditingController();
-     _DescribeController = TextEditingController();
-     _keyEditor = GlobalKey();
-     selectedType=null;
-     selectedTypeType=null;
-     selectedTypeTypeType=null;
-     selectedPack =null;
-     postId='';
-     songay = 0;
-     selectedTown = null;
-     selectedCommune = null;
-     selectedCity = null;
-     selectedhuongnha = null;
-     selectedhuongbancong = null;
-     pointx='';
-     pointy='';
-     result = "";
-     commune = [];
-     selectedDatefl = null;
-  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // initializing stores
-    //set initialLoading = true ;
-    _postStore = Provider.of<PostStore>(context);
-    _townStore = Provider.of<TownStore>(context);
-    _userStore = Provider.of<UserStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
 
-    if (!_postStore.loadinggetcategorys) {
-      _postStore.getPostcategorys();
+    if (!_imageStore.imageLoading) {
+      _imageStore.getImagesForDetail(post.id.toString());
     }
-    if (!_townStore.loading) {
-      _townStore.getTowns();
-    }
-    if (!_townStore.loadingCommune) {
-      _townStore.getCommunes();
-      _townStore.isIntialLoading = true;
-    }
-    if (!_postStore.loadingPack) {
-      _postStore.getPacks();
-    }
-    if (!_postStore.loadingThuocTinh) {
-      _postStore.getThuocTinhs();
-    }
-    if (!_userStore.loadingCurrentUserWallet) {
-      _userStore.getCurrentWalletUser();
-    }
-    _imageStore.imageListpost=[];
+    if (!postStore.propertiesLoading)
+      postStore.getPostProperties(post.id.toString());
   }
 
   @override
@@ -189,28 +119,88 @@ class _NewpostScreenState extends State<NewpostScreen> {
       "Nam",
       "Bắc"
     ];
-    songay = 0;
-    // ifuserstore.loading
+    loading = true;
+    _TileController = TextEditingController(text: post.tieuDe.toString());
+    _PriceController = TextEditingController(text: post.gia.toString());
+    _AcreageController = TextEditingController(text: post.dienTich.toString());
+    _ThuocTinhController =
+        List<TextEditingController>(postStore.thuocTinhList.thuocTinhs.length);
+    _LocateController = TextEditingController(text: post.diaChi.toString());
+    _keyEditor2 = TextEditingController(text: post.moTa.toString());
+    selectedTypeTypeType =
+        postStore.postCategoryList.categorys[post.danhMucId - 2];
+    selectedTypeType = postStore
+        .postCategoryList.categorys[selectedTypeTypeType.danhMucCha - 2];
+    if (selectedTypeType.danhMucCha != null)
+      selectedType =
+          postStore.postCategoryList.categorys[selectedTypeType.danhMucCha - 2];
+    else {
+      selectedType = selectedTypeType;
+      selectedTypeType = selectedTypeTypeType;
+    }
+    ;
+    pointx=post.toaDoX;
+    pointy=post.toaDoY;
+    selectedCommune = townStore.communeList.communes[post.xaId - 14468];
+    selectedTown = townStore.townList.towns[selectedCommune.huyenId - 896];
+    selectedCity = selectedTown.tinhTenTinh;
+    for (var i = 0; i < townStore.communeList.communes.length; i++)
+      if (townStore.communeList.communes[i].huyenId == selectedTown.id)
+        commune.add(townStore.communeList.communes[i]);
   }
 
   @override
   void dispose() {
     super.dispose();
   }
-  String DatetimeToString(String datetime) {
-    return "${datetime.substring(11, 13)}:${datetime.substring(14, 16)} - ${datetime.substring(8, 10)}/${datetime.substring(5, 7)}/${datetime.substring(0, 4)}";
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         primary: true,
         appBar: AppBar(
-          title: Text("Đăng tin bất động sản"),
+          title: Text("Chỉnh sửa thông tin"),
           //actions: _buildActions(context),
           centerTitle: true,
         ),
         body: WillPopScope(
             onWillPop: () {
+              {
+                var futureValue = showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(
+                          "Bạn chưa lưu thông tin bạn thật sự có muốn thoát?",
+                          style:
+                          TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        ),
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RoundedButtonWidget(
+                              buttonText: "Đồng ý",
+                              buttonColor: Colors.green,
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                            RoundedButtonWidget(
+                              buttonColor: Colors.grey,
+                              buttonText: "Hủy",
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                futureValue.then((value) {
+                  if (value)  Navigator.of(context).pop();
+                });
+              };
               return;
             },
             child: _buildbody()));
@@ -225,26 +215,19 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _handleErrorMessage() {
     return Observer(
-      builder: (context)  {
-        if (_postStore.errorStore.errorMessage.isNotEmpty) {
-          return showErrorMessage(_postStore.errorStore.errorMessage, context);
+      builder: (context) {
+        if (postStore.errorStore.errorMessage.isNotEmpty) {
+          return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
-        if (_postStore.successNewpost) {
-          showSuccssfullMesssage("Đăng tin thành công", context);
+        if (postStore.successeditpost) {
+          showSuccssfullMesssage("Chỉnh sửa thông tin thành công", context);
           //dispose();.
-          _postStore.getsobaidangall();
-          _postStore.successNewpost = false;
-          _postStore.getPostForCurs(false,"", 0);
-          _postStore.getsobaidang();
-          _userStore.getCurrentWalletUser();
-          Future.delayed(Duration(milliseconds: 3000), () {
-            reset();
-            Route route = MaterialPageRoute(
-                builder: (context) =>
-                    Detail(post: _postStore.postForCurList.posts.first));
-            Navigator.push(context, route);
+          postStore.successeditpost = false;
+          postStore.getPostForCurs(false, "", 0);
+          Future.delayed(Duration(milliseconds: 1000), () {
+            Navigator.pop(context);
+            Navigator.pop(context);
           });
-
         }
         return SizedBox.shrink();
       },
@@ -254,18 +237,32 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return !_postStore.loadinggetcategorys &&
-                !_townStore.loadingCommune &&
-                !_postStore.loadingThuocTinh &&
-                !_postStore.loadingPack &&
-                !_userStore.loadingCurrentUserWallet
+        return !postStore.propertiesLoading && !_imageStore.imageLoading
             ? _buildBody()
+            //;
             : CustomProgressIndicatorWidget();
       },
     );
   }
 
   Widget _buildBody() {
+    if (loading) {
+      loading = false;
+      _imageStore.imageListpost = new List<String>();
+      if (postStore.propertyList != null)
+        for (var item in postStore.propertyList.properties) {
+          _ThuocTinhController[item.thuocTinhId - 3] =
+              TextEditingController(text: item.giaTri);
+          if (item.thuocTinhTenThuocTinh == "Hướng nhà")
+            selectedhuongnha = item.giaTri;
+          if (item.thuocTinhTenThuocTinh == "Hướng ban công")
+            selectedhuongbancong = item.giaTri;
+        }
+      for (var i in _imageStore.imageList.images) {
+        _imageStore.imageListpost.add(i.duongDan);
+        _image.add(null);
+      }
+    }
     var _formKey;
     return Material(
         child: Form(
@@ -273,6 +270,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       autovalidateMode: AutovalidateMode.always,
       child: Stack(
         children: <Widget>[
+          Container(),
           MediaQuery.of(context).orientation == Orientation.landscape
               ? Row(
                   children: <Widget>[
@@ -287,6 +285,21 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ],
                 )
               : Center(child: _buildRightSide()),
+          Observer(
+            builder: (context) {
+              return _store.regist_success
+                  ? navigate(context)
+                  : showErrorMessage(_store.errorStore.errorMessage, context);
+            },
+          ),
+          Observer(
+            builder: (context) {
+              return Visibility(
+                visible: _store.regist_loading,
+                child: CustomProgressIndicatorWidget(),
+              );
+            },
+          )
         ],
       ),
     ));
@@ -305,73 +318,40 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child:
-        _userStore.userCurrent.phoneNumber==null?
-        AlertDialog(
-          title: Text(
-            "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-          ),
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RoundedButtonWidget(
-                buttonText: "ok",
-                buttonColor: Colors.green,
-                onPressed: () {
-                  Route route = MaterialPageRoute(
-                      builder: (context) => AccountPage(
-                        UserName: _userStore.userCurrent.userName,
-                        Phone: _userStore.userCurrent.phoneNumber,
-                        Email: _userStore.userCurrent.emailAddress,
-                        Address: "Address",
-                        SurName: _userStore.userCurrent.surname,
-                        Name: _userStore.userCurrent.name,
-                        UserID:  _userStore.userCurrent.UserID,
-                        creationTime: DatetimeToString(
-                            _userStore.userCurrent.creationTime),
-                      ));
-                  Navigator.push(context, route);
-                },
-              )]))
-            : Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-                  SizedBox(height: 24.0),
-                  _buildTileField(),
-                  SizedBox(height: 24.0),
-                  _buildCityField(),
-                  SizedBox(height: 24.0),
-                  _buildTownField(),
-                  _buildCommuneField(),
-                  _buildCommuneField2(),
-                  _buildLocateField(),
-                  SizedBox(height: 24.0),
-                  _buildTypeField(),
-                  SizedBox(height: 24.0),
-                  _buildTypeTypeField(),
-                  _buildTypeTypeTypeField(),
-                  _buildAcreageField(),
-                  SizedBox(height: 24.0),
-                  _buildPriceField(),
-                  SizedBox(height: 24.0),
-                  _buildListView(),
-                  SizedBox(height: 24.0),
-                  _buildPackField(),
-                  SizedBox(height: 24.0),
-                  _buildPackinfoField(),
-                  SizedBox(height: 24.0),
-                  _buildEnddateField(),
-                  _buildTileField2(),
-                  SizedBox(height: 24.0),
-                  _buildImagepick2(),
-                  SizedBox(height: 24.0),
-                  _buildUpButton(),
-                ],
-              ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            SizedBox(height: 24.0),
+            _buildTileField(),
+            SizedBox(height: 24.0),
+            _buildCityField(),
+            SizedBox(height: 24.0),
+            _buildTownField(),
+            _buildCommuneField(),
+            _buildCommuneField2(),
+            _buildLocateField(),
+            SizedBox(height: 24.0),
+            _buildTypeField(),
+            SizedBox(height: 24.0),
+            _buildTypeTypeField(),
+            _buildTypeTypeTypeField(),
+            //_buildVilField(),
+            _buildAcreageField(),
+            SizedBox(height: 24.0),
+            _buildPriceField(),
+            SizedBox(height: 24.0),
+            _buildListView(),
+            SizedBox(height: 24.0),
+            _buildTileField2(),
+            SizedBox(height: 24.0),
+            _buildImagepick2(),
+            SizedBox(height: 24.0),
+            _buildUpButton(),
+          ],
+        ),
       ),
     );
   }
@@ -384,52 +364,51 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-              TextFormField(
-                autofocus: false,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.textsms_rounded,
-                      color:
-                          _themeStore.darkMode ? Colors.white : Colors.amber),
-                  labelStyle: TextStyle(
-                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.textsms_rounded,
+                            color: _themeStore.darkMode
+                                ? Colors.white
+                                : Colors.amber),
+                        labelStyle: TextStyle(
+                          color: (_themeStore.darkMode)
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        hintText: 'Tối đa 50 kí tự',
+                        labelText: 'Tiêu đề',
+                        suffixIcon: IconButton(
+                          onPressed: () => _TileController.clear(),
+                          icon: Icon(Icons.clear),
+                        )),
+                    onSaved: (value) {
+                      // //  FormState.save();
+                      //   print(value);
+                      //   // code when the user saves the form.
+                    },
+                    controller: _TileController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length > 50) {
+                        return 'Vui lòng điền lại tiêu đề';
+                      }
+                      return null;
+                    },
                   ),
-                  hintText: 'Tối đa 50 kí tự',
-                  labelText: 'Tiêu đề',
-                  suffixIcon: IconButton(
-                    onPressed: () => _TileController.clear(),
-                    icon: Icon(Icons.clear,
-                        color:
-                            _themeStore.darkMode ? Colors.white : Colors.amber),
-                  ),
-                ),
-                cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
-                controller: _TileController,
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.length > 50) {
-                    return 'Vui lòng điền lại tiêu đề';
-                  }
-                  return null;
-                },
-              ),
-            ]));
+                ]));
       },
     );
   }
 
   Widget _buildTypeField() {
     List<Postcategory> type = [];
-    if (_postStore.postCategoryList.categorys.length == 0)
-      return Container(
-        height: 0,
-      );
     var _formKey;
-    for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
-      if (_postStore.postCategoryList.categorys[i].danhMucCha ==
-          null) if (_postStore.postCategoryList.categorys[i] != null)
-        type.add(_postStore.postCategoryList.categorys[i]);
+    for (var i = 0; i < postStore.postCategoryList.categorys.length; i++)
+      if (postStore.postCategoryList.categorys[i].danhMucCha ==
+          null) if (postStore.postCategoryList.categorys[i] != null)
+        type.add(postStore.postCategoryList.categorys[i]);
     return Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.always,
@@ -454,7 +433,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             icon: Icon(Icons.clear),
           )),
           validator: (value) =>
-              value == null ? 'Vui lòng chọn phương thức' : null,
+              value == null ? 'vui lòng chọn phương thức' : null,
           items: type.map((Postcategory type) {
             if (type.danhMucCha == null)
               return DropdownMenuItem<Postcategory>(
@@ -464,6 +443,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
+                      color: !_themeStore.darkMode
+                          ? const Color(0xFF167F67)
+                          : Colors.amber,
                     ),
                     SizedBox(
                       width: 10,
@@ -489,11 +471,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildTypeTypeField() {
     List<Postcategory> typetype = [];
     if (selectedType != null) {
-      for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
-        if (_postStore.postCategoryList.categorys[i].danhMucCha ==
+      for (var i = 0; i < postStore.postCategoryList.categorys.length; i++)
+        if (postStore.postCategoryList.categorys[i].danhMucCha ==
             selectedType
-                .id) if (_postStore.postCategoryList.categorys[i] != null)
-          typetype.add(_postStore.postCategoryList.categorys[i]);
+                .id) if (postStore.postCategoryList.categorys[i] != null)
+          typetype.add(postStore.postCategoryList.categorys[i]);
 
       if (typetype.length != 0)
         return Observer(
@@ -505,7 +487,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hint: Text("Chọn hình thức nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
+                    value == null ? 'vui lòng chọn hình thức nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                   onPressed: () => setState(() {
@@ -529,6 +511,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
+                          color: !_themeStore.darkMode
+                              ? const Color(0xFF167F67)
+                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -556,11 +541,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildTypeTypeTypeField() {
     List<Postcategory> typetypetype = [];
     if (selectedTypeType != null) {
-      for (var i = 0; i < _postStore.postCategoryList.categorys.length; i++)
-        if (_postStore.postCategoryList.categorys[i].danhMucCha ==
+      for (var i = 0; i < postStore.postCategoryList.categorys.length; i++)
+        if (postStore.postCategoryList.categorys[i].danhMucCha ==
             selectedTypeType
-                .id) if (_postStore.postCategoryList.categorys[i] != null)
-          typetypetype.add(_postStore.postCategoryList.categorys[i]);
+                .id) if (postStore.postCategoryList.categorys[i] != null)
+          typetypetype.add(postStore.postCategoryList.categorys[i]);
       if (typetypetype.length != 0)
         return Observer(
           builder: (context) {
@@ -570,7 +555,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
               child: DropdownButtonFormField<Postcategory>(
                 hint: Text("Chọn hình thức bổ sung"),
                 value: selectedTypeTypeType,
-                //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
                   setState(() {
                     selectedTypeTypeType = Value;
@@ -590,6 +574,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
+                          color: !_themeStore.darkMode
+                              ? const Color(0xFF167F67)
+                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -615,13 +602,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildCityField() {
-    {
+    return Observer(
+      builder: (context) {
         return Padding(
           padding: const EdgeInsets.only(left: 0.0, right: 0.0),
           child: DropdownSearch<String>(
             autoValidateMode: AutovalidateMode.always,
             validator: (value) =>
-                value == null ? 'Vui lòng chọn tỉnh/thành' : null,
+                value == null ? 'vui lòng chọn tỉnh/thành' : null,
             items: [
               "Thành phố Hà Nội",
               "Tỉnh Hà Giang",
@@ -695,7 +683,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 selectedTown = null;
               });
             },
-            selectedItem: null,
+            selectedItem: selectedCity,
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -705,10 +693,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
               height: 50,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColorDark,
-                // borderRadius: BorderRadius.only(
-                //   topLeft: Radius.circular(20),
-                //   topRight: Radius.circular(20),
-                // ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
               ),
               child: Center(
                 child: Text(
@@ -723,15 +711,16 @@ class _NewpostScreenState extends State<NewpostScreen> {
             ),
           ),
         );
-      };
+      },
+    );
   }
 
   Widget _buildTownField() {
     if (selectedCity != null) {
       List<Town> town = [];
-      for (var i = 0; i < _townStore.townList.towns.length; i++)
-        if (_townStore.townList.towns[i].tinhTenTinh == selectedCity)
-          town.add(_townStore.townList.towns[i]);
+      for (var i = 0; i < townStore.townList.towns.length; i++)
+        if (townStore.townList.towns[i].tinhTenTinh == selectedCity)
+          town.add(townStore.townList.towns[i]);
       return Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 0.0, bottom: 24.0),
         child: DropdownButtonFormField<Town>(
@@ -739,7 +728,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           value: selectedTown,
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'Vui lòng chọn quận huyện' : null,
+              value == null ? 'vui lòng chọn quận huyện' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -753,10 +742,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
               selectedTown = Value;
               selectedCommune = null;
               commune = [];
-              for (var i = 0; i < _townStore.communeList.communes.length; i++)
-                if (_townStore.communeList.communes[i].huyenId ==
+              for (var i = 0; i < townStore.communeList.communes.length; i++)
+                if (townStore.communeList.communes[i].huyenId ==
                     selectedTown.id)
-                  commune.add(_townStore.communeList.communes[i]);
+                  commune.add(townStore.communeList.communes[i]);
             });
           },
           items: town.map((Town type) {
@@ -766,6 +755,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
+                    color: !_themeStore.darkMode
+                        ? const Color(0xFF167F67)
+                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 10,
@@ -790,12 +782,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildCommuneField() {
     if (selectedTown != null) {
       return Padding(
-        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
+        padding: const EdgeInsets.only(left: 40.0, right: 0.0, bottom: 24.0),
         child: DropdownButtonFormField<Commune>(
           hint: Text("Chọn xã/phường"),
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'Vui lòng chọn xã/phường' : null,
+              value == null ? 'vui lòng chọn xã/phường' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
             onPressed: () => setState(() {
@@ -830,14 +822,17 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
+                    color: !_themeStore.darkMode
+                        ? const Color(0xFF167F67)
+                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 8,
                   ),
                   Text(
-                    type.tenXa.length <= 22
+                    type.tenXa.length <= 21
                         ? type.tenXa
-                        : type.tenXa = type.tenXa.substring(0, 20) + "..",
+                        : type.tenXa = type.tenXa.substring(0, 19) + "..",
                     style: TextStyle(),
                   ),
                 ],
@@ -855,11 +850,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildCommuneField2() {
     if (selectedCommune != null) {
       return Padding(
-        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
-        child: Text(
-          pointx+','+pointy,
-          style: TextStyle(),
-        ));
+          padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
+          child: Text(
+            pointx+','+pointy,
+            style: TextStyle(),
+          ));
     } else
       return Container(
         height: 0,
@@ -877,7 +872,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
@@ -893,7 +887,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         onPressed: () => _LocateController.clear(),
                         icon: Icon(Icons.clear),
                       ),
-                      labelText: ('Địa chỉ'),
+                      labelText: 'Địa chỉ',
                     ),
                     onSaved: (value) {
                       // //  FormState.save();
@@ -915,7 +909,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildListView() {
     return Observer(builder: (context) {
-      return !_postStore.loadingThuocTinh
+      return !postStore.loadingThuocTinh
           ? SingleChildScrollView(
               child: ExpansionTile(
                   title: Text(
@@ -929,11 +923,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   Container(
                     height: 200,
                     child: ListView.builder(
-                      itemCount: _postStore.thuocTinhList.thuocTinhs.length - 2,
+                      itemCount: postStore.thuocTinhList.thuocTinhs.length - 2,
                       itemBuilder: (context, i) {
                         //_ThuocTinhController.add(new TextEditingController());
                         return _buildThuocTinh(
-                            _postStore.thuocTinhList.thuocTinhs[i + 2], i);
+                            postStore.thuocTinhList.thuocTinhs[i + 2], i);
                       },
                     ),
                   )
@@ -959,7 +953,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   thuocTinh.tenThuocTinh != "Hướng nhà" &&
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
-                          autofocus: false,
                           decoration: InputDecoration(
                             icon: Icon(Icons.home_work,
                                 color: _themeStore.darkMode
@@ -970,7 +963,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                   ? Colors.white
                                   : Colors.black,
                             ),
-                            fillColor: Colors.white,
                             labelText: '${thuocTinh.tenThuocTinh}',
                             suffixIcon: IconButton(
                               onPressed: () =>
@@ -997,6 +989,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                   children: [
                                     Icon(
                                       Icons.directions,
+                                      color: !_themeStore.darkMode
+                                          ? const Color(0xFF167F67)
+                                          : Colors.amber,
                                     ),
                                     SizedBox(
                                       width: 10,
@@ -1043,6 +1038,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.directions,
+                                      color: !_themeStore.darkMode
+                                          ? const Color(0xFF167F67)
+                                          : Colors.amber,
                                     ),
                                     SizedBox(
                                       width: 10,
@@ -1074,7 +1072,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    autofocus: false,
                     decoration: InputDecoration(
                         icon: Icon(Icons.api,
                             color: _themeStore.darkMode
@@ -1094,6 +1091,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
+                    autofocus: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Vui lòng điền diện tích';
@@ -1117,7 +1115,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
-                    autofocus: false,
                     decoration: InputDecoration(
                       icon: Icon(Icons.money,
                           color: _themeStore.darkMode
@@ -1157,147 +1154,41 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-              TextFormField(
-                autofocus: false,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.textsms_rounded,
-                      color:
-                          _themeStore.darkMode ? Colors.white : Colors.amber),
-                  labelStyle: TextStyle(
-                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
-                  ),
-                  labelText: 'Mô tả',
-                  hintText: "Mô tả thêm về bài đăng",
-                  suffixIcon: IconButton(
-                    onPressed: () => _keyEditor2.clear(),
-                    icon: Icon(
-                      Icons.clear,
-                      color: _themeStore.darkMode ? Colors.white : Colors.black,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.textsms_rounded,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      labelText: 'Mô tả',
+                      hintText: "Mô tả thêm về bài đăng",
+                      suffixIcon: IconButton(
+                        onPressed: () => _keyEditor2.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
                     ),
+                    onSaved: (value) {},
+                    //keyboardType: TextInputType.number,
+                    controller: _keyEditor2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng nhập mô tả';
+                      }
+                      if (value.length > 1000) return null;
+                      return null;
+                    },
                   ),
-                ),
-                onSaved: (value) {},
-                //keyboardType: TextInputType.number,
-                controller: _keyEditor2,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mô tả';
-                  }
-                  if (value.length > 1000) return null;
-                  return null;
-                },
-              ),
-            ]));
+                ]));
       },
     );
-  }
-
-  Widget _buildPackField() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      child: DropdownButtonFormField<Pack>(
-        hint: Text("Chọn gói bài đăng"),
-        value: selectedPack,
-        autovalidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
-        decoration: InputDecoration(
-            suffixIcon: IconButton(
-          onPressed: () => setState(() {
-            selectedPack = null;
-          }),
-          icon: Icon(Icons.clear),
-        )),
-        onChanged: (Pack Value) {
-          setState(() {
-            selectedPack = Value;
-            songay = selectedPack.thoiGianToiThieu;
-            selectedDatefl = DateTime.now()
-                .add(Duration(days: selectedPack.thoiGianToiThieu));
-          });
-        },
-        items: _postStore.packList.packs.map((Pack type) {
-          return DropdownMenuItem<Pack>(
-            value: type,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.account_circle,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  type.tenGoi + ", phí: " + priceFormat(type.phi),
-                  style: TextStyle(),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildPackinfoField() {
-    return selectedPack != null
-        ? Text(
-            "Mô tả: ${selectedPack.moTa}",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          )
-        : Container(
-            width: 0,
-            height: 0,
-          );
-  }
-
-  Widget _buildEnddateField() {
-    return selectedPack != null
-        ? Observer(
-            builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    RoundedButtonWidget(
-                      onPressed: () => _selectDatefl(context),
-                      buttonColor: Colors.amber,
-                      textColor: Colors.white,
-                      buttonText: ('Chọn ngày kết thúc'),
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    Text(
-                      "Ngày kết thúc:" +
-                          "${selectedDatefl.toLocal()}".split(' ')[0],
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    Text(
-                      "Phí bài đăng:" +
-                          "${priceFormat(selectedPack.phi * songay)}",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                  ],
-                ),
-              );
-            },
-          )
-        : Container(
-            height: 0,
-          );
   }
 
   List<File> _image = [];
@@ -1375,7 +1266,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             margin: EdgeInsets.all(3),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: FileImage(_image[index]),
+                                    image: _image[index] != null
+                                        ? FileImage(_image[index])
+                                        : NetworkImage(
+                                            _imageStore.imageListpost[index]),
                                     fit: BoxFit.cover)),
                             child: SizedBox(
                               width: 80,
@@ -1383,6 +1277,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               child: FlatButton(
                                 padding:
                                     EdgeInsets.only(left: 70.0, bottom: 70.0),
+                                // shape: RoundedRectangleBorder(
+                                //     borderRadius: BorderRadius.circular(20),
+                                //     side: BorderSide(color: Colors.white)),
+                                // color: Color(0xFFF5F6F9),
                                 onPressed: () => {clearimage(index)},
                                 child: Icon(
                                   Icons.dangerous,
@@ -1425,11 +1323,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
-            selectedPack == null
-                ? Text('Vui lòng chọn gói bài đăng')
-                : Container(
-                    height: 0,
-                  ),
             selectedTypeTypeType == null
                 ? Text('Vui lòng chọn hình thức nhà/đất')
                 : Container(
@@ -1450,8 +1343,25 @@ class _NewpostScreenState extends State<NewpostScreen> {
     );
   }
 
+  // Dangtin(BuildContext context) {
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("Thông báo"),
+  //     content: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: <Widget>[
+  //         ]),
+  //   );
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
+
   var _newpost = new Newpost();
-  var sc = false;
   Widget _buildUpButton() {
     return Observer(builder: (context) {
       return RoundedButtonWidget(
@@ -1461,192 +1371,101 @@ class _NewpostScreenState extends State<NewpostScreen> {
         textColor: Colors.white,
         onPressed: () async {
           {
-            try{
-              if (_TileController.value.text.isEmpty ||
-                  _PriceController.value.text.isEmpty ||
-                  _AcreageController.value.text.isEmpty ||
-                  selectedCommune == null ||
-                  selectedPack == null ||
-                  selectedTypeTypeType == null ||
-                  _image.length == 0)
-                showAlertDialog(context);
-              else {
-                var post = new Post();
-                post.tenXa = selectedCommune.tenXa;
-                post.xaId = selectedCommune.id;
-                post.danhMuc = selectedTypeTypeType.tenDanhMuc;
-                post.danhMucId = selectedTypeTypeType.id;
-                post.dienTich = double.parse(_AcreageController.text);
-                post.gia = double.parse(_PriceController.text);
-                post.tieuDe = _TileController.text;
-                post.thoiDiemDang = DateTime.now().toIso8601String().toString();
-                post.thoiHan = DateTime.parse(post.thoiDiemDang)
-                    .add(Duration(days: songay))
-                    .toIso8601String()
-                    .toString();
-                post.diemBaiDang = 0;
-                post.luotXem = 0;
-                post.luotYeuThich = 0;
-                if (selectedType.tenDanhMuc == "Nhà đất cho thuê")
-                  post.tagLoaiBaidang = "Cho thuê";
-                else
-                  post.tagLoaiBaidang = "Bán";
-                post.tagTimKiem = selectedTypeTypeType.tag;
-                post.diaChi = _LocateController.text;
-                post.userName = _userStore.userCurrent.userName;
-                post.toaDoX = pointx;
-                post.toaDoY = pointy;
-                post.trangThai = "On";
-                post.userId = _userStore.userCurrent.UserID;
-                _newpost.post = post;
-                _newpost.post.moTa = _keyEditor2.text;
-                _newpost.post.featuredImage = _imageStore.imageListpost.first;
-                lichsugiaodich lichsu = new lichsugiaodich();
-                lichsu.ghiChu =
-                    "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
-                lichsu.soTien = songay * selectedPack.phi;
-                if (_userStore.userCurrent.UserID != null)
-                  lichsu.userId = _userStore.userCurrent.UserID;
-                else
-                  lichsu.userId = 2;
-                lichsu.thoiDiem = _newpost.post.thoiDiemDang;
-                _newpost.lichsugiaodichs = lichsu;
-                Hoadonbaidang hoadon = new Hoadonbaidang();
-                hoadon.thoiDiem = _newpost.post.thoiDiemDang;
-                hoadon.giaGoi = selectedPack.phi;
-                hoadon.soNgayMua = songay;
-                hoadon.userId = _userStore.userCurrent.UserID;
-                print(_userStore.userCurrent.wallet.toString());
-                hoadon.ghiChu = lichsu.ghiChu;
-                hoadon.tongTien = lichsu.soTien;
-                hoadon.goiBaiDangId = selectedPack.id;
-                _newpost.hoadonbaidang = hoadon;
-                _newpost.properties = new List<Property>();
-                if (_ThuocTinhController != null)
-                  for (int i = 0; i < _ThuocTinhController.length; i++)
-                    if (_ThuocTinhController[i] !=
-                        null) if (_ThuocTinhController[i].text.isNotEmpty) {
-                      Property value = new Property();
-                      value.giaTri = _ThuocTinhController[i].text;
-                      value.thuocTinhId =
-                          _postStore.thuocTinhList.thuocTinhs[i + 2].id;
-                      _newpost.properties.add(value);
-                    }
+            if (_TileController.value.text.isEmpty ||
+                _PriceController.value.text.isEmpty ||
+                _AcreageController.value.text.isEmpty ||
+                selectedCommune == null ||
+                selectedTypeTypeType == null ||
+                _image.length == 0 ||
+                _keyEditor2.value.text.isEmpty)
+              showAlertDialog(context);
+            else {
+              var post = new Post();
+              post = this.post;
+              post.tenXa = selectedCommune.tenXa;
+              post.xaId = selectedCommune.id;
+              post.danhMuc = selectedTypeTypeType.tenDanhMuc;
+              post.danhMucId = selectedTypeTypeType.id;
+              post.dienTich = double.parse(_AcreageController.text);
+              post.gia = double.parse(_PriceController.text);
+              post.tieuDe = _TileController.text;
+              if (selectedType.tenDanhMuc == "Nhà đất cho thuê")
+                post.tagLoaiBaidang = "Cho thuê";
+              else
+                post.tagLoaiBaidang = "Bán";
+              post.tagTimKiem = selectedTypeTypeType.tag;
+              post.diaChi = _LocateController.text;
+              post.toaDoX = pointx;
+              post.toaDoY = pointy;
+              post.trangThai = "On";
+              post.moTa = _keyEditor2.text;
+              post.featuredImage = _imageStore.imageListpost.first;
+              _newpost.post = post;
+              _newpost.properties = new List<Property>();
+              var j = 0;
+              if (_ThuocTinhController != null)
+                for (int i = 0; i < _ThuocTinhController.length; i++)
+                  if (_ThuocTinhController[i] !=
+                      null) if (_ThuocTinhController[i].text.isNotEmpty) {
+                    //j++;
+                    Property value = new Property();
+                    if (j < postStore.propertyList.properties.length)
+                      value.id = postStore.propertyList.properties[j].id;
+                    value.giaTri = _ThuocTinhController[i].text;
+                    value.thuocTinhId =
+                        postStore.thuocTinhList.thuocTinhs[i + 2].id;
+                    value.baiDangId = this.post.id;
+                    j++;
+                    value.thuocTinhTenThuocTinh =
+                        postStore.thuocTinhList.thuocTinhs[i + 2].tenThuocTinh;
+                    _newpost.properties.add(value);
+                  }
+              _newpost.images = new List<AppImage>();
+              j = 0;
+              var futureValue = showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Chỉnh sửa bài đăng?",
+                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                      ),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RoundedButtonWidget(
+                            buttonText: "Đồng ý",
+                            buttonColor: Colors.green,
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                          RoundedButtonWidget(
+                            buttonColor: Colors.grey,
+                            buttonText: "Hủy",
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  });
+              futureValue.then((value) {
+                if(value) {
+              for (var item in _imageStore.imageListpost) {
 
-                if (songay * selectedPack.phi > _userStore.userCurrent.wallet) {
-                  var futureValue = showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(
-                            "Bạn không đủ số dư để thực hiện giao dịch?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                          ),
-                          content: Column(
-                            //mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              RoundedButtonWidget(
-                                buttonText: "Nạp thêm tiền",
-                                buttonColor: Colors.green,
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                              RoundedButtonWidget(
-                                buttonColor: Colors.grey,
-                                buttonText: "Hủy",
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      });
-                  futureValue.then((value) {
-                    if (value) {
-                      Route route = MaterialPageRoute(
-                          builder: (context) => NapTienPage(
-                                userID: _userStore.userCurrent.UserID,
-                              ));
-                      Navigator.push(context, route);
-                    }
-                  });
-                } else {
-                  var futureValue = showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(
-                            "Đăng tin và thực hiện thanh toán?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                          ),
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RoundedButtonWidget(
-                                buttonText: "Đồng ý",
-                                buttonColor: Colors.green,
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                              RoundedButtonWidget(
-                                buttonColor: Colors.grey,
-                                buttonText: "Hủy",
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      });
-                  futureValue.then((value) {
-                    if (value) {
-                      _newpost.images = new List<AppImage>();
-                      for (var item in _imageStore.imageListpost) {
-                        AppImage u = new AppImage();
-                        u.duongDan = item;
-                        _newpost.images.add(u);
-                      }
-                      _postStore.postPost(_newpost);
-                    }
-                    // true/false
-                  });
-                }
-              }
-            }
-            on Exception catch(_){ var futureValue = showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(
-                      "Vui lòng load lại trang cá nhân",
-                      style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                    ),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RoundedButtonWidget(
-                          buttonText: "Đồng ý",
-                          buttonColor: Colors.green,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
-                                ));
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                });
+                AppImage u = new AppImage();
+                if (j < _imageStore.imageList.images.length)
+                  u.id = _imageStore.imageList.images[j].id;
+                j++;
+                u.baiDangId = this.post.id.toString();
+                u.duongDan = item;
+                _newpost.images.add(u);
+               }
+                postStore.editpost(_newpost);
+              }});
             }
           }
         },
@@ -1656,9 +1475,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
 //endregion
 
   Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, false);
-    });
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pop();
     });

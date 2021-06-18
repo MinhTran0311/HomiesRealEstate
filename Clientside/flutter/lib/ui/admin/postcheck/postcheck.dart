@@ -16,7 +16,7 @@ import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/home/filter.dart';
-import 'package:boilerplate/ui/profile/mypost/editpost/editpost.dart';
+import 'package:boilerplate/ui/admin/postcheck/editpost/editpostforcheck.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
@@ -32,23 +32,18 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class MyPostScreen extends StatefulWidget {
-  final UserStore userStore;
-  final PostStore postStore;
-  MyPostScreen({@required this.userStore, this.postStore});
+class PostCheckScreen extends StatefulWidget {
   @override
-  _MyPostScreenState createState() =>
-      _MyPostScreenState(userStore: userStore, postStore: postStore);
+  _PostCheckScreenState createState() =>
+      _PostCheckScreenState();
 }
 
 enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
 
-class _MyPostScreenState extends State<MyPostScreen> {
-  BestTutorSite _site = BestTutorSite.javatpoint;
-  final UserStore userStore;
-  final PostStore postStore;
+class _PostCheckScreenState extends State<PostCheckScreen> {
+  UserStore userStore;
+  PostStore postStore;
   TextEditingController _searchController11 = new TextEditingController();
-  _MyPostScreenState({@required this.userStore, this.postStore});
   TownStore _townStore;
   ThemeStore _themeStore;
   String dropdownValue = "Tất cả";
@@ -66,17 +61,22 @@ class _MyPostScreenState extends State<MyPostScreen> {
   @override
   void initState() {
     super.initState();
-    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
-    selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
-    songay = new List<int>(int.parse(postStore.sobaidang));
+    // selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
+    // selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
+    // songay = new List<int>(int.parse(postStore.sobaidang));
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    postStore = Provider.of<PostStore>(context);
+    userStore = Provider.of<UserStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
-    if (!postStore.loadingPostForCur) postStore.getPostForCurs(false, "", key);
+    if (!postStore.loadingPostForcheck) postStore.getPostForcheck(false, "", key);
+    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
+    selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
+    songay = new List<int>(int.parse(postStore.sobaidang));
   }
 
   @override
@@ -128,7 +128,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return postStore.loadingPostForCur
+        return postStore.loadingPostForcheck
             ? CustomProgressIndicatorWidget()
             : _buildPostsList();
       },
@@ -172,7 +172,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     size: 28,
                   ),
                   onPressed: () async {
-                    postStore.getPostForCurs(
+                    postStore.getPostForcheck(
                         false,
                         _searchController11 != null
                             ? _searchController11.text.toString()
@@ -201,7 +201,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 key = -1;
               else
                 key = 1;
-              postStore.getPostForCurs(
+              postStore.getPostForcheck(
                   false,
                   _searchController11 != null
                       ? _searchController11.text.toString()
@@ -223,7 +223,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   }
 
   Widget _buildListView() {
-    return postStore.postForCurList != null
+    return postStore.postForcheckList != null
         ? Expanded(
             child: SmartRefresher(
               key: _refresherKey1,
@@ -258,7 +258,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               ),
               onLoading: () async {
                 print("loading");
-                postStore.getPostForCurs(
+                postStore.getPostForcheck(
                     false,
                     _searchController11 != null
                         ? _searchController11.text.toString()
@@ -276,7 +276,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               },
               onRefresh: () async {
                 print("refresh");
-                postStore.getPostForCurs(
+                postStore.getPostForcheck(
                     false,
                     _searchController11 != null
                         ? _searchController11.text.toString()
@@ -292,10 +292,10 @@ class _MyPostScreenState extends State<MyPostScreen> {
               child: ListView.builder(
                 key: _contentKey1,
                 controller: _scrollController1,
-                itemCount: postStore.postForCurList.posts.length,
+                itemCount: postStore.postForcheckList.posts.length,
                 itemBuilder: (context, position) {
                   return _buildPostPoster(
-                      postStore.postForCurList.posts[position], position);
+                      postStore.postForcheckList.posts[position], position);
                 },
               ),
             ),
@@ -330,7 +330,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
       setState(() {
         songay[index] = 0;
         if (DateTime.now().isAfter(
-            DateTime.parse(postStore.postForCurList.posts[index].thoiHan))) {
+            DateTime.parse(postStore.postForcheckList.posts[index].thoiHan))) {
           while (
               picked.isAfter(DateTime.now().add(Duration(days: songay[index]))))
             songay[index]++;
@@ -338,10 +338,10 @@ class _MyPostScreenState extends State<MyPostScreen> {
               DateTime.now().add(Duration(days: songay[index]));
         } else {
           while (picked.isAfter(
-              DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
+              DateTime.parse(postStore.postForcheckList.posts[index].thoiHan)
                   .add(Duration(days: songay[index])))) songay[index]++;
           selectedDatefl[index] =
-              DateTime.parse(postStore.postForCurList.posts[index].thoiHan)
+              DateTime.parse(postStore.postForcheckList.posts[index].thoiHan)
                   .add(Duration(days: songay[index]));
         }
       });
@@ -517,7 +517,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: post.tagLoaiBaidang!="Cho thuê"?Colors.yellow[700]:Colors.lightBlueAccent,
+                              color: Colors.yellow[700],
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
                           width: 80,
@@ -876,7 +876,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                   selectedDatefl[index].toIso8601String();
                               newpost.post = post;
                               newpost.lichsugiaodichs = new lichsugiaodich();
-                              newpost.lichsugiaodichs.userId = post.userId;
+                              newpost.lichsugiaodichs.userId = userStore.userCurrent.UserID;
                               newpost.lichsugiaodichs.ghiChu =
                                   "${post.tieuDe} gia hạn";
                               newpost.lichsugiaodichs.thoiDiem =
@@ -896,13 +896,13 @@ class _MyPostScreenState extends State<MyPostScreen> {
                               newpost.hoadonbaidang.tongTien =
                                   newpost.lichsugiaodichs.soTien;
                               newpost.hoadonbaidang.ghiChu =
-                                  "Gia hạn bài đăng \"${post.tieuDe}\"";
+                                  "Gia hạn bài đăng cho user \"${post.userId}\"";
                               newpost.hoadonbaidang.baiDangId = post.id;
                               newpost.hoadonbaidang.goiBaiDangId =
                                   selectedPack[index] == null
                                       ? post.goiBaiDangId
                                       : selectedPack[index].id;
-                              newpost.hoadonbaidang.userId = post.userId;
+                              newpost.hoadonbaidang.userId = userStore.userCurrent.UserID;
                               postStore.giahan(newpost);
                               setState(() {
                                 selectedDatefl[index] = null;

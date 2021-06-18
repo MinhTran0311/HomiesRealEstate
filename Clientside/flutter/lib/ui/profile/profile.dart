@@ -86,7 +86,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     //sobaidang = await _postStore.getsobaidang();
   }
-
   @override
   void initState() {
     super.initState();

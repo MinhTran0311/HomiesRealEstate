@@ -1,9 +1,12 @@
 import 'dart:developer';
+//import 'dart:html';
 import 'dart:math';
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/ui/admin/postcheck/postcheck.dart';
 import 'package:boilerplate/ui/admin/roleManagement/roleManagement.dart';
 import 'package:boilerplate/ui/admin/thuocTinhManagement/thuocTinhManagement.dart';
 import 'package:boilerplate/ui/kiemduyet/kiemduyet.dart';
@@ -43,7 +46,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
   ThuocTinhManagementStore _thuocTinhManagementStore;
   GoiBaiDangManagementStore _goiBaiDangManagementStore;
   BaiDangManagementStore _baiDangManagementStore;
-
+  PostStore postStore;
   @override
   void initState() {
     super.initState();
@@ -52,6 +55,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    postStore = Provider.of<PostStore>(context);
 
     _themeStore = Provider.of<ThemeStore>(context);
     _userManagementStore = Provider.of<UserManagementStore>(context);
@@ -81,6 +85,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
     if(!_baiDangManagementStore.loadingCountNewBaiDangsInMonth) {
       _baiDangManagementStore.fCountNewBaiDangsInMonth();
     }
+    if (!postStore.loadingsobaidangall) postStore.getsobaidangall();
   }
 
   @override
@@ -119,7 +124,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
         || _danhMucManagementStore.loadingCountAllDanhMucs
         || _thuocTinhManagementStore.loadingCountAllThuocTinhs
         || _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs
-        || _baiDangManagementStore.loadingCountNewBaiDangsInMonth)
+        || _baiDangManagementStore.loadingCountNewBaiDangsInMonth
+        || postStore.loadingsobaidangall)
             ? CustomProgressIndicatorWidget()
             : _buildMenuItems();
       },
@@ -252,6 +258,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
             _buildListItem("Maps đăng bài", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMapsDangBai, Colors.green, 0),
             SizedBox(height: 25,),
             _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", 15, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
+            SizedBox(height: 25,),
+            _buildListItem("Kiểm duyệt bài đăng", "assets/images/approve.png", int.parse(postStore.sobaidangall), "Kiểm duyệt bài đăng", _clickBtnPostChecker, Colors.deepOrangeAccent, 0),
             SizedBox(height: 25,),
           ],
         ),
@@ -438,4 +446,10 @@ class _ManagementScreenState extends State<ManagementScreen> {
       MaterialPageRoute(builder: (context) => KiemDuyetPage()),
     );
   }
+  _clickBtnPostChecker(){
+  Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => PostCheckScreen()),
+  );
+}
 }

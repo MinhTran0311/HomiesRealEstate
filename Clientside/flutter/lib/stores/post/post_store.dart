@@ -596,6 +596,33 @@ abstract class _PostStore with Store {
       }
     });
   }
+  ///////////////////////////getsobaidang
+  static ObservableFuture<String> emptysobaidangallResponse =
+  ObservableFuture.value(null);
+  @observable
+  ObservableFuture<String> fetchsobaidangallFuture = ObservableFuture<String>(emptysobaidangallResponse);
+  @observable
+  String sobaidangall="";
+  @computed
+  bool get loadingsobaidangall => fetchsobaidangallFuture.status == FutureStatus.pending && isIntialLoading ;
+  @observable
+  Future getsobaidangall() async {
+    final future = _repository.getsobaidangall();
+    fetchsobaidangallFuture = ObservableFuture(future);
+    future.then((sobaidangall) {
+      this.sobaidangall = sobaidangall;
+      return sobaidangall;
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+        throw error;
+      }
+    });
+  }
   /////////////////delete
   static ObservableFuture<String> emptydeleteResponse =
   ObservableFuture.value(null);
@@ -708,6 +735,51 @@ abstract class _PostStore with Store {
       else {
         for(var i in favopost.posts)
           this.favopost.posts.add(i);
+      }
+    }).catchError((error) {
+      if (error is DioError) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+        throw error;
+      }
+      else{
+        errorStore.errorMessage="Hãy kiểm tra kết nối Internet và thử lại!";
+        throw error;
+      }
+    });
+  }
+  //////////
+  ///////////////////////////getcheckpost
+  static ObservableFuture<PostList> emptyPostforcheckResponse =
+  ObservableFuture.value(null);
+  @observable
+  bool isIntialLoadingpostforcheck = true;
+  @observable
+  ObservableFuture<PostList> fetchPostForcheckFuture = ObservableFuture<PostList>(emptyPostforcheckResponse);
+  @observable
+  PostList postForcheckList=new PostList();
+  @computed
+  bool get loadingPostForcheck => fetchPostForcheckFuture.status == FutureStatus.pending && isIntialLoadingpostforcheck ;
+  @observable
+  bool successPostForcheck = false;
+  @observable
+  Future getPostForcheck(bool isLoadMore, String filter, int key) async {
+    if (!isLoadMore){
+      skipCountmypost = 0;
+    }
+    else
+      skipCountmypost +=
+          Preferences.skipIndex;
+    final future = _repository.getPostsforcheck(skipCountmypost,Preferences.maxCount,filter,key);
+    fetchPostForcheckFuture = ObservableFuture(future);
+    future.then((postList) {
+      successPostForcheck = true;
+      if (!isLoadMore) {
+        this.postForcheckList = postList;
+        if (isIntialLoadingpostforcheck) isIntialLoadingpostforcheck = false;
+      }
+      else {
+        for(var i in postList.posts)
+          this.postForcheckList.posts.add(i);
       }
     }).catchError((error) {
       if (error is DioError) {

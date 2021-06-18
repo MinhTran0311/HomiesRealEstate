@@ -114,7 +114,7 @@ class PostApi {
   Future<PostCategoryList> getPostCategorys() async {
     try {
       final res = await _dioClient.get(
-        "https://homies.exscanner.edu.vn/api/services/app/DanhMucs/GetAll?MaxResultCount=50",
+        "https://homies.exscanner.edu.vn/api/services/app/DanhMucs/GetAllDanhMucForView",
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
@@ -146,7 +146,7 @@ class PostApi {
   Future<ThuocTinhList> getThuocTinhs() async {
     try {
       final res = await _dioClient.get(
-        "https://homies.exscanner.edu.vn/api/services/app/ThuocTinhs/GetAll",
+        "https://homies.exscanner.edu.vn/api/services/app/ThuocTinhs/GetAllThuocTinhForView",
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
@@ -219,10 +219,42 @@ class PostApi {
       throw e;
     }
   }
+  Future<PostList> getPostsforcheck(int skipCount, int maxResultCount, String filter, int key,) async {
+    try {
+      final res = await _dioClient.get(
+        "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllForModerator",
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+        queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount,"filter":filter,"phanLoaiBaiDang":key },
+      );
+      return PostList.fromJsonmypost(res);
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
   Future<String> getsobaidang() async {
     try {
       final res = await _dioClient.get(
         "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllBaiDangsByCurrentUser",
+        options: Options(headers: {
+          "Abp.TenantId": 1,
+          "Authorization": "Bearer ${Preferences.access_token}",
+        }),
+        queryParameters:{"skipCount": 0, "maxResultCount":1},
+      );
+      return (res["result"]["totalCount"].toString());
+    } catch (e) {
+      print("lỗi" + e.toString());
+      throw e;
+    }
+  }
+  Future<String> getsobaidangall() async {
+    try {
+      final res = await _dioClient.get(
+        "https://homies.exscanner.edu.vn/api/services/app/BaiDangs/GetAllForModerator",
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
@@ -352,7 +384,7 @@ class PostApi {
   Future<double> getpackprice(int idpost) async {
     try {
       final res = await _dioClient.get(
-        "https://homies.exscanner.edu.vn/api/services/app/GoiBaiDangs/GetGoiBaiDangForView",
+        "https://homies.exscanner.edu.vn/api/services/app/GoiBaiDangs/GetAllGoiBaiDangForView",
         options: Options(
           headers: {
             "Abp.TenantId": 1,
