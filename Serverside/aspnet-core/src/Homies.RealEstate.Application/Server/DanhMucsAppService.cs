@@ -64,6 +64,42 @@ namespace Homies.RealEstate.Server
                 await danhMucs.ToListAsync()
             );
         }
+        
+        public async Task<PagedResultDto<GetDanhMucForViewDto>> GetAllDanhMucForView(GetAllDanhMucForViewInput input)
+        {
+
+            var filteredDanhMucs = _danhMucRepository.GetAll()
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TenDanhMuc.Contains(input.Filter) || e.Tag.Contains(input.Filter) || e.TrangThai.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TenDanhMucFilter), e => e.TenDanhMuc == input.TenDanhMucFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagFilter), e => e.Tag == input.TagFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TrangThaiFilter), e => e.TrangThai == input.TrangThaiFilter)
+                        .WhereIf(input.MinDanhMucChaFilter != null, e => e.DanhMucCha >= input.MinDanhMucChaFilter)
+                        .WhereIf(input.MaxDanhMucChaFilter != null, e => e.DanhMucCha <= input.MaxDanhMucChaFilter)
+                        .Where(e => e.TrangThai.Equals("On"));
+
+            var pagedAndFilteredDanhMucs = filteredDanhMucs
+                .OrderBy("id asc");
+
+            var danhMucs = from o in pagedAndFilteredDanhMucs
+                           select new GetDanhMucForViewDto()
+                           {
+                               DanhMuc = new DanhMucDto
+                               {
+                                   TenDanhMuc = o.TenDanhMuc,
+                                   Tag = o.Tag,
+                                   TrangThai = o.TrangThai,
+                                   DanhMucCha = o.DanhMucCha,
+                                   Id = o.Id
+                               }
+                           };
+
+            var totalCount = await filteredDanhMucs.CountAsync();
+
+            return new PagedResultDto<GetDanhMucForViewDto>(
+                totalCount,
+                await danhMucs.ToListAsync()
+            );
+        }
 
         public async Task<GetDanhMucForViewDto> GetDanhMucForView(int id)
         {

@@ -70,6 +70,48 @@ namespace Homies.RealEstate.Server
                 await goiBaiDangs.ToListAsync()
             );
         }
+        
+        public async Task<PagedResultDto<GetGoiBaiDangForViewDto>> GetAllGoiBaiDangForView(GetAllGoiBaiDangForViewInput input)
+        {
+
+            var filteredGoiBaiDangs = _goiBaiDangRepository.GetAll()
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TenGoi.Contains(input.Filter) || e.MoTa.Contains(input.Filter) || e.TrangThai.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TenGoiFilter), e => e.TenGoi == input.TenGoiFilter)
+                        .WhereIf(input.MinPhiFilter != null, e => e.Phi >= input.MinPhiFilter)
+                        .WhereIf(input.MaxPhiFilter != null, e => e.Phi <= input.MaxPhiFilter)
+                        .WhereIf(input.MinDoUuTienFilter != null, e => e.DoUuTien >= input.MinDoUuTienFilter)
+                        .WhereIf(input.MaxDoUuTienFilter != null, e => e.DoUuTien <= input.MaxDoUuTienFilter)
+                        .WhereIf(input.MinThoiGianToiThieuFilter != null, e => e.ThoiGianToiThieu >= input.MinThoiGianToiThieuFilter)
+                        .WhereIf(input.MaxThoiGianToiThieuFilter != null, e => e.ThoiGianToiThieu <= input.MaxThoiGianToiThieuFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.MoTaFilter), e => e.MoTa == input.MoTaFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TrangThaiFilter), e => e.TrangThai == input.TrangThaiFilter)
+                        .Where(e => e.TrangThai.Equals("On"));
+
+            var pagedAndFilteredGoiBaiDangs = filteredGoiBaiDangs
+                .OrderBy("id asc");
+
+            var goiBaiDangs = from o in pagedAndFilteredGoiBaiDangs
+                              select new GetGoiBaiDangForViewDto()
+                              {
+                                  GoiBaiDang = new GoiBaiDangDto
+                                  {
+                                      TenGoi = o.TenGoi,
+                                      Phi = o.Phi,
+                                      DoUuTien = o.DoUuTien,
+                                      ThoiGianToiThieu = o.ThoiGianToiThieu,
+                                      MoTa = o.MoTa,
+                                      TrangThai = o.TrangThai,
+                                      Id = o.Id
+                                  }
+                              };
+
+            var totalCount = await filteredGoiBaiDangs.CountAsync();
+
+            return new PagedResultDto<GetGoiBaiDangForViewDto>(
+                totalCount,
+                await goiBaiDangs.ToListAsync()
+            );
+        }
 
         public async Task<GetGoiBaiDangForViewDto> GetGoiBaiDangForView(int id)
         {

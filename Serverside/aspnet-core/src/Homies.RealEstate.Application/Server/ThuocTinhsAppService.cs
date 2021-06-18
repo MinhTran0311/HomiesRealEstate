@@ -62,6 +62,39 @@ namespace Homies.RealEstate.Server
             );
         }
 
+        public async Task<PagedResultDto<GetThuocTinhForViewDto>> GetAllThuocTinhForView(GetAllThuocTinhForViewInput input)
+        {
+
+            var filteredThuocTinhs = _thuocTinhRepository.GetAll()
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TenThuocTinh.Contains(input.Filter) || e.KieuDuLieu.Contains(input.Filter) || e.TrangThai.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TenThuocTinhFilter), e => e.TenThuocTinh == input.TenThuocTinhFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.KieuDuLieuFilter), e => e.KieuDuLieu == input.KieuDuLieuFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.TrangThaiFilter), e => e.TrangThai == input.TrangThaiFilter)
+                        .Where(e => e.TrangThai.Equals("On"));
+
+            var pagedAndFilteredThuocTinhs = filteredThuocTinhs
+                .OrderBy("id asc");
+
+            var thuocTinhs = from o in pagedAndFilteredThuocTinhs
+                             select new GetThuocTinhForViewDto()
+                             {
+                                 ThuocTinh = new ThuocTinhDto
+                                 {
+                                     TenThuocTinh = o.TenThuocTinh,
+                                     KieuDuLieu = o.KieuDuLieu,
+                                     TrangThai = o.TrangThai,
+                                     Id = o.Id
+                                 }
+                             };
+
+            var totalCount = await filteredThuocTinhs.CountAsync();
+
+            return new PagedResultDto<GetThuocTinhForViewDto>(
+                totalCount,
+                await thuocTinhs.ToListAsync()
+            );
+        }
+
         public async Task<GetThuocTinhForViewDto> GetThuocTinhForView(int id)
         {
             var thuocTinh = await _thuocTinhRepository.GetAsync(id);
