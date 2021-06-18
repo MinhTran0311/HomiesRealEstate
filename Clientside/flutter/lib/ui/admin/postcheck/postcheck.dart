@@ -74,9 +74,9 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
     if (!postStore.loadingPostForcheck) postStore.getPostForcheck(false, "", key);
-    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
-    selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
-    songay = new List<int>(int.parse(postStore.sobaidang));
+    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidangall));
+    selectedPack = new List<Pack>(int.parse(postStore.sobaidangall));
+    songay = new List<int>(int.parse(postStore.sobaidangall));
   }
 
   @override

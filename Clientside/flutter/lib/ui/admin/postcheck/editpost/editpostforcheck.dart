@@ -890,9 +890,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       labelText: 'Địa chỉ',
                     ),
                     onSaved: (value) {
-                      // //  FormState.save();
-                      //   print(value);
-                      //   // code when the user saves the form.
+
                     },
                     controller: _LocateController,
                     validator: (value) {
