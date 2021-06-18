@@ -168,38 +168,21 @@ namespace Homies.RealEstate.Server
             }
         }
 
-        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllTest(GetAllBaiDangsInput input)
+        [AbpAuthorize(AppPermissions.Pages_BaiDangs_Edit)]
+        public async Task<PagedResultDto<GetBaiDangForViewDto>> GetAllForModerator(GetAllBaiDangByCurrentUserInput input)
         {
-
+            //var user = await GetCurrentUserAsync();
             var filteredBaiDangs = _baiDangRepository.GetAll()
                         .Include(e => e.UserFk)
                         .Include(e => e.DanhMucFk)
                         .Include(e => e.XaFk)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.TagLoaiBaiDang.Contains(input.Filter) || e.DiaChi.Contains(input.Filter) || e.MoTa.Contains(input.Filter) || e.ToaDoX.Contains(input.Filter) || e.ToaDoY.Contains(input.Filter) || e.TrangThai.Contains(input.Filter) || e.TagTimKiem.Contains(input.Filter) || e.TieuDe.Contains(input.Filter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagLoaiBaiDangFilter), e => e.TagLoaiBaiDang == input.TagLoaiBaiDangFilter)
-                        .WhereIf(input.MinThoiDiemDangFilter != null, e => e.ThoiDiemDang >= input.MinThoiDiemDangFilter)
-                        .WhereIf(input.MaxThoiDiemDangFilter != null, e => e.ThoiDiemDang <= input.MaxThoiDiemDangFilter)
-                        .WhereIf(input.MinThoiHanFilter != null, e => e.ThoiHan >= input.MinThoiHanFilter)
-                        .WhereIf(input.MaxThoiHanFilter != null, e => e.ThoiHan <= input.MaxThoiHanFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.DiaChiFilter), e => e.DiaChi == input.DiaChiFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.MoTaFilter), e => e.MoTa == input.MoTaFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoXFilter), e => e.ToaDoX == input.ToaDoXFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.ToaDoYFilter), e => e.ToaDoY == input.ToaDoYFilter)
-                        .WhereIf(input.MinLuotXemFilter != null, e => e.LuotXem >= input.MinLuotXemFilter)
-                        .WhereIf(input.MaxLuotXemFilter != null, e => e.LuotXem <= input.MaxLuotXemFilter)
-                        .WhereIf(input.MinLuotYeuThichFilter != null, e => e.LuotYeuThich >= input.MinLuotYeuThichFilter)
-                        .WhereIf(input.MaxLuotYeuThichFilter != null, e => e.LuotYeuThich <= input.MaxLuotYeuThichFilter)
-                        .WhereIf(input.MinDiemBaiDangFilter != null, e => e.DiemBaiDang >= input.MinDiemBaiDangFilter)
-                        .WhereIf(input.MaxDiemBaiDangFilter != null, e => e.DiemBaiDang <= input.MaxDiemBaiDangFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TrangThaiFilter), e => e.TrangThai == input.TrangThaiFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TagTimKiemFilter), e => e.TagTimKiem == input.TagTimKiemFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.TieuDeFilter), e => e.TieuDe == input.TieuDeFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.UserNameFilter), e => e.UserFk != null && e.UserFk.Name == input.UserNameFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.DanhMucTenDanhMucFilter), e => e.DanhMucFk != null && e.DanhMucFk.TenDanhMuc == input.DanhMucTenDanhMucFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.XaTenXaFilter), e => e.XaFk != null && e.XaFk.TenXa == input.XaTenXaFilter);
+                        .WhereIf(input.Filter != null, e => e.TieuDe.Contains(input.Filter))
+                        .Where(e => e.TrangThai.Equals("On"))
+                        .WhereIf(input.phanLoaiBaiDang == 1, e => e.ThoiHan > DateTime.Now)
+                        .WhereIf(input.phanLoaiBaiDang == -1, e => e.ThoiHan < DateTime.Now);
 
             var pagedAndFilteredBaiDangs = filteredBaiDangs
-                .OrderBy(input.Sorting ?? "id asc")
+                .OrderBy(input.Sorting ?? "thoiDiemDang desc")
                 .PageBy(input);
 
             var baiDangs = from o in pagedAndFilteredBaiDangs
@@ -215,8 +198,14 @@ namespace Homies.RealEstate.Server
                            join o4 in _lookup_huyenRepository.GetAll() on s3.HuyenId equals o4.Id into j4
                            from s4 in j4.DefaultIfEmpty()
 
+
                            join o5 in _lookup_tinhRepository.GetAll() on s4.TinhId equals o5.Id into j5
                            from s5 in j5.DefaultIfEmpty()
+
+                           join o6 in _lookup_chiTietHoaDonBaiDangRepository.GetAll() on o.Id equals o6.BaiDangId into j6
+                           from s6 in j6.DefaultIfEmpty()
+
+                           orderby o.ThoiDiemDang descending
 
                            select new GetBaiDangForViewDto()
                            {
@@ -242,14 +231,15 @@ namespace Homies.RealEstate.Server
                                    UserId = o.UserId,
                                    XaId = o.XaId,
                                    DanhMucId = o.DanhMucId
-
                                },
                                UserName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                                DanhMucTenDanhMuc = s2 == null || s2.TenDanhMuc == null ? "" : s2.TenDanhMuc.ToString(),
                                XaTenXa = s3 == null || s3.TenXa == null ? "" : s3.TenXa.ToString(),
                                HuyenTenHuyen = s3 == null || s4.TenHuyen == null ? "" : s4.TenHuyen.ToString(),
                                TinhTenTinh = s3 == null || s5.TenTinh == null ? "" : s5.TenTinh.ToString(),
+                               ChiTietHoaDon = s6 == null ? null : ObjectMapper.Map<ChiTietHoaDonBaiDangDto>(s6)
                            };
+
             var totalCount = await filteredBaiDangs.CountAsync();
 
             var list = await baiDangs.ToListAsync();
@@ -259,7 +249,7 @@ namespace Homies.RealEstate.Server
                 return new PagedResultDto<GetBaiDangForViewDto>(
                 totalCount,
                 list
-            );
+                );
             }
             else
             {
@@ -267,7 +257,7 @@ namespace Homies.RealEstate.Server
                 for (int i = 0; i < list.Count; i++)
                 {
                     var e = list[i];
-                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id))
+                    if (lookupInListBaiDangs(filteredList, e.BaiDang.Id) || isSoonerDate(list, e.BaiDang.Id, e.ChiTietHoaDon.ThoiDiem))
                     {
                         continue;
                     }

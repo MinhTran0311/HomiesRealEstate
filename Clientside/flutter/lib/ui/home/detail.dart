@@ -772,7 +772,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
             borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30))
         ),
         child: Padding(
-          padding: EdgeInsets.only(left: 24,right: 24,top: 10, bottom: 12),
+          padding: EdgeInsets.only(left: 12,right: 12,top: 6, bottom: 6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -807,9 +807,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       );
                     }
                   ),
-                  SizedBox(width: 12,),
+                  SizedBox(width: 6,),
                   Container(
-                    width: size.width*0.4,
+                    width: size.width * 0.4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -824,7 +824,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(
-                          height: 6,
+                          height: 3,
                         ),
                         SelectableText(
                           _userStore.userOfCurrentPost.phoneNumber ?? _userStore.userOfCurrentPost.emailAddress,
@@ -832,7 +832,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: 18,
+                            fontSize: 16,
                           ),
                         ),
                       ],
