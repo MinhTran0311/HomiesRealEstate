@@ -259,7 +259,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
               onLoading: () async {
                 print("loading");
                 postStore.getPostForcheck(
-                    false,
+                    true,
                     _searchController11 != null
                         ? _searchController11.text.toString()
                         : "",
@@ -473,7 +473,6 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
 
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
-    return Observer(builder: (context) {
       return Card(
         margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -517,7 +516,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.yellow[700],
+                              color: post.tagLoaiBaidang!="Cho thuê"?Colors.yellow[700]:Colors.lightBlueAccent,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
                           width: 80,
@@ -920,7 +919,6 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
           ),
         ]),
       );
-    });
   }
 
   Widget _handleErrorMessage() {

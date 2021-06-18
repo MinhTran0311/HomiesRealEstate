@@ -259,7 +259,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               onLoading: () async {
                 print("loading");
                 postStore.getPostForCurs(
-                    false,
+                    true,
                     _searchController11 != null
                         ? _searchController11.text.toString()
                         : "",
