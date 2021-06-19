@@ -443,68 +443,59 @@ class _MapsScreenState extends State<MapsScreen> {
 
   //Show when click maps
   Widget containerLatLngInfor() {
-    return Observer(
-      builder: (context) {
-        if (_mapsStore.tapPointClick != LatLng(0, 0)) {
-          return GestureDetector(
-            child: Container(
-              height: 100,
-              width: MediaQuery.of(context).size.width / 1.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.white,
-              ),
-              padding: EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Text(
-                      // _applicationBloc.placemark[0].country,
-                      _handlingStringSubTitleLocation(_applicationBloc.placemarks[0]),
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Flexible(
-                    child: Text(
-                      "${_mapsStore.tapPointClick.latitude.toStringAsFixed(6)}, ${_mapsStore.tapPointClick.longitude.toStringAsFixed(6)}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 6,),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6),
-                    child: Container(
-                      decoration: new BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      padding: EdgeInsets.all(6),
-                      child: Text(
-                        "Xác nhận",
-                      ),
-                    ),
-                  )
-                ],
+    return GestureDetector(
+      child: Container(
+        height: 100,
+        width: MediaQuery.of(context).size.width / 1.5,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Flexible(
+              child: Text(
+                // _applicationBloc.placemark[0].country,
+                _handlingStringSubTitleLocation(_applicationBloc.placemarks[0]),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
             ),
-            onTap: () {
-              Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
-            },
-          );
-        } else
-          return Container(
-            height: 1,
-          );
+            SizedBox(
+              height: 6,
+            ),
+            Flexible(
+              child: Text(
+                "${_mapsStore.tapPointClick.latitude.toStringAsFixed(6)}, ${_mapsStore.tapPointClick.longitude.toStringAsFixed(6)}",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+            SizedBox(height: 6,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Container(
+                decoration: new BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                padding: EdgeInsets.all(6),
+                child: Text(
+                  "Xác nhận",
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
       },
     );
   }
@@ -654,93 +645,98 @@ class _MapsScreenState extends State<MapsScreen> {
           }
           else Navigator.pop(context, '${_mapsStore.tapPointClick.latitude},${_mapsStore.tapPointClick.longitude}');
         },
-        child: Stack(
-          children: [
-            GoogleMap(
-              gestureRecognizers: Set()
-                ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(
-                    () => ScaleGestureRecognizer()))
-                ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer())),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
-                target: _center,
-                zoom: 11.0,
-              ),
-              mapType: _currentMapType,
-              markers: Set.from(myMarker),
-              onTap: _handleTap,
-              onCameraMove: _onCameraMove,
-            ),
-            // _addMarkerButtonProcessed(),
-            Padding(
-              padding:
-                  EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    button(_onMapTypeButtonProcessed, Icons.map),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    button(_goToCurrentLocationDevice, Icons.my_location),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 96, left: 12),
-              child: containerLatLngInfor(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                  boxShadow: [
-                    _themeStore.darkMode
-                        ? BoxShadow()
-                        : BoxShadow(
-                            color: Color.fromRGBO(198, 199, 202, 1),
-                            blurRadius: 10, // soften the shadow
-                            spreadRadius: 0.01, //extend the shadow
-                            offset: Offset(
-                              8.0, // Move to right 10  horizontally
-                              12.0, // Move to bottom 10 Vertically
-                            ),
-                          )
-                  ],
-                  color: _themeStore.darkMode
-                      ? Color.fromRGBO(54, 55, 58, 1)
-                      : AppColors.backgroundLightThemeColor,
-                ),
-                padding: EdgeInsets.only(left: 12, top: 6),
-                child: TextField(
-                  controller: _autocompleteText,
-                  decoration: InputDecoration(
-                    hintText: "Nhập kinh độ và vĩ độ",
-                    suffixIcon: Icon(Icons.search),
-                    border: InputBorder.none,
+        child: Observer(
+          builder: (context) {
+            return Stack(
+              children: [
+                GoogleMap(
+                  gestureRecognizers: Set()
+                    ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+                    ..add(Factory<ScaleGestureRecognizer>(
+                            () => ScaleGestureRecognizer()))
+                    ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+                    ..add(Factory<VerticalDragGestureRecognizer>(
+                            () => VerticalDragGestureRecognizer())),
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
+                    target: _center,
+                    zoom: 11.0,
                   ),
-
-                  // onChanged: (value) => this._applicationBloc.searchPlaces(value),
-                  onSubmitted: (value) => {
-                    _searchPlacemarkFromCoordinates(value),
-                    // _goToCurrentLocationDevice(),
-                    Future.delayed(const Duration(milliseconds: 1500), () {
-                      setState(() {
-                        _showSimpleModalDialog(context);
-                      });
-                    }),
-                  },
+                  mapType: _currentMapType,
+                  markers: Set.from(myMarker),
+                  onTap: _handleTap,
+                  onCameraMove: _onCameraMove,
                 ),
-              ),
-            ),
-          ],
+                // _addMarkerButtonProcessed(),
+                Padding(
+                  padding:
+                  EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Column(
+                      children: <Widget>[
+                        button(_onMapTypeButtonProcessed, Icons.map),
+                        SizedBox(
+                          height: 24.0,
+                        ),
+                        button(_goToCurrentLocationDevice, Icons.my_location),
+                      ],
+                    ),
+                  ),
+                ),
+                if(_mapsStore.tapPointClick != LatLng(0, 0))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 96, left: 12),
+                    child: containerLatLngInfor(),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                      boxShadow: [
+                        _themeStore.darkMode
+                            ? BoxShadow()
+                            : BoxShadow(
+                          color: Color.fromRGBO(198, 199, 202, 1),
+                          blurRadius: 10, // soften the shadow
+                          spreadRadius: 0.01, //extend the shadow
+                          offset: Offset(
+                            8.0, // Move to right 10  horizontally
+                            12.0, // Move to bottom 10 Vertically
+                          ),
+                        )
+                      ],
+                      color: _themeStore.darkMode
+                          ? Color.fromRGBO(54, 55, 58, 1)
+                          : AppColors.backgroundLightThemeColor,
+                    ),
+                    padding: EdgeInsets.only(left: 12, top: 6),
+                    child: TextField(
+                      controller: _autocompleteText,
+                      decoration: InputDecoration(
+                        hintText: "Nhập kinh độ và vĩ độ",
+                        suffixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
+                      ),
+
+                      // onChanged: (value) => this._applicationBloc.searchPlaces(value),
+                      onSubmitted: (value) => {
+                        _searchPlacemarkFromCoordinates(value),
+                        // _goToCurrentLocationDevice(),
+                        Future.delayed(const Duration(milliseconds: 1500), () {
+                          setState(() {
+                            _showSimpleModalDialog(context);
+                          });
+                        }),
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

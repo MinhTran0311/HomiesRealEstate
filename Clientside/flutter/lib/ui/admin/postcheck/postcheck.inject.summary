@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/ui/admin/postcheck/postcheck.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

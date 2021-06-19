@@ -60,14 +60,14 @@ class Repository {
   final DanhMucApi _danhMucApi;
   final ThuocTinhApi _thuocTinhApi;
   final GoiBaiDangApi _goiBaiDangApi;
-
   final RegistrationApi _registrationApi;
+  final lichsugiaodichApi _lichSuGiaoDichApi;
 
   // shared pref object
   final SharedPreferenceHelper _sharedPrefsHelper;
 
   // constructor
-  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi,this._townApi, this._danhMucApi, this._thuocTinhApi, this._goiBaiDangApi);
+  Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource, this._authTokenApi, this._registrationApi, this._userApi, this._roleApi, this._imageApi,this._townApi, this._danhMucApi, this._thuocTinhApi, this._goiBaiDangApi, this._lichSuGiaoDichApi);
 
 
   // Post: ---------------------------------------------------------------------
@@ -571,6 +571,14 @@ class Repository {
   Future<dynamic> updateGoiBaiDang(int id, String tenGoi, double phi, int doUuTien, int thoiGianToiThieu, String moTa, String trangThai) async
   {
     return await _goiBaiDangApi.updateGoiBaiDang(id, tenGoi, phi, doUuTien, thoiGianToiThieu, moTa, trangThai).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  //LichSuGiaoDich chua kiem duyet
+  Future<dynamic> countLichSuGiaoDichChuaKiemDuyets() async
+  {
+    return await _lichSuGiaoDichApi.countLichSuGiaoDichChuaKiemDuyet().then((res) {
       return res;
     }).catchError((error) => throw error);
   }

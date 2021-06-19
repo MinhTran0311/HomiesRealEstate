@@ -356,5 +356,15 @@ namespace Homies.RealEstate.Server
             user.Wallet += lsgd.SoTien;
             // }
         }
+
+        //Get tổng số lịch sử giao dịch chưa được kiểm duyệt
+        public async Task<int> CountAllLichSuGiaoDichsChuaKiemDuyet()
+        {
+            var filteredLichSuGiaoDichs = _lichSuGiaoDichRepository.GetAll()
+                .Where(e => !e.KiemDuyetVienId.HasValue);
+
+            var lichSuGiaoDichsNotValueCount = await filteredLichSuGiaoDichs.CountAsync();
+            return lichSuGiaoDichsNotValueCount;
+        }
     }
 }

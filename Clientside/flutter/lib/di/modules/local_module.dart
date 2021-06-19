@@ -5,6 +5,7 @@ import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/network/apis/danhMucs/danhMuc_api.dart';
 import 'package:boilerplate/data/network/apis/goiBaiDangs/goiBaiDang_api.dart';
 import 'package:boilerplate/data/network/apis/image/image_api.dart';
+import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/thuocTinhs/thuocTinh_api.dart';
 import 'package:boilerplate/data/network/apis/towns/town_api.dart';
@@ -96,6 +97,7 @@ class LocalModule extends NetworkModule {
     DanhMucApi danhMucApi,
     ThuocTinhApi thuocTinhApi,
     GoiBaiDangApi goiBaiDangApi,
+    lichsugiaodichApi lichSuGiaoDichApi,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, roleApi, imageApi, townApi, danhMucApi, thuocTinhApi, goiBaiDangApi);
+      Repository(postApi, preferenceHelper, postDataSource, authTokenApi, registrationApi, userApi, roleApi, imageApi, townApi, danhMucApi, thuocTinhApi, goiBaiDangApi, lichSuGiaoDichApi);
 }

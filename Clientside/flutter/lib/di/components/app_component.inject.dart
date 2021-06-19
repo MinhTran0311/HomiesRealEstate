@@ -16,10 +16,11 @@ import '../../data/network/apis/registration/registration_api.dart' as _i15;
 import '../../data/network/apis/danhMucs/danhMuc_api.dart' as _i16;
 import '../../data/network/apis/thuocTinhs/thuocTinh_api.dart' as _i17;
 import '../../data/network/apis/goiBaiDangs/goiBaiDang_api.dart' as _i18;
-import '../../data/repository.dart' as _i19;
-import 'dart:async' as _i20;
-import '../modules/netwok_module.dart' as _i21;
-import '../../main.dart' as _i22;
+import '../../data/network/apis/lichsugiaodich/lichsugiaodich_api.dart' as _i19;
+import '../../data/repository.dart' as _i20;
+import 'dart:async' as _i21;
+import '../modules/netwok_module.dart' as _i22;
+import '../../main.dart' as _i23;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);
@@ -58,10 +59,12 @@ class AppComponent$Injector implements _i1.AppComponent {
 
   _i18.GoiBaiDangApi _singletonGoiBaiDangApi;
 
-  _i19.Repository _singletonRepository;
+  _i19.lichsugiaodichApi _singletonLichsugiaodichApi;
 
-  static _i20.Future<_i1.AppComponent> create(
-      _i21.NetworkModule _,
+  _i20.Repository _singletonRepository;
+
+  static _i21.Future<_i1.AppComponent> create(
+      _i22.NetworkModule _,
       _i2.LocalModule localModule,
       _i3.PreferenceModule preferenceModule) async {
     final injector = AppComponent$Injector._(localModule, preferenceModule);
@@ -69,8 +72,8 @@ class AppComponent$Injector implements _i1.AppComponent {
     return injector;
   }
 
-  _i22.MyApp _createMyApp() => _i22.MyApp();
-  _i19.Repository _createRepository() =>
+  _i23.MyApp _createMyApp() => _i23.MyApp();
+  _i20.Repository _createRepository() =>
       _singletonRepository ??= _localModule.provideRepository(
           _createPostApi(),
           _createAuthTokenApi(),
@@ -83,7 +86,8 @@ class AppComponent$Injector implements _i1.AppComponent {
           _createRegistrationApi(),
           _createDanhMucApi(),
           _createThuocTinhApi(),
-          _createGoiBaiDangApi());
+          _createGoiBaiDangApi(),
+          _createLichsugiaodichApi());
   _i8.PostApi _createPostApi() => _singletonPostApi ??=
       _localModule.providePostApi(_createDioClient(), _createRestClient());
   _i6.DioClient _createDioClient() =>
@@ -117,8 +121,11 @@ class AppComponent$Injector implements _i1.AppComponent {
   _i18.GoiBaiDangApi _createGoiBaiDangApi() =>
       _singletonGoiBaiDangApi ??= _localModule.provideGoiBaiDangApi(
           _createDioClient(), _createRestClient());
+  _i19.lichsugiaodichApi _createLichsugiaodichApi() =>
+      _singletonLichsugiaodichApi ??= _localModule.provideLichSuGiaoDichApi(
+          _createDioClient(), _createRestClient());
   @override
-  _i22.MyApp get app => _createMyApp();
+  _i23.MyApp get app => _createMyApp();
   @override
-  _i19.Repository getRepository() => _createRepository();
+  _i20.Repository getRepository() => _createRepository();
 }

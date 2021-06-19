@@ -17,6 +17,14 @@ mixin _$BaiDangManagementStore on _BaiDangManagementStore, Store {
               () => super.loadingCountNewBaiDangsInMonth,
               name: '_BaiDangManagementStore.loadingCountNewBaiDangsInMonth'))
           .value;
+  Computed<bool> _$loadingCountLSDGChuaKiemDuyetComputed;
+
+  @override
+  bool get loadingCountLSDGChuaKiemDuyet =>
+      (_$loadingCountLSDGChuaKiemDuyetComputed ??= Computed<bool>(
+              () => super.loadingCountLSDGChuaKiemDuyet,
+              name: '_BaiDangManagementStore.loadingCountLSDGChuaKiemDuyet'))
+          .value;
 
   final _$fetchCountNewBaiDangsInMonthFutureAtom =
       Atom(name: '_BaiDangManagementStore.fetchCountNewBaiDangsInMonthFuture');
@@ -32,6 +40,23 @@ mixin _$BaiDangManagementStore on _BaiDangManagementStore, Store {
     _$fetchCountNewBaiDangsInMonthFutureAtom
         .reportWrite(value, super.fetchCountNewBaiDangsInMonthFuture, () {
       super.fetchCountNewBaiDangsInMonthFuture = value;
+    });
+  }
+
+  final _$fetchCountLSGDChuaKiemDuyetFutureAtom =
+      Atom(name: '_BaiDangManagementStore.fetchCountLSGDChuaKiemDuyetFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchCountLSGDChuaKiemDuyetFuture {
+    _$fetchCountLSGDChuaKiemDuyetFutureAtom.reportRead();
+    return super.fetchCountLSGDChuaKiemDuyetFuture;
+  }
+
+  @override
+  set fetchCountLSGDChuaKiemDuyetFuture(ObservableFuture<dynamic> value) {
+    _$fetchCountLSGDChuaKiemDuyetFutureAtom
+        .reportWrite(value, super.fetchCountLSGDChuaKiemDuyetFuture, () {
+      super.fetchCountLSGDChuaKiemDuyetFuture = value;
     });
   }
 
@@ -52,6 +77,23 @@ mixin _$BaiDangManagementStore on _BaiDangManagementStore, Store {
     });
   }
 
+  final _$countLSGDChuaKiemDuyetAtom =
+      Atom(name: '_BaiDangManagementStore.countLSGDChuaKiemDuyet');
+
+  @override
+  int get countLSGDChuaKiemDuyet {
+    _$countLSGDChuaKiemDuyetAtom.reportRead();
+    return super.countLSGDChuaKiemDuyet;
+  }
+
+  @override
+  set countLSGDChuaKiemDuyet(int value) {
+    _$countLSGDChuaKiemDuyetAtom
+        .reportWrite(value, super.countLSGDChuaKiemDuyet, () {
+      super.countLSGDChuaKiemDuyet = value;
+    });
+  }
+
   final _$fCountNewBaiDangsInMonthAsyncAction =
       AsyncAction('_BaiDangManagementStore.fCountNewBaiDangsInMonth');
 
@@ -61,12 +103,24 @@ mixin _$BaiDangManagementStore on _BaiDangManagementStore, Store {
         .run(() => super.fCountNewBaiDangsInMonth());
   }
 
+  final _$fCountLichSuGiaoDichsChuaKiemDuyetAsyncAction =
+      AsyncAction('_BaiDangManagementStore.fCountLichSuGiaoDichsChuaKiemDuyet');
+
+  @override
+  Future<dynamic> fCountLichSuGiaoDichsChuaKiemDuyet() {
+    return _$fCountLichSuGiaoDichsChuaKiemDuyetAsyncAction
+        .run(() => super.fCountLichSuGiaoDichsChuaKiemDuyet());
+  }
+
   @override
   String toString() {
     return '''
 fetchCountNewBaiDangsInMonthFuture: ${fetchCountNewBaiDangsInMonthFuture},
+fetchCountLSGDChuaKiemDuyetFuture: ${fetchCountLSGDChuaKiemDuyetFuture},
 countNewBaiDangsInMonth: ${countNewBaiDangsInMonth},
-loadingCountNewBaiDangsInMonth: ${loadingCountNewBaiDangsInMonth}
+countLSGDChuaKiemDuyet: ${countLSGDChuaKiemDuyet},
+loadingCountNewBaiDangsInMonth: ${loadingCountNewBaiDangsInMonth},
+loadingCountLSDGChuaKiemDuyet: ${loadingCountLSDGChuaKiemDuyet}
     ''';
   }
 }
