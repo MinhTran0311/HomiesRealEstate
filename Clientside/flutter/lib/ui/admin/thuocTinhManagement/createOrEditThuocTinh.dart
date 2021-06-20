@@ -369,7 +369,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.UpdateThuocTinh();
           }
           else{
-            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
         else {
@@ -378,7 +378,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
             _thuocTinhManagementStore.CreateThuocTinh();
           }
           else{
-            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
 

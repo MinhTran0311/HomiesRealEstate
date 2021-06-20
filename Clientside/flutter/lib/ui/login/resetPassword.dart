@@ -192,7 +192,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           DeviceUtils.hideKeyboard(context);
           _store.resetPassword();
         } else {
-          showErrorMessage('Hãy điền đầy đủ thông tin', context);
+          showErrorMessage('Hãy nhập đầy đủ thông tin', context);
         }
       },
     );

@@ -566,7 +566,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
             _goiBaiDangManagementStore.UpdateGoiBaiDang();
           }
           else {
-            showErrorMessage('Vui lòng điền đầy đủ thông tin',context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
           }
         }
         else {
@@ -575,7 +575,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
             _goiBaiDangManagementStore.CreateGoiBaiDang();
           }
           else {
-            showErrorMessage('Vui lòng điền đầy đủ thông tin',context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
           }
         }
 

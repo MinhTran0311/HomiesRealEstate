@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _store.authLogIn(_userNameController.text,_passwordController.text);
           //_authTokenStore.authLogIn(_store.userEmail, _store.password);
         } else {
-          showErrorMessage('Hãy điền đầy đủ thông tin',context);
+          showErrorMessage('Hãy nhập đầy đủ thông tin',context);
         }
       },
     );

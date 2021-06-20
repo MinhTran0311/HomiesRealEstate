@@ -345,7 +345,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //showSuccssfullMesssage("Đăng ký thành công",context);
         }
         else{
-          showErrorMessage('Hãy điền đầy đủ thông tin',context);
+          showErrorMessage('Hãy nhập đầy đủ thông tin',context);
         }
         //});
       },

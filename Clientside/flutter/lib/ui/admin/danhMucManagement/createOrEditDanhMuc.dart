@@ -494,7 +494,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             _danhMucManagementStore.UpdateDanhMuc();
           }
           else {
-            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
         else {
@@ -503,7 +503,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             _danhMucManagementStore.CreateDanhMuc();
           }
           else {
-            showErrorMessage('Vui lòng điền đầy đủ thông tin', context);
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
 

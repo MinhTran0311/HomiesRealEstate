@@ -246,7 +246,7 @@ abstract class _FormStore with Store {
   @action
   void validateSurname(String value) {
     if (value.isEmpty) {
-      formErrorStore.surname = "Chưa điền họ";
+      formErrorStore.surname = "Chưa nhập họ";
     }
     else {
       formErrorStore.surname = null;
@@ -256,7 +256,7 @@ abstract class _FormStore with Store {
   @action
   void validateName(String value) {
     if (value.isEmpty) {
-      formErrorStore.name = "Chưa điền tên";
+      formErrorStore.name = "Chưa nhập tên";
     }
     else {
       formErrorStore.name = null;
@@ -266,7 +266,7 @@ abstract class _FormStore with Store {
   @action
   void validateUsername(String value) {
     if (value.isEmpty) {
-      formErrorStore.username = "Chưa điền tên đăng nhập";
+      formErrorStore.username = "Chưa nhập tên đăng nhập";
     }
     else if(value.length>20){
       formErrorStore.username = "Tối đa 20 kí tự";
@@ -279,7 +279,7 @@ abstract class _FormStore with Store {
   @action
   void validatePassword(String value) {
     if (value.isEmpty) {
-      formErrorStore.password = "Chưa điền mật khẩu";
+      formErrorStore.password = "Chưa nhập mật khẩu";
     } else if (value.length < 6) {
       formErrorStore.password = "Mật khẩu phải có ít nhất 6 kí tự";
     } else {
@@ -290,7 +290,7 @@ abstract class _FormStore with Store {
   @action
   void validateConfirmPassword(String value) {
     if (value.isEmpty)
-      formErrorStore.confirmPassword = "Chưa điền mật khẩu xác nhận";
+      formErrorStore.confirmPassword = "Chưa nhập mật khẩu xác nhận";
     else if (newPassword.isEmpty && value.compareTo(password)!=0)
       formErrorStore.confirmPassword = "Mật khẩu xác nhận chưa đúng";
     else if (newPassword.isNotEmpty && value.compareTo(newPassword)!=0)
@@ -302,7 +302,7 @@ abstract class _FormStore with Store {
   @action
   void validateUserEmail(String value) {
     if (value.isEmpty) {
-      formErrorStore.userEmail = "Chưa điền địa chỉ email";
+      formErrorStore.userEmail = "Chưa nhập địa chỉ email";
     } else if (!isEmail(value)) {
       formErrorStore.userEmail = 'Hãy nhập địa chỉ email hợp lệ';
     }
@@ -313,7 +313,7 @@ abstract class _FormStore with Store {
   @action
   void validateNewPassword(String value){
     if (value.isEmpty){
-      formErrorStore.newPassword = "Chưa điền mật khẩu mới";
+      formErrorStore.newPassword = "Chưa nhập mật khẩu mới";
     } else if(value.compareTo(password)==0){
       formErrorStore.newPassword = "Mật khẩu mới không được trùng với mật khẩu hiện tại";
     }
@@ -327,7 +327,7 @@ abstract class _FormStore with Store {
   @action
   void validatePhoneNumber(String value) {
     if (value.isEmpty) {
-      formErrorStore.phoneNumber = "Chưa điền số điện thoại";
+      formErrorStore.phoneNumber = "Chưa nhập số điện thoại";
     } else if (double.tryParse(value) == null) {
       formErrorStore.phoneNumber = 'Hãy nhập số điện thoại hợp lệ';
     }

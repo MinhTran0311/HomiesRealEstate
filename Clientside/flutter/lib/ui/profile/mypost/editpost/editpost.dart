@@ -392,7 +392,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     controller: _TileController,
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length > 50) {
-                        return 'Vui lòng điền lại tiêu đề';
+                        return 'Vui lòng nhập lại tiêu đề';
                       }
                       return null;
                     },
@@ -1094,7 +1094,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     autofocus: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Vui lòng điền diện tích';
+                        return 'Vui lòng nhập diện tích';
                       }
                       return null;
                     },
@@ -1137,7 +1137,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     controller: _PriceController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Vui lòng điền giá bán';
+                        return 'Vui lòng nhập giá bán';
                       }
                       return null;
                     },

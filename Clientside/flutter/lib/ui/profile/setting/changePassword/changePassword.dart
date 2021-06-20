@@ -211,7 +211,7 @@ class _changePassWordPageState extends State<changePassWordPage> {
           _store.changePassword();
         }
         else{
-          showErrorMessage('Hãy điền đẩy đủ thông tin',context);
+          showErrorMessage('Hãy nhập đẩy đủ thông tin',context);
         }
         //});
       },
