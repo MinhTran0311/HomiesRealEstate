@@ -58,6 +58,9 @@ abstract class _UserManagementStore with Store {
   int countNewUsersInMonth = 0;
 
   @observable
+  String filter = '';
+
+  @observable
   UserList userList;
 
   @observable
@@ -101,7 +104,7 @@ abstract class _UserManagementStore with Store {
     }
     else
       skipCount += skipIndex;
-    var userListGet = _repository.getAllUsers(skipCount, maxCount);
+    var userListGet = _repository.getAllUsers(skipCount, maxCount, filter);
     fetchUsersFuture = ObservableFuture(userListGet);
     userListGet.then((users) {
       if (!isLoadMore){
@@ -135,7 +138,6 @@ abstract class _UserManagementStore with Store {
                 errorStore.errorMessage = DioErrorUtil.handleError(error);
               });
             }
-
           }
       }
     }).catchError((error) {
@@ -170,18 +172,19 @@ abstract class _UserManagementStore with Store {
       this.countAllUsers = totalUsers;
       // print("totalUsers: " + totalUsers.toString());
       }
-    ).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+    ).catchError((error) {
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
+  }
+
+  @action
+  void setStringFilter(String value) {
+    this.filter = value;
   }
 
   @action
@@ -195,17 +198,13 @@ abstract class _UserManagementStore with Store {
       this.countNewUsersInMonth = totalUsersInMonth;
       // print("totalUsers: " + totalUsersInMonth.toString());
     }
-    ).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null)
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
-      }
-      else{
-        throw error;
-      }
+    ).catchError((error) {
+      if (error.response != null && error.response.data!=null)
+        //errorStore.errorMessage = error.response.data["error"]["message"];
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
     });
   }
 

@@ -274,8 +274,8 @@ class Repository {
     }).catchError((error) => throw error);
   }
   //User: ----------------------------------------------------------------------
-  Future<UserList> getAllUsers(int skipCount, int maxCount) async {
-    return await _userApi.getAllUsers(skipCount, maxCount).then((usersList) {
+  Future<UserList> getAllUsers(int skipCount, int maxCount, String filter) async {
+    return await _userApi.getAllUsers(skipCount, maxCount, filter).then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
     }).catchError((error) => throw error);

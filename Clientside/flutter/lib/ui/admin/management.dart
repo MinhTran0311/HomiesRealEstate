@@ -86,6 +86,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
     if(!_baiDangManagementStore.loadingCountNewBaiDangsInMonth) {
       _baiDangManagementStore.fCountNewBaiDangsInMonth();
     }
+    if(!_baiDangManagementStore.loadingCountLSDGChuaKiemDuyet) {
+      _baiDangManagementStore.fCountLichSuGiaoDichsChuaKiemDuyet();
+    }
     if (!postStore.loadingsobaidangall) postStore.getsobaidangall();
   }
 
@@ -126,6 +129,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
         || _thuocTinhManagementStore.loadingCountAllThuocTinhs
         || _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs
         || _baiDangManagementStore.loadingCountNewBaiDangsInMonth
+        || _baiDangManagementStore.loadingCountLSDGChuaKiemDuyet
         || postStore.loadingsobaidangall)
             ? CustomProgressIndicatorWidget()
             : _buildMenuItems();
