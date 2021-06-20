@@ -259,7 +259,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
             SizedBox(height: 25,),
             _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", 15, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
             SizedBox(height: 25,),
-            _buildListItem("Kiểm duyệt bài đăng", "assets/images/approve.png", int.parse(postStore.sobaidangall), "Kiểm duyệt bài đăng", _clickBtnPostChecker, Colors.deepOrangeAccent, 0),
+            _buildListItem("Quản lý bài đăng", "assets/images/approve.png", int.parse(postStore.sobaidangall), "Quản lý bài đăng", _clickBtnPostChecker, Colors.deepOrangeAccent, 0),
             SizedBox(height: 25,),
           ],
         ),

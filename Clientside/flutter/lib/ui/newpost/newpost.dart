@@ -1503,7 +1503,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
                 lichsu.ghiChu =
-                    "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
+                    "${post.tieuDe}${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
                 if (_userStore.userCurrent.UserID != null)
                   lichsu.userId = _userStore.userCurrent.UserID;

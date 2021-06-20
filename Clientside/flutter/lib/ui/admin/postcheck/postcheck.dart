@@ -85,7 +85,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
       appBar: AppBar(
         // Icon: Icons.app_registration,
         title: Text(
-          "Bài đăng của tôi",
+          "Quản lý bài đăng",
           //size:24,
           style: Theme.of(context).textTheme.button.copyWith(
               fontWeight: FontWeight.bold, fontSize: 20, letterSpacing: 1.0),
