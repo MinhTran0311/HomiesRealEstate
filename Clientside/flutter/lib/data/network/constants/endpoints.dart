@@ -45,6 +45,8 @@ class Endpoints {
 
   //get all lichsugiaodich
   static const String getAllLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/GetAll";
+  //get lichsugiaodich chua kiem duyet
+  static const String getLSGDChuaKiemDuyet = homiesUrl + "/services/app/LichSuGiaoDichs/CountAllLichSuGiaoDichsChuaKiemDuyet";
   //update all lichsugiaodich
   static const String CreateOrEditLSGD = homiesUrl + "/services/app/LichSuGiaoDichs/CreateOrEdit";
   //update kiemduyetgiaodich

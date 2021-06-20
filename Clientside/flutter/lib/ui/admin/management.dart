@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/admin/postcheck/postcheck.dart';
@@ -236,31 +237,21 @@ class _ManagementScreenState extends State<ManagementScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 25,),
-            _buildListItem("Người dùng", "assets/images/customer.png", _userManagementStore.countAllUsers, "Danh sách người dùng", _clickBtnListUser, Colors.amber, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Danh mục", "assets/images/project-management.png", _danhMucManagementStore.countAllDanhMucs, "Danh sách danh mục", _clickBtnListDanhMuc, Colors.lightBlueAccent, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Gói bài đăng", "assets/images/project-management.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListGoiBaiDang, Colors.lightBlueAccent, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Thuộc tính", "assets/images/project-management.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListThuocTinh, Colors.lightBlueAccent, 0),
-            SizedBox(height: 25,),
-            // _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
-            // SizedBox(height: 25,),
-            // _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
-            // SizedBox(height: 25,),
-            _buildListItem("Nhật ký kiểm tra", "assets/images/open-book.png", 300, "Nhật ký kiểm tra", _clickBtnListTester, Colors.red, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Maps", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMaps, Colors.green, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Maps đăng bài", "assets/images/maps-and-flags.png", 15, "Xem bản đồ", _clickBtnMapsDangBai, Colors.green, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", 15, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
-            SizedBox(height: 25,),
-            _buildListItem("Quản lý bài đăng", "assets/images/approve.png", int.parse(postStore.sobaidangall), "Quản lý bài đăng", _clickBtnPostChecker, Colors.deepOrangeAccent, 0),
-            SizedBox(height: 25,),
+            SizedBox(height: 24,),
+            if (Permission.instance.hasPermission(Preferences.PagesAdministrationUsers) && Permission.instance.hasPermission(Preferences.PagesAdministrationUsersCreate) && Permission.instance.hasPermission(Preferences.PagesAdministrationUsersEdit))
+              _buildListItem("Người dùng", "assets/images/customer.png", _userManagementStore.countAllUsers, "Danh sách người dùng", _clickBtnListUser, Colors.amber, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesAdministrationRoles))
+              _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesDanhMucs) && Permission.instance.hasPermission(Preferences.PagesDanhMucsCreate) && Permission.instance.hasPermission(Preferences.PagesDanhMucsEdit))
+              _buildListItem("Danh mục", "assets/images/google-docs.png", _danhMucManagementStore.countAllDanhMucs, "Danh sách danh mục", _clickBtnListDanhMuc, Colors.red, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesGoiBaiDangs)  && Permission.instance.hasPermission(Preferences.PagesGoiBaiDangsCreate) && Permission.instance.hasPermission(Preferences.PagesGoiBaiDangsEdit))
+              _buildListItem("Gói bài đăng", "assets/images/briefcase.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListGoiBaiDang, Colors.green, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesThuocTinhs) && Permission.instance.hasPermission(Preferences.PagesThuocTinhsCreate) && Permission.instance.hasPermission(Preferences.PagesThuocTinhsEdit))
+               _buildListItem("Thuộc tính", "assets/images/settings.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListThuocTinh, Colors.lightBlueAccent, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesLichSuGiaoDichs))
+              _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", _baiDangManagementStore.countLSGDChuaKiemDuyet, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
+            if (Permission.instance.hasPermission(Preferences.PagesBaiDangs))
+              _buildListItem("Quản lý bài đăng", "assets/images/badge.png", int.parse(postStore.sobaidangall), "Quản lý bài đăng", _clickBtnPostChecker, Colors.amber, 0),
           ],
         ),
       ),
@@ -269,6 +260,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
 
   Widget _buildListItem(String nameItem, String pathPicture, int totalItems, String nameButton, Function function, Color colors, double leftPadding) {
     return Container(
+      margin: EdgeInsets.only(bottom: 24),
       decoration: !_themeStore.darkMode ? new BoxDecoration(
         boxShadow: [
           // color: Colors.white, //background color of box
@@ -416,27 +408,6 @@ class _ManagementScreenState extends State<ManagementScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
-    );
-  }
-
-  _clickBtnListTester() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => UserManagementScreen()),
-    // );
-  }
-
-  _clickBtnMaps() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MapsScreen()),
-    );
-  }
-
-  _clickBtnMapsDangBai() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MapsScreen(type: "Đăng bài")),
     );
   }
 
