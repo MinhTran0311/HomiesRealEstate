@@ -1457,7 +1457,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       return RoundedButtonWidget(
         buttonText: ('Đăng tin'),
         buttonColor:
-            !_imageStore.imageLoadingpost ? Colors.amber[700] : Colors.grey,
+            !_imageStore.imageLoadingpost ? Colors.amber : Colors.grey,
         textColor: Colors.white,
         onPressed: () async {
           {
@@ -1503,7 +1503,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
                 lichsu.ghiChu =
-                    "${_userStore.userCurrent.UserID} ${selectedPack.tenGoi}";
+                    "${post.tieuDe}${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
                 if (_userStore.userCurrent.UserID != null)
                   lichsu.userId = _userStore.userCurrent.UserID;

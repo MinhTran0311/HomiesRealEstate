@@ -108,6 +108,13 @@ mixin _$PostStore on _PostStore, Store {
           () => super.loadingsobaidang,
           name: '_PostStore.loadingsobaidang'))
       .value;
+  Computed<bool> _$loadingsobaidangallComputed;
+
+  @override
+  bool get loadingsobaidangall => (_$loadingsobaidangallComputed ??=
+          Computed<bool>(() => super.loadingsobaidangall,
+              name: '_PostStore.loadingsobaidangall'))
+      .value;
   Computed<bool> _$DeletepostComputed;
 
   @override
@@ -134,6 +141,13 @@ mixin _$PostStore on _PostStore, Store {
       (_$loadingfavopostComputed ??= Computed<bool>(() => super.loadingfavopost,
               name: '_PostStore.loadingfavopost'))
           .value;
+  Computed<bool> _$loadingPostForcheckComputed;
+
+  @override
+  bool get loadingPostForcheck => (_$loadingPostForcheckComputed ??=
+          Computed<bool>(() => super.loadingPostForcheck,
+              name: '_PostStore.loadingPostForcheck'))
+      .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -729,6 +743,38 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchsobaidangallFutureAtom =
+      Atom(name: '_PostStore.fetchsobaidangallFuture');
+
+  @override
+  ObservableFuture<String> get fetchsobaidangallFuture {
+    _$fetchsobaidangallFutureAtom.reportRead();
+    return super.fetchsobaidangallFuture;
+  }
+
+  @override
+  set fetchsobaidangallFuture(ObservableFuture<String> value) {
+    _$fetchsobaidangallFutureAtom
+        .reportWrite(value, super.fetchsobaidangallFuture, () {
+      super.fetchsobaidangallFuture = value;
+    });
+  }
+
+  final _$sobaidangallAtom = Atom(name: '_PostStore.sobaidangall');
+
+  @override
+  String get sobaidangall {
+    _$sobaidangallAtom.reportRead();
+    return super.sobaidangall;
+  }
+
+  @override
+  set sobaidangall(String value) {
+    _$sobaidangallAtom.reportWrite(value, super.sobaidangall, () {
+      super.sobaidangall = value;
+    });
+  }
+
   final _$fetchdeleteFutureAtom = Atom(name: '_PostStore.fetchdeleteFuture');
 
   @override
@@ -885,6 +931,71 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$isIntialLoadingpostforcheckAtom =
+      Atom(name: '_PostStore.isIntialLoadingpostforcheck');
+
+  @override
+  bool get isIntialLoadingpostforcheck {
+    _$isIntialLoadingpostforcheckAtom.reportRead();
+    return super.isIntialLoadingpostforcheck;
+  }
+
+  @override
+  set isIntialLoadingpostforcheck(bool value) {
+    _$isIntialLoadingpostforcheckAtom
+        .reportWrite(value, super.isIntialLoadingpostforcheck, () {
+      super.isIntialLoadingpostforcheck = value;
+    });
+  }
+
+  final _$fetchPostForcheckFutureAtom =
+      Atom(name: '_PostStore.fetchPostForcheckFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchPostForcheckFuture {
+    _$fetchPostForcheckFutureAtom.reportRead();
+    return super.fetchPostForcheckFuture;
+  }
+
+  @override
+  set fetchPostForcheckFuture(ObservableFuture<PostList> value) {
+    _$fetchPostForcheckFutureAtom
+        .reportWrite(value, super.fetchPostForcheckFuture, () {
+      super.fetchPostForcheckFuture = value;
+    });
+  }
+
+  final _$postForcheckListAtom = Atom(name: '_PostStore.postForcheckList');
+
+  @override
+  PostList get postForcheckList {
+    _$postForcheckListAtom.reportRead();
+    return super.postForcheckList;
+  }
+
+  @override
+  set postForcheckList(PostList value) {
+    _$postForcheckListAtom.reportWrite(value, super.postForcheckList, () {
+      super.postForcheckList = value;
+    });
+  }
+
+  final _$successPostForcheckAtom =
+      Atom(name: '_PostStore.successPostForcheck');
+
+  @override
+  bool get successPostForcheck {
+    _$successPostForcheckAtom.reportRead();
+    return super.successPostForcheck;
+  }
+
+  @override
+  set successPostForcheck(bool value) {
+    _$successPostForcheckAtom.reportWrite(value, super.successPostForcheck, () {
+      super.successPostForcheck = value;
+    });
+  }
+
   @override
   ObservableFuture<dynamic> getPostForCurs(
       bool isLoadMore, String filter, int key) {
@@ -895,6 +1006,12 @@ mixin _$PostStore on _PostStore, Store {
   @override
   ObservableFuture<dynamic> getsobaidang() {
     final _$future = super.getsobaidang();
+    return ObservableFuture<dynamic>(_$future);
+  }
+
+  @override
+  ObservableFuture<dynamic> getsobaidangall() {
+    final _$future = super.getsobaidangall();
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -919,6 +1036,13 @@ mixin _$PostStore on _PostStore, Store {
   @override
   ObservableFuture<dynamic> getfavopost(int iduser, bool isLoadMore, String s) {
     final _$future = super.getfavopost(iduser, isLoadMore, s);
+    return ObservableFuture<dynamic>(_$future);
+  }
+
+  @override
+  ObservableFuture<dynamic> getPostForcheck(
+      bool isLoadMore, String filter, int key) {
+    final _$future = super.getPostForcheck(isLoadMore, filter, key);
     return ObservableFuture<dynamic>(_$future);
   }
 
@@ -1070,6 +1194,8 @@ postForCurList: ${postForCurList},
 successPostForCur: ${successPostForCur},
 fetchsobaidangFuture: ${fetchsobaidangFuture},
 sobaidang: ${sobaidang},
+fetchsobaidangallFuture: ${fetchsobaidangallFuture},
+sobaidangall: ${sobaidangall},
 fetchdeleteFuture: ${fetchdeleteFuture},
 successdelete: ${successdelete},
 fetchgiahanFuture: ${fetchgiahanFuture},
@@ -1080,6 +1206,10 @@ isIntialLoadingpostfavo: ${isIntialLoadingpostfavo},
 fetchpostfavoFuture: ${fetchpostfavoFuture},
 favopost: ${favopost},
 successfavopost: ${successfavopost},
+isIntialLoadingpostforcheck: ${isIntialLoadingpostforcheck},
+fetchPostForcheckFuture: ${fetchPostForcheckFuture},
+postForcheckList: ${postForcheckList},
+successPostForcheck: ${successPostForcheck},
 loading: ${loading},
 propertiesLoading: ${propertiesLoading},
 isBaiGhimYeuThichLoading: ${isBaiGhimYeuThichLoading},
@@ -1094,10 +1224,12 @@ loadingNewpost: ${loadingNewpost},
 loadingeditpost: ${loadingeditpost},
 loadingPostForCur: ${loadingPostForCur},
 loadingsobaidang: ${loadingsobaidang},
+loadingsobaidangall: ${loadingsobaidangall},
 Deletepost: ${Deletepost},
 giahanpost: ${giahanpost},
 getpackpricepost: ${getpackpricepost},
-loadingfavopost: ${loadingfavopost}
+loadingfavopost: ${loadingfavopost},
+loadingPostForcheck: ${loadingPostForcheck}
     ''';
   }
 }

@@ -30,4 +30,22 @@ class lichsugiaodichApi{
       throw e;
     }
   }
+  
+  Future<dynamic> countLichSuGiaoDichChuaKiemDuyet() async {
+    try {
+      final res = await _dioClient.post(
+        Endpoints.getLSGDChuaKiemDuyet,
+        options: Options(
+          headers: {
+            "Abp.TenantId": 1,
+            "Authorization" : "Bearer ${Preferences.access_token}",
+          }
+        ),
+      );
+      return res["result"];
+    }catch (e) {
+      throw e;
+    }
+  }
+  
 }

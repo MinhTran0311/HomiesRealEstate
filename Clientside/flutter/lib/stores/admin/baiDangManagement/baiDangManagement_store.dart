@@ -23,11 +23,23 @@ abstract class _BaiDangManagementStore with Store {
   ObservableFuture<dynamic> fetchCountNewBaiDangsInMonthFuture =
   ObservableFuture<dynamic>(emptyCountNewBaiDangsInMonthResponse);
 
+  static ObservableFuture<dynamic> emptyCountLSDGChuaKiemDuyetResponse =
+  ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchCountLSGDChuaKiemDuyetFuture =
+  ObservableFuture<dynamic>(emptyCountLSDGChuaKiemDuyetResponse);
+
   @observable
   int countNewBaiDangsInMonth = 0;
 
+  @observable
+  int countLSGDChuaKiemDuyet = 0;
+
   @computed
   bool get loadingCountNewBaiDangsInMonth => fetchCountNewBaiDangsInMonthFuture.status == FutureStatus.pending;
+  @computed
+  bool get loadingCountLSDGChuaKiemDuyet => fetchCountLSGDChuaKiemDuyetFuture.status == FutureStatus.pending;
 
   @action
   Future fCountNewBaiDangsInMonth() async {
@@ -39,16 +51,24 @@ abstract class _BaiDangManagementStore with Store {
       // print("totalUsers: " + totalUsers.toString());
     }
     ).catchError((error) {
-      // if (error is DioError) {
-      //   if (error.response.data != null)
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   throw error;
-      // }
+      if (error.response != null && error.response.data!=null)
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
+    });
+  }
+
+  //Đếm lịch sử giao dịch chưa kiểm duyệt
+  @action
+  Future fCountLichSuGiaoDichsChuaKiemDuyet() async {
+    final future = _repository.countLichSuGiaoDichChuaKiemDuyets();
+    fetchCountLSGDChuaKiemDuyetFuture = ObservableFuture(future);
+
+    future.then((lichSuGiaoDichChuaKiemDuyet) {
+      this.countLSGDChuaKiemDuyet = lichSuGiaoDichChuaKiemDuyet;
+    }
+    ).catchError((error){
       if (error.response != null && error.response.data!=null)
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else

@@ -2,6 +2,7 @@ import 'package:boilerplate/data/network/apis/authToken/authToken_api.dart';
 import 'package:boilerplate/data/network/apis/danhMucs/danhMuc_api.dart';
 import 'package:boilerplate/data/network/apis/goiBaiDangs/goiBaiDang_api.dart';
 import 'package:boilerplate/data/network/apis/image/image_api.dart';
+import 'package:boilerplate/data/network/apis/lichsugiaodich/lichsugiaodich_api.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/network/apis/thuocTinhs/thuocTinh_api.dart';
 import 'package:boilerplate/data/network/apis/towns/town_api.dart';
@@ -125,6 +126,11 @@ class NetworkModule extends PreferenceModule {
   @singleton
   GoiBaiDangApi provideGoiBaiDangApi(DioClient dioClient, RestClient restClient)=>
       GoiBaiDangApi(dioClient, restClient);
+
+  @provide
+  @singleton
+  lichsugiaodichApi provideLichSuGiaoDichApi(DioClient dioClient, RestClient restClient)=>
+      lichsugiaodichApi(dioClient, restClient);
 // Api Providers End:---------------------------------------------------------
 
 }

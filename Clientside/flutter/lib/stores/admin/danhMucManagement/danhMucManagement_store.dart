@@ -221,16 +221,6 @@ abstract class _DanhMucManagementStore with Store {
       // print("totalUsers: " + totalUsers.toString());
     }
     ).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null)
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else{
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
