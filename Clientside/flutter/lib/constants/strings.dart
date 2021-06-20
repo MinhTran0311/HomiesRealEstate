@@ -13,5 +13,6 @@ class Strings {
     "Connection to API server failed due to internet connection": "Đã xảy ra lỗi. Vui lòng liên hệ với Admin",
     "Receive timeout in connection with API server": "Đã xảy ra lỗi. Vui lòng liên hệ với Admin",
     "Send timeout in connection with API server": "Đã xảy ra lỗi. Vui lòng liên hệ với Admin",
+    "Incorrect password.": "Mật khẩu không đúng",
   };
 }

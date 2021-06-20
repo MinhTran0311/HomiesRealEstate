@@ -71,7 +71,7 @@ class _SettingPageState extends State<SettingPage> {
           children:[
             CardItem(
               text: "Đổi chế độ nền ${_themeStore.darkMode ? "sáng" : "tối"}",
-              icon: Icons.security_outlined,
+              icon: _themeStore.darkMode ? Icons.nights_stay_outlined : Icons.wb_sunny_outlined,
               isFunction: true,
               press: () {
                 //Preferences.is_dark_mode=!_themeStore.darkMode;

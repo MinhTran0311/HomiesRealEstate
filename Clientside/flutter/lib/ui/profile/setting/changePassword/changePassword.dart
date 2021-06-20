@@ -129,10 +129,15 @@ class _changePassWordPageState extends State<changePassWordPage> {
           onEditingComplete: () => FocusScope.of(context).nextFocus(),
           iconColor: Colors.amber,
           textController: _oldPasswordController,
-          errorText: _store.formErrorStore.password,
           onChanged: (value) {
             _store.setPassword(_oldPasswordController.text);
           },
+          labelText: "Mật khẩu hiện tại",
+          isDarkmode: _themeStore.darkMode,
+          // suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
+            _store.setPassword(_oldPasswordController.text);
+            return _store.formErrorStore.password;},
         );
       },
     );
@@ -150,11 +155,18 @@ class _changePassWordPageState extends State<changePassWordPage> {
           icon: Icons.vpn_key,
           iconColor: Colors.amber,
           textController: _newPasswordController,
-          errorText: _store.formErrorStore.newPassword,
+          //errorText: _store.formErrorStore.newPassword,
           autoFocus: false,
           onChanged: (value) {
             _store.setNewPassword(_newPasswordController.text);
           },
+
+          labelText: "Mật khẩu mới",
+          isDarkmode: _themeStore.darkMode,
+          // suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
+            _store.setNewPassword(_newPasswordController.text);
+            return _store.formErrorStore.newPassword;},
         );
       },
     );
@@ -172,10 +184,16 @@ class _changePassWordPageState extends State<changePassWordPage> {
           iconColor: Colors.amber,
           textController: _reenterNewPasswordController,
           autoFocus: false,
-          errorText: _store.formErrorStore.confirmPassword,
+          //errorText: _store.formErrorStore.confirmPassword,
           onChanged: (value) {
             _store.setConfirmPassword(_reenterNewPasswordController.text);
           },
+          labelText: "Nhập lại mật khẩu mới",
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
+            _store.setConfirmPassword(_reenterNewPasswordController.text);
+            return _store.formErrorStore.confirmPassword;},
         );
       },
     );
