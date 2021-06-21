@@ -311,7 +311,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.yellow[700],
+                            color: post.tagLoaiBaidang!="Cho thuê" ? Colors.yellow[700]:Colors.lightBlueAccent,
                             borderRadius: BorderRadius.all(Radius.circular(5))
                         ),
                         width: 100,
@@ -640,8 +640,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   List<Widget> buildRecommendPosts(BuildContext context){
     List<Widget> list =[];
     for (int i=0; i<_postStore.rcmPostList.posts.length; i++){
-      //if (_postStore.rcmPostList.posts[i].id!=post.id)
-
+      if (_postStore.rcmPostList.posts[i].id!=post.id)
         list.add(buildRecommendPost(context,_postStore.rcmPostList.posts[i],i));
     }
     return list;
