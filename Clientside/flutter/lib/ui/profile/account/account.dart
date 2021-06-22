@@ -223,8 +223,8 @@ class _AccountPageState extends State<AccountPage>{
                                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Observer(builder: (context) {
-                                        if(_userstore.userCurrent != null){
-                                          return _userstore.userCurrent.picture != null
+                                        // if(_userstore.userCurrent != null){
+                                          return !_userstore.loadingCurrentUserPicture && _userstore.userCurrent.picture != null
                                               ? CircleAvatar(
                                               radius: (52),
                                               backgroundColor: Colors.white,
@@ -242,17 +242,17 @@ class _AccountPageState extends State<AccountPage>{
                                                 BorderRadius.circular(50),
                                                 child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
                                               ));
-                                        }
-                                        else{
-                                          return CircleAvatar(
-                                              radius: (52),
-                                              backgroundColor: Colors.white,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                BorderRadius.circular(50),
-                                                child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                              ));
-                                        }
+                                        // }
+                                        // else{
+                                        //   return CircleAvatar(
+                                        //       radius: (52),
+                                        //       backgroundColor: Colors.white,
+                                        //       child: ClipRRect(
+                                        //         borderRadius:
+                                        //         BorderRadius.circular(50),
+                                        //         child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                        //       ));
+                                        // }
 
                                       }),
                                       // Observer(builder: (context) {
@@ -876,7 +876,6 @@ class _AccountEditPageState extends State<AccountEditPage> {
                         )
                     ),
                     onPressed: () {
-                      print("Duong1111");
                       _showSimpleModalDialog(context, "Bạn có muốn cập nhật thông tin?");
                     },
                   )
@@ -925,7 +924,6 @@ class _AccountEditPageState extends State<AccountEditPage> {
         ) : Center(child: _buildRightSide()),
         Observer(
           builder: (context) {
-            print("DuongDebug ${_userstore.updateUser_success}");
             if (_userstore.updateUser_success) {
               _userstore.getCurrentUser();
               // _userstore.getCurrentWalletUser();
