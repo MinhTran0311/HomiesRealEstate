@@ -36,6 +36,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
   ThemeStore _themeStore;
 
   var _selectedValue;
+  TextEditingController _searchController = new TextEditingController();
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   final ScrollController _scrollController =
@@ -57,8 +58,9 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
 
     if (!_danhMucManagementStore.loading) {
-      _danhMucManagementStore.getDanhMucs(false);
       _danhMucManagementStore.isIntialLoading = true;
+      _danhMucManagementStore.setStringFilter('');
+      _danhMucManagementStore.getDanhMucs(false);
     }
   }
 
@@ -150,6 +152,12 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
+            controller: _searchController,
+            onChanged: (value) => _danhMucManagementStore.setStringFilter(_searchController.text),
+            onSubmitted: (value) {
+              _danhMucManagementStore.isIntialLoading = true;
+              _danhMucManagementStore.getDanhMucs(false);
+            },
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
@@ -167,41 +175,20 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                 ),
                 suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,),
+                    onPressed: () {
+                      _danhMucManagementStore.isIntialLoading = true;
+                      _danhMucManagementStore.getDanhMucs(false);
+                    },
                   ),
                 )
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 25),
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Text(
-                  'Hiển thị bộc lọc nâng cao',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black26,
-                  size: 20,
-                ),
-              ],
-            ),
-            onTap: (){
-              _showBottomSheet();
-            },
-          ),
-
-        ),
-        // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
         Expanded(child: _buildListView()),
       ],
     );
@@ -288,30 +275,9 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     );
   }
 
-  // Widget _buildListViewFilter() {
-  //   return _listUserFilterFromRole != null
-  //       ? Expanded(
-  //       child: ListView.separated(
-  //         itemCount: _listUserFilterFromRole.length,
-  //         separatorBuilder: (context, position) {
-  //           return Divider();
-  //         },
-  //         itemBuilder: (context, position) {
-  //           return _buildListItem(_listUserFilterFromRole[position], position);
-  //         },
-  //       )
-  //   )
-  //       : Center(
-  //     child: Text(
-  //       // AppLocalizations.of(context).translate('home_tv_no_post_found'),
-  //       "Không tìm thấy người dùng nào!",
-  //     ),
-  //   );
-  // }
-
   Widget _buildListItem(DanhMuc danhMuc, int position) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: Container(
         decoration: !_themeStore.darkMode ? new BoxDecoration(
           boxShadow: [
@@ -703,6 +669,16 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     ).then<void>((T value) {
       // The value passed to Navigator.pop() or null.
     });
+  }
+
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _searchController.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
 }

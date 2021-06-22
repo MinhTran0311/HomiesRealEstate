@@ -97,6 +97,9 @@ abstract class _GoiBaiDangManagementStore with Store {
   int countAllGoiBaiDangs = 0;
 
   @observable
+  String filter = '';
+
+  @observable
   int skipCount = 0;
 
   @observable
@@ -123,6 +126,11 @@ abstract class _GoiBaiDangManagementStore with Store {
   @action
   void setGoiBaiDangId(int value) {
     goiBaiDangID = value;
+  }
+
+  @action
+  void setStringFilter(String value) {
+    this.filter = value;
   }
 
   @action
@@ -163,7 +171,7 @@ abstract class _GoiBaiDangManagementStore with Store {
     }
     else
       skipCount += skipIndex;
-    final future = _repository.getAllGoiBaiDangs(skipCount, maxCount);
+    final future = _repository.getAllGoiBaiDangs(skipCount, maxCount, filter);
     fetchGoiBaiDangsFuture = ObservableFuture(future);
 
     future.then((goiBaiDangList) {

@@ -2,6 +2,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -102,15 +103,21 @@ class _SettingPageState extends State<SettingPage> {
       icon: Icons.logout,
       isFunction: true,
       press: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          preference.setString(Preferences.auth_token, "");
-          preference.setString(Preferences.userRole, "");
-          preference.setInt(Preferences.userRoleRank.toString(), 0);
+        var future = showSimpleModalDialog(context, "Bạn có chắc chắn muốn đăng xuất không?");
+        future.then((value) {
+          if (value)  {
+            SharedPreferences.getInstance().then((preference) {
+              preference.setBool(Preferences.is_logged_in, false);
+              preference.setString(Preferences.auth_token, "");
+              preference.setString(Preferences.userRole, "");
+              preference.setInt(Preferences.userRoleRank.toString(), 0);
+            });
+            Preferences.userRole="";
+            _themeStore.changeBrightnessToDark(false);
+            Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+          };
         });
-        Preferences.userRole="";
-        _themeStore.changeBrightnessToDark(false);
-        Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+        return;
       },
     );
   }

@@ -274,8 +274,8 @@ class Repository {
     }).catchError((error) => throw error);
   }
   //User: ----------------------------------------------------------------------
-  Future<UserList> getAllUsers(int skipCount, int maxCount) async {
-    return await _userApi.getAllUsers(skipCount, maxCount).then((usersList) {
+  Future<UserList> getAllUsers(int skipCount, int maxCount, String filter) async {
+    return await _userApi.getAllUsers(skipCount, maxCount, filter).then((usersList) {
       // log('dataUserTest: $usersList');
       return usersList;
     }).catchError((error) => throw error);
@@ -481,8 +481,8 @@ class Repository {
 
   //Danh mục------------------------------------------------------------------
   //Get all danh mục
-  Future<DanhMucList> getAllDanhMucs(int skipCount, int maxCount) async {
-    return await _danhMucApi.getAllDanhMucs(skipCount, maxCount).then((danhMucList) {
+  Future<DanhMucList> getAllDanhMucs(int skipCount, int maxCount, String filter) async {
+    return await _danhMucApi.getAllDanhMucs(skipCount, maxCount, filter).then((danhMucList) {
       return danhMucList;
     }).catchError((error) => throw error);
   }
@@ -513,8 +513,8 @@ class Repository {
 
   //Thuộc tính------------------------------------------------------------------
   //Get all Thuộc tính
-  Future<ThuocTinhManagementList> getAllThuocTinhs(int skipCount, int maxCount) async {
-    return await _thuocTinhApi.getAllThuocTinhs(skipCount, maxCount).then((thuocTinhList) {
+  Future<ThuocTinhManagementList> getAllThuocTinhs(int skipCount, int maxCount, String filter) async {
+    return await _thuocTinhApi.getAllThuocTinhs(skipCount, maxCount, filter).then((thuocTinhList) {
       return thuocTinhList;
     }).catchError((error) => throw error);
   }
@@ -545,8 +545,8 @@ class Repository {
 
   //Gói bài đăng------------------------------------------------------------------
   //Get all gói bài đăng
-  Future<GoiBaiDangList> getAllGoiBaiDangs(int skipCount, int maxCount) async {
-    return await _goiBaiDangApi.getAllGoiBaiDangs(skipCount, maxCount).then((goiBaiDangList) {
+  Future<GoiBaiDangList> getAllGoiBaiDangs(int skipCount, int maxCount, String filter) async {
+    return await _goiBaiDangApi.getAllGoiBaiDangs(skipCount, maxCount, filter).then((goiBaiDangList) {
       return goiBaiDangList;
     }).catchError((error) => throw error);
   }
