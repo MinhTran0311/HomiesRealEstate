@@ -22,6 +22,13 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   bool get loading => (_$loadingComputed ??= Computed<bool>(() => super.loading,
           name: '_DanhMucManagementStore.loading'))
       .value;
+  Computed<bool> _$loadingAllComputed;
+
+  @override
+  bool get loadingAll =>
+      (_$loadingAllComputed ??= Computed<bool>(() => super.loadingAll,
+              name: '_DanhMucManagementStore.loadingAll'))
+          .value;
   Computed<bool> _$loadingCountAllDanhMucsComputed;
 
   @override
@@ -65,6 +72,23 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   set fetchDanhMucsFuture(ObservableFuture<DanhMucList> value) {
     _$fetchDanhMucsFutureAtom.reportWrite(value, super.fetchDanhMucsFuture, () {
       super.fetchDanhMucsFuture = value;
+    });
+  }
+
+  final _$fetchAllDanhMucsFutureAtom =
+      Atom(name: '_DanhMucManagementStore.fetchAllDanhMucsFuture');
+
+  @override
+  ObservableFuture<DanhMucList> get fetchAllDanhMucsFuture {
+    _$fetchAllDanhMucsFutureAtom.reportRead();
+    return super.fetchAllDanhMucsFuture;
+  }
+
+  @override
+  set fetchAllDanhMucsFuture(ObservableFuture<DanhMucList> value) {
+    _$fetchAllDanhMucsFutureAtom
+        .reportWrite(value, super.fetchAllDanhMucsFuture, () {
+      super.fetchAllDanhMucsFuture = value;
     });
   }
 
@@ -385,22 +409,6 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
-  final _$nameDanhMucListAtom =
-      Atom(name: '_DanhMucManagementStore.nameDanhMucList');
-
-  @override
-  List<String> get nameDanhMucList {
-    _$nameDanhMucListAtom.reportRead();
-    return super.nameDanhMucList;
-  }
-
-  @override
-  set nameDanhMucList(List<String> value) {
-    _$nameDanhMucListAtom.reportWrite(value, super.nameDanhMucList, () {
-      super.nameDanhMucList = value;
-    });
-  }
-
   final _$getAllDanhMucsAsyncAction =
       AsyncAction('_DanhMucManagementStore.getAllDanhMucs');
 
@@ -523,6 +531,7 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   String toString() {
     return '''
 fetchDanhMucsFuture: ${fetchDanhMucsFuture},
+fetchAllDanhMucsFuture: ${fetchAllDanhMucsFuture},
 fetchCountAllDanhMucsFuture: ${fetchCountAllDanhMucsFuture},
 fetchUpdateDanhMucFuture: ${fetchUpdateDanhMucFuture},
 fetchCreateDanhMucFuture: ${fetchCreateDanhMucFuture},
@@ -543,9 +552,9 @@ updateDanhMuc_success: ${updateDanhMuc_success},
 updateActiveDanhMuc_success: ${updateActiveDanhMuc_success},
 createDanhMuc_success: ${createDanhMuc_success},
 isIntialLoading: ${isIntialLoading},
-nameDanhMucList: ${nameDanhMucList},
 canSubmit: ${canSubmit},
 loading: ${loading},
+loadingAll: ${loadingAll},
 loadingCountAllDanhMucs: ${loadingCountAllDanhMucs},
 loadingUpdateDanhMuc: ${loadingUpdateDanhMuc},
 loadingUpdateActiveDanhMuc: ${loadingUpdateActiveDanhMuc},

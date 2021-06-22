@@ -154,7 +154,6 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
                 _goiBaiDangManagementStore.createGoiBaiDang_success = false;
               }
               return Container(width: 0, height : 0);
-
             }
             else {
               return showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage,context);
