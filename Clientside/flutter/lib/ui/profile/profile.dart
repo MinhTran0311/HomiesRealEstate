@@ -121,8 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: _buildAppBar(),
           body: Observer(builder: (context) {
             return
-              !_userstore.loadingCurrentUser ||
-                    !_userstore.loadingCurrentUserWallet ||
+              !_userstore.loadingCurrentUser &&
+                    !_userstore.loadingCurrentUserWallet &&
                     !_userstore.loadingCurrentUserPicture
                 ? _buildBody()
                 : CustomProgressIndicatorWidget();
