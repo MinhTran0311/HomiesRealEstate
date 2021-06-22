@@ -45,30 +45,22 @@ Future<dynamic> showSimpleModalDialog(context, String message) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            message,
-            style:
-            TextStyle(fontSize: 20),
+          title: Text("Thông báo"),
+          content: Text(message),
+          actions:<Widget>[
+          TextButton(
+            child: Text('Xác nhận'),
+            onPressed: () async {
+            Navigator.of(context).pop(true);
+            },
           ),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              RoundedButtonWidget(
-                buttonText: "Đồng ý",
-                buttonColor: Colors.green,
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
-              RoundedButtonWidget(
-                buttonColor: Colors.grey,
-                buttonText: "Hủy",
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-              )
-            ],
+          TextButton(
+            child: Text('Hủy'),
+            onPressed: () {
+                Navigator.of(context).pop(false);
+            },
           ),
-        );
-      });
+        ]);
+      }
+    );
 }

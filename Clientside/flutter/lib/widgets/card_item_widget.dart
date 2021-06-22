@@ -50,8 +50,8 @@ class CardItem extends StatelessWidget {
                   child: Text(text,
                       style:
                       TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 21,
                           color: colortext ?? ((_themeStore.darkMode ? Colors.white : Colors.black))
                       )
                   ),

@@ -415,17 +415,33 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
     );
   }
   Widget buildExpansionKiemDuyet(lichsugiaodich lsgd,i){
-    return Card(
-      color: _themeStore.darkMode==true? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: ExpansionTile(
-          title:  buildCardKiemDuyetheaderBuilder(lsgd),
-          children: [
-            buildCardKiemDuyetBody(lsgd,i)
-          ],
+    return Container(
+      decoration: !_themeStore.darkMode ? new BoxDecoration(
+        boxShadow: [
+          // color: Colors.white, //background color of box
+          BoxShadow(
+            color: Color.fromRGBO(198, 199, 202, 1),
+            blurRadius: 10, // soften the shadow
+            spreadRadius: 0.01, //extend the shadow
+            offset: Offset(
+              8.0, // Move to right 10  horizontally
+              12.0, // Move to bottom 10 Vertically
+            ),
+          )
+        ],
+      ) : new BoxDecoration(),
+      child: Card(
+        color: _themeStore.darkMode==true? AppColors.darkBlueForCardDarkTheme:AppColors.greyForCardLightTheme,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+            title:  buildCardKiemDuyetheaderBuilder(lsgd),
+            children: [
+              buildCardKiemDuyetBody(lsgd,i)
+            ],
+        ),
       ),
     );
   }

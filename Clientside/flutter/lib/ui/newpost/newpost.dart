@@ -434,7 +434,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         key: _formKey,
         autovalidateMode: AutovalidateMode.always,
         child: DropdownButtonFormField<Postcategory>(
-          hint: Text("Chọn phương thức "),
+          hint: Text("Chọn loại hình bất động sản "),
           value: selectedType,
           onChanged: (Postcategory Value) {
             setState(() {
@@ -454,7 +454,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             icon: Icon(Icons.clear),
           )),
           validator: (value) =>
-              value == null ? 'Vui lòng chọn phương thức' : null,
+              value == null ? 'Vui lòng chọn loại hình bất động sản' : null,
           items: type.map((Postcategory type) {
             if (type.danhMucCha == null)
               return DropdownMenuItem<Postcategory>(

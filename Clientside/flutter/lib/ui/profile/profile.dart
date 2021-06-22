@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Wrap(
             children: <Widget>[
               CardItem(
-                text: "Tài Khoản của tôi",
+                text: "Tài khoản của tôi",
                 icon: Icons.account_circle_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
@@ -264,6 +264,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ));
                     Navigator.push(context, route);
                    });
+                },
+              ),
+              CardItem(
+                text: "Bài đăng yêu thích",
+                icon: Icons.article_outlined,
+                // colorbackgroud: Colors.grey[200],
+                // colortext: Colors.black,
+                coloricon: Colors.amber,
+                isFunction: false,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FavoPostScreen(
+                          userid: _userstore.userCurrent.UserID,
+                        )),
+                  );
                 },
               ),
               CardItem(
@@ -312,23 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(context, route);
                     });
                   }),
-              CardItem(
-                text: "Danh sách bài ghim",
-                icon: Icons.article_outlined,
-                // colorbackgroud: Colors.grey[200],
-                // colortext: Colors.black,
-                coloricon: Colors.amber,
-                isFunction: false,
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FavoPostScreen(
-                              userid: _userstore.userCurrent.UserID,
-                            )),
-                  );
-                },
-              ),
+
             ],
           ),
         ),
