@@ -223,30 +223,63 @@ class _AccountPageState extends State<AccountPage>{
                                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Observer(builder: (context) {
-                                        return _userstore.userCurrent.picture != null
-                                            ? CircleAvatar(radius: (52),
-                                            backgroundColor: Colors.white,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(50),
-                                              child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
-                                            )
-                                            )
-                                            : CircleAvatar(
-                                            radius: (52),
-                                            backgroundColor: Colors.white,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(50),
-                                              child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                            ));
+                                        if(_userstore.userCurrent != null){
+                                          return _userstore.userCurrent.picture != null
+                                              ? CircleAvatar(
+                                              radius: (52),
+                                              backgroundColor: Colors.white,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(50),
+                                                child: Image.memory(Base64Decoder()
+                                                    .convert(_userstore
+                                                    .userCurrent.picture)),
+                                              )): CircleAvatar(
+                                              radius: (52),
+                                              backgroundColor: Colors.white,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(50),
+                                                child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                              ));
+                                        }
+                                        else{
+                                          return CircleAvatar(
+                                              radius: (52),
+                                              backgroundColor: Colors.white,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(50),
+                                                child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                              ));
+                                        }
+
                                       }),
+                                      // Observer(builder: (context) {
+                                      //   return _userstore.userCurrent.picture != null
+                                      //       ? CircleAvatar(radius: (52),
+                                      //       backgroundColor: Colors.white,
+                                      //       child: ClipRRect(
+                                      //         borderRadius: BorderRadius.circular(50),
+                                      //         child: Image.memory(Base64Decoder().convert(_userstore.userCurrent.picture)),
+                                      //       )
+                                      //       )
+                                      //       : CircleAvatar(
+                                      //       radius: (52),
+                                      //       backgroundColor: Colors.white,
+                                      //       child: ClipRRect(
+                                      //         borderRadius:
+                                      //         BorderRadius.circular(50),
+                                      //         child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                      //       ));
+                                      // }),
 
                                       // SizedBox(height: 10,),
                                       Container(
                                         width: size.width*0.9,
                                         child:
                                         SelectableText(
-                                          "${SurName} " + "${Name}",
+                                          "${_userstore.userCurrent.surname} " + "${_userstore.userCurrent.name}",
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -423,7 +456,7 @@ class _AccountPageState extends State<AccountPage>{
                                 ),
                                 Text(
                                   // alignment: Alignment.centerRight,
-                                  "${Email}",
+                                  "${_userstore.userCurrent.emailAddress}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 18,
@@ -513,7 +546,7 @@ class _AccountPageState extends State<AccountPage>{
                                 )
                                     :Text(
                                   // alignment: Alignment.centerRight,
-                                  "${Phone}",
+                                  "${_userstore.userCurrent.phoneNumber}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 18,
@@ -762,7 +795,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
                 RoundedButtonWidget(
                   buttonText: "Đồng ý",
                   buttonColor: Colors.green,
-                  onPressed: () {
+                  onPressed: ()  {
                     DeviceUtils.hideKeyboard(context);
                     _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
                     Navigator.of(context).pop(true);
@@ -894,6 +927,9 @@ class _AccountEditPageState extends State<AccountEditPage> {
           builder: (context) {
             print("DuongDebug ${_userstore.updateUser_success}");
             if (_userstore.updateUser_success) {
+              _userstore.getCurrentUser();
+              // _userstore.getCurrentWalletUser();
+              // _userstore.getCurrentPictureUser();
               Future.delayed(Duration(milliseconds: 0), () {
                 Navigator.pop(context);
               });
@@ -1091,7 +1127,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
         Email = CtlEmail.text;
         Phone = CtlPhone.text;
         if(SurName!=null && Name!=null && Email!=null && Phone!=null && SurName.isNotEmpty && Name.isNotEmpty && Email.isNotEmpty && Phone.isNotEmpty ) {
-          _showSimpleModalDialog(context, "Bạn có muốn cập nhật thông tin?");
+          _showMyDialog();
         }
         else{
           showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
@@ -1147,22 +1183,18 @@ class _AccountEditPageState extends State<AccountEditPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Hủy'),
-              onPressed: () {
-                setState(() {
-                  _selectedIndex =1;
-                  Navigator.of(context).pop();
-                });
+              child: Text('Xác nhận'),
+              onPressed: () async {
+                DeviceUtils.hideKeyboard(context);
+                _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Cập nhật'),
+              child: Text('Hủy'),
               onPressed: () {
                 setState(() {
-                  update();
-                  _selectedIndex =0;
                   Navigator.of(context).pop();
-
                 });
               },
             ),

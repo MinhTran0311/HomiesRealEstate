@@ -203,6 +203,8 @@ abstract class _UserStore with Store {
     fetchUserCurrentFuture = ObservableFuture(future);
     future.then((user) {
       this.userCurrent = user;
+      getCurrentPictureUser();
+      getCurrentWalletUser();
       // this.getUserByID(user.UserID);
     }).catchError((error) {
       // if (error is DioError) {
@@ -349,13 +351,12 @@ abstract class _UserStore with Store {
 
     future.then((user) {
       if (user["success"]==true){
-
-        updateUser_success = true;
         this.userCurrent.name = name;
         this.userCurrent.surname = surname;
         this.userCurrent.phoneNumber = phonenumber;
         this.userCurrent.emailAddress = email;
         this.userCurrent.userName = userName;
+        updateUser_success = true;
       }
 
     }).catchError((error) {

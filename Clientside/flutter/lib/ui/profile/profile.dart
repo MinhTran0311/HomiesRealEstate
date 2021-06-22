@@ -75,12 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!_userstore.loadingCurrentUser) {
         _userstore.getCurrentUser();
       }
-      if (!_userstore.loadingCurrentUserWallet) {
-        _userstore.getCurrentWalletUser();
-      }
-      if (!_userstore.loadingCurrentUserPicture) {
-        _userstore.getCurrentPictureUser();
-      }
+      // if (!_userstore.loadingCurrentUserWallet) {
+      //   _userstore.getCurrentWalletUser();
+      // }
+      // if (!_userstore.loadingCurrentUserPicture) {
+      //   _userstore.getCurrentPictureUser();
+      // }
      if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false,"",0);
       if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     }
