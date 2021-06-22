@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -36,4 +37,38 @@ String translateErrorMessage(String error){
     return Strings.errorString[error];
   else
     return "Hãy kiểm tra lại !";
+}
+
+Future<dynamic> showSimpleModalDialog(context, String message) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            message,
+            style:
+            TextStyle(fontSize: 20),
+          ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              RoundedButtonWidget(
+                buttonText: "Đồng ý",
+                buttonColor: Colors.green,
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+              RoundedButtonWidget(
+                buttonColor: Colors.grey,
+                buttonText: "Hủy",
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              )
+            ],
+          ),
+        );
+      });
 }

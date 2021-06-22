@@ -1,4 +1,5 @@
 import 'package:boilerplate/models/role/role.dart';
+import 'package:flutter/widgets.dart';
 
 class User {
   int id;
@@ -15,6 +16,7 @@ class User {
   String permissions;
   String avatar;
   String roleName;
+  Image avatarImage;
 
   // List<String> permissions;
 
@@ -33,6 +35,7 @@ class User {
     this.permissions,
     this.avatar,
     this.roleName,
+    this.avatarImage,
   });
   factory User.UserByIDfromMap(Map<String, dynamic> json) => User(
     id: json["result"]["user"]["id"],

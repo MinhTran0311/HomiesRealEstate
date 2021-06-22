@@ -258,6 +258,21 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
     });
   }
 
+  final _$filterAtom = Atom(name: '_DanhMucManagementStore.filter');
+
+  @override
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   final _$skipCountAtom = Atom(name: '_DanhMucManagementStore.skipCount');
 
   @override
@@ -494,6 +509,17 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   }
 
   @override
+  void setStringFilter(String value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.setStringFilter');
+    try {
+      return super.setStringFilter(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchDanhMucsFuture: ${fetchDanhMucsFuture},
@@ -509,6 +535,7 @@ trangThai: ${trangThai},
 danhMucList: ${danhMucList},
 danhMucListAll: ${danhMucListAll},
 countAllDanhMucs: ${countAllDanhMucs},
+filter: ${filter},
 skipCount: ${skipCount},
 skipIndex: ${skipIndex},
 maxCount: ${maxCount},

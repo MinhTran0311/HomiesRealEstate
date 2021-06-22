@@ -137,6 +137,21 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
     });
   }
 
+  final _$filterAtom = Atom(name: '_UserManagementStore.filter');
+
+  @override
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   final _$userListAtom = Atom(name: '_UserManagementStore.userList');
 
   @override
@@ -302,6 +317,28 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   }
 
   @override
+  int ElementsHasAvatar(UserList userList) {
+    final _$actionInfo = _$_UserManagementStoreActionController.startAction(
+        name: '_UserManagementStore.ElementsHasAvatar');
+    try {
+      return super.ElementsHasAvatar(userList);
+    } finally {
+      _$_UserManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setStringFilter(String value) {
+    final _$actionInfo = _$_UserManagementStoreActionController.startAction(
+        name: '_UserManagementStore.setStringFilter');
+    try {
+      return super.setStringFilter(value);
+    } finally {
+      _$_UserManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchUsersFuture: ${fetchUsersFuture},
@@ -310,6 +347,7 @@ fetchCountAllUsersFuture: ${fetchCountAllUsersFuture},
 fetchCountNewUsersInMonthFuture: ${fetchCountNewUsersInMonthFuture},
 countAllUsers: ${countAllUsers},
 countNewUsersInMonth: ${countNewUsersInMonth},
+filter: ${filter},
 userList: ${userList},
 avatarUser: ${avatarUser},
 dateCurrent: ${dateCurrent},

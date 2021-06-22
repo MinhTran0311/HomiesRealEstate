@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/constants/font_family.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -77,6 +78,7 @@ class _AccountPageState extends State<AccountPage>{
 
   @override
   Widget build(BuildContext context) {
+    Size size =  MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         // centerTitle: true,
@@ -88,22 +90,7 @@ class _AccountPageState extends State<AccountPage>{
         //   });}),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          // borderRadius: BorderRadius.only(
-          //   // topLeft: Radius.circular(25),
-          //   // topRight: Radius.circular(25),
-          // ),
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                // Colors.blue,
-                // Colors.red,
-                Colors.orange.shade700,
-                Colors.amberAccent.shade100,
-              ],
-            )
-        ),
+          color: _themeStore.darkMode==true? AppColors.backgroundDarkThemeColor:AppColors.backgroundLightThemeColor,
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.only(topRight: Radius.circular(30),topLeft: Radius.circular(30)),
         //   border: Border.all(color: Colors.white,width: 10.0),
@@ -195,8 +182,8 @@ class _AccountPageState extends State<AccountPage>{
           return Wrap(
             children: [
               Container(
-                height: size.height,
-                width: size.width,
+                // height: size.height,
+                // width: size.width,
                 decoration: BoxDecoration(
                     // borderRadius: BorderRadius.only(
                     //   // topLeft: Radius.circular(25),
@@ -620,7 +607,7 @@ class _AccountPageState extends State<AccountPage>{
                                 },
                               )
                           ),
-                          SizedBox(height: 30,)
+
                         ],
                       ),
                     ),

@@ -75,6 +75,9 @@ abstract class _ThuocTinhManagementStore with Store {
   int countAllThuocTinhs = 0;
 
   @observable
+  String filter = '';
+
+  @observable
   bool updateThuocTinh_success = false;
 
   @observable
@@ -94,6 +97,7 @@ abstract class _ThuocTinhManagementStore with Store {
 
   @observable
   int maxCount = 10;
+
 
   @computed
   bool get canSubmit =>
@@ -121,6 +125,11 @@ abstract class _ThuocTinhManagementStore with Store {
   @action
   void setNameThuocTinh(String value) {
     name = value;
+  }
+
+  @action
+  void setStringFilter(String value) {
+    this.filter = value;
   }
 
   @action
@@ -172,7 +181,7 @@ abstract class _ThuocTinhManagementStore with Store {
     }
     else
       skipCount += skipIndex;
-    final future = _repository.getAllThuocTinhs(skipCount, maxCount);
+    final future = _repository.getAllThuocTinhs(skipCount, maxCount, filter);
     fetchThuocTinhsFuture = ObservableFuture(future);
 
     future.then((thuocTinhList) {
