@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:validators/validators.dart';
 
 import '../profile.dart';
 
@@ -731,9 +732,53 @@ class _AccountEditPageState extends State<AccountEditPage> {
         //       Navigator.pop(context);
         //     });}),
       ),
-      body:_buildBody()
+      body: WillPopScope(
+        child: _buildBody(),
+        onWillPop: () {
+          var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+          future.then((value) {
+            if (value)  Navigator.of(context).pop();
+          });
+          return;
+        },
+      ),
 
     );
+  }
+  Future<dynamic> _showSimpleModalDialog(context, String message) {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              message,
+              style:
+              TextStyle(fontSize: 20),
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                RoundedButtonWidget(
+                  buttonText: "Đồng ý",
+                  buttonColor: Colors.green,
+                  onPressed: () {
+                    DeviceUtils.hideKeyboard(context);
+                    _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                RoundedButtonWidget(
+                  buttonColor: Colors.grey,
+                  buttonText: "Hủy",
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
   Widget buildbodyOLD(){
     return Container(
@@ -798,7 +843,8 @@ class _AccountEditPageState extends State<AccountEditPage> {
                         )
                     ),
                     onPressed: () {
-                      _showMyDialog();
+                      print("Duong1111");
+                      _showSimpleModalDialog(context, "Bạn có muốn cập nhật thông tin?");
                     },
                   )
                   // CardItem(text: "Cập nhật", icon: Icons.save,colorbackgroud: Colors.green,colortext: Colors.white,coloricon: Colors.white,
@@ -909,17 +955,29 @@ class _AccountEditPageState extends State<AccountEditPage> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          isDarkmode: _themeStore.darkMode,
-          labelText: 'Họ',
-          suffixIcon: Icon(Icons.clear),
-          hint: ('Nhập họ'),
-          // hintColor: Colors.white,
+          hint: ('Họ'),
+          hintColor: Colors.grey,
           icon: Icons.person,
           inputType: TextInputType.text,
           iconColor: Colors.amber,
           textController: CtlSurName,
           inputAction: TextInputAction.next,
           autoFocus: false,
+          // onChanged: (value) {
+          //   _store.setSurname(_surnameController.text);
+          // },
+          // errorText: _store.formErrorStore.surname,
+          labelText: "Họ",
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value) {
+            if (value.isEmpty) {
+              return "Chưa nhập họ";
+            }
+            else {
+              return null;
+            }
+          },
         );
       },
     );
@@ -929,17 +987,29 @@ class _AccountEditPageState extends State<AccountEditPage> {
       builder: (context) {
         return TextFieldWidget(
           inputFontsize: 22,
-          hint: ('Nhập tên'),
-          isDarkmode: _themeStore.darkMode,
-          suffixIcon: Icon(Icons.clear),
-          labelText: 'Tên',
-          // hintColor: Colors.white,
+          hint: ('Tên'),
+          hintColor: Colors.grey,
           icon: Icons.person_add,
           inputType: TextInputType.text,
           iconColor: Colors.amber,
           textController: CtlName,
           inputAction: TextInputAction.next,
           autoFocus: false,
+          // onChanged: (value) {
+          //   _store.setName(_nameController.text);
+          // },
+          // errorText: _store.formErrorStore.name,
+          labelText: "Tên",
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value) {
+            if (value.isEmpty) {
+              return "Chưa nhập tên";
+            }
+            else {
+              return null;
+            }
+          }
         );
       },
     );
@@ -956,12 +1026,22 @@ class _AccountEditPageState extends State<AccountEditPage> {
           suffixIcon: Icon(Icons.clear),
           // hintColor: Colors.white,
           icon: Icons.phone,
-          inputType: TextInputType.phone,
+          inputType: TextInputType.number,
           iconColor: Colors.amber,
           textController: CtlPhone,
           inputAction: TextInputAction.next,
           autoFocus: false,
           // errorText: _store.formErrorStore.name,
+          errorMessage: (value) {
+            if (value.isEmpty) {
+              return "Chưa nhập số điện thoại";
+            } else if (double.tryParse(value) == null) {
+              return 'Hãy nhập số điện thoại hợp lệ';
+            }
+            else {
+              return null;
+            }
+          },
         );
       },
     );
@@ -970,18 +1050,32 @@ class _AccountEditPageState extends State<AccountEditPage> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          labelText: 'Email',
           inputFontsize: 22,
-          isDarkmode: _themeStore.darkMode,
-          hint: ('Nhập địa chỉ email'),
-          suffixIcon: Icon(Icons.clear),
-          // hintColor: Colors.white,
+          hint: ('Email'),
+          hintColor: Colors.grey,
           icon: Icons.email_rounded,
-          inputType: TextInputType.emailAddress,
+          inputType: TextInputType.text,
           iconColor: Colors.amber,
           textController: CtlEmail,
           inputAction: TextInputAction.next,
           autoFocus: false,
+          // onChanged: (value) {
+          //   _store.setUserEmail(_userEmailController.text);
+          // },
+          // errorText: _store.formErrorStore.userEmail,
+          labelText: "Email",
+          isDarkmode: _themeStore.darkMode,
+          suffixIcon: Icon(Icons.clear),
+          errorMessage: (value){
+            if (value.isEmpty) {
+              return "Chưa nhập địa chỉ email";
+            } else if (!isEmail(value)) {
+              return 'Hãy nhập địa chỉ email hợp lệ';
+            }
+            else {
+              return null;
+            }
+          },
         );
       },
     );
@@ -997,8 +1091,7 @@ class _AccountEditPageState extends State<AccountEditPage> {
         Email = CtlEmail.text;
         Phone = CtlPhone.text;
         if(SurName!=null && Name!=null && Email!=null && Phone!=null && SurName.isNotEmpty && Name.isNotEmpty && Email.isNotEmpty && Phone.isNotEmpty ) {
-          DeviceUtils.hideKeyboard(context);
-          _userstore.updateCurrentUser(Name, SurName, Phone, Email,_userstore.userCurrent.userName,UserID);
+          _showSimpleModalDialog(context, "Bạn có muốn cập nhật thông tin?");
         }
         else{
           showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
