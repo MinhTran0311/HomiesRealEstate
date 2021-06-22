@@ -172,12 +172,12 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text(
-                          "Bạn chưa lưu thông tin bạn thật sự có muốn thoát?",
+                          "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?",
                           style:
-                          TextStyle(fontSize: 24, fontFamily: 'intel'),
+                          TextStyle(fontSize: 24,),
                         ),
                         content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RoundedButtonWidget(
                               buttonText: "Đồng ý",

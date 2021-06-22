@@ -237,6 +237,21 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
     });
   }
 
+  final _$filterAtom = Atom(name: '_ThuocTinhManagementStore.filter');
+
+  @override
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   final _$updateThuocTinh_successAtom =
       Atom(name: '_ThuocTinhManagementStore.updateThuocTinh_success');
 
@@ -418,6 +433,17 @@ mixin _$ThuocTinhManagementStore on _ThuocTinhManagementStore, Store {
   }
 
   @override
+  void setStringFilter(String value) {
+    final _$actionInfo = _$_ThuocTinhManagementStoreActionController
+        .startAction(name: '_ThuocTinhManagementStore.setStringFilter');
+    try {
+      return super.setStringFilter(value);
+    } finally {
+      _$_ThuocTinhManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setTrangThaiThuocTinh(bool value) {
     final _$actionInfo = _$_ThuocTinhManagementStoreActionController
         .startAction(name: '_ThuocTinhManagementStore.setTrangThaiThuocTinh');
@@ -465,6 +491,7 @@ KieuDuLieuShow: ${KieuDuLieuShow},
 KieuDuLieu: ${KieuDuLieu},
 thuocTinhList: ${thuocTinhList},
 countAllThuocTinhs: ${countAllThuocTinhs},
+filter: ${filter},
 updateThuocTinh_success: ${updateThuocTinh_success},
 createThuocTinh_success: ${createThuocTinh_success},
 updateActiveThuocTinh_success: ${updateActiveThuocTinh_success},

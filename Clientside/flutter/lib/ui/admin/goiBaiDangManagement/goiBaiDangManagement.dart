@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:boilerplate/constants/colors.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/goiBaiDang/goiBaiDang.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -35,7 +36,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
   ThemeStore _themeStore;
 
   var _selectedValue;
-  // var _permissions;
+  TextEditingController _searchController = new TextEditingController();
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   final ScrollController _scrollController =
@@ -55,16 +56,10 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     _goiBaiDangManagementStore = Provider.of<GoiBaiDangManagementStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
 
-    // initializing stores
-
-    // check to see if already called api
-    // if (!_roleManagementStore.loading) {
-    //   _roleManagementStore.getRoles();
-    // }
-    // check to see if already called api
     if (!_goiBaiDangManagementStore.loading) {
-      _goiBaiDangManagementStore.getGoiBaiDangs(false);
       _goiBaiDangManagementStore.isIntialLoading = true;
+      _goiBaiDangManagementStore.setStringFilter('');
+      _goiBaiDangManagementStore.getGoiBaiDangs(false);
     }
   }
 
@@ -156,6 +151,12 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
+            controller: _searchController,
+            onChanged: (value) => _goiBaiDangManagementStore.setStringFilter(_searchController.text),
+            onSubmitted: (value) {
+              _goiBaiDangManagementStore.isIntialLoading = true;
+              _goiBaiDangManagementStore.getGoiBaiDangs(false);
+            },
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
@@ -173,41 +174,20 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                 ),
                 suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,),
+                    onPressed: () {
+                      _goiBaiDangManagementStore.isIntialLoading = true;
+                      _goiBaiDangManagementStore.getGoiBaiDangs(false);
+                    },
                   ),
                 )
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 25),
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Text(
-                  'Hiển thị bộc lọc nâng cao',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black26,
-                  size: 20,
-                ),
-              ],
-            ),
-            onTap: (){
-              _showBottomSheet();
-            },
-          ),
-
-        ),
-        // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
         Expanded(child: _buildListView()),
       ],
     );
@@ -294,7 +274,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
 
   Widget _buildListItem(GoiBaiDang goiBaiDang, int position) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: Container(
         decoration: !_themeStore.darkMode ? new BoxDecoration(
           boxShadow: [
@@ -383,7 +363,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                         Text(
                           // alignment: Alignment.centerRight,
                           // thuocTinh.kieuDuLieu == "String" ? "Chuỗi" : thuocTinh.kieuDuLieu == "int" ? "Số nguyên" : thuocTinh.kieuDuLieu == "double" ? "Số thực" : thuocTinh.kieuDuLieu,
-                          "${goiBaiDang.phi}",
+                          priceFormat(goiBaiDang.phi),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 18,
@@ -686,13 +666,14 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     );
   }
 
-  _showDialog<T>({BuildContext context, Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T value) {
-      // The value passed to Navigator.pop() or null.
-    });
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _searchController.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
 }

@@ -320,6 +320,21 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
     });
   }
 
+  final _$filterAtom = Atom(name: '_GoiBaiDangManagementStore.filter');
+
+  @override
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   final _$skipCountAtom = Atom(name: '_GoiBaiDangManagementStore.skipCount');
 
   @override
@@ -439,6 +454,17 @@ mixin _$GoiBaiDangManagementStore on _GoiBaiDangManagementStore, Store {
   }
 
   @override
+  void setStringFilter(String value) {
+    final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
+        .startAction(name: '_GoiBaiDangManagementStore.setStringFilter');
+    try {
+      return super.setStringFilter(value);
+    } finally {
+      _$_GoiBaiDangManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setNameGoiBaiDang(String value) {
     final _$actionInfo = _$_GoiBaiDangManagementStoreActionController
         .startAction(name: '_GoiBaiDangManagementStore.setNameGoiBaiDang');
@@ -525,6 +551,7 @@ updateGoiBaiDang_success: ${updateGoiBaiDang_success},
 createGoiBaiDang_success: ${createGoiBaiDang_success},
 updateActiveGoiBaiDang_success: ${updateActiveGoiBaiDang_success},
 countAllGoiBaiDangs: ${countAllGoiBaiDangs},
+filter: ${filter},
 skipCount: ${skipCount},
 skipIndex: ${skipIndex},
 maxCount: ${maxCount},
