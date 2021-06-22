@@ -267,6 +267,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               CardItem(
+                text: "Danh sách bài ghim",
+                icon: Icons.article_outlined,
+                // colorbackgroud: Colors.grey[200],
+                // colortext: Colors.black,
+                coloricon: Colors.amber,
+                isFunction: false,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FavoPostScreen(
+                          userid: _userstore.userCurrent.UserID,
+                        )),
+                  );
+                },
+              ),
+              CardItem(
                 text: "Báo cáo thống kê",
                 icon: Icons.article_outlined,
                 // colorbackgroud: Colors.grey[200],
@@ -312,23 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(context, route);
                     });
                   }),
-              CardItem(
-                text: "Danh sách bài ghim",
-                icon: Icons.article_outlined,
-                // colorbackgroud: Colors.grey[200],
-                // colortext: Colors.black,
-                coloricon: Colors.amber,
-                isFunction: false,
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FavoPostScreen(
-                              userid: _userstore.userCurrent.UserID,
-                            )),
-                  );
-                },
-              ),
+
             ],
           ),
         ),
