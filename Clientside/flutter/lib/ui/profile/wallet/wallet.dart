@@ -4,6 +4,7 @@ import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/lichsugiaodich/LSGD_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/FilterLSGD.dart';
@@ -56,11 +57,13 @@ class _WalletPageState extends State<WalletPage>{
   bool isRefreshing = false;
   String dropdownValue = 'Tất cả';
   ThemeStore _themeStore;
+  UserStore _userStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
 
+    _userStore = Provider.of<UserStore>(context);
     _lsgdStore = Provider.of<LSGDStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
@@ -112,7 +115,7 @@ class _WalletPageState extends State<WalletPage>{
           ),
           SizedBox(height: 20,),
           Center(
-            child: Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT admin 15000\nGửi 0368421694",
+            child: Text("Nội dung chuyển tiền:\nNT <userName> <số tiền> \nGửi 0368421694\n\nVí dụ: \nNT ${_userStore.userCurrent.userName} 15000\nGửi 0368421694",
               style: TextStyle(fontSize: 24,),),
           ),
           CardItem(text: "Nạp tiền",icon: Icons.create_outlined,coloricon: Colors.white,colorbackgroud: Colors.green,colortext: Colors.white,
@@ -544,7 +547,7 @@ class _NapTienPageState extends State<NapTienPage> {
   Widget build(BuildContext context) {
     return Container(
         child: Scaffold(
-          appBar: AppBar(centerTitle:true,title: Text("Nạp tiền",style: TextStyle(color: Colors.white),),
+          appBar: AppBar(title: Text("Nạp tiền"),
             // leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
             //     onPressed: (){setState(() {
             //       Navigator.pop(context);
@@ -586,7 +589,7 @@ class _NapTienPageState extends State<NapTienPage> {
                       if(Ctlmoneysend.text.length>3)
                       _showMyDialog();
                       else(
-                      _showErrorMessage("Số tiền tối thiểu là 1000")
+                      showErrorMessage("Số tiền tối thiểu là 1000 VND",context)
                       );
                     });
                   },
@@ -613,7 +616,16 @@ class _NapTienPageState extends State<NapTienPage> {
               ],
               decoration: InputDecoration(
                   hintText: "1500000",
-                  icon: Icon(Icons.attach_money,color: Colors.amber,)
+                  icon: Icon(Icons.attach_money,color: Colors.amber,),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.amber),
+                ),
+                border:  UnderlineInputBorder(
+                    borderSide:  BorderSide(color: Colors.black)
+                ),
               )
           ),
           // Observer(builder: (context)=> Ctlmoneysend.text.length<4?Text("Số tiền tối thiểu là 1000",style: TextStyle(fontFamily: FontFamily.roboto,color: Colors.redAccent),):Container())
@@ -638,6 +650,13 @@ class _NapTienPageState extends State<NapTienPage> {
           ),
           actions: <Widget>[
             TextButton(
+              child: Text('Xác nhận'),
+              onPressed: () async {
+                update();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
               child: Text('Hủy'),
               onPressed: () {
                 setState(() {
@@ -645,44 +664,13 @@ class _NapTienPageState extends State<NapTienPage> {
                 });
               },
             ),
-            TextButton(
-              child: Text('Cập nhật'),
-              onPressed: () async {
-                update();
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },
     );
   }
-  _showErrorMessage( String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 5),
-        )..show(context);
-      }
-    });
 
-    return SizedBox.shrink();
-  }
-  _showSuccssfullMesssage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: "Thông báo",
-          duration: Duration(seconds: 5),
-        )
-            .show(context);
-      }
-      return SizedBox.shrink();
-    });
-  }
+
   update() async {
     _lsgdStore.Naptien("${datetimesend}",double.parse(Ctlmoneysend.text), userID);
     // Route route = MaterialPageRoute(builder: (context) => WalletPage(userID: userID,));

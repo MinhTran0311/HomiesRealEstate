@@ -267,7 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               CardItem(
-                text: "Bài ghim của tôi",
+                text: "Bài đăng yêu thích",
                 icon: Icons.article_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
