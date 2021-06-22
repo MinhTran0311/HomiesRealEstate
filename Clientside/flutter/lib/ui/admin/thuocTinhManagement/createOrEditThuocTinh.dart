@@ -75,7 +75,11 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_outlined,),
           onPressed: () {
-            Navigator.pop(context);
+            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+            future.then((value) {
+              if (value)  Navigator.of(context).pop();
+            });
+            return;
           },
         ),
         title: Text(
@@ -84,7 +88,16 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         automaticallyImplyLeading: false,
       ),
 
-      body: _buildBody(),
+      body: WillPopScope(
+        child: _buildBody(),
+        onWillPop: () {
+          var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+          future.then((value) {
+            if (value)  Navigator.of(context).pop();
+          });
+          return;
+        },
+      ),
     );
   }
 

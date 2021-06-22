@@ -96,7 +96,11 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
           icon : Icon(Icons.arrow_back_ios_outlined,
           ),
           onPressed : () {
-            Navigator.pop(context);
+            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+            future.then((value) {
+              if (value)  Navigator.of(context).pop();
+            });
+            return;
           },
         ),
         title: Text(
@@ -105,7 +109,16 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
         automaticallyImplyLeading : false,
       ),
 
-      body: _buildBody(),
+      body: WillPopScope(
+          onWillPop: () {
+            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+            future.then((value) {
+              if (value)  Navigator.of(context).pop();
+            });
+          return;
+          },
+          child: _buildBody()
+      ),
     );
   }
 

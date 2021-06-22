@@ -57,12 +57,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Scaffold(
         primary: true,
         appBar: EmptyAppBar(),
-        body: Stack(
-            children: <Widget>[
-              _handleErrorMessage(),
-              _buildBody(),
-            ]
-        )
+        body: WillPopScope(
+          child: Stack(
+              children: <Widget>[
+                _handleErrorMessage(),
+                _buildBody(),
+              ]
+          ),
+          onWillPop: () {
+            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có quay lại?");
+            future.then((value) {
+              if (value)  Navigator.of(context).pop();
+            });
+            return;
+          },
+        ),
     );
   }
 

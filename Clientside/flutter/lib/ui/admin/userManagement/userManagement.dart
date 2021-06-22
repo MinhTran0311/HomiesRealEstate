@@ -41,6 +41,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   LanguageStore _languageStore;
   RoleManagementStore _roleManagementStore;
 
+  TextEditingController _searchController = new TextEditingController();
+
   var _selectedValue;
   var _selectedValueAfterTouchBtn;
   var _roles = List<DropdownMenuItem>();
@@ -83,18 +85,14 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     // initializing stores
     // check to see if already called api
     if (!_userManagementStore.loading) {
-      _userManagementStore.getUsers(false);
       _userManagementStore.isIntialLoading = true;
+      _userManagementStore.setStringFilter('');
+      _userManagementStore.getUsers(false);
     }
 
     if (!_roleManagementStore.loading) {
       _roleManagementStore.getRoles();
     }
-  }
-
-  Image imageFromBase64String(String base64String) {
-    Uint8List bytes = base64.decode(base64String);
-    return Image.memory(bytes);
   }
 
   _loadRoleList() {
@@ -194,9 +192,16 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return (_userManagementStore.isIntialLoading && _userManagementStore.loadingAvatar)
+        print(_userManagementStore.isIntialLoading);
+        return (_userManagementStore.loading || _userManagementStore.loadingAvatar)
             ? CustomProgressIndicatorWidget()
             : _buildUsersList();
+        // FutureBuilder(
+        //     future: Future.delayed(Duration(seconds: 3)),
+        //     builder: (c, s) => (s.connectionState == ConnectionState.done || _userManagementStore.isIntialLoading)
+        //         ? _buildUsersList()
+        //         : CustomProgressIndicatorWidget());
+
       },
     );
   }
@@ -211,9 +216,17 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             style: TextStyle(
               fontSize: 28,
               height: 1,
-              color: Colors.black,
+              // color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
+            onSubmitted: (value) {
+              _userManagementStore.isIntialLoading = true;
+              _userManagementStore.getUsers(false);
+            },
+            onChanged: (value) {
+              _userManagementStore.setStringFilter(_searchController.text);
+            },
+            controller: _searchController,
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
@@ -231,42 +244,22 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 ),
                 suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      _userManagementStore.isIntialLoading = true;
+                      _userManagementStore.getUsers(false);
+                    },
                   ),
                 )
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 25),
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Text(
-                  'Hiển thị bộc lọc nâng cao',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black26,
-                  size: 20,
-                ),
-              ],
-            ),
-            onTap: (){
-              _showBottomSheet();
-            },
-          ),
-
-        ),
         Expanded(child: _buildListView()),
-        // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
       ],
     );
   }
@@ -305,13 +298,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           completeDuration: Duration(milliseconds: 500),
         ),
         onLoading: () async {
-          print("loading");
-
           _userManagementStore.getUsers(true);
           while(_userManagementStore.loadingAvatar && !_userManagementStore.isIntialLoading){
-            print("dat ta vl");
           }
-          await Future.delayed(Duration(milliseconds: 2000));
+          await Future.delayed(Duration(milliseconds: 3000));
           if (mounted) {
             setState(() {});
           }
@@ -355,41 +345,35 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
 
   Widget _buildListItem(User user, int position) {
-    // Uint8List bytes = base64Decode(user.profilePictureID);
-    return Observer(
-      builder: (context) {
-        return ListTile(
-          leading: _userManagementStore.userList.users[position].avatar == null ? CircleAvatar(
-            backgroundColor: Colors.amber.shade800,
-            child: Text((_userManagementStore.userList.users[position].surName.substring(0,1) + _userManagementStore.userList.users[position].name.substring(0,1)).toUpperCase(),
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          )
-              : CircleAvatar(
-            // child: imageFromBase64String(user.profilePictureID),
-            child: ClipOval(child: imageFromBase64String(_userManagementStore.userList.users[position].avatar)),
-            backgroundColor: Colors.brown.shade800,
+    return ListTile(
+      leading: _userManagementStore.userList.users[position].avatar == null ? CircleAvatar(
+        backgroundColor: Colors.amber.shade800,
+        child: Text((_userManagementStore.userList.users[position].surName.substring(0,1) + _userManagementStore.userList.users[position].name.substring(0,1)).toUpperCase(),
+          style: TextStyle(
+            color: Colors.white,
           ),
-          title: Text(
-            _userManagementStore.userList.users[position].name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          subtitle: Text(
-            _userManagementStore.userList.users[position].email,
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-          onTap: (){
-            this.userChoosen = _userManagementStore.userList.users[position];
-            _showSimpleModalDialog(context, _userManagementStore.userList.users[position]);
-          },
-        );
+        ),
+      )
+          : CircleAvatar(
+        child: ClipOval(child: _userManagementStore.userList.users[position].avatarImage),
+        backgroundColor: Colors.brown.shade800,
+      ),
+      title: Text(
+        _userManagementStore.userList.users[position].name,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      subtitle: Text(
+        _userManagementStore.userList.users[position].email,
+        style: TextStyle(
+          color: Colors.grey,
+        ),
+      ),
+      onTap: (){
+        this.userChoosen = _userManagementStore.userList.users[position];
+        _showSimpleModalDialog(context, _userManagementStore.userList.users[position]);
       },
     );
   }
@@ -564,7 +548,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       maxRadius: 50,
                                       minRadius: 25,
                                       // child: imageFromBase64String(user.profilePictureID),
-                                      child: ClipOval(child: imageFromBase64String(user.avatar)),
+                                      child: ClipOval(child: user.avatarImage),
                                       backgroundColor: Colors.brown.shade800,
                                     ),
                                     IconButton(
@@ -1003,7 +987,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Áp dụng'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: () {
         _clickButtonApDung();
@@ -1254,5 +1238,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             ),
           );
         });
+  }
+
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _searchController.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 }

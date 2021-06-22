@@ -75,6 +75,9 @@ abstract class _DanhMucManagementStore with Store {
   int countAllDanhMucs = 0;
 
   @observable
+  String filter = '';
+
+  @observable
   int skipCount = 0;
 
   @observable
@@ -148,7 +151,7 @@ abstract class _DanhMucManagementStore with Store {
 
   @action
   Future getAllDanhMucs() async {
-    final future = _repository.getAllDanhMucs(0, Preferences.maxDanhMucCount);
+    final future = _repository.getAllDanhMucs(0, Preferences.maxDanhMucCount, filter);
     fetchDanhMucsFuture = ObservableFuture(future);
 
     future.then((danhMucList) {
@@ -181,7 +184,7 @@ abstract class _DanhMucManagementStore with Store {
     }
     else
       skipCount += skipIndex;
-    final future = _repository.getAllDanhMucs(skipCount, maxCount);
+    final future = _repository.getAllDanhMucs(skipCount, maxCount, filter);
     fetchDanhMucsFuture = ObservableFuture(future);
 
     future.then((danhMucList) {
@@ -194,16 +197,6 @@ abstract class _DanhMucManagementStore with Store {
           this.danhMucList.danhMucs.add(danhMucList.danhMucs[i]);
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null)
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else{
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
@@ -241,20 +234,6 @@ abstract class _DanhMucManagementStore with Store {
         updateDanhMuc_success = true;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null) {
-      //
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
@@ -276,20 +255,6 @@ abstract class _DanhMucManagementStore with Store {
         createDanhMuc_success = true;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null) {
-      //
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
@@ -310,20 +275,6 @@ abstract class _DanhMucManagementStore with Store {
         updateActiveDanhMuc_success = true;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null) {
-      //
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
@@ -333,4 +284,8 @@ abstract class _DanhMucManagementStore with Store {
     });
   }
 
+  @action
+  void setStringFilter(String value) {
+    this.filter = value;
+  }
 }

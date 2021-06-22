@@ -317,6 +317,17 @@ mixin _$UserManagementStore on _UserManagementStore, Store {
   }
 
   @override
+  int ElementsHasAvatar(UserList userList) {
+    final _$actionInfo = _$_UserManagementStoreActionController.startAction(
+        name: '_UserManagementStore.ElementsHasAvatar');
+    try {
+      return super.ElementsHasAvatar(userList);
+    } finally {
+      _$_UserManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setStringFilter(String value) {
     final _$actionInfo = _$_UserManagementStoreActionController.startAction(
         name: '_UserManagementStore.setStringFilter');

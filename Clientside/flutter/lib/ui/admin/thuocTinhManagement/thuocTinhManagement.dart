@@ -37,7 +37,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
   ThemeStore _themeStore;
 
   var _selectedValue;
-  // var _permissions;
+  TextEditingController _searchController = new TextEditingController();
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   final ScrollController _scrollController =
@@ -58,8 +58,9 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
 
     if (!_thuocTinhManagementStore.loading) {
-      _thuocTinhManagementStore.getThuocTinhs(false);
       _thuocTinhManagementStore.isIntialLoading = true;
+      _thuocTinhManagementStore.setStringFilter('');
+      _thuocTinhManagementStore.getThuocTinhs(false);
     }
   }
 
@@ -152,6 +153,12 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
+            controller: _searchController,
+            onChanged: (value) => _thuocTinhManagementStore.setStringFilter(_searchController.text),
+            onSubmitted: (value) {
+              _thuocTinhManagementStore.isIntialLoading = true;
+              _thuocTinhManagementStore.getThuocTinhs(false);
+            },
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
                 hintStyle: TextStyle(
@@ -169,41 +176,20 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                 ),
                 suffixIcon: Padding(
                   padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
+                  child:  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,),
+                    onPressed: () {
+                      _thuocTinhManagementStore.isIntialLoading = true;
+                      _thuocTinhManagementStore.getThuocTinhs(false);
+                    },
                   ),
                 )
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 25),
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Text(
-                  'Hiển thị bộc lọc nâng cao',
-                  style: TextStyle(
-                    fontSize: 15,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black26,
-                  size: 20,
-                ),
-              ],
-            ),
-            onTap: (){
-              _showBottomSheet();
-            },
-          ),
-
-        ),
-        // _selectedValueAfterTouchBtn != null ? _buildListViewFilter() : _buildListView(),
         Expanded(child: _buildListView()),
       ],
     );
@@ -290,7 +276,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
 
   Widget _buildListItem(ThuocTinhManagement thuocTinh, int position) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 24.0),
       child: Container(
         decoration: !_themeStore.darkMode ? new BoxDecoration(
           boxShadow: [
@@ -653,13 +639,14 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     );
   }
 
-  _showDialog<T>({BuildContext context, Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T value) {
-      // The value passed to Navigator.pop() or null.
-    });
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _searchController.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
 }

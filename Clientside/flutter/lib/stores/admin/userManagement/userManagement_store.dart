@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/user/user_list.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -88,14 +89,16 @@ abstract class _UserManagementStore with Store {
   bool get loading => fetchUsersFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
-  bool get loadingAvatar => fetchAvatarUserFuture.status == FutureStatus.pending ;
+  bool get loadingAvatar => fetchAvatarUserFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllUser => fetchCountAllUsersFuture.status == FutureStatus.pending;
 
   @computed
   bool get loadingCountNewUsersInMonth => fetchCountNewUsersInMonthFuture.status == FutureStatus.pending;
-
+  //
+  // @observable
+  // List<ObservableFuture> list = new List<ObservableFuture>();
   // actions:-------------------------------------------------------------------
   @action
   Future getUsers(bool isLoadMore) {
@@ -114,8 +117,10 @@ abstract class _UserManagementStore with Store {
           if (this.userList.users[i].profilePictureID != null) {
             final avtUserApi = _repository.getAvatarUsers(this.userList.users[i].id);
             fetchAvatarUserFuture = ObservableFuture(avtUserApi);
+
             avtUserApi.then((avt) {
               this.userList.users[i].avatar = avt;
+              this.userList.users[i].avatarImage = imageFromBase64String(avt);
               if(i == lastUserHasAvatar) {
                 if (isIntialLoading) isIntialLoading = false;
               }
@@ -134,6 +139,7 @@ abstract class _UserManagementStore with Store {
               fetchAvatarUserFuture = ObservableFuture(avtUserApi);
               avtUserApi.then((avt) {
                 this.userList.users[i].avatar = avt;
+                this.userList.users[i].avatarImage = imageFromBase64String(avt);
               }).catchError((error) {
                 errorStore.errorMessage = DioErrorUtil.handleError(error);
               });
@@ -162,6 +168,17 @@ abstract class _UserManagementStore with Store {
   }
 
   @action
+  int ElementsHasAvatar(UserList userList) {
+    int count = 0;
+    for (int i = 0; i < userList.users.length; i++) {
+      if (userList.users[i].profilePictureID != null) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  @action
   Future fCountAllUsers() async {
     final future = _repository.countAllUsers();
     fetchCountAllUsersFuture = ObservableFuture(future);
@@ -186,6 +203,19 @@ abstract class _UserManagementStore with Store {
   void setStringFilter(String value) {
     this.filter = value;
   }
+
+  // @action
+  // bool checkFeatchPicure(UserList userList){
+  //   if (list.length != ElementsHasAvatar(userList))
+  //     return false;
+  //   for (int i=0; i<list.length; i++) {
+  //     if (!(list[i].status == FutureStatus.pending))
+  //       {
+  //         return false;
+  //       }
+  //   }
+  //   return true;
+  // }
 
   @action
   Future fCountNewUsersInMonth() async {
