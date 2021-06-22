@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Wrap(
             children: <Widget>[
               CardItem(
-                text: "Tài Khoản của tôi",
+                text: "Tài khoản của tôi",
                 icon: Icons.account_circle_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
@@ -267,7 +267,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               CardItem(
-                text: "Danh sách bài ghim",
+                text: "Bài ghim của tôi",
                 icon: Icons.article_outlined,
                 // colorbackgroud: Colors.grey[200],
                 // colortext: Colors.black,
