@@ -364,7 +364,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           );
         });
   }
-
+ int curindex=-1;
   Widget buildPopMenuBottom(Post post, int position) {
     return Container(
         padding: EdgeInsets.only(right: 24, left: 24, top: 32, bottom: 24),
@@ -460,6 +460,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         });
                     futureValue.then((value) {
                       post.trangThai = "Off";
+                      curindex=position;
                       if (value) postStore.Delete(post);
                       // true/false
                     });
@@ -910,6 +911,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
+          setState(() {
+            postStore.postForCurList.posts.removeAt(curindex);
+          });
           showSuccssfullMesssage("Xóa bài đăng thành công", context);
         }
         return SizedBox.shrink();
