@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isRefreshing = false;
   GlobalKey _contentKey = GlobalKey();
   GlobalKey _refresherKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -154,12 +155,18 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: EdgeInsets.only(top: 6, left: 24, right: 24, bottom: 12),
           child: TextField(
+            autofocus: false,
             keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
+              print("123");
+              print(value);
+
+
               _postStore.filter_model.searchContent = value;
               _postStore.setSearchContent(_searchController.text);
             },
+
             style: TextStyle(
               fontSize: 28,
               height: 1,
@@ -167,7 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             decoration: InputDecoration(
                 hintText: "Tìm kiếm",
-
                 hintStyle: TextStyle(
                   fontSize: 24,
                   color: Colors.grey[400],

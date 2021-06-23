@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/stores/post/filter_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/login/login.dart';
 import 'package:boilerplate/widgets/card_item_widget.dart';
@@ -27,10 +28,12 @@ class _SettingPageState extends State<SettingPage> {
     Key key,
   }) : super();
   ThemeStore _themeStore;
+  FilterStore _filterStore;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _themeStore = Provider.of<ThemeStore>(context);
+    _filterStore = Provider.of<FilterStore>(context);
 
   }
   @override
@@ -40,8 +43,8 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody()
+        appBar: _buildAppBar(),
+        body: _buildBody()
     );
   }
   Widget _buildAppBar(){
@@ -49,7 +52,7 @@ class _SettingPageState extends State<SettingPage> {
       leading: IconButton(icon: Icon(Icons.arrow_back_ios),
           onPressed: (){
             Navigator.pop(context);
-      }),
+          }),
       title: Text("Cài đặt"),
     );
   }
@@ -67,21 +70,21 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _buildChangeBrightMode(){
     return Observer(
-      builder: (context){
-        return Stack(
-          children:[
-            CardItem(
-              text: "Đổi chế độ nền ${_themeStore.darkMode ? "sáng" : "tối"}",
-              icon: _themeStore.darkMode ? Icons.nights_stay_outlined : Icons.wb_sunny_outlined,
-              isFunction: true,
-              press: () {
-                //Preferences.is_dark_mode=!_themeStore.darkMode;
-                _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
-              },
-            ),
-          ]
-        );
-      }
+        builder: (context){
+          return Stack(
+              children:[
+                CardItem(
+                  text: "Đổi chế độ nền ${_themeStore.darkMode ? "sáng" : "tối"}",
+                  icon: _themeStore.darkMode ? Icons.nights_stay_outlined : Icons.wb_sunny_outlined,
+                  isFunction: true,
+                  press: () {
+                    //Preferences.is_dark_mode=!_themeStore.darkMode;
+                    _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
+                  },
+                ),
+              ]
+          );
+        }
     );
   }
 
@@ -112,6 +115,7 @@ class _SettingPageState extends State<SettingPage> {
               preference.setString(Preferences.userRole, "");
               preference.setInt(Preferences.userRoleRank.toString(), 0);
             });
+            _filterStore.resetValue();
             Preferences.userRole="";
             _themeStore.changeBrightnessToDark(false);
             Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));

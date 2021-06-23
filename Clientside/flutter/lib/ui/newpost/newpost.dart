@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
@@ -17,6 +18,7 @@ import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
+import 'package:boilerplate/widgets/dropdownsearch/dropdown_search.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -25,8 +27,6 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
-
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -242,7 +242,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
           _postStore.getsobaidang();
           _userStore.getCurrentWalletUser();
           Future.delayed(Duration(milliseconds: 3000), () {
-            reset();
+            setState(() {
+              reset();
+            });
             Route route = MaterialPageRoute(
                 builder: (context) =>
                     Detail(post: _postStore.postForCurList.posts.first));
@@ -312,13 +314,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
             ? AlertDialog(
                 title: Text(
                   "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-                  style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                  style: TextStyle(fontSize: 24,),
                 ),
                 content: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RoundedButtonWidget(
-                        buttonText: "ok",
+                        buttonText: "Ok",
                         buttonColor: Colors.green,
                         onPressed: () {
                           Route route = MaterialPageRoute(
@@ -346,21 +348,21 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   SizedBox(height: 24.0),
                   _buildTileField(),
                   SizedBox(height: 24.0),
+                  _buildAcreageField(),
+                  SizedBox(height: 24.0),
+                  _buildPriceField(),
+                  SizedBox(height: 24.0),
+                  _buildLocateField(),
+                  SizedBox(height: 24.0),
                   _buildCityField(),
                   SizedBox(height: 24.0),
                   _buildTownField(),
                   _buildCommuneField(),
                   _buildCommuneField2(),
-                  _buildLocateField(),
-                  SizedBox(height: 24.0),
                   _buildTypeField(),
                   SizedBox(height: 24.0),
                   _buildTypeTypeField(),
                   _buildTypeTypeTypeField(),
-                  _buildAcreageField(),
-                  SizedBox(height: 24.0),
-                  _buildPriceField(),
-                  SizedBox(height: 24.0),
                   _buildListView(),
                   SizedBox(height: 24.0),
                   _buildPackField(),
@@ -393,6 +395,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
               TextFormField(
                 autofocus: false,
                 decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
                   icon: Icon(Icons.textsms_rounded,
                       color:
                           _themeStore.darkMode ? Colors.white : Colors.amber),
@@ -402,10 +407,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   hintText: 'Tối đa 50 kí tự',
                   labelText: 'Tiêu đề',
                   suffixIcon: IconButton(
+                    color: Colors.grey,
                     onPressed: () => _TileController.clear(),
-                    icon: Icon(Icons.clear,
-                        color:
-                            _themeStore.darkMode ? Colors.white : Colors.amber),
+                    icon: Icon(Icons.clear),
                   ),
                 ),
                 cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
@@ -508,7 +512,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hint: Text("Chọn loại hình nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
+                    value == null ? 'Vui lòng chọn loại hình nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                   onPressed: () => setState(() {
@@ -571,7 +575,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               padding:
                   const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<Postcategory>(
-                hint: Text("Chọn hình thức bổ sung"),
+                hint: Text("Chọn loại hình bổ sung"),
                 value: selectedTypeTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
@@ -691,6 +695,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             "Tỉnh Cà Mau",
           ],
           showClearButton: true,
+
           hint: "Chọn tỉnh/thành phố",
           onChanged: (String Value) {
             setState(() {
@@ -701,17 +706,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
             labelText: "Tìm tỉnh/thành phố",
           ),
           popupTitle: Container(
             height: 50,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColorDark,
-              // borderRadius: BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
             ),
             child: Center(
               child: Text(
@@ -753,6 +753,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           )),
           //icon:Icons.attach_file ,
           onChanged: (Town Value) {
+            //FocusScope.of(context).requestFocus(FocusNode());
             setState(() {
               selectedTown = Value;
               selectedCommune = null;
@@ -884,6 +885,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     autofocus: false,
+                    //focusNode: nullptr,
                     decoration: InputDecoration(
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
@@ -894,8 +896,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       hintText: 'Số nhà/tên khu phố',
                       suffixIcon: IconButton(
+                        color: Colors.grey,
                         onPressed: () => _LocateController.clear(),
                         icon: Icon(Icons.clear),
                       ),
@@ -1006,7 +1012,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ),
                             fillColor: Colors.white,
                             labelText: '${thuocTinh.tenThuocTinh}',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.amber),
+                            ),
                             suffixIcon: IconButton(
+                              color: Colors.grey,
                               onPressed: () =>
                                   _ThuocTinhController[index].clear(),
                               icon: Icon(Icons.clear),
@@ -1117,12 +1127,16 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               ? Colors.white
                               : Colors.black,
                         ),
-                        labelText: 'Diện tích',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
+                        labelText: 'Diện tích (m2)',
                         suffixIcon: IconButton(
+                          color: Colors.grey,
                           onPressed: () => _AcreageController.clear(),
                           icon: Icon(Icons.clear),
                         ),
-                        hintText: "mxm"),
+                        hintText: "m2"),
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
@@ -1160,8 +1174,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       labelText: 'Giá bán/thuê',
                       suffixIcon: IconButton(
+                        color: Colors.grey,
                         onPressed: () => _PriceController.clear(),
                         icon: Icon(Icons.clear),
                       ),
@@ -1203,11 +1221,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ),
                   labelText: 'Mô tả',
                   hintText: "Mô tả thêm về bài đăng",
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
                   suffixIcon: IconButton(
+                    color:Colors.grey,
                     onPressed: () => _keyEditor2.clear(),
                     icon: Icon(
                       Icons.clear,
-                      color: _themeStore.darkMode ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -1228,58 +1249,57 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildPackField() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      child: DropdownButtonFormField<Pack>(
-        hint: Text("Chọn gói bài đăng"),
-        value: selectedPack,
-        autovalidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
-        decoration: InputDecoration(
-            suffixIcon: IconButton(
-          onPressed: () => setState(() {
-            selectedPack = null;
-          }),
-          icon: Icon(Icons.clear),
-        )),
-        onChanged: (Pack Value) {
-          setState(() {
-            selectedPack = Value;
-            songay = selectedPack.thoiGianToiThieu;
-            selectedDatefl = DateTime.now()
-                .add(Duration(days: selectedPack.thoiGianToiThieu));
-          });
-        },
-        items: _postStore.packList.packs.map((Pack type) {
-          return DropdownMenuItem<Pack>(
-            value: type,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.account_circle,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  type.tenGoi + ", phí: " + priceFormat(type.phi),
-                  style: TextStyle(),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
+    return DropdownButtonFormField<Pack>(
+      hint: Text("Chọn gói bài đăng"),
+      value: selectedPack,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
+      decoration: InputDecoration(
+          suffixIcon: IconButton(
+        onPressed: () => setState(() {
+          selectedPack = null;
+        }),
+        icon: Icon(Icons.clear),
+      )),
+      onChanged: (Pack Value) {
+        setState(() {
+          selectedPack = Value;
+          songay = selectedPack.thoiGianToiThieu;
+          selectedDatefl = DateTime.now()
+              .add(Duration(days: selectedPack.thoiGianToiThieu));
+        });
+      },
+      items: _postStore.packList.packs.map((Pack type) {
+        return DropdownMenuItem<Pack>(
+          value: type,
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.account_circle,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                type.tenGoi + ", phí: " + priceFormat(type.phi),
+                style: TextStyle(),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildPackinfoField() {
     return selectedPack != null
-        ? Text(
-            "Mô tả: ${selectedPack.moTa}",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          )
+        ? Center(
+          child: Text(
+              "Mô tả: ${selectedPack.moTa}",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+        )
         : Container(
             width: 0,
             height: 0,
@@ -1305,7 +1325,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Ngày kết thúc:" +
+                      "Ngày kết thúc: " +
                           "${selectedDatefl.toLocal()}".split(' ')[0],
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -1314,7 +1334,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Phí bài đăng:" +
+                      "Phí bài đăng: " +
                           "${priceFormat(selectedPack.phi * songay)}",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -1374,6 +1394,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.grey[300],
+          ),
           height: 200,
           padding: EdgeInsets.all(4),
           child: _image.length == 0
@@ -1452,6 +1476,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
+            _LocateController.value.text.isEmpty
+                ? Text('Vui lòng nhập địa chỉ chi tiết')
+                : Container(
+              height: 0,
+            ),
             selectedCommune == null
                 ? Text('Vui lòng chọn địa chỉ')
                 : Container(
@@ -1463,7 +1492,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     height: 0,
                   ),
             selectedTypeTypeType == null
-                ? Text('Vui lòng chọn hình thức nhà/đất')
+                ? Text('Vui lòng chọn loại hình nhà/đất')
                 : Container(
                     height: 0,
                   ),
@@ -1571,7 +1600,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         return AlertDialog(
                           title: Text(
                             "Bạn không đủ số dư để thực hiện giao dịch?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                            style: TextStyle(fontSize: 24),
                           ),
                           content: Column(
                             //mainAxisAlignment: MainAxisAlignment.start,
@@ -1628,7 +1657,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     return AlertDialog(
                       title: Text(
                         "Vui lòng load lại trang cá nhân",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        style: TextStyle(fontSize: 24),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -14,6 +14,7 @@ import 'package:boilerplate/models/post/postpack/pack.dart';
 import 'package:boilerplate/models/lichsugiaodich/lichsugiadich.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
+import 'package:boilerplate/widgets/dropdownsearch/dropdown_search.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -23,7 +24,6 @@ import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
 
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -300,22 +300,21 @@ class _EditpostScreenState extends State<EditpostScreen> {
             SizedBox(height: 24.0),
             _buildTileField(),
             SizedBox(height: 24.0),
+            _buildAcreageField(),
+            SizedBox(height: 24.0),
+            _buildPriceField(),
+            SizedBox(height: 24.0),
+            _buildLocateField(),
+            SizedBox(height: 24.0),
             _buildCityField(),
             SizedBox(height: 24.0),
             _buildTownField(),
             _buildCommuneField(),
             _buildCommuneField2(),
-            _buildLocateField(),
-            SizedBox(height: 24.0),
             _buildTypeField(),
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
             _buildTypeTypeTypeField(),
-            //_buildVilField(),
-            _buildAcreageField(),
-            SizedBox(height: 24.0),
-            _buildPriceField(),
-            SizedBox(height: 24.0),
             _buildListView(),
             SizedBox(height: 24.0),
             _buildTileField2(),
@@ -342,7 +341,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
                         icon: Icon(Icons.textsms_rounded,
+
                             color: _themeStore.darkMode
                                 ? Colors.white
                                 : Colors.amber),
@@ -416,9 +419,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
-                      color: !_themeStore.darkMode
-                          ? const Color(0xFF167F67)
-                          : Colors.amber,
                     ),
                     SizedBox(
                       width: 10,
@@ -484,9 +484,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: !_themeStore.darkMode
-                              ? const Color(0xFF167F67)
-                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -547,9 +544,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: !_themeStore.darkMode
-                              ? const Color(0xFF167F67)
-                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -659,17 +653,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
             selectedItem: selectedCity,
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
-              border: OutlineInputBorder(),
+              //border: OutlineInputBorder(),
               labelText: "Tìm tỉnh/thành phố",
             ),
             popupTitle: Container(
               height: 50,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
               ),
               child: Center(
                 child: Text(
@@ -728,9 +718,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: !_themeStore.darkMode
-                        ? const Color(0xFF167F67)
-                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 10,
@@ -795,9 +782,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: !_themeStore.darkMode
-                        ? const Color(0xFF167F67)
-                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 8,
@@ -848,6 +832,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -1007,6 +994,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                                   Text("Chọn hướng ban công")
                                 ]),
                           decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.amber),
+                              ),
                               suffixIcon: IconButton(
                             onPressed: () => setState(() {
                               _ThuocTinhController[index] =
@@ -1068,6 +1058,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
                         icon: Icon(Icons.api,
                             color: _themeStore.darkMode
                                 ? Colors.white
@@ -1111,6 +1104,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.money,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -1154,6 +1150,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.textsms_rounded,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -1417,37 +1416,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   }
               _newpost.images = new List<AppImage>();
               j = 0;
-              var futureValue = showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Chỉnh sửa bài đăng?",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                      ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RoundedButtonWidget(
-                            buttonText: "Đồng ý",
-                            buttonColor: Colors.green,
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                          RoundedButtonWidget(
-                            buttonColor: Colors.grey,
-                            buttonText: "Hủy",
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  });
-              futureValue.then((value) {
+              var future = showSimpleModalDialog(context,
+                  "Chỉnh sửa thông tin bài đăng?");
+              future.then((value) {
                 if (value) {
                   for (var item in _imageStore.imageListpost) {
                     AppImage u = new AppImage();
