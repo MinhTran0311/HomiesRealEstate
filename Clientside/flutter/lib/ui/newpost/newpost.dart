@@ -343,21 +343,22 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   SizedBox(height: 24.0),
                   _buildTileField(),
                   SizedBox(height: 24.0),
+                  _buildAcreageField(),
+                  SizedBox(height: 24.0),
+                  _buildPriceField(),
+                  SizedBox(height: 24.0),
+                  _buildLocateField(),
+                  SizedBox(height: 24.0),
+
                   _buildCityField(),
                   SizedBox(height: 24.0),
                   _buildTownField(),
                   _buildCommuneField(),
                   _buildCommuneField2(),
-                  _buildLocateField(),
-                  SizedBox(height: 24.0),
                   _buildTypeField(),
                   SizedBox(height: 24.0),
                   _buildTypeTypeField(),
                   _buildTypeTypeTypeField(),
-                  _buildAcreageField(),
-                  SizedBox(height: 24.0),
-                  _buildPriceField(),
-                  SizedBox(height: 24.0),
                   _buildListView(),
                   SizedBox(height: 24.0),
                   _buildPackField(),
@@ -390,6 +391,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
               TextFormField(
                 autofocus: false,
                 decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
                   icon: Icon(Icons.textsms_rounded,
                       color:
                           _themeStore.darkMode ? Colors.white : Colors.amber),
@@ -399,10 +403,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   hintText: 'Tối đa 50 kí tự',
                   labelText: 'Tiêu đề',
                   suffixIcon: IconButton(
+                    color: Colors.grey,
                     onPressed: () => _TileController.clear(),
-                    icon: Icon(Icons.clear,
-                        color:
-                            _themeStore.darkMode ? Colors.white : Colors.amber),
+                    icon: Icon(Icons.clear),
                   ),
                 ),
                 cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
@@ -888,8 +891,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       hintText: 'Số nhà/tên khu phố',
                       suffixIcon: IconButton(
+                        color: Colors.grey,
                         onPressed: () => _LocateController.clear(),
                         icon: Icon(Icons.clear),
                       ),
@@ -972,7 +979,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ),
                             fillColor: Colors.white,
                             labelText: '${thuocTinh.tenThuocTinh}',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.amber),
+                            ),
                             suffixIcon: IconButton(
+                              color: Colors.grey,
                               onPressed: () =>
                                   _ThuocTinhController[index].clear(),
                               icon: Icon(Icons.clear),
@@ -1085,12 +1096,16 @@ class _NewpostScreenState extends State<NewpostScreen> {
                               ? Colors.white
                               : Colors.black,
                         ),
-                        labelText: 'Diện tích',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
+                        labelText: 'Diện tích (m2)',
                         suffixIcon: IconButton(
+                          color: Colors.grey,
                           onPressed: () => _AcreageController.clear(),
                           icon: Icon(Icons.clear),
                         ),
-                        hintText: "mxm"),
+                        hintText: "m2"),
                     onSaved: (value) {},
                     keyboardType: TextInputType.number,
                     controller: _AcreageController,
@@ -1128,8 +1143,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                             ? Colors.white
                             : Colors.black,
                       ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       labelText: 'Giá bán/thuê',
                       suffixIcon: IconButton(
+                        color: Colors.grey,
                         onPressed: () => _PriceController.clear(),
                         icon: Icon(Icons.clear),
                       ),
@@ -1171,11 +1190,14 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   ),
                   labelText: 'Mô tả',
                   hintText: "Mô tả thêm về bài đăng",
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
                   suffixIcon: IconButton(
+                    color:Colors.grey,
                     onPressed: () => _keyEditor2.clear(),
                     icon: Icon(
                       Icons.clear,
-                      color: _themeStore.darkMode ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -1273,7 +1295,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Ngày kết thúc:" +
+                      "Ngày kết thúc: " +
                           "${selectedDatefl.toLocal()}".split(' ')[0],
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -1282,7 +1304,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       height: 24.0,
                     ),
                     Text(
-                      "Phí bài đăng:" +
+                      "Phí bài đăng: " +
                           "${priceFormat(selectedPack.phi * songay)}",
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -1342,6 +1364,10 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(
       builder: (context) {
         return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.grey[300],
+          ),
           height: 200,
           padding: EdgeInsets.all(4),
           child: _image.length == 0

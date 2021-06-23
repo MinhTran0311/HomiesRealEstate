@@ -546,6 +546,8 @@ class _FilterState extends State<Filter> {
               decoration: InputDecoration(
                 hintText: "Địa chỉ bất kì",
                 suffixIcon: IconButton(
+                  color: Colors.grey,
+                  focusColor: Colors.amber,
                   onPressed: () {
                     _diaChiController.clear();
                     _filterStore.setDiaChiContent("");
@@ -608,6 +610,7 @@ class _FilterState extends State<Filter> {
               decoration: InputDecoration(
                 hintText: "Tag bất kỳ",
                 suffixIcon: IconButton(
+                  color: Colors.grey,
                   onPressed: () {
                     _filterStore.setTag("");
                     _tagController.clear();
@@ -656,6 +659,7 @@ class _FilterState extends State<Filter> {
               Expanded(
                 child:
                   DropdownSearch<String>(
+
                     items: _filterStore.provinceListString,
                     hint: "Chọn tỉnh thành",
                     onChanged: (String Value) {
@@ -663,6 +667,7 @@ class _FilterState extends State<Filter> {
                       if (Value!=null)
                         _filterStore.getTownByProvinceName(Value);
                     },
+
                     selectedItem: _filterStore.filter_model.tenTinh,
                     showSearchBox: true,
                     searchBoxDecoration: InputDecoration(
@@ -856,7 +861,10 @@ class _FilterState extends State<Filter> {
               decoration: InputDecoration(
                 hintText: "Username",
                 suffixIcon: IconButton(
+                  color: Colors.grey,
+
                   onPressed: () {
+
                     _filterStore.setUsernameContent("");
                     _usernameController.clear();
                   } ,
