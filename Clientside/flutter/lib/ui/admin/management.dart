@@ -33,13 +33,12 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'danhMucManagement/danhMucManagement.dart';
 import 'goiBaiDangManagement/goiBaiDangManagement.dart';
 
-class ManagementScreen extends StatefulWidget{
+class ManagementScreen extends StatefulWidget {
   @override
   _ManagementScreenState createState() => _ManagementScreenState();
 }
 
 class _ManagementScreenState extends State<ManagementScreen> {
-
   UserManagementStore _userManagementStore;
   ThemeStore _themeStore;
   RoleManagementStore _roleManagementStore;
@@ -63,30 +62,31 @@ class _ManagementScreenState extends State<ManagementScreen> {
     _roleManagementStore = Provider.of<RoleManagementStore>(context);
     _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
     _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
-    _goiBaiDangManagementStore = Provider.of<GoiBaiDangManagementStore>(context);
+    _goiBaiDangManagementStore =
+        Provider.of<GoiBaiDangManagementStore>(context);
     _baiDangManagementStore = Provider.of<BaiDangManagementStore>(context);
-    if(!_userManagementStore.loadingCountAllUser) {
+    if (!_userManagementStore.loadingCountAllUser) {
       _userManagementStore.fCountAllUsers();
     }
-    if(!_userManagementStore.loadingCountNewUsersInMonth) {
+    if (!_userManagementStore.loadingCountNewUsersInMonth) {
       _userManagementStore.fCountNewUsersInMonth();
     }
-    if(!_roleManagementStore.loadingCountAllRoles) {
+    if (!_roleManagementStore.loadingCountAllRoles) {
       _roleManagementStore.fCountAllRoles();
     }
-    if(!_danhMucManagementStore.loadingCountAllDanhMucs) {
+    if (!_danhMucManagementStore.loadingCountAllDanhMucs) {
       _danhMucManagementStore.fCountAllDanhMucs();
     }
-    if(!_thuocTinhManagementStore.loadingCountAllThuocTinhs) {
+    if (!_thuocTinhManagementStore.loadingCountAllThuocTinhs) {
       _thuocTinhManagementStore.fCountAllThuocTinhs();
     }
-    if(!_goiBaiDangManagementStore.loadingCountAllGoiBaiDangs) {
+    if (!_goiBaiDangManagementStore.loadingCountAllGoiBaiDangs) {
       _goiBaiDangManagementStore.fCountAllGoiBaiDangs();
     }
-    if(!_baiDangManagementStore.loadingCountNewBaiDangsInMonth) {
+    if (!_baiDangManagementStore.loadingCountNewBaiDangsInMonth) {
       _baiDangManagementStore.fCountNewBaiDangsInMonth();
     }
-    if(!_baiDangManagementStore.loadingCountLSDGChuaKiemDuyet) {
+    if (!_baiDangManagementStore.loadingCountLSDGChuaKiemDuyet) {
       _baiDangManagementStore.fCountLichSuGiaoDichsChuaKiemDuyet();
     }
     if (!postStore.loadingsobaidangall) postStore.getsobaidangall();
@@ -98,7 +98,8 @@ class _ManagementScreenState extends State<ManagementScreen> {
       primary: true,
       appBar: AppBar(
         title: Text(
-          "Quản trị",),
+          "Quản trị",
+        ),
         automaticallyImplyLeading: false,
       ),
       body: WillPopScope(
@@ -122,15 +123,15 @@ class _ManagementScreenState extends State<ManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return (_userManagementStore.loadingCountAllUser
-        || _userManagementStore.loadingCountNewUsersInMonth
-        || _roleManagementStore.loadingCountAllRoles
-        || _danhMucManagementStore.loadingCountAllDanhMucs
-        || _thuocTinhManagementStore.loadingCountAllThuocTinhs
-        || _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs
-        || _baiDangManagementStore.loadingCountNewBaiDangsInMonth
-        || _baiDangManagementStore.loadingCountLSDGChuaKiemDuyet
-        || postStore.loadingsobaidangall)
+        return (_userManagementStore.loadingCountAllUser ||
+                _userManagementStore.loadingCountNewUsersInMonth ||
+                _roleManagementStore.loadingCountAllRoles ||
+                _danhMucManagementStore.loadingCountAllDanhMucs ||
+                _thuocTinhManagementStore.loadingCountAllThuocTinhs ||
+                _goiBaiDangManagementStore.loadingCountAllGoiBaiDangs ||
+                _baiDangManagementStore.loadingCountNewBaiDangsInMonth ||
+                _baiDangManagementStore.loadingCountLSDGChuaKiemDuyet ||
+                postStore.loadingsobaidangall)
             ? CustomProgressIndicatorWidget()
             : _buildMenuItems();
       },
@@ -151,8 +152,12 @@ class _ManagementScreenState extends State<ManagementScreen> {
               Colors.amberAccent,
               // Color.fromRGBO(236, 236, 238, 1),
               // Color.fromRGBO(236, 236, 238, 1),
-              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
-              _themeStore.darkMode ? AppColors.backgroundDarkThemeColor : AppColors.backgroundLightThemeColor,
+              _themeStore.darkMode
+                  ? AppColors.backgroundDarkThemeColor
+                  : AppColors.backgroundLightThemeColor,
+              _themeStore.darkMode
+                  ? AppColors.backgroundDarkThemeColor
+                  : AppColors.backgroundLightThemeColor,
             ],
             tileMode: TileMode.repeated,
           ),
@@ -161,25 +166,31 @@ class _ManagementScreenState extends State<ManagementScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(height: 35 ,),
+            SizedBox(
+              height: 35,
+            ),
             Container(
               padding: EdgeInsets.only(top: 15, left: 18),
-              width: MediaQuery.of(context).size.width*0.95,
+              width: MediaQuery.of(context).size.width * 0.95,
               // height: 200,
               decoration: BoxDecoration(
                 boxShadow: [
                   // color: Colors.white, //background color of box
-                  !_themeStore.darkMode ? BoxShadow(
-                    color: Color.fromRGBO(198, 199, 202, 1),
-                    blurRadius: 12, // soften the shadow
-                    spreadRadius: 0.01, //extend the shadow
-                    offset: Offset(
-                      8.0, // Move to right 10  horizontally
-                      12.0, // Move to bottom 10 Vertically
-                    ),
-                  ) : BoxShadow(),
+                  !_themeStore.darkMode
+                      ? BoxShadow(
+                          color: Color.fromRGBO(198, 199, 202, 1),
+                          blurRadius: 12, // soften the shadow
+                          spreadRadius: 0.01, //extend the shadow
+                          offset: Offset(
+                            8.0, // Move to right 10  horizontally
+                            12.0, // Move to bottom 10 Vertically
+                          ),
+                        )
+                      : BoxShadow(),
                 ],
-                color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
+                color: _themeStore.darkMode
+                    ? AppColors.darkBlueForCardDarkTheme
+                    : AppColors.greyForCardLightTheme,
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Column(
@@ -188,97 +199,193 @@ class _ManagementScreenState extends State<ManagementScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tổng Quan Tháng " + "${_userManagementStore.dateCurrent.month}/${_userManagementStore.dateCurrent.year}",
+                    "Tổng Quan Tháng " +
+                        "${_userManagementStore.dateCurrent.month}/${_userManagementStore.dateCurrent.year}",
                     style: TextStyle(
                       fontSize: 23,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/analytics.png',
-                            width: MediaQuery.of(context).size.width*0.15,
+                      MaterialButton(
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/images/analytics.png',
+                                width: MediaQuery.of(context).size.width * 0.15,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("Người dùng mới"),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "${_userManagementStore.countNewUsersInMonth}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(height: 10,),
-                          Text("Người dùng mới"),
-                          SizedBox(height: 10,),
-                          Text(
-                            "${_userManagementStore.countNewUsersInMonth}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          )
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/map.png',
-                            width: MediaQuery.of(context).size.width*0.15,
+                          onPressed: () {
+                            _clickBtnListUser();
+                          }),
+                      MaterialButton(
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/images/map.png',
+                                width: MediaQuery.of(context).size.width * 0.15,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("Bài đăng mới"),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "${_baiDangManagementStore.countNewBaiDangsInMonth}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(height: 10,),
-                          Text("Bài đăng mới"),
-                          SizedBox(height: 10,),
-                          Text(
-                            "${_baiDangManagementStore.countNewBaiDangsInMonth}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
-                          )
-                        ],
-                      ),
+                          onPressed: () {
+                            _clickBtnPostChecker();
+                          }),
                     ],
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 24,),
-            if (Permission.instance.hasPermission(Preferences.PagesAdministrationUsers) && Permission.instance.hasPermission(Preferences.PagesAdministrationUsersCreate) && Permission.instance.hasPermission(Preferences.PagesAdministrationUsersEdit))
-              _buildListItem("Người dùng", "assets/images/customer.png", _userManagementStore.countAllUsers, "Danh sách người dùng", _clickBtnListUser, Colors.amber, 0),
-            if (Permission.instance.hasPermission(Preferences.PagesAdministrationRoles))
-              _buildListItem("Vai trò", "assets/images/project-management.png", _roleManagementStore.countAllRoles, "Danh sách vai trò", _clickBtnListRole, Colors.lightBlueAccent, 0),
-            if (Permission.instance.hasPermission(Preferences.PagesDanhMucs) && Permission.instance.hasPermission(Preferences.PagesDanhMucsCreate) && Permission.instance.hasPermission(Preferences.PagesDanhMucsEdit))
-              _buildListItem("Danh mục", "assets/images/google-docs.png", _danhMucManagementStore.countAllDanhMucs, "Danh sách danh mục", _clickBtnListDanhMuc, Colors.red, 0),
-            if (Permission.instance.hasPermission(Preferences.PagesGoiBaiDangs)  && Permission.instance.hasPermission(Preferences.PagesGoiBaiDangsCreate) && Permission.instance.hasPermission(Preferences.PagesGoiBaiDangsEdit))
-              _buildListItem("Gói bài đăng", "assets/images/briefcase.png", _goiBaiDangManagementStore.countAllGoiBaiDangs, "Danh sách gói bài đăng", _clickBtnListGoiBaiDang, Colors.green, 0),
-            if (Permission.instance.hasPermission(Preferences.PagesThuocTinhs) && Permission.instance.hasPermission(Preferences.PagesThuocTinhsCreate) && Permission.instance.hasPermission(Preferences.PagesThuocTinhsEdit))
-               _buildListItem("Thuộc tính", "assets/images/settings.png", _thuocTinhManagementStore.countAllThuocTinhs, "Danh sách thuộc tính", _clickBtnListThuocTinh, Colors.lightBlueAccent, 0),
-            if (Permission.instance.hasPermission(Preferences.PagesLichSuGiaoDichs))
-              _buildListItem("Kiểm duyệt giao dịch", "assets/images/approve.png", _baiDangManagementStore.countLSGDChuaKiemDuyet, "Kiểm duyệt giao dịch", _clickBtnChecker, Colors.deepOrangeAccent, 0),
+            SizedBox(
+              height: 24,
+            ),
+            if (Permission.instance
+                    .hasPermission(Preferences.PagesAdministrationUsers) &&
+                Permission.instance.hasPermission(
+                    Preferences.PagesAdministrationUsersCreate) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesAdministrationUsersEdit))
+              _buildListItem(
+                  "Người dùng",
+                  "assets/images/customer.png",
+                  _userManagementStore.countAllUsers,
+                  "Danh sách người dùng",
+                  _clickBtnListUser,
+                  Colors.amber,
+                  0),
+            if (Permission.instance
+                .hasPermission(Preferences.PagesAdministrationRoles))
+              _buildListItem(
+                  "Vai trò",
+                  "assets/images/project-management.png",
+                  _roleManagementStore.countAllRoles,
+                  "Danh sách vai trò",
+                  _clickBtnListRole,
+                  Colors.lightBlueAccent,
+                  0),
+            if (Permission.instance.hasPermission(Preferences.PagesDanhMucs) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesDanhMucsCreate) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesDanhMucsEdit))
+              _buildListItem(
+                  "Danh mục",
+                  "assets/images/google-docs.png",
+                  _danhMucManagementStore.countAllDanhMucs,
+                  "Danh sách danh mục",
+                  _clickBtnListDanhMuc,
+                  Colors.red,
+                  0),
+            if (Permission.instance
+                    .hasPermission(Preferences.PagesGoiBaiDangs) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesGoiBaiDangsCreate) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesGoiBaiDangsEdit))
+              _buildListItem(
+                  "Gói bài đăng",
+                  "assets/images/briefcase.png",
+                  _goiBaiDangManagementStore.countAllGoiBaiDangs,
+                  "Danh sách gói bài đăng",
+                  _clickBtnListGoiBaiDang,
+                  Colors.green,
+                  0),
+            if (Permission.instance
+                    .hasPermission(Preferences.PagesThuocTinhs) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesThuocTinhsCreate) &&
+                Permission.instance
+                    .hasPermission(Preferences.PagesThuocTinhsEdit))
+              _buildListItem(
+                  "Thuộc tính",
+                  "assets/images/settings.png",
+                  _thuocTinhManagementStore.countAllThuocTinhs,
+                  "Danh sách thuộc tính",
+                  _clickBtnListThuocTinh,
+                  Colors.lightBlueAccent,
+                  0),
+            if (Permission.instance
+                .hasPermission(Preferences.PagesLichSuGiaoDichs))
+              _buildListItem(
+                  "Kiểm duyệt giao dịch",
+                  "assets/images/approve.png",
+                  _baiDangManagementStore.countLSGDChuaKiemDuyet,
+                  "Kiểm duyệt giao dịch",
+                  _clickBtnChecker,
+                  Colors.deepOrangeAccent,
+                  0),
             if (Permission.instance.hasPermission(Preferences.PagesBaiDangs))
-              _buildListItem("Quản lý bài đăng", "assets/images/badge.png", int.parse(postStore.sobaidangall), "Quản lý bài đăng", _clickBtnPostChecker, Colors.amber, 0),
+              _buildListItem(
+                  "Quản lý bài đăng",
+                  "assets/images/badge.png",
+                  int.parse(postStore.sobaidangall),
+                  "Quản lý bài đăng",
+                  _clickBtnPostChecker,
+                  Colors.amber,
+                  0),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildListItem(String nameItem, String pathPicture, int totalItems, String nameButton, Function function, Color colors, double leftPadding) {
+  Widget _buildListItem(String nameItem, String pathPicture, int totalItems,
+      String nameButton, Function function, Color colors, double leftPadding) {
     return Container(
       margin: EdgeInsets.only(bottom: 24),
-      decoration: !_themeStore.darkMode ? new BoxDecoration(
-        boxShadow: [
-          // color: Colors.white, //background color of box
-          BoxShadow(
-            color: Color.fromRGBO(198, 199, 202, 1),
-            blurRadius: 12, // soften the shadow
-            spreadRadius: 0.01, //extend the shadow
-            offset: Offset(
-              8.0, // Move to right 10  horizontally
-              12.0, // Move to bottom 10 Vertically
-            ),
-          )
-        ],
-      ) : new BoxDecoration(),
+      decoration: !_themeStore.darkMode
+          ? new BoxDecoration(
+              boxShadow: [
+                // color: Colors.white, //background color of box
+                BoxShadow(
+                  color: Color.fromRGBO(198, 199, 202, 1),
+                  blurRadius: 12, // soften the shadow
+                  spreadRadius: 0.01, //extend the shadow
+                  offset: Offset(
+                    8.0, // Move to right 10  horizontally
+                    12.0, // Move to bottom 10 Vertically
+                  ),
+                )
+              ],
+            )
+          : new BoxDecoration(),
       child: Card(
         margin: EdgeInsets.only(top: 8, right: 10, left: 10),
         clipBehavior: Clip.antiAlias,
@@ -289,7 +396,9 @@ class _ManagementScreenState extends State<ManagementScreen> {
           padding: EdgeInsets.all(20),
           // height: 130,
           // color: Color.fromRGBO(242, 242, 242, 1),
-          color: _themeStore.darkMode ? AppColors.darkBlueForCardDarkTheme : AppColors.greyForCardLightTheme,
+          color: _themeStore.darkMode
+              ? AppColors.darkBlueForCardDarkTheme
+              : AppColors.greyForCardLightTheme,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -319,64 +428,61 @@ class _ManagementScreenState extends State<ManagementScreen> {
                   ),
                 ),
               ),
-              SizedBox(width: 15,),
+              SizedBox(
+                width: 15,
+              ),
               Flexible(
-                flex: 4,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          nameItem,
-                          style: TextStyle(
+                  flex: 4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            nameItem,
+                            style: TextStyle(
+                                fontSize: 21, fontWeight: FontWeight.bold),
+                          ),
+                          // SizedBox(width: 15,),
+                          Text(
+                            totalItems.toString(),
+                            style: TextStyle(
                               fontSize: 21,
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        // SizedBox(width: 15,),
-                        Text(
-                          totalItems.toString(),
-                          style: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6,),
-                    ElevatedButton(
-                        child: Text(
-                            nameButton.toUpperCase(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      ElevatedButton(
+                        child: Text(nameButton.toUpperCase(),
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                            )
-                        ),
+                            )),
                         style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            backgroundColor: MaterialStateProperty.all<Color>(colors),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(colors),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    side: BorderSide(color: colors)
-                                )
-                            )
-                        ),
+                                    side: BorderSide(color: colors)))),
                         onPressed: function,
-                    )
-                  ],
-                )
-              ),
+                      )
+                    ],
+                  )),
             ],
           ),
-
         ),
       ),
-
     );
   }
 
@@ -421,10 +527,11 @@ class _ManagementScreenState extends State<ManagementScreen> {
       MaterialPageRoute(builder: (context) => KiemDuyetPage()),
     );
   }
-  _clickBtnPostChecker(){
-  Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => PostCheckScreen()),
-  );
-}
+
+  _clickBtnPostChecker() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PostCheckScreen()),
+    );
+  }
 }
