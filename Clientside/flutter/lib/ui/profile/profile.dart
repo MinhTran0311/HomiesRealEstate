@@ -75,12 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!_userstore.loadingCurrentUser) {
         _userstore.getCurrentUser();
       }
-      if (!_userstore.loadingCurrentUserWallet) {
-        _userstore.getCurrentWalletUser();
-      }
-      if (!_userstore.loadingCurrentUserPicture) {
-        _userstore.getCurrentPictureUser();
-      }
+      // if (!_userstore.loadingCurrentUserWallet) {
+      //   _userstore.getCurrentWalletUser();
+      // }
+      // if (!_userstore.loadingCurrentUserPicture) {
+      //   _userstore.getCurrentPictureUser();
+      // }
      if (!_postStore.loadingPostForCur) _postStore.getPostForCurs(false,"",0);
       if (!_postStore.loadingsobaidang) _postStore.getsobaidang();
     }
@@ -120,8 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
           appBar: _buildAppBar(),
           body: Observer(builder: (context) {
-            return !_userstore.loadingCurrentUser ||
-                    !_userstore.loadingCurrentUserWallet ||
+            return
+              !_userstore.loadingCurrentUser &&
+                    !_userstore.loadingCurrentUserWallet &&
                     !_userstore.loadingCurrentUserPicture
                 ? _buildBody()
                 : CustomProgressIndicatorWidget();
@@ -375,8 +376,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         overflow: Overflow.visible,
                                         children: [
                                           Observer(builder: (context) {
-                                            if(_userstore.userCurrent != null){
-                                              return _userstore.userCurrent.picture != null
+                                            // if(_userstore.userCurrent != null){
+                                              return !_userstore.loadingCurrentUserPicture && _userstore.userCurrent.picture != null
                                                   ? CircleAvatar(
                                                   radius: (52),
                                                   backgroundColor: Colors.white,
@@ -394,17 +395,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     BorderRadius.circular(50),
                                                     child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
                                                   ));
-                                            }
-                                            else{
-                                              return CircleAvatar(
-                                                  radius: (52),
-                                                  backgroundColor: Colors.white,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                    BorderRadius.circular(50),
-                                                    child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
-                                                  ));
-                                            }
+                                            // }
+                                            // else{
+                                            //   return CircleAvatar(
+                                            //       radius: (52),
+                                            //       backgroundColor: Colors.white,
+                                            //       child: ClipRRect(
+                                            //         borderRadius:
+                                            //         BorderRadius.circular(50),
+                                            //         child: Image.network("https://st.quantrimang.com/photos/image/2017/04/08/anh-dai-dien-FB-200.jpg"),
+                                            //       ));
+                                            // }
 
                                           }),
                                           // CircularProfileAvatar(
@@ -556,7 +557,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Column(
                                   children: [
                                     Observer(builder: (context) {
-                                      return _userstore.userCurrent !=null && _userstore.userCurrent.wallet != null
+                                      return !_userstore.loadingCurrentUserWallet
                                           ? Text(
                                           "${oCcy.format(_userstore.userCurrent.wallet)} Đ",
                                               style: TextStyle(
