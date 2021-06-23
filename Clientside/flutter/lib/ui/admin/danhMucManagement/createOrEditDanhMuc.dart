@@ -175,7 +175,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
         Observer(
           builder : (context) {
             if (_danhMucManagementStore.updateDanhMuc_success || _danhMucManagementStore.createDanhMuc_success) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(setDataBack());
               if (_danhMucManagementStore.updateDanhMuc_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
@@ -486,66 +486,22 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       return Container(height: 0, width: 0);
   }
 
-  // Widget _buildTypeTypeTypeField() {
-  //   List<DanhMuc> typetypetype = [];
-  //   if (selectedTypeType != null) {
-  //     for (var i = 0; i < _danhMucManagementStore.danhMucListAll.danhMucs.length; i++)
-  //       if (_danhMucManagementStore.danhMucListAll.danhMucs[i].danhMucCha ==
-  //           selectedTypeType
-  //               .id) if (_danhMucManagementStore.danhMucListAll.danhMucs[i] != null)
-  //         typetypetype.add(_danhMucManagementStore.danhMucListAll.danhMucs[i]);
-  //     if (typetypetype.length != 0)
-  //       return Observer(
-  //         builder: (context) {
-  //           return Padding(
-  //             padding:
-  //             const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
-  //             child: DropdownButtonFormField<DanhMuc>(
-  //               hint: Text("Chọn hình thức bổ sung"),
-  //               value: selectedTypeTypeType,
-  //               //icon:Icons.attach_file ,
-  //               onChanged: (DanhMuc Value) {
-  //                 setState(() {
-  //                   selectedTypeTypeType = Value;
-  //                 });
-  //               },
-  //               decoration: InputDecoration(
-  //                   suffixIcon: IconButton(
-  //                     onPressed: () => setState(() {
-  //                       selectedTypeTypeType = null;
-  //                     }),
-  //                     icon: Icon(Icons.clear),
-  //                   )),
-  //               items: typetypetype.map((DanhMuc type) {
-  //                 return DropdownMenuItem<DanhMuc>(
-  //                   value: type,
-  //                   child: Row(
-  //                     children: <Widget>[
-  //                       Icon(
-  //                         Icons.home_work_sharp,
-  //                       ),
-  //                       SizedBox(
-  //                         width: 10,
-  //                       ),
-  //                       Text(
-  //                         type.tenDanhMuc,
-  //                         style: TextStyle(),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 );
-  //               }).toList(),
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     else {
-  //       selectedTypeTypeType = selectedTypeType;
-  //       return Container(height: 0, width: 0);
-  //     }
-  //   } else
-  //     return Container(height: 0, width: 0);
-  // }
+  DanhMuc setDataBack() {
+    DanhMuc danhMucBack = new DanhMuc();
+    if (this.danhMuc != null) {
+      danhMucBack = this.danhMuc;
+    }
+    danhMucBack.tenDanhMuc = _nameController.text;
+    danhMucBack.tag = _tagController.text;
+    danhMucBack.trangThai = _checkboxTrangThai ? "On" : "Off";
+    if (selectedType != null) {
+      if (selectedTypeType != null) {
+        danhMucBack.danhMucCha = selectedTypeType.id;
+      }
+      danhMucBack.danhMucCha = selectedType.id;
+    }
+    return danhMucBack;
+  }
 
   //endregion
 

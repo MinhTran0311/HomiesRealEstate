@@ -42,6 +42,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
 
   bool _checkboxTrangThai = true;
   String titleForm = "Tạo thuộc tính mới";
+  bool isFinishInit = true;
 
   @override
   void initState() {
@@ -59,10 +60,14 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
-    _thuocTinhManagementStore.getKieuDuLieu("String");
-    if(this.thuocTinh != null) {
+    if (this.thuocTinh == null && isFinishInit) {
+      _thuocTinhManagementStore.getKieuDuLieu("String");
+      isFinishInit = false;
+    }
+    if(this.thuocTinh != null && isFinishInit) {
       _thuocTinhManagementStore.KieuDuLieu = this.thuocTinh.kieuDuLieu;
       _thuocTinhManagementStore.getKieuDuLieu(this.thuocTinh.kieuDuLieu);
+      isFinishInit = false;
     }
     _thuocTinhManagementStore.createThuocTinh_success = false;
     _thuocTinhManagementStore.updateThuocTinh_success = false;
@@ -346,6 +351,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       thuocTinhSet = this.thuocTinh;
     }
     String kieuDL = _thuocTinhManagementStore.KieuDuLieuShow;
+    print("1112");
+    print(kieuDL);
     thuocTinhSet.trangThai = _checkboxTrangThai ? "On" : "Off";
     if (kieuDL.compareTo("Số nguyên")==0)
       thuocTinhSet.kieuDuLieu="int";
@@ -355,6 +362,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       thuocTinhSet.kieuDuLieu="String";
 
     thuocTinhSet.tenThuocTinh = _nameController.text;
+    print("....");
+    print(thuocTinhSet.kieuDuLieu);
     return thuocTinhSet;
   }
 

@@ -576,14 +576,22 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   }
 
   User _setDataUser() {
-    User updatedUser = this.user;
+    User updatedUser = new User();
+
+    if (this.user != null) {
+      updatedUser = this.user;
+      updatedUser.permissionsList.clear();
+    }
+    if (this.user == null) {
+      updatedUser.creationTime = DateTime.now().toIso8601String();
+    }
     updatedUser.name = _nameController.text;
     updatedUser.surName = _surnameController.text;
     updatedUser.isActive = _checkboxActive;
     updatedUser.email = _userEmailController.text;
     updatedUser.userName = _userNameController.text;
     updatedUser.phoneNumber = _phoneNumberController.text;
-    updatedUser.permissionsList.clear();
+    updatedUser.permissionsList = new List<dynamic>();
     updatedUser.permissions='';
 
     for (int j = 0; j < _store.displayRoleName.length; j++) {
@@ -596,6 +604,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         }
       }
     }
+    updatedUser.permissions = updatedUser.permissions.substring(0,updatedUser.permissions.length-2);
     _store.displayRoleName.clear();
     return updatedUser;
   }
