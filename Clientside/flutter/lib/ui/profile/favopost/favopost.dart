@@ -216,8 +216,6 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
 
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
-    Post post1 = new Post();
-    post1 = post as Post;
     return Observer(builder: (context) {
       return Card(
         margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
@@ -229,7 +227,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
           GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Detail(post: post1)));
+                  MaterialPageRoute(builder: (context) => Detail(post: post)));
             },
             child: Container(
               height: 190,
