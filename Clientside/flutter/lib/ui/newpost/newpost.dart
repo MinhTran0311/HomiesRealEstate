@@ -17,6 +17,7 @@ import 'package:boilerplate/ui/home/detail.dart';
 import 'package:boilerplate/ui/maps/maps.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/ui/profile/wallet/wallet.dart';
+import 'package:boilerplate/widgets/dropdownsearch/dropdown_search.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:dio/dio.dart';
 import 'package:boilerplate/models/town/town.dart';
@@ -25,8 +26,6 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/town/town_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/postDetail/build_properties.dart';
-
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -314,7 +313,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             ? AlertDialog(
                 title: Text(
                   "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-                  style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                  style: TextStyle(fontSize: 24,),
                 ),
                 content: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -354,7 +353,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   SizedBox(height: 24.0),
                   _buildLocateField(),
                   SizedBox(height: 24.0),
-
                   _buildCityField(),
                   SizedBox(height: 24.0),
                   _buildTownField(),
@@ -696,6 +694,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             "Tỉnh Cà Mau",
           ],
           showClearButton: true,
+
           hint: "Chọn tỉnh/thành phố",
           onChanged: (String Value) {
             setState(() {
@@ -713,10 +712,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
             height: 50,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColorDark,
-              // borderRadius: BorderRadius.only(
-              //   topLeft: Radius.circular(20),
-              //   topRight: Radius.circular(20),
-              // ),
             ),
             child: Center(
               child: Text(
@@ -1252,48 +1247,45 @@ class _NewpostScreenState extends State<NewpostScreen> {
   }
 
   Widget _buildPackField() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      child: DropdownButtonFormField<Pack>(
-        hint: Text("Chọn gói bài đăng"),
-        value: selectedPack,
-        autovalidateMode: AutovalidateMode.always,
-        validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
-        decoration: InputDecoration(
-            suffixIcon: IconButton(
-          onPressed: () => setState(() {
-            selectedPack = null;
-          }),
-          icon: Icon(Icons.clear),
-        )),
-        onChanged: (Pack Value) {
-          setState(() {
-            selectedPack = Value;
-            songay = selectedPack.thoiGianToiThieu;
-            selectedDatefl = DateTime.now()
-                .add(Duration(days: selectedPack.thoiGianToiThieu));
-          });
-        },
-        items: _postStore.packList.packs.map((Pack type) {
-          return DropdownMenuItem<Pack>(
-            value: type,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.account_circle,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  type.tenGoi + ", phí: " + priceFormat(type.phi),
-                  style: TextStyle(),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
+    return DropdownButtonFormField<Pack>(
+      hint: Text("Chọn gói bài đăng"),
+      value: selectedPack,
+      autovalidateMode: AutovalidateMode.always,
+      validator: (value) => value == null ? 'Vui lòng gói bài đăng' : null,
+      decoration: InputDecoration(
+          suffixIcon: IconButton(
+        onPressed: () => setState(() {
+          selectedPack = null;
+        }),
+        icon: Icon(Icons.clear),
+      )),
+      onChanged: (Pack Value) {
+        setState(() {
+          selectedPack = Value;
+          songay = selectedPack.thoiGianToiThieu;
+          selectedDatefl = DateTime.now()
+              .add(Duration(days: selectedPack.thoiGianToiThieu));
+        });
+      },
+      items: _postStore.packList.packs.map((Pack type) {
+        return DropdownMenuItem<Pack>(
+          value: type,
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.account_circle,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                type.tenGoi + ", phí: " + priceFormat(type.phi),
+                style: TextStyle(),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -1604,7 +1596,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         return AlertDialog(
                           title: Text(
                             "Bạn không đủ số dư để thực hiện giao dịch?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                            style: TextStyle(fontSize: 24),
                           ),
                           content: Column(
                             //mainAxisAlignment: MainAxisAlignment.start,
@@ -1661,7 +1653,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     return AlertDialog(
                       title: Text(
                         "Vui lòng load lại trang cá nhân",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        style: TextStyle(fontSize: 24),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
