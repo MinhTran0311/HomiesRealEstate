@@ -225,9 +225,11 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
         ),
         child: Column(children: [
           GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Detail(post: post)));
+            onTap: () async {
+              final result = await
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Detail(post: post)));
+              if (result) postStore.postForCurList.posts.removeAt(index);
             },
             child: Container(
               height: 190,
