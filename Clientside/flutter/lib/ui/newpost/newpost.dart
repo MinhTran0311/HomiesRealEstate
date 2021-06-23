@@ -317,7 +317,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RoundedButtonWidget(
-                        buttonText: "ok",
+                        buttonText: "Ok",
                         buttonColor: Colors.green,
                         onPressed: () {
                           Route route = MaterialPageRoute(
@@ -703,7 +703,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
             labelText: "Tìm tỉnh/thành phố",
           ),
           popupTitle: Container(

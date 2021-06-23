@@ -352,11 +352,19 @@ class _SelectDialogState<T> extends State<SelectDialog<T>> {
                 }),
                 decoration: widget.searchBoxDecoration ??
                     InputDecoration(
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                      ),
                       hintText: widget.hintText,
-                      border: const OutlineInputBorder(),
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 16),
+                      suffixIcon: IconButton(
+                        color: Colors.grey,
+                        onPressed: () => widget.searchBoxController.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
                     ),
+
               ),
             )
         ]);

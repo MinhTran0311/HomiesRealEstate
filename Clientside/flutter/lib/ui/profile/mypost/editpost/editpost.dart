@@ -1416,37 +1416,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   }
               _newpost.images = new List<AppImage>();
               j = 0;
-              var futureValue = showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Chỉnh sửa bài đăng?",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                      ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RoundedButtonWidget(
-                            buttonText: "Đồng ý",
-                            buttonColor: Colors.green,
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                          RoundedButtonWidget(
-                            buttonColor: Colors.grey,
-                            buttonText: "Hủy",
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  });
-              futureValue.then((value) {
+              var future = showSimpleModalDialog(context,
+                  "Chỉnh sửa thông tin bài đăng?");
+              future.then((value) {
                 if (value) {
                   for (var item in _imageStore.imageListpost) {
                     AppImage u = new AppImage();
