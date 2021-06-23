@@ -386,6 +386,9 @@ abstract class _FormStore with Store {
   @action
   Future UpdateUser() async {
     updateUser_success = false;
+    if (displayRoleName.length == 0) {
+      displayRoleName.add("User");
+    }
     final future = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive, displayRoleName);
     fetchUpdateUserFuture = ObservableFuture(future);
 
@@ -394,19 +397,19 @@ abstract class _FormStore with Store {
         updateUser_success = true;
       }
     }).catchError((error){
-      if (error is DioError) {
-        if (error.response.data!=null) {
-          errorStore.errorMessage = error.response.data["error"]["message"];
-        }
+      updateUser_success = false;
+      if (error.response != null && error.response.data!=null)
+      {//errorStore.errorMessage = error.response.data["error"]["message"];
+        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
+          errorStore.errorMessage = translateErrorMessage("User name");
+        else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
+          errorStore.errorMessage = translateErrorMessage("Email");
         else
-          errorStore.errorMessage = DioErrorUtil.handleError(error);
-        throw error;
+          errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       }
-      else {
-        errorStore.errorMessage =
-        "Hãy kiểm tra lại kết nối mạng và thử lại!";
-        throw error;
-      }
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
     });
   }
 
@@ -442,6 +445,9 @@ abstract class _FormStore with Store {
   @action
   Future CreateUser() async {
     createUser_success = false;
+    if (displayRoleName.length == 0) {
+      displayRoleName.add("User");
+    }
     final future = _repository.createUser(username, surname, name, userEmail, phoneNumber, isActive, displayRoleName, password);
     fetchCreateUserFuture = ObservableFuture(future);
 
@@ -450,13 +456,20 @@ abstract class _FormStore with Store {
         createUser_success = true;
       }
     }).catchError((error){
+      createUser_success = false;
       if (error.response != null && error.response.data!=null)
-        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      {//errorStore.errorMessage = error.response.data["error"]["message"];
+        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
+          errorStore.errorMessage = translateErrorMessage("User name");
+        else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
+          errorStore.errorMessage = translateErrorMessage("Email");
+        else
+          errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      }
       else
         errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      throw error;
-    }
-    );
+    });
   }
 
   @action
