@@ -121,7 +121,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
         child: Scaffold(
       body: WillPopScope(
           onWillPop: () {
-            Navigator.pop(context,_postStore.isBaiGhimYeuThich?true:false);
+            Navigator.pop(context,_postStore.isBaiGhimYeuThich);
           },
           child: NotificationListener<ScrollNotification>(
             onNotification: _scrollListener,
@@ -242,7 +242,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pop(context,_postStore.isBaiGhimYeuThich?true:false);
+                Navigator.pop(context,_postStore.isBaiGhimYeuThich);
               },
               child: Container(
                   child: AnimatedBuilder(
