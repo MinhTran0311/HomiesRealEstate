@@ -190,7 +190,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
               buildSquareAndPrice(),
               buildDiaChi(size),
               Padding(
-                padding: EdgeInsets.only(right: 24,left: 24,bottom: 12,),
+                padding: EdgeInsets.only(right: 24,left: 24,bottom: 6,),
                 child:_postStore.propertyList!=null? Properties(_postStore.propertyList):Container(width: 0,height: 0,),
               ),
               buildHeadline("Mô tả chi tiết"),
