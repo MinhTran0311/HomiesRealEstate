@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
@@ -319,7 +320,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RoundedButtonWidget(
-                        buttonText: "ok",
+                        buttonText: "Ok",
                         buttonColor: Colors.green,
                         onPressed: () {
                           Route route = MaterialPageRoute(
@@ -705,7 +706,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
-            border: OutlineInputBorder(),
             labelText: "Tìm tỉnh/thành phố",
           ),
           popupTitle: Container(
@@ -753,6 +753,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           )),
           //icon:Icons.attach_file ,
           onChanged: (Town Value) {
+            //FocusScope.of(context).requestFocus(FocusNode());
             setState(() {
               selectedTown = Value;
               selectedCommune = null;
@@ -884,6 +885,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     autofocus: false,
+                    //focusNode: nullptr,
                     decoration: InputDecoration(
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
@@ -1291,11 +1293,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildPackinfoField() {
     return selectedPack != null
-        ? Text(
-            "Mô tả: ${selectedPack.moTa}",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          )
+        ? Center(
+          child: Text(
+              "Mô tả: ${selectedPack.moTa}",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+        )
         : Container(
             width: 0,
             height: 0,

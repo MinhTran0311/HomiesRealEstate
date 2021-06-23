@@ -34,8 +34,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PostCheckScreen extends StatefulWidget {
   @override
-  _PostCheckScreenState createState() =>
-      _PostCheckScreenState();
+  _PostCheckScreenState createState() => _PostCheckScreenState();
 }
 
 enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
@@ -73,7 +72,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
     userStore = Provider.of<UserStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _townStore = Provider.of<TownStore>(context);
-    if (!postStore.loadingPostForcheck) postStore.getPostForcheck(false, "", key);
+    if (!postStore.loadingPostForcheck)
+      postStore.getPostForcheck(false, "", key);
     selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidangall));
     selectedPack = new List<Pack>(int.parse(postStore.sobaidangall));
     songay = new List<int>(int.parse(postStore.sobaidangall));
@@ -473,92 +473,92 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
 
   Widget _buildPostPoster(Post post, int index) {
     Newpost newpost;
-      return Card(
-        margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-        child: Column(children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Detail(post: post)));
-            },
+    return Card(
+      margin: EdgeInsets.only(bottom: 24, right: 10, left: 10),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Detail(post: post)));
+          },
+          child: Container(
+            height: 190,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: post.featuredImage != null
+                  ? NetworkImage(post.featuredImage)
+                  : AssetImage(Assets.front_img),
+              fit: BoxFit.cover,
+            )),
             child: Container(
-              height: 190,
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: post.featuredImage != null
-                    ? NetworkImage(post.featuredImage)
-                    : AssetImage(Assets.front_img),
-                fit: BoxFit.cover,
-              )),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [
-                      0.5,
-                      1.0
-                    ],
-                        colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.7),
-                    ])),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: post.tagLoaiBaidang!="Cho thuê"?Colors.yellow[700]:Colors.lightBlueAccent,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          width: 80,
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Center(
-                            child: Text(
-                              post.tagLoaiBaidang,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [
+                    0.5,
+                    1.0
+                  ],
+                      colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.7),
+                  ])),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: post.tagLoaiBaidang != "Cho thuê"
+                                ? Colors.yellow[700]
+                                : Colors.lightBlueAccent,
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        width: 80,
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Center(
+                          child: Text(
+                            post.tagLoaiBaidang,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: DateTime.now()
-                                      .isAfter(DateTime.parse(post.thoiHan))
-                                  ? Colors.red[700]
-                                  : Colors.green[600],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          width: 80,
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Center(
-                              child: DateTime.now()
-                                      .isAfter(DateTime.parse(post.thoiHan))
-                                  ? Text("Hết hạn",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ))
-                                  : Text("Còn Hạn",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ))),
-                        ),
-                        GestureDetector(
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: DateTime.now()
+                                    .isAfter(DateTime.parse(post.thoiHan))
+                                ? Colors.red[700]
+                                : Colors.green[600],
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        width: 80,
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Center(
+                            child: DateTime.now()
+                                    .isAfter(DateTime.parse(post.thoiHan))
+                                ? Text("Hết hạn",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ))
+                                : Text("Còn Hạn",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ))),
+                      ),
+                      GestureDetector(
                           onTap: () {
                             _showBottomSheetPopMenu(post, index);
                           },
@@ -566,304 +566,275 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(100))),
+                                    BorderRadius.all(Radius.circular(100))),
                             width: 38,
                             height: 38,
                             child: Icon(
-                            Icons.menu_outlined,
-                            size: 25,
-                            color:
-                                 Colors.black,
-                          ),
-                        )),
-                      ],
-                    ),
-                    Expanded(child: Container()),
-                    Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            post.tieuDe,
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              Icons.menu_outlined,
+                              size: 25,
+                              color: Colors.black,
                             ),
+                          )),
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          post.tieuDe,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                post.dienTich.toString() + ' m2',
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              post.dienTich.toString() + ' m2',
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                priceFormat(post.gia),
-                                textAlign: TextAlign.end,
-                                overflow: TextOverflow.fade,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              priceFormat(post.gia),
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Flexible(
-                                    child: Container(
-                                      padding: EdgeInsets.only(right: 4),
-                                      child: Text(
-                                        post.tenXa,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Flexible(
+                                  child: Container(
+                                    padding: EdgeInsets.only(right: 4),
+                                    child: Text(
+                                      post.tenXa,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(post.diemBaiDang.toString(),
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      )),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 14,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(post.diemBaiDang.toString(),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    )),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                  size: 14,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
-          ExpansionTile(
-            title: Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: Text(
-                "Gia hạn",
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-              ),
+        ),
+        ExpansionTile(
+          title: Padding(
+            padding: const EdgeInsets.only(left: 12.0),
+            child: Text(
+              "Gia hạn",
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
             ),
-            tilePadding: EdgeInsets.only(top: 0.0),
-            //.all(0),
-            children: <Widget>[
-              Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+          ),
+          tilePadding: EdgeInsets.only(top: 0.0),
+          //.all(0),
+          children: <Widget>[
+            Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: Text(
+                        "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                  ),
+                  if (selectedDatefl[index] != null) (SizedBox(height: 12)),
+                  if (selectedDatefl[index] != null &&
+                      DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
                     Padding(
                       padding: const EdgeInsets.only(left: 12.0),
-                      child: Text(
-                          "Ngày hết hạn: ${post.thoiHan.split("T")[0]} ${post.thoiHan.split("T")[1].split(".")[0]}"),
+                      child: DropdownButtonFormField<Pack>(
+                        hint: Text("Chọn gói bài đăng mới"),
+                        value: selectedPack[index],
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                          onPressed: () => setState(() {
+                            selectedPack[index] = null;
+                          }),
+                          icon: Icon(Icons.clear),
+                        )),
+                        onChanged: (Pack Value) {
+                          setState(() {
+                            selectedPack[index] = Value;
+                          });
+                        },
+                        items: postStore.packList.packs.map((Pack type) {
+                          return DropdownMenuItem<Pack>(
+                            value: type,
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.account_circle,
+                                  color: const Color(0xFF167F67),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  type.tenGoi +
+                                      ", phí: " +
+                                      priceFormat(type.phi),
+                                  style: TextStyle(),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                    if (selectedDatefl[index] != null) (SizedBox(height: 12)),
-                    if (selectedDatefl[index] != null &&
-                        DateTime.now().isAfter(DateTime.parse(post.thoiHan)))
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: DropdownButtonFormField<Pack>(
-                          hint: Text("Chọn gói bài đăng mới"),
-                          value: selectedPack[index],
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                            onPressed: () => setState(() {
-                              selectedPack[index] = null;
-                            }),
-                            icon: Icon(Icons.clear),
-                          )),
-                          onChanged: (Pack Value) {
-                            setState(() {
-                              selectedPack[index] = Value;
-                            });
-                          },
-                          items: postStore.packList.packs.map((Pack type) {
-                            return DropdownMenuItem<Pack>(
-                              value: type,
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.account_circle,
-                                    color: const Color(0xFF167F67),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    type.tenGoi+", phí: "+priceFormat(type.phi),
-                                    style: TextStyle(),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    if (selectedDatefl[index] != null) (SizedBox(height: 12)),
-                    if (selectedDatefl[index] != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: (Text(
-                            "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
-                      ),
-                    SizedBox(height: 12),
-                    if (selectedDatefl[index] != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: (Text(
-                            "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
-                      ),
-                    SizedBox(height: 12),
+                  if (selectedDatefl[index] != null) (SizedBox(height: 12)),
+                  if (selectedDatefl[index] != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: (Text(
+                          "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
+                    ),
+                  SizedBox(height: 12),
+                  if (selectedDatefl[index] != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: (Text(
+                          "Phí gia hạn:    ${(selectedPack[index] == null) ? songay[index] * postStore.packList.packs[post.goiBaiDangId - 1].phi : songay[index] * selectedPack[index].phi}")),
+                    ),
+                  SizedBox(height: 12),
+                  RoundedButtonWidget(
+                    onPressed: () async => {
+                      _selectDatefl(
+                          context, DateTime.parse(post.thoiHan), index)
+                    },
+                    buttonColor: Colors.amber,
+                    textColor: Colors.white,
+                    buttonText: ('Chọn ngày kết thúc'),
+                  ),
+                  if (selectedDatefl[index] != null)
                     RoundedButtonWidget(
-                      onPressed: () async => {
-                        _selectDatefl(
-                            context, DateTime.parse(post.thoiHan), index)
-                      },
-                      buttonColor: Colors.amber,
-                      textColor: Colors.white,
-                      buttonText: ('Chọn ngày kết thúc'),
-                    ),
-                    if (selectedDatefl[index] != null)
-                      RoundedButtonWidget(
-                        onPressed: () {
-                          newpost = new Newpost();
-                          if (songay[index] *
-                                  (selectedPack[index] == null
-                                      ? postStore.packList
-                                          .packs[post.goiBaiDangId - 1].phi
-                                      : selectedPack[index].phi) >
-                              userStore.userCurrent.wallet) {
-                            var futureValue = showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      "Bạn không đủ số dư để thực hiện giao dịch?",
-                                      style: TextStyle(
-                                          fontSize: 24, fontFamily: 'intel'),
-                                    ),
-                                    content: Column(
-                                      mainAxisSize:MainAxisSize.min,
-                                      children: [
-                                        RoundedButtonWidget(
-                                          buttonText: "Nạp thêm tiền",
-                                          buttonColor: Colors.green,
-                                          onPressed: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                        ),
-                                        RoundedButtonWidget(
-                                          buttonColor: Colors.grey,
-                                          buttonText: "Hủy",
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
-                            futureValue.then((value) {
-                              if(value) {
-                                Route route = MaterialPageRoute(
-                                    builder: (context) => NapTienPage(
-                                          userID: userStore.userCurrent.UserID,
-                                        ));
-                                Navigator.push(context, route);
-                              }
-                            });
-                          } else {
-                            var futureValue = showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      "Gia hạn bài viết và thực hiện thanh toán?",
-                                      style: TextStyle(
-                                          fontSize: 24, fontFamily: 'intel'),
-                                    ),
-                                    content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        RoundedButtonWidget(
-                                          buttonText: "Đồng ý",
-                                          buttonColor: Colors.green,
-                                          onPressed: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                        ),
-                                        RoundedButtonWidget(
-                                          buttonColor: Colors.grey,
-                                          buttonText: "Hủy",
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
-                            futureValue.then((value) {
-                              //_postStore.postPost(_newpost);
+                      onPressed: () {
+                        newpost = new Newpost();
+                        if (songay[index] *
+                                (selectedPack[index] == null
+                                    ? postStore.packList
+                                        .packs[post.goiBaiDangId - 1].phi
+                                    : selectedPack[index].phi) >
+                            userStore.userCurrent.wallet) {
+                          var futureValue = showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    "Bạn không đủ số dư để thực hiện giao dịch?",
+                                    style: TextStyle(
+                                        fontSize: 24, fontFamily: 'intel'),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      RoundedButtonWidget(
+                                        buttonText: "Nạp thêm tiền",
+                                        buttonColor: Colors.green,
+                                        onPressed: () {
+                                          Navigator.of(context).pop(true);
+                                        },
+                                      ),
+                                      RoundedButtonWidget(
+                                        buttonColor: Colors.grey,
+                                        buttonText: "Hủy",
+                                        onPressed: () {
+                                          Navigator.of(context).pop(false);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              });
+                          futureValue.then((value) {
+                            if (value) {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => NapTienPage(
+                                        userID: userStore.userCurrent.UserID,
+                                      ));
+                              Navigator.push(context, route);
+                            }
+                          });
+                        } else {
+                          var future = showSimpleModalDialog(context,
+                              "Gia hạn bài viết và thực hiện thanh toán?");
+                          future.then((value) {
+                            if (value) {
                               post.giagoi = selectedPack[index] == null
                                   ? postStore
                                       .packList.packs[post.goiBaiDangId - 1].phi
@@ -875,7 +846,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                                   selectedDatefl[index].toIso8601String();
                               newpost.post = post;
                               newpost.lichsugiaodichs = new lichsugiaodich();
-                              newpost.lichsugiaodichs.userId = userStore.userCurrent.UserID;
+                              newpost.lichsugiaodichs.userId = post.userId;
                               newpost.lichsugiaodichs.ghiChu =
                                   "${post.tieuDe} gia hạn";
                               newpost.lichsugiaodichs.thoiDiem =
@@ -895,46 +866,47 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                               newpost.hoadonbaidang.tongTien =
                                   newpost.lichsugiaodichs.soTien;
                               newpost.hoadonbaidang.ghiChu =
-                                  "Gia hạn bài đăng cho user \"${post.userId}\"";
+                                  "Gia hạn bài đăng \"${post.tieuDe}\"";
                               newpost.hoadonbaidang.baiDangId = post.id;
                               newpost.hoadonbaidang.goiBaiDangId =
                                   selectedPack[index] == null
                                       ? post.goiBaiDangId
                                       : selectedPack[index].id;
-                              newpost.hoadonbaidang.userId = userStore.userCurrent.UserID;
+                              newpost.hoadonbaidang.userId = post.userId;
                               postStore.giahan(newpost);
                               setState(() {
                                 selectedDatefl[index] = null;
                                 selectedPack[index] = null;
                               });
-                            });
-                          }
-                        },
-                        buttonColor: Colors.amber,
-                        textColor: Colors.white,
-                        buttonText: ('Gia hạn'),
-                      ),
-                  ]),
-            ],
-          ),
-        ]),
-      );
+                            }
+                          });
+                        }
+                      },
+                      buttonColor: Colors.amber,
+                      textColor: Colors.white,
+                      buttonText: ('Gia hạn'),
+                    ),
+                ]),
+          ],
+        ),
+      ]),
+    );
   }
 
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return showErrorMessage(postStore.errorStore.errorMessage,context);
+          return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
         if (postStore.successgiahan) {
           postStore.successgiahan = false;
           userStore.getCurrentWalletUser();
-          showSuccssfullMesssage("Gia hạn thành công",context);
+          showSuccssfullMesssage("Gia hạn thành công", context);
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          showSuccssfullMesssage("Xóa bài đăng thành công",context);
+          showSuccssfullMesssage("Xóa bài đăng thành công", context);
         }
         return SizedBox.shrink();
       },

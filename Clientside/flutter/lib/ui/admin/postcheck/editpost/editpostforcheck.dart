@@ -128,12 +128,12 @@ class _EditpostScreenState extends State<EditpostScreen> {
     _LocateController = TextEditingController(text: post.diaChi.toString());
     _keyEditor2 = TextEditingController(text: post.moTa.toString());
     selectedTypeTypeType =
-        postStore.postCategoryList.categorys[post.danhMucId - 2];
+    postStore.postCategoryList.categorys[post.danhMucId - 2];
     selectedTypeType = postStore
         .postCategoryList.categorys[selectedTypeTypeType.danhMucCha - 2];
     if (selectedTypeType.danhMucCha != null)
       selectedType =
-          postStore.postCategoryList.categorys[selectedTypeType.danhMucCha - 2];
+      postStore.postCategoryList.categorys[selectedTypeType.danhMucCha - 2];
     else {
       selectedType = selectedTypeType;
       selectedTypeType = selectedTypeTypeType;
@@ -212,7 +212,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       builder: (context) {
         return !postStore.propertiesLoading && !_imageStore.imageLoading
             ? _buildBody()
-            //;
+        //;
             : CustomProgressIndicatorWidget();
       },
     );
@@ -239,43 +239,43 @@ class _EditpostScreenState extends State<EditpostScreen> {
     var _formKey;
     return Material(
         child: Form(
-      key: _formKey,
-      autovalidateMode: AutovalidateMode.always,
-      child: Stack(
-        children: <Widget>[
-          Container(),
-          MediaQuery.of(context).orientation == Orientation.landscape
-              ? Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: _buildLeftSide(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: _buildRightSide(),
-                    ),
-                  ],
-                )
-              : Center(child: _buildRightSide()),
-          Observer(
-            builder: (context) {
-              return _store.regist_success
-                  ? navigate(context)
-                  : showErrorMessage(_store.errorStore.errorMessage, context);
-            },
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.always,
+          child: Stack(
+            children: <Widget>[
+              Container(),
+              MediaQuery.of(context).orientation == Orientation.landscape
+                  ? Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: _buildLeftSide(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildRightSide(),
+                  ),
+                ],
+              )
+                  : Center(child: _buildRightSide()),
+              Observer(
+                builder: (context) {
+                  return _store.regist_success
+                      ? navigate(context)
+                      : showErrorMessage(_store.errorStore.errorMessage, context);
+                },
+              ),
+              Observer(
+                builder: (context) {
+                  return Visibility(
+                    visible: _store.regist_loading,
+                    child: CustomProgressIndicatorWidget(),
+                  );
+                },
+              )
+            ],
           ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _store.regist_loading,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          )
-        ],
-      ),
-    ));
+        ));
   }
 
   Widget _buildLeftSide() {
@@ -300,22 +300,21 @@ class _EditpostScreenState extends State<EditpostScreen> {
             SizedBox(height: 24.0),
             _buildTileField(),
             SizedBox(height: 24.0),
+            _buildAcreageField(),
+            SizedBox(height: 24.0),
+            _buildPriceField(),
+            SizedBox(height: 24.0),
+            _buildLocateField(),
+            SizedBox(height: 24.0),
             _buildCityField(),
             SizedBox(height: 24.0),
             _buildTownField(),
             _buildCommuneField(),
             _buildCommuneField2(),
-            _buildLocateField(),
-            SizedBox(height: 24.0),
             _buildTypeField(),
             SizedBox(height: 24.0),
             _buildTypeTypeField(),
             _buildTypeTypeTypeField(),
-            //_buildVilField(),
-            _buildAcreageField(),
-            SizedBox(height: 24.0),
-            _buildPriceField(),
-            SizedBox(height: 24.0),
             _buildListView(),
             SizedBox(height: 24.0),
             _buildTileField2(),
@@ -342,7 +341,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
                         icon: Icon(Icons.textsms_rounded,
+
                             color: _themeStore.darkMode
                                 ? Colors.white
                                 : Colors.amber),
@@ -400,13 +403,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
           },
           decoration: InputDecoration(
               suffixIcon: IconButton(
-            onPressed: () => setState(() {
-              selectedType = null;
-            }),
-            icon: Icon(Icons.clear),
-          )),
+                onPressed: () => setState(() {
+                  selectedType = null;
+                }),
+                icon: Icon(Icons.clear),
+              )),
           validator: (value) =>
-              value == null ? 'vui lòng chọn phương thức' : null,
+          value == null ? 'vui lòng chọn phương thức' : null,
           items: type.map((Postcategory type) {
             if (type.danhMucCha == null)
               return DropdownMenuItem<Postcategory>(
@@ -416,9 +419,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   children: <Widget>[
                     Icon(
                       Icons.home_work_sharp,
-                      color: !_themeStore.darkMode
-                          ? const Color(0xFF167F67)
-                          : Colors.amber,
                     ),
                     SizedBox(
                       width: 10,
@@ -432,11 +432,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
               );
             else
               return
-                  //Container(width: 0, height: 0);
-                  DropdownMenuItem<Postcategory>(
-                value: type,
-                child: SizedBox(height: 0),
-              );
+                //Container(width: 0, height: 0);
+                DropdownMenuItem<Postcategory>(
+                  value: type,
+                  child: SizedBox(height: 0),
+                );
           }).toList(),
         ));
   }
@@ -455,19 +455,19 @@ class _EditpostScreenState extends State<EditpostScreen> {
           builder: (context) {
             return Padding(
               padding:
-                  const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
+              const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<Postcategory>(
                 hint: Text("Chọn hình thức nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'vui lòng chọn hình thức nhà đất' : null,
+                value == null ? 'vui lòng chọn hình thức nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                  onPressed: () => setState(() {
-                    selectedTypeType = null;
-                  }),
-                  icon: Icon(Icons.clear),
-                )),
+                      onPressed: () => setState(() {
+                        selectedTypeType = null;
+                      }),
+                      icon: Icon(Icons.clear),
+                    )),
                 value: selectedTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
@@ -484,9 +484,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: !_themeStore.darkMode
-                              ? const Color(0xFF167F67)
-                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -524,7 +521,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
           builder: (context) {
             return Padding(
               padding:
-                  const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
+              const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<Postcategory>(
                 hint: Text("Chọn hình thức bổ sung"),
                 value: selectedTypeTypeType,
@@ -535,11 +532,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 },
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                  onPressed: () => setState(() {
-                    selectedTypeTypeType = null;
-                  }),
-                  icon: Icon(Icons.clear),
-                )),
+                      onPressed: () => setState(() {
+                        selectedTypeTypeType = null;
+                      }),
+                      icon: Icon(Icons.clear),
+                    )),
                 items: typetypetype.map((Postcategory type) {
                   return DropdownMenuItem<Postcategory>(
                     value: type,
@@ -547,9 +544,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.home_work_sharp,
-                          color: !_themeStore.darkMode
-                              ? const Color(0xFF167F67)
-                              : Colors.amber,
                         ),
                         SizedBox(
                           width: 10,
@@ -582,7 +576,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
           child: DropdownSearch<String>(
             autoValidateMode: AutovalidateMode.always,
             validator: (value) =>
-                value == null ? 'vui lòng chọn tỉnh/thành' : null,
+            value == null ? 'vui lòng chọn tỉnh/thành' : null,
             items: [
               "Thành phố Hà Nội",
               "Tỉnh Hà Giang",
@@ -659,17 +653,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
             selectedItem: selectedCity,
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
-              border: OutlineInputBorder(),
+              //border: OutlineInputBorder(),
               labelText: "Tìm tỉnh/thành phố",
             ),
             popupTitle: Container(
               height: 50,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
               ),
               child: Center(
                 child: Text(
@@ -701,14 +691,14 @@ class _EditpostScreenState extends State<EditpostScreen> {
           value: selectedTown,
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn quận huyện' : null,
+          value == null ? 'vui lòng chọn quận huyện' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
-            onPressed: () => setState(() {
-              selectedTown = null;
-            }),
-            icon: Icon(Icons.clear),
-          )),
+                onPressed: () => setState(() {
+                  selectedTown = null;
+                }),
+                icon: Icon(Icons.clear),
+              )),
           //icon:Icons.attach_file ,
           onChanged: (Town Value) {
             setState(() {
@@ -728,9 +718,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: !_themeStore.darkMode
-                        ? const Color(0xFF167F67)
-                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 10,
@@ -760,14 +747,14 @@ class _EditpostScreenState extends State<EditpostScreen> {
           hint: Text("Chọn xã/phường"),
           autovalidateMode: AutovalidateMode.always,
           validator: (value) =>
-              value == null ? 'vui lòng chọn xã/phường' : null,
+          value == null ? 'vui lòng chọn xã/phường' : null,
           decoration: InputDecoration(
               suffixIcon: IconButton(
-            onPressed: () => setState(() {
-              selectedCommune = null;
-            }),
-            icon: Icon(Icons.clear),
-          )),
+                onPressed: () => setState(() {
+                  selectedCommune = null;
+                }),
+                icon: Icon(Icons.clear),
+              )),
           value: selectedCommune,
           //icon:Icons.attach_file ,
           onChanged: (Commune Value) {
@@ -795,9 +782,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.blur_circular,
-                    color: !_themeStore.darkMode
-                        ? const Color(0xFF167F67)
-                        : Colors.amber,
                   ),
                   SizedBox(
                     width: 8,
@@ -848,6 +832,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.home,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -864,7 +851,11 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       ),
                       labelText: 'Địa chỉ',
                     ),
-                    onSaved: (value) {},
+                    onSaved: (value) {
+                      // //  FormState.save();
+                      //   print(value);
+                      //   // code when the user saves the form.
+                    },
                     controller: _LocateController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -882,31 +873,31 @@ class _EditpostScreenState extends State<EditpostScreen> {
     return Observer(builder: (context) {
       return !postStore.loadingThuocTinh
           ? SingleChildScrollView(
-              child: ExpansionTile(
-                  title: Text(
-                    "Một số thông tin thêm(nếu có)",
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+          child: ExpansionTile(
+              title: Text(
+                "Một số thông tin thêm(nếu có)",
+                style:
+                TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+              ),
+              tilePadding: EdgeInsets.only(top: 0.0),
+              //.all(0),
+              children: <Widget>[
+                Container(
+                  height: 200,
+                  child: ListView.builder(
+                    itemCount: postStore.thuocTinhList.thuocTinhs.length - 2,
+                    itemBuilder: (context, i) {
+                      //_ThuocTinhController.add(new TextEditingController());
+                      return _buildThuocTinh(
+                          postStore.thuocTinhList.thuocTinhs[i + 2], i);
+                    },
                   ),
-                  tilePadding: EdgeInsets.only(top: 0.0),
-                  //.all(0),
-                  children: <Widget>[
-                  Container(
-                    height: 200,
-                    child: ListView.builder(
-                      itemCount: postStore.thuocTinhList.thuocTinhs.length - 2,
-                      itemBuilder: (context, i) {
-                        //_ThuocTinhController.add(new TextEditingController());
-                        return _buildThuocTinh(
-                            postStore.thuocTinhList.thuocTinhs[i + 2], i);
-                      },
-                    ),
-                  )
-                ]))
+                )
+              ]))
           : Container(
-              height: 0,
-              width: 0,
-            );
+        height: 0,
+        width: 0,
+      );
       //       :  Text(
       //             "Không có thuộc tính thêm hiển thị",
       //         );
@@ -916,140 +907,143 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Widget _buildThuocTinh(ThuocTinh thuocTinh, int index) {
     return thuocTinh != null
         ? Observer(builder: (context) {
-            return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  thuocTinh.tenThuocTinh != "Hướng nhà" &&
-                          thuocTinh.tenThuocTinh != "Hướng ban công"
-                      ? TextFormField(
-                          decoration: InputDecoration(
-                            icon: Icon(
-                                thuocTinh.id == 3
-                                    ? Icons.house_outlined
-                                    : thuocTinh.id == 4
-                                        ? Icons.add_road_outlined
-                                        : thuocTinh.id == 5
-                                            ? Icons.sensor_door_outlined
-                                            : thuocTinh.id == 6
-                                                ? Icons.streetview_outlined
-                                                : thuocTinh.id == 7
-                                                    ? Icons.king_bed_outlined
-                                                    : thuocTinh.id == 8
-                                                        ? Icons.bathtub_outlined
-                                                        : thuocTinh.id == 9
-                                                            ? Icons
-                                                                .policy_outlined
-                                                            : thuocTinh.id == 10
-                                                                ? Icons
-                                                                    .weekend_outlined
-                                                                : thuocTinh.id ==
-                                                                        11
-                                                                    ? Icons
-                                                                        .apartment_outlined
-                                                                    : thuocTinh.id ==
-                                                                            12
-                                                                        ? Icons
-                                                                            .confirmation_number_outlined
-                                                                        : Icons
-                                                                            .category_outlined,
-                                color: _themeStore.darkMode
-                                    ? Colors.white
-                                    : Colors.amber),
-                            labelStyle: TextStyle(
-                              color: (_themeStore.darkMode)
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            labelText: '${thuocTinh.tenThuocTinh}',
-                            suffixIcon: IconButton(
-                              onPressed: () =>
-                                  _ThuocTinhController[index].clear(),
-                              icon: Icon(Icons.clear),
-                            ),
-                            //hintText: "${thuocTinh.kieuDuLieu}",
-                          ),
-                          onSaved: (value) {},
-                          keyboardType: thuocTinh.kieuDuLieu == "double" ||
-                                  thuocTinh.kieuDuLieu == "int"
-                              ? TextInputType.numberWithOptions(
-                                  decimal: false, signed: false)
-                              : TextInputType.text,
-                          controller: _ThuocTinhController[index],
-                          onChanged: (value) {
-                            _ThuocTinhController[index] =
-                                new TextEditingController(text: value);
-                          },
-                        )
-                      : DropdownButtonFormField<String>(
-                          hint: thuocTinh.tenThuocTinh == "Hướng nhà"
-                              ? Row(
-                                  children: [
-                                    Icon(Icons.sensor_door_outlined),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text("Chọn hướng nhà"),
-                                  ],
-                                )
-                              : Row(children: [
-                                  Icon(
-                                    Icons.streetview_outlined,
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("Chọn hướng ban công")
-                                ]),
-                          decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                            onPressed: () => setState(() {
-                              _ThuocTinhController[index] =
-                                  new TextEditingController();
-                              thuocTinh.tenThuocTinh == "Hướng nhà"
-                                  ? selectedhuongnha = null
-                                  : selectedhuongbancong = null;
-                            }),
-                            icon: Icon(Icons.clear),
-                          )),
-                          value: thuocTinh.tenThuocTinh == "Hướng nhà"
-                              ? selectedhuongnha
-                              : selectedhuongbancong,
-                          onChanged: (String value) {
-                            setState(() {
-                              thuocTinh.tenThuocTinh == "Hướng nhà"
-                                  ? selectedhuongnha = value
-                                  : selectedhuongbancong = value;
-                              _ThuocTinhController[index] =
-                                  TextEditingController(text: value);
-                            });
-                          },
-                          items: Huong.map((String type) {
-                            return DropdownMenuItem<String>(
-                                value: type,
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.directions,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      type,
-                                      style: TextStyle(),
-                                    ),
-                                  ],
-                                ));
-                          }).toList(),
+      return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            thuocTinh.tenThuocTinh != "Hướng nhà" &&
+                thuocTinh.tenThuocTinh != "Hướng ban công"
+                ? TextFormField(
+              decoration: InputDecoration(
+                icon: Icon(
+                    thuocTinh.id == 3
+                        ? Icons.house_outlined
+                        : thuocTinh.id == 4
+                        ? Icons.add_road_outlined
+                        : thuocTinh.id == 5
+                        ? Icons.sensor_door_outlined
+                        : thuocTinh.id == 6
+                        ? Icons.streetview_outlined
+                        : thuocTinh.id == 7
+                        ? Icons.king_bed_outlined
+                        : thuocTinh.id == 8
+                        ? Icons.bathtub_outlined
+                        : thuocTinh.id == 9
+                        ? Icons
+                        .policy_outlined
+                        : thuocTinh.id == 10
+                        ? Icons
+                        .weekend_outlined
+                        : thuocTinh.id ==
+                        11
+                        ? Icons
+                        .apartment_outlined
+                        : thuocTinh.id ==
+                        12
+                        ? Icons
+                        .confirmation_number_outlined
+                        : Icons
+                        .category_outlined,
+                    color: _themeStore.darkMode
+                        ? Colors.white
+                        : Colors.amber),
+                labelStyle: TextStyle(
+                  color: (_themeStore.darkMode)
+                      ? Colors.white
+                      : Colors.black,
+                ),
+                labelText: '${thuocTinh.tenThuocTinh}',
+                suffixIcon: IconButton(
+                  onPressed: () =>
+                      _ThuocTinhController[index].clear(),
+                  icon: Icon(Icons.clear),
+                ),
+                //hintText: "${thuocTinh.kieuDuLieu}",
+              ),
+              onSaved: (value) {},
+              keyboardType: thuocTinh.kieuDuLieu == "double" ||
+                  thuocTinh.kieuDuLieu == "int"
+                  ? TextInputType.numberWithOptions(
+                  decimal: false, signed: false)
+                  : TextInputType.text,
+              controller: _ThuocTinhController[index],
+              onChanged: (value) {
+                _ThuocTinhController[index] =
+                new TextEditingController(text: value);
+              },
+            )
+                : DropdownButtonFormField<String>(
+              hint: thuocTinh.tenThuocTinh == "Hướng nhà"
+                  ? Row(
+                children: [
+                  Icon(Icons.sensor_door_outlined),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("Chọn hướng nhà"),
+                ],
+              )
+                  : Row(children: [
+                Icon(
+                  Icons.streetview_outlined,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Chọn hướng ban công")
+              ]),
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amber),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => setState(() {
+                      _ThuocTinhController[index] =
+                      new TextEditingController();
+                      thuocTinh.tenThuocTinh == "Hướng nhà"
+                          ? selectedhuongnha = null
+                          : selectedhuongbancong = null;
+                    }),
+                    icon: Icon(Icons.clear),
+                  )),
+              value: thuocTinh.tenThuocTinh == "Hướng nhà"
+                  ? selectedhuongnha
+                  : selectedhuongbancong,
+              onChanged: (String value) {
+                setState(() {
+                  thuocTinh.tenThuocTinh == "Hướng nhà"
+                      ? selectedhuongnha = value
+                      : selectedhuongbancong = value;
+                  _ThuocTinhController[index] =
+                      TextEditingController(text: value);
+                });
+              },
+              items: Huong.map((String type) {
+                return DropdownMenuItem<String>(
+                    value: type,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.directions,
                         ),
-                  SizedBox(height: 24.0),
-                ]);
-          })
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          type,
+                          style: TextStyle(),
+                        ),
+                      ],
+                    ));
+              }).toList(),
+            ),
+            SizedBox(height: 24.0),
+          ]);
+    })
         : Container(
-            height: 0,
-          );
+      height: 0,
+    );
   }
 
   Widget _buildAcreageField() {
@@ -1064,6 +1058,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
                         icon: Icon(Icons.api,
                             color: _themeStore.darkMode
                                 ? Colors.white
@@ -1107,6 +1104,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.money,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -1150,6 +1150,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
                       icon: Icon(Icons.textsms_rounded,
                           color: _themeStore.darkMode
                               ? Colors.white
@@ -1228,59 +1231,59 @@ class _EditpostScreenState extends State<EditpostScreen> {
           padding: EdgeInsets.all(4),
           child: _image.length == 0
               ? Center(
-                  child: IconButton(
-                  icon: Icon(
-                    Icons.add_photo_alternate_rounded,
-                    color: !_themeStore.darkMode
-                        ? Colors.amber
-                        : Color.fromRGBO(30, 32, 38, 1),
-                  ),
-                  iconSize: 150,
-                  onPressed: () => getImage(true),
-                ))
+              child: IconButton(
+                icon: Icon(
+                  Icons.add_photo_alternate_rounded,
+                  color: !_themeStore.darkMode
+                      ? Colors.amber
+                      : Color.fromRGBO(30, 32, 38, 1),
+                ),
+                iconSize: 150,
+                onPressed: () => getImage(true),
+              ))
               : GridView.builder(
-                  itemCount: _image.length + 1,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3),
-                  itemBuilder: (context, index) {
-                    return index == _image.length
-                        ? _image.length < 6
-                            ? Center(
-                                child: IconButton(
-                                icon: Icon(Icons.add_photo_alternate_rounded),
-                                onPressed: () => getImage(true),
-                              ))
-                            : Container(
-                                height: 0,
-                              )
-                        : Container(
-                            margin: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: _image[index] != null
-                                        ? FileImage(_image[index])
-                                        : NetworkImage(
-                                            _imageStore.imageListpost[index]),
-                                    fit: BoxFit.cover)),
-                            child: SizedBox(
-                              width: 80,
-                              height: 80,
-                              child: FlatButton(
-                                padding:
-                                    EdgeInsets.only(left: 70.0, bottom: 70.0),
-                                // shape: RoundedRectangleBorder(
-                                //     borderRadius: BorderRadius.circular(20),
-                                //     side: BorderSide(color: Colors.white)),
-                                // color: Color(0xFFF5F6F9),
-                                onPressed: () => {clearimage(index)},
-                                child: Icon(
-                                  Icons.dangerous,
-                                  color: Colors.white,
-                                  size: 20.0,
-                                ),
-                              ),
-                            ));
-                  }),
+              itemCount: _image.length + 1,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3),
+              itemBuilder: (context, index) {
+                return index == _image.length
+                    ? _image.length < 6
+                    ? Center(
+                    child: IconButton(
+                      icon: Icon(Icons.add_photo_alternate_rounded),
+                      onPressed: () => getImage(true),
+                    ))
+                    : Container(
+                  height: 0,
+                )
+                    : Container(
+                    margin: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: _image[index] != null
+                                ? FileImage(_image[index])
+                                : NetworkImage(
+                                _imageStore.imageListpost[index]),
+                            fit: BoxFit.cover)),
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: FlatButton(
+                        padding:
+                        EdgeInsets.only(left: 70.0, bottom: 70.0),
+                        // shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     side: BorderSide(color: Colors.white)),
+                        // color: Color(0xFFF5F6F9),
+                        onPressed: () => {clearimage(index)},
+                        child: Icon(
+                          Icons.dangerous,
+                          color: Colors.white,
+                          size: 20.0,
+                        ),
+                      ),
+                    ));
+              }),
         );
       },
     );
@@ -1297,33 +1300,33 @@ class _EditpostScreenState extends State<EditpostScreen> {
             _TileController.value.text.isEmpty
                 ? Text('Vui lòng nhập tiêu đề')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
             _PriceController.value.text.isEmpty
                 ? Text('Vui lòng nhập giá')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
             _AcreageController.value.text.isEmpty
                 ? Text('Vui lòng nhập diện tích')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
             selectedCommune == null
                 ? Text('Vui lòng chọn địa chỉ')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
             selectedTypeTypeType == null
                 ? Text('Vui lòng chọn hình thức nhà/đất')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
             _image.length == 0
                 ? Text('Vui lòng thêm hình ảnh cho bài đăng')
                 : Container(
-                    height: 0,
-                  ),
+              height: 0,
+            ),
           ]),
     );
     showDialog(
@@ -1358,7 +1361,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       return RoundedButtonWidget(
         buttonText: ('Đăng tin'),
         buttonColor:
-            !_imageStore.imageLoadingpost ? Colors.amber[700] : Colors.grey,
+        !_imageStore.imageLoadingpost ? Colors.amber[700] : Colors.grey,
         textColor: Colors.white,
         onPressed: () async {
           {
@@ -1413,37 +1416,9 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   }
               _newpost.images = new List<AppImage>();
               j = 0;
-              var futureValue = showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Chỉnh sửa bài đăng?",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                      ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RoundedButtonWidget(
-                            buttonText: "Đồng ý",
-                            buttonColor: Colors.green,
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                          RoundedButtonWidget(
-                            buttonColor: Colors.grey,
-                            buttonText: "Hủy",
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  });
-              futureValue.then((value) {
+              var future = showSimpleModalDialog(context,
+                  "Chỉnh sửa thông tin bài đăng?");
+              future.then((value) {
                 if (value) {
                   for (var item in _imageStore.imageListpost) {
                     AppImage u = new AppImage();

@@ -310,7 +310,8 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
     return (widget.dropdownSearchDecoration ??
             InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-                border: OutlineInputBorder()))
+            )
+    )
         .applyDefaults(Theme.of(state.context).inputDecorationTheme)
         .copyWith(
             enabled: widget.enabled,
@@ -350,7 +351,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
               )
             : IconButton(
                 icon: widget.dropDownButton ??
-                    const Icon(Icons.arrow_drop_down, size: 24),
+                    const Icon(Icons.arrow_drop_down, size: 24,color: Colors.grey,),
                 onPressed: dropdownButtonPressed,
               ),
         widget.clearButtonBuilder != null

@@ -517,7 +517,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: post.tagLoaiBaidang!="Cho thuê"?Colors.yellow[700]:Colors.lightBlueAccent,
+                              color: post.tagLoaiBaidang != "Cho thuê"
+                                  ? Colors.yellow[700]
+                                  : Colors.lightBlueAccent,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
                           width: 80,
@@ -560,23 +562,22 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                       ))),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            _showBottomSheetPopMenu(post, index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(100))),
-                            width: 38,
-                            height: 38,
-                            child: Icon(
-                            Icons.menu_outlined,
-                            size: 25,
-                            color:
-                                 Colors.black,
-                          ),
-                        )),
+                            onTap: () {
+                              _showBottomSheetPopMenu(post, index);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100))),
+                              width: 38,
+                              height: 38,
+                              child: Icon(
+                                Icons.menu_outlined,
+                                size: 25,
+                                color: Colors.black,
+                              ),
+                            )),
                       ],
                     ),
                     Expanded(child: Container()),
@@ -747,7 +748,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     width: 10,
                                   ),
                                   Text(
-                                    type.tenGoi+", phí: "+priceFormat(type.phi),
+                                    type.tenGoi +
+                                        ", phí: " +
+                                        priceFormat(type.phi),
                                     style: TextStyle(),
                                   ),
                                 ],
@@ -801,7 +804,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                           fontSize: 24, fontFamily: 'intel'),
                                     ),
                                     content: Column(
-                                      mainAxisSize:MainAxisSize.min,
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
                                         RoundedButtonWidget(
                                           buttonText: "Nạp thêm tiền",
@@ -822,7 +825,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                   );
                                 });
                             futureValue.then((value) {
-                              if(value) {
+                              if (value) {
                                 Route route = MaterialPageRoute(
                                     builder: (context) => NapTienPage(
                                           userID: userStore.userCurrent.UserID,
@@ -831,83 +834,54 @@ class _MyPostScreenState extends State<MyPostScreen> {
                               }
                             });
                           } else {
-                            var futureValue = showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      "Gia hạn bài viết và thực hiện thanh toán?",
-                                      style: TextStyle(
-                                          fontSize: 24, fontFamily: 'intel'),
-                                    ),
-                                    content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        RoundedButtonWidget(
-                                          buttonText: "Đồng ý",
-                                          buttonColor: Colors.green,
-                                          onPressed: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                        ),
-                                        RoundedButtonWidget(
-                                          buttonColor: Colors.grey,
-                                          buttonText: "Hủy",
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
+                            var future = showSimpleModalDialog(context,"Gia hạn bài viết và thực hiện thanh toán?");
+                            future.then((value) {
+                              if (value) {
+                                post.giagoi = selectedPack[index] == null
+                                    ? postStore.packList
+                                        .packs[post.goiBaiDangId - 1].phi
+                                    : selectedPack[index].phi;
+                                post.goiBaiDangId = selectedPack[index] == null
+                                    ? post.goiBaiDangId
+                                    : selectedPack[index].id;
+                                post.thoiHan =
+                                    selectedDatefl[index].toIso8601String();
+                                newpost.post = post;
+                                newpost.lichsugiaodichs = new lichsugiaodich();
+                                newpost.lichsugiaodichs.userId = post.userId;
+                                newpost.lichsugiaodichs.ghiChu =
+                                    "${post.tieuDe} gia hạn";
+                                newpost.lichsugiaodichs.thoiDiem =
+                                    DateTime.now().toIso8601String();
+                                newpost.lichsugiaodichs.soTien =
+                                    selectedPack[index] == null
+                                        ? songay[index] * post.giagoi
+                                        : songay[index] *
+                                            selectedPack[index].phi;
+                                newpost.hoadonbaidang = new Hoadonbaidang();
+                                newpost.hoadonbaidang.thoiDiem =
+                                    newpost.lichsugiaodichs.thoiDiem;
+                                newpost.hoadonbaidang.giaGoi =
+                                    selectedPack[index] == null
+                                        ? post.giagoi
+                                        : selectedPack[index].phi;
+                                newpost.hoadonbaidang.soNgayMua = songay[index];
+                                newpost.hoadonbaidang.tongTien =
+                                    newpost.lichsugiaodichs.soTien;
+                                newpost.hoadonbaidang.ghiChu =
+                                    "Gia hạn bài đăng \"${post.tieuDe}\"";
+                                newpost.hoadonbaidang.baiDangId = post.id;
+                                newpost.hoadonbaidang.goiBaiDangId =
+                                    selectedPack[index] == null
+                                        ? post.goiBaiDangId
+                                        : selectedPack[index].id;
+                                newpost.hoadonbaidang.userId = post.userId;
+                                postStore.giahan(newpost);
+                                setState(() {
+                                  selectedDatefl[index] = null;
+                                  selectedPack[index] = null;
                                 });
-                            futureValue.then((value) {
-                              //_postStore.postPost(_newpost);
-                              post.giagoi = selectedPack[index] == null
-                                  ? postStore
-                                      .packList.packs[post.goiBaiDangId - 1].phi
-                                  : selectedPack[index].phi;
-                              post.goiBaiDangId = selectedPack[index] == null
-                                  ? post.goiBaiDangId
-                                  : selectedPack[index].id;
-                              post.thoiHan =
-                                  selectedDatefl[index].toIso8601String();
-                              newpost.post = post;
-                              newpost.lichsugiaodichs = new lichsugiaodich();
-                              newpost.lichsugiaodichs.userId = post.userId;
-                              newpost.lichsugiaodichs.ghiChu =
-                                  "${post.tieuDe} gia hạn";
-                              newpost.lichsugiaodichs.thoiDiem =
-                                  DateTime.now().toIso8601String();
-                              newpost.lichsugiaodichs.soTien =
-                                  selectedPack[index] == null
-                                      ? songay[index] * post.giagoi
-                                      : songay[index] * selectedPack[index].phi;
-                              newpost.hoadonbaidang = new Hoadonbaidang();
-                              newpost.hoadonbaidang.thoiDiem =
-                                  newpost.lichsugiaodichs.thoiDiem;
-                              newpost.hoadonbaidang.giaGoi =
-                                  selectedPack[index] == null
-                                      ? post.giagoi
-                                      : selectedPack[index].phi;
-                              newpost.hoadonbaidang.soNgayMua = songay[index];
-                              newpost.hoadonbaidang.tongTien =
-                                  newpost.lichsugiaodichs.soTien;
-                              newpost.hoadonbaidang.ghiChu =
-                                  "Gia hạn bài đăng \"${post.tieuDe}\"";
-                              newpost.hoadonbaidang.baiDangId = post.id;
-                              newpost.hoadonbaidang.goiBaiDangId =
-                                  selectedPack[index] == null
-                                      ? post.goiBaiDangId
-                                      : selectedPack[index].id;
-                              newpost.hoadonbaidang.userId = post.userId;
-                              postStore.giahan(newpost);
-                              setState(() {
-                                selectedDatefl[index] = null;
-                                selectedPack[index] = null;
-                              });
+                              }
                             });
                           }
                         },
@@ -927,16 +901,16 @@ class _MyPostScreenState extends State<MyPostScreen> {
     return Observer(
       builder: (context) {
         if (postStore.errorStore.errorMessage.isNotEmpty) {
-          return showErrorMessage(postStore.errorStore.errorMessage,context);
+          return showErrorMessage(postStore.errorStore.errorMessage, context);
         }
         if (postStore.successgiahan) {
           postStore.successgiahan = false;
           userStore.getCurrentWalletUser();
-          showSuccssfullMesssage("Gia hạn thành công",context);
+          showSuccssfullMesssage("Gia hạn thành công", context);
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          showSuccssfullMesssage("Xóa bài đăng thành công",context);
+          showSuccssfullMesssage("Xóa bài đăng thành công", context);
         }
         return SizedBox.shrink();
       },
