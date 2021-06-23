@@ -994,7 +994,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
-      position: RelativeRect.fromLTRB(25.0, 0.0, 0.0, 0.0),      //position where you want to show the menu on screen
+      position: RelativeRect.fromLTRB(25.0, MediaQuery.of(context).size.height/4.6, 0.0, 0.0),      //position where you want to show the menu on screen
       // position: relRectSize,
       items: [
         PopupMenuItem<String>(

@@ -63,7 +63,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   bool _checkboxActive = true;
   String titleForm = "Tạo tài khoản mới";
   RoleManagementStore _roleManagementStore;
-
+  bool isFinishInit = true;
 
   @override
   void initState() {
@@ -89,29 +89,33 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _roleManagementStore = Provider.of<RoleManagementStore>(context);
 
-    _store.displayRoleName.clear();
-    if (this.user != null) {
+
+    if (this.user != null && isFinishInit) {
       _store.setName(this.user.name);
       _store.setSurname(this.user.surName);
       _store.setIdUser(this.user.id);
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
       _store.setIsActive(this.user.isActive);
-      print("/.//");
+      print("init");
       print(this.user.permissionsList);
-      if(this.user.permissionsList != null && !(this.user.permissionsList is RoleList)) {
+      print(this.user.permissionsList.runtimeType);
+      if(this.user.permissionsList != null && this.user.permissionsList.first["roleName"]!=null) {
         this.user.permissionsList.forEach((element) {
           _store.displayRoleName.add(element["roleName"]);
           print(_store.displayRoleName);
         });
       }
-      else if (this.user.permissionsList is RoleList){
-        this.user.permissionsList.forEach((element ) {
-          _store.displayRoleName.add((element as Role).name);
+      else {
+        this.user.permissionsList.forEach((element) {
+          _store.displayRoleName.add(element["name"]);
           print(_store.displayRoleName);
         });
       }
+      print("adter add");
+      print(_store.displayRoleName);
       _store.setUserId(this.user.userName);
+      isFinishInit=false;
     }
 
     if (!_roleManagementStore.loading) {
@@ -584,17 +588,21 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     updatedUser.userName = _userNameController.text;
     updatedUser.phoneNumber = _phoneNumberController.text;
     updatedUser.permissionsList.clear();
+    updatedUser.permissions='';
+    print('before add');
+    print(_store.displayRoleName);
 
-    print("123123123");
     for (int j = 0; j < _store.displayRoleName.length; j++) {
       for (int i = 0; i < _roleManagementStore.roleList.roles.length; i++) {
         if (_roleManagementStore.roleList.roles[i].name.compareTo(_store.displayRoleName[j])==0) {
           updatedUser.permissionsList.add(
               (_roleManagementStore.roleList.roles[i]).toMap());
           updatedUser.permissions += _roleManagementStore.roleList.roles[i].displayName +", ";
+
         }
       }
     }
+    _store.displayRoleName.clear();
     return updatedUser;
   }
 
