@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/filter_model.dart';
 import 'package:boilerplate/models/town/province.dart';
 import 'package:boilerplate/models/town/province_list.dart';
 import 'package:boilerplate/stores/post/filter_store.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
 import 'package:dio/dio.dart';
@@ -56,6 +57,9 @@ class _FilterState extends State<Filter> {
     _usernameController.text = _filterStore.filter_model.username;
     _giaMinValueController.text = priceFormatForFilter(_filterStore.filter_model.giaMin);
     _giaMaxValueController.text = priceFormatForFilter(_filterStore.filter_model.giaMax);
+    _filterStore.filter_model.giaMin = priceFormatForFilter(_filterStore.filter_model.giaMin);
+    _filterStore.filter_model.giaMax = priceFormatForFilter(_filterStore.filter_model.giaMax);
+
     _dienTichMinValueController.text = _filterStore.filter_model.dienTichMin;
     _dienTichMaxValueController.text = _filterStore.filter_model.dienTichMax;
     if (_filterStore.filter_model.tenTinh!= null && _filterStore.filter_model.tenTinh.isNotEmpty){
@@ -342,7 +346,7 @@ class _FilterState extends State<Filter> {
                             onChanged: (String newValue) {
                               _filterStore.giaDropDownValue = newValue;
                             },
-                            items: <String>['Bất kì', 'triệu', 'tỷ']
+                            items: <String>['Bất kì', 'ngàn', 'triệu', 'tỷ']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -885,7 +889,12 @@ class _FilterState extends State<Filter> {
       buttonColor: Colors.amber,
       textColor: Colors.white,
       onPressed: (){
-        Navigator.pop(context, _filterStore.validateSearchContent());
+        if (!_filterStore.isAcceptedDienTich)
+          showErrorMessage("Vui lòng kiểm tra lại diện tích", context);
+        else if (!_filterStore.isAcceptedGia)
+          showErrorMessage("Vui lòng kiểm tra lại giá tiền", context);
+        else
+          Navigator.pop(context, _filterStore.validateSearchContent());
       },
     );
   }

@@ -23,6 +23,20 @@ mixin _$FilterStore on _FilterStore, Store {
           Computed<bool>(() => super.suDungDienTichFilter,
               name: '_FilterStore.suDungDienTichFilter'))
       .value;
+  Computed<bool> _$isAcceptedGiaComputed;
+
+  @override
+  bool get isAcceptedGia =>
+      (_$isAcceptedGiaComputed ??= Computed<bool>(() => super.isAcceptedGia,
+              name: '_FilterStore.isAcceptedGia'))
+          .value;
+  Computed<bool> _$isAcceptedDienTichComputed;
+
+  @override
+  bool get isAcceptedDienTich => (_$isAcceptedDienTichComputed ??=
+          Computed<bool>(() => super.isAcceptedDienTich,
+              name: '_FilterStore.isAcceptedDienTich'))
+      .value;
   Computed<bool> _$loadingProvinceComputed;
 
   @override
@@ -453,6 +467,8 @@ communeListString: ${communeListString},
 fetchCommuneFuture: ${fetchCommuneFuture},
 suDungGiaFilter: ${suDungGiaFilter},
 suDungDienTichFilter: ${suDungDienTichFilter},
+isAcceptedGia: ${isAcceptedGia},
+isAcceptedDienTich: ${isAcceptedDienTich},
 loadingProvince: ${loadingProvince},
 loadingTown: ${loadingTown},
 loadingCommune: ${loadingCommune}

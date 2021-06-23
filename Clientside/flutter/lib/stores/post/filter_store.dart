@@ -109,21 +109,26 @@ abstract class _FilterStore with Store {
   void setTenXa(String value){
     filter_model.tenXa = value;
   }
+  @computed
+  bool get isAcceptedGia => (giaDropDownValue=="Bất kì") || (giaDropDownValue=="Bất kì" && double.parse(filter_model.giaMin) <= double.parse(filter_model.giaMax));
+  @computed
+  bool get isAcceptedDienTich => (dienTichDropDownValue=="Bất kì") || (dienTichDropDownValue=="Bất kì" && double.parse(filter_model.dienTichMin) <= double.parse(filter_model.dienTichMax));
 
   @action String calculateActualValue(String value, String option){
     if (option == "Bất kì")
       return "";
     double newValue = double.parse(value);
     if (option == "triệu"){
-      newValue = newValue * 100;
+      newValue = newValue * 1000;
     }
-    else newValue = newValue * 100000;
-    return newValue.toString().split(".")[0] + "0000";
+    else if(option == "tỷ")
+      newValue = newValue * 1000000;
+    print(newValue.toString().split(".")[0] + "000");
+    return newValue.toString().split(".")[0] + "000";
   }
 
   @action
   filter_Model validateSearchContent() {
-    print("val" + loaiBaiDangDropDownValue);
     if (filter_model == null || (loaiBaiDangDropDownValue == "Bất kì" &&
         filter_model.giaMin.isEmpty &&
         filter_model.giaMax.isEmpty &&
