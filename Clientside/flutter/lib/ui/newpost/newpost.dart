@@ -311,7 +311,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
             ? AlertDialog(
                 title: Text(
                   "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-                  style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                  style: TextStyle(fontSize: 24,),
                 ),
                 content: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1589,7 +1589,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                         return AlertDialog(
                           title: Text(
                             "Bạn không đủ số dư để thực hiện giao dịch?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                            style: TextStyle(fontSize: 24),
                           ),
                           content: Column(
                             //mainAxisAlignment: MainAxisAlignment.start,
@@ -1646,7 +1646,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     return AlertDialog(
                       title: Text(
                         "Vui lòng load lại trang cá nhân",
-                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                        style: TextStyle(fontSize: 24),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
