@@ -99,8 +99,8 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     if (!_danhMucManagementStore.loadingAll) {
       _danhMucManagementStore.getAllDanhMucs();
     }
-
-
+    _danhMucManagementStore.createDanhMuc_success = false;
+    _danhMucManagementStore.updateDanhMuc_success = false;
   }
 
   @override
@@ -176,21 +176,14 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
         Observer(
           builder : (context) {
             if (_danhMucManagementStore.updateDanhMuc_success || _danhMucManagementStore.createDanhMuc_success) {
-              Future.delayed(Duration(milliseconds: 0), () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DanhMucManagementScreen()),
-                );
-              });
+              Navigator.of(context).pop();
               if (_danhMucManagementStore.updateDanhMuc_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
-                _danhMucManagementStore.updateDanhMuc_success = false;
               }
               else if (_danhMucManagementStore.createDanhMuc_success)
               {
                 showSuccssfullMesssage("Thêm mới thành công", context);
-                _danhMucManagementStore.createDanhMuc_success = false;
               }
               return Container(width: 0, height : 0);
 
@@ -236,12 +229,12 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
             SizedBox(height:24.0),
             _buildTagField(),
             SizedBox(height: 24.0),
-            _buildActiveCheckBox(),
-            SizedBox(height: 24.0),
             // _buildDanhMucChaField(),
             _buildTypeField(),
             SizedBox(height: 24.0),
             if (!isVisible) _buildTypeTypeField(),
+            SizedBox(height: 24.0),
+            _buildActiveCheckBox(),
             SizedBox(height: 24.0),
             // _buildTypeTypeTypeField(),
             _buildSignUpButton(),
@@ -252,125 +245,48 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   }
   //#region build TextFieldWidget
   Widget _buildNameField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:80,
-            child : Text("Tên",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.text,
-              controller : _nameController,
-              onChanged : (value) {
-                _danhMucManagementStore.setNameDanhMuc(value);
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-              ),
-              decoration : InputDecoration(
-                hintText : "Tên danh mục",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _nameController.clear();
-                    _danhMucManagementStore.setNameDanhMuc("");
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return TextFieldWidget(
+      inputFontsize: 22,
+      isDarkmode: _themeStore.darkMode,
+      labelText: 'Tên',
+      suffixIcon: Icon(Icons.clear),
+      hint: ('Nhập tên danh mục'),
+      // hintColor: Colors.white,
+      icon: Icons.person,
+      inputType: TextInputType.text,
+      iconColor: Colors.amber,
+      textController: _nameController,
+      inputAction: TextInputAction.next,
+      autoFocus: false,
+      errorMessage: (value) {
+        _danhMucManagementStore.setNameDanhMuc(value);
+        if (value.isEmpty) {
+          return 'Vui lòng nhập tên danh mục';
+        }
+      },
     );
   }
 
   Widget _buildTagField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:80,
-            child : Text("Nhãn",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.text,
-              controller : _tagController,
-              onChanged : (value) {
-                _danhMucManagementStore.setTagDanhMuc(value);
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "Gắn nhãn",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _tagController.clear();
-                    _danhMucManagementStore.setTagDanhMuc("");
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return TextFieldWidget(
+      inputFontsize: 22,
+      isDarkmode: _themeStore.darkMode,
+      labelText: 'Nhãn',
+      suffixIcon: Icon(Icons.clear),
+      hint: ('Gắn nhãn cho danh mục'),
+      // hintColor: Colors.white,
+      icon: Icons.person,
+      inputType: TextInputType.text,
+      iconColor: Colors.amber,
+      textController: _tagController,
+      inputAction: TextInputAction.next,
+      autoFocus: false,
+      errorMessage: (value) {
+        _danhMucManagementStore.setTagDanhMuc(value);
+        if (value.isEmpty) {
+          return 'Vui lòng nhập nhãn cho danh mục';
+        }
+      },
     );
   }
 
@@ -382,8 +298,8 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
           value:_checkboxTrangThai,
           onChanged : (value) {
             setState(() {
-              _danhMucManagementStore.setTrangThaiDanhMuc(!_checkboxTrangThai);
               _checkboxTrangThai = !_checkboxTrangThai;
+              _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai);
             });
           },
         ),

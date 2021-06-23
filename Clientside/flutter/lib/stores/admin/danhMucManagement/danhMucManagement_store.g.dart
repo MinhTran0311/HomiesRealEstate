@@ -528,6 +528,17 @@ mixin _$DanhMucManagementStore on _DanhMucManagementStore, Store {
   }
 
   @override
+  DanhMuc findDanhMucCha(int value) {
+    final _$actionInfo = _$_DanhMucManagementStoreActionController.startAction(
+        name: '_DanhMucManagementStore.findDanhMucCha');
+    try {
+      return super.findDanhMucCha(value);
+    } finally {
+      _$_DanhMucManagementStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchDanhMucsFuture: ${fetchDanhMucsFuture},

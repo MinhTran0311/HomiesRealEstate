@@ -392,8 +392,10 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   //Update user
-  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async {
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, List<dynamic> roleName) async {
     try {
+      // List<String> roleNames = new List<String>();
+      // roleName.forEach((element) {roleNames.add(element["roleName"]);});
       final res = await _dioClient.post(
         Endpoints.createOrUpdateUser,
         data: {
@@ -406,9 +408,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
             "phoneNumber": phoneNumber,
             "isActive": isActive,
           },
-          "assignedRoleNames": [
-            roleName
-          ],
+          "assignedRoleNames": roleName,
         },
         options: Options(
           headers: {
@@ -424,8 +424,10 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   //Create user
-  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async {
+  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, List<dynamic> roleName, String password) async {
     try {
+      // List<String> roleNames = new List<String>();
+      // roleName.forEach((element) {roleNames.add(element["roleName"]);});
       final res = await _dioClient.post(
         Endpoints.createOrUpdateUser,
         data: {
@@ -436,10 +438,9 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
             "emailAddress": email,
             "phoneNumber": phoneNumber,
             "isActive": isActive,
+            "password": password,
           },
-          "assignedRoleNames": [
-            roleName
-          ],
+          "assignedRoleNames": roleName,
         },
         options: Options(
           headers: {

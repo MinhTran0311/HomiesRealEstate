@@ -41,13 +41,11 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   ThuocTinhManagementStore _thuocTinhManagementStore;
 
   bool _checkboxTrangThai = true;
-  bool _radioBtnKDL = true;
   String titleForm = "Tạo thuộc tính mới";
 
   @override
   void initState() {
     super.initState();
-
     if(this.thuocTinh != null) {
       _nameController.text = this.thuocTinh.tenThuocTinh;
       _checkboxTrangThai = this.thuocTinh.trangThai == "On" ? true : false;
@@ -61,10 +59,13 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _thuocTinhManagementStore = Provider.of<ThuocTinhManagementStore>(context);
+    _thuocTinhManagementStore.getKieuDuLieu("String");
     if(this.thuocTinh != null) {
       _thuocTinhManagementStore.KieuDuLieu = this.thuocTinh.kieuDuLieu;
       _thuocTinhManagementStore.getKieuDuLieu(this.thuocTinh.kieuDuLieu);
     }
+    _thuocTinhManagementStore.createThuocTinh_success = false;
+    _thuocTinhManagementStore.updateThuocTinh_success = false;
   }
 
   @override
@@ -105,18 +106,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
-        Container(
-          // decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //         begin: Alignment.topCenter,
-          //         end: Alignment.bottomCenter,
-          //         colors: [
-          //           Colors.amber,
-          //           Colors.orange[700],
-          //         ]
-          //     )
-          // ),
-        ),
         MediaQuery.of(context).orientation == Orientation.landscape
             ? Row(
           children: <Widget>[
@@ -133,22 +122,15 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         Observer(
           builder: (context) {
             if (_thuocTinhManagementStore.updateThuocTinh_success || _thuocTinhManagementStore.createThuocTinh_success) {
-              Future.delayed(Duration(milliseconds: 0), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ThuocTinhManagementScreen()),
-                );
-              });
+              Navigator.of(context).pop();
               if(_thuocTinhManagementStore.updateThuocTinh_success)
-                {
-                  showSuccssfullMesssage("Cập nhật thành công", context);
-                  _thuocTinhManagementStore.updateThuocTinh_success = false;
-                }
+              {
+                showSuccssfullMesssage("Cập nhật thành công", context);
+              }
               else if(_thuocTinhManagementStore.createThuocTinh_success)
-                {
-                  showSuccssfullMesssage("Thêm mới thành công", context);
-                  _thuocTinhManagementStore.createThuocTinh_success = false;
-                }
+              {
+                showSuccssfullMesssage("Thêm mới thành công", context);
+              }
               return Container(width: 0, height: 0);
 
             } else {
@@ -208,64 +190,25 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
   }
 //#region build TextFieldWidget
   Widget _buildNameField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: 150,
-            child: Text("Tên",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-              textAlign: TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus: false,
-              keyboardType: TextInputType.text,
-              controller: _nameController,
-              onChanged: (value){
-                _thuocTinhManagementStore.setNameThuocTinh(value);
-              },
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 18,
-                // color: Colors.black,
-              ),
-              decoration: InputDecoration(
-                hintText: "Tên thuộc tính",
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    _nameController.clear();
-                    _thuocTinhManagementStore.setNameThuocTinh("");
-                  },
-                  icon: Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize: 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.amber),
-                ),
-                border:  UnderlineInputBorder(
-                    borderSide:  BorderSide(color: Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return TextFieldWidget(
+      inputFontsize: 22,
+      isDarkmode: _themeStore.darkMode,
+      labelText: 'Tên',
+      suffixIcon: Icon(Icons.clear),
+      hint: ('Nhập tên thuộc tính'),
+      // hintColor: Colors.white,
+      icon: Icons.person,
+      inputType: TextInputType.text,
+      iconColor: Colors.amber,
+      textController: _nameController,
+      inputAction: TextInputAction.next,
+      autoFocus: false,
+      errorMessage: (value) {
+        _thuocTinhManagementStore.setNameThuocTinh(value);
+        if (value.isEmpty) {
+          return 'Vui lòng nhập tên thuộc tính';
+        }
+      },
     );
   }
 
@@ -343,8 +286,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
           value: _checkboxTrangThai,
           onChanged: (value) {
             setState(() {
-              _thuocTinhManagementStore.setTrangThaiThuocTinh(!_checkboxTrangThai);
               _checkboxTrangThai = !_checkboxTrangThai;
+              _thuocTinhManagementStore.setTrangThaiThuocTinh(_checkboxTrangThai);
             });
           },
         ),
@@ -368,10 +311,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       onPressed: () async {
         if(this.thuocTinh != null) await {
           _thuocTinhManagementStore.setNameThuocTinh(_nameController.text),
-          //  else {
-          //    _store.setPassword(this.user.),
-          //    _store.setConfirmPassword(_confirmPasswordController.text),
-          // },
           _thuocTinhManagementStore.setThuocTinhId(this.thuocTinh.id),
           _thuocTinhManagementStore.setTrangThaiThuocTinh(_checkboxTrangThai),
           _thuocTinhManagementStore.setKieuDuLieu(_thuocTinhManagementStore.KieuDuLieuShow),
@@ -387,6 +326,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         }
         else {
           if(_thuocTinhManagementStore.canSubmit) {
+            await _thuocTinhManagementStore.setTrangThaiThuocTinh(_checkboxTrangThai);
             DeviceUtils.hideKeyboard(context);
             _thuocTinhManagementStore.CreateThuocTinh();
           }
@@ -399,6 +339,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       },
     );
   }
+
 //endregion
   // dispose:-------------------------------------------------------------------
   @override

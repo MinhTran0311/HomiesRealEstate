@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/widgets/rounded_button_widget.dart';
+import 'package:charts_flutter/flutter.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +61,34 @@ Future<dynamic> showSimpleModalDialog(context, String message) {
                 Navigator.of(context).pop(false);
             },
           ),
+        ]);
+      }
+    );
+}
+
+Future<dynamic> showSimpleModalDialogWarning(context, String message) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Cảnh báo",
+          ),
+          content: Text(message),
+          actions:<Widget>[
+          TextButton(
+            child: Text('Xác nhận'),
+            onPressed: () async {
+            Navigator.of(context).pop(true);
+            },
+          ),
+          // TextButton(
+          //   child: Text('Hủy'),
+          //   onPressed: () {
+          //       Navigator.of(context).pop(false);
+          //   },
+          // ),
         ]);
       }
     );

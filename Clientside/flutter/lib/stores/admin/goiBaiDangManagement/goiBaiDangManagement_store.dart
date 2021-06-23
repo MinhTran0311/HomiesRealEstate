@@ -87,10 +87,6 @@ abstract class _GoiBaiDangManagementStore with Store {
           tenGoi != null &&
           phi.toString().isNotEmpty &&
           phi != null &&
-          doUuTien.toString().isNotEmpty &&
-          doUuTien != null &&
-          thoiGianToiThieu.toString().isNotEmpty &&
-          thoiGianToiThieu != null && moTa.isNotEmpty &&
           moTa != null;
 
   @observable
@@ -231,20 +227,6 @@ abstract class _GoiBaiDangManagementStore with Store {
         updateGoiBaiDang_success = true;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null) {
-      //
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);

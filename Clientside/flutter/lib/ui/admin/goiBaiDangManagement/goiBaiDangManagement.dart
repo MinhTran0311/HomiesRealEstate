@@ -82,7 +82,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     await _goiBaiDangManagementStore.IsActiveGoiBaiDang(goiBaiDang);
     Navigator.of(context).pop();
     setState(() {});
-    // _showSuccssfullMesssage(_goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công");
+    showSuccssfullMesssage(_goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công", context);
   }
 
   @override
@@ -517,10 +517,14 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                     ),
                   ),
                   onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
-                    );
+                    ).then((_) => {
+                    setState(() {
+                    })
+                    });
                   },
                 ),
               ],

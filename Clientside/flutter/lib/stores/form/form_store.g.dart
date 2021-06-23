@@ -229,13 +229,13 @@ mixin _$FormStore on _FormStore, Store {
   final _$roleNameAtom = Atom(name: '_FormStore.roleName');
 
   @override
-  String get roleName {
+  List<dynamic> get roleName {
     _$roleNameAtom.reportRead();
     return super.roleName;
   }
 
   @override
-  set roleName(String value) {
+  set roleName(List<dynamic> value) {
     _$roleNameAtom.reportWrite(value, super.roleName, () {
       super.roleName = value;
     });
@@ -692,11 +692,11 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
-  void setRoleName(String value) {
+  void setRolesList(List<dynamic> value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
-        name: '_FormStore.setRoleName');
+        name: '_FormStore.setRolesList');
     try {
-      return super.setRoleName(value);
+      return super.setRolesList(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }

@@ -21,6 +21,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/token/authToken_store.dart';
+import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
+
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,6 +60,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   bool _checkboxSendEmailActive = true;
   bool _checkboxActive = true;
   String titleForm = "Tạo tài khoản mới";
+  RoleManagementStore _roleManagementStore;
+
 
   @override
   void initState() {
@@ -81,6 +85,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     //_store = Provider.of<FormStore>(context);
     _authTokenStore = Provider.of<AuthTokenStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
+    _roleManagementStore = Provider.of<RoleManagementStore>(context);
 
     if (this.user != null) {
       _store.setName(this.user.name);
@@ -89,8 +94,13 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
       _store.setIsActive(this.user.isActive);
-      _store.setRoleName(this.user.roleName);
+      _store.setRolesList(this.user.permissionsList);
+      _store.roleName.forEach((element) {_store.displayRoleName.add(element["roleName"]);});
       _store.setUserId(this.user.userName);
+    }
+
+    if (!_roleManagementStore.loading) {
+      _roleManagementStore.getRoles();
     }
   }
 
@@ -227,6 +237,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
             _buildPasswordField(),
             SizedBox(height: 24.0),
             _buildConfirmPasswordField(),
+            SizedBox(height: 24.0),
+            _buildChoosenRoles(),
             SizedBox(height: 24.0),
             _buildActiveCheckBox(),
             SizedBox(height: 24.0),
@@ -396,22 +408,17 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       iconColor: Colors.amber,
       textController: _passwordController,
       focusNode: _passwordFocusNode,
-      errorText: _store.formErrorStore.password,
-      onChanged: (value) {
-
-      },
       errorMessage: (value){
         if (this.user == null)
         {
           _store.setPassword(value);
-          _store.formErrorStore.password;
+          return _store.formErrorStore.password;
         }
-        else {
-          if(value != null || value.isNotEmpty) {
-            _store.formErrorStore.password;
+        else if(value != null) {
+          _store.setPassword(value);
+          return _store.formErrorStore.password;
           }
-        }
-        return null;
+        else return null;
       },
     );
   }
@@ -435,10 +442,11 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
           _store.setConfirmPassword(value);
           return _store.formErrorStore.confirmPassword;
         }
-        else {
-
+        else if(value != null) {
+          _store.setConfirmPassword(value);
+          return _store.formErrorStore.confirmPassword;
         }
-        return null;
+        else return null;
       },
     );
   }
@@ -470,6 +478,55 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       },
     );
   }
+
+  Widget _buildChoosenRoles() {
+    return Observer(
+      builder: (context) {
+        if (_roleManagementStore.roleList != null) {
+          return Container(
+            height: 230,
+            child: ListView.builder(
+                itemCount: _roleManagementStore.roleList.roles.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: Container(
+                      padding: new EdgeInsets.all(10.0),
+                      child: Column(
+                        children: <Widget>[
+                          CheckboxListTile(
+                              activeColor: Colors.amber,
+                              dense: true,
+                              //font change
+                              title: new Text(
+                                _roleManagementStore.roleList.roles[index].name,
+                                style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 0.5),
+                              ),
+                              value: _store.displayRoleName.contains(_roleManagementStore.roleList.roles[index].name),
+                              onChanged: (bool val) {
+                                setState(() {
+                                  if (val && !_store.displayRoleName.contains(_roleManagementStore.roleList.roles[index].name))
+                                    _store.displayRoleName.add(_roleManagementStore.roleList.roles[index].name);
+                                  else if (!val && _store.displayRoleName.contains(_roleManagementStore.roleList.roles[index].name))
+                                    _store.displayRoleName.remove(_roleManagementStore.roleList.roles[index].name);
+                                });
+                              })
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          );
+        }
+        else return Container(
+          height: 0,
+        );
+      },
+    );
+  }
+
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
@@ -477,23 +534,11 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       textColor: Colors.white,
       onPressed: () async {
          if(this.user != null) await {
-          // _store.setSurname(_surnameController.text),
-          // _store.setName(_nameController.text),
-          //  _store.setUserId(_userNameController.text),
-          //  _store.setUserEmail(_userEmailController.text),
-          //  _store.setRoleName(this.user.roleName),
            if(_passwordController.text != null && _passwordController.text.isNotEmpty)
              {
                _store.setPassword(_passwordController.text),
                _store.setConfirmPassword(_confirmPasswordController.text),
              },
-          //  else {
-          //    _store.setPassword(this.user.),
-          //    _store.setConfirmPassword(_confirmPasswordController.text),
-          // },
-          //  _store.setIdUser(this.user.id),
-          //  _store.setPhoneNumber(_phoneNumberController.text),
-          //  _store.setIsActive(_checkbox),
          };
          if(this.user != null) {
            if(_store.canUpdate) {
