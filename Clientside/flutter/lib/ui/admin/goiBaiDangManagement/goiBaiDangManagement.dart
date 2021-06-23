@@ -103,10 +103,16 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
               size: 28,
             ),
             onPressed: () {
-              Navigator.push(
+              var future = Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen()),
               );
+              future.then((value) {
+                if (value != null)
+                  setState(() {
+                    _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs.add(value);
+                  });
+              });
             },
           ),
         ],
@@ -516,46 +522,50 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.push(
+                    var future = Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
-                    ).then((_) => {
-                    setState(() {
-                    })
+                    );
+                    future.then((value) {
+                      if (value != null) {
+                        setState(() {
+                          _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position] = value;
+                        });
+                      }
                     });
                   },
                 ),
               ],
             ),
-            SizedBox(
-              height: 24,
-            ),
-            Row(
-              children: [
-                Icon(
-                  Icons.remove_red_eye,
-                  color: Colors.grey,
-                  size: 28,
-                ),
-                SizedBox(width: 20,),
-                GestureDetector(
-                  child: Text(
-                    "Xem chi tiết",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
-                    // );
-                  },
-                ),
-              ],
-            ),
+            // SizedBox(
+            //   height: 24,
+            // ),
+            // Row(
+            //   children: [
+            //     Icon(
+            //       Icons.remove_red_eye,
+            //       color: Colors.grey,
+            //       size: 28,
+            //     ),
+            //     SizedBox(width: 20,),
+            //     GestureDetector(
+            //       child: Text(
+            //         "Xem chi tiết",
+            //         style: TextStyle(
+            //           fontSize: 24,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       onTap: () {
+            //         Navigator.of(context).pop();
+            //         // Navigator.push(
+            //         //   context,
+            //         //   MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen(goiBaiDang: goiBaiDang,)),
+            //         // );
+            //       },
+            //     ),
+            //   ],
+            // ),
             SizedBox(
               height: 24,
             ),

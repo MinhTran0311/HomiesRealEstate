@@ -122,7 +122,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         Observer(
           builder: (context) {
             if (_thuocTinhManagementStore.updateThuocTinh_success || _thuocTinhManagementStore.createThuocTinh_success) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(setDataThuocTinh());
               if(_thuocTinhManagementStore.updateThuocTinh_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
@@ -338,6 +338,24 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
         //});
       },
     );
+  }
+
+  ThuocTinhManagement setDataThuocTinh() {
+    ThuocTinhManagement thuocTinhSet = new ThuocTinhManagement();
+    if (this.thuocTinh != null) {
+      thuocTinhSet = this.thuocTinh;
+    }
+    String kieuDL = _thuocTinhManagementStore.KieuDuLieuShow;
+    thuocTinhSet.trangThai = _checkboxTrangThai ? "On" : "Off";
+    if (kieuDL.compareTo("Số nguyên")==0)
+      thuocTinhSet.kieuDuLieu="int";
+    else if (kieuDL.compareTo("Số thực")==0)
+      thuocTinhSet.kieuDuLieu="double";
+    else
+      thuocTinhSet.kieuDuLieu="String";
+
+    thuocTinhSet.tenThuocTinh = _nameController.text;
+    return thuocTinhSet;
   }
 
 //endregion

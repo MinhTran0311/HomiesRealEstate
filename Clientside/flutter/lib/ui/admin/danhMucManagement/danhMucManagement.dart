@@ -685,5 +685,4 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
     // _refreshController.dispose();
     super.dispose();
   }
-
 }
