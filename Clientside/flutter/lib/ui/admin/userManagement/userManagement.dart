@@ -47,28 +47,17 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   TextEditingController _searchController = new TextEditingController();
 
-  var _selectedValue;
-  var _selectedValueAfterTouchBtn;
-  var _roles = List<DropdownMenuItem>();
-  var _listUserFilterFromRole = List<User>();
   User userChoosen;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   final ScrollController _scrollController =
   ScrollController(keepScrollOffset: true);
   bool isRefreshing = false;
+  int positionUser = -1;
   // ↓ hold tap position, set during onTapDown, using getPosition() method
   Offset tapXY;
   // ↓ hold screen size, using first line in build() method
   RenderBox overlay;
-  // bool selectedRole = false;
-
-  // bool visibilityFilter = false;
-  // bool visibilityObs = false;
-
-  // _onClickItemUsers(var userSelected) {
-  //
-  // }
 
   @override
   void initState() {
@@ -85,8 +74,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _userManagementStore = Provider.of<UserManagementStore>(context);
 
-    // initializing stores
-    // check to see if already called api
     if (!_userManagementStore.loading) {
       _userManagementStore.isIntialLoading = true;
       _userManagementStore.setStringFilter('');
@@ -184,6 +171,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       children: <Widget>[
         _handleErrorMessage(),
         _buildMainContent(),
+        _buildActive(),
       ],
     );
   }
@@ -191,7 +179,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        print(_userManagementStore.isIntialLoading);
         return (_userManagementStore.loading || _userManagementStore.loadingAvatar)
             ? CustomProgressIndicatorWidget()
             : _buildUsersList();
@@ -498,11 +485,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                         children:[
                           Container(
                             child: Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
-                              // mainAxisSize: MainAxisSize.max,
-                              // crossAxisAlignment: CrossAxisAlignment.stretch,
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
@@ -1058,16 +1041,26 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       if (itemSelected == null) return;
 
       if(itemSelected == "1"){
-        Navigator.push(
+        Navigator.of(context).pop();
+        var future = Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: this.userChoosen)),
         );
+        future.then((user) {
+          if (user!=null)
+            {
+              setState(() {
+                _userManagementStore.userList.users[Position] = user;
+              });
+            }
+        });
       }else{
         if (this.userChoosen.permissions.contains("Admin")) showSimpleModalDialogWarning(context, "Bạn không thể ngừng kích hoạt người dùng này!");
         else {
           var future =  showSimpleModalDialog(context, userChoosen.isActive ? "Bạn có chắc chắn muốn ngừng kích hoạt người dùng này ?" : "Bạn có chắc chắn muốn kích hoạt người dùng này ?" );
           future.then((value) {
-            if (value) _isActiveDanhMuc(userChoosen, Position);
+            if (value)
+              _isActiveDanhMuc(userChoosen, Position);
           });
           return;
       }
@@ -1108,23 +1101,29 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     _openUrl ( 'https://admin.homies.exscanner.edu.vn/app/admin/users');
   }
 
+  Widget _buildActive() {
+    return Observer(
+      builder: (context) {
+        if (_formStore.isActive_success && positionUser != -1) {
+          if (userChoosen.isActive)
+          {
+            _userManagementStore.userList.users[positionUser].isActive = false;
+          }
+          else {
+            _userManagementStore.userList.users[positionUser].isActive = true;
+          }
+          Navigator.of(context).pop();
+
+          // setState(() {});
+          showSuccssfullMesssage(!_userManagementStore.userList.users[positionUser].isActive ? "Ngừng kích hoạt thành công": "Kích hoạt thành công",context);
+        }
+        return Container(height: 0, width: 0,);
+      });
+  }
+
   _isActiveDanhMuc(User user, int position) async {
     await _formStore.IsActiveUser(user);
-    if (_formStore.isActive_success) {
-      if(user.isActive)
-      {
-        _userManagementStore.userList.users[position].isActive = false;
-
-      }
-      else {
-        _userManagementStore.userList.users[position].isActive = true;
-      }
-      // Navigator.of(context).pop();
-      setState(() {});
-      showSuccssfullMesssage(!_userManagementStore.userList.users[position].isActive ? "Ngừng kích hoạt thành công": "Kích hoạt thành công",context);
-      await Future.delayed(Duration(milliseconds: 3500));
-      _formStore.isActive_success = false;
-    }
+    positionUser = position;
   }
 
   // dispose:-------------------------------------------------------------------
@@ -1132,8 +1131,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _searchController.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+    // _scrollController.dispose();
+    // _refreshController.dispose();
     super.dispose();
   }
 }

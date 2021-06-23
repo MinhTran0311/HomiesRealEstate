@@ -645,8 +645,8 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _searchController.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+    // _scrollController.dispose();
+    // _refreshController.dispose();
     super.dispose();
   }
 

@@ -72,12 +72,10 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
     {
       goiBaiDang.trangThai = "Off";
       _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai = "Off";
-
     }
     else {
       goiBaiDang.trangThai = "On";
       _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs[position].trangThai = "On";
-
     }
     await _goiBaiDangManagementStore.IsActiveGoiBaiDang(goiBaiDang);
     Navigator.of(context).pop();
@@ -675,8 +673,8 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _searchController.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+    // _scrollController.dispose();
+    // _refreshController.dispose();
     super.dispose();
   }
 
