@@ -97,23 +97,19 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
       _store.setIsActive(this.user.isActive);
-      print("init");
-      print(this.user.permissionsList);
-      print(this.user.permissionsList.runtimeType);
-      if(this.user.permissionsList != null && this.user.permissionsList.first["roleName"]!=null) {
+
+      if (this.user.permissionsList != null && this.user.permissionsList.first["roleName"]!=null) {
         this.user.permissionsList.forEach((element) {
           _store.displayRoleName.add(element["roleName"]);
-          print(_store.displayRoleName);
         });
       }
-      else {
+      else if (this.user.permissionsList != null && this.user.permissionsList.first["name"]!=null){
         this.user.permissionsList.forEach((element) {
           _store.displayRoleName.add(element["name"]);
-          print(_store.displayRoleName);
         });
       }
-      print("adter add");
-      print(_store.displayRoleName);
+      else
+        _store.displayRoleName.clear();
       _store.setUserId(this.user.userName);
       isFinishInit=false;
     }
@@ -589,8 +585,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     updatedUser.phoneNumber = _phoneNumberController.text;
     updatedUser.permissionsList.clear();
     updatedUser.permissions='';
-    print('before add');
-    print(_store.displayRoleName);
 
     for (int j = 0; j < _store.displayRoleName.length; j++) {
       for (int i = 0; i < _roleManagementStore.roleList.roles.length; i++) {
