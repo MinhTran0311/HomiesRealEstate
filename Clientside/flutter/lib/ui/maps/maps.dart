@@ -668,7 +668,6 @@ class _MapsScreenState extends State<MapsScreen> {
                   onTap: _handleTap,
                   onCameraMove: _onCameraMove,
                 ),
-                // _addMarkerButtonProcessed(),
                 Padding(
                   padding:
                   EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0, top: 96),
@@ -689,7 +688,8 @@ class _MapsScreenState extends State<MapsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 96, left: 12),
                     child: containerLatLngInfor(),
-                  ),
+                  )
+                else Container(height: 0, width: 0,),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Container(

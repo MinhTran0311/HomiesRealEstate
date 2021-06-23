@@ -416,7 +416,7 @@ class Repository {
   }
 
   //Update user
-  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async
+  Future<dynamic> updateUser(int id, String userName, String surname, String name, String email, String phoneNumber, bool isActive, List<dynamic> roleName) async
   {
     return await _userApi.updateUser(id, userName, surname, name, email, phoneNumber, isActive, roleName).then((res) {
       return res;
@@ -424,9 +424,9 @@ class Repository {
   }
 
   //Create user
-  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, String roleName) async
+  Future<dynamic> createUser(String userName, String surname, String name, String email, String phoneNumber, bool isActive, List<dynamic> roleName, String password) async
   {
-    return await _userApi.createUser(userName, surname, name, email, phoneNumber, isActive, roleName).then((res) {
+    return await _userApi.createUser(userName, surname, name, email, phoneNumber, isActive, roleName, password).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

@@ -26,13 +26,17 @@ class CreateOrEditGoiBaiDangScreen extends StatefulWidget {
   final GoiBaiDang goiBaiDang;
 
   @override
-  CreateOrEditGoiBaiDangScreen({ @required this.goiBaiDang });
-  _CreateOrEditGoiBaiDangScreenScreenState createState() => _CreateOrEditGoiBaiDangScreenScreenState(goiBaiDang: goiBaiDang);
+  CreateOrEditGoiBaiDangScreen({@required this.goiBaiDang});
+
+  _CreateOrEditGoiBaiDangScreenScreenState createState() =>
+      _CreateOrEditGoiBaiDangScreenScreenState(goiBaiDang: goiBaiDang);
 }
 
-class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiDangScreen> {
+class _CreateOrEditGoiBaiDangScreenScreenState
+    extends State<CreateOrEditGoiBaiDangScreen> {
   final GoiBaiDang goiBaiDang;
-  _CreateOrEditGoiBaiDangScreenScreenState({ @required this.goiBaiDang });
+
+  _CreateOrEditGoiBaiDangScreenScreenState({@required this.goiBaiDang});
 
   //text controllers:-----------------------------------------------------------
   TextEditingController _nameController = TextEditingController();
@@ -56,7 +60,8 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
       _nameController.text = this.goiBaiDang.tenGoi;
       _phiController.text = this.goiBaiDang.phi.toString();
       _doUuTienController.text = this.goiBaiDang.doUuTien.toString();
-      _thoiGianToiThieuController.text = this.goiBaiDang.thoiGianToiThieu.toString();
+      _thoiGianToiThieuController.text =
+          this.goiBaiDang.thoiGianToiThieu.toString();
       _moTaController.text = this.goiBaiDang.moTa;
       _checkboxTrangThai = this.goiBaiDang.trangThai == "On" ? true : false;
       titleForm = "Chỉnh sửa gói";
@@ -68,20 +73,27 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
     super.didChangeDependencies();
     //_store = Provider.of<FormStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
-    _goiBaiDangManagementStore = Provider.of<GoiBaiDangManagementStore>(context);
+    _goiBaiDangManagementStore =
+        Provider.of<GoiBaiDangManagementStore>(context);
+    _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
+    _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
-      appBar : AppBar(
-        leading : IconButton(
-          icon : Icon(Icons.arrow_back_ios_outlined,),
-          onPressed : () {
-            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_outlined,
+          ),
+          onPressed: () {
+            var future = showSimpleModalDialog(
+                context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
             future.then((value) {
-              if (value)  Navigator.of(context).pop();
+              if (value) Navigator.of(context).pop();
             });
             return;
           },
@@ -89,15 +101,15 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
         title: Text(
           this.titleForm,
         ),
-        automaticallyImplyLeading : false,
+        automaticallyImplyLeading: false,
       ),
-
       body: WillPopScope(
         child: _buildBody(),
         onWillPop: () {
-          var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+          var future = showSimpleModalDialog(
+              context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
           future.then((value) {
-            if (value)  Navigator.of(context).pop();
+            if (value) Navigator.of(context).pop();
           });
           return;
         },
@@ -108,64 +120,46 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(
-      children : <Widget>[
-        Container(
-          // decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //         begin: Alignment.topCenter,
-          //         end: Alignment.bottomCenter,
-          //         colors: [
-          //           Colors.amber,
-          //           Colors.orange[700],
-          //         ]
-          //     )
-          // ),
-        ),
+      children: <Widget>[
         MediaQuery.of(context).orientation == Orientation.landscape
             ? Row(
-          children : <Widget>[
-            Expanded(
-              flex:1,
-              child : _buildLeftSide(),
-            ),
-            Expanded(
-              flex:1,
-              child : _buildRightSide(),
-            ),
-          ],
-        ) : Center(child : _buildRightSide()),
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: _buildLeftSide(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildRightSide(),
+                  ),
+                ],
+              )
+            : Center(child: _buildRightSide()),
         Observer(
-          builder : (context) {
+          builder: (context) {
             if (_goiBaiDangManagementStore.updateGoiBaiDang_success || _goiBaiDangManagementStore.createGoiBaiDang_success) {
-              Future.delayed(Duration(milliseconds: 0), () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GoiBaiDangManagementScreen()),
-                );
-              });
-              if (_goiBaiDangManagementStore.updateGoiBaiDang_success)
+              Navigator.of(context).pop(context);
+              if(_goiBaiDangManagementStore.updateGoiBaiDang_success)
               {
-                showSuccssfullMesssage("Cập nhật thành công",context);
-                _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
+                showSuccssfullMesssage("Cập nhật thành công", context);
               }
-              else if (_goiBaiDangManagementStore.createGoiBaiDang_success)
+              else if(_goiBaiDangManagementStore.createGoiBaiDang_success)
               {
-                showSuccssfullMesssage("Thêm mới thành công",context);
-                _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+                showSuccssfullMesssage("Thêm mới thành công", context);
               }
-              return Container(width: 0, height : 0);
-
-            }
-            else {
-              return showErrorMessage(_goiBaiDangManagementStore.errorStore.errorMessage,context);
+              return Container(width: 0, height: 0);
+            } else {
+              return showErrorMessage(
+                  _goiBaiDangManagementStore.errorStore.errorMessage, context);
             }
           },
         ),
         Observer(
           builder: (context) {
             return Visibility(
-              visible: _goiBaiDangManagementStore.loadingUpdateGoiBaiDang || _goiBaiDangManagementStore.loadingCreateGoiBaiDang,
-              child : CustomProgressIndicatorWidget(),
+              visible: _goiBaiDangManagementStore.loadingUpdateGoiBaiDang ||
+                  _goiBaiDangManagementStore.loadingCreateGoiBaiDang,
+              child: CustomProgressIndicatorWidget(),
             );
           },
         )
@@ -185,16 +179,16 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
   Widget _buildRightSide() {
     return SingleChildScrollView(
       child: Padding(
-        padding : const EdgeInsets.symmetric(horizontal : 24.0, vertical : 24.0),
-        child : Column(
-          mainAxisSize : MainAxisSize.max,
-          crossAxisAlignment : CrossAxisAlignment.stretch,
-          mainAxisAlignment : MainAxisAlignment.center,
-          children : <Widget>[
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             //SizedBox(height: 24.0),
             _buildNameField(),
-            SizedBox(height:24.0),
+            SizedBox(height: 24.0),
             _buildPhiField(),
             SizedBox(height: 24.0),
             _buildDoUuTienField(),
@@ -217,336 +211,157 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
       ),
     );
   }
+
   //#region build TextFieldWidget
   Widget _buildNameField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:80,
-            child : Text("Tên",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.text,
-              controller : _nameController,
-              onChanged : (value) {
-                _goiBaiDangManagementStore.setNameGoiBaiDang(value);
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "Tên danh mục",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _nameController.clear();
-                    _goiBaiDangManagementStore.setNameGoiBaiDang("");
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Tên',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập tên gói bài đăng'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.text,
+          iconColor: Colors.amber,
+          textController: _nameController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorMessage: (value) {
+            _goiBaiDangManagementStore.setNameGoiBaiDang(value);
+            if (value.isEmpty) {
+              return 'Vui lòng nhập tên gói bài đăng';
+            }
+          },
+        );
+      },
     );
   }
 
   Widget _buildPhiField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:200,
-            child : Text("Phí",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.number,
-              controller : _phiController,
-              onChanged : (value) {
-                _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(value));
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "VNĐ",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _phiController.clear();
-                    _goiBaiDangManagementStore.setPhiGoiBaiDang(0);
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Phí',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập phí gói bài đăng'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.number,
+          iconColor: Colors.amber,
+          textController: _phiController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorMessage: (value) {
+            _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(value));
+            if (value.isEmpty) {
+              return 'Vui lòng nhập phí gói bài đăng';
+            }
+          },
+        );
+      },
     );
   }
 
   Widget _buildDoUuTienField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:200,
-            child : Text("Độ ưu tiên",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.number,
-              controller : _doUuTienController,
-              onChanged : (value) {
-                _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(int.tryParse(value));
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "Độ ưu tiên",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _doUuTienController.clear();
-                    _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(0);
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Độ ưu tiên',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập độ ưu tiên gói bài đăng'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.number,
+          iconColor: Colors.amber,
+          textController: _doUuTienController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorMessage: (value) {
+            _goiBaiDangManagementStore
+                .setDoUuTienGoiBaiDang(int.tryParse(value));
+          },
+        );
+      },
     );
   }
 
   Widget _buildThoiGianToiThieuField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:200,
-            child : Text("Thời gian tối thiểu",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.number,
-              controller : _thoiGianToiThieuController,
-              onChanged : (value) {
-                _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(int.tryParse(value));
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "Ngày",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _thoiGianToiThieuController.clear();
-                    _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(0);
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Thời gian tối thiểu (ngày)',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập thời gian tối thiểu'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.number,
+          iconColor: Colors.amber,
+          textController: _thoiGianToiThieuController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorMessage: (value) {
+            _goiBaiDangManagementStore
+                .setThoiGianToiThieuGoiBaiDang(int.tryParse(value));
+          },
+        );
+      },
     );
   }
 
   Widget _buildMoTaField() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom : 12.0),
-      child : Row(
-        mainAxisAlignment : MainAxisAlignment.start,
-        children : [
-          Container(
-            width:80,
-            child : Text("Mô tả",
-              style: TextStyle(
-                fontWeight : FontWeight.bold,
-                fontSize : 22,
-              ),
-              textAlign : TextAlign.start,
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Expanded(
-            child: TextField(
-              autofocus : false,
-              keyboardType : TextInputType.text,
-              controller : _moTaController,
-              onChanged : (value) {
-                _goiBaiDangManagementStore.setMoTaGoiBaiDang(value);
-              },
-              textAlign : TextAlign.start,
-              style : TextStyle(
-                fontSize : 18,
-                // color : Colors.black,
-              ),
-              decoration : InputDecoration(
-                hintText : "Mô tả",
-                suffixIcon : IconButton(
-                  onPressed : () {
-                    _moTaController.clear();
-                    _goiBaiDangManagementStore.setMoTaGoiBaiDang("");
-                  },
-                  icon : Icon(Icons.clear),
-                ),
-                hintStyle: TextStyle(
-                  fontSize : 18,
-                  // color: Colors.grey[400],
-                ),
-                enabledBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.red[400]),
-                ),
-                focusedBorder : UnderlineInputBorder(
-                  borderSide : BorderSide(color : Colors.orange[400]),
-                ),
-                border : UnderlineInputBorder(
-                    borderSide : BorderSide(color : Colors.black)
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          inputFontsize: 22,
+          isDarkmode: _themeStore.darkMode,
+          labelText: 'Mô tả',
+          suffixIcon: Icon(Icons.clear),
+          hint: ('Nhập mô tả gói bài đăng'),
+          // hintColor: Colors.white,
+          icon: Icons.person,
+          inputType: TextInputType.text,
+          iconColor: Colors.amber,
+          textController: _moTaController,
+          inputAction: TextInputAction.next,
+          autoFocus: false,
+          errorMessage: (value) {
+            _goiBaiDangManagementStore.setMoTaGoiBaiDang(value);
+            if (value.isEmpty) {
+              return 'Vui lòng nhập mô tả gói bài đăng';
+            }
+          },
+        );
+      },
     );
   }
-
 
   Widget _buildActiveCheckBox() {
     return Row(
       children: [
         Checkbox(
           activeColor: Colors.amber,
-          value:_checkboxTrangThai,
-          onChanged : (value) {
+          value: _checkboxTrangThai,
+          onChanged: (value) {
             setState(() {
-              _goiBaiDangManagementStore.setTrangThaiGoiBaiDang(!_checkboxTrangThai);
               _checkboxTrangThai = !_checkboxTrangThai;
+              _goiBaiDangManagementStore.setTrangThaiGoiBaiDang(_checkboxTrangThai);
             });
           },
         ),
         Text(
           'Kích hoạt',
           style: TextStyle(
-            fontSize : 22,
-            fontWeight : FontWeight.bold,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
             // color: Colors.white,
           ),
         ),
@@ -557,38 +372,54 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor : Colors.amber,
-      textColor : Colors.white,
-      onPressed : () async {
-        if (this.goiBaiDang != null) await{
-          _goiBaiDangManagementStore.setNameGoiBaiDang(_nameController.text),
-          //  else {
-          //    _store.setPassword(this.user.),
-          //    _store.setConfirmPassword(_confirmPasswordController.text),
-          // },
-          _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
-          _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
-          _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(int.tryParse(_thoiGianToiThieuController.text)),
-          _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(int.tryParse(_doUuTienController.text)),
-          _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(_phiController.text)),
-          _goiBaiDangManagementStore.setTrangThaiGoiBaiDang(_checkboxTrangThai),
-        };
+      buttonColor: Colors.amber,
+      textColor: Colors.white,
+      onPressed: () async {
+        if (this.goiBaiDang != null)
+          await {
+            _goiBaiDangManagementStore.setNameGoiBaiDang(_nameController.text),
+            _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
+            _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
+            if (_doUuTienController.text == null || _doUuTienController.text.isEmpty) {
+              _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(1),
+            } else {
+              _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(int.tryParse(_doUuTienController.text)),
+            },
+            if (_thoiGianToiThieuController.text == null || _thoiGianToiThieuController.text.isEmpty) {
+              _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(1),
+            } else {
+              _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(int.tryParse(_thoiGianToiThieuController.text)),
+            },
+            _goiBaiDangManagementStore
+                .setPhiGoiBaiDang(double.tryParse(_phiController.text)),
+            _goiBaiDangManagementStore
+                .setTrangThaiGoiBaiDang(_checkboxTrangThai),
+          };
         if (this.goiBaiDang != null) {
           if (_goiBaiDangManagementStore.canSubmit) {
             DeviceUtils.hideKeyboard(context);
             _goiBaiDangManagementStore.UpdateGoiBaiDang();
+          } else {
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
-          else {
-            showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
-          }
-        }
-        else {
+        } else {
           if (_goiBaiDangManagementStore.canSubmit) {
+            if (_doUuTienController.text == null ||
+                _doUuTienController.text.isEmpty)
+              await {
+                _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(1),
+              };
+            if (_thoiGianToiThieuController.text == null ||
+                _thoiGianToiThieuController.text.isEmpty)
+              await {
+                _goiBaiDangManagementStore.setThoiGianToiThieuGoiBaiDang(1),
+              };
+            await _goiBaiDangManagementStore
+                .setTrangThaiGoiBaiDang(_checkboxTrangThai);
             DeviceUtils.hideKeyboard(context);
             _goiBaiDangManagementStore.CreateGoiBaiDang();
-          }
-          else {
-            showErrorMessage('Vui lòng nhập đầy đủ thông tin',context);
+          } else {
+            showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
 
@@ -596,6 +427,21 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
       },
     );
   }
+
+  _updateOrCreateSuccess() async {
+    // await Navigator.of(context).pop();
+    // if(_goiBaiDangManagementStore.updateActiveGoiBaiDang_success)
+    // {
+    //   showSuccssfullMesssage("Cập nhật thành công", context);
+    //   _goiBaiDangManagementStore.updateActiveGoiBaiDang_success = false;
+    // }
+    // else if(_goiBaiDangManagementStore.createGoiBaiDang_success)
+    // {
+    //   showSuccssfullMesssage("Thêm mới thành công", context);
+    //   _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+    // }
+  }
+
   //endregion
 
   // dispose:-------------------------------------------------------------------
@@ -609,5 +455,4 @@ class _CreateOrEditGoiBaiDangScreenScreenState extends State<CreateOrEditGoiBaiD
     _moTaController.dispose();
     super.dispose();
   }
-
 }

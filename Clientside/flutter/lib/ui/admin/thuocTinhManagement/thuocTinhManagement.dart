@@ -83,7 +83,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
     await _thuocTinhManagementStore.IsActiveThuocTinh(thuocTinh);
     Navigator.of(context).pop();
     setState(() {});
-    // _showSuccssfullMesssage(_thuocTinhManagementStore.thuocTinhList.thuocTinhs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công");
+    showSuccssfullMesssage(_thuocTinhManagementStore.thuocTinhList.thuocTinhs[position].trangThai == "Off" ? "Ngừng kích hoạt thành công" : "Kích hoạt thành công", context);
   }
 
   @override
@@ -519,6 +519,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                     ),
                   ),
                   onTap: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen(thuocTinh: thuocTinh,)),

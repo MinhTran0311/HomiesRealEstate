@@ -68,7 +68,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         title: Text(
           "Đăng ký",
       ),),
-      body: _buildBody(),
+      body: WillPopScope(
+        child: _buildBody(),
+        onWillPop: () {
+          var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+          future.then((value) {
+            if (value)  Navigator.of(context).pop();
+          });
+          return;
+        },
+      ),
     );
   }
 

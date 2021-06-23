@@ -89,8 +89,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
   String selectedhuongnha = null;
   String selectedhuongbancong = null;
   List<String> Huong = new List<String>();
-  String pointx='';
-  String pointy='';
+  String pointx = '';
+  String pointy = '';
   String result = "";
   List<Commune> commune = [];
 //endregion
@@ -115,34 +115,36 @@ class _NewpostScreenState extends State<NewpostScreen> {
             .isAfter(DateTime.now().add(Duration(days: songay)))) songay++;
       });
   }
-  reset(){
-      _image = [];
-     _TileController = TextEditingController();
-     _PriceController = TextEditingController();
-     _AcreageController = TextEditingController();
-     _keyEditor2 = TextEditingController();
-     _ThuocTinhController = new List<TextEditingController>(20);
-      _imageStore.imageListpost=[];
-     _LocateController = TextEditingController();
-     _DescribeController = TextEditingController();
-     _keyEditor = GlobalKey();
-     selectedType=null;
-     selectedTypeType=null;
-     selectedTypeTypeType=null;
-     selectedPack =null;
-     postId='';
-     songay = 0;
-     selectedTown = null;
-     selectedCommune = null;
-     selectedCity = null;
-     selectedhuongnha = null;
-     selectedhuongbancong = null;
-     pointx='';
-     pointy='';
-     result = "";
-     commune = [];
-     selectedDatefl = null;
+
+  reset() {
+    _image = [];
+    _TileController = TextEditingController();
+    _PriceController = TextEditingController();
+    _AcreageController = TextEditingController();
+    _keyEditor2 = TextEditingController();
+    _ThuocTinhController = new List<TextEditingController>(20);
+    _imageStore.imageListpost = [];
+    _LocateController = TextEditingController();
+    _DescribeController = TextEditingController();
+    _keyEditor = GlobalKey();
+    selectedType = null;
+    selectedTypeType = null;
+    selectedTypeTypeType = null;
+    selectedPack = null;
+    postId = '';
+    songay = 0;
+    selectedTown = null;
+    selectedCommune = null;
+    selectedCity = null;
+    selectedhuongnha = null;
+    selectedhuongbancong = null;
+    pointx = '';
+    pointy = '';
+    result = "";
+    commune = [];
+    selectedDatefl = null;
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -173,7 +175,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     if (!_userStore.loadingCurrentUserWallet) {
       _userStore.getCurrentWalletUser();
     }
-    _imageStore.imageListpost=[];
+    _imageStore.imageListpost = [];
   }
 
   @override
@@ -197,9 +199,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
   void dispose() {
     super.dispose();
   }
+
   String DatetimeToString(String datetime) {
     return "${datetime.substring(11, 13)}:${datetime.substring(14, 16)} - ${datetime.substring(8, 10)}/${datetime.substring(5, 7)}/${datetime.substring(0, 4)}";
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,7 +229,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _handleErrorMessage() {
     return Observer(
-      builder: (context)  {
+      builder: (context) {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
@@ -234,7 +238,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
           //dispose();.
           _postStore.getsobaidangall();
           _postStore.successNewpost = false;
-          _postStore.getPostForCurs(false,"", 0);
+          _postStore.getPostForCurs(false, "", 0);
           _postStore.getsobaidang();
           _userStore.getCurrentWalletUser();
           Future.delayed(Duration(milliseconds: 3000), () {
@@ -244,7 +248,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     Detail(post: _postStore.postForCurList.posts.first));
             Navigator.push(context, route);
           });
-
         }
         return SizedBox.shrink();
       },
@@ -305,35 +308,35 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child:
-        _userStore.userCurrent.phoneNumber==null?
-        AlertDialog(
-          title: Text(
-            "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-          ),
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RoundedButtonWidget(
-                buttonText: "ok",
-                buttonColor: Colors.green,
-                onPressed: () {
-                  Route route = MaterialPageRoute(
-                      builder: (context) => AccountPage(
-                        UserName: _userStore.userCurrent.userName,
-                        Phone: _userStore.userCurrent.phoneNumber,
-                        Email: _userStore.userCurrent.emailAddress,
-                        Address: "Address",
-                        SurName: _userStore.userCurrent.surname,
-                        Name: _userStore.userCurrent.name,
-                        UserID:  _userStore.userCurrent.UserID,
-                        creationTime: DatetimeToString(
-                            _userStore.userCurrent.creationTime),
-                      ));
-                  Navigator.push(context, route);
-                },
-              )]))
+        child: _userStore.userCurrent.phoneNumber == null
+            ? AlertDialog(
+                title: Text(
+                  "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
+                  style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                ),
+                content: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RoundedButtonWidget(
+                        buttonText: "ok",
+                        buttonColor: Colors.green,
+                        onPressed: () {
+                          Route route = MaterialPageRoute(
+                              builder: (context) => AccountPage(
+                                    UserName: _userStore.userCurrent.userName,
+                                    Phone: _userStore.userCurrent.phoneNumber,
+                                    Email: _userStore.userCurrent.emailAddress,
+                                    Address: "Address",
+                                    SurName: _userStore.userCurrent.surname,
+                                    Name: _userStore.userCurrent.name,
+                                    UserID: _userStore.userCurrent.UserID,
+                                    creationTime: DatetimeToString(
+                                        _userStore.userCurrent.creationTime),
+                                  ));
+                          Navigator.push(context, route);
+                        },
+                      )
+                    ]))
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -505,7 +508,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               padding:
                   const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<Postcategory>(
-                hint: Text("Chọn hình thức nhà đất"),
+                hint: Text("Chọn loại hình nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
                     value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
@@ -619,114 +622,115 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   Widget _buildCityField() {
     {
-        return Padding(
-          padding: const EdgeInsets.only(left: 0.0, right: 0.0),
-          child: DropdownSearch<String>(
-            autoValidateMode: AutovalidateMode.always,
-            validator: (value) =>
-                value == null ? 'Vui lòng chọn tỉnh/thành' : null,
-            items: [
-              "Thành phố Hà Nội",
-              "Tỉnh Hà Giang",
-              "Tỉnh Cao Bằng",
-              "Tỉnh Bắc Kạn",
-              "Tỉnh Tuyên Quang",
-              "Tỉnh Lào Cai",
-              "Tỉnh Điện Biên",
-              "Tỉnh Lai Châu",
-              "Tỉnh Sơn La",
-              "Tỉnh Yên Bái",
-              "Tỉnh Hoà Bình",
-              "Tỉnh Thái Nguyên",
-              "Tỉnh Lạng Sơn",
-              "Tỉnh Quảng Ninh",
-              "Tỉnh Bắc Giang",
-              "Tỉnh Phú Thọ",
-              "Tỉnh Vĩnh Phúc",
-              "Tỉnh Bắc Ninh",
-              "Tỉnh Hải Dương",
-              "Thành phố Hải Phòng",
-              "Tỉnh Hưng Yên",
-              "Tỉnh Thái Bình",
-              "Tỉnh Hà Nam",
-              "Tỉnh Nam Định",
-              "Tỉnh Ninh Bình",
-              "Tỉnh Thanh Hóa",
-              "Tỉnh Nghệ An",
-              "Tỉnh Hà Tĩnh",
-              "Tỉnh Quảng Bình",
-              "Tỉnh Quảng Trị",
-              "Tỉnh Thừa Thiên Huế",
-              "Thành phố Đà Nẵng",
-              "Tỉnh Quảng Nam",
-              "Tỉnh Quảng Ngãi",
-              "Tỉnh Bình Định",
-              "Tỉnh Phú Yên",
-              "Tỉnh Khánh Hòa",
-              "Tỉnh Ninh Thuận",
-              "Tỉnh Bình Thuận",
-              "Tỉnh Kon Tum",
-              "Tỉnh Gia Lai",
-              "Tỉnh Đắk Lắk",
-              "Tỉnh Đắk Nông",
-              "Tỉnh Lâm Đồng",
-              "Tỉnh Bình Phước",
-              "Tỉnh Tây Ninh",
-              "Tỉnh Bình Dương",
-              "Tỉnh Đồng Nai",
-              "Tỉnh Bà Rịa - Vũng Tàu",
-              "Thành phố Hồ Chí Minh",
-              "Tỉnh Long An",
-              "Tỉnh Tiền Giang",
-              "Tỉnh Bến Tre",
-              "Tỉnh Trà Vinh",
-              "Tỉnh Vĩnh Long",
-              "Tỉnh Đồng Tháp",
-              "Tỉnh An Giang",
-              "Tỉnh Kiên Giang",
-              "Thành phố Cần Thơ",
-              "Tỉnh Hậu Giang",
-              "Tỉnh Sóc Trăng",
-              "Tỉnh Bạc Liêu",
-              "Tỉnh Cà Mau",
-            ],
-            showClearButton: true,
-            hint: "Chọn tỉnh/thành phố",
-            onChanged: (String Value) {
-              setState(() {
-                selectedCity = Value;
-                selectedTown = null;
-              });
-            },
-            selectedItem: null,
-            showSearchBox: true,
-            searchBoxDecoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Tìm tỉnh/thành phố",
+      return Padding(
+        padding: const EdgeInsets.only(left: 0.0, right: 0.0),
+        child: DropdownSearch<String>(
+          autoValidateMode: AutovalidateMode.always,
+          validator: (value) =>
+              value == null ? 'Vui lòng chọn tỉnh/thành' : null,
+          items: [
+            "Thành phố Hà Nội",
+            "Tỉnh Hà Giang",
+            "Tỉnh Cao Bằng",
+            "Tỉnh Bắc Kạn",
+            "Tỉnh Tuyên Quang",
+            "Tỉnh Lào Cai",
+            "Tỉnh Điện Biên",
+            "Tỉnh Lai Châu",
+            "Tỉnh Sơn La",
+            "Tỉnh Yên Bái",
+            "Tỉnh Hoà Bình",
+            "Tỉnh Thái Nguyên",
+            "Tỉnh Lạng Sơn",
+            "Tỉnh Quảng Ninh",
+            "Tỉnh Bắc Giang",
+            "Tỉnh Phú Thọ",
+            "Tỉnh Vĩnh Phúc",
+            "Tỉnh Bắc Ninh",
+            "Tỉnh Hải Dương",
+            "Thành phố Hải Phòng",
+            "Tỉnh Hưng Yên",
+            "Tỉnh Thái Bình",
+            "Tỉnh Hà Nam",
+            "Tỉnh Nam Định",
+            "Tỉnh Ninh Bình",
+            "Tỉnh Thanh Hóa",
+            "Tỉnh Nghệ An",
+            "Tỉnh Hà Tĩnh",
+            "Tỉnh Quảng Bình",
+            "Tỉnh Quảng Trị",
+            "Tỉnh Thừa Thiên Huế",
+            "Thành phố Đà Nẵng",
+            "Tỉnh Quảng Nam",
+            "Tỉnh Quảng Ngãi",
+            "Tỉnh Bình Định",
+            "Tỉnh Phú Yên",
+            "Tỉnh Khánh Hòa",
+            "Tỉnh Ninh Thuận",
+            "Tỉnh Bình Thuận",
+            "Tỉnh Kon Tum",
+            "Tỉnh Gia Lai",
+            "Tỉnh Đắk Lắk",
+            "Tỉnh Đắk Nông",
+            "Tỉnh Lâm Đồng",
+            "Tỉnh Bình Phước",
+            "Tỉnh Tây Ninh",
+            "Tỉnh Bình Dương",
+            "Tỉnh Đồng Nai",
+            "Tỉnh Bà Rịa - Vũng Tàu",
+            "Thành phố Hồ Chí Minh",
+            "Tỉnh Long An",
+            "Tỉnh Tiền Giang",
+            "Tỉnh Bến Tre",
+            "Tỉnh Trà Vinh",
+            "Tỉnh Vĩnh Long",
+            "Tỉnh Đồng Tháp",
+            "Tỉnh An Giang",
+            "Tỉnh Kiên Giang",
+            "Thành phố Cần Thơ",
+            "Tỉnh Hậu Giang",
+            "Tỉnh Sóc Trăng",
+            "Tỉnh Bạc Liêu",
+            "Tỉnh Cà Mau",
+          ],
+          showClearButton: true,
+          hint: "Chọn tỉnh/thành phố",
+          onChanged: (String Value) {
+            setState(() {
+              selectedCity = Value;
+              selectedTown = null;
+            });
+          },
+          selectedItem: null,
+          showSearchBox: true,
+          searchBoxDecoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Tìm tỉnh/thành phố",
+          ),
+          popupTitle: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorDark,
+              // borderRadius: BorderRadius.only(
+              //   topLeft: Radius.circular(20),
+              //   topRight: Radius.circular(20),
+              // ),
             ),
-            popupTitle: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColorDark,
-                // borderRadius: BorderRadius.only(
-                //   topLeft: Radius.circular(20),
-                //   topRight: Radius.circular(20),
-                // ),
-              ),
-              child: Center(
-                child: Text(
-                  'Tỉnh/thành phố',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+            child: Center(
+              child: Text(
+                'Tỉnh/thành phố',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ),
           ),
-        );
-      };
+        ),
+      );
+    }
+    ;
   }
 
   Widget _buildTownField() {
@@ -855,20 +859,22 @@ class _NewpostScreenState extends State<NewpostScreen> {
         width: 0,
       );
   }
+
   Widget _buildCommuneField2() {
     if (selectedCommune != null) {
       return Padding(
-        padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
-        child: Text(
-          pointx+','+pointy,
-          style: TextStyle(),
-        ));
+          padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
+          child: Text(
+            pointx + ',' + pointy,
+            style: TextStyle(),
+          ));
     } else
       return Container(
         height: 0,
         width: 0,
       );
   }
+
   Widget _buildLocateField() {
     return Observer(
       builder: (context) {
@@ -968,7 +974,35 @@ class _NewpostScreenState extends State<NewpostScreen> {
                       ? TextFormField(
                           autofocus: false,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.home_work,
+                            icon: Icon(
+                                thuocTinh.id == 3
+                                    ? Icons.house_outlined
+                                    : thuocTinh.id == 4
+                                        ? Icons.add_road_outlined
+                                        : thuocTinh.id == 5
+                                            ? Icons.sensor_door_outlined
+                                            : thuocTinh.id == 6
+                                                ? Icons.streetview_outlined
+                                                : thuocTinh.id == 7
+                                                    ? Icons.king_bed_outlined
+                                                    : thuocTinh.id == 8
+                                                        ? Icons.bathtub_outlined
+                                                        : thuocTinh.id == 9
+                                                            ? Icons
+                                                                .policy_outlined
+                                                            : thuocTinh.id == 10
+                                                                ? Icons
+                                                                    .weekend_outlined
+                                                                : thuocTinh.id ==
+                                                                        11
+                                                                    ? Icons
+                                                                        .apartment_outlined
+                                                                    : thuocTinh.id ==
+                                                                            12
+                                                                        ? Icons
+                                                                            .confirmation_number_outlined
+                                                                        : Icons
+                                                                            .category_outlined,
                                 color: _themeStore.darkMode
                                     ? Colors.white
                                     : Colors.amber),
@@ -1006,9 +1040,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                           hint: thuocTinh.tenThuocTinh == "Hướng nhà"
                               ? Row(
                                   children: [
-                                    Icon(
-                                      Icons.directions,
-                                    ),
+                                    Icon(Icons.sensor_door_outlined),
                                     SizedBox(
                                       width: 10,
                                     ),
@@ -1017,7 +1049,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                                 )
                               : Row(children: [
                                   Icon(
-                                    Icons.directions,
+                                    Icons.streetview_outlined,
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -1482,12 +1514,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
     return Observer(builder: (context) {
       return RoundedButtonWidget(
         buttonText: ('Đăng tin'),
-        buttonColor:
-            !_imageStore.imageLoadingpost ? Colors.amber : Colors.grey,
+        buttonColor: !_imageStore.imageLoadingpost ? Colors.amber : Colors.grey,
         textColor: Colors.white,
         onPressed: () async {
           {
-            try{
+            try {
               if (_TileController.value.text.isEmpty ||
                   _PriceController.value.text.isEmpty ||
                   _AcreageController.value.text.isEmpty ||
@@ -1528,8 +1559,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 _newpost.post.moTa = _keyEditor2.text;
                 _newpost.post.featuredImage = _imageStore.imageListpost.first;
                 lichsugiaodich lichsu = new lichsugiaodich();
-                lichsu.ghiChu =
-                    "${post.tieuDe}${selectedPack.tenGoi}";
+                lichsu.ghiChu = "${post.tieuDe}${selectedPack.tenGoi}";
                 lichsu.soTien = songay * selectedPack.phi;
                 if (_userStore.userCurrent.UserID != null)
                   lichsu.userId = _userStore.userCurrent.UserID;
@@ -1601,37 +1631,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     }
                   });
                 } else {
-                  var futureValue = showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text(
-                            "Đăng tin và thực hiện thanh toán?",
-                            style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                          ),
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RoundedButtonWidget(
-                                buttonText: "Đồng ý",
-                                buttonColor: Colors.green,
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                              RoundedButtonWidget(
-                                buttonColor: Colors.grey,
-                                buttonText: "Hủy",
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      });
-                  futureValue.then((value) {
+                  var future = showSimpleModalDialog(context, "Đăng tin và thực hiện thanh toán?");
+                  future.then((value) {
                     if (value) {
                       _newpost.images = new List<AppImage>();
                       for (var item in _imageStore.imageListpost) {
@@ -1645,34 +1646,34 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   });
                 }
               }
-            }
-            on Exception catch(_){ var futureValue = showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(
-                      "Vui lòng load lại trang cá nhân",
-                      style: TextStyle(fontSize: 24, fontFamily: 'intel'),
-                    ),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RoundedButtonWidget(
-                          buttonText: "Đồng ý",
-                          buttonColor: Colors.green,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProfileScreen(),
-                                ));
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                });
+            } on Exception catch (_) {
+              var futureValue = showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Vui lòng load lại trang cá nhân",
+                        style: TextStyle(fontSize: 24, fontFamily: 'intel'),
+                      ),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RoundedButtonWidget(
+                            buttonText: "Đồng ý",
+                            buttonColor: Colors.green,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(),
+                                  ));
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  });
             }
           }
         },

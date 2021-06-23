@@ -62,6 +62,11 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
       _danhMucManagementStore.setStringFilter('');
       _danhMucManagementStore.getDanhMucs(false);
     }
+
+
+    if (!_danhMucManagementStore.loadingAll) {
+      _danhMucManagementStore.getAllDanhMucs();
+    }
   }
 
   _clickButtonApDung() {

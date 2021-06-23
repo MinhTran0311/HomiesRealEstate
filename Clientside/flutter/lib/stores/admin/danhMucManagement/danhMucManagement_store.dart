@@ -25,6 +25,12 @@ abstract class _DanhMucManagementStore with Store {
   ObservableFuture<DanhMucList> fetchDanhMucsFuture =
   ObservableFuture<DanhMucList>(emptyDanhMucResponse);
 
+  static ObservableFuture<DanhMucList> emptyAllDanhMucResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<DanhMucList> fetchAllDanhMucsFuture =
+  ObservableFuture<DanhMucList>(emptyAllDanhMucResponse);
+
   static ObservableFuture<dynamic> emptyCountAllDanhMucsResponse = ObservableFuture.value(null);
 
   @observable
@@ -98,9 +104,6 @@ abstract class _DanhMucManagementStore with Store {
   @observable
   bool isIntialLoading = true;
 
-  @observable
-  List<String> nameDanhMucList = new List<String>();
-
   @computed
   bool get canSubmit =>
       tenDanhMuc.isNotEmpty &&
@@ -110,6 +113,9 @@ abstract class _DanhMucManagementStore with Store {
 
   @computed
   bool get loading => fetchDanhMucsFuture.status == FutureStatus.pending && isIntialLoading;
+
+  @computed
+  bool get loadingAll => fetchAllDanhMucsFuture.status == FutureStatus.pending && isIntialLoading;
 
   @computed
   bool get loadingCountAllDanhMucs => fetchCountAllDanhMucsFuture.status == FutureStatus.pending;
@@ -146,30 +152,19 @@ abstract class _DanhMucManagementStore with Store {
 
   @action
   void setDanhMucCha(int value) {
+    if (value != null)
     danhMucCha = value;
+    else danhMucCha = null;
   }
 
   @action
   Future getAllDanhMucs() async {
     final future = _repository.getAllDanhMucs(0, Preferences.maxDanhMucCount, filter);
-    fetchDanhMucsFuture = ObservableFuture(future);
+    fetchAllDanhMucsFuture = ObservableFuture(future);
 
     future.then((danhMucList) {
       this.danhMucListAll = danhMucList;
-      for(int i = 0; i < this.danhMucListAll.danhMucs.length; i++){
-        nameDanhMucList.add(this.danhMucListAll.danhMucs[i].tenDanhMuc);
-      }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null)
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else{
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
@@ -287,5 +282,17 @@ abstract class _DanhMucManagementStore with Store {
   @action
   void setStringFilter(String value) {
     this.filter = value;
+  }
+
+  @action
+  DanhMuc findDanhMucCha(int value) {
+    try {
+      for (int i = 0; i < danhMucListAll.danhMucs.length; i++) {
+        if (danhMucListAll.danhMucs[i].id == value)
+          return danhMucListAll.danhMucs[i];
+      }
+    } catch(e){
+      throw(e);
+    }
   }
 }

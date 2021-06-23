@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/token/authToken.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:boilerplate/widgets/generalMethods.dart';
@@ -68,7 +69,9 @@ abstract class _FormStore with Store {
   @observable
   String phoneNumber = '';
   @observable
-  String roleName = '';
+  List<dynamic> roleName = new List<dynamic>();
+  @observable
+  List<String> displayRoleName = new List<String>();
   @observable
   String newPassword = '';
   @observable
@@ -100,6 +103,11 @@ abstract class _FormStore with Store {
   @observable
   ObservableFuture<dynamic> fetchUpdateUserFuture = ObservableFuture<dynamic>(emptyUpdateUserResponse);
 
+  static ObservableFuture<dynamic> emptyIsActiveUserResponse = ObservableFuture.value(null);
+
+  @observable
+  ObservableFuture<dynamic> fetchIsActiveUserFuture = ObservableFuture<dynamic>(emptyIsActiveUserResponse);
+
   static ObservableFuture<dynamic> emptyCreateUserResponse = ObservableFuture.value(null);
 
   @observable
@@ -119,6 +127,9 @@ abstract class _FormStore with Store {
 
   @observable
   bool updateUser_success = false;
+
+  @observable
+  bool isActive_success = false;
 
   @observable
   bool resetPassword_success = false;
@@ -173,7 +184,8 @@ abstract class _FormStore with Store {
       surname.isNotEmpty &&
       name.isNotEmpty &&
       username.isNotEmpty &&
-      phoneNumber.isNotEmpty;
+      phoneNumber.isNotEmpty &&
+      password.compareTo(confirmPassword) == 0;
 
   @computed
   bool get sendingCode => fetchResetCodeFuture.status == FutureStatus.pending;
@@ -184,6 +196,9 @@ abstract class _FormStore with Store {
 
   @computed
   bool get updateUserLoading => fetchUpdateUserFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get isActiveLoading => fetchIsActiveUserFuture.status == FutureStatus.pending;
   //endregion
 
   //#region set value
@@ -236,7 +251,7 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void setRoleName(String value) {
+  void setRolesList(List<dynamic> value) {
     roleName = value;
   }
 
@@ -371,7 +386,7 @@ abstract class _FormStore with Store {
   @action
   Future UpdateUser() async {
     updateUser_success = false;
-    final future = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive, roleName);
+    final future = _repository.updateUser(idUser, username, surname, name, userEmail, phoneNumber, isActive, displayRoleName);
     fetchUpdateUserFuture = ObservableFuture(future);
 
     future.then((res){
@@ -396,19 +411,20 @@ abstract class _FormStore with Store {
   }
 
   @action
-  Future CreateUser() async {
-    createUser_success = false;
-    final future = _repository.createUser(username, surname, name, userEmail, phoneNumber, isActive, roleName);
-    fetchCreateUserFuture = ObservableFuture(future);
+  Future IsActiveUser(User user) async {
+    isActive_success = false;
+    List<String> roleNames = new List<String>();
+    await user.permissionsList.forEach((element) {roleNames.add(element["roleName"]);});
+    final future = _repository.updateUser(user.id, user.userName, user.surName, user.name, user.email, user.phoneNumber, !user.isActive, roleNames);
+    fetchIsActiveUserFuture = ObservableFuture(future);
 
     future.then((res){
       if (res["success"]){
-        createUser_success = true;
+        isActive_success = true;
       }
     }).catchError((error){
       if (error is DioError) {
         if (error.response.data!=null) {
-
           errorStore.errorMessage = error.response.data["error"]["message"];
         }
         else
@@ -421,6 +437,26 @@ abstract class _FormStore with Store {
         throw error;
       }
     });
+  }
+
+  @action
+  Future CreateUser() async {
+    createUser_success = false;
+    final future = _repository.createUser(username, surname, name, userEmail, phoneNumber, isActive, displayRoleName, password);
+    fetchCreateUserFuture = ObservableFuture(future);
+
+    future.then((res){
+      if (res["success"]){
+        createUser_success = true;
+      }
+    }).catchError((error){
+      if (error.response != null && error.response.data!=null)
+        errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
+      else
+        errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
+      throw error;
+    }
+    );
   }
 
   @action
@@ -442,19 +478,7 @@ abstract class _FormStore with Store {
         loggedIn = false;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   if (error.response.data!=null)
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else{
-      //   errorStore.errorMessage="Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
-        //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
         errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
@@ -475,23 +499,7 @@ abstract class _FormStore with Store {
       }
       else resetPassword_success=false;
     }).catchError((error){
-      // if (error is DioError) {
-      //   resetPassword_success=false;
-      //   if (error.response.data!=null) {
-      //
-      //     errorStore.errorMessage = error.response.data["error"]["message"];
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
-        //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
       else
         errorStore.errorMessage = "Hãy kiểm tra lại kết nối mạng và thử lại!";
@@ -513,20 +521,6 @@ abstract class _FormStore with Store {
         changePassword_succes = false;
       }
     }).catchError((error){
-      // if (error is DioError) {
-      //   changePassword_succes=false;
-      //   if (error.response.data!=null) {
-      //     errorStore.errorMessage = "Không đổi được mật khẩu, vui lòng thử lại sau!";
-      //   }
-      //   else
-      //     errorStore.errorMessage = DioErrorUtil.handleError(error);
-      //   throw error;
-      // }
-      // else {
-      //   errorStore.errorMessage =
-      //   "Hãy kiểm tra lại kết nối mạng và thử lại!";
-      //   throw error;
-      // }
       if (error.response != null && error.response.data!=null)
         //errorStore.errorMessage = error.response.data["error"]["message"];
         errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);

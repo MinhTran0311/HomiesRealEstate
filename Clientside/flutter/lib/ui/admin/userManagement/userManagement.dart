@@ -4,6 +4,9 @@ import 'dart:developer';
 import 'dart:math';
 
 import 'package:boilerplate/constants/colors.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:boilerplate/widgets/generalMethods.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -29,6 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/stores/admin/roleManagement/roleManagement_store.dart';
 import 'package:boilerplate/ui/admin/userManagement/createOrEditUser.dart';
 
+
 class UserManagementScreen extends StatefulWidget {
   @override
   _UserManagementScreenState createState() => _UserManagementScreenState();
@@ -39,7 +43,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   UserManagementStore _userManagementStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
-  RoleManagementStore _roleManagementStore;
+  final FormStore _formStore = new FormStore();
 
   TextEditingController _searchController = new TextEditingController();
 
@@ -47,7 +51,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   var _selectedValueAfterTouchBtn;
   var _roles = List<DropdownMenuItem>();
   var _listUserFilterFromRole = List<User>();
-  var userChoosen;
+  User userChoosen;
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   final ScrollController _scrollController =
@@ -80,7 +84,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _userManagementStore = Provider.of<UserManagementStore>(context);
-    _roleManagementStore = Provider.of<RoleManagementStore>(context);
 
     // initializing stores
     // check to see if already called api
@@ -89,62 +92,58 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       _userManagementStore.setStringFilter('');
       _userManagementStore.getUsers(false);
     }
-
-    if (!_roleManagementStore.loading) {
-      _roleManagementStore.getRoles();
-    }
   }
 
-  _loadRoleList() {
-    if (_roleManagementStore.roleList != null) {
-      _roles.clear();
-      _roles.add(DropdownMenuItem(
-        child: Text("Tất cả vai trò"),
-        value: "Tất cả vai trò",
-      ));
-      for (int i = 0; i < _roleManagementStore.roleList.roles.length; i++) {
-        setState(() {
-          _roles.add(DropdownMenuItem(
-            child: Text(_roleManagementStore.roleList.roles[i].name),
-            value: _roleManagementStore.roleList.roles[i].name,
-          ));
-        });
-      }
-    }
-  }
+  // _loadRoleList() {
+  //   if (_roleManagementStore.roleList != null) {
+  //     _roles.clear();
+  //     _roles.add(DropdownMenuItem(
+  //       child: Text("Tất cả vai trò"),
+  //       value: "Tất cả vai trò",
+  //     ));
+  //     for (int i = 0; i < _roleManagementStore.roleList.roles.length; i++) {
+  //       setState(() {
+  //         _roles.add(DropdownMenuItem(
+  //           child: Text(_roleManagementStore.roleList.roles[i].name),
+  //           value: _roleManagementStore.roleList.roles[i].name,
+  //         ));
+  //       });
+  //     }
+  //   }
+  // }
 
-  _clickButtonApDung() {
-    if (_selectedValue != null && _selectedValue != "Tất cả vai trò") {
-      _selectedValueAfterTouchBtn = _selectedValue;
-      print(_selectedValueAfterTouchBtn);
-      var listRoleSelect = _roleManagementStore.roleList;
-      var listUserAll = _userManagementStore.userList;
-      // var listUserFromRole = List<User>();
-      _listUserFilterFromRole.clear();
-      setState(() {
-        for (int i = 0; i < listRoleSelect.roles.length; i++) {
-          if (_selectedValue == listRoleSelect.roles[i].name) {
-            for (int j = 0; j < listUserAll.users.length; j ++) {
-              if (listUserAll.users[j].permissions == _selectedValue) {
-                _listUserFilterFromRole.add(listUserAll.users[j]);
-              }
-            }
-            Navigator.of(context).pop();
-            return;
-          }
-        }
-      });
-    }
-    else if (_selectedValue == "Tất cả vai trò") {
-      _selectedValueAfterTouchBtn = _selectedValue;
-      _listUserFilterFromRole.clear();
-      setState(() {
-        _listUserFilterFromRole = _userManagementStore.userList.users;
-      });
-      Navigator.of(context).pop();
-      return;
-    }
-  }
+  // _clickButtonApDung() {
+  //   if (_selectedValue != null && _selectedValue != "Tất cả vai trò") {
+  //     _selectedValueAfterTouchBtn = _selectedValue;
+  //     print(_selectedValueAfterTouchBtn);
+  //     var listRoleSelect = _roleManagementStore.roleList;
+  //     var listUserAll = _userManagementStore.userList;
+  //     // var listUserFromRole = List<User>();
+  //     _listUserFilterFromRole.clear();
+  //     setState(() {
+  //       for (int i = 0; i < listRoleSelect.roles.length; i++) {
+  //         if (_selectedValue == listRoleSelect.roles[i].name) {
+  //           for (int j = 0; j < listUserAll.users.length; j ++) {
+  //             if (listUserAll.users[j].permissions == _selectedValue) {
+  //               _listUserFilterFromRole.add(listUserAll.users[j]);
+  //             }
+  //           }
+  //           Navigator.of(context).pop();
+  //           return;
+  //         }
+  //       }
+  //     });
+  //   }
+  //   else if (_selectedValue == "Tất cả vai trò") {
+  //     _selectedValueAfterTouchBtn = _selectedValue;
+  //     _listUserFilterFromRole.clear();
+  //     setState(() {
+  //       _listUserFilterFromRole = _userManagementStore.userList.users;
+  //     });
+  //     Navigator.of(context).pop();
+  //     return;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -373,7 +372,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       ),
       onTap: (){
         this.userChoosen = _userManagementStore.userList.users[position];
-        _showSimpleModalDialog(context, _userManagementStore.userList.users[position]);
+        _showSimpleModalDialog(context, _userManagementStore.userList.users[position], position);
       },
     );
   }
@@ -382,7 +381,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     return Observer(
       builder: (context) {
         if (_userManagementStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_userManagementStore.errorStore.errorMessage);
+          return showErrorMessage(_userManagementStore.errorStore.errorMessage, context);
         }
 
         return SizedBox.shrink();
@@ -391,19 +390,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
 
   _buildLanguageDialog() {
     _showDialog<String>(
@@ -451,28 +437,28 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  void _showBottomSheet() async {
-    await _loadRoleList();
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            )
-        ),
-        builder: (BuildContext context){
-          return Wrap(
-            children: [
-              buildFilterAdvance(),
-            ],
-          );
-        }
-    );
-  }
+  // void _showBottomSheet() async {
+  //   await _loadRoleList();
+  //   showModalBottomSheet(
+  //       context: context,
+  //       isScrollControlled: true,
+  //       shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(30),
+  //             topRight: Radius.circular(30),
+  //           )
+  //       ),
+  //       builder: (BuildContext context){
+  //         return Wrap(
+  //           children: [
+  //             buildFilterAdvance(),
+  //           ],
+  //         );
+  //       }
+  //   );
+  // }
 
-  _showSimpleModalDialog(context, User user){
+  _showSimpleModalDialog(context, User user, int position){
     showModalBottomSheet(
       // backgroundColor: Colors.red,
         context: context,
@@ -558,7 +544,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                         size: 28,
                                       ),
                                       onPressed: () {
-                                        _showPopupMenu();
+                                        _showPopupMenu(position);
                                       },
                                     )
                                   ],
@@ -895,7 +881,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 // ),
                                 child: ElevatedButton(
                                   child: Text(
-                                    "Chỉnh sửa thông tin",
+                                    "Chỉnh sửa vai trò/quyền",
                                     style: TextStyle(fontSize: 22,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -910,10 +896,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       )
                                   ),
                                   onPressed: () async {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: user)),
-                                    );
+                                    var future = showSimpleModalDialog(context, "Bạn có muốn chuyển hướng đến trang web quản lý?");
+                                    future.then((value) {
+                                      if (value)  _launchURL();
+                                    });
+                                    return;
                                   },
                                 )
                             ),
@@ -930,83 +917,83 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget buildFilterAdvance() {
-    return Container(
-        padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
-        child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Bộ lọc người dùng",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 4,),
-              ],
-            ),
-            SizedBox(
-              height: 32,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Vai trò",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 4,),
-              ],
-            ),
-            _buildListDropdownItem(),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSignUpButton(),
-                SizedBox(
-                  height: 20,
-                  // width: double.infinity,
-                ),
-              ],
-            ),
-          ],
-        )
-    );
-  }
+  // Widget buildFilterAdvance() {
+  //   return Container(
+  //       padding: EdgeInsets.only(right: 24,left: 24,top: 32,bottom: 24),
+  //       child: Column(
+  //         // crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Row(
+  //             children: [
+  //               Text(
+  //                 "Bộ lọc người dùng",
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               SizedBox(width: 4,),
+  //             ],
+  //           ),
+  //           SizedBox(
+  //             height: 32,
+  //           ),
+  //           Row(
+  //             children: [
+  //               Text(
+  //                 "Vai trò",
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               SizedBox(width: 4,),
+  //             ],
+  //           ),
+  //           _buildListDropdownItem(),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           Row(
+  //             mainAxisSize: MainAxisSize.max,
+  //             // crossAxisAlignment: CrossAxisAlignment.stretch,
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               _buildSignUpButton(),
+  //               SizedBox(
+  //                 height: 20,
+  //                 // width: double.infinity,
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       )
+  //   );
+  // }
 
-  Widget _buildSignUpButton() {
-    return RoundedButtonWidget(
-      buttonText: ('Áp dụng'),
-      buttonColor: Colors.amber,
-      textColor: Colors.white,
-      onPressed: () {
-        _clickButtonApDung();
-      },
-    );
-  }
+  // Widget _buildSignUpButton() {
+  //   return RoundedButtonWidget(
+  //     buttonText: ('Áp dụng'),
+  //     buttonColor: Colors.amber,
+  //     textColor: Colors.white,
+  //     onPressed: () {
+  //       _clickButtonApDung();
+  //     },
+  //   );
+  // }
 
-  Widget _buildListDropdownItem() {
-    return DropdownButtonFormField(
-      value: _selectedValue,
-      items: _roles,
-      hint: Text("Chọn vai trò"),
-      onChanged: (value) {
-        setState(() {
-          _selectedValue = value;
-        });
-      },
-    );
-  }
+  // Widget _buildListDropdownItem() {
+  //   return DropdownButtonFormField(
+  //     value: _selectedValue,
+  //     items: _roles,
+  //     hint: Text("Chọn vai trò"),
+  //     onChanged: (value) {
+  //       setState(() {
+  //         _selectedValue = value;
+  //       });
+  //     },
+  //   );
+  // }
 
   _showDialog<T>({BuildContext context, Widget child}) {
     showDialog<T>(
@@ -1017,21 +1004,13 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     });
   }
 
-  _showPopupMenu(){
+  _showPopupMenu(int Position){
     getPosition;
     showMenu<String>(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
-
-      // builder: (BuildContext context){
-      //   return Wrap(
-      //     children: [
-      //       buildFilterAdvance(),
-      //     ],
-      //   );
-      // }
       position: RelativeRect.fromLTRB(25.0, 0.0, 0.0, 0.0),      //position where you want to show the menu on screen
       // position: relRectSize,
       items: [
@@ -1055,34 +1034,22 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             child: Row(
               children: [
                 Icon(
-                  Icons.people_alt,
-                  size: 20,
-                ),
-                SizedBox(width: 10,),
-                Text("Quyền",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            value: '2'),
-        PopupMenuItem<String>(
-            child: Row(
-              children: [
-                Icon(
                   Icons.delete_rounded,
                   size: 20,
                 ),
                 SizedBox(width: 10,),
-                Text("Xóa bỏ",
+                this.userChoosen.isActive ? Text("Ngừng kích hoạt",
                   style: TextStyle(
                     fontSize: 20,
                   ),
-                )
+                ) : Text ("Kích hoạt",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
               ],
             ),
-            value: '3'),
+            value: '2'),
       ],
       elevation: 8.0,
     )
@@ -1095,10 +1062,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           context,
           MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: this.userChoosen)),
         );
-      }else if(itemSelected == "2"){
-        //code here
       }else{
-        _showSimpleModalDialogConfirmDelete(context, this.userChoosen);
+        if (this.userChoosen.permissions.contains("Admin")) showSimpleModalDialogWarning(context, "Bạn không thể ngừng kích hoạt người dùng này!");
+        else {
+          var future =  showSimpleModalDialog(context, userChoosen.isActive ? "Bạn có chắc chắn muốn ngừng kích hoạt người dùng này ?" : "Bạn có chắc chắn muốn kích hoạt người dùng này ?" );
+          future.then((value) {
+            if (value) _isActiveDanhMuc(userChoosen, Position);
+          });
+          return;
+      }
       }
 
     });
@@ -1124,120 +1096,35 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     }
   }
 
-  _showSimpleModalDialogConfirmDelete(context, User user){
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius:BorderRadius.circular(12.0)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  // constraints: user.name == "admin" ? BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.25,) : BoxConstraints(maxHeight: MediaQuery.of(context).size.height*0.35,),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0, left: 18,top: 12, bottom: 16),
-                    child: Container(
-                      child: Stack(
-                          children: [
-                            user.name == "admin" ? Positioned(
-                              right: 0.0,
-                              child: GestureDetector(
-                                onTap: (){
-                                  Navigator.of(context).pop();
-                                },
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: CircleAvatar(
-                                    radius: 14.0,
-                                    backgroundColor: Colors.grey.shade300,
-                                    child: Icon(Icons.close, color: Colors.red),
-                                  ),
-                                ),
-                              ),
-                            ) : Container(),
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.warning_rounded,
-                                  size: MediaQuery.of(context).size.width*0.2,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(height: 10,),
-                                (user.name == "admin") ?
-                                Text(
-                                  "Bạn không thể xóa người dùng này!",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                                    : Text(
-                                  "Bạn có chắc muốn xóa người dùng này?",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 10,),
-                                user.name != "admin" ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ElevatedButton(
-                                      child: Text(
-                                        "Xóa",
-                                        style: TextStyle(fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      style: ButtonStyle(
-                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                side: BorderSide(color: Colors.red),
-                                              )
-                                          )
-                                      ),
-                                      onPressed: () {
-                                        // _userManagementStore.deleteUser(user.id);
-                                      },
-                                    ),
-                                    // SizedBox(width: 10,),
-                                    ElevatedButton(
-                                      child: Text(
-                                        "Hủy bỏ",
-                                        style: TextStyle(fontSize: 22,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      style: ButtonStyle(
-                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade400),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(Radius.circular(18)),
-                                                side: BorderSide(color: Colors.red),
-                                              )
-                                          )
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                ) : Container()
-                              ],
-                            ),
-                          ]
-                      ),
-                    )
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
+  Future<void> _openUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchURL() async {
+    _openUrl ( 'https://admin.homies.exscanner.edu.vn/app/admin/users');
+  }
+
+  _isActiveDanhMuc(User user, int position) async {
+    await _formStore.IsActiveUser(user);
+    if (_formStore.isActive_success) {
+      if(user.isActive)
+      {
+        _userManagementStore.userList.users[position].isActive = false;
+
+      }
+      else {
+        _userManagementStore.userList.users[position].isActive = true;
+      }
+      // Navigator.of(context).pop();
+      setState(() {});
+      showSuccssfullMesssage(!_userManagementStore.userList.users[position].isActive ? "Ngừng kích hoạt thành công": "Kích hoạt thành công",context);
+      await Future.delayed(Duration(milliseconds: 3500));
+      _formStore.isActive_success = false;
+    }
   }
 
   // dispose:-------------------------------------------------------------------
