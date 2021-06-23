@@ -86,7 +86,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       //     onPressed: (){setState(() {
       //       _selectedIndex =0;
       //     });}):Container(),
-      title:  Text("Kiểm Duyêt"),
+      title:  Text("Kiểm Duyệt"),
 
     );
   }

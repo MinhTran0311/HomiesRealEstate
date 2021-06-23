@@ -1361,7 +1361,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
       return RoundedButtonWidget(
         buttonText: ('Đăng tin'),
         buttonColor:
-            !_imageStore.imageLoadingpost ? Colors.amber[700] : Colors.grey,
+            !_imageStore.imageLoadingpost ? Colors.amber : Colors.grey,
         textColor: Colors.white,
         onPressed: () async {
           {
