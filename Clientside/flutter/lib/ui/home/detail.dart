@@ -242,7 +242,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pop(context,_postStore.isBaiGhimYeuThich?true:false);
               },
               child: Container(
                   child: AnimatedBuilder(

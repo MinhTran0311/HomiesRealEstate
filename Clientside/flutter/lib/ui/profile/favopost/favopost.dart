@@ -229,7 +229,8 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
               final result = await
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Detail(post: post)));
-              if (result) postStore.postForCurList.posts.removeAt(index);
+              if (result) setState((){postStore.postForCurList.posts.removeAt(index);});
+              print(result);
             },
             child: Container(
               height: 190,
