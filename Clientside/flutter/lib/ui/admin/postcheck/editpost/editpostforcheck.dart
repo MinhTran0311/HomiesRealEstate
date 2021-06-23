@@ -82,8 +82,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
   int songay;
-  String pointx='';
-  String pointy='';
+  String pointx = '';
+  String pointy = '';
   Town selectedTown = null;
   Commune selectedCommune = null;
   String selectedCity = null;
@@ -139,8 +139,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
       selectedTypeType = selectedTypeTypeType;
     }
     ;
-    pointx=post.toaDoX;
-    pointy=post.toaDoY;
+    pointx = post.toaDoX;
+    pointy = post.toaDoY;
     selectedCommune = townStore.communeList.communes[post.xaId - 14468];
     selectedTown = townStore.townList.towns[selectedCommune.huyenId - 896];
     selectedCity = selectedTown.tinhTenTinh;
@@ -166,42 +166,15 @@ class _EditpostScreenState extends State<EditpostScreen> {
         body: WillPopScope(
             onWillPop: () {
               {
-                var futureValue = showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text(
-                          "Bạn chưa lưu thông tin bạn thật sự có muốn thoát?",
-                          style:
-                          TextStyle(fontSize: 24, fontFamily: 'intel'),
-                        ),
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RoundedButtonWidget(
-                              buttonText: "Đồng ý",
-                              buttonColor: Colors.green,
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                            ),
-                            RoundedButtonWidget(
-                              buttonColor: Colors.grey,
-                              buttonText: "Hủy",
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    });
-                futureValue.then((value) {
-                  if (value)  Navigator.of(context).pop();
+                var future = showSimpleModalDialog(context,
+                    "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+                future.then((value) {
+                  if (value)
+                    Navigator.of(context).pop();
+                  else
+                    return;
                 });
-              };
-              return;
+              }
             },
             child: _buildbody()));
   }
@@ -847,12 +820,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
         width: 0,
       );
   }
+
   Widget _buildCommuneField2() {
     if (selectedCommune != null) {
       return Padding(
           padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
           child: Text(
-            pointx+','+pointy,
+            pointx + ',' + pointy,
             style: TextStyle(),
           ));
     } else
@@ -861,6 +835,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
         width: 0,
       );
   }
+
   Widget _buildLocateField() {
     return Observer(
       builder: (context) {
@@ -889,9 +864,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                       ),
                       labelText: 'Địa chỉ',
                     ),
-                    onSaved: (value) {
-
-                    },
+                    onSaved: (value) {},
                     controller: _LocateController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -952,7 +925,35 @@ class _EditpostScreenState extends State<EditpostScreen> {
                           thuocTinh.tenThuocTinh != "Hướng ban công"
                       ? TextFormField(
                           decoration: InputDecoration(
-                            icon: Icon(Icons.home_work,
+                            icon: Icon(
+                                thuocTinh.id == 3
+                                    ? Icons.house_outlined
+                                    : thuocTinh.id == 4
+                                        ? Icons.add_road_outlined
+                                        : thuocTinh.id == 5
+                                            ? Icons.sensor_door_outlined
+                                            : thuocTinh.id == 6
+                                                ? Icons.streetview_outlined
+                                                : thuocTinh.id == 7
+                                                    ? Icons.king_bed_outlined
+                                                    : thuocTinh.id == 8
+                                                        ? Icons.bathtub_outlined
+                                                        : thuocTinh.id == 9
+                                                            ? Icons
+                                                                .policy_outlined
+                                                            : thuocTinh.id == 10
+                                                                ? Icons
+                                                                    .weekend_outlined
+                                                                : thuocTinh.id ==
+                                                                        11
+                                                                    ? Icons
+                                                                        .apartment_outlined
+                                                                    : thuocTinh.id ==
+                                                                            12
+                                                                        ? Icons
+                                                                            .confirmation_number_outlined
+                                                                        : Icons
+                                                                            .category_outlined,
                                 color: _themeStore.darkMode
                                     ? Colors.white
                                     : Colors.amber),
@@ -985,12 +986,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                           hint: thuocTinh.tenThuocTinh == "Hướng nhà"
                               ? Row(
                                   children: [
-                                    Icon(
-                                      Icons.directions,
-                                      color: !_themeStore.darkMode
-                                          ? const Color(0xFF167F67)
-                                          : Colors.amber,
-                                    ),
+                                    Icon(Icons.sensor_door_outlined),
                                     SizedBox(
                                       width: 10,
                                     ),
@@ -999,7 +995,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
                                 )
                               : Row(children: [
                                   Icon(
-                                    Icons.directions,
+                                    Icons.streetview_outlined,
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -1036,9 +1032,6 @@ class _EditpostScreenState extends State<EditpostScreen> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.directions,
-                                      color: !_themeStore.darkMode
-                                          ? const Color(0xFF167F67)
-                                          : Colors.amber,
                                     ),
                                     SizedBox(
                                       width: 10,
@@ -1451,19 +1444,19 @@ class _EditpostScreenState extends State<EditpostScreen> {
                     );
                   });
               futureValue.then((value) {
-                if(value) {
-              for (var item in _imageStore.imageListpost) {
-
-                AppImage u = new AppImage();
-                if (j < _imageStore.imageList.images.length)
-                  u.id = _imageStore.imageList.images[j].id;
-                j++;
-                u.baiDangId = this.post.id.toString();
-                u.duongDan = item;
-                _newpost.images.add(u);
-               }
-                postStore.editpost(_newpost);
-              }});
+                if (value) {
+                  for (var item in _imageStore.imageListpost) {
+                    AppImage u = new AppImage();
+                    if (j < _imageStore.imageList.images.length)
+                      u.id = _imageStore.imageList.images[j].id;
+                    j++;
+                    u.baiDangId = this.post.id.toString();
+                    u.duongDan = item;
+                    _newpost.images.add(u);
+                  }
+                  postStore.editpost(_newpost);
+                }
+              });
             }
           }
         },
