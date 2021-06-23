@@ -714,6 +714,7 @@ class _MapsScreenState extends State<MapsScreen> {
                     ),
                     padding: EdgeInsets.only(left: 12, top: 6),
                     child: TextField(
+
                       controller: _autocompleteText,
                       decoration: InputDecoration(
                         hintText: "Nhập kinh độ và vĩ độ",

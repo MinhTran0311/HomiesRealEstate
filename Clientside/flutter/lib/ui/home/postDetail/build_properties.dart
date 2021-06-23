@@ -10,25 +10,25 @@ class Properties extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      height: 120,
-      child: Padding(
-          padding: EdgeInsets.only(left:12, bottom:6,top: 6,right: 6),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            children: buildProperties(context, this._propertyList.properties,size),
-          )
-      ),
+    return  Center(
+        child: Container(
+          height: 130,
+          child:  Padding(
+              padding: EdgeInsets.only(top: 6,right: 6),
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                children: buildProperties(context, this._propertyList.properties,size),
+              )
+          ),
+    )
     );
   }
   List<Widget> buildProperties(BuildContext context, List<Property> propertyList, Size size) {
     List<Widget> list =[];
-
     for (var i=0;i<propertyList.length;i++){
       list.add(buildPropertyIcon(propertyList[i], i, size));
-
     }
     return list;
   }

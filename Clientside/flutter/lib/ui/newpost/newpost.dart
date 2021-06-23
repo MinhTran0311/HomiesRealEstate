@@ -241,7 +241,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
           _postStore.getsobaidang();
           _userStore.getCurrentWalletUser();
           Future.delayed(Duration(milliseconds: 3000), () {
-            reset();
+            setState(() {
+              reset();
+            });
             Route route = MaterialPageRoute(
                 builder: (context) =>
                     Detail(post: _postStore.postForCurList.posts.first));
@@ -509,7 +511,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hint: Text("Chọn loại hình nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
                 validator: (value) =>
-                    value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
+                    value == null ? 'Vui lòng chọn loại hình nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                   onPressed: () => setState(() {
@@ -572,7 +574,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               padding:
                   const EdgeInsets.only(left: 40.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<Postcategory>(
-                hint: Text("Chọn hình thức bổ sung"),
+                hint: Text("Chọn loại hình bổ sung"),
                 value: selectedTypeTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (Postcategory Value) {
@@ -1469,6 +1471,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 : Container(
                     height: 0,
                   ),
+            _LocateController.value.text.isEmpty
+                ? Text('Vui lòng nhập địa chỉ chi tiết')
+                : Container(
+              height: 0,
+            ),
             selectedCommune == null
                 ? Text('Vui lòng chọn địa chỉ')
                 : Container(
@@ -1480,7 +1487,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     height: 0,
                   ),
             selectedTypeTypeType == null
-                ? Text('Vui lòng chọn hình thức nhà/đất')
+                ? Text('Vui lòng chọn loại hình nhà/đất')
                 : Container(
                     height: 0,
                   ),
