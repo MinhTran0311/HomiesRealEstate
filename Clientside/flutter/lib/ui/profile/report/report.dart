@@ -369,7 +369,7 @@ class _ReportPageState extends State<ReportPage>{
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
-                        child: Text("Tổng",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                        child: Text("Tổng lượng tiền giao dịch",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                       ),
                       Align(
                         alignment: Alignment.centerRight,

@@ -134,7 +134,7 @@ class _changePassWordPageState extends State<changePassWordPage> {
           },
           labelText: "Mật khẩu hiện tại",
           isDarkmode: _themeStore.darkMode,
-          // suffixIcon: Icon(Icons.clear),
+          suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
             _store.setPassword(_oldPasswordController.text);
             return _store.formErrorStore.password;},
@@ -163,7 +163,7 @@ class _changePassWordPageState extends State<changePassWordPage> {
 
           labelText: "Mật khẩu mới",
           isDarkmode: _themeStore.darkMode,
-          // suffixIcon: Icon(Icons.clear),
+          suffixIcon: Icon(Icons.clear),
           errorMessage: (value){
             _store.setNewPassword(_newPasswordController.text);
             return _store.formErrorStore.newPassword;},

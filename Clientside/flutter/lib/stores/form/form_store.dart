@@ -46,6 +46,7 @@ abstract class _FormStore with Store {
       reaction((_) => userEmail, validateUserEmail),
       reaction((_) => phoneNumber, validatePhoneNumber),
       reaction((_) => newPassword,validateNewPassword),
+      reaction((_) => confirmPassword,validateConfirmPassword),
     ];
   }
 
@@ -297,7 +298,9 @@ abstract class _FormStore with Store {
       formErrorStore.password = "Chưa nhập mật khẩu";
     } else if (value.length < 6) {
       formErrorStore.password = "Mật khẩu phải có ít nhất 6 kí tự";
-    } else {
+    } else if (newPassword.isNotEmpty && value.compareTo(newPassword)==0)
+      formErrorStore.password = "Mật khẩu hiện tại không được trùng với mật khẩu mới";
+    else{
       formErrorStore.password = null;
     }
   }
@@ -306,6 +309,8 @@ abstract class _FormStore with Store {
   void validateConfirmPassword(String value) {
     if (value.isEmpty)
       formErrorStore.confirmPassword = "Chưa nhập mật khẩu xác nhận";
+    else if (value.length < 6)
+      formErrorStore.confirmPassword = "Mật khẩu phải có ít nhất 6 kí tự";
     else if (newPassword.isEmpty && value.compareTo(password)!=0)
       formErrorStore.confirmPassword = "Mật khẩu xác nhận chưa đúng";
     else if (newPassword.isNotEmpty && value.compareTo(newPassword)!=0)
@@ -333,9 +338,9 @@ abstract class _FormStore with Store {
       formErrorStore.newPassword = "Mật khẩu mới không được trùng với mật khẩu hiện tại";
     }
     else if (value.length < 6) {
-      formErrorStore.password = "Mật khẩu phải có ít nhất 6 kí tự";
+      formErrorStore.newPassword = "Mật khẩu phải có ít nhất 6 kí tự";
     } else {
-      formErrorStore.password = null;
+      formErrorStore.newPassword = null;
     }
   }
 
