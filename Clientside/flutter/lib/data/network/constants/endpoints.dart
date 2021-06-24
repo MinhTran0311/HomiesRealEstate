@@ -84,7 +84,7 @@ class Endpoints {
   //Update user
   static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
   // //Delete user
-  // static const String createOrUpdateUser = homiesUrl + "/services/app/User/CreateOrUpdateUser";
+   static const String deleteUser = homiesUrl + "/services/app/User/DeleteUser";
 
   //Danh mục
   //Get all Danh Mục
