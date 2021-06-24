@@ -559,11 +559,14 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       size: 20,
                                     ),
                                     SizedBox(width: 10,),
-                                    Text(
-                                      "${user.permissions}",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
+                                    Flexible(
+                                      child: Text(
+                                        "${user.permissions}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -871,7 +874,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                 // ),
                                 child: ElevatedButton(
                                   child: Text(
-                                    "Chỉnh sửa vai trò/quyền",
+                                    "Chỉnh sửa thông tin",
                                     style: TextStyle(fontSize: 22,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -886,11 +889,19 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                       )
                                   ),
                                   onPressed: () async {
-                                    var future = showSimpleModalDialog(context, "Bạn có muốn chuyển hướng đến trang web quản lý?");
-                                    future.then((value) {
-                                      if (value)  _launchURL();
+                                    Navigator.of(context).pop();
+                                    var future = Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: this.userChoosen)),
+                                    );
+                                    future.then((user) {
+                                      if (user!=null)
+                                      {
+                                        setState(() {
+                                          _userManagementStore.userList.users[this.positionUser] = user;
+                                        });
+                                      }
                                     });
-                                    return;
                                   },
                                 )
                             ),
@@ -996,6 +1007,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   _showPopupMenu(int Position){
     getPosition;
+    positionUser = Position;
     showMenu<String>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -1012,7 +1024,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   size: 20,
                 ),
                 SizedBox(width: 10,),
-                Text("Chỉnh sửa",
+                Text("Chỉnh sửa quyền",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -1048,19 +1060,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       if (itemSelected == null) return;
 
       if(itemSelected == "1"){
-        Navigator.of(context).pop();
-        var future = Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CreateOrEditUserScreen(user: this.userChoosen)),
-        );
-        future.then((user) {
-          if (user!=null)
-            {
-              setState(() {
-                _userManagementStore.userList.users[Position] = user;
-              });
-            }
+        var future = showSimpleModalDialog(context, "Bạn có muốn chuyển hướng đến trang web quản lý?");
+        future.then((value) {
+          if (value)  _launchURL();
         });
+        return;
       }else{
         if (this.userChoosen.permissions.contains("Admin")) showSimpleModalDialogWarning(context, "Bạn không thể ngừng kích hoạt người dùng này!");
         else {
@@ -1120,7 +1124,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             _userManagementStore.userList.users[positionUser].isActive = true;
           }
           Navigator.of(context).pop();
-
+          _formStore.isActive_success = false;
           // setState(() {});
           showSuccssfullMesssage(!_userManagementStore.userList.users[positionUser].isActive ? "Ngừng kích hoạt thành công": "Kích hoạt thành công",context);
         }
@@ -1130,7 +1134,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
   _isActiveDanhMuc(User user, int position) async {
     await _formStore.IsActiveUser(user);
-    positionUser = position;
   }
 
   // dispose:-------------------------------------------------------------------

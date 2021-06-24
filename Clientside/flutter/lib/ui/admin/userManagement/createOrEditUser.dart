@@ -60,7 +60,6 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   bool _checkbox = true;
   bool _checkboxNeedChangePs = true;
   bool _checkboxSendEmailActive = true;
-  bool _checkboxActive = true;
   String titleForm = "Tạo tài khoản mới";
   RoleManagementStore _roleManagementStore;
   bool isFinishInit = true;
@@ -562,6 +561,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
          }
          else {
            if(_store.canCreate) {
+             _store.setIsActive(_checkbox);
              DeviceUtils.hideKeyboard(context);
              _store.CreateUser();
            }
@@ -584,10 +584,11 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     }
     if (this.user == null) {
       updatedUser.creationTime = DateTime.now().toIso8601String();
+      updatedUser.isEmailConfirmed = false;
     }
     updatedUser.name = _nameController.text;
     updatedUser.surName = _surnameController.text;
-    updatedUser.isActive = _checkboxActive;
+    updatedUser.isActive = _checkbox;
     updatedUser.email = _userEmailController.text;
     updatedUser.userName = _userNameController.text;
     updatedUser.phoneNumber = _phoneNumberController.text;

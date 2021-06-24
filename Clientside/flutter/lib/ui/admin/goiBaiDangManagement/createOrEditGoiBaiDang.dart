@@ -52,6 +52,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
   bool _checkboxTrangThai = true;
   String titleForm = "Tạo gói mới";
   bool _validatorPhi = false;
+  bool isFirst = true;
 
   @override
   void initState() {
@@ -81,6 +82,11 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         Provider.of<GoiBaiDangManagementStore>(context);
     _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
     _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+    if (this.goiBaiDang != null && isFirst) {
+      _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id);
+      isFirst = false;
+    }
+
 
   }
 
@@ -406,7 +412,6 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         if (this.goiBaiDang != null)
           await {
             _goiBaiDangManagementStore.setNameGoiBaiDang(_nameController.text),
-            _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
             _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
             if (_doUuTienController.text == null || _doUuTienController.text.isEmpty) {
               _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(1),
