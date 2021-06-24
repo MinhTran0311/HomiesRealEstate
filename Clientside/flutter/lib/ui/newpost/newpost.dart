@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
-import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/converter/local_converter.dart';
 import 'package:boilerplate/models/image/image.dart';
@@ -62,8 +61,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
   ImageStore _imageStore;
   UserStore _userStore;
   ThemeStore _themeStore;
-  ApplicationBloc _applicationBloc;
-
 
   //region text controllers
   TextEditingController _TileController = TextEditingController();
@@ -158,7 +155,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
     _userStore = Provider.of<UserStore>(context);
     _imageStore = Provider.of<ImageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
-    _applicationBloc = Provider.of<ApplicationBloc>(context);
 
     if (!_postStore.loadinggetcategorys) {
       _postStore.getPostcategorys();
@@ -818,12 +814,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
           onChanged: (Commune Value) {
             setState(() {
               selectedCommune = Value;
-              _applicationBloc.searchFromPlace(selectedCommune.tenXa);
-              Future.delayed(Duration(milliseconds: 2000), () async {
+              Future.delayed(Duration(milliseconds: 1000), () async {
                 final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MapsScreen(type: "Đăng bài", commune: selectedCommune.tenXa,),
+                      builder: (context) => MapsScreen(type: "Đăng bài"),
                     ));
                 setState(() {
                   pointx = result.split(',')[0];

@@ -78,7 +78,7 @@ abstract class _MapsStore with Store {
     {
       isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
       if (!isLocationServiceEnabled) {
-        await Geolocator.openLocationSettings();
+        await Geolocator.openAppSettings();
       }
       else {
         this.positionCurrent =  await Geolocator.getCurrentPosition();
