@@ -233,7 +233,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
-        if (_postStore.successNewpost) {
+        if (_postStore.successNewpost)  {
           showSuccssfullMesssage("Đăng tin thành công", context);
           //dispose();.
           _postStore.getsobaidangall();

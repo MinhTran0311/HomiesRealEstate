@@ -223,7 +223,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
   }
 
   Widget _buildListView() {
-    return postStore.postForCurList != null
+    return Observer(builder: (context) {
+      return postStore.postForCurList != null
         ? Expanded(
             child: SmartRefresher(
               key: _refresherKey1,
@@ -305,7 +306,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               "chưa có bài đăng",
             ),
           );
-  }
+  });}
 
   List<int> songay = new List<int>();
   _selectDatefl(
@@ -364,7 +365,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
           );
         });
   }
- int curindex=-1;
+
+  int curindex = -1;
   Widget buildPopMenuBottom(Post post, int position) {
     return Container(
         padding: EdgeInsets.only(right: 24, left: 24, top: 32, bottom: 24),
@@ -427,42 +429,15 @@ class _MyPostScreenState extends State<MyPostScreen> {
                     ),
                   ),
                   onTap: () {
-                    var futureValue = showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              "Bạn có chắc chắn muốn xóa bài đăng?",
-                              style:
-                                  TextStyle(fontSize: 24, fontFamily: 'intel'),
-                            ),
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RoundedButtonWidget(
-                                  buttonText: "Đồng ý",
-                                  buttonColor: Colors.green,
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                ),
-                                RoundedButtonWidget(
-                                  buttonColor: Colors.grey,
-                                  buttonText: "Hủy",
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                    futureValue.then((value) {
-                      post.trangThai = "Off";
-                      curindex=position;
-                      if (value) postStore.Delete(post);
-                      // true/false
+                    var future = showSimpleModalDialog(
+                        context, "Bạn có chắc chắn xóa bài đăng?");
+                    future.then((value) {
+                      if (value) {
+                        post.trangThai = "Off";
+                        curindex = position;
+                        if (value) postStore.Delete(post);
+                        // true/false
+                      }
                     });
                   },
                 ),
@@ -835,7 +810,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                               }
                             });
                           } else {
-                            var future = showSimpleModalDialog(context,"Gia hạn bài viết và thực hiện thanh toán?");
+                            var future = showSimpleModalDialog(context,
+                                "Gia hạn bài viết và thực hiện thanh toán?");
                             future.then((value) {
                               if (value) {
                                 post.giagoi = selectedPack[index] == null
@@ -913,6 +889,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
           postStore.successdelete = false;
           setState(() {
             postStore.postForCurList.posts.removeAt(curindex);
+            Navigator.pop(context);
           });
           showSuccssfullMesssage("Xóa bài đăng thành công", context);
         }
