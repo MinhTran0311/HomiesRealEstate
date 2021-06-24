@@ -233,12 +233,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
-        if (_postStore.successNewpost) {
+        if (_postStore.successNewpost)  {
           showSuccssfullMesssage("Đăng tin thành công", context);
           //dispose();.
           _postStore.getsobaidangall();
           _postStore.successNewpost = false;
           _postStore.getPostForCurs(false, "", 0);
+          _postStore.getPostForcheck(false, "", 0);
           _postStore.getsobaidang();
           _userStore.getCurrentWalletUser();
           Future.delayed(Duration(milliseconds: 3000), () {
@@ -1650,33 +1651,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 }
               }
             } on Exception catch (_) {
-              var futureValue = showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Vui lòng load lại trang cá nhân",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RoundedButtonWidget(
-                            buttonText: "Đồng ý",
-                            buttonColor: Colors.green,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(),
-                                  ));
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  });
+              var future = showSimpleModalDialog(context, "Vui lòng thử lại sau");
+              future.then((value) {
+                if (value) {
+                  _userStore.getCurrentWalletUser();
+                }
+              });
             }
           }
         },

@@ -422,7 +422,7 @@ abstract class _FormStore with Store {
   Future IsActiveUser(User user) async {
     isActive_success = false;
     List<String> roleNames = new List<String>();
-    await user.permissionsList.forEach((element) {roleNames.add(element["roleName"]);});
+    user.permissionsList.forEach((element) {roleNames.add(element.name);});
     final future = _repository.updateUser(user.id, user.userName, user.surName, user.name, user.email, user.phoneNumber, !user.isActive, roleNames);
     fetchIsActiveUserFuture = ObservableFuture(future);
 

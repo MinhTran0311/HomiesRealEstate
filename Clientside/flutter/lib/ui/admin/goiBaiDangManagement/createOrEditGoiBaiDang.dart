@@ -142,7 +142,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         Observer(
           builder: (context) {
             if (_goiBaiDangManagementStore.updateGoiBaiDang_success || _goiBaiDangManagementStore.createGoiBaiDang_success) {
-              Navigator.of(context).pop(context);
+              Navigator.of(context).pop(setDataBack());
               if(_goiBaiDangManagementStore.updateGoiBaiDang_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
@@ -461,18 +461,24 @@ class _CreateOrEditGoiBaiDangScreenScreenState
     );
   }
 
-  _updateOrCreateSuccess() async {
-    // await Navigator.of(context).pop();
-    // if(_goiBaiDangManagementStore.updateActiveGoiBaiDang_success)
-    // {
-    //   showSuccssfullMesssage("Cập nhật thành công", context);
-    //   _goiBaiDangManagementStore.updateActiveGoiBaiDang_success = false;
-    // }
-    // else if(_goiBaiDangManagementStore.createGoiBaiDang_success)
-    // {
-    //   showSuccssfullMesssage("Thêm mới thành công", context);
-    //   _goiBaiDangManagementStore.createGoiBaiDang_success = false;
-    // }
+  GoiBaiDang setDataBack() {
+    GoiBaiDang goiBaiDangBack = new GoiBaiDang();
+    if (this.goiBaiDang != null) {
+      goiBaiDangBack = this.goiBaiDang;
+    }
+    goiBaiDangBack.tenGoi = _nameController.text;
+    goiBaiDangBack.phi = double.tryParse(_phiController.text);
+    if (_doUuTienController.text == null || _doUuTienController.text.isEmpty){
+      goiBaiDangBack.doUuTien = 1;
+    }
+    else goiBaiDangBack.doUuTien = int.tryParse(_doUuTienController.text);
+    if (_thoiGianToiThieuController.text == null || _thoiGianToiThieuController.text.isEmpty){
+      goiBaiDangBack.thoiGianToiThieu = 1;
+    }
+    else goiBaiDangBack.thoiGianToiThieu = int.tryParse(_thoiGianToiThieuController.text);
+    goiBaiDangBack.trangThai = _checkboxTrangThai ? "On" : "Off";
+    goiBaiDangBack.moTa = _moTaController.text;
+    return goiBaiDangBack;
   }
 
   //endregion

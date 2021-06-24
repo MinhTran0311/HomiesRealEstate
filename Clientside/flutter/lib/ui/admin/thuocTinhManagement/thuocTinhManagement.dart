@@ -107,10 +107,16 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
               // size: 28,
             ),
             onPressed: () {
-              Navigator.push(
+              var future = Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen()),
               );
+              future.then((value) {
+                if(value != null)
+                  setState(() {
+                    _thuocTinhManagementStore.thuocTinhList.thuocTinhs.add(value);
+                  });
+              });
             },
           ),
         ],
@@ -364,7 +370,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                         child:
                         Text(
                           // alignment: Alignment.centerRight,
-                          thuocTinh.kieuDuLieu == "String" ? "Chuỗi" : thuocTinh.kieuDuLieu == "int" ? "Số nguyên" : thuocTinh.kieuDuLieu == "double" ? "Số thực" : thuocTinh.kieuDuLieu,
+                          thuocTinh.kieuDuLieu == "String" ? "Chuỗi" : thuocTinh.kieuDuLieu == "int" ? "Số nguyên" : "Số thực" ,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 18,
@@ -520,10 +526,18 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.push(
+                    var future = Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen(thuocTinh: thuocTinh,)),
                     );
+                    future.then((thuocTinhBack) {
+                      if (thuocTinhBack != null)
+                        {
+                          setState(() {
+                            _thuocTinhManagementStore.thuocTinhList.thuocTinhs[position] = thuocTinhBack;
+                          });
+                        }
+                    });
                   },
                 ),
               ],
@@ -645,8 +659,8 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _searchController.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+    // _scrollController.dispose();
+    // _refreshController.dispose();
     super.dispose();
   }
 

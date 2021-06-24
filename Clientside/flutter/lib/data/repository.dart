@@ -431,13 +431,13 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  // //Delete user
-  // Future<dynamic> deleteUser(int id) async
-  // {
-  //   return await _userApi.deleteUser(id).then((res) {
-  //     return res;
-  //   }).catchError((error) => throw error);
-  // }
+  //Delete user
+  Future<dynamic> deleteUser(int id) async
+  {
+    return await _userApi.deleteUser(id).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
 
   //Count all users
   Future<dynamic> countAllUsers() async

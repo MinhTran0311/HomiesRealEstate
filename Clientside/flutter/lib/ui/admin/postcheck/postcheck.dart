@@ -74,7 +74,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
     _townStore = Provider.of<TownStore>(context);
     if (!postStore.loadingPostForcheck)
       postStore.getPostForcheck(false, "", key);
-    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidangall));
+    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidangall) + 2);
     selectedPack = new List<Pack>(int.parse(postStore.sobaidangall));
     songay = new List<int>(int.parse(postStore.sobaidangall));
   }
@@ -136,93 +136,96 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
   }
 
   Widget _buildPostsList() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(
-        padding: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 0),
-        child: TextField(
-          autofocus: false,
-          keyboardType: TextInputType.text,
-          controller: _searchController11,
-          onChanged: (value) {},
-          style: TextStyle(
-            fontSize: 28,
-            height: 1,
-            fontWeight: FontWeight.bold,
-          ),
-          decoration: InputDecoration(
-              hintText: "Tìm kiếm",
-              hintStyle: TextStyle(
-                fontSize: 24,
-                color: Colors.grey[400],
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.orange[400]),
-              ),
-              border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black)),
-              suffixIcon: Padding(
-                padding: EdgeInsets.only(left: 16),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
-                  ),
-                  onPressed: () async {
-                    postStore.getPostForcheck(
-                        false,
-                        _searchController11 != null
-                            ? _searchController11.text.toString()
-                            : "",
-                        key);
-                    await Future.delayed(Duration(milliseconds: 2000));
-                    // if (mounted) setState(() {});
-                    isRefreshing1 = true;
-                    _refreshController1.refreshCompleted();
-                  },
+    return Observer(builder: (context) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 0),
+          child: TextField(
+            autofocus: false,
+            keyboardType: TextInputType.text,
+            controller: _searchController11,
+            onChanged: (value) {},
+            style: TextStyle(
+              fontSize: 28,
+              height: 1,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: InputDecoration(
+                hintText: "Tìm kiếm",
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  color: Colors.grey[400],
                 ),
-              )),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orange[400]),
+                ),
+                border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black)),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.grey[400],
+                      size: 28,
+                    ),
+                    onPressed: () async {
+                      postStore.getPostForcheck(
+                          false,
+                          _searchController11 != null
+                              ? _searchController11.text.toString()
+                              : "",
+                          key);
+                      await Future.delayed(Duration(milliseconds: 2000));
+                      // if (mounted) setState(() {});
+                      isRefreshing1 = true;
+                      _refreshController1.refreshCompleted();
+                    },
+                  ),
+                )),
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 24.0),
-        child: DropdownButton<String>(
-          value: dropdownValue,
-          //  elevation: 16
-          onChanged: (String newValue) {
-            setState(() {
-              dropdownValue = newValue;
-              if (newValue == "Tất cả")
-                key = 0;
-              else if (newValue == "Hết hạn")
-                key = -1;
-              else
-                key = 1;
-              postStore.getPostForcheck(
-                  false,
-                  _searchController11 != null
-                      ? _searchController11.text.toString()
-                      : "",
-                  key);
-            });
-          },
-          items: <String>["Tất cả", "Hết hạn", "Còn hạn"]
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0),
+          child: DropdownButton<String>(
+            value: dropdownValue,
+            //  elevation: 16
+            onChanged: (String newValue) {
+              setState(() {
+                dropdownValue = newValue;
+                if (newValue == "Tất cả")
+                  key = 0;
+                else if (newValue == "Hết hạn")
+                  key = -1;
+                else
+                  key = 1;
+                postStore.getPostForcheck(
+                    false,
+                    _searchController11 != null
+                        ? _searchController11.text.toString()
+                        : "",
+                    key);
+              });
+            },
+            items: <String>["Tất cả", "Hết hạn", "Còn hạn"]
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
         ),
-      ),
-      _buildListView()
-    ]);
+        _buildListView()
+      ]);
+    });
   }
 
   Widget _buildListView() {
+    return Observer(builder: (context) {
     return postStore.postForcheckList != null
         ? Expanded(
             child: SmartRefresher(
@@ -305,7 +308,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
               "chưa có bài đăng",
             ),
           );
-  }
+  });}
 
   List<int> songay = new List<int>();
   _selectDatefl(
@@ -364,7 +367,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
           );
         });
   }
-  int curindex=-1;
+
+  int curindex = -1;
   Widget buildPopMenuBottom(Post post, int position) {
     return Container(
         padding: EdgeInsets.only(right: 24, left: 24, top: 32, bottom: 24),
@@ -427,41 +431,17 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                     ),
                   ),
                   onTap: () {
-                    var futureValue = showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              "Bạn có chắc chắn muốn xóa bài đăng?",
-                              style:
-                                  TextStyle(fontSize: 24, fontFamily: 'intel'),
-                            ),
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RoundedButtonWidget(
-                                  buttonText: "Đồng ý",
-                                  buttonColor: Colors.green,
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                ),
-                                RoundedButtonWidget(
-                                  buttonColor: Colors.grey,
-                                  buttonText: "Hủy",
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                )
-                              ],
-                            ),
-                          );
+                    var future = showSimpleModalDialog(
+                        context, "Bạn có chắc chắn xóa bài đăng?");
+                    future.then((value) async {
+                      if (value) {
+                        post.trangThai = "Off";
+                        curindex = position;
+                        if (value) await postStore.Delete(post);
+                        setState(() {
+                          postStore.postForcheckList.posts.removeAt(curindex);
                         });
-                    futureValue.then((value) {
-                      post.trangThai = "Off";
-                      curindex=position;
-                      if (value) postStore.Delete(post);                      // true/false
+                      }
                     });
                   },
                 ),
@@ -906,9 +886,6 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          setState(() {
-            postStore.postForcheckList.posts.removeAt(curindex);
-          });
           showSuccssfullMesssage("Xóa bài đăng thành công", context);
         }
         return SizedBox.shrink();

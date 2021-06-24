@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/role/role.dart';
+import 'package:boilerplate/models/role/role_list.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -61,7 +63,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
   bool _checkboxActive = true;
   String titleForm = "Tạo tài khoản mới";
   RoleManagementStore _roleManagementStore;
-
+  bool isFinishInit = true;
 
   @override
   void initState() {
@@ -87,16 +89,29 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _roleManagementStore = Provider.of<RoleManagementStore>(context);
 
-    if (this.user != null) {
+
+    if (this.user != null && isFinishInit) {
       _store.setName(this.user.name);
       _store.setSurname(this.user.surName);
       _store.setIdUser(this.user.id);
       _store.setUserEmail(this.user.email);
       _store.setPhoneNumber(this.user.phoneNumber);
       _store.setIsActive(this.user.isActive);
-      _store.setRolesList(this.user.permissionsList);
-      _store.roleName.forEach((element) {_store.displayRoleName.add(element["roleName"]);});
+
+      if (this.user.permissionsList != null && this.user.permissionsList.first["roleName"]!=null) {
+        this.user.permissionsList.forEach((element) {
+          _store.displayRoleName.add(element["roleName"]);
+        });
+      }
+      else if (this.user.permissionsList != null && this.user.permissionsList.first["name"]!=null){
+        this.user.permissionsList.forEach((element) {
+          _store.displayRoleName.add(element["name"]);
+        });
+      }
+      else
+        _store.displayRoleName.clear();
       _store.setUserId(this.user.userName);
+      isFinishInit=false;
     }
 
     if (!_roleManagementStore.loading) {
@@ -169,13 +184,8 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
         Observer(
           builder: (context) {
             if (_store.updateUser_success || _store.createUser_success) {
-              Future.delayed(Duration(milliseconds: 0), () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => UserManagementScreen()),
-                // );
-                Navigator.pop(context);
-              });
+
+              Navigator.of(context).pop(_setDataUser());
               if (_store.updateUser_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
@@ -185,6 +195,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
                 showSuccssfullMesssage("Thêm mới thành công",context);
                 _store.createUser_success = false;
               }
+
               return Container(width: 0, height: 0);
 
             } else {
@@ -498,7 +509,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
                               dense: true,
                               //font change
                               title: new Text(
-                                _roleManagementStore.roleList.roles[index].name,
+                                _roleManagementStore.roleList.roles[index].displayName,
                                 style: TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w400,
@@ -534,11 +545,11 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       textColor: Colors.white,
       onPressed: () async {
          if(this.user != null) await {
-           if(_passwordController.text != null && _passwordController.text.isNotEmpty)
-             {
+           if(_passwordController.text != null && _passwordController.text.isNotEmpty) {
                _store.setPassword(_passwordController.text),
                _store.setConfirmPassword(_confirmPasswordController.text),
              },
+
          };
          if(this.user != null) {
            if(_store.canUpdate) {
@@ -563,6 +574,41 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
       },
     );
   }
+
+  User _setDataUser() {
+    User updatedUser = new User();
+
+    if (this.user != null) {
+      updatedUser = this.user;
+      updatedUser.permissionsList.clear();
+    }
+    if (this.user == null) {
+      updatedUser.creationTime = DateTime.now().toIso8601String();
+    }
+    updatedUser.name = _nameController.text;
+    updatedUser.surName = _surnameController.text;
+    updatedUser.isActive = _checkboxActive;
+    updatedUser.email = _userEmailController.text;
+    updatedUser.userName = _userNameController.text;
+    updatedUser.phoneNumber = _phoneNumberController.text;
+    updatedUser.permissionsList = new List<dynamic>();
+    updatedUser.permissions='';
+
+    for (int j = 0; j < _store.displayRoleName.length; j++) {
+      for (int i = 0; i < _roleManagementStore.roleList.roles.length; i++) {
+        if (_roleManagementStore.roleList.roles[i].name.compareTo(_store.displayRoleName[j])==0) {
+          updatedUser.permissionsList.add(
+              (_roleManagementStore.roleList.roles[i]).toMap());
+          updatedUser.permissions += _roleManagementStore.roleList.roles[i].displayName +", ";
+
+        }
+      }
+    }
+    updatedUser.permissions = updatedUser.permissions.substring(0,updatedUser.permissions.length-2);
+    _store.displayRoleName.clear();
+    return updatedUser;
+  }
+
 //endregion
 
   // dispose:-------------------------------------------------------------------
