@@ -278,32 +278,6 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
                             ),
                           ),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: DateTime.now()
-                                      .isAfter(DateTime.parse(post.thoiHan))
-                                  ? Colors.red[700]
-                                  : Colors.green[600],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          width: 80,
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          child: Center(
-                              child: DateTime.now()
-                                      .isAfter(DateTime.parse(post.thoiHan))
-                                  ? Text("Hết hạn",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ))
-                                  : Text("Còn Hạn",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ))),
-                        ),
                       ],
                     ),
                     Expanded(child: Container()),
