@@ -155,7 +155,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
               }
               else if(_goiBaiDangManagementStore.createGoiBaiDang_success)
               {
-                showSuccssfullMesssage("Thêm mới thành công", context);
+                showSuccssfullMesssage("Thêm mới thành công, vui lòng tải lại trang!", context);
               }
               return Container(width: 0, height: 0);
             } else {

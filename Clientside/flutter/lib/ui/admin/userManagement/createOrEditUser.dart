@@ -191,7 +191,7 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
                 _store.updateUser_success = false;
               }
               else if(_store.createUser_success) {
-                showSuccssfullMesssage("Thêm mới thành công",context);
+                showSuccssfullMesssage("Thêm mới thành công, vui lòng tải lại trang!",context);
                 _store.createUser_success = false;
               }
 
