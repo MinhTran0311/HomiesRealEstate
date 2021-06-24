@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/test/testFunction.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

@@ -298,7 +298,7 @@ class _CreateOrEditDanhMucScreenScreenState
       suffixIcon: Icon(Icons.clear),
       hint: ('Gắn nhãn cho danh mục'),
       // hintColor: Colors.white,
-      icon: Icons.person,
+      icon: Icons.loyalty,
       inputType: TextInputType.text,
       iconColor: Colors.amber,
       textController: _tagController,

@@ -263,13 +263,19 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  //color: Colors.black,
-                                ),
-                              ),
+                              child: Row (
+                                children: [
+                                  Icon(Icons.workspaces_filled),
+                                  SizedBox(width: 10,),
+                                  Text(value,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      //color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              )
                             );
                           }).toList(),
                         );

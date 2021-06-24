@@ -493,6 +493,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                           Container(
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
@@ -548,6 +549,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+
                                 SizedBox(height: 5,),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
