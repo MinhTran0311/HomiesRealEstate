@@ -169,6 +169,8 @@ abstract class _FilterStore with Store {
     filter_model.tenHuyen = "";
     filter_model.tenXa = "";
     filter_model.tagTimKiem = "";
+    townListString.clear();
+    communeListString.clear();
     print(filter_model.username);
   }
   //#region Province

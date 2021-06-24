@@ -109,17 +109,29 @@ class _SettingPageState extends State<SettingPage> {
         var future = showSimpleModalDialog(context, "Bạn có chắc chắn muốn đăng xuất không?");
         future.then((value) {
           if (value)  {
+            // SharedPreferences.getInstance().then((preference) {
+            //   preference.setBool(Preferences.is_logged_in, false);
+            //   preference.setString(Preferences.auth_token, "");
+            //   preference.setString(Preferences.userRole, "");
+            //   preference.setInt(Preferences.userRoleRank.toString(), 0);
+            //
+            // });
+            // _filterStore.resetValue();
+            // //_themeStore.changeBrightnessToDark(false);
+            // Preferences.grantedPermissions.clear();
+            // Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
             SharedPreferences.getInstance().then((preference) {
               preference.setBool(Preferences.is_logged_in, false);
               preference.setString(Preferences.auth_token, "");
             });
+            _filterStore.resetValue();
+            Preferences.grantedPermissions.clear();
+            // _themeStore.changeBrightnessToDark(false);
             Preferences.userRole="";
             Preferences.userRoleRank=0;
-            _filterStore.resetValue();
-            Preferences.userRole="";
-            _themeStore.changeBrightnessToDark(false);
-            Preferences.grantedPermissions.clear();
             Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+
           };
         });
         return;
