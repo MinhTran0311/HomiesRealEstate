@@ -31,7 +31,7 @@ dependencies:
   flutter_summernote: ^0.2.3
   flutter:
     sdk: flutter
-#  pull_to_refresh: 1.6.3
+  pull_to_refresh: 1.6.3
   image_picker: ^0.6.7+6
 
   flutter_localizations:

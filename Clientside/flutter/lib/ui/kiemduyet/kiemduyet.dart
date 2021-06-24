@@ -18,7 +18,7 @@ import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/widgets/smart/pull_to_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 
