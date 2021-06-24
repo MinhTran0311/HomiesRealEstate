@@ -3,12 +3,16 @@ import 'package:boilerplate/models/placeSearch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 class ApplicationBloc with ChangeNotifier {
 
   @observable
   List<Placemark> placemarks;
+
+  @observable
+  List<Location> placemarksFromPlaces = new List<Location>();
 
   @observable
   double latTit;
@@ -20,7 +24,13 @@ class ApplicationBloc with ChangeNotifier {
   bool getSuccess = false;
 
   @observable
+  bool getSuccessFromPlaces = false;
+
+  @observable
   String inputSearch;
+
+  @observable
+  LatLng postNewCurrent;
 
 
   @action
@@ -50,6 +60,24 @@ class ApplicationBloc with ChangeNotifier {
           getSuccess = true;
         }
       }
+    }
+  }
+
+  @action
+  searchFromPlace(String searchTerm) async {
+    getSuccessFromPlaces = false;
+    try {
+      placemarksFromPlaces.clear();
+      placemarksFromPlaces = await locationFromAddress(searchTerm);
+    }
+    catch(e) {
+      throw e;
+    }
+    if (placemarksFromPlaces[0] != null) {
+      print(".....");
+      postNewCurrent = LatLng(placemarksFromPlaces[0].latitude, placemarksFromPlaces[0].longitude);
+      print(postNewCurrent);
+      getSuccessFromPlaces = true;
     }
   }
 
