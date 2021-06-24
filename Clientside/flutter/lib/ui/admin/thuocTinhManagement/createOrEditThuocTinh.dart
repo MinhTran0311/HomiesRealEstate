@@ -67,7 +67,8 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
     if(this.thuocTinh != null && isFinishInit) {
       _thuocTinhManagementStore.KieuDuLieu = this.thuocTinh.kieuDuLieu;
       _thuocTinhManagementStore.getKieuDuLieu(this.thuocTinh.kieuDuLieu);
-      isFinishInit = false;
+      _thuocTinhManagementStore.setThuocTinhId(this.thuocTinh.id);
+    isFinishInit = false;
     }
     _thuocTinhManagementStore.createThuocTinh_success = false;
     _thuocTinhManagementStore.updateThuocTinh_success = false;
@@ -262,13 +263,19 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  //color: Colors.black,
-                                ),
-                              ),
+                              child: Row (
+                                children: [
+                                  Icon(Icons.workspaces_filled),
+                                  SizedBox(width: 10,),
+                                  Text(value,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      //color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              )
                             );
                           }).toList(),
                         );
@@ -316,7 +323,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       onPressed: () async {
         if(this.thuocTinh != null) await {
           _thuocTinhManagementStore.setNameThuocTinh(_nameController.text),
-          _thuocTinhManagementStore.setThuocTinhId(this.thuocTinh.id),
           _thuocTinhManagementStore.setTrangThaiThuocTinh(_checkboxTrangThai),
           _thuocTinhManagementStore.setKieuDuLieu(_thuocTinhManagementStore.KieuDuLieuShow),
         };

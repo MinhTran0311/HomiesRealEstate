@@ -52,6 +52,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
   bool _checkboxTrangThai = true;
   String titleForm = "Tạo gói mới";
   bool _validatorPhi = false;
+  bool isFirst = true;
 
   @override
   void initState() {
@@ -81,6 +82,11 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         Provider.of<GoiBaiDangManagementStore>(context);
     _goiBaiDangManagementStore.updateGoiBaiDang_success = false;
     _goiBaiDangManagementStore.createGoiBaiDang_success = false;
+    if (this.goiBaiDang != null && isFirst) {
+      _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id);
+      isFirst = false;
+    }
+
 
   }
 
@@ -254,7 +260,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           suffixIcon: Icon(Icons.clear),
           hint: ('Nhập phí gói bài đăng'),
           // hintColor: Colors.white,
-          icon: Icons.person,
+          icon: Icons.money,
           inputType: TextInputType.number,
           iconColor: Colors.amber,
           textController: _phiController,
@@ -289,7 +295,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           suffixIcon: Icon(Icons.clear),
           hint: ('Nhập độ ưu tiên gói bài đăng'),
           // hintColor: Colors.white,
-          icon: Icons.person,
+          icon: Icons.bar_chart,
           inputType: TextInputType.number,
           iconColor: Colors.amber,
           textController: _doUuTienController,
@@ -322,7 +328,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           suffixIcon: Icon(Icons.clear),
           hint: ('Nhập thời gian tối thiểu'),
           // hintColor: Colors.white,
-          icon: Icons.person,
+          icon: Icons.update,
           inputType: TextInputType.number,
           iconColor: Colors.amber,
           textController: _thoiGianToiThieuController,
@@ -355,7 +361,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           suffixIcon: Icon(Icons.clear),
           hint: ('Nhập mô tả gói bài đăng'),
           // hintColor: Colors.white,
-          icon: Icons.person,
+          icon: Icons.edit,
           inputType: TextInputType.text,
           iconColor: Colors.amber,
           textController: _moTaController,
@@ -406,7 +412,6 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         if (this.goiBaiDang != null)
           await {
             _goiBaiDangManagementStore.setNameGoiBaiDang(_nameController.text),
-            _goiBaiDangManagementStore.setGoiBaiDangId(this.goiBaiDang.id),
             _goiBaiDangManagementStore.setMoTaGoiBaiDang(_moTaController.text),
             if (_doUuTienController.text == null || _doUuTienController.text.isEmpty) {
               _goiBaiDangManagementStore.setDoUuTienGoiBaiDang(1),

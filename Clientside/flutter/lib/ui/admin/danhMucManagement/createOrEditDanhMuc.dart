@@ -26,13 +26,15 @@ class CreateOrEditDanhMucScreen extends StatefulWidget {
   final DanhMuc danhMuc;
 
   @override
-  CreateOrEditDanhMucScreen({ @required this.danhMuc });
-  _CreateOrEditDanhMucScreenScreenState createState() => _CreateOrEditDanhMucScreenScreenState(danhMuc: danhMuc);
+  CreateOrEditDanhMucScreen({@required this.danhMuc});
+  _CreateOrEditDanhMucScreenScreenState createState() =>
+      _CreateOrEditDanhMucScreenScreenState(danhMuc: danhMuc);
 }
 
-class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScreen> {
+class _CreateOrEditDanhMucScreenScreenState
+    extends State<CreateOrEditDanhMucScreen> {
   final DanhMuc danhMuc;
-  _CreateOrEditDanhMucScreenScreenState({ @required this.danhMuc });
+  _CreateOrEditDanhMucScreenScreenState({@required this.danhMuc});
 
   //text controllers:-----------------------------------------------------------
   TextEditingController _nameController = TextEditingController();
@@ -48,17 +50,20 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   DanhMuc selectedTypeType;
   bool isVisible = true;
   DanhMuc TypeDanhMucCurrent;
-
+  bool isFinishInit = true;
+  List<DanhMuc> type = [];
+  List<DanhMuc> typetype = [];
 
   @override
   void initState() {
     super.initState();
-
     if (this.danhMuc != null) {
       _nameController.text = this.danhMuc.tenDanhMuc;
       _tagController.text = this.danhMuc.tag;
       // print
       _checkboxTrangThai = this.danhMuc.trangThai == "On" ? true : false;
+      selectedType = null;
+      selectedTypeType = null;
       titleForm = "Chỉnh sửa danh mục";
     }
   }
@@ -70,30 +75,17 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     _themeStore = Provider.of<ThemeStore>(context);
     _danhMucManagementStore = Provider.of<DanhMucManagementStore>(context);
 
-    if (this.danhMuc != null) {
+    if (this.danhMuc != null && isFinishInit) {
       _danhMucManagementStore.setDanhMucId(this.danhMuc.id);
       _danhMucManagementStore.setTagDanhMuc(this.danhMuc.tag);
       _danhMucManagementStore.setNameDanhMuc(this.danhMuc.tenDanhMuc);
-      if (this.danhMuc.danhMucCha != null)
-        {
 
-        _danhMucManagementStore.setDanhMucCha(this.danhMuc.danhMucCha);
-          TypeDanhMucCurrent = _danhMucManagementStore.findDanhMucCha(this.danhMuc.danhMucCha);
-          if (TypeDanhMucCurrent.danhMucCha != null) {
-            selectedType = _danhMucManagementStore.findDanhMucCha(this.TypeDanhMucCurrent.danhMucCha);
-            selectedTypeType = TypeDanhMucCurrent;
-            isVisible = false;
-          }
-          else {
-            selectedType = TypeDanhMucCurrent;
-          }
-        }
-      else selectedType = null;
       if (this.danhMuc.trangThai == "On") {
         _danhMucManagementStore.setTrangThaiDanhMuc(true);
-      }
-      else _danhMucManagementStore.setTrangThaiDanhMuc(false);
-    } else selectedType = null;
+      } else
+        _danhMucManagementStore.setTrangThaiDanhMuc(false);
+      isFinishInit = false;
+    }
 
     if (!_danhMucManagementStore.loadingAll) {
       _danhMucManagementStore.getAllDanhMucs();
@@ -102,18 +94,53 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     _danhMucManagementStore.updateDanhMuc_success = false;
   }
 
+  var firstrun = true;
   @override
   Widget build(BuildContext context) {
+    if (firstrun) {
+      setState(() {
+        isVisible = true;
+        firstrun = false;
+        for (var i in _danhMucManagementStore.danhMucListAll.danhMucs)
+          if (i.danhMucCha == null) type.add(i);
+        if (this.danhMuc != null) {
+          if (this.danhMuc.danhMucCha != null) {
+            _danhMucManagementStore.setDanhMucCha(this.danhMuc.danhMucCha);
+            TypeDanhMucCurrent =
+                _danhMucManagementStore.findDanhMucCha(this.danhMuc.danhMucCha);
+            if (TypeDanhMucCurrent.danhMucCha != null) {
+              selectedType = _danhMucManagementStore
+                  .findDanhMucCha(this.TypeDanhMucCurrent.danhMucCha);
+              selectedTypeType = TypeDanhMucCurrent;
+              isVisible = false;
+              typetype = [];
+              for (var i = 0;
+              i < _danhMucManagementStore.danhMucListAll.danhMucs.length;
+              i++)
+                if (_danhMucManagementStore.danhMucListAll.danhMucs[i].danhMucCha ==
+                    selectedType.id) if (_danhMucManagementStore
+                    .danhMucListAll.danhMucs[i] !=
+                    null)
+                  typetype.add(_danhMucManagementStore.danhMucListAll.danhMucs[i]);
+            } else {
+              selectedType = TypeDanhMucCurrent;
+            }
+          }
+        }
+      });
+    }
     return Scaffold(
       primary: true,
-      appBar : AppBar(
-        leading : IconButton(
-          icon : Icon(Icons.arrow_back_ios_outlined,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_outlined,
           ),
-          onPressed : () {
-            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+          onPressed: () {
+            var future = showSimpleModalDialog(
+                context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
             future.then((value) {
-              if (value)  Navigator.of(context).pop();
+              if (value) Navigator.of(context).pop();
             });
             return;
           },
@@ -121,82 +148,78 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
         title: Text(
           this.titleForm,
         ),
-        automaticallyImplyLeading : false,
+        automaticallyImplyLeading: false,
       ),
-
-      body: WillPopScope(
-          onWillPop: () {
-            var future = showSimpleModalDialog(context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
-            future.then((value) {
-              if (value)  Navigator.of(context).pop();
-            });
-          return;
-          },
-          child: Observer(
-            builder: (context) {
-              return _danhMucManagementStore.loadingAll
-                  ? CustomProgressIndicatorWidget()
-                  : _buildBody();
-            },
-          )
-      ),
+      body: WillPopScope(onWillPop: () {
+        var future = showSimpleModalDialog(
+            context, "Bạn chưa lưu thông tin, bạn thật sự có muốn thoát?");
+        future.then((value) {
+          if (value) Navigator.of(context).pop();
+        });
+        return;
+      }, child: Observer(
+        builder: (context) {
+          return _danhMucManagementStore.loadingAll
+              ? CustomProgressIndicatorWidget()
+              : _buildBody();
+        },
+      )),
     );
   }
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Stack(
-      children : <Widget>[
+      children: <Widget>[
         Container(
-          // decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //         begin: Alignment.topCenter,
-          //         end: Alignment.bottomCenter,
-          //         colors: [
-          //           Colors.amber,
-          //           Colors.orange[700],
-          //         ]
-          //     )
-          // ),
-        ),
+            // decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //         begin: Alignment.topCenter,
+            //         end: Alignment.bottomCenter,
+            //         colors: [
+            //           Colors.amber,
+            //           Colors.orange[700],
+            //         ]
+            //     )
+            // ),
+            ),
         MediaQuery.of(context).orientation == Orientation.landscape
             ? Row(
-          children : <Widget>[
-            Expanded(
-              flex:1,
-              child : _buildLeftSide(),
-            ),
-            Expanded(
-              flex:1,
-              child : _buildRightSide(),
-            ),
-          ],
-        ) : Center(child : _buildRightSide()),
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: _buildLeftSide(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildRightSide(),
+                  ),
+                ],
+              )
+            : Center(child: _buildRightSide()),
         Observer(
-          builder : (context) {
-            if (_danhMucManagementStore.updateDanhMuc_success || _danhMucManagementStore.createDanhMuc_success) {
+          builder: (context) {
+            if (_danhMucManagementStore.updateDanhMuc_success ||
+                _danhMucManagementStore.createDanhMuc_success) {
               Navigator.of(context).pop(setDataBack());
-              if (_danhMucManagementStore.updateDanhMuc_success)
-              {
+              if (_danhMucManagementStore.updateDanhMuc_success) {
                 showSuccssfullMesssage("Cập nhật thành công", context);
-              }
-              else if (_danhMucManagementStore.createDanhMuc_success)
-              {
+              } else if (_danhMucManagementStore.createDanhMuc_success) {
                 showSuccssfullMesssage("Thêm mới thành công", context);
               }
-              return Container(width: 0, height : 0);
-
-            }
-            else {
-              return showErrorMessage(_danhMucManagementStore.errorStore.errorMessage, context);
+              return Container(width: 0, height: 0);
+            } else {
+              return showErrorMessage(
+                  _danhMucManagementStore.errorStore.errorMessage, context);
             }
           },
         ),
         Observer(
           builder: (context) {
             return Visibility(
-              visible: _danhMucManagementStore.loadingUpdateDanhMuc || _danhMucManagementStore.loadingCreateDanhMuc,
-              child : CustomProgressIndicatorWidget(),
+              visible: _danhMucManagementStore.loadingUpdateDanhMuc ||
+                  _danhMucManagementStore.loadingCreateDanhMuc,
+              child: CustomProgressIndicatorWidget(),
             );
           },
         )
@@ -216,16 +239,16 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   Widget _buildRightSide() {
     return SingleChildScrollView(
       child: Padding(
-        padding : const EdgeInsets.symmetric(horizontal : 24.0, vertical : 24.0),
-        child : Column(
-          mainAxisSize : MainAxisSize.max,
-          crossAxisAlignment : CrossAxisAlignment.stretch,
-          mainAxisAlignment : MainAxisAlignment.center,
-          children : <Widget>[
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             //AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             //SizedBox(height: 24.0),
             _buildNameField(),
-            SizedBox(height:24.0),
+            SizedBox(height: 24.0),
             _buildTagField(),
             SizedBox(height: 24.0),
             // _buildDanhMucChaField(),
@@ -242,6 +265,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       ),
     );
   }
+
   //#region build TextFieldWidget
   Widget _buildNameField() {
     return TextFieldWidget(
@@ -274,7 +298,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       suffixIcon: Icon(Icons.clear),
       hint: ('Gắn nhãn cho danh mục'),
       // hintColor: Colors.white,
-      icon: Icons.person,
+      icon: Icons.loyalty,
       inputType: TextInputType.text,
       iconColor: Colors.amber,
       textController: _tagController,
@@ -294,8 +318,8 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       children: [
         Checkbox(
           activeColor: Colors.amber,
-          value:_checkboxTrangThai,
-          onChanged : (value) {
+          value: _checkboxTrangThai,
+          onChanged: (value) {
             setState(() {
               _checkboxTrangThai = !_checkboxTrangThai;
               _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai);
@@ -305,8 +329,8 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
         Text(
           'Kích hoạt',
           style: TextStyle(
-            fontSize : 22,
-            fontWeight : FontWeight.bold,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
             // color: Colors.white,
           ),
         ),
@@ -317,39 +341,50 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   Widget _buildSignUpButton() {
     return RoundedButtonWidget(
       buttonText: ('Lưu thông tin'),
-      buttonColor : Colors.amber,
-      textColor : Colors.white,
-      onPressed : () async {
-        if (this.danhMuc != null) await{
-          _danhMucManagementStore.setNameDanhMuc(_nameController.text),
-          // _danhMucManagementStore.setDanhMucCha(int.tryParse(_danhMucChaController.text)),
-          if (selectedType != null) {
-            if (selectedTypeType != null) {
-              _danhMucManagementStore.setDanhMucCha(selectedTypeType.id),
-            }
-            else _danhMucManagementStore.setDanhMucCha(selectedType.id),
-          }
-          else {
-            _danhMucManagementStore.setDanhMucCha(null)
-        },
-          _danhMucManagementStore.setDanhMucId(this.danhMuc.id),
-          _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai),
-        };
+      buttonColor: Colors.amber,
+      textColor: Colors.white,
+      onPressed: () async {
+        if (this.danhMuc != null)
+          await {
+            _danhMucManagementStore.setNameDanhMuc(_nameController.text),
+            // _danhMucManagementStore.setDanhMucCha(int.tryParse(_danhMucChaController.text)),
+            if (selectedType != null)
+              {
+                if (selectedTypeType != null)
+                  {
+                    _danhMucManagementStore.setDanhMucCha(selectedTypeType.id),
+                  }
+                else
+                  _danhMucManagementStore.setDanhMucCha(selectedType.id),
+              }
+            else
+              {_danhMucManagementStore.setDanhMucCha(null)},
+            _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai),
+          };
         if (this.danhMuc != null) {
           if (_danhMucManagementStore.canSubmit) {
             DeviceUtils.hideKeyboard(context);
             _danhMucManagementStore.UpdateDanhMuc();
-          }
-          else {
+          } else {
             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
-        }
-        else {
+        } else {
           if (_danhMucManagementStore.canSubmit) {
-            DeviceUtils.hideKeyboard(context);
+            if (selectedType != null)
+            {
+              if (selectedTypeType != null)
+              {
+                _danhMucManagementStore.setDanhMucCha(selectedTypeType.id);
+            }
+            else
+              _danhMucManagementStore.setDanhMucCha(selectedType.id);
+            }
+            else
+            {_danhMucManagementStore.setDanhMucCha(null);};
+            _danhMucManagementStore.setTrangThaiDanhMuc(_checkboxTrangThai);
+        DeviceUtils.hideKeyboard(context);
             _danhMucManagementStore.CreateDanhMuc();
-          }
-          else {
+          } else {
             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
         }
@@ -358,83 +393,69 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
   }
 
   Widget _buildTypeField() {
-    List<DanhMuc> type = [];
-    var _formKey;
-    for (var i = 0; i < _danhMucManagementStore.danhMucListAll.danhMucs.length; i++)
-      if (_danhMucManagementStore.danhMucListAll.danhMucs[i].danhMucCha == null)
-        if (_danhMucManagementStore.danhMucListAll.danhMucs[i] != null)
-          type.add(_danhMucManagementStore.danhMucListAll.danhMucs[i]);
-    return Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.always,
-        child: DropdownButtonFormField<DanhMuc>(
-          hint: Text("Chọn danh mục cha (nếu có)"),
-          value: selectedType,
-          onChanged: (DanhMuc Value) {
-            setState(() {
-              try {
-                selectedType = Value;
-                isVisible = false;
-                selectedTypeType = null;
-              } catch (_) {
-                selectedType = type[0];
-              }
-            });
-          },
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                onPressed: () => setState(() {
-                  selectedType = null;
-                }),
-                icon: Icon(Icons.clear),
-              )),
-          // validator: (value) =>
-          // value == null ? 'Chọn danh mục cha nếu có' : null,
-          items: type.map((DanhMuc type) {
-            if (type.danhMucCha == null)
-              return DropdownMenuItem<DanhMuc>(
-                value: type,
-                //showClearButton:true,
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.home_work_sharp,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      type.tenDanhMuc,
-                      style: TextStyle(),
-                    ),
-                  ],
-                ),
-              );
-            else
-              return
-                //Container(width: 0, height: 0);
-                DropdownMenuItem<DanhMuc>(
-                  value: type,
-                  child: SizedBox(height: 0),
-                );
-          }).toList(),
-        ));
+    return DropdownButtonFormField<DanhMuc>(
+      hint: Text("Chọn danh mục cha (nếu có)"),
+      value: selectedType,
+      onChanged: (DanhMuc Value) {
+        setState(() {
+          try {
+            selectedType = Value;
+            isVisible = false;
+            selectedTypeType = null;
+            typetype = [];
+            for (var i = 0;
+                i < _danhMucManagementStore.danhMucListAll.danhMucs.length;
+                i++)
+              if (_danhMucManagementStore
+                      .danhMucListAll.danhMucs[i].danhMucCha ==
+                  selectedType.id) if (_danhMucManagementStore
+                      .danhMucListAll.danhMucs[i] !=
+                  null)
+                typetype
+                    .add(_danhMucManagementStore.danhMucListAll.danhMucs[i]);
+          } catch (_) {
+            selectedType = type[0];
+          }
+        });
+      },
+      decoration: InputDecoration(
+          suffixIcon: IconButton(
+        onPressed: () => setState(() {
+          selectedType = null;
+        }),
+        icon: Icon(Icons.clear),
+      )),
+      items: type.map((DanhMuc types) {
+        return DropdownMenuItem<DanhMuc>(
+          value: types,
+          //showClearButton:true,
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.home_work_sharp,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                types.tenDanhMuc,
+                style: TextStyle(),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
   }
 
   Widget _buildTypeTypeField() {
-    List<DanhMuc> typetype = [];
-    if (selectedType != null && !isVisible) {
-      for (var i = 0; i < _danhMucManagementStore.danhMucListAll.danhMucs.length; i++)
-        if (_danhMucManagementStore.danhMucListAll.danhMucs[i].danhMucCha == selectedType.id)
-          if (_danhMucManagementStore.danhMucListAll.danhMucs[i] != null)
-            typetype.add(_danhMucManagementStore.danhMucListAll.danhMucs[i]);
-
+    if (selectedType != null) {
       if (typetype.length != 0)
         return Observer(
           builder: (context) {
             return Padding(
               padding:
-              const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
+                  const EdgeInsets.only(left: 20.0, right: 10.0, bottom: 24.0),
               child: DropdownButtonFormField<DanhMuc>(
                 hint: Text("Chọn hình thức nhà đất"),
                 autovalidateMode: AutovalidateMode.always,
@@ -442,11 +463,11 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
                 // value == null ? 'Vui lòng chọn hình thức nhà đất' : null,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                      onPressed: () => setState(() {
-                        selectedTypeType = null;
-                      }),
-                      icon: Icon(Icons.clear),
-                    )),
+                  onPressed: () => setState(() {
+                    selectedTypeType = null;
+                  }),
+                  icon: Icon(Icons.clear),
+                )),
                 value: selectedTypeType,
                 //icon:Icons.attach_file ,
                 onChanged: (DanhMuc Value) {
@@ -498,7 +519,7 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
       if (selectedTypeType != null) {
         danhMucBack.danhMucCha = selectedTypeType.id;
       }
-      danhMucBack.danhMucCha = selectedType.id;
+      else danhMucBack.danhMucCha = selectedType.id;
     }
     return danhMucBack;
   }
@@ -513,5 +534,4 @@ class _CreateOrEditDanhMucScreenScreenState extends State<CreateOrEditDanhMucScr
     _tagController.dispose();
     super.dispose();
   }
-
 }

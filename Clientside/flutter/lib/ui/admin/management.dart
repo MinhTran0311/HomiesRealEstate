@@ -146,7 +146,7 @@ class _ManagementScreenState extends State<ManagementScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.0, 0.08, 0.08, 1],
+            stops: Permission.instance.hasPermission(Preferences.PagesAdministrationUsers) ? [0.0, 0.08, 0.08, 1] : [0.0, 0.55, 0.55, 1],
             colors: [
               Color.fromRGBO(230, 145, 56, 1),
               Colors.amberAccent,
