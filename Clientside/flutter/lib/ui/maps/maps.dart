@@ -61,8 +61,8 @@ class _MapsScreenState extends State<MapsScreen> {
   LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
   GoogleMapController _controllerMap;
-  LatLng currentPositionDevice= LatLng(10.869811, 106.803725);
-  LatLng currentPositionDeviceNewPost;
+  LatLng currentPositionDevice = LatLng(10.869811, 106.803725);
+  LatLng currentPositionDeviceNewPost = LatLng(10.869811, 106.803725);
 
   String _darkMapStyle;
   String _lightMapStyle;
