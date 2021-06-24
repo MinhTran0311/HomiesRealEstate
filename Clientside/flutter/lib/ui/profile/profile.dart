@@ -149,7 +149,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildBody() {
     Size size =  MediaQuery.of(context).size;
     return Container(
-      color: Colors.amber,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomRight,
+              colors: [Colors.orange, Colors.amber])),
       width: size.width,
       height: size.height,
       child: RefreshIndicator(
