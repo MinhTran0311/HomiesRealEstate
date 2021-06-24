@@ -107,16 +107,16 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
               // size: 28,
             ),
             onPressed: () {
-              var future = Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditThuocTinhScreen()),
               );
-              future.then((value) {
-                if(value != null)
-                  setState(() {
-                    _thuocTinhManagementStore.thuocTinhList.thuocTinhs.add(value);
-                  });
-              });
+              // future.then((value) {
+              //   if(value != null)
+              //     setState(() {
+              //       _thuocTinhManagementStore.thuocTinhList.thuocTinhs.add(value);
+              //     });
+              // });
             },
           ),
         ],

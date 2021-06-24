@@ -111,17 +111,10 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
               // size: 28,
             ),
             onPressed: () {
-              var future = Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditDanhMucScreen()),
               );
-              future.then((value) {
-                if (value != null) {
-                  setState(() {
-                    _danhMucManagementStore.danhMucList.danhMucs.add(value);
-                  });
-                }
-              });
             },
           ),
         ],

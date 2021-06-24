@@ -103,16 +103,16 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
               size: 28,
             ),
             onPressed: () {
-              var future = Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditGoiBaiDangScreen()),
               );
-              future.then((value) {
-                if (value != null)
-                  setState(() {
-                    _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs.add(value);
-                  });
-              });
+              // future.then((value) {
+              //   if (value != null)
+              //     setState(() {
+              //       _goiBaiDangManagementStore.goiBaiDangList.goiBaiDangs.add(value);
+              //     });
+              // });
             },
           ),
         ],

@@ -205,7 +205,7 @@ class _CreateOrEditDanhMucScreenScreenState
               if (_danhMucManagementStore.updateDanhMuc_success) {
                 showSuccssfullMesssage("Cập nhật thành công", context);
               } else if (_danhMucManagementStore.createDanhMuc_success) {
-                showSuccssfullMesssage("Thêm mới thành công", context);
+                showSuccssfullMesssage("Thêm mới thành công, , vui lòng tải lại trang!", context);
               }
               return Container(width: 0, height: 0);
             } else {

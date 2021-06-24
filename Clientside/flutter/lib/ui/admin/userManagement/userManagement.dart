@@ -152,17 +152,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
               Icons.person_add_alt_1,
             ),
             onPressed: () {
-              var future = Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditUserScreen()),
               );
-              future.then((value) {
-                if (value != null) {
-                  setState(() {
-                    _userManagementStore.userList.users.add(value);
-                  });
-                }
-              });
             },
           ),
         ],
