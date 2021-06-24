@@ -82,6 +82,13 @@ mixin _$FormStore on _FormStore, Store {
           () => super.updateUserLoading,
           name: '_FormStore.updateUserLoading'))
       .value;
+  Computed<bool> _$isActiveLoadingComputed;
+
+  @override
+  bool get isActiveLoading =>
+      (_$isActiveLoadingComputed ??= Computed<bool>(() => super.isActiveLoading,
+              name: '_FormStore.isActiveLoading'))
+          .value;
   Computed<bool> _$loadingsGetCurrentUserRoleComputed;
 
   @override
@@ -241,6 +248,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$displayRoleNameAtom = Atom(name: '_FormStore.displayRoleName');
+
+  @override
+  List<String> get displayRoleName {
+    _$displayRoleNameAtom.reportRead();
+    return super.displayRoleName;
+  }
+
+  @override
+  set displayRoleName(List<String> value) {
+    _$displayRoleNameAtom.reportWrite(value, super.displayRoleName, () {
+      super.displayRoleName = value;
+    });
+  }
+
   final _$newPasswordAtom = Atom(name: '_FormStore.newPassword');
 
   @override
@@ -352,6 +374,23 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchIsActiveUserFutureAtom =
+      Atom(name: '_FormStore.fetchIsActiveUserFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchIsActiveUserFuture {
+    _$fetchIsActiveUserFutureAtom.reportRead();
+    return super.fetchIsActiveUserFuture;
+  }
+
+  @override
+  set fetchIsActiveUserFuture(ObservableFuture<dynamic> value) {
+    _$fetchIsActiveUserFutureAtom
+        .reportWrite(value, super.fetchIsActiveUserFuture, () {
+      super.fetchIsActiveUserFuture = value;
+    });
+  }
+
   final _$fetchCreateUserFutureAtom =
       Atom(name: '_FormStore.fetchCreateUserFuture');
 
@@ -441,6 +480,21 @@ mixin _$FormStore on _FormStore, Store {
   set updateUser_success(bool value) {
     _$updateUser_successAtom.reportWrite(value, super.updateUser_success, () {
       super.updateUser_success = value;
+    });
+  }
+
+  final _$isActive_successAtom = Atom(name: '_FormStore.isActive_success');
+
+  @override
+  bool get isActive_success {
+    _$isActive_successAtom.reportRead();
+    return super.isActive_success;
+  }
+
+  @override
+  set isActive_success(bool value) {
+    _$isActive_successAtom.reportWrite(value, super.isActive_success, () {
+      super.isActive_success = value;
     });
   }
 
@@ -539,6 +593,13 @@ mixin _$FormStore on _FormStore, Store {
   @override
   Future<dynamic> UpdateUser() {
     return _$UpdateUserAsyncAction.run(() => super.UpdateUser());
+  }
+
+  final _$IsActiveUserAsyncAction = AsyncAction('_FormStore.IsActiveUser');
+
+  @override
+  Future<dynamic> IsActiveUser(User user) {
+    return _$IsActiveUserAsyncAction.run(() => super.IsActiveUser(user));
   }
 
   final _$CreateUserAsyncAction = AsyncAction('_FormStore.CreateUser');
@@ -814,6 +875,7 @@ idUser: ${idUser},
 isActive: ${isActive},
 phoneNumber: ${phoneNumber},
 roleName: ${roleName},
+displayRoleName: ${displayRoleName},
 newPassword: ${newPassword},
 active: ${active},
 fetchTokenFuture: ${fetchTokenFuture},
@@ -821,12 +883,14 @@ fetchRegistFuture: ${fetchRegistFuture},
 fetchResetCodeFuture: ${fetchResetCodeFuture},
 fetchChangePasswordFuture: ${fetchChangePasswordFuture},
 fetchUpdateUserFuture: ${fetchUpdateUserFuture},
+fetchIsActiveUserFuture: ${fetchIsActiveUserFuture},
 fetchCreateUserFuture: ${fetchCreateUserFuture},
 authToken: ${authToken},
 loggedIn: ${loggedIn},
 success: ${success},
 regist_success: ${regist_success},
 updateUser_success: ${updateUser_success},
+isActive_success: ${isActive_success},
 resetPassword_success: ${resetPassword_success},
 changePassword_succes: ${changePassword_succes},
 createUser_success: ${createUser_success},
@@ -843,6 +907,7 @@ sendingCode: ${sendingCode},
 regist_loading: ${regist_loading},
 changePasswordLoading: ${changePasswordLoading},
 updateUserLoading: ${updateUserLoading},
+isActiveLoading: ${isActiveLoading},
 loadingsGetCurrentUserRole: ${loadingsGetCurrentUserRole}
     ''';
   }

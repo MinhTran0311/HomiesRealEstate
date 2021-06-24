@@ -111,10 +111,17 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
               // size: 28,
             ),
             onPressed: () {
-              Navigator.push(
+              var future = Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CreateOrEditDanhMucScreen()),
               );
+              future.then((value) {
+                if (value != null) {
+                  setState(() {
+                    _danhMucManagementStore.danhMucList.danhMucs.add(value);
+                  });
+                }
+              });
             },
           ),
         ],
@@ -546,10 +553,18 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.of(context).pop();
+                    var future = Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CreateOrEditDanhMucScreen(danhMuc: danhMuc,)),
                     );
+                    future.then((value) {
+                      if (value != null) {
+                        setState(() {
+                          _danhMucManagementStore.danhMucList.danhMucs[position] = value;
+                        });
+                      }
+                    });
                   },
                 ),
               ],
@@ -681,9 +696,8 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _searchController.dispose();
-    _scrollController.dispose();
-    _refreshController.dispose();
+    // _scrollController.dispose();
+    // _refreshController.dispose();
     super.dispose();
   }
-
 }

@@ -51,6 +51,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
 
   bool _checkboxTrangThai = true;
   String titleForm = "Tạo gói mới";
+  bool _validatorPhi = false;
 
   @override
   void initState() {
@@ -59,6 +60,9 @@ class _CreateOrEditGoiBaiDangScreenScreenState
     if (this.goiBaiDang != null) {
       _nameController.text = this.goiBaiDang.tenGoi;
       _phiController.text = this.goiBaiDang.phi.toString();
+      if (this.goiBaiDang.phi > 0) {
+        _validatorPhi = true;
+      }
       _doUuTienController.text = this.goiBaiDang.doUuTien.toString();
       _thoiGianToiThieuController.text =
           this.goiBaiDang.thoiGianToiThieu.toString();
@@ -138,7 +142,7 @@ class _CreateOrEditGoiBaiDangScreenScreenState
         Observer(
           builder: (context) {
             if (_goiBaiDangManagementStore.updateGoiBaiDang_success || _goiBaiDangManagementStore.createGoiBaiDang_success) {
-              Navigator.of(context).pop(context);
+              Navigator.of(context).pop(setDataBack());
               if(_goiBaiDangManagementStore.updateGoiBaiDang_success)
               {
                 showSuccssfullMesssage("Cập nhật thành công", context);
@@ -257,9 +261,17 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           inputAction: TextInputAction.next,
           autoFocus: false,
           errorMessage: (value) {
-            _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(value));
             if (value.isEmpty) {
+              _validatorPhi = false;
               return 'Vui lòng nhập phí gói bài đăng';
+            }
+            else if (double.tryParse(value) == null || double.tryParse(value) < 0) {
+              _validatorPhi = false;
+              return 'Vui lòng nhập phí hợp lệ';
+            }
+            else {
+              _validatorPhi = true;
+              _goiBaiDangManagementStore.setPhiGoiBaiDang(double.tryParse(value));
             }
           },
         );
@@ -284,8 +296,16 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           inputAction: TextInputAction.next,
           autoFocus: false,
           errorMessage: (value) {
-            _goiBaiDangManagementStore
-                .setDoUuTienGoiBaiDang(int.tryParse(value));
+            if (value.isNotEmpty) {
+              if (int.tryParse(value) == null || int.tryParse(value) < 1 || int.tryParse(value) > 10) {
+                return 'Vui lòng nhập độ ưu tiên từ 1 đến 10';
+              }
+              else {
+                _goiBaiDangManagementStore
+                    .setDoUuTienGoiBaiDang(int.tryParse(value));
+              }
+            }
+            else return null;
           },
         );
       },
@@ -309,8 +329,16 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           inputAction: TextInputAction.next,
           autoFocus: false,
           errorMessage: (value) {
-            _goiBaiDangManagementStore
-                .setThoiGianToiThieuGoiBaiDang(int.tryParse(value));
+            if (value.isNotEmpty) {
+              if (int.tryParse(value) == null || int.tryParse(value) < 1 || int.tryParse(value) > 365) {
+                return 'Vui lòng nhập thời gian tối thiểu từ 1 đến 365 (ngày)';
+              }
+              else {
+                _goiBaiDangManagementStore
+                    .setThoiGianToiThieuGoiBaiDang(int.tryParse(value));
+              }
+            }
+            else return null;
           },
         );
       },
@@ -397,8 +425,13 @@ class _CreateOrEditGoiBaiDangScreenScreenState
           };
         if (this.goiBaiDang != null) {
           if (_goiBaiDangManagementStore.canSubmit) {
-            DeviceUtils.hideKeyboard(context);
-            _goiBaiDangManagementStore.UpdateGoiBaiDang();
+            if (_validatorPhi) {
+              DeviceUtils.hideKeyboard(context);
+              _goiBaiDangManagementStore.UpdateGoiBaiDang();
+            }
+            else {
+              showErrorMessage('Vui lòng kiểm tra lại', context);
+            }
           } else {
             showErrorMessage('Vui lòng nhập đầy đủ thông tin', context);
           }
@@ -428,18 +461,24 @@ class _CreateOrEditGoiBaiDangScreenScreenState
     );
   }
 
-  _updateOrCreateSuccess() async {
-    // await Navigator.of(context).pop();
-    // if(_goiBaiDangManagementStore.updateActiveGoiBaiDang_success)
-    // {
-    //   showSuccssfullMesssage("Cập nhật thành công", context);
-    //   _goiBaiDangManagementStore.updateActiveGoiBaiDang_success = false;
-    // }
-    // else if(_goiBaiDangManagementStore.createGoiBaiDang_success)
-    // {
-    //   showSuccssfullMesssage("Thêm mới thành công", context);
-    //   _goiBaiDangManagementStore.createGoiBaiDang_success = false;
-    // }
+  GoiBaiDang setDataBack() {
+    GoiBaiDang goiBaiDangBack = new GoiBaiDang();
+    if (this.goiBaiDang != null) {
+      goiBaiDangBack = this.goiBaiDang;
+    }
+    goiBaiDangBack.tenGoi = _nameController.text;
+    goiBaiDangBack.phi = double.tryParse(_phiController.text);
+    if (_doUuTienController.text == null || _doUuTienController.text.isEmpty){
+      goiBaiDangBack.doUuTien = 1;
+    }
+    else goiBaiDangBack.doUuTien = int.tryParse(_doUuTienController.text);
+    if (_thoiGianToiThieuController.text == null || _thoiGianToiThieuController.text.isEmpty){
+      goiBaiDangBack.thoiGianToiThieu = 1;
+    }
+    else goiBaiDangBack.thoiGianToiThieu = int.tryParse(_thoiGianToiThieuController.text);
+    goiBaiDangBack.trangThai = _checkboxTrangThai ? "On" : "Off";
+    goiBaiDangBack.moTa = _moTaController.text;
+    return goiBaiDangBack;
   }
 
   //endregion
