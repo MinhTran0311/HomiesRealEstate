@@ -926,6 +926,7 @@ class _FilterState extends State<Filter> {
         _tagController.clear();
         _usernameController.clear();
         _filterStore.resetValue();
+        Navigator.pop(context);
       },
     );
   }
