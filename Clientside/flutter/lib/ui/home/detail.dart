@@ -223,8 +223,8 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                 padding: EdgeInsets.only(right: 24, left: 24, bottom: 24),
                 child: buildTagList(post.tagTimKiem),
               ),
-              //(_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? buildRcmPost() :Container(width: 0,height:0,) ,
-              buildRcmPost(),
+              (_postStore.rcmPostList !=null && _postStore.rcmPostList.posts.length>1) ? buildRcmPost() :Container(width: 0,height:0,) ,
+              // buildRcmPost(),
             ],
           ),
         ),
@@ -335,7 +335,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  Preferences.access_token.isNotEmpty
+                  Permission.instance.hasPermission(Preferences.PagesBaiGhimYeuThichs)
                       ? Container(
                           height: 50,
                           width: 50,
@@ -591,24 +591,25 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
 
   Widget buildRcmPost() {
     return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildHeadline("Bài viết cùng chủ đề"),
-        Container(
-          height: 200,
-          child: Padding(
-              padding: EdgeInsets.only(left: 12, bottom: 6, top: 12, right: 12),
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                children: buildRecommendPosts(context),
-              )),
-        )
-      ],
-    ));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildHeadline("Bài viết cùng chủ đề"),
+          Container(
+            height: 200,
+           child: Padding(
+                padding: EdgeInsets.only(left: 12, bottom: 6, top: 12, right: 12),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                 scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                 children: buildRecommendPosts(context),
+                )),
+          )
+       ],
+      )
+    );
   }
 
   List<Widget> buildPhotos(BuildContext context, ImageList imageList) {
@@ -942,7 +943,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         size: 20,
                       ),
                       onPressed: () {
-                        _lauchURL("tel:" + _userStore.user.phoneNumber);
+                        _lauchURL("tel:" + _userStore.userCurrent.phoneNumber);
                       },
                     ),
                   ),
@@ -963,7 +964,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         size: 20,
                       ),
                       onPressed: () {
-                        _lauchURL("sms:" + _userStore.user.phoneNumber);
+                        _lauchURL("sms:" + _userStore.userCurrent.phoneNumber);
                       },
                     ),
                   ),

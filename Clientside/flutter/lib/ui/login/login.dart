@@ -89,19 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
             ),
           ),
-          MediaQuery.of(context).orientation == Orientation.landscape
-            ? Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: _buildLeftSide(),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildRightSide(),
-                  ),
-                ],
-          ) : Center(child: _buildRightSide()),
+           Center(child: _buildRightSide()),
 
           Observer(
             builder: (context) {
@@ -119,15 +107,6 @@ class _LoginScreenState extends State<LoginScreen> {
             },
           )
         ],
-      ),
-    );
-  }
-
-  Widget _buildLeftSide() {
-    return SizedBox.expand(
-      child: Image.asset(
-        Assets.carBackground,
-        fit: BoxFit.cover,
       ),
     );
   }
@@ -285,9 +264,9 @@ class _LoginScreenState extends State<LoginScreen> {
           SharedPreferences.getInstance().then((preference) {
             preference.setBool(Preferences.is_logged_in, false);
             preference.setString(Preferences.auth_token, "");
-            preference.setString(Preferences.userRole, "");
-            preference.setInt(Preferences.userRoleRank.toString(), 0);
           });
+          Preferences.userRole="";
+          Preferences.userRoleRank=0;
           navigate(context, false);
         },
       ),
