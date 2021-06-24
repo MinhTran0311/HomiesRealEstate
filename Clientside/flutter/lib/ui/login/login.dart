@@ -147,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
           iconColor: Colors.white,
           textController: _userNameController,
           inputAction: TextInputAction.next,
-
           autoFocus: false,
           onChanged: (value) {
             _store.setUserId(_userNameController.text);

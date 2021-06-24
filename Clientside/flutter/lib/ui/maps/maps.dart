@@ -34,25 +34,27 @@ class MapsScreen extends StatefulWidget {
   // final String title = "Bản đồ";
   final Post post;
   final String type;
+  final String commune;
 
   @override
-  MapsScreen({@required this.post, this.type});
+  MapsScreen({@required this.post, this.type, this.commune});
 
-  _MapsScreenState createState() => _MapsScreenState(post: post, type: type);
+  _MapsScreenState createState() => _MapsScreenState(post: post, type: type, commune: commune);
 }
 
 class _MapsScreenState extends State<MapsScreen> {
   final Post post;
   final String type;
+  final String commune;
 
   ThemeStore _themeStore;
 
-  _MapsScreenState({@required this.post, this.type});
+  _MapsScreenState({@required this.post, this.type, this.commune});
 
   TextEditingController _autocompleteText = TextEditingController();
 
   Completer<GoogleMapController> _controller = Completer();
-  static LatLng _center;
+  static LatLng _center = LatLng(10.869811, 106.803725);
   final Set<Marker> _markers = {};
   List<Marker> myMarker = [];
   CameraPosition _position1;
@@ -99,18 +101,27 @@ class _MapsScreenState extends State<MapsScreen> {
         if (!_mapsStore.loading) {
           _mapsStore.getAllPosts();
         }
+      } else if (this.commune != null) {
+        // this._applicationBloc.searchFromPlace(commune);
       }
       _mapsStore.checkPermission();
     } else {
       _addMarkerButtonProcessed();
     }
+    _applicationBloc.getSuccess = false;
     _mapsStore.tapPointClick = LatLng(0, 0);
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      setState(() {
-        _setCameraPositon();
+    if (this.type == "Đăng bài") {
+      if(this._applicationBloc.getSuccessFromPlaces) {
+        currentPositionDeviceNewPost = _applicationBloc.postNewCurrent;
+      }
+    }
 
-      });
-    });
+    if (this.post != null || this.type == "Đăng bài") _setCameraPositon();
+    else Future.delayed(const Duration(milliseconds: 2500), () {
+          setState(() {
+            _setCameraPositon();
+          });
+        });
   }
 
   Future _loadMapStyles() async {
@@ -130,18 +141,29 @@ class _MapsScreenState extends State<MapsScreen> {
 
   _setCameraPositon() {
     if (this.post == null) {
-      LatLng currentPositionDevice= LatLng(10.869811, 106.803725);
-      if (_mapsStore.positionCurrent != null) {
-        currentPositionDevice = LatLng(_mapsStore.positionCurrent.latitude, _mapsStore.positionCurrent.longitude);
+      if (this.type == "Đăng bài") {
+        _position1 = CameraPosition(
+          bearing: 192.833,
+          target: currentPositionDeviceNewPost,
+          tilt: 59.440,
+          zoom: 15.0,
+        );
+        _center = currentPositionDeviceNewPost;
+        print("Centerrr");
+        print(_center);
       }
-      _position1 = CameraPosition(
-        bearing: 192.833,
-        target: currentPositionDevice,
-        tilt: 59.440,
-        zoom: 11.0,
-      );
-      _center = currentPositionDevice;
-
+      else {
+        if (_mapsStore.positionCurrent != null) {
+          currentPositionDevice = LatLng(_mapsStore.positionCurrent.latitude, _mapsStore.positionCurrent.longitude);
+        }
+        _position1 = CameraPosition(
+          bearing: 192.833,
+          target: currentPositionDevice,
+          tilt: 59.440,
+          zoom: 11.0,
+        );
+        _center = currentPositionDevice;
+      }
     } else {
       _position1 = CameraPosition(
         bearing: 192.833,
@@ -451,7 +473,7 @@ class _MapsScreenState extends State<MapsScreen> {
         width: MediaQuery.of(context).size.width / 1.5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(12)),
-          color: Colors.white,
+          color: _themeStore.darkMode ? Color.fromRGBO(54, 55, 58, 1) : Colors.white,
         ),
         padding: EdgeInsets.all(12),
         child: Column(
@@ -663,7 +685,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   initialCameraPosition: CameraPosition(
                     // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
                     target: _center,
-                    zoom: 11.0,
+                    zoom: 13.0,
                   ),
                   mapType: _currentMapType,
                   markers: Set.from(myMarker),
@@ -686,7 +708,8 @@ class _MapsScreenState extends State<MapsScreen> {
                     ),
                   ),
                 ),
-                if(_mapsStore.tapPointClick != LatLng(0, 0))
+                // if(_mapsStore.tapPointClick != LatLng(0, 0))
+                if(_applicationBloc.getSuccess)
                   Padding(
                     padding: const EdgeInsets.only(top: 96, left: 12),
                     child: containerLatLngInfor(),
