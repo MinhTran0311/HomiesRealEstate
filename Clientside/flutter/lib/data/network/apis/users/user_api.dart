@@ -478,25 +478,26 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
   }
 
   // //Delete user
-  // Future<dynamic> deleteUser(int id) async {
-  //   try {
-  //     final res = await _dioClient.post(
-  //       Endpoints.createOrUpdateUser,
-  //       queryParameters: {
-  //         "Id":id
-  //       },
-  //       options: Options(
-  //           headers: {
-  //             "Abp.TenantId": 1,
-  //             "Authorization" : "Bearer ${Preferences.access_token}",
-  //           }
-  //       ),
-  //     );
-  //     return res;
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
+  Future<dynamic> deleteUser(int id) async {
+    try {
+      final dio = Dio();
+      final res = await dio.delete(
+        Endpoints.deleteUser,
+        queryParameters: {
+          "Id":id
+        },
+        options: Options(
+            headers: {
+              "Abp.TenantId": 1,
+              "Authorization" : "Bearer ${Preferences.access_token}",
+            }
+        ),
+      );
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   //Count all users
   Future<dynamic> countAllUsers() async {
