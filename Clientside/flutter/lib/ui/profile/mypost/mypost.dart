@@ -136,7 +136,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
   }
 
   Widget _buildPostsList() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Observer(builder: (context) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: EdgeInsets.only(top: 0, left: 24, right: 24, bottom: 0),
         child: TextField(
@@ -219,7 +220,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
         ),
       ),
       _buildListView()
-    ]);
+    ]);});
   }
 
   Widget _buildListView() {
@@ -436,7 +437,9 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         post.trangThai = "Off";
                         curindex = position;
                         if (value) postStore.Delete(post);
-                        postStore.postForCurList.posts.removeAt(curindex);
+                        setState(() {
+                          postStore.postForCurList.posts.removeAt(curindex);
+                        });
                         // true/false
                       }
                     });
