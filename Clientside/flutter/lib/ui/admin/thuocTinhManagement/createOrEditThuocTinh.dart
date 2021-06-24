@@ -135,7 +135,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
               }
               else if(_thuocTinhManagementStore.createThuocTinh_success)
               {
-                showSuccssfullMesssage("Thêm mới thành công", context);
+                showSuccssfullMesssage("Thêm mới thành công, vui lòng tải lại trang!", context);
               }
               return Container(width: 0, height: 0);
 
