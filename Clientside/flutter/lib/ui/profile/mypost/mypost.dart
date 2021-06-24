@@ -436,6 +436,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         post.trangThai = "Off";
                         curindex = position;
                         if (value) postStore.Delete(post);
+                        postStore.postForCurList.posts.removeAt(curindex);
                         // true/false
                       }
                     });
@@ -887,11 +888,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          setState(() {
-            postStore.postForCurList.posts.removeAt(curindex);
-            Navigator.pop(context);
-          });
           showSuccssfullMesssage("Xóa bài đăng thành công", context);
+          postStore.getsobaidang();
         }
         return SizedBox.shrink();
       },
