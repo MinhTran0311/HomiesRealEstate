@@ -225,6 +225,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
   }
 
   Widget _buildListView() {
+    return Observer(builder: (context) {
     return postStore.postForcheckList != null
         ? Expanded(
             child: SmartRefresher(
@@ -307,7 +308,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
               "chưa có bài đăng",
             ),
           );
-  }
+  });}
 
   List<int> songay = new List<int>();
   _selectDatefl(
@@ -432,11 +433,14 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                   onTap: () {
                     var future = showSimpleModalDialog(
                         context, "Bạn có chắc chắn xóa bài đăng?");
-                    future.then((value) {
+                    future.then((value) async {
                       if (value) {
                         post.trangThai = "Off";
                         curindex = position;
-                        if (value) postStore.Delete(post); // true/false
+                        if (value) await postStore.Delete(post);
+                        setState(() {
+                          postStore.postForcheckList.posts.removeAt(curindex);
+                        });
                       }
                     });
                   },
@@ -883,11 +887,6 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
         if (postStore.successdelete) {
           postStore.successdelete = false;
           showSuccssfullMesssage("Xóa bài đăng thành công", context);
-          setState(() {
-            postStore.postForcheckList.posts.removeAt(curindex);
-            Navigator.pop(context);
-          });
-         // Navigator.pop(context);
         }
         return SizedBox.shrink();
       },
