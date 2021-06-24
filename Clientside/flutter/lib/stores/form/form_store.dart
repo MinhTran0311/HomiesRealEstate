@@ -521,7 +521,7 @@ abstract class _FormStore with Store {
     fetchResetCodeFuture = ObservableFuture(future);
 
     future.then((res){
-      if (res["result"]["canLogin"]){
+      if (res["success"]){
         resetPassword_success=true;
       }
       else resetPassword_success=false;

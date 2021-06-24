@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/di/permissions/permission.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -96,11 +97,13 @@ class _HomePageScreenState extends State<HomePageScreen> {
         // ),
         body: Stack(
           children: [
-             _buildOffstageNavigator("HomeScreen"),
+           _buildOffstageNavigator("HomeScreen"),
             _buildOffstageNavigator("MapsScreen"),
-            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("NewPost"),
-            if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
-            if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
+            if (Permission.instance.hasPermission(Preferences.PagesBaiDangsCreate)) _buildOffstageNavigator("NewPost"),
+            // if (Preferences.userRoleRank >= 1) _buildOffstageNavigator("ProfileScreen"),
+            // if (Preferences.userRoleRank >= 2) _buildOffstageNavigator("ManagementScreen"),
+            if (Permission.instance.hasPermission(Preferences.PagesBaiGhimYeuThichs)) _buildOffstageNavigator("ProfileScreen"),
+            if (Permission.instance.hasPermission(Preferences.PagesAdministration)) _buildOffstageNavigator("ManagementScreen"),
           ],
         ),
         bottomNavigationBar: CurvedNavigationBar(
@@ -110,9 +113,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
           items: <Widget>[
             Icon(Icons.home_rounded, size: 30,color: Colors.black,),
             Icon(Icons.location_pin, size: 30,color: Colors.black,),
-            if (Preferences.userRoleRank >= 1) Icon(Icons.add_circle_rounded, size: 30, color: Colors.black,),
-            if (Preferences.userRoleRank >= 1) Icon(Icons.person, size: 30, color: Colors.black,),
-            if (Preferences.userRoleRank >= 2) Icon(Icons.admin_panel_settings_rounded, size: 30, color: Colors.black,),
+            if (Permission.instance.hasPermission(Preferences.PagesBaiDangsCreate)) Icon(Icons.add_circle_rounded, size: 30, color: Colors.black,),
+            if (Permission.instance.hasPermission(Preferences.PagesBaiGhimYeuThichs)) Icon(Icons.person, size: 30, color: Colors.black,),
+            if (Permission.instance.hasPermission(Preferences.PagesAdministration)) Icon(Icons.admin_panel_settings_rounded, size: 30, color: Colors.black,),
           ],
           index: _currentIndex,
           onTap: (index) {

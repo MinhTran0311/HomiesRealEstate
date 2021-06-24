@@ -109,10 +109,12 @@ abstract class _FilterStore with Store {
   void setTenXa(String value){
     filter_model.tenXa = value;
   }
+
   @computed
-  bool get isAcceptedGia => (giaDropDownValue=="Bất kì") || (giaDropDownValue=="Bất kì" && double.parse(filter_model.giaMin) <= double.parse(filter_model.giaMax));
+  bool get isAcceptedGia => (giaDropDownValue=="Bất kì") || (giaDropDownValue!="Bất kì" && double.parse(filter_model.giaMin) <= double.parse(filter_model.giaMax));
+
   @computed
-  bool get isAcceptedDienTich => (dienTichDropDownValue=="Bất kì") || (dienTichDropDownValue=="Bất kì" && double.parse(filter_model.dienTichMin) <= double.parse(filter_model.dienTichMax));
+  bool get isAcceptedDienTich => (dienTichDropDownValue=="Bất kì") || (dienTichDropDownValue!="Bất kì" && double.parse(filter_model.dienTichMin) <= double.parse(filter_model.dienTichMax));
 
   @action String calculateActualValue(String value, String option){
     if (option == "Bất kì")
@@ -156,6 +158,7 @@ abstract class _FilterStore with Store {
     dienTichDropDownValue = 'Bất kì';
     //var _searchContent = filter_model.searchContent;
     //filter_model = new filter_Model(searchContent: _searchContent);
+    filter_model.searchContent='';
     filter_model.giaMin="";
     filter_model.giaMax="";
     filter_model.dienTichMin = "";
