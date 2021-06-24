@@ -30,7 +30,7 @@ import 'package:http/http.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:boilerplate/widgets/smart/pull_to_refresh.dart';
 
 class MyPostScreen extends StatefulWidget {
   final UserStore userStore;
