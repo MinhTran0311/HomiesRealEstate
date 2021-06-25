@@ -18,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_Huyens)]
     public class HuyensAppService : RealEstateAppServiceBase, IHuyensAppService
     {
         private readonly IRepository<Huyen> _huyenRepository;
@@ -33,6 +32,7 @@ namespace Homies.RealEstate.Server
 
         }
 
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetHuyenForViewDto>> GetAll(GetAllHuyensInput input)
         {
 
@@ -70,6 +70,7 @@ namespace Homies.RealEstate.Server
             );
         }
 
+        [AbpAllowAnonymous]
         public async Task<GetHuyenForViewDto> GetHuyenForView(int id)
         {
             var huyen = await _huyenRepository.GetAsync(id);

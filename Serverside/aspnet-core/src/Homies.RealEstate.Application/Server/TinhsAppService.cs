@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_Tinhs)]
     public class TinhsAppService : RealEstateAppServiceBase, ITinhsAppService
     {
         private readonly IRepository<Tinh> _tinhRepository;
@@ -29,6 +28,7 @@ namespace Homies.RealEstate.Server
 
         }
 
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetTinhForViewDto>> GetAll(GetAllTinhsInput input)
         {
 
@@ -58,6 +58,7 @@ namespace Homies.RealEstate.Server
             );
         }
 
+        [AbpAllowAnonymous]
         public async Task<GetTinhForViewDto> GetTinhForView(int id)
         {
             var tinh = await _tinhRepository.GetAsync(id);

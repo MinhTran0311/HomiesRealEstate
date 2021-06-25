@@ -18,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Homies.RealEstate.Server
 {
-    [AbpAuthorize(AppPermissions.Pages_Xas)]
     public class XasAppService : RealEstateAppServiceBase, IXasAppService
     {
         private readonly IRepository<Xa> _xaRepository;
@@ -32,7 +31,7 @@ namespace Homies.RealEstate.Server
             _lookup_huyenRepository = lookup_huyenRepository;
 
         }
-
+        [AbpAllowAnonymous]
         public async Task<PagedResultDto<GetXaForViewDto>> GetAll(GetAllXasInput input)
         {
 
@@ -70,7 +69,7 @@ namespace Homies.RealEstate.Server
                 await xas.ToListAsync()
             );
         }
-
+        [AbpAllowAnonymous]
         public async Task<GetXaForViewDto> GetXaForView(int id)
         {
             var xa = await _xaRepository.GetAsync(id);
