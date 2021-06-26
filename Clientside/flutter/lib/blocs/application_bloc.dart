@@ -62,7 +62,6 @@ class ApplicationBloc with ChangeNotifier {
       }
     }
   }
-
   @action
   searchFromPlace(String searchTerm) async {
     getSuccessFromPlaces = false;
