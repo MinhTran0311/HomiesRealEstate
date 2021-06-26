@@ -63,15 +63,13 @@ class _NewpostScreenState extends State<NewpostScreen> {
   UserStore _userStore;
   ThemeStore _themeStore;
   ApplicationBloc _applicationBloc;
-
-
   //region text controllers
   TextEditingController _TileController = TextEditingController();
   TextEditingController _PriceController = TextEditingController();
   TextEditingController _AcreageController = TextEditingController();
   TextEditingController _keyEditor2 = TextEditingController();
   var _ThuocTinhController = new List<TextEditingController>(20);
-
+  TextEditingController citysearch = TextEditingController();
   TextEditingController _LocateController = TextEditingController();
   TextEditingController _DescribeController = TextEditingController();
   GlobalKey<FlutterSummernoteState> _keyEditor = GlobalKey();
@@ -121,6 +119,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   reset() {
     _image = [];
+    citysearch=TextEditingController();
     _TileController = TextEditingController();
     _PriceController = TextEditingController();
     _AcreageController = TextEditingController();
@@ -159,25 +158,23 @@ class _NewpostScreenState extends State<NewpostScreen> {
     _imageStore = Provider.of<ImageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
     _applicationBloc = Provider.of<ApplicationBloc>(context);
-
-    if (!_postStore.loadinggetcategorys) {
+    //reset();
+    if (!_postStore.loadinggetcategorys&& _postStore.isIntialLoading) {
       _postStore.getPostcategorys();
     }
-    if (!_townStore.loading) {
+    if (!_townStore.loading&&_townStore.isIntialLoading) {
       _townStore.getTowns();
+      //_townStore.isIntialLoading = false;
     }
-    if (!_townStore.loadingCommune) {
+    if (!_townStore.loadingCommune&&_townStore.isIntialLoading) {
       _townStore.getCommunes();
-      _townStore.isIntialLoading = true;
+      _townStore.isIntialLoading = false;
     }
-    if (!_postStore.loadingPack) {
+    if (!_postStore.loadingPack&& _postStore.isIntialLoading) {
       _postStore.getPacks();
     }
-    if (!_postStore.loadingThuocTinh) {
+    if (!_postStore.loadingThuocTinh&& _postStore.isIntialLoading) {
       _postStore.getThuocTinhs();
-    }
-    if (!_userStore.loadingCurrentUserWallet) {
-      _userStore.getCurrentWalletUser();
     }
     _imageStore.imageListpost = [];
   }
@@ -708,6 +705,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               selectedTown = null;
             });
           },
+          searchBoxController:citysearch ,
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
@@ -741,6 +739,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       for (var i = 0; i < _townStore.townList.towns.length; i++)
         if (_townStore.townList.towns[i].tinhTenTinh == selectedCity)
           town.add(_townStore.townList.towns[i]);
+        if (town!=[])
       return Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 0.0, bottom: 24.0),
         child: DropdownButtonFormField<Town>(
@@ -789,7 +788,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
             );
           }).toList(),
         ),
-      );
+      );else
+          return Container(
+            height: 0,
+            width: 0,
+          );
     } else
       return Container(
         height: 0,
@@ -815,11 +818,11 @@ class _NewpostScreenState extends State<NewpostScreen> {
           )),
           value: selectedCommune,
           //icon:Icons.attach_file ,
-          onChanged: (Commune Value) {
+          onChanged: (Commune Value) async {
             setState(() {
-              selectedCommune = Value;
-              _applicationBloc.searchFromPlace(selectedCommune.tenXa);
-              Future.delayed(Duration(milliseconds: 2000), () async {
+              selectedCommune = Value;            });
+            await _applicationBloc.searchFromPlace(selectedCommune.tenXa+selectedTown.tenHuyen);
+              Future.delayed(Duration(milliseconds: 0), () async {
                 final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -832,7 +835,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 print(pointx);
                 print(pointy);
               });
-            });
           },
           items: commune.map((Commune type) {
             return DropdownMenuItem<Commune>(

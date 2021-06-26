@@ -180,7 +180,7 @@ abstract class _PostStore with Store {
       success = true;
       if (!isLoadMore){
         this.postList = postList;
-        if (isIntialLoading) isIntialLoading=false;
+       // if (isIntialLoading) isIntialLoading=false;
       }
       else {
         for (int i=0; i< postList.posts.length; i++)
