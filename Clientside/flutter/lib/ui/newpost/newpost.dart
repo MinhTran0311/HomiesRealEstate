@@ -76,7 +76,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   //endregion
   final FormStore _store = new FormStore();
-
+ bool firstrun=true;
   //region Item
   Postcategory selectedType;
   Postcategory selectedTypeType;
@@ -150,8 +150,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // initializing stores
-    //set initialLoading = true ;
     _postStore = Provider.of<PostStore>(context);
     _townStore = Provider.of<TownStore>(context);
     _userStore = Provider.of<UserStore>(context);
@@ -159,7 +157,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _applicationBloc = Provider.of<ApplicationBloc>(context);
     //reset();
-    if (!_postStore.loadinggetcategorys&& _postStore.isIntialLoading) {
+    if (!_postStore.loadinggetcategorys&& _postStore.isIntialLoading&&firstrun) {
       _postStore.getPostcategorys();
     }
     if (!_townStore.loading&&_townStore.isIntialLoading) {
@@ -170,11 +168,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
       _townStore.getCommunes();
       _townStore.isIntialLoading = false;
     }
-    if (!_postStore.loadingPack&& _postStore.isIntialLoading) {
+    if (!_postStore.loadingPack&& _postStore.isIntialLoading&&firstrun) {
       _postStore.getPacks();
     }
-    if (!_postStore.loadingThuocTinh&& _postStore.isIntialLoading) {
+    if (!_postStore.loadingThuocTinh&& _postStore.isIntialLoading&&firstrun) {
       _postStore.getThuocTinhs();
+      firstrun=false;
     }
     _imageStore.imageListpost = [];
   }
@@ -697,7 +696,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
             "Tỉnh Cà Mau",
           ],
           showClearButton: true,
-
           hint: "Chọn tỉnh/thành phố",
           onChanged: (String Value) {
             setState(() {
@@ -705,6 +703,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               selectedTown = null;
             });
           },
+
           searchBoxController:citysearch ,
           selectedItem: null,
           showSearchBox: true,
@@ -826,7 +825,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MapsScreen(type: "Đăng bài", commune: selectedCommune.tenXa,),
+                      builder: (context) => MapsScreen(type: "Đăng bài"),
                     ));
                 setState(() {
                   pointx = result.split(',')[0];

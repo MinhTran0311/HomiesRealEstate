@@ -227,7 +227,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-        queryParameters:{"skipCount": skipCount, "maxResultCount":maxResultCount,"filter":filter,"phanLoaiBaiDang":key },
+        queryParameters:{"Filter":filter,"phanLoaiBaiDang":key,"SkipCount": skipCount, "MaxResultCount":maxResultCount },
       );
       return PostList.fromJsonmypost(res);
     } catch (e) {

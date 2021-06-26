@@ -180,7 +180,7 @@ abstract class _PostStore with Store {
       success = true;
       if (!isLoadMore){
         this.postList = postList;
-       // if (isIntialLoading) isIntialLoading=false;
+        if (isIntialLoading) isIntialLoading=false;
       }
       else {
         for (int i=0; i< postList.posts.length; i++)
@@ -768,8 +768,8 @@ abstract class _PostStore with Store {
     }
     else
       skipCountmypost +=
-          Preferences.skipIndex;
-    final future = _repository.getPostsforcheck(skipCountmypost,Preferences.maxCount,filter,key);
+          5;
+    final future = _repository.getPostsforcheck(skipCountmypost,5,filter,key);
     fetchPostForcheckFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForcheck = true;
