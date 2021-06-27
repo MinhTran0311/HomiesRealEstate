@@ -24,7 +24,7 @@ dynamic showSuccssfullMesssage(String message, BuildContext context) {
       FlushbarHelper.createSuccess(
         message: message,
         title: "Thông báo",
-        duration: Duration(seconds: 4),
+        duration: Duration(seconds: 2),
       )
           .show(context);
     }

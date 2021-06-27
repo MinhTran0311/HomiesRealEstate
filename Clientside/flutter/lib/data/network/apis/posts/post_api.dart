@@ -243,7 +243,7 @@ class PostApi {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
         }),
-        queryParameters:{"skipCount": 0, "maxResultCount":1},
+        queryParameters:{"skipCount": 0, "maxResultCount":0},
       );
       return (res["result"]["totalCount"].toString());
     } catch (e) {
