@@ -45,8 +45,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
   TextEditingController _searchController11 = new TextEditingController();
   TownStore _townStore;
   ThemeStore _themeStore;
-  String dropdownValue = "Tất cả";
-  int key = 0;
+  String dropdownValue = "Còn hạn";
+  int key = 1;
   GlobalKey _refresherKey1 = GlobalKey();
   GlobalKey _contentKey1 = GlobalKey();
   bool isRefreshing1 = false;
@@ -67,6 +67,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
 
   @override
   void didChangeDependencies() {
+    int key = 1;
     super.didChangeDependencies();
     postStore = Provider.of<PostStore>(context);
     userStore = Provider.of<UserStore>(context);
@@ -440,6 +441,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                         if (value) await postStore.Delete(post);
                         setState(() {
                           postStore.postForcheckList.posts.removeAt(curindex);
+                          Navigator.pop(context);
                         });
                       }
                     });

@@ -439,6 +439,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         if (value) postStore.Delete(post);
                         setState(() {
                           postStore.postForCurList.posts.removeAt(curindex);
+                          Navigator.pop(context);
                         });
                         // true/false
                       }

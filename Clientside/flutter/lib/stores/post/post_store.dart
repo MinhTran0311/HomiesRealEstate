@@ -768,8 +768,8 @@ abstract class _PostStore with Store {
     }
     else
       skipCountmypost +=
-          Preferences.skipIndex;
-    final future = _repository.getPostsforcheck(skipCountmypost,Preferences.maxCount,filter,key);
+          5;
+    final future = _repository.getPostsforcheck(skipCountmypost,5,filter,key);
     fetchPostForcheckFuture = ObservableFuture(future);
     future.then((postList) {
       successPostForcheck = true;
