@@ -73,6 +73,7 @@ class _MapsScreenState extends State<MapsScreen> {
   bool permissionEnable = false;
   Placemark placeMarkChoosen;
 
+  bool isFirstLoad = true;
   MapsStore _mapsStore;
 
   // Map
@@ -95,33 +96,36 @@ class _MapsScreenState extends State<MapsScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
-    if (this.post == null) {
-      if (this.type == null)
-      {
-        if (!_mapsStore.loading) {
-          _mapsStore.getAllPosts();
+    if (isFirstLoad) {
+      if (this.post == null) {
+        if (this.type == null)
+        {
+          if (!_mapsStore.loading) {
+            _mapsStore.getAllPosts();
+          }
+        } else if (this.commune != null) {
+          // this._applicationBloc.searchFromPlace(commune);
         }
-      } else if (this.commune != null) {
-        // this._applicationBloc.searchFromPlace(commune);
+        _mapsStore.checkPermission();
+      } else {
+        _addMarkerButtonProcessed();
       }
-      _mapsStore.checkPermission();
-    } else {
-      _addMarkerButtonProcessed();
-    }
-    _applicationBloc.getSuccess = false;
-    _mapsStore.tapPointClick = LatLng(0, 0);
-    if (this.type == "Đăng bài") {
-      if(this._applicationBloc.getSuccessFromPlaces) {
-        currentPositionDeviceNewPost = _applicationBloc.postNewCurrent;
+      _applicationBloc.getSuccess = false;
+      _mapsStore.tapPointClick = LatLng(0, 0);
+      if (this.type == "Đăng bài") {
+        if(this._applicationBloc.getSuccessFromPlaces) {
+          currentPositionDeviceNewPost = _applicationBloc.postNewCurrent;
+        }
       }
-    }
 
-    if (this.post != null || this.type == "Đăng bài") _setCameraPositon();
-    else Future.delayed(const Duration(milliseconds: 2500), () {
-          setState(() {
-            _setCameraPositon();
-          });
+      if (this.post != null || this.type == "Đăng bài") _setCameraPositon();
+      else Future.delayed(const Duration(milliseconds: 2500), () {
+        setState(() {
+          _setCameraPositon();
         });
+      });
+      isFirstLoad = false;
+    }
   }
 
   Future _loadMapStyles() async {
@@ -685,7 +689,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   initialCameraPosition: CameraPosition(
                     // target: LatLng(applicationBloc.currentLocation.latitude, applicationBloc.currentLocation.longitude),
                     target: _center,
-                    zoom: 13.0,
+                    zoom: 15.0,
                   ),
                   mapType: _currentMapType,
                   markers: Set.from(myMarker),

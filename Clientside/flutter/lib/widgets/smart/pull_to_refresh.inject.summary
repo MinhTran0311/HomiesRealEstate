@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/widgets/smart/pull_to_refresh.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}
