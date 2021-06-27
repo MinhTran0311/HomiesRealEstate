@@ -162,7 +162,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                list.Count,
+                totalCount,
                 filteredList
             );
             }
@@ -267,7 +267,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                filteredList.Count,
+                totalCount,
                 filteredList
             );
             //}
@@ -391,7 +391,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                list.Count,
+                totalCount,
                 filteredList
             );
             }
@@ -882,7 +882,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                filteredList.Count,
+                totalCount,
                 filteredList
             );
             //}
