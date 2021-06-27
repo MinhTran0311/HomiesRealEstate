@@ -438,11 +438,13 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                       if (value) {
                         post.trangThai = "Off";
                         curindex = position;
-                        if (value) await postStore.Delete(post);
-                        setState(() {
-                          postStore.postForcheckList.posts.removeAt(curindex);
-                          Navigator.pop(context);
-                        });
+                        if (value) {
+                          var xoabai = await postStore.Delete(post);
+                          if (xoabai) setState(() {
+                            postStore.postForcheckList.posts.removeAt(curindex);
+                            Navigator.pop(context);
+                          }
+                        );}
                       }
                     });
                   },

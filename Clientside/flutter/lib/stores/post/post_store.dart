@@ -639,6 +639,7 @@ abstract class _PostStore with Store {
     fetchdeleteFuture = ObservableFuture(future);
     future.then((post) {
       successdelete = true;
+      return true;
         }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
@@ -649,6 +650,7 @@ abstract class _PostStore with Store {
         throw error;
       }
     });
+    return false;
   }
   /////////////////giahan
   static ObservableFuture<String> emptygiahanResponse =
