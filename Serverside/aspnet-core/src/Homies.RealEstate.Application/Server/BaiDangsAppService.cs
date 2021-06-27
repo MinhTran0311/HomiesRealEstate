@@ -162,7 +162,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
+                list.Count,
                 filteredList
             );
             }
@@ -391,7 +391,7 @@ namespace Homies.RealEstate.Server
                     }
                 }
                 return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
+                list.Count,
                 filteredList
             );
             }
