@@ -227,89 +227,90 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
 
   Widget _buildListView() {
     return Observer(builder: (context) {
-    return postStore.postForcheckList != null
-        ? Expanded(
-            child: SmartRefresher(
-              key: _refresherKey1,
-              controller: _refreshController1,
-              enablePullUp: true,
-              enablePullDown: true,
-              header: WaterDropHeader(
-                refresh: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: Icon(
-                    Icons.flight_takeoff_outlined,
-                    color: Colors.amber,
-                    size: 20,
+      return postStore.postForcheckList != null
+          ? Expanded(
+              child: SmartRefresher(
+                key: _refresherKey1,
+                controller: _refreshController1,
+                enablePullUp: true,
+                enablePullDown: true,
+                header: WaterDropHeader(
+                  refresh: SizedBox(
+                    width: 25.0,
+                    height: 25.0,
+                    child: Icon(
+                      Icons.flight_takeoff_outlined,
+                      color: Colors.amber,
+                      size: 20,
+                    ),
                   ),
-                ),
-                idleIcon: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: Icon(
-                    Icons.flight_takeoff_outlined,
-                    color: Colors.amber,
-                    size: 20,
+                  idleIcon: SizedBox(
+                    width: 25.0,
+                    height: 25.0,
+                    child: Icon(
+                      Icons.flight_takeoff_outlined,
+                      color: Colors.amber,
+                      size: 20,
+                    ),
                   ),
+                  waterDropColor: Colors.amber,
                 ),
-                waterDropColor: Colors.amber,
-              ),
-              physics: BouncingScrollPhysics(),
-              footer: ClassicFooter(
-                loadStyle: LoadStyle.ShowWhenLoading,
-                completeDuration: Duration(milliseconds: 500),
-              ),
-              onLoading: () async {
-                print("loading");
-                postStore.getPostForcheck(
-                    true,
-                    _searchController11 != null
-                        ? _searchController11.text.toString()
-                        : "",
-                    key);
-                await Future.delayed(Duration(milliseconds: 2000));
+                physics: BouncingScrollPhysics(),
+                footer: ClassicFooter(
+                  loadStyle: LoadStyle.ShowWhenLoading,
+                  completeDuration: Duration(milliseconds: 500),
+                ),
+                onLoading: () async {
+                  print("loading");
+                  postStore.getPostForcheck(
+                      true,
+                      _searchController11 != null
+                          ? _searchController11.text.toString()
+                          : "",
+                      key);
+                  await Future.delayed(Duration(milliseconds: 2000));
 
-                if (mounted) {
-                  setState(() {});
-                }
-                _scrollController1.jumpTo(
-                  _scrollController1.position.maxScrollExtent,
-                );
-                _refreshController1.loadComplete();
-              },
-              onRefresh: () async {
-                print("refresh");
-                postStore.getPostForcheck(
-                    false,
-                    _searchController11 != null
-                        ? _searchController11.text.toString()
-                        : "",
-                    key);
-                await Future.delayed(Duration(milliseconds: 2000));
-                if (mounted) setState(() {});
-                isRefreshing1 = true;
-                _refreshController1.refreshCompleted();
-              },
-              scrollController: _scrollController1,
-              primary: false,
-              child: ListView.builder(
-                key: _contentKey1,
-                controller: _scrollController1,
-                itemCount: postStore.postForcheckList.posts.length,
-                itemBuilder: (context, position) {
-                  return _buildPostPoster(
-                      postStore.postForcheckList.posts[position], position);
+                  if (mounted) {
+                    setState(() {});
+                  }
+                  _scrollController1.jumpTo(
+                    _scrollController1.position.maxScrollExtent,
+                  );
+                  _refreshController1.loadComplete();
                 },
+                onRefresh: () async {
+                  print("refresh");
+                  postStore.getPostForcheck(
+                      false,
+                      _searchController11 != null
+                          ? _searchController11.text.toString()
+                          : "",
+                      key);
+                  await Future.delayed(Duration(milliseconds: 2000));
+                  if (mounted) setState(() {});
+                  isRefreshing1 = true;
+                  _refreshController1.refreshCompleted();
+                },
+                scrollController: _scrollController1,
+                primary: false,
+                child: ListView.builder(
+                  key: _contentKey1,
+                  controller: _scrollController1,
+                  itemCount: postStore.postForcheckList.posts.length,
+                  itemBuilder: (context, position) {
+                    return _buildPostPoster(
+                        postStore.postForcheckList.posts[position], position);
+                  },
+                ),
               ),
-            ),
-          )
-        : Center(
-            child: Text(
-              "chưa có bài đăng",
-            ),
-          );
-  });}
+            )
+          : Center(
+              child: Text(
+                "chưa có bài đăng",
+              ),
+            );
+    });
+  }
 
   List<int> songay = new List<int>();
   _selectDatefl(
@@ -438,11 +439,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                       if (value) {
                         post.trangThai = "Off";
                         curindex = position;
-                        if (value) await postStore.Delete(post);
-                        setState(() {
-                          postStore.postForcheckList.posts.removeAt(curindex);
-                          Navigator.pop(context);
-                        });
+                        if (value)
+                          await postStore.Delete(post);
                       }
                     });
                   },
@@ -874,6 +872,25 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
       ]),
     );
   }
+  dynamic showSuccssfullMesssageonlydelete(String message, BuildContext context) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 2),
+        )
+            .show(context);
+        Future.delayed(Duration(milliseconds: 2060), () async {
+          setState(() {
+            postStore.postForcheckList.posts.removeAt(curindex);
+            Navigator.pop(context);
+          });
+        });
+      }
+      return SizedBox.shrink();
+    });
+  }
 
   Widget _handleErrorMessage() {
     return Observer(
@@ -888,7 +905,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          showSuccssfullMesssage("Xóa bài đăng thành công", context);
+          showSuccssfullMesssageonlydelete("Xóa bài đăng thành công", context);
         }
         return SizedBox.shrink();
       },

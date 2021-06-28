@@ -437,10 +437,10 @@ class _MyPostScreenState extends State<MyPostScreen> {
                         post.trangThai = "Off";
                         curindex = position;
                         if (value) postStore.Delete(post);
-                        setState(() {
-                          postStore.postForCurList.posts.removeAt(curindex);
-                          Navigator.pop(context);
-                        });
+                        // setState(() {
+                        //   postStore.postForCurList.posts.removeAt(curindex);
+                        //   Navigator.pop(context);
+                        // });
                         // true/false
                       }
                     });
@@ -878,7 +878,25 @@ class _MyPostScreenState extends State<MyPostScreen> {
       );
     });
   }
-
+  dynamic showSuccssfullMesssageonlydelete(String message, BuildContext context) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: "Thông báo",
+          duration: Duration(seconds: 2),
+        )
+            .show(context);
+        Future.delayed(Duration(milliseconds: 2060), () async {
+          setState(() {
+            postStore.postForCurList.posts.removeAt(curindex);
+            Navigator.pop(context);
+          });
+        });
+      }
+      return SizedBox.shrink();
+    });
+  }
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
@@ -892,7 +910,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
         }
         if (postStore.successdelete) {
           postStore.successdelete = false;
-          showSuccssfullMesssage("Xóa bài đăng thành công", context);
+          showSuccssfullMesssageonlydelete("Xóa bài đăng thành công", context);
           postStore.getsobaidang();
         }
         return SizedBox.shrink();
