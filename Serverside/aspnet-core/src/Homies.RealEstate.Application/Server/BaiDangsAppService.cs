@@ -244,15 +244,15 @@ namespace Homies.RealEstate.Server
 
             var list = await baiDangs.ToListAsync();
 
-            if (list.Count == totalCount)
-            {
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                list
-                );
-            }
-            else
-            {
+            //if (list.Count == totalCount)
+            //{
+            //    return new PagedResultDto<GetBaiDangForViewDto>(
+            //    totalCount,
+            //    list
+            //    );
+            //}
+            //else
+            //{
                 List<GetBaiDangForViewDto> filteredList = new List<GetBaiDangForViewDto>();
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -270,7 +270,7 @@ namespace Homies.RealEstate.Server
                 totalCount,
                 filteredList
             );
-            }
+            //}
         }
 
         [AbpAllowAnonymous]
@@ -849,15 +849,15 @@ namespace Homies.RealEstate.Server
 
             var list = await baiDangs.ToListAsync();
 
-            if (list.Count == totalCount)
-            {
-                return new PagedResultDto<GetBaiDangForViewDto>(
-                totalCount,
-                list
-                );
-            }
-            else
-            {
+            //if (list.Count == totalCount)
+            //{
+            //    return new PagedResultDto<GetBaiDangForViewDto>(
+            //    totalCount,
+            //    list
+            //    );
+            //}
+            //else
+            //{
                 //for (int i = 0; i < list.Count; i++)
                 //{
                 //    for (int j = 0; j < list.Count; j++)
@@ -885,7 +885,7 @@ namespace Homies.RealEstate.Server
                 totalCount,
                 filteredList
             );
-            }
+            //}
         }
         private bool isSoonerDate(List<GetBaiDangForViewDto> list, int baidangId, DateTime date)
         {
