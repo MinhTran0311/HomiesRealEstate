@@ -130,7 +130,7 @@ class PostApi {
   Future<PackList> getPacks() async {
     try {
       final res = await _dioClient.get(
-        "https://homies.exscanner.edu.vn/api/services/app/GoiBaiDangs/GetAll",
+        "https://homies.exscanner.edu.vn/api/services/app/GoiBaiDangs/GetAllGoiBaiDangForView",
         options: Options(headers: {
           "Abp.TenantId": 1,
           "Authorization": "Bearer ${Preferences.access_token}",
