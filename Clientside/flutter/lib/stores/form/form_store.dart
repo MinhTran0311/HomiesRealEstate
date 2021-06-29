@@ -376,10 +376,14 @@ abstract class _FormStore with Store {
       if (error.response != null && error.response.data!=null)
         {//errorStore.errorMessage = error.response.data["error"]["message"];
         print(error.response.data["error"]["message"].toString().split(' \'')[1]);
-        if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
-          errorStore.errorMessage = translateErrorMessage("User name");
-        else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
-          errorStore.errorMessage = translateErrorMessage("Email");
+        if (error.response.data["error"]["message"].toString().contains("invalid")) {
+          errorStore.errorMessage = translateErrorMessage("invalid regist");
+        }
+        else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name" || error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
+         {
+           errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"].toString().split(' \'')[0] + error.response.data["error"]["message"].toString().split(' \'')[2]);
+
+         }
         else
           errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"]);
         }
