@@ -1535,7 +1535,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                   selectedCommune == null ||
                   selectedPack == null ||
                   selectedTypeTypeType == null ||
-                  _image.length == 0)
+                  _image.length == 0 ||_TileController.value.text.length>50)
                 showAlertDialog(context);
               else {
                 var post = new Post();
