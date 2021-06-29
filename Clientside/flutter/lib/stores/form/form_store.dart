@@ -381,7 +381,7 @@ abstract class _FormStore with Store {
         }
         else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name" || error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
          {
-           errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"].toString().split(' \'')[0] + error.response.data["error"]["message"].toString().split(' \'')[2]);
+           errorStore.errorMessage = translateErrorMessage(error.response.data["error"]["message"].toString().split('\'')[0] + error.response.data["error"]["message"].toString().split('\'')[2]);
 
          }
         else
