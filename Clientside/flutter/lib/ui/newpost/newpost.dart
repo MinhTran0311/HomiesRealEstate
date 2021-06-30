@@ -1306,7 +1306,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 width: 10,
               ),
               Text(
-                type.tenGoi.length>10?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,10) + ", phí: " + priceFormat(type.phi),
+                type.tenGoi.length<10?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,10) + ", phí: " + priceFormat(type.phi),
                 style: TextStyle(),
               ),
             ],
