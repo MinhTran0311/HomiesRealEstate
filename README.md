@@ -77,9 +77,7 @@
 ## About The Project
 
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+Ứng dụng Homies Real Estate cung cấp nền tảng cho phép người dùng chia sẻ các thông tin mua bán, cho thuê các bất động sản. Đặc biệt, các thông tin quan trọng về bất động sản đều được thể hiện một cách rõ ràng tạo điều kiện thuận lợi nhất cho giao dịch.
 
 
 ### Built With
