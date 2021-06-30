@@ -76,7 +76,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   //endregion
   final FormStore _store = new FormStore();
- bool firstrun=true;
+  bool firstrun = true;
   //region Item
   Postcategory selectedType;
   Postcategory selectedTypeType;
@@ -119,7 +119,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
 
   reset() {
     _image = [];
-    citysearch=TextEditingController();
+    citysearch = TextEditingController();
     _TileController = TextEditingController();
     _PriceController = TextEditingController();
     _AcreageController = TextEditingController();
@@ -157,23 +157,27 @@ class _NewpostScreenState extends State<NewpostScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _applicationBloc = Provider.of<ApplicationBloc>(context);
     //reset();
-    if (!_postStore.loadinggetcategorys&& _postStore.isIntialLoading&&firstrun) {
+    if (!_postStore.loadinggetcategorys &&
+        _postStore.isIntialLoading &&
+        firstrun) {
       _postStore.getPostcategorys();
     }
-    if (!_townStore.loading&&_townStore.isIntialLoading) {
+    if (!_townStore.loading && _townStore.isIntialLoading) {
       _townStore.getTowns();
       //_townStore.isIntialLoading = false;
     }
-    if (!_townStore.loadingCommune&&_townStore.isIntialLoading) {
+    if (!_townStore.loadingCommune && _townStore.isIntialLoading) {
       _townStore.getCommunes();
       _townStore.isIntialLoading = false;
     }
-    if (!_postStore.loadingPack&& _postStore.isIntialLoading&&firstrun) {
+    if (!_postStore.loadingPack && _postStore.isIntialLoading && firstrun) {
       _postStore.getPacks();
     }
-    if (!_postStore.loadingThuocTinh&& _postStore.isIntialLoading&&firstrun) {
+    if (!_postStore.loadingThuocTinh &&
+        _postStore.isIntialLoading &&
+        firstrun) {
       _postStore.getThuocTinhs();
-      firstrun=false;
+      firstrun = false;
     }
     _imageStore.imageListpost = [];
   }
@@ -233,7 +237,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         if (_postStore.errorStore.errorMessage.isNotEmpty) {
           return showErrorMessage(_postStore.errorStore.errorMessage, context);
         }
-        if (_postStore.successNewpost)  {
+        if (_postStore.successNewpost) {
           showSuccssfullMesssage("Đăng tin thành công", context);
           //dispose();.
           _postStore.getsobaidangall();
@@ -315,7 +319,9 @@ class _NewpostScreenState extends State<NewpostScreen> {
             ? AlertDialog(
                 title: Text(
                   "Bạn phải thêm thông tin số điện thoại trước khi đăng bài",
-                  style: TextStyle(fontSize: 24,),
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
                 ),
                 content: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,39 +396,46 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-              TextFormField(
-                autofocus: false,
-                decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amber),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(50),
+                    ],
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
+                      icon: Icon(Icons.textsms_rounded,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      hintText: 'Tối đa 50 kí tự',
+                      labelText: 'Tiêu đề',
+                      suffixIcon: IconButton(
+                        color: Colors.grey,
+                        onPressed: () => _TileController.clear(),
+                        icon: Icon(Icons.clear),
+                      ),
+                    ),
+                    cursorColor:
+                        _themeStore.darkMode ? Colors.white : Colors.amber,
+                    controller: _TileController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length > 50) {
+                        return 'Vui lòng nhập lại tiêu đề';
+                      }
+                      return null;
+                    },
                   ),
-                  icon: Icon(Icons.textsms_rounded,
-                      color:
-                          _themeStore.darkMode ? Colors.white : Colors.amber),
-                  labelStyle: TextStyle(
-                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
-                  ),
-                  hintText: 'Tối đa 50 kí tự',
-                  labelText: 'Tiêu đề',
-                  suffixIcon: IconButton(
-                    color: Colors.grey,
-                    onPressed: () => _TileController.clear(),
-                    icon: Icon(Icons.clear),
-                  ),
-                ),
-                cursorColor: _themeStore.darkMode ? Colors.white : Colors.amber,
-                controller: _TileController,
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.length > 50) {
-                    return 'Vui lòng nhập lại tiêu đề';
-                  }
-                  return null;
-                },
-              ),
-            ]));
+                ]));
       },
     );
   }
@@ -703,8 +716,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               selectedTown = null;
             });
           },
-
-          searchBoxController:citysearch ,
+          searchBoxController: citysearch,
           selectedItem: null,
           showSearchBox: true,
           searchBoxDecoration: InputDecoration(
@@ -738,60 +750,61 @@ class _NewpostScreenState extends State<NewpostScreen> {
       for (var i = 0; i < _townStore.townList.towns.length; i++)
         if (_townStore.townList.towns[i].tinhTenTinh == selectedCity)
           town.add(_townStore.townList.towns[i]);
-        if (town!=[])
-      return Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 0.0, bottom: 24.0),
-        child: DropdownButtonFormField<Town>(
-          hint: Text("Chọn quận/huyện"),
-          value: selectedTown,
-          autovalidateMode: AutovalidateMode.always,
-          validator: (value) =>
-              value == null ? 'Vui lòng chọn quận huyện' : null,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-            onPressed: () => setState(() {
-              selectedTown = null;
-            }),
-            icon: Icon(Icons.clear),
-          )),
-          //icon:Icons.attach_file ,
-          onChanged: (Town Value) {
-            //FocusScope.of(context).requestFocus(FocusNode());
-            setState(() {
-              selectedTown = Value;
-              selectedCommune = null;
-              commune = [];
-              for (var i = 0; i < _townStore.communeList.communes.length; i++)
-                if (_townStore.communeList.communes[i].huyenId ==
-                    selectedTown.id)
-                  commune.add(_townStore.communeList.communes[i]);
-            });
-          },
-          items: town.map((Town type) {
-            return DropdownMenuItem<Town>(
-              value: type,
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.blur_circular,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    type.tenHuyen,
-                    style: TextStyle(),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
-      );else
-          return Container(
-            height: 0,
-            width: 0,
-          );
+      if (town != [])
+        return Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 0.0, bottom: 24.0),
+          child: DropdownButtonFormField<Town>(
+            hint: Text("Chọn quận/huyện"),
+            value: selectedTown,
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) =>
+                value == null ? 'Vui lòng chọn quận huyện' : null,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+              onPressed: () => setState(() {
+                selectedTown = null;
+              }),
+              icon: Icon(Icons.clear),
+            )),
+            //icon:Icons.attach_file ,
+            onChanged: (Town Value) {
+              //FocusScope.of(context).requestFocus(FocusNode());
+              setState(() {
+                selectedTown = Value;
+                selectedCommune = null;
+                commune = [];
+                for (var i = 0; i < _townStore.communeList.communes.length; i++)
+                  if (_townStore.communeList.communes[i].huyenId ==
+                      selectedTown.id)
+                    commune.add(_townStore.communeList.communes[i]);
+              });
+            },
+            items: town.map((Town type) {
+              return DropdownMenuItem<Town>(
+                value: type,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.blur_circular,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      type.tenHuyen,
+                      style: TextStyle(),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      else
+        return Container(
+          height: 0,
+          width: 0,
+        );
     } else
       return Container(
         height: 0,
@@ -819,21 +832,23 @@ class _NewpostScreenState extends State<NewpostScreen> {
           //icon:Icons.attach_file ,
           onChanged: (Commune Value) async {
             setState(() {
-              selectedCommune = Value;            });
-            await _applicationBloc.searchFromPlace(selectedCommune.tenXa+selectedTown.tenHuyen);
-              Future.delayed(Duration(milliseconds: 0), () async {
-                final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapsScreen(type: "Đăng bài"),
-                    ));
-                setState(() {
-                  pointx = result.split(',')[0];
-                  pointy = result.split(',')[1];
-                });
-                print(pointx);
-                print(pointy);
+              selectedCommune = Value;
+            });
+            await _applicationBloc
+                .searchFromPlace(selectedCommune.tenXa + selectedTown.tenHuyen);
+            Future.delayed(Duration(milliseconds: 0), () async {
+              final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapsScreen(type: "Đăng bài"),
+                  ));
+              setState(() {
+                pointx = result.split(',')[0];
+                pointy = result.split(',')[1];
               });
+              print(pointx);
+              print(pointy);
+            });
           },
           items: commune.map((Commune type) {
             return DropdownMenuItem<Commune>(
@@ -1214,43 +1229,46 @@ class _NewpostScreenState extends State<NewpostScreen> {
         return Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.always,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-              TextFormField(
-                autofocus: false,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.textsms_rounded,
-                      color:
-                          _themeStore.darkMode ? Colors.white : Colors.amber),
-                  labelStyle: TextStyle(
-                    color: (_themeStore.darkMode) ? Colors.white : Colors.black,
-                  ),
-                  labelText: 'Mô tả',
-                  hintText: "Mô tả thêm về bài đăng",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.amber),
-                  ),
-                  suffixIcon: IconButton(
-                    color:Colors.grey,
-                    onPressed: () => _keyEditor2.clear(),
-                    icon: Icon(
-                      Icons.clear,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.textsms_rounded,
+                          color: _themeStore.darkMode
+                              ? Colors.white
+                              : Colors.amber),
+                      labelStyle: TextStyle(
+                        color: (_themeStore.darkMode)
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      labelText: 'Mô tả',
+                      hintText: "Mô tả thêm về bài đăng",
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.amber),
+                      ),
+                      suffixIcon: IconButton(
+                        color: Colors.grey,
+                        onPressed: () => _keyEditor2.clear(),
+                        icon: Icon(
+                          Icons.clear,
+                        ),
+                      ),
                     ),
+                    onSaved: (value) {},
+                    //keyboardType: TextInputType.number,
+                    controller: _keyEditor2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Vui lòng nhập mô tả';
+                      }
+                      if (value.length > 1000) return null;
+                      return null;
+                    },
                   ),
-                ),
-                onSaved: (value) {},
-                //keyboardType: TextInputType.number,
-                controller: _keyEditor2,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập mô tả';
-                  }
-                  if (value.length > 1000) return null;
-                  return null;
-                },
-              ),
-            ]));
+                ]));
       },
     );
   }
@@ -1272,8 +1290,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
         setState(() {
           selectedPack = Value;
           songay = selectedPack.thoiGianToiThieu;
-          selectedDatefl = DateTime.now()
-              .add(Duration(days: selectedPack.thoiGianToiThieu));
+          selectedDatefl =
+              DateTime.now().add(Duration(days: selectedPack.thoiGianToiThieu));
         });
       },
       items: _postStore.packList.packs.map((Pack type) {
@@ -1288,7 +1306,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 width: 10,
               ),
               Text(
-                type.tenGoi + ", phí: " + priceFormat(type.phi),
+                type.tenGoi.length>10?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,10) + ", phí: " + priceFormat(type.phi),
                 style: TextStyle(),
               ),
             ],
@@ -1301,12 +1319,12 @@ class _NewpostScreenState extends State<NewpostScreen> {
   Widget _buildPackinfoField() {
     return selectedPack != null
         ? Center(
-          child: Text(
+            child: Text(
               "Mô tả: ${selectedPack.moTa}",
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-        )
+          )
         : Container(
             width: 0,
             height: 0,
@@ -1486,8 +1504,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
             _LocateController.value.text.isEmpty
                 ? Text('Vui lòng nhập địa chỉ chi tiết')
                 : Container(
-              height: 0,
-            ),
+                    height: 0,
+                  ),
             selectedCommune == null
                 ? Text('Vui lòng chọn địa chỉ')
                 : Container(
@@ -1641,7 +1659,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                     }
                   });
                 } else {
-                  var future = showSimpleModalDialog(context, "Đăng tin và thực hiện thanh toán?");
+                  var future = showSimpleModalDialog(
+                      context, "Đăng tin và thực hiện thanh toán?");
                   future.then((value) {
                     if (value) {
                       _newpost.images = new List<AppImage>();
@@ -1657,7 +1676,8 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 }
               }
             } on Exception catch (_) {
-              var future = showSimpleModalDialog(context, "Vui lòng thử lại sau");
+              var future =
+                  showSimpleModalDialog(context, "Vui lòng thử lại sau");
               future.then((value) {
                 if (value) {
                   _userStore.getCurrentWalletUser();
