@@ -27,7 +27,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/MinhTran0311/HomiesRealEstate">
-    <img src="blob/main/Clientside/flutter/assets/icons/ic_appicon.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/Clientside/flutter/assets/icons/ic_appicon.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Homies Real Estate</h3>
