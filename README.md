@@ -120,7 +120,7 @@ CPU: Snapdragon 439 / MediaTek MT6762 (P22) or higher
 2. Architecture
 <p align="center">
   <a href="https://github.com/MinhTran0311/HomiesRealEstate">
-    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/architecture.png" alt="Logo" width="500" height="400">
+    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/architecture.png" alt="Logo" width="500" height="200">
   </a>
 
   <h3 align="center">Homies Real Estate</h3>
@@ -144,12 +144,11 @@ Interface (abstraction) không nên phụ thuộc vào chi tiết, mà ngược 
 <!-- CONTACT -->
 ## Contact
 
-Nguyễn Minh Đức - [@nmd11999](https://twitter.com/nmd11999) - email: ictnmd@gmail.com
-Trần Tuấn Minh - [@nmd11999](https://twitter.com/nmd11999) - email: 18520314@gm.uit.edu.vn
-Phạm Quốc Đạt - [@nmd11999](https://twitter.com/nmd11999) - email: 18520584@gm.uit.edu.vn
-Tester
-Nguyễn Văn Dương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520211@gm.uit.edu.vn
-Nguyễn Văn Lương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520096@gm.uit.edu.vn
+-Nguyễn Minh Đức - [@nmd11999](https://twitter.com/nmd11999) - email: ictnmd@gmail.com
+-Trần Tuấn Minh - [@nmd11999](https://twitter.com/nmd11999) - email: 18520314@gm.uit.edu.vn
+-Phạm Quốc Đạt - [@nmd11999](https://twitter.com/nmd11999) - email: 18520584@gm.uit.edu.vn
+-Nguyễn Văn Dương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520211@gm.uit.edu.vn
+-Nguyễn Văn Lương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520096@gm.uit.edu.vn
 
 Project Link: [https://github.com/MinhTran0311/HomiesRealEstate_name](https://github.com/MinhTran0311/HomiesRealEstate_name)
 
