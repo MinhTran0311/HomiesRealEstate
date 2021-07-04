@@ -943,7 +943,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         size: 20,
                       ),
                       onPressed: () {
-                        _lauchURL("tel:" + _userStore.userCurrent.phoneNumber);
+                        _lauchURL("tel:" + _userStore.userOfCurrentPost.phoneNumber);
                       },
                     ),
                   ),
@@ -964,7 +964,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                         size: 20,
                       ),
                       onPressed: () {
-                        _lauchURL("sms:" + _userStore.userCurrent.phoneNumber);
+                        _lauchURL("sms:" + _userStore.userOfCurrentPost.phoneNumber);
                       },
                     ),
                   ),
