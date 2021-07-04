@@ -548,10 +548,9 @@ class _CreateOrEditUserScreenScreenState extends State<CreateOrEditUserScreen> {
                _store.setPassword(_passwordController.text),
                _store.setConfirmPassword(_confirmPasswordController.text),
              },
-
          };
          if(this.user != null) {
-           if(_store.canUpdate) {
+           if (this.user.phoneNumber != null && _store.canUpdate) {
              DeviceUtils.hideKeyboard(context);
              _store.UpdateUser();
            }
