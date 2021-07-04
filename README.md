@@ -1,33 +1,9 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
-***
-***
-***
-*** To avoid retyping too much info. Do a search and replace for the following:
-*** github_username, repo_name, twitter_handle, email, project_title, project_description
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
   <a href="https://github.com/MinhTran0311/HomiesRealEstate">
-    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/Clientside/flutter/assets/icons/ic_appicon.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/Clientside/flutter/assets/icons/ic_appicon.png" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">Homies Real Estate</h3>
@@ -65,7 +41,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#architecture">Architecture & Database</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#techstack">Tech Stacks</a></li>
   </ol>
@@ -76,9 +52,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-
+1. Introduction
 Ứng dụng Homies Real Estate cung cấp nền tảng cho phép người dùng chia sẻ các thông tin mua bán, cho thuê các bất động sản. Đặc biệt, các thông tin quan trọng về bất động sản đều được thể hiện một cách rõ ràng tạo điều kiện thuận lợi nhất cho giao dịch.
 
+2. Features
+- 
 
 ### Built With
 
@@ -93,12 +71,23 @@
 To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
+1. Software
 * flutter 1.22.6
   ```Powershell
   choco install flutter --version=1.22.6
   ```
+  
+2. Hardware
+* For development
+- Operating system: Windows 10
+- DBMS: MariaDb 10
+- Testing environment: Xiaomi Note 4X, Xiaomi Note 7 pro, Pixel 3 (Emulator)
+	
+* For Deployment
+- Operating System: Android 5+
+- RAM: 2GB
+CPU: Snapdragon 439 / MediaTek MT6762 (P22) or higher
+- Storage: 200MB
 
 ### Installation
 * For Flutter App
@@ -118,16 +107,49 @@ This is an example of how to list things you need to use the software and how to
 4. Run the App on Emulator
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- Architecture -->
+## architecture
+1. Database
+<p align="center">
+  <a href="https://github.com/MinhTran0311/HomiesRealEstate">
+    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/database.png" alt="Logo" width="900" height="700">
+  </a>
 
-See the [open issues](https://github.com/MinhTran0311/HomiesRealEstate_name/issues) for a list of proposed features (and known issues).
+  <h3 align="center">Homies Real Estate</h3>
+</p>
+2. Architecture
+<p align="center">
+  <a href="https://github.com/MinhTran0311/HomiesRealEstate">
+    <img src="https://github.com/MinhTran0311/HomiesRealEstate/blob/main/architecture.png" alt="Logo" width="500" height="400">
+  </a>
+
+  <h3 align="center">Homies Real Estate</h3>
+</p>
+
+Hệ thống sử dụng kiến trúc client-server ứng dụng Angular Solution, ASP.NET Solution và giao thức API để trao đổi thông tin.
+* Flutter App
+Flutter App là một ứng dụng Flutter thuần tuý có thể hoạt động độc lập trên Android, iOS. Kết nối với Server thông qua RESTful API.
+* ASP.NET Zero
+Trong kiến trúc ASP.NET Core Solution không có sự xuất hiện code của HTML, JS hoặc CSS. Nó chỉ đơn giản cung cấp điểm cuối để xác thực dựa trên mã token và sử dụng các application services (API REST).
+Bên trong ASP.NET Core Solution, các thành phần được xây dựng dựa trên nguyên tắc SOLID:
+-	Single Responsibilty Priciple (SRP): mỗi class chỉ nên giữ 1 trách nhiệm duy nhất và một lớp chỉ có một, và chỉ một lý do để thay đổi.
+-	Open/Closed Priciple (OCP):  Có thể thoải mái mở rộng 1 class, nhưng không được thay đổi bên trong class đó.
+-	LiskovSubsitution Priciple (LSP): Trong một chương trình, các object của class con có thể thay thế class cha mà không làm thay đổi tính đúng đắn của chương trình.
+-	Interface Segregation Priciple (ISP): Thay vì dùng 1 interface lớn, ta nên tách thành nhiều interface nhỏ, với nhiều mục đích cụ thể
+-	Dependency Inversion Priciple (DIP): 
+Các module cấp cao không nên phụ thuộc vào các modules cấp thấp. Cả 2 nên phụ thuộc vào abstraction.
+Interface (abstraction) không nên phụ thuộc vào chi tiết, mà ngược lại (các class giao tiếp với nhau thông qua interface, không phải thông qua implementation).
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@nmd11999](https://twitter.com/nmd11999) - email: ictnmd@gmail.com
+Nguyễn Minh Đức - [@nmd11999](https://twitter.com/nmd11999) - email: ictnmd@gmail.com
+Trần Tuấn Minh - [@nmd11999](https://twitter.com/nmd11999) - email: 18520314@gm.uit.edu.vn
+Phạm Quốc Đạt - [@nmd11999](https://twitter.com/nmd11999) - email: 18520584@gm.uit.edu.vn
+Tester
+Nguyễn Văn Dương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520211@gm.uit.edu.vn
+Nguyễn Văn Lương - [@nmd11999](https://twitter.com/nmd11999) - email: 18520096@gm.uit.edu.vn
 
 Project Link: [https://github.com/MinhTran0311/HomiesRealEstate_name](https://github.com/MinhTran0311/HomiesRealEstate_name)
 
