@@ -829,6 +829,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                               newpost.lichsugiaodichs.userId = post.userId;
                               newpost.lichsugiaodichs.ghiChu =
                                   "${post.tieuDe} gia hạn";
+                              if (newpost.lichsugiaodichs.ghiChu.length>50) newpost.lichsugiaodichs.ghiChu =newpost.lichsugiaodichs.ghiChu.substring(0,50);
+
                               newpost.lichsugiaodichs.thoiDiem =
                                   DateTime.now().toIso8601String();
                               newpost.lichsugiaodichs.soTien =
@@ -847,6 +849,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                                   newpost.lichsugiaodichs.soTien;
                               newpost.hoadonbaidang.ghiChu =
                                   "Gia hạn bài đăng \"${post.tieuDe}\"";
+                              if (newpost.hoadonbaidang.ghiChu.length>50) newpost.hoadonbaidang.ghiChu =newpost.hoadonbaidang.ghiChu.substring(0,50);
                               newpost.hoadonbaidang.baiDangId = post.id;
                               newpost.hoadonbaidang.goiBaiDangId =
                                   selectedPack[index] == null

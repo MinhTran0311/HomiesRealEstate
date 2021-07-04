@@ -66,7 +66,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   @override
   void initState() {
     super.initState();
-    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang));
+    selectedDatefl = new List<DateTime>(int.parse(postStore.sobaidang)+2);
     selectedPack = new List<Pack>(int.parse(postStore.sobaidang));
     songay = new List<int>(int.parse(postStore.sobaidang));
   }
@@ -256,7 +256,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
               physics: BouncingScrollPhysics(),
               footer: ClassicFooter(
                 loadStyle: LoadStyle.ShowWhenLoading,
-                completeDuration: Duration(milliseconds: 500),
+                completeDuration: Duration(milliseconds: 0),
               ),
               onLoading: () async {
                 print("loading");
@@ -748,7 +748,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                             "Gia hạn đến:   ${selectedDatefl[index].toIso8601String().split("T")[0]} ${selectedDatefl[index].toIso8601String().split("T")[1].split(".")[0]}")),
                       ),
                     SizedBox(height: 12),
-                    if (selectedDatefl[index] != null)
+                    if (selectedDatefl[index] != null&& songay[index]!=null)
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0),
                         child: (Text(
@@ -833,6 +833,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                 newpost.lichsugiaodichs.userId = post.userId;
                                 newpost.lichsugiaodichs.ghiChu =
                                     "${post.tieuDe} gia hạn";
+                                if (newpost.lichsugiaodichs.ghiChu.length>50) newpost.lichsugiaodichs.ghiChu =newpost.lichsugiaodichs.ghiChu.substring(0,50);
+
                                 newpost.lichsugiaodichs.thoiDiem =
                                     DateTime.now().toIso8601String();
                                 newpost.lichsugiaodichs.soTien =
@@ -852,7 +854,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     newpost.lichsugiaodichs.soTien;
                                 newpost.hoadonbaidang.ghiChu =
                                     "Gia hạn bài đăng \"${post.tieuDe}\"";
-                                newpost.hoadonbaidang.baiDangId = post.id;
+                               if (newpost.hoadonbaidang.ghiChu.length>50) newpost.hoadonbaidang.ghiChu =newpost.hoadonbaidang.ghiChu.substring(0,50);
+                                    newpost.hoadonbaidang.baiDangId = post.id;
                                 newpost.hoadonbaidang.goiBaiDangId =
                                     selectedPack[index] == null
                                         ? post.goiBaiDangId
