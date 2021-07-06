@@ -62,7 +62,7 @@ class Properties extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Text(
-                  appImage.giaTri,
+                  !appImage.thuocTinhTenThuocTinh.contains("Số")?  appImage.giaTri:double.parse(appImage.giaTri).round().toString(),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,

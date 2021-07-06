@@ -225,7 +225,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
 
   Widget _buildListView() {
     return Observer(builder: (context) {
-      return postStore.postForCurList != null
+      return postStore.postForCurList.posts.length != 0
         ? Expanded(
             child: SmartRefresher(
               key: _refresherKey1,
@@ -729,9 +729,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
                                     width: 10,
                                   ),
                                   Text(
-                                    type.tenGoi +
-                                        ", phí: " +
-                                        priceFormat(type.phi),
+                                    type.tenGoi.length<11?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,9) + ".., phí: " + priceFormat(type.phi),
+
                                     style: TextStyle(),
                                   ),
                                 ],

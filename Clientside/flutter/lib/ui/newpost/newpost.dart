@@ -885,7 +885,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
       return Padding(
           padding: const EdgeInsets.only(left: 39.0, right: 0.0, bottom: 24.0),
           child: Text(
-            pointx + ',' + pointy,
+            'Tọa độ: '+pointx + ',' + pointy,
             style: TextStyle(),
           ));
     } else
@@ -1306,7 +1306,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 width: 10,
               ),
               Text(
-                type.tenGoi.length<10?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,8) + ".., phí: " + priceFormat(type.phi),
+                type.tenGoi.length<11?type.tenGoi + ", phí: " + priceFormat(type.phi):type.tenGoi.substring(0,9) + ".., phí: " + priceFormat(type.phi),
                 style: TextStyle(),
               ),
             ],
