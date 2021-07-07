@@ -199,7 +199,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
           showSuccssfullMesssage("Chỉnh sửa thông tin thành công", context);
           //dispose();.
           postStore.successeditpost = false;
-          postStore.getPostForCurs(false, "", 0);
+         // postStore.getPostForCurs(false, "", 0);
           Future.delayed(Duration(milliseconds: 1000), () {
             Navigator.pop(context);
             Navigator.pop(context);
