@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
@@ -78,6 +79,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
   TextEditingController _LocateController = TextEditingController();
   TextEditingController _keyEditor2 = new TextEditingController();
   final FormStore _store = new FormStore();
+  ApplicationBloc _applicationBloc;
   Postcategory selectedType;
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
@@ -757,22 +759,24 @@ class _EditpostScreenState extends State<EditpostScreen> {
               )),
           value: selectedCommune,
           //icon:Icons.attach_file ,
-          onChanged: (Commune Value) {
+          onChanged: (Commune Value) async {
             setState(() {
               selectedCommune = Value;
-              Future.delayed(Duration(milliseconds: 1000), () async {
-                final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapsScreen(type: "Đăng bài"),
-                    ));
-                setState(() {
-                  pointx = result.split(',')[0];
-                  pointy = result.split(',')[1];
-                });
-                print(pointx);
-                print(pointy);
+            });
+            await _applicationBloc
+                .searchFromPlace(selectedCommune.tenXa + selectedTown.tenHuyen);
+            Future.delayed(Duration(milliseconds: 0), () async {
+              final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapsScreen(type: "Đăng bài"),
+                  ));
+              setState(() {
+                pointx = result.split(',')[0];
+                pointy = result.split(',')[1];
               });
+              print(pointx);
+              print(pointy);
             });
           },
           items: commune.map((Commune type) {

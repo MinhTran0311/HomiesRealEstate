@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:boilerplate/blocs/application_bloc.dart';
 import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/post/hoadonbaidang/hoadonbaidang.dart';
@@ -81,6 +82,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Postcategory selectedType;
   Postcategory selectedTypeType;
   Postcategory selectedTypeTypeType;
+  ApplicationBloc _applicationBloc;
   int songay;
   String pointx = '';
   String pointy = '';
@@ -757,10 +759,13 @@ class _EditpostScreenState extends State<EditpostScreen> {
           )),
           value: selectedCommune,
           //icon:Icons.attach_file ,
-          onChanged: (Commune Value) {
-            setState(() {
-              selectedCommune = Value;
-              Future.delayed(Duration(milliseconds: 1000), () async {
+            onChanged: (Commune Value) async {
+              setState(() {
+                selectedCommune = Value;
+              });
+              await _applicationBloc
+                  .searchFromPlace(selectedCommune.tenXa + selectedTown.tenHuyen);
+              Future.delayed(Duration(milliseconds: 0), () async {
                 final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -773,8 +778,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                 print(pointx);
                 print(pointy);
               });
-            });
-          },
+            },
+
           items: commune.map((Commune type) {
             return DropdownMenuItem<Commune>(
               value: type,
