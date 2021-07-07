@@ -825,7 +825,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                                   selectedDatefl[index].toIso8601String();
                               newpost.post = post;
                               newpost.lichsugiaodichs = new lichsugiaodich();
-                              newpost.lichsugiaodichs.userId = post.userId;
+                              newpost.lichsugiaodichs.userId = userStore.userCurrent.UserID;
                               newpost.lichsugiaodichs.ghiChu =
                                   "${post.tieuDe} gia hạn";
                               if (newpost.lichsugiaodichs.ghiChu.length>50) newpost.lichsugiaodichs.ghiChu =newpost.lichsugiaodichs.ghiChu.substring(0,50);
@@ -854,7 +854,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                                   selectedPack[index] == null
                                       ? post.goiBaiDangId
                                       : selectedPack[index].id;
-                              newpost.hoadonbaidang.userId = post.userId;
+                              newpost.hoadonbaidang.userId = userStore.userCurrent.UserID;
                               postStore.giahan(newpost);
                               setState(() {
                                 selectedDatefl[index] = null;
