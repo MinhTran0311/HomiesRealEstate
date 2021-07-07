@@ -835,7 +835,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
               selectedCommune = Value;
             });
             await _applicationBloc
-                .searchFromPlace(selectedCommune.tenXa + selectedTown.tenHuyen);
+                .searchFromPlace(selectedCommune.tenXa +", "+ selectedTown.tenHuyen);
             Future.delayed(Duration(milliseconds: 0), () async {
               final result = await Navigator.push(
                   context,

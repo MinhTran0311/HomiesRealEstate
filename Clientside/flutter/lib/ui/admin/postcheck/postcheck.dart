@@ -45,8 +45,8 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
   TextEditingController _searchController11 = new TextEditingController();
   TownStore _townStore;
   ThemeStore _themeStore;
-  String dropdownValue = "Còn hạn";
-  int key = 1;
+  String dropdownValue = "Tất cả";
+  int key = 0;
   GlobalKey _refresherKey1 = GlobalKey();
   GlobalKey _contentKey1 = GlobalKey();
   bool isRefreshing1 = false;
