@@ -100,6 +100,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
     super.didChangeDependencies();
     _imageStore = Provider.of<ImageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
+    _applicationBloc = Provider.of<ApplicationBloc>(context);
 
     if (!_imageStore.imageLoading) {
       _imageStore.getImagesForDetail(post.id.toString());
