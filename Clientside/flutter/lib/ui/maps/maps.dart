@@ -174,7 +174,7 @@ class _MapsScreenState extends State<MapsScreen> {
         target: LatLng(double.tryParse(this.post.toaDoX),
             double.tryParse(this.post.toaDoY)),
         tilt: 59.440,
-        zoom: 13.0,
+        zoom: 15.0,
       );
       _center = LatLng(
           double.tryParse(this.post.toaDoX), double.tryParse(this.post.toaDoY));
