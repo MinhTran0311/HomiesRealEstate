@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   PostStore _postStore;
   ThemeStore _themeStore;
   LanguageStore _languageStore;
+  FilterStore _filterStore;
   //AuthTokenStore _authTokenStore;
   UserStore userStore;
   RefreshController _refreshController =
@@ -61,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _themeStore = Provider.of<ThemeStore>(context);
     _postStore = Provider.of<PostStore>(context);
     userStore = Provider.of<UserStore>(context);
+    _filterStore=Provider.of<FilterStore>(context);
     //_authTokenStore = Provider.of<AuthTokenStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
@@ -98,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Preferences.userRole="";
         Preferences.userRoleRank=0;
         Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-
+        _filterStore.resetValue();
       },
       icon: Icon(
         Icons.login_outlined,
@@ -159,10 +161,6 @@ class _HomeScreenState extends State<HomeScreen> {
             keyboardType: TextInputType.text,
             controller: _searchController,
             onChanged: (value) {
-              print("123");
-              print(value);
-
-
               _postStore.filter_model.searchContent = value;
               _postStore.setSearchContent(_searchController.text);
             },
