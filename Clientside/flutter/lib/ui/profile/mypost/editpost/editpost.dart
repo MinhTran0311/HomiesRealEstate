@@ -1364,7 +1364,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
   Widget _buildUpButton() {
     return Observer(builder: (context) {
       return RoundedButtonWidget(
-        buttonText: ('Đăng tin'),
+        buttonText: ('Chỉnh sửa'),
         buttonColor:
             !_imageStore.imageLoadingpost ? Colors.amber : Colors.grey,
         textColor: Colors.white,
