@@ -847,7 +847,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                               newpost.hoadonbaidang.tongTien =
                                   newpost.lichsugiaodichs.soTien;
                               newpost.hoadonbaidang.ghiChu =
-                                  "Gia hạn bài đăng \"${post.tieuDe}\"";
+                                  "Gia hạn bài đăng \"${post.tieuDe}\" cho \"${post.userId}\"";
                               if (newpost.hoadonbaidang.ghiChu.length>50) newpost.hoadonbaidang.ghiChu =newpost.hoadonbaidang.ghiChu.substring(0,50);
                               newpost.hoadonbaidang.baiDangId = post.id;
                               newpost.hoadonbaidang.goiBaiDangId =
