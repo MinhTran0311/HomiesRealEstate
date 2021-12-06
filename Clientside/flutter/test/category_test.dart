@@ -38,7 +38,7 @@ void main() async {
   // test('[Admin] Add new category with invalid data', () async {
   //   expect(
   //           () async =>
-  //       await function.repository.createDanhMuc('duc', null, null, null),
+  //       await function.repository.createDanhMuc(TenDanhMuc, null, null, null),
   //       throwsA(predicate((e) =>
   //       e is DioError &&
   //           e.message == 'Http status error [400]'))); //invalid request
@@ -46,12 +46,12 @@ void main() async {
 
   // test('[Admin] Add new category with valid data', () async {
   //   var result = await function.repository.createDanhMuc(
-  //       'duc', 'test', null, 'On');
+  //       TenDanhMuc, 'test', null, 'On');
   //   expect(result['success'], true);
   // });
   //
   // test('[Admin] edit category  with valid data', () async {
-  //   var edit = await function.repository.getAllDanhMucs(0,1,'duc');
+  //   var edit = await function.repository.getAllDanhMucs(0,1,TenDanhMuc);
   //   expect(edit.danhMucs.length, 1);
   //   var entity = edit.danhMucs[0];
   //   entity.tenDanhMuc = 'ducTest';
@@ -72,8 +72,8 @@ void testUpdateCategory() {
   List<Object> list3 = new List<Object>();
   List<Object> list4 = new List<Object>();
   List<bool> list5 = new List<bool>();
-
-  list1.add('duc');
+  String TenDanhMuc='luong';
+  list1.add(TenDanhMuc);
   list1.add(null);
 
   list2.add('test');
@@ -82,7 +82,7 @@ void testUpdateCategory() {
   list3.add(0);
   list3.add(null);
 
-  list4.add('On');
+  list4.add('OFF');
   list4.add(null);
 
   list5.add(true);
@@ -111,7 +111,7 @@ void testUpdateCategory() {
           String name = 'UTCID$i';
           if (list5[count]){
             test(name, () async {
-              var edit = await function.repository.getAllDanhMucs(0,1,'duc');
+              var edit = await function.repository.getAllDanhMucs(0,1,TenDanhMuc);
               expect(edit.danhMucs.length, 1);
               var entity = edit.danhMucs[0];
               var result = await function.repository.updateDanhMuc(entity.id, item1, item2, item3, item4);
@@ -119,7 +119,7 @@ void testUpdateCategory() {
             });
           }else{
             test(name, () async {
-              var edit = await function.repository.getAllDanhMucs(0,1,'duc');
+              var edit = await function.repository.getAllDanhMucs(0,1,TenDanhMuc);
               expect(edit.danhMucs.length, 1);
               var entity = edit.danhMucs[0];
               expect(
@@ -145,8 +145,8 @@ void testCreateCategory(){
   List<Object> list3 = new List<Object>();
   List<Object> list4 = new List<Object>();
   List<bool> list5 = new List<bool>();
-
-  list1.add('duc');
+  String TenDanhMuc='luong';
+  list1.add(TenDanhMuc);
   list1.add(null);
 
   list2.add('test');

@@ -6,7 +6,7 @@ class Preferences {
   static String access_token = "";
   static bool is_dark_mode = false;
   static const String current_language = "current_language";
-  static const String imgbb_api_key = "e654c99ecc0c0269a734e39f35249c8f";
+  static const String imgbb_api_key = "d2c7b8df30fc67baab57beaac0d21bad";
   static String userRole = "";
   static int userRoleRank = 0;
   static const int skipIndex = 5;
