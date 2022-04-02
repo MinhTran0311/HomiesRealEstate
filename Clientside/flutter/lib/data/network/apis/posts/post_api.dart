@@ -65,7 +65,7 @@ class PostApi {
       );
       return PostList.fromJson(res);
     } catch (e) {
-      print("lỗi get all Post" + e.toString());
+      // print("lỗi get all Post" + e.toString());
       throw e;
     }
   }
@@ -122,7 +122,7 @@ class PostApi {
       );
       return PostCategoryList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -138,7 +138,7 @@ class PostApi {
       );
       return PackList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -154,7 +154,7 @@ class PostApi {
       );
       return ThuocTinhList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -215,7 +215,7 @@ class PostApi {
       );
       return PostList.fromJsonmypost(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -231,7 +231,7 @@ class PostApi {
       );
       return PostList.fromJsonmypost(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -247,7 +247,7 @@ class PostApi {
       );
       return (res["result"]["totalCount"].toString());
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -263,7 +263,7 @@ class PostApi {
       );
       return (res["result"]["totalCount"].toString());
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -410,7 +410,7 @@ class PostApi {
       );
       return PostList.fromJsonfavopost(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }

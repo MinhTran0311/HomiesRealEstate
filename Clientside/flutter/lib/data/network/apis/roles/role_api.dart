@@ -28,10 +28,10 @@ class RoleApi {
             "Authorization" : "Bearer ${Preferences.access_token}",
           }
         ),);
-      print("Get All Role success" + res.toString());
+      // print("Get All Role success" + res.toString());
       return RoleList.fromJson(res);
     } catch(e) {
-      print("lỗi get all roles" + e.toString());
+      // print("lỗi get all roles" + e.toString());
       throw e;
     }
   }

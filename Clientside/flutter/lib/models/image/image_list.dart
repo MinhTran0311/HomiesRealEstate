@@ -11,8 +11,6 @@ class ImageList {
   factory ImageList.fromJson(Map<String, dynamic> json) {
     List<AppImage> images = List<AppImage>();
 
-    print("heyyy");
-
     for (int i =0; i< json["result"]["items"].length; i++) {
       images.add(AppImage.fromMap(json["result"]["items"][i]["hinhAnh"]));
     }

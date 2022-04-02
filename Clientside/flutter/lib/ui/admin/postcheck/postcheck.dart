@@ -261,7 +261,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                   completeDuration: Duration(milliseconds: 500),
                 ),
                 onLoading: () async {
-                  print("loading");
+                  // print("loading");
                   postStore.getPostForcheck(
                       true,
                       _searchController11 != null
@@ -279,7 +279,7 @@ class _PostCheckScreenState extends State<PostCheckScreen> {
                   _refreshController1.loadComplete();
                 },
                 onRefresh: () async {
-                  print("refresh");
+                  // print("refresh");
                   postStore.getPostForcheck(
                       false,
                       _searchController11 != null

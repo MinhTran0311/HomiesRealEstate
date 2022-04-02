@@ -259,7 +259,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 completeDuration: Duration(milliseconds: 0),
               ),
               onLoading: () async {
-                print("loading");
+                // print("loading");
                 postStore.getPostForCurs(
                     true,
                     _searchController11 != null
@@ -277,7 +277,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
                 _refreshController1.loadComplete();
               },
               onRefresh: () async {
-                print("refresh");
+                // print("refresh");
                 postStore.getPostForCurs(
                     false,
                     _searchController11 != null

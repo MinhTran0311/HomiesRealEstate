@@ -73,9 +73,9 @@ class ApplicationBloc with ChangeNotifier {
       throw e;
     }
     if (placemarksFromPlaces[0] != null) {
-      print(".....");
+      // print(".....");
       postNewCurrent = LatLng(placemarksFromPlaces[0].latitude, placemarksFromPlaces[0].longitude);
-      print(postNewCurrent);
+      // print(postNewCurrent);
       getSuccessFromPlaces = true;
     }
   }

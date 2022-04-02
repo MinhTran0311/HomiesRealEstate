@@ -231,7 +231,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
           completeDuration: Duration(milliseconds: 500),
         ),
         onLoading: () async {
-          print("loading");
+          // print("loading");
 
           _goiBaiDangManagementStore.getGoiBaiDangs(true);
           await Future.delayed(Duration(milliseconds: 2000));
@@ -244,7 +244,7 @@ class _GoiBaiDangManagementScreenState extends State<GoiBaiDangManagementScreen>
           _refreshController.loadComplete();
         },
         onRefresh: () async {
-          print("refresh");
+          // print("refresh");
           _goiBaiDangManagementStore.getGoiBaiDangs(false);
 
           await Future.delayed(Duration(milliseconds: 2000));

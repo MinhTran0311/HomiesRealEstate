@@ -97,7 +97,6 @@ abstract class _MapsStore with Store {
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
-      print("ccc");
       this.postListAll = postList;
       for (int i = 0; i < postList.posts.length; i++)
       {

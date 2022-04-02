@@ -37,7 +37,7 @@ class UserApi {
       // log("Get All Success");
       return UserList.fromJson(res);
     } catch (e) {
-      print("lỗi2" + e.toString());
+      // print("lỗi2" + e.toString());
       throw e;
     }
   }
@@ -56,7 +56,7 @@ class UserApi {
       log("Get UserID Success ${res.toString()}");
       return User.UserByIDfromMap(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -74,7 +74,7 @@ class UserApi {
       log("Get All Success");
       return CurrentUserForEditdto.fromMap(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -131,7 +131,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       double getCurrentWallet = res["result"];
       return getCurrentWallet;
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -149,7 +149,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       String getCurrentPicture = res["result"]["profilePicture"];
       return getCurrentPicture;
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -172,7 +172,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
             ),);
           bool updateUserSuccess = res["success"];
 
-          print(res);
+          // print(res);
           return res;
         } catch (e) {
           throw e;
@@ -205,7 +205,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("updateUser Success");
       bool updateUserSuccess = res["success"];
 
-      print(res);
+      // print(res);
       return updateUserSuccess;
     } catch (e) {
       throw e;
@@ -248,7 +248,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("Get All LSGD Success");
       return listLSGD.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -272,7 +272,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("CreateLSGD Success");
       bool CreateLSGDSuccess = res["success"];
 
-      print(res);
+      // print(res);
       return res;
     } catch (e) {
       throw e;
@@ -318,7 +318,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("CreateLSGD Success");
       bool CreateLSGDSuccess = res["success"];
 
-      print(res);
+      // print(res);
       return CreateLSGDSuccess;
     } catch (e) {
       throw e;
@@ -368,7 +368,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("Get All LSGD Success ${res}");
       return listLSGD.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -386,7 +386,7 @@ Future<CurrentUserForEditdto> getUserOfCurrentDetailPost(int Id) async {
       log("Get All LSGD Success");
       return listitemReport.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }

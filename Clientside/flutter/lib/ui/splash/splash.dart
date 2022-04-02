@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTimer() {
-    print("Heyeyyyyy");
+    // print("Heyeyyyyy");
     var _duration = Duration(milliseconds: 2000);
     return Timer(_duration, navigate);
   }

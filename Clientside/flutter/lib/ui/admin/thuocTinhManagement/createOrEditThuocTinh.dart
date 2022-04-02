@@ -357,8 +357,7 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       thuocTinhSet = this.thuocTinh;
     }
     String kieuDL = _thuocTinhManagementStore.KieuDuLieuShow;
-    print("1112");
-    print(kieuDL);
+    // print(kieuDL);
     thuocTinhSet.trangThai = _checkboxTrangThai ? "On" : "Off";
     if (kieuDL.compareTo("Số nguyên")==0)
       thuocTinhSet.kieuDuLieu="int";
@@ -368,8 +367,6 @@ class _CreateOrEditThuocTinhScreenScreenState extends State<CreateOrEditThuocTin
       thuocTinhSet.kieuDuLieu="String";
 
     thuocTinhSet.tenThuocTinh = _nameController.text;
-    print("....");
-    print(thuocTinhSet.kieuDuLieu);
     return thuocTinhSet;
   }
 

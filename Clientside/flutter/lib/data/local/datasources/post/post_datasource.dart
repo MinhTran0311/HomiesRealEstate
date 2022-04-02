@@ -49,7 +49,7 @@ class PostDataSource {
 
   Future<PostList> getPostsFromDb() async {
 
-    print('Loading from database');
+    // print('Loading from database');
 
     // post list
     var postsList;

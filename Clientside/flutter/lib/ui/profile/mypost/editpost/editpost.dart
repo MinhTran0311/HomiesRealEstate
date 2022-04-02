@@ -775,8 +775,8 @@ class _EditpostScreenState extends State<EditpostScreen> {
                   pointx = result.split(',')[0];
                   pointy = result.split(',')[1];
                 });
-                print(pointx);
-                print(pointy);
+                // print(pointx);
+                // print(pointy);
               });
             },
 
@@ -1214,7 +1214,7 @@ class _EditpostScreenState extends State<EditpostScreen> {
         _imageStore.postImages(pickedFile.path,
             "Dangtinbdstieude-${_TileController.text}-_${_image.length}");
       } else {
-        print('No image selected.');
+        // print('No image selected.');
       }
     });
   }

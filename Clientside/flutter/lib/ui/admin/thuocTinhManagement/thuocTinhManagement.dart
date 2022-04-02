@@ -235,7 +235,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
         completeDuration: Duration(milliseconds: 500),
       ),
       onLoading: () async {
-        print("loading");
+        // print("loading");
 
         _thuocTinhManagementStore.getThuocTinhs(true);
         await Future.delayed(Duration(milliseconds: 2000));
@@ -248,7 +248,7 @@ class _ThuocTinhManagementScreenState extends State<ThuocTinhManagementScreen> {
         _refreshController.loadComplete();
       },
       onRefresh: () async {
-        print("refresh");
+        // print("refresh");
         _thuocTinhManagementStore.getThuocTinhs(false);
 
         await Future.delayed(Duration(milliseconds: 2000));

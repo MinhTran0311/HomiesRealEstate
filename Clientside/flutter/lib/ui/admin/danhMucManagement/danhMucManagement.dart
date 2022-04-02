@@ -233,7 +233,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
           completeDuration: Duration(milliseconds: 500),
         ),
         onLoading: () async {
-          print("loading");
+          // print("loading");
 
           _danhMucManagementStore.getDanhMucs(true);
           await Future.delayed(Duration(milliseconds: 2000));
@@ -246,7 +246,7 @@ class _DanhMucManagementScreenState extends State<DanhMucManagementScreen> {
           _refreshController.loadComplete();
         },
         onRefresh: () async {
-          print("refresh");
+          // print("refresh");
           _danhMucManagementStore.getDanhMucs(false);
 
           await Future.delayed(Duration(milliseconds: 2000));

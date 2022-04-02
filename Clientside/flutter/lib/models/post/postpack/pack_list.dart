@@ -12,8 +12,6 @@ class PackList {
 
   factory PackList.fromJson(Map<String, dynamic> json) {
     List<Pack> categorys = List<Pack>();
-    print("outt");
-    print(json);
     for (int i =0; i<json["result"]["items"].length; i++) {
       categorys.add(Pack.fromMap(json["result"]["items"][i]));
     }

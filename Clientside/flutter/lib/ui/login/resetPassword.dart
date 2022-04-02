@@ -108,7 +108,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           Observer(
             builder: (context) {
               if (_store.resetPassword_success) {
-                print("Success reset");
+                // print("Success reset");
                 Future.delayed(Duration(milliseconds: 0), () {
                   Navigator.of(context).pop();
                 });

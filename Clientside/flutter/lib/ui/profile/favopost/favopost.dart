@@ -175,7 +175,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
                 completeDuration: Duration(milliseconds: 500),
               ),
               onLoading: () async {
-                print("loading");
+                // print("loading");
                 postStore.getfavopost(userid,true,_searchController11==null?"":_searchController11.text.toString());
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) {
@@ -187,7 +187,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
                 _refreshController2.loadComplete();
               },
               onRefresh: () async {
-                print("refresh");
+                // print("refresh");
                 postStore.getfavopost(userid,false,_searchController11==null?"":_searchController11.text.toString());
                 await Future.delayed(Duration(milliseconds: 2000));
                 if (mounted) setState(() {});
@@ -229,7 +229,7 @@ class _FavoPostScreenState extends State<FavoPostScreen> {
               final result = await Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Detail(post: post)));
               if (!result) setState((){postStore.favopost.posts.removeAt(index);});
-              print(result);
+              // print(result);
             },
             child: Container(
               height: 190,

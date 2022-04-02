@@ -26,8 +26,8 @@ dependencies:
   cached_network_image: ^2.3.2
 #  dropdown_search: ^0.4.8
   multi_image_picker: ^4.7.14
-  firebase_storage: ^5.2.0
-  cloud_firestore: ^0.14.4
+#  firebase_storage: ^5.2.0
+#  cloud_firestore: ^0.14.4
   flutter_summernote: ^0.2.3
   flutter:
     sdk: flutter

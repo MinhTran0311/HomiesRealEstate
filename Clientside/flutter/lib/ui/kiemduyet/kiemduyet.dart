@@ -96,7 +96,6 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
       children: <Widget>[
         Observer(
           builder: (context) {
-            print("DuongDebug ${_lsgdStore.kiemduyet_success}");
             if (_lsgdStore.kiemduyet_success) {
               Future.delayed(Duration(milliseconds: 0), () {
               });
@@ -199,7 +198,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                     completeDuration: Duration(milliseconds: 500),
                   ),
                   onLoading: () async {
-                    print("loading");
+                    // print("loading");
 
                     _lsgdStore.getAllLSGD(true,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                     await Future.delayed(Duration(milliseconds: 2000));
@@ -212,7 +211,7 @@ class _KiemDuyetPageState extends State<KiemDuyetPage>{
                     _refreshController.loadComplete();
                   },
                   onRefresh: () async {
-                    print("refresh");
+                    // print("refresh");
 
                     _lsgdStore.getAllLSGD(false,_lsgdStore.FilterDataLSGD.LoaiLSGD,_lsgdStore.FilterDataLSGD.MinThoiDiem,_lsgdStore.FilterDataLSGD.MaxThoiDiem);
                     await Future.delayed(Duration(milliseconds: 2000));

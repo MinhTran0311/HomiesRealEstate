@@ -100,7 +100,7 @@ abstract class _LSGDStore with Store {
   @action
   void setLoaiLSGD(String value) {
     FilterDataLSGD  = new FilterData("Tất cả", DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: -1000))) , DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(days: 1))));
-    print("debug ${FilterDataLSGD.LoaiLSGD}");
+    // print("debug ${FilterDataLSGD.LoaiLSGD}");
   }
   @action
   void setSetThoiDiem(String MinThoiDiem,String MaxThoiDiem) {
@@ -194,7 +194,7 @@ abstract class _LSGDStore with Store {
     fetchNaptienFuture = ObservableFuture(future);
 
     fetchNaptienFuture.then((res) {
-      print("XXX ${res}");
+      // print("XXX ${res}");
       if(res["success"]==true){
         naptien_success = true;
       }

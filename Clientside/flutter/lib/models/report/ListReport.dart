@@ -15,8 +15,6 @@ class yearReport{
   });
 
   factory yearReport.fromMap(Map<String, dynamic> json) {
-    print("DuongLSGD1");
-    print(json);
     return yearReport(
         soBaiDang: json["soBaiDang"],
         soTienNap: json["soTienNap"],
@@ -38,8 +36,6 @@ class listyearReport{
 
   factory listyearReport.fromJson(Map<String, dynamic> json) {
     List<yearReport> listyearReports = List<yearReport>();
-    print("DuongLSGD2");
-    print(json);
     for (int i =0; i<json["yearReport"].length; i++) {
       listyearReports.add(yearReport.fromMap(json["yearReport"][i]));
     }
@@ -58,8 +54,6 @@ class listitemReport{
 
   factory listitemReport.fromJson(Map<String, dynamic> json) {
     List<listyearReport> listitemReports = List<listyearReport>();
-    print("DuongLSGD3");
-    print(json);
     for (int i =0; i<json["result"]["items"].length; i++) {
       listitemReports.add(listyearReport.fromJson(json["result"]["items"][i]));
     }

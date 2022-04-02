@@ -125,7 +125,7 @@ abstract class _FilterStore with Store {
     }
     else if(option == "tỷ")
       newValue = newValue * 1000000;
-    print(newValue.toString().split(".")[0] + "000");
+    // print(newValue.toString().split(".")[0] + "000");
     return newValue.toString().split(".")[0] + "000";
   }
 
@@ -172,7 +172,7 @@ abstract class _FilterStore with Store {
     filter_model.loaiBaiDang="";
     townListString.clear();
     communeListString.clear();
-    print(filter_model.username);
+    // print(filter_model.username);
   }
   //#region Province
   @observable
@@ -235,7 +235,7 @@ abstract class _FilterStore with Store {
       this.townListString.clear();
       for (int i=0; i< townList.towns.length; i++)
         this.townListString.add(townList.towns[i].tenHuyen);
-      print(townListString.length);
+      // print(townListString.length);
     }).catchError((error) {
       // if (error is DioError) {
       //   errorStore.errorMessage = DioErrorUtil.handleError(error);

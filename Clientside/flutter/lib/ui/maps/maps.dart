@@ -153,8 +153,6 @@ class _MapsScreenState extends State<MapsScreen> {
           zoom: 15.0,
         );
         _center = currentPositionDeviceNewPost;
-        print("Centerrr");
-        print(_center);
       }
       else {
         if (_mapsStore.positionCurrent != null) {
@@ -928,8 +926,6 @@ class _MapsScreenState extends State<MapsScreen> {
   }
 
   Widget _buildListItem(Placemark placemark, context) {
-    print(placemark);
-    // return Container();
     return ListTile(
       title: Text(
         _handlingStringNameLocation(placemark),

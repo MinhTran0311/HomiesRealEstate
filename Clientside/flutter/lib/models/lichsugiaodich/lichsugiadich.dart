@@ -58,8 +58,6 @@ class listLSGD{
 
   factory listLSGD.fromJson(Map<String, dynamic> json) {
     List<lichsugiaodich> listLSGDs = List<lichsugiaodich>();
-    print("DuongLSGD");
-    print(json);
     //posts = json["result"]["items"].map((post) => Post.fromMap(post)).toList();
     //print(json["result"]["items"][0].runtimeType);
     for (int i =0; i<json["result"]["items"].length; i++) {

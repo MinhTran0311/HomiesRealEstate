@@ -33,7 +33,7 @@ class ThuocTinhApi {
         ),);
       return ThuocTinhManagementList.fromJson(res);
     } catch(e) {
-      print("lỗi get all Thuoc Tinh" + e.toString());
+      // print("lỗi get all Thuoc Tinh" + e.toString());
       throw e;
     }
   }

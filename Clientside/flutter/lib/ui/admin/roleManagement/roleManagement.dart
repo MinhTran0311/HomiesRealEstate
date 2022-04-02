@@ -201,7 +201,7 @@ class _RoleManagementScreenState extends State<RoleManagementScreen> {
       //   _refreshController.loadComplete();
       // },
       onRefresh: () async {
-        print("refresh");
+        // print("refresh");
         _roleManagementStore.getRoles();
 
         await Future.delayed(Duration(milliseconds: 2000));

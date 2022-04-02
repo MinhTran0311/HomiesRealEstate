@@ -33,7 +33,7 @@ class GoiBaiDangApi {
         ),);
       return GoiBaiDangList.fromJson(res);
     } catch(e) {
-      print("lỗi get all Goi bai dang" + e.toString());
+      // print("lỗi get all Goi bai dang" + e.toString());
       throw e;
     }
   }

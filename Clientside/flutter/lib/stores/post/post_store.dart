@@ -156,8 +156,8 @@ abstract class _PostStore with Store {
   void setSearchContent(String value) {
     searchContent = value;
     filter_model.searchContent = value;
-    print("helloooo");
-    print(filter_model.searchContent);
+    // print("helloooo");
+    // print(filter_model.searchContent);
   }
 
   @action
@@ -202,7 +202,7 @@ abstract class _PostStore with Store {
     final future = _repository.addViewForPost(postId);
 
     future.then((res) {}).catchError((error) {
-      print(error);
+      // print(error);
     });
   }
 
@@ -513,7 +513,7 @@ abstract class _PostStore with Store {
     fetchNewpostsFuture = ObservableFuture(editpostFuture);
     editpostFuture.then((newpost) {
       successeditpost=true;
-      print(newpost);
+      // print(newpost);
     }).catchError((error) {
       if (error is DioError) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);

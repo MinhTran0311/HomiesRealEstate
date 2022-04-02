@@ -375,7 +375,7 @@ abstract class _FormStore with Store {
       regist_success = false;
       if (error.response != null && error.response.data!=null)
         {//errorStore.errorMessage = error.response.data["error"]["message"];
-        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        // print(error.response.data["error"]["message"].toString().split(' \'')[1]);
         if (error.response.data["error"]["message"].toString().contains("invalid")) {
           errorStore.errorMessage = translateErrorMessage("invalid regist");
         }
@@ -409,7 +409,7 @@ abstract class _FormStore with Store {
       updateUser_success = false;
       if (error.response != null && error.response.data!=null)
       {//errorStore.errorMessage = error.response.data["error"]["message"];
-        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        // print(error.response.data["error"]["message"].toString().split(' \'')[1]);
         if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
           errorStore.errorMessage = translateErrorMessage("User name");
         else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
@@ -477,7 +477,7 @@ abstract class _FormStore with Store {
       createUser_success = false;
       if (error.response != null && error.response.data!=null)
       {//errorStore.errorMessage = error.response.data["error"]["message"];
-        print(error.response.data["error"]["message"].toString().split(' \'')[1]);
+        // print(error.response.data["error"]["message"].toString().split(' \'')[1]);
         if (error.response.data["error"]["message"].toString().split(' \'')[0] == "User name")
           errorStore.errorMessage = translateErrorMessage("User name");
         else if (error.response.data["error"]["message"].toString().split(' \'')[0] == "Email")
@@ -623,7 +623,7 @@ abstract class _FormStore with Store {
   @action
   int rolePermission()
   {
-    print("role" + Preferences.userRole);
+    // print("role" + Preferences.userRole);
 
     switch(Preferences.userRole)
     {

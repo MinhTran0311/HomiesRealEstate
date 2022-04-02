@@ -53,7 +53,7 @@ class TownApi {
       );
       return TownList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }
@@ -74,7 +74,7 @@ class TownApi {
 
       return CommuneList.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }

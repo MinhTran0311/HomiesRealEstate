@@ -12,8 +12,6 @@ class PostCategoryList {
 
   factory PostCategoryList.fromJson(Map<String, dynamic> json) {
     List<Postcategory> categorys = List<Postcategory>();
-    print("outt");
-    print(json);
     for (int i =0; i<json["result"]["items"].length; i++) {
       categorys.add(Postcategory.fromMap(json["result"]["items"][i]));
     }

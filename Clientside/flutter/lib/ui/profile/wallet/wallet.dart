@@ -562,7 +562,7 @@ class _NapTienPageState extends State<NapTienPage> {
       children: [
         Observer(
           builder: (context) {
-            print("DuongDebug ${_lsgdStore.naptien_success}");
+            // print("DuongDebug ${_lsgdStore.naptien_success}");
             if (_lsgdStore.naptien_success) {
               Future.delayed(Duration(milliseconds: 0), () {
                 Navigator.pop(context);

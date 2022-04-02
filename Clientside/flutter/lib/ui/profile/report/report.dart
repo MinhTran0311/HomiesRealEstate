@@ -555,7 +555,7 @@ class _ReportPageState extends State<ReportPage>{
     List<FlSpot> listBaiDang=[];
     List<FlSpot> listSoTienNap=[];
     List<FlSpot> listSoTienChi=[];
-    print("DuongLx: ${_reportDataStore.listitemReports.listitemReports.length}");
+    // print("DuongLx: ${_reportDataStore.listitemReports.listitemReports.length}");
     if(_reportDataStore.listitemReports!=null)
     for(int i=0,ii=12;i<ii;i++){
       listBaiDang.add(FlSpot(i.toDouble(),_reportDataStore.listitemReports.listitemReports[0].listyearReports[i].soBaiDang.toDouble()));

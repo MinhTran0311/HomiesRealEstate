@@ -79,7 +79,6 @@ abstract class _UserStore with Store {
         print('failed to login');
       }
     }).catchError((e) {
-      print(e);
       this.isLoggedIn = false;
       this.success = false;
       throw e;

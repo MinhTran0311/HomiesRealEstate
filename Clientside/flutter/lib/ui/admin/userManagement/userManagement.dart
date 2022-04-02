@@ -297,7 +297,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           _refreshController.loadComplete();
         },
         onRefresh: () async {
-          print("refresh");
+          // print("refresh");
           _userManagementStore.getUsers(false);
 
           await Future.delayed(Duration(milliseconds: 2000));

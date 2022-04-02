@@ -33,7 +33,7 @@ dynamic showSuccssfullMesssage(String message, BuildContext context) {
 }
 
 String translateErrorMessage(String error){
-  print(error);
+  // print(error);
   if (Strings.errorString.containsKey(error))
     return Strings.errorString[error];
   else

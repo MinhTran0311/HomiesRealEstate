@@ -60,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final bytes = File(pickedFile.path).readAsBytesSync();
         _userstore.userCurrent.picture = (base64Encode(bytes).toString());
       } else {
-        print('No image selected.');
+        // print('No image selected.');
       }
     });
   }
@@ -497,7 +497,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     if(_userstore.userCurrent != null){
                                       if(_userstore.userCurrent.listRole != null){
                                         role=" ${_userstore.userCurrent.listRole[0].roleDisplayName}";
-                                        print("debug ${_userstore.userCurrent.listRole.length}");
+                                        // print("debug ${_userstore.userCurrent.listRole.length}");
                                         for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
                                           role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
                                         }

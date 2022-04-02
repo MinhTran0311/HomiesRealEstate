@@ -846,8 +846,6 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 pointx = result.split(',')[0];
                 pointy = result.split(',')[1];
               });
-              print(pointx);
-              print(pointy);
             });
           },
           items: commune.map((Commune type) {
@@ -1401,7 +1399,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
         _imageStore.postImages(pickedFile.path,
             "Dangtinbdstieude-${_TileController.text}-_${_image.length}");
       } else {
-        print('No image selected.');
+        // print('No image selected.');
       }
     });
   }
@@ -1600,7 +1598,7 @@ class _NewpostScreenState extends State<NewpostScreen> {
                 hoadon.giaGoi = selectedPack.phi;
                 hoadon.soNgayMua = songay;
                 hoadon.userId = _userStore.userCurrent.UserID;
-                print(_userStore.userCurrent.wallet.toString());
+                // print(_userStore.userCurrent.wallet.toString());
                 hoadon.ghiChu = lichsu.ghiChu;
                 hoadon.tongTien = lichsu.soTien;
                 hoadon.goiBaiDangId = selectedPack.id;

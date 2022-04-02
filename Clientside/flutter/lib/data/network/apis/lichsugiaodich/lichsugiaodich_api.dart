@@ -26,7 +26,7 @@ class lichsugiaodichApi{
       // log("Get All Success");
       return listLSGD.fromJson(res);
     } catch (e) {
-      print("lỗi" + e.toString());
+      // print("lỗi" + e.toString());
       throw e;
     }
   }

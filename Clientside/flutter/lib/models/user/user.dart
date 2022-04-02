@@ -125,8 +125,6 @@ class CurrentUserForEditdto{
 
   factory CurrentUserForEditdto.fromMap(Map<String, dynamic> json) {
     List<RoleCurrent> listRoles = List<RoleCurrent>();
-    print("DuongLSGD");
-    print(json);
     //posts = json["result"]["items"].map((post) => Post.fromMap(post)).toList();
     //print(json["result"]["items"][0].runtimeType);
     for (int i =0; i<json["result"]["roles"].length; i++) {

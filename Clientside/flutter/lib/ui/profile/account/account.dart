@@ -319,7 +319,7 @@ class _AccountPageState extends State<AccountPage>{
                                             if(_userstore.userCurrent != null){
                                               if(_userstore.userCurrent.listRole != null){
                                                 role="${_userstore.userCurrent.listRole[0].roleDisplayName}";
-                                                print("debug ${_userstore.userCurrent.listRole.length}");
+                                                // print("debug ${_userstore.userCurrent.listRole.length}");
                                                 for(int i=1,ii=_userstore.userCurrent.listRole.length;i<ii;i++){
                                                   role += ", ${_userstore.userCurrent.listRole[i].roleDisplayName}";
                                                 }

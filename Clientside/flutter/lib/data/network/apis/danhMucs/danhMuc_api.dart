@@ -36,7 +36,7 @@ class DanhMucApi {
         ),);
       return DanhMucList.fromJson(res);
     } catch(e) {
-      print("lỗi get all Danh Muc" + e.toString());
+      // print("lỗi get all Danh Muc" + e.toString());
       throw e;
     }
   }
