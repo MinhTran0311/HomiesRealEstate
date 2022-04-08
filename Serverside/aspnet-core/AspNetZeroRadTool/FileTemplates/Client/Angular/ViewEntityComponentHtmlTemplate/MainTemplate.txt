@@ -4,10 +4,9 @@
             <div class="modal-header">
                 <h4 class="modal-title">
                     <span>{{l("Details")}}</span>
-                </h4>
-                <button type="button" class="close" (click)="close()" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                </h4>               
+                {{Modal_Header_Close_Times_Before_V110000_Here}}
+                {{Modal_Header_Close_Times_After_V110000_Here}}
             </div>
             <div class="modal-body">
 

@@ -1,8 +1,8 @@
 {
 "propertyTemplates":[
 		{
-			"placeholder" : "{{Property_Filter_Template_Here}}",
-			"condition" : "{{Property_Advanced_Filter_Here}} == true",
+			"placeholder" : "{{Property_Filter_Template_Before_V110000_Here}}",
+			"condition" : "{{Property_Advanced_Filter_Here}} == true && {{Project_Version_Here}} < 110000",
 			"templates" : [
 					{
 					"type" : "enum",
@@ -55,11 +55,85 @@
                             </div>"
 					},
 					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
 					"type" : "default",
 					"content" : "
 							<div class=\"col-md-3\">
 								<div class=\"form-group\">
 									<label for=\"{{Property_Name_Here}}FilterId\">@L(\"{{Property_Name_Here}}\")</label>
+									<input type=\"text\" class=\"form-control\" name=\"{{property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterId\">
+								</div>
+                            </div>"
+					}
+				]
+		},
+{
+			"placeholder" : "{{Property_Filter_Template_After_V110000_Here}}",
+			"condition" : "{{Property_Advanced_Filter_Here}} == true && {{Project_Version_Here}} >= 110000",
+			"templates" : [
+					{
+					"type" : "enum",
+					"content" : "
+							<div class=\"col-md-3\">
+								<label class=\"form-label\" for=\"{{Property_Name_Here}}FilterId\">@L(\"{{Property_Name_Here}}\")</label>
+								<select class=\"form-control\" name=\"{{Property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterId\">
+								<option value=\"-1\">@L(\"All\")</option>
+									{{Enum_Option_Looped_Template_Here}}
+								</select>
+                            </div>"
+					},
+					{
+					"type" : "bool",
+					"content" : "
+							<div class=\"col-md-3\">
+								<label class=\"form-label\" for=\"{{Property_Name_Here}}FilterId\">@L(\"{{Property_Name_Here}}\")</label>
+								<select class=\"form-control\" name=\"{{Property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterId\">
+									<option value=\"-1\">@L(\"All\")</option>
+									<option value=\"0\">@L(\"False\")</option>
+									<option value=\"1\">@L(\"True\")</option>
+								</select>
+                            </div>"
+					},
+					{
+					"type" : "DateTime",
+					"content" : "
+                            <div class=\"col-md-3\">
+                                    <div class=\"my-3\">
+										<label class=\"form-label\" for=\"Min{{Property_Name_Here}}FilterId\">@L(\"{{Property_Name_Here}}Range\")</label>
+										<div class=\"input-group\">
+											<input class=\"form-control m-input date-picker\" type=\"text\" placeholder=\"@L(\"MinValue\")\"  id=\"Min{{Property_Name_Here}}FilterId\">
+											<span style=\"line-height: 40px;padding: 0 15px 0 15px;\"> &mdash; </span>
+											<input class=\"form-control m-input date-picker\" type=\"text\" placeholder=\"@L(\"MaxValue\")\"  id=\"Max{{Property_Name_Here}}FilterId\">
+										</div>
+									</div>
+                            </div>"
+					},
+					{
+					"type" : "numeric",
+					"content" : "
+                            <div class=\"col-md-3\">
+                                 <div class=\"my-3\">
+									<label class=\"form-label\" for=\"Min{{Property_Name_Here}}FilterId\">@L(\"MinMax\") @L(\"{{Property_Name_Here}}\")</label>
+									<div class=\"input-group\">
+										<input type=\"number\" class=\"form-control m-input\" placeholder=\"@L(\"MinValue\")\" name=\"min{{Property_Name_Here}}Filter\" id=\"Min{{Property_Name_Here}}FilterId\"/>
+                                        <input type=\"number\" class=\"form-control m-input\" placeholder=\"@L(\"MaxValue\")\" name=\"max{{Property_Name_Here}}Filter\"  id=\"Max{{Property_Name_Here}}FilterId\"/>
+									</div>
+                                </div>
+                            </div>"
+					},
+					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
+					"type" : "default",
+					"content" : "
+							<div class=\"col-md-3\">
+								<div class=\"my-3\">
+									<label class=\"form-label\" for=\"{{Property_Name_Here}}FilterId\">@L(\"{{Property_Name_Here}}\")</label>
 									<input type=\"text\" class=\"form-control\" name=\"{{property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterId\">
 								</div>
                             </div>"
@@ -90,13 +164,30 @@
 				]
 		},
 		{
-			"placeholder" : "{{NP_Filter_Template_Here}}",
+			"placeholder" : "{{NP_Filter_Template_Before_V110000_Here}}",
+			"condition" : "{{Project_Version_Here}} < 110000",
 			"templates" : [
 					{
 					"relation" : "single",
 					"content" : "
 							<div class=\"col-md-3\">
 								<div class=\"form-group\">
+									<label for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">(@L(\"{{NP_Foreign_Entity_Name_Here}}\")) @L(\"{{NP_Display_Property_Name_Here}}\")</label>
+									<input type=\"text\" class=\"form-control\" name=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" id=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">
+								</div>
+                            </div>"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{NP_Filter_Template_After_V110000_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 110000",
+			"templates" : [
+					{
+					"relation" : "single",
+					"content" : "
+							<div class=\"col-md-3\">
+								<div class=\"my-3\">
 									<label for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">(@L(\"{{NP_Foreign_Entity_Name_Here}}\")) @L(\"{{NP_Display_Property_Name_Here}}\")</label>
 									<input type=\"text\" class=\"form-control\" name=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" id=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}FilterId\">
 								</div>
@@ -195,7 +286,7 @@
             "placeholder": "{{Page_Header}}",
             "condition": "{{Project_Version_Here}} >= 090000",
             "content": "
-                <abp-page-subheader title=\"@L(\"{{Entity_Name_Plural_Here}}\")\" description=\"@L(\"{{Entity_Name_Plural_Here}}HeaderInfo\")\">
+                <abp-page-subheader title='@L(\"{{Entity_Name_Plural_Here}}\")' description='@L(\"{{Entity_Name_Plural_Here}}HeaderInfo\")'>
                      {{Get_Excel_Button_Here}}
                      @if (IsGranted(AppPermissions.{{Permission_Name_Here}}_Create))
                      {
@@ -233,6 +324,42 @@
             "placeholder": "{{Form_Class_Here}}",
             "condition": "{{Project_Version_Here}} >= 090000",
             "content": "form"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} < 090000",
+            "content": "<div class=\"kt-separator kt-separator--border-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} >= 090000",
+            "content": "<div class=\"separator separator-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_Before_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} < 110000",
+            "content": "
+                <div class="form-group align-items-center">
+                    <div class="input-group">
+                        <input type="text" id="{{Entity_Name_Plural_Here}}TableFilter" class="form-control m-input" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                        <span class="input-group-btn">
+                            <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                        </span>
+                    </div>
+                </div>
+            "
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_After_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} >= 110000",
+            "content": "
+                <div class="my-3">
+                    <div class="input-group">
+                        <input type="text" id="{{Entity_Name_Plural_Here}}TableFilter" class="form-control" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                        <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>                        
+                    </div>
+                </div>
+            "
         }
 	],
 "navigationPropertyOneToManyTableTemplates": [

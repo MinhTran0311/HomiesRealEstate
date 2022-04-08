@@ -44,6 +44,16 @@
             "placeholder": "{{Form_Class_Here}}",
             "condition": "{{Project_Version_Here}} >= 090000",
             "content": "form"
-        }
+        },
+        {
+            "placeholder": "{{Input_Group_Here}}",
+            "condition": "{{Project_Version_Here}} < 090000",
+            "content": "kt-group"
+        },
+        {
+            "placeholder": "{{Input_Group_Here}}",
+            "condition": "{{Project_Version_Here}} >= 090000",
+            "content": "form-group"
+        },
 	]
 }

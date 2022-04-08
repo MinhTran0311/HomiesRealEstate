@@ -88,7 +88,7 @@
                             }
                         }]
                     }
-                }{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}{{NP_Looped_One_To_Many_Table_Coloumn_Def_Here}}
+                }{{NP_Looped_One_To_Many_Table_Column_Def_Here}}{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}
             ]
         });
 

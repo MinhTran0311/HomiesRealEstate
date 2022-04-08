@@ -5,6 +5,20 @@
 			"condition" : "{{Property_Listed_Here}} == true",
 			"templates" : [
 					{
+                        "type" : "file",
+                        "content" : ",
+                        {
+                            targets: {{Combined_Loop_Index}},
+                            data: \"{{entity_Name_Here}}\",
+                            render: function ({{entity_Name_Here}}) {
+                                if (!{{entity_Name_Here}}.{{property_Name_Here}}){
+                                    return '';
+                                }
+                                return `<a href=\"/File/DownloadBinaryFile?id=${{{entity_Name_Here}}.{{property_Name_Here}}}\" target=\"_blank\">${{{entity_Name_Here}}.{{property_Name_Here}}FileName}</a>`;
+                            }
+                        }"
+					},
+					{
 					"type" : "default",
 					"content" : ",
 					{
@@ -265,12 +279,13 @@
 	],
 "navigationPropertyOneToManyTableTemplates": [
          {
-             "placeholder": "{{NP_Looped_One_To_Many_Table_Coloumn_Def_Here}}",
+             "placeholder": "{{NP_Looped_One_To_Many_Table_Column_Def_Here}}",
              "content": "
                 ,{
                     className: 'details-control',
                     targets: {{Combined_Loop_Index}},
                     orderable: false,
+                    autoWidth: false,
                     visible: abp.auth.hasPermission('{{NP_OneToMany_Permission_Value_Here}}'),
                     render: function () {
                         return `<button class=\"btn btn-primary btn-xs Edit_{{NP_OneTwoMany_EntityName_Here}}_{{NP_OneTwoMany_ForeignPropertyName_Here}}\">${app.localize(\"Edit{{NP_OneTwoMany_EntityName_Here}}\")}</button>`;

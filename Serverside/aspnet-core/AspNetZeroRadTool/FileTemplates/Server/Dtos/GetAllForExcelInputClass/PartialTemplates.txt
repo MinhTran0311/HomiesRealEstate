@@ -37,11 +37,15 @@
 "
 					},
 					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
 					"type" : "default",
 					"content" : "		public {{Property_Type_Here}}{{Property_Nullable_Question_Mark_Here}} {{Property_Name_Here}}Filter { get; set; }
 
 "
-					}
+					},
 				]
 		}
 	],

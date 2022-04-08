@@ -1,4 +1,18 @@
 {
+"propertyTemplates":[
+		{
+			"placeholder" : "{{Remove_File_Prop_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 100100",
+			"templates" : [
+					{
+					"type" : "file",
+					"content" : "Task Remove{{Property_Name_Here}}File(EntityDto input);
+		
+		"
+					}
+				]
+		}
+	],
 "navigationPropertyTemplates":[
 		{
 			"placeholder" : "{{NP_Looped_Method_Declaration_Here}}",

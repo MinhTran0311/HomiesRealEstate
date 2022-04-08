@@ -45,6 +45,10 @@
 						.WhereIf(input.{{Property_Name_Here}}Filter.HasValue && input.{{Property_Name_Here}}Filter > -1,  e => (input.{{Property_Name_Here}}Filter == 1 && e.{{Property_Name_Here}}) || (input.{{Property_Name_Here}}Filter == 0 && !e.{{Property_Name_Here}}) )"
 					},
 					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
 					"type" : "default",
 					"content" : "
 						.WhereIf(!string.IsNullOrWhiteSpace(input.{{Property_Name_Here}}Filter.ToString()),  e => e.{{Property_Name_Here}}.ToString() == input.{{Property_Name_Here}}Filter.ToString())"
@@ -63,6 +67,17 @@
 		{
 			"placeholder" : "{{Property_Manuel_Mapping_Here}}",
 			"condition" : "{{Property_Listed_Here}} == true",
+			"templates" : [					
+					{
+					"type" : "default",
+					"content" : "
+                                o.{{Property_Name_Here}},"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{Property_Manuel_Mapping_Inside_Here}}",
+			"condition" : "{{Property_Listed_Here}} == true",
 			"templates" : [
 					{
 					"type" : "default",
@@ -70,7 +85,76 @@
                                 {{Property_Name_Here}} = o.{{Property_Name_Here}},"
 					}
 				]
-		}
+		},
+		{
+            "placeholder" : "{{Remove_File_Prop_Here}}",            
+            "templates" : [
+                    {
+                    "type" : "file",
+                    "content" : "
+                    [AbpAuthorize(AppPermissions.{{Permission_Name_Here}}_Edit)]
+                    public async Task Remove{{Property_Name_Here}}File(EntityDto input)
+                    {
+                        var {{entity_Name_Here}} = await _{{entity_Name_Here}}Repository.FirstOrDefaultAsync(input.Id);
+                        if ({{entity_Name_Here}} == null)
+                        {
+                            throw new UserFriendlyException(L(\"EntityNotFound\"));
+                        }
+            
+                        if (!{{entity_Name_Here}}.{{Property_Name_Here}}.HasValue)
+                        {
+                            throw new UserFriendlyException(L(\"FileNotFound\"));
+                        }
+            
+                        await _binaryObjectManager.DeleteAsync({{entity_Name_Here}}.{{Property_Name_Here}}.Value);
+                        {{entity_Name_Here}}.{{Property_Name_Here}} = null;
+                    }        
+        "
+                    }
+                ]
+        },
+		{
+			"placeholder" : "{{File_Prop_Get_File_Name_Here}}",
+			"templates" : [
+					{
+					"type" : "file",
+					"content" : "res.{{Entity_Name_Here}}.{{Property_Name_Here}}FileName = await GetBinaryFileName(o.{{Property_Name_Here}});
+					"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{File_Prop_Get_File_Name_For_Edit_Here}}",
+			"templates" : [
+					{
+					"type" : "file",
+					"content" : "
+					output.{{Property_Name_Here}}FileName = await GetBinaryFileName({{entity_Name_Here}}.{{Property_Name_Here}});
+					"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{File_Prop_Get_File_Name_For_View_Here}}",
+			"templates" : [
+					{
+					"type" : "file",
+					"content" : "
+					output.{{Entity_Name_Here}}.{{Property_Name_Here}}FileName = await GetBinaryFileName({{entity_Name_Here}}.{{Property_Name_Here}});
+					"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{Use_Get_Binary_Object_From_Cache_Here}}",
+			"templates" : [
+					{
+					"type" : "file",
+					"content" : "{{entity_Name_Here}}.{{Property_Name_Here}} = await GetBinaryObjectFromCache(input.{{Property_Name_Here}}Token);
+					"
+					}
+				]
+		},
 	],
 "navigationPropertyTemplates":[
 		{
@@ -146,6 +230,16 @@
 					"relation" : "single",
 					"content" : ",
                          	{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}} = s{{Loop_Index}} == null || s{{Loop_Index}}.{{NP_Display_Property_Name_Here}} == null ? \"\" : s{{Loop_Index}}.{{NP_Display_Property_Name_Here}}.ToString()"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{NP_Looped_Map_Join_Inside_Here}}",
+			"templates" : [
+					{
+					"relation" : "single",
+					"content" : ",
+                         	{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}} = o.{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}"
 					}
 				]
 		},
@@ -298,7 +392,7 @@
 			var query = (from o in filtered{{Entity_Name_Plural_Here}}{{NP_Looped_Query_Join_Here}}
                          select new Get{{Entity_Name_Here}}ForViewDto() { 
 							{{Entity_Name_Here}} = new {{Entity_Name_Here}}Dto
-							{{{Property_Manuel_Mapping_Here}}
+							{{{Property_Manuel_Mapping_Inside_Here}}
                                 Id = o.Id
 							}{{NP_Looped_Map_Join_Here}}
 						 });
@@ -364,9 +458,66 @@ using {{Namespace_Here}}.{{Namespace_Relative_Full_Here}}.Exporting;"
             var {{entity_Name_Here}} = await _{{entity_Name_Here}}Repository.GetAsync(id);
 
             var output = new Get{{Entity_Name_Here}}ForViewDto { {{Entity_Name_Here}} = ObjectMapper.Map<{{Entity_Name_Here}}Dto>({{entity_Name_Here}}) };{{NP_Loop_Include_In_Get_Here}}
-			
+			{{File_Prop_Get_File_Name_For_View_Here}}
             return output;
          }"
-		}
+		},
+		{
+			"placeholder": "{{Get_Binary_Object_From_Cache_Here}}",
+			"condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+			"content": "
+                private async Task<Guid?> GetBinaryObjectFromCache(string fileToken)
+                {
+                    if (fileToken.IsNullOrWhiteSpace())
+                    {
+                        return null;
+                    }
+        
+                    var fileCache = _tempFileCacheManager.GetFileInfo(fileToken);
+        
+                    if (fileCache == null)
+                    {
+                        throw new UserFriendlyException(\"There is no such file with the token: \" + fileToken);
+                    }
+        
+                    var storedFile = new BinaryObject(AbpSession.TenantId, fileCache.File, fileCache.FileName);
+                    await _binaryObjectManager.SaveAsync(storedFile);
+        
+                    return storedFile.Id;
+                }
+                
+                private async Task<string> GetBinaryFileName(Guid? fileId)
+                {
+                    if (!fileId.HasValue)
+                    {
+                        return null;
+                    }
+        
+                    var file = await _binaryObjectManager.GetOrNullAsync(fileId.Value);
+                    return file?.Description;
+                }
+		"
+		},
+		{
+			"placeholder": "{{File_Prop_Ctor_Parameters_Here}}",
+			"condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+			"content": ", ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager"
+		},
+		{
+			"placeholder": "{{File_Prop_Declaration_Here}}",
+			"condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+			"content": "
+			        private readonly ITempFileCacheManager _tempFileCacheManager;
+                    private readonly IBinaryObjectManager _binaryObjectManager;
+			"
+		},
+		{
+			"placeholder": "{{File_Prop_Ctor_Initialize_Here}}",
+			"condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+			"content": "
+                    _tempFileCacheManager = tempFileCacheManager;
+                    _binaryObjectManager = binaryObjectManager;
+			"
+		},
 	],
 }

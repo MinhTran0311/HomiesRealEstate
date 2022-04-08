@@ -56,6 +56,11 @@
                         _ => _timeZoneConverter.Convert(_.{{Entity_Name_Here}}.{{Property_Name_Here}}, _abpSession.TenantId, _abpSession.GetUserId())"
 					},
 					{
+					"type" : "file",
+					"content" : ",
+                        _ => _.{{Entity_Name_Here}}.{{Property_Name_Here}}FileName"
+					},
+					{
 					"type" : "default",
 					"content" : ",
                         _ => _.{{Entity_Name_Here}}.{{Property_Name_Here}}"
@@ -116,6 +121,16 @@
 			"placeholder": "{{Sheet_Initialization_Here}}",
 			"condition": "{{Project_Version_Here}} >= 080400",
 			"content": "var sheet = excelPackage.CreateSheet(L(\"{{Entity_Name_Plural_Here}}\"));"
+		},
+		{
+			"placeholder": "{{Add_Objects_Start_Index_Here}}",
+			"condition": "{{Project_Version_Here}} >= 100400",
+			"content": ""
+		},
+		{
+			"placeholder": "{{Add_Objects_Start_Index_Here}}",
+			"condition": "{{Project_Version_Here}} < 100400",
+			"content": "2,"
 		}
 	]
 }

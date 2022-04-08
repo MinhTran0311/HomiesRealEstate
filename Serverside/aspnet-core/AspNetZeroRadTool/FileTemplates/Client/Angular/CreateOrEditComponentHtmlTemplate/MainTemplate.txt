@@ -6,15 +6,16 @@
                     <h4 class="modal-title">
                         <span *ngIf="{{entity_Name_Here}}.id">{{l("Edit{{Entity_Name_Here}}")}}</span>
                         <span *ngIf="!{{entity_Name_Here}}.id">{{l("CreateNew{{Entity_Name_Here}}")}}</span>
-                    </h4>
-                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    </h4>                    
+                    {{Modal_Header_Close_Times_Before_V110000_Here}}
+                    {{Modal_Header_Close_Times_After_V110000_Here}}
                 </div>
                 <div class="modal-body">
                  
-{{NP_Looped_Template_Here}}
-{{Property_Looped_Template_Here}}
+{{NP_Looped_Template_Before_V110000_Here}}
+{{NP_Looped_Template_After_V110000_Here}}
+{{Property_Looped_Template_Before_V110000_Here}}
+{{Property_Looped_Template_After_V110000_Here}}
 
                 </div>
                 <div class="modal-footer">

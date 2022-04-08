@@ -38,7 +38,7 @@
                             </div>
                             <div class="row" [hidden]="!advancedFiltersAreShown">
                                 <div class="col-md-12">
-                                    <div class="kt-separator kt-separator--border-dashed"></div>
+                                    <div class="separator separator-dashed"></div>
                                 </div>
 
                                 <div class="col-md-3">
@@ -225,6 +225,7 @@
                                         <input type="text" class="form-control" id="TieuDeFilter" name="tieuDeFilter" [(ngModel)]="tieuDeFilter" />
                                     </div>
                                 </div>
+
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="UserNameFilter">({{ l("User") }}) {{ l("Name") }}</label>
@@ -396,73 +397,73 @@
                                             </div>
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("Name") }}</span>
+                                            <span class="p-column-title"> {{ l("Name") }}</span>
                                             {{ record.userName }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TenDanhMuc") }}</span>
+                                            <span class="p-column-title"> {{ l("TenDanhMuc") }}</span>
                                             {{ record.danhMucTenDanhMuc }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TenXa") }}</span>
+                                            <span class="p-column-title"> {{ l("TenXa") }}</span>
                                             {{ record.xaTenXa }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TagLoaiBaiDang") }}</span>
+                                            <span class="p-column-title"> {{ l("TagLoaiBaiDang") }}</span>
                                             {{ record.baiDang.tagLoaiBaiDang }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("ThoiDiemDang") }}</span>
+                                            <span class="p-column-title"> {{ l("ThoiDiemDang") }}</span>
                                             <span *ngIf="record.baiDang.thoiDiemDang">
                                                 {{ record.baiDang.thoiDiemDang | luxonFormat: "F" }}
                                             </span>
                                             <span *ngIf="!record.baiDang.thoiDiemDang">-</span>
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("ThoiHan") }}</span>
+                                            <span class="p-column-title"> {{ l("ThoiHan") }}</span>
                                             <span *ngIf="record.baiDang.thoiHan">
                                                 {{ record.baiDang.thoiHan | luxonFormat: "F" }}
                                             </span>
                                             <span *ngIf="!record.baiDang.thoiHan">-</span>
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("DiaChi") }}</span>
+                                            <span class="p-column-title"> {{ l("DiaChi") }}</span>
                                             {{ record.baiDang.diaChi }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("MoTa") }}</span>
+                                            <span class="p-column-title"> {{ l("MoTa") }}</span>
                                             {{ record.baiDang.moTa }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("ToaDoX") }}</span>
+                                            <span class="p-column-title"> {{ l("ToaDoX") }}</span>
                                             {{ record.baiDang.toaDoX }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("ToaDoY") }}</span>
+                                            <span class="p-column-title"> {{ l("ToaDoY") }}</span>
                                             {{ record.baiDang.toaDoY }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("LuotXem") }}</span>
+                                            <span class="p-column-title"> {{ l("LuotXem") }}</span>
                                             {{ record.baiDang.luotXem }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("LuotYeuThich") }}</span>
+                                            <span class="p-column-title"> {{ l("LuotYeuThich") }}</span>
                                             {{ record.baiDang.luotYeuThich }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("DiemBaiDang") }}</span>
+                                            <span class="p-column-title"> {{ l("DiemBaiDang") }}</span>
                                             {{ record.baiDang.diemBaiDang }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TrangThai") }}</span>
+                                            <span class="p-column-title"> {{ l("TrangThai") }}</span>
                                             {{ record.baiDang.trangThai }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TagTimKiem") }}</span>
+                                            <span class="p-column-title"> {{ l("TagTimKiem") }}</span>
                                             {{ record.baiDang.tagTimKiem }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("TieuDe") }}</span>
+                                            <span class="p-column-title"> {{ l("TieuDe") }}</span>
                                             {{ record.baiDang.tieuDe }}
                                         </td>
                                     </tr>
@@ -478,11 +479,10 @@
                                     (onPageChange)="getBaiDangs($event)"
                                     [totalRecords]="primengTableHelper.totalRecordsCount"
                                     [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                    [showCurrentPageReport]="true"
+                                    [currentPageReportTemplate]="'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount"
                                 >
                                 </p-paginator>
-                                <span class="total-records-count">
-                                    {{ l("TotalRecordsCount", primengTableHelper.totalRecordsCount) }}
-                                </span>
                             </div>
                         </div>
                         <!--<Primeng-Datatable-End>-->

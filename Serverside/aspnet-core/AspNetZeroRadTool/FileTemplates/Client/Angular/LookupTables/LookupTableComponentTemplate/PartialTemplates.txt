@@ -38,9 +38,15 @@ import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';"
 		},
 		{
 			"placeholder": "{{PrimeNG_Imports_Here}}",
-			"condition": "{{Project_Version_Here}} >= 080500",
+			"condition": "{{Project_Version_Here}} >= 080500 && {{Project_Version_Here}} < 100000",
 			"content": "import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/public_api';"
+		},
+		{
+			"placeholder": "{{PrimeNG_Imports_Here}}",
+			"condition": "{{Project_Version_Here}} >= 100000",
+			"content": "import { Paginator } from 'primeng/paginator';
+import { LazyLoadEvent } from 'primeng/api';"
 		},
 		{
 			"placeholder": "{{Import_Modal_Directive_Here}}",

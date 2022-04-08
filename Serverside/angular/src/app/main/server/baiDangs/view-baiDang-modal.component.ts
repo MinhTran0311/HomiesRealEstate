@@ -1,4 +1,5 @@
-﻿import { Component, ViewChild, Injector, Output, EventEmitter } from "@angular/core";
+﻿import { AppConsts } from "@shared/AppConsts";
+import { Component, ViewChild, Injector, Output, EventEmitter } from "@angular/core";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { GetBaiDangForViewDto, BaiDangDto } from "@shared/service-proxies/service-proxies";
 import { AppComponentBase } from "@shared/common/app-component-base";

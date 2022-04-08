@@ -6,9 +6,9 @@ import { AppComponentBase } from '@shared/common/app-component-base';
 {{PrimeNG_Imports_Here}}
 @Component({
     selector: '{{master_Detail_Child_Prefix_Here}}{{entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModal',
-    styleUrls: ['./{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component.less'],
+    styleUrls: ['./{{master_Detail_Child_Prefix_Here}}{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component.less'],
     encapsulation: ViewEncapsulation.None,
-    templateUrl: './{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component.html'
+    templateUrl: './{{master_Detail_Child_Prefix_Here}}{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component.html'
 })
 export class {{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComponent extends AppComponentBase {
 

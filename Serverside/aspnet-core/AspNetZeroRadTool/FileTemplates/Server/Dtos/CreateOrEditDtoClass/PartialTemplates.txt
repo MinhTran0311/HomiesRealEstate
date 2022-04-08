@@ -5,6 +5,15 @@
 			"condition" : "{{Property_CreateOrEdit_Here}} == true",
 			"templates" : [
 					{
+					"type" : "file",
+					"content" : "
+					public Guid? {{Property_Name_Here}} { get; set; }
+					
+					public string {{Property_Name_Here}}Token { get; set; }
+		
+		"
+					},
+					{
 					"type" : "default",
 					"content" : "{{Required}}{{Regex}}{{MixMaxLength}}{{Range}}
 		public {{Property_Type_Here}}{{Property_Nullable_Question_Mark_Here}} {{Property_Name_Here}} { get; set; }

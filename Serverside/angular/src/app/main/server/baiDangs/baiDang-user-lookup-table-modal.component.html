@@ -14,7 +14,8 @@
                 <h4 class="modal-title">
                     <span>{{ l("PickUser") }}</span>
                 </h4>
-                <button type="button" class="close" (click)="close()" aria-label="Close">
+
+                <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -79,7 +80,7 @@
                                             </div>
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="ui-column-title"> {{ l("Name") }}</span>
+                                            <span class="p-column-title"> {{ l("Name") }}</span>
                                             {{ record.displayName }}
                                         </td>
                                     </tr>
@@ -96,11 +97,10 @@
                                     (onPageChange)="getAll($event)"
                                     [totalRecords]="primengTableHelper.totalRecordsCount"
                                     [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                    [showCurrentPageReport]="true"
+                                    [currentPageReportTemplate]="'TotalRecordsCount' | localize: primengTableHelper.totalRecordsCount"
                                 >
                                 </p-paginator>
-                                <span class="total-records-count">
-                                    {{ l("TotalRecordsCount", primengTableHelper.totalRecordsCount) }}
-                                </span>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, Injector, Output, EventEmitter } from "@angular/core";
+﻿import { Component, ViewChild, Injector, Output, EventEmitter, OnInit, ElementRef } from "@angular/core";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { finalize } from "rxjs/operators";
 import { BaiDangsServiceProxy, CreateOrEditBaiDangDto } from "@shared/service-proxies/service-proxies";
@@ -14,7 +14,7 @@ import { BaiDangXaLookupTableModalComponent } from "./baiDang-xa-lookup-table-mo
     selector: "createOrEditBaiDangModal",
     templateUrl: "./create-or-edit-baiDang-modal.component.html",
 })
-export class CreateOrEditBaiDangModalComponent extends AppComponentBase {
+export class CreateOrEditBaiDangModalComponent extends AppComponentBase implements OnInit {
     @ViewChild("createOrEditModal", { static: true }) modal: ModalDirective;
     @ViewChild("baiDangUserLookupTableModal", { static: true }) baiDangUserLookupTableModal: BaiDangUserLookupTableModalComponent;
     @ViewChild("baiDangDanhMucLookupTableModal", { static: true }) baiDangDanhMucLookupTableModal: BaiDangDanhMucLookupTableModalComponent;
@@ -124,4 +124,6 @@ export class CreateOrEditBaiDangModalComponent extends AppComponentBase {
         this.active = false;
         this.modal.hide();
     }
+
+    ngOnInit(): void {}
 }

@@ -1,4 +1,5 @@
-﻿import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
+﻿import {AppConsts} from '@shared/AppConsts';
+import { Component, Injector, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute , Router} from '@angular/router';
 import { {{Entity_Name_Plural_Here}}ServiceProxy, {{Entity_Name_Here}}Dto {{Enum_Import_After_V060600_Here}}{{Enum_Import_Before_V060600_Here}} } from '@shared/service-proxies/service-proxies';
 {{Notify_Service_Here}}
@@ -91,4 +92,5 @@ export class {{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Plural_Here}}Compo
             }
         );
     }{{Get_Excel_Method_Here}}
+    {{Get_Download_Url_Here}}
 }

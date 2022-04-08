@@ -6,22 +6,19 @@
                     <div>
                         <div class="row align-items-center">
                             <div class="col-xl-12">
-                                <div class="form-group m-form__group align-items-center">
-                                    <div class="input-group">
-                                        <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
-                                        <span class="input-group-btn">
-                                            <button (click)="get{{Entity_Name_Plural_Here}}()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
+                                {{Filter_Form_Group_Before_V110000_Here}}
+                                {{Filter_Form_Group_After_V110000_Here}}
                             </div>
                         </div>
 						 <div class="row" [hidden]="!advancedFiltersAreShown">
 						 	<div class="col-md-12">
-						         <div class="kt-separator kt-separator--border-dashed"></div>
+						         {{Seperator_Div_Here}}
 						     </div>
 
-{{Property_Filter_Template_Here}}{{NP_Filter_Template_Here}}
+{{Property_Filter_Template_Before_V110000_Here}}
+{{Property_Filter_Template_After_V110000_Here}}
+{{NP_Filter_Template_Before_V110000_Here}}
+{{NP_Filter_Template_After_V110000_Here}}
 
                         </div>
                         <div class="row mb-2">
@@ -84,11 +81,11 @@
                                          #paginator
                                          (onPageChange)="get{{Entity_Name_Plural_Here}}($event)"
                                          [totalRecords]="primengTableHelper.totalRecordsCount"
-                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
+                                         [showCurrentPageReport]="true"
+                                         [currentPageReportTemplate]="'TotalRecordsCount' | localize:primengTableHelper.totalRecordsCount"    
+                            >
                             </p-paginator>
-                            <span class="total-records-count">
-                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
-                            </span>
                         </div>
                     </div>
                     <!--<Primeng-Datatable-End>-->

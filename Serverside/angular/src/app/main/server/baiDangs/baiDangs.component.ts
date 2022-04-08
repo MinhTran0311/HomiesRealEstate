@@ -1,4 +1,5 @@
-﻿import { Component, Injector, ViewEncapsulation, ViewChild } from "@angular/core";
+﻿import { AppConsts } from "@shared/AppConsts";
+import { Component, Injector, ViewEncapsulation, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaiDangsServiceProxy, BaiDangDto } from "@shared/service-proxies/service-proxies";
 import { NotifyService } from "abp-ng2-module";
@@ -10,7 +11,7 @@ import { ViewBaiDangModalComponent } from "./view-baiDang-modal.component";
 import { appModuleAnimation } from "@shared/animations/routerTransition";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/api/public_api";
+import { LazyLoadEvent } from "primeng/api";
 import { FileDownloadService } from "@shared/utils/file-download.service";
 import { filter as _filter } from "lodash-es";
 import { DateTime } from "luxon";

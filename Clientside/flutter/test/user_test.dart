@@ -12,11 +12,11 @@ void main() async {
 
 
 
-   createUserTest();
+  await createUserTest();
 
-  await editUserTest();
-
-  await deleteUserTest();
+  // await editUserTest();
+  //
+  // await deleteUserTest();
 
   //
   // test(' Get 10 users', () async {

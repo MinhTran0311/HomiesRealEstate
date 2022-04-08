@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, Injector, Output, EventEmitter, OnInit} from '@angular/core';
+﻿import { Component, ViewChild, Injector, Output, EventEmitter, OnInit, ElementRef} from '@angular/core';
 {{Import_Modal_Directive_Here}}
 import { finalize } from 'rxjs/operators';
 import { {{Entity_Name_Plural_Here}}ServiceProxy, CreateOrEdit{{Entity_Name_Here}}Dto {{NP_Looped_Import_Dropdown_LookupTableDto_Here}}} from '@shared/service-proxies/service-proxies';
@@ -9,6 +9,8 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {Observable} from "@node_modules/rxjs";
 {{Import_Breadcrumb_Here}}
 {{Import_DateTime_Service_Here}}
+{{Import_File_Uploader_Here}}
+{{Import_HttpClient}}
 
 @Component({
     templateUrl: './create-or-edit-{{entity_Name_Here}}.component.html',
@@ -23,17 +25,20 @@ export class CreateOrEdit{{Entity_Name_Here}}Component extends AppComponentBase 
 {{NP_Looped_Display_Declaration_Here}}
 {{NP_Looped_Dropdown_Property_Here}}
 {{Breadcrumb_Definitions_Here}}
+{{File_Property_Looped_Definition_Here}}
+
     constructor(
         injector: Injector,
         private _activatedRoute: ActivatedRoute,        
         private _{{entity_Name_Plural_Here}}ServiceProxy: {{Entity_Name_Plural_Here}}ServiceProxy,
-        private _router: Router{{Get_DateTime_Service_Here}}
+        private _router: Router{{Get_DateTime_Service_Here}}{{Add_Token_Service_Here}}{{Define_HttpClient_In_Constructor}}
     ) {
         super(injector);
     }
 
     ngOnInit(): void {
         this.show(this._activatedRoute.snapshot.queryParams['id']);
+        {{Get_File_Prop_Accepted_Types_On_Init}}
     }
 
     show({{entity_Name_Here}}Id?: {{Primary_Key_Type_Here}}): void {
@@ -42,39 +47,47 @@ export class CreateOrEdit{{Entity_Name_Here}}Component extends AppComponentBase 
             this.{{entity_Name_Here}} = new CreateOrEdit{{Entity_Name_Here}}Dto();
             this.{{entity_Name_Here}}.id = {{entity_Name_Here}}Id;{{Property_Datetime_Init_Looped_Template_Here}}{{Property_Datetime_Init_Looped_Template_Here_After_070200}}
 {{NP_Looped_Display_Init_Here}}
+{{Set_File_Property_Null_Here}}
             this.active = true;
         } else {
             this._{{entity_Name_Plural_Here}}ServiceProxy.get{{Entity_Name_Here}}ForEdit({{entity_Name_Here}}Id).subscribe(result => {
                 this.{{entity_Name_Here}} = result.{{entity_Name_Here}};
 {{Property_Nullable_Datetime_Init_Looped_Template_Here}}
 {{NP_Looped_Edit_Bind_Here}}
+{{Set_File_Property_Here}}
                 this.active = true;
             });
         }
         {{NP_Looped_Dropdown_GetAll_Here}}
-    }
-
-    private saveInternal(): Observable<void> {
-            this.saving = true;
-            
-        {{Property_Nullable_Datetime_GetValue_Looped_Template_Here}}
-        return this._{{entity_Name_Plural_Here}}ServiceProxy.createOrEdit(this.{{entity_Name_Here}})
-         .pipe(finalize(() => { 
-            this.saving = false;               
-            this.notify.info(this.l('SavedSuccessfully'));
-         }));
+         {{Init_File_Uploader_Here}}
     }
     
     save(): void {
-        this.saveInternal().subscribe(x => {
-             this._router.navigate( ['/app/{{menu_Position_Here}}/{{namespace_Relative_Here}}/{{entity_Name_Plural_Here}}']);
-        })
+        this.saving = true;
+        {{Property_Nullable_Datetime_GetValue_Looped_Template_Here}}
+        this._{{entity_Name_Plural_Here}}ServiceProxy.createOrEdit(this.{{entity_Name_Here}})
+            .pipe(finalize(() => {
+                this.saving = false;
+            }))
+            .subscribe(x => {
+                 this.saving = false;               
+                 this.notify.info(this.l('SavedSuccessfully'));
+                 this._router.navigate( ['/app/{{menu_Position_Here}}/{{namespace_Relative_Here}}/{{entity_Name_Plural_Here}}']);
+            })
     }
     
     saveAndNew(): void {
-        this.saveInternal().subscribe(x => {
-            this.{{entity_Name_Here}} = new CreateOrEdit{{Entity_Name_Here}}Dto();
-        })
+        this.saving = true;
+        {{Property_Nullable_Datetime_GetValue_Looped_Template_Here}}
+        this._{{entity_Name_Plural_Here}}ServiceProxy.createOrEdit(this.{{entity_Name_Here}})
+            .pipe(finalize(() => {
+                this.saving = false;
+            }))
+            .subscribe(x => {
+                this.saving = false;               
+                this.notify.info(this.l('SavedSuccessfully'));
+                this.{{entity_Name_Here}} = new CreateOrEdit{{Entity_Name_Here}}Dto();
+            });
     }
 
 {{NP_Looped_OpenModal_Here}}
@@ -82,5 +95,11 @@ export class CreateOrEdit{{Entity_Name_Here}}Component extends AppComponentBase 
 {{NP_Looped_SetNull_Here}}
 
 {{NP_Looped_GetNew_Here}}
+
+{{Init_File_Properties_Functions_Here}}
+
+{{File_Upload_Initializer_Func_Here}}
+
+{{Get_Download_Url_Here}}
 
 }

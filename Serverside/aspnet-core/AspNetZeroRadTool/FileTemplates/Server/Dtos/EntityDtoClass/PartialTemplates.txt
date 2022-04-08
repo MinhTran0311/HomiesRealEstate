@@ -5,6 +5,15 @@
 			"condition" : "{{Property_Listed_Here}} == true",
 			"templates" : [
 					{
+					"type" : "file",
+					"content" : "
+					public Guid? {{Property_Name_Here}} { get; set; }
+					
+					public string {{Property_Name_Here}}FileName { get; set; }
+
+"
+					},
+					{
 					"type" : "default",
 					"content" : "		public {{Property_Type_Here}}{{Property_Nullable_Question_Mark_Here}} {{Property_Name_Here}} { get; set; }
 

@@ -13,6 +13,14 @@
 "
 					},
 					{
+					"type" : "file",
+					"content" : "            <div class=\"col-6 mb-3\">
+                <h6>@L(\"{{Property_Name_Here}}\") :</h6>
+                <a href=\"@(\"/File/DownloadBinaryFile?id=\" + Model.{{Entity_Name_Here}}.{{Property_Name_Here}})\" target=\"_blank\">@Model.{{Entity_Name_Here}}.{{Property_Name_Here}}FileName</a>
+            </div>
+"
+					},
+					{
 					"type" : "default",
 					"content" : "            <div class=\"col-6 mb-3\">
                 <h6>@L(\"{{Property_Name_Here}}\") :</h6>
@@ -108,7 +116,7 @@
                           new BreadcrumbItem(L(\"Details\")),
                       };
                    }
-                  <abp-page-subheader title=\"@L(\"Details\")\" breadcrumbs=\"breadcrumbs\">                     
+                  <abp-page-subheader title='@L(\"Details\")' breadcrumbs=\"breadcrumbs\">                     
                   </abp-page-subheader>
              "
         },

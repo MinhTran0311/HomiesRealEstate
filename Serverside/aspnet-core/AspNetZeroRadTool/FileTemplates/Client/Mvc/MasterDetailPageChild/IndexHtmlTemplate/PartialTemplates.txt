@@ -232,6 +232,42 @@
             "placeholder": "{{Form_Class_Here}}",
             "condition": "{{Project_Version_Here}} >= 090000",
             "content": "form"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} < 090000",
+            "content": "<div class=\"kt-separator kt-separator--border-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} >= 090000",
+            "content": "<div class=\"separator separator-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_Before_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} < 110000",
+            "content": "
+                <div class="form-group align-items-center">
+                    <div class="input-group">
+                        <input type="text" id="{{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Plural_Here}}TableFilter" class="form-control m-input" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                        <span class="input-group-btn">
+                            <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                        </span>
+                    </div>
+                </div>
+            "
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_After_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} >= 110000",
+            "content": "
+                <div class="my-3">
+                    <div class="input-group">
+                        <input type="text" id="{{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Plural_Here}}TableFilter" class="form-control m-input" placeholder='@L("SearchWithThreeDot")' value="@Model.FilterText">
+                        <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                    </div>
+                </div>
+            "
         }
 	],
 "navigationPropertyOneToManyTableTemplates": [

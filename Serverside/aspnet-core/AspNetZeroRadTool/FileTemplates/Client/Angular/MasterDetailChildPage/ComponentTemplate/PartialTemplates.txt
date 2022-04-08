@@ -52,6 +52,10 @@
             this.min{{Property_Name_Here}}Filter,"
 					},
 					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
 					"type" : "default",
 					"content" : "
             this.{{property_Name_Here}}Filter,"
@@ -227,9 +231,15 @@ import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';"
 		},
 		{
 			"placeholder": "{{PrimeNG_Imports_Here}}",
-			"condition": "{{Project_Version_Here}} >= 080500",
+			"condition": "{{Project_Version_Here}} >= 080500 && {{Project_Version_Here}} < 100000",
 			"content": "import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/public_api';"
+		},
+		{
+			"placeholder": "{{PrimeNG_Imports_Here}}",
+			"condition": "{{Project_Version_Here}} >= 100000",
+			"content": "import { Paginator } from 'primeng/paginator';
+import { LazyLoadEvent } from 'primeng/api';"
 		},
 		{
 			"placeholder": "{{Notify_Service_Here}}",
@@ -319,5 +329,14 @@ import { LazyLoadEvent } from 'primeng/public_api';"
              "condition": "{{Project_Version_Here}} < 100000",
              "content" : "moment.Moment"
         },
+        {
+             "placeholder" : "{{Get_Download_Url_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "
+                 getDownloadUrl(id: string): string {
+                     return AppConsts.remoteServiceBaseUrl + '/File/DownloadBinaryFile?id=' + id;
+                 }
+             "
+        }
 	]
 }

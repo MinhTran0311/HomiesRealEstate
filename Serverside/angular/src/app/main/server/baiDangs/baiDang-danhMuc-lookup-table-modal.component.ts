@@ -4,7 +4,7 @@ import { BaiDangsServiceProxy, BaiDangDanhMucLookupTableDto } from "@shared/serv
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/api/public_api";
+import { LazyLoadEvent } from "primeng/api";
 @Component({
     selector: "baiDangDanhMucLookupTableModal",
     styleUrls: ["./baiDang-danhMuc-lookup-table-modal.component.less"],

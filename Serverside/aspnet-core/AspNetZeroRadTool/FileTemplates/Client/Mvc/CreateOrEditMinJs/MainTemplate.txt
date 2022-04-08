@@ -7,6 +7,8 @@
         var _${{entity_Name_Here}}InformationForm = null;
 
 		{{NP_Modal_Init_Here}}
+		{{File_Uploading_Init_Here}}
+		{{File_Property_Init_Here}}
 
         this.init = function (modalManager) {
             _modalManager = modalManager;
@@ -28,7 +30,12 @@
                 return;
             }{{NP_Required_Validation_Here}}
 
+            {{Check_If_Uploading_Before_Save_Here}}
+
             var {{entity_Name_Here}} = _${{entity_Name_Here}}InformationForm.serializeFormToObject();
+            
+            {{Set_File_Prop_Token_To_Save_Here}}
+            
 			{{Master_Detail_Child_Base_Property_Here}}
 			 _modalManager.setBusy(true);
 			 _{{entity_Name_Plural_Here}}Service.createOrEdit(
@@ -41,5 +48,7 @@
                _modalManager.setBusy(false);
 			});
         };
+        
+        {{File_Prop_Functions_Here}}
     };
 })(jQuery);

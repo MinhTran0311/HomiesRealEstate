@@ -38,7 +38,7 @@ namespace {{Namespace_Here}}.{{Namespace_Relative_Full_Here}}.Exporting
                         );
 
                     AddObjects(
-                        sheet, 2, {{entity_Name_Plural_Here}}{{Property_Params_Here}}{{NP_Params_Here}}
+                        sheet, {{Add_Objects_Start_Index_Here}} {{entity_Name_Plural_Here}}{{Property_Params_Here}}{{NP_Params_Here}}
                         );
 
 					{{Property_DateTime_Formatter_Here_Before_080400}}

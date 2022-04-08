@@ -153,7 +153,7 @@
 			"content": "										    <li>
                                                 <a 
                                                    (click)=\"view{{Entity_Name_Here}}Modal.show(record)\">
-                                                   <i class="far fa-eye mr-2"></i>
+                                                   <i class=\"far fa-eye mr-2\"></i>
                                                    {{l('View')}}
                                                 </a>
                                             </li>"

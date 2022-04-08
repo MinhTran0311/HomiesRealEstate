@@ -10,6 +10,7 @@ namespace {{Namespace_Here}}.Web.Areas.{{App_Area_Name_Here}}.Models.{{Entity_Na
 
 	   {{Navigation_Property_Looped_Template_Here}}
        {{Navigation_Property_Table_Dropdown_Looped_Template_Here}}
+       {{File_Typed_Prop_File_Name_Property_Here}}
 	   public bool IsEditMode => {{IsEditMode_Value_Here}};
     }
 }

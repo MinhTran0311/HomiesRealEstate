@@ -1,4 +1,5 @@
-﻿import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
+﻿import {AppConsts} from "@shared/AppConsts";
+import { Component, ViewChild, Injector, Output, EventEmitter, OnInit } from '@angular/core';
 {{Import_Modal_Directive_Here}}
 import { {{Entity_Name_Plural_Here}}ServiceProxy, Get{{Entity_Name_Here}}ForViewDto, {{Entity_Name_Here}}Dto {{Enum_Import_After_V060600_Here}}{{Enum_Import_Before_V060600_Here}}} from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
@@ -37,4 +38,6 @@ export class View{{Entity_Name_Here}}Component extends AppComponentBase implemen
                 this.active = true;
             });       
     }
+    
+    {{Get_Download_Url_Here}}
 }

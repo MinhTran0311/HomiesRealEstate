@@ -27,6 +27,13 @@
             }
             return element.data("DateTimePicker").date().format("YYYY-MM-DDT00:00:00Z"); 
         }
+        
+        var getMaxDateFilter = function (element) {
+            if (element.data("DateTimePicker").date() == null) {
+                return null;
+            }
+            return element.data("DateTimePicker").date().format("YYYY-MM-DDT23:59:59Z"); 
+        }
 
         var dataTable = _${{entity_Name_Plural_Here}}Table.DataTable({
             paging: true,
@@ -62,6 +69,7 @@
                         items: [{{View_Button_Here}}
 						{
                             text: app.localize('Edit'),
+                            iconStyle: 'far fa-edit mr-2',
                             visible: function () {
                                 return _permissions.edit;
                             },
@@ -71,6 +79,7 @@
                         },{{EntityHistory_Action_Here}} 
 						{
                             text: app.localize('Delete'),
+                            iconStyle: 'far fa-trash-alt mr-2',
                             visible: function () {
                                 return _permissions.delete;
                             },
@@ -79,7 +88,7 @@
                             }
                         }]
                     }
-                }{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}{{NP_Looped_One_To_Many_Table_Coloumn_Def_Here}}
+                }{{NP_Looped_One_To_Many_Table_Column_Def_Here}}{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}
             ]
         });
 

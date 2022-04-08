@@ -16,6 +16,7 @@
                         <span *ngIf="baiDang.id">{{ l("EditBaiDang") }}</span>
                         <span *ngIf="!baiDang.id">{{ l("CreateNewBaiDang") }}</span>
                     </h4>
+
                     <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -159,7 +160,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="BaiDang_ToaDoX">{{ l("ToaDoX") }} *</label>
+                        <label for="BaiDang_ToaDoX">{{ l("ToaDoX") }}</label>
                         <input
                             type="text"
                             #BaiDang_ToaDoX="ngModel"
@@ -167,13 +168,12 @@
                             class="form-control"
                             [(ngModel)]="baiDang.toaDoX"
                             name="ToaDoX"
-                            required
                         />
                         <validation-messages [formCtrl]="BaiDang_ToaDoX"></validation-messages>
                     </div>
 
                     <div class="form-group">
-                        <label for="BaiDang_ToaDoY">{{ l("ToaDoY") }} *</label>
+                        <label for="BaiDang_ToaDoY">{{ l("ToaDoY") }}</label>
                         <input
                             type="text"
                             #BaiDang_ToaDoY="ngModel"
@@ -181,7 +181,6 @@
                             class="form-control"
                             [(ngModel)]="baiDang.toaDoY"
                             name="ToaDoY"
-                            required
                         />
                         <validation-messages [formCtrl]="BaiDang_ToaDoY"></validation-messages>
                     </div>

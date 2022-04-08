@@ -9,5 +9,6 @@ namespace {{Namespace_Here}}.{{Namespace_Relative_Full_Here}}.Dtos
 		public CreateOrEdit{{Entity_Name_Here}}Dto {{Entity_Name_Here}} { get; set; }
 
 {{NP_Looped_Display_Property_Here}}
+{{File_Typed_Prop_File_Name_Property_Here}}
     }
 }

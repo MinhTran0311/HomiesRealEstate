@@ -33,6 +33,15 @@
 			"placeholder": "{{Import_Modal_Directive_Here}}",
 			"condition": "{{Project_Version_Here}} >= 080500",
 			"content": "import { ModalDirective } from 'ngx-bootstrap/modal';"
-		}
+		},
+        {
+             "placeholder" : "{{Get_Download_Url_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "
+                 getDownloadUrl(id: string): string {
+                     return AppConsts.remoteServiceBaseUrl + '/File/DownloadBinaryFile?id=' + id;
+                 }
+             "
+        }
 	]
 }

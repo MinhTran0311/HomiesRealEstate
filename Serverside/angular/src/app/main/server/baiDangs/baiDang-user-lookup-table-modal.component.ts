@@ -4,7 +4,7 @@ import { BaiDangsServiceProxy, BaiDangUserLookupTableDto } from "@shared/service
 import { AppComponentBase } from "@shared/common/app-component-base";
 import { Table } from "primeng/table";
 import { Paginator } from "primeng/paginator";
-import { LazyLoadEvent } from "primeng/api/public_api";
+import { LazyLoadEvent } from "primeng/api";
 @Component({
     selector: "baiDangUserLookupTableModal",
     styleUrls: ["./baiDang-user-lookup-table-modal.component.less"],

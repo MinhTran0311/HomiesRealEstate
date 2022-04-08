@@ -30,6 +30,14 @@
 "
 					},
 					{
+					"type" : "file",
+					"content" : "                    <div class=\"col-6 mb-3\">
+                        <h6>{{l(\"{{Property_Name_Here}}\")}} :</h6>
+                        <a href=\"{{getDownloadUrl(item.{{entity_Name_Here}}.{{property_Name_Here}})}}\" target=\"_blank\">{{ item.{{entity_Name_Here}}.{{property_Name_Here}}FileName}}</a>
+                    </div>
+"
+					},
+					{
 					"type" : "default",
 					"content" : "                    <div class=\"col-6 mb-3\">
                         <h6>{{l(\"{{Property_Name_Here}}\")}} :</h6>
@@ -162,13 +170,13 @@
         },
         {
              "placeholder": "{{Datetime_Format_Pipe_Here}}",
-             "condition": "{{Project_Version_Here}} >= 100000
+             "condition": "{{Project_Version_Here}} >= 100000",
              "content": " luxonFormat:'yyyy-LL-dd HH:mm:ss' "
         },
         {
              "placeholder": "{{Datetime_Format_Pipe_Here}}",
-             "condition": "{{Project_Version_Here}} < 100000"
-             "content": " momentFormat:'YYYY-MM-DD HH:mm:ss' 
+             "condition": "{{Project_Version_Here}} < 100000",
+             "content": " momentFormat:'YYYY-MM-DD HH:mm:ss'" 
         }
 	]
 }

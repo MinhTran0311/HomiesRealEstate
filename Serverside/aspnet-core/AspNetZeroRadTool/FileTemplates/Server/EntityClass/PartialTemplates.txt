@@ -9,7 +9,14 @@
 					"content" : "{{Required}}{{Regex}}{{MixMaxLength}}{{Range}}
 		public virtual {{Property_Type_Here}}{{Property_Nullable_Question_Mark_Here}} {{Property_Name_Here}} { get; set; }
 		"
-					}
+					},
+					{
+					"type" : "file",
+					"content" : "//File
+					{{Required}}{{Regex}}{{MixMaxLength}}{{Range}}
+		public virtual Guid? {{Property_Name_Here}} { get; set; } //File, (BinaryObjectId)
+		"
+					},
 				]
 		}
 	],

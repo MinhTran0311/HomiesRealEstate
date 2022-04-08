@@ -77,7 +77,133 @@
         }"
 					}
 				]
-		}
+		},
+		{
+			"placeholder" : "{{File_Property_Looped_Definition_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                           {{property_Name_Here}}FileUploader: FileUploader;
+                           {{property_Name_Here}}FileToken: string;
+                           {{property_Name_Here}}FileName: string;
+                           {{property_Name_Here}}FileAcceptedTypes: string = '';
+                           @ViewChild('{{Entity_Name_Here}}_{{property_Name_Here}}Label') {{entity_Name_Here}}_{{property_Name_Here}}Label: ElementRef;
+
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Set_File_Property_Null_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                        this.{{property_Name_Here}}FileName = null;
+                           
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Set_File_Property_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                        this.{{property_Name_Here}}FileName = result.{{property_Name_Here}}FileName;
+                           
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Init_File_Uploader_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                        this.{{property_Name_Here}}FileUploader = this.initializeUploader(AppConsts.remoteServiceBaseUrl + '/{{Entity_Name_Plural_Here}}/Upload{{property_Name_Here}}File',
+                        fileToken => this.{{property_Name_Here}}FileToken = fileToken);                        
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Init_File_Properties_Functions_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                                  
+                       onSelect{{Property_Name_Here}}File(fileInput: any): void {
+                           let selectedFile = <File>fileInput.target.files[0];
+                           if(!selectedFile){
+                               this.{{entity_Name_Here}}_{{property_Name_Here}}Label.nativeElement.innerText = this.l('ChooseAFile');
+                                return;
+                           }
+                           this.{{entity_Name_Here}}_{{property_Name_Here}}Label.nativeElement.innerText = selectedFile.name;
+                           this.{{property_Name_Here}}FileUploader.clearQueue();
+                           this.{{property_Name_Here}}FileUploader.addToQueue([selectedFile]);
+                           this.{{property_Name_Here}}FileUploader.uploadAll();
+                       }
+                   
+                       remove{{Property_Name_Here}}File(): void {
+                           this.message.confirm(
+                               this.l('DoYouWantToRemoveTheFile'),
+                               this.l('AreYouSure'),
+                               isConfirmed => {
+                                   if (isConfirmed) {
+                                       this._{{entity_Name_Plural_Here}}ServiceProxy.remove{{Property_Name_Here}}File(this.{{entity_Name_Here}}.id).subscribe(() => {
+                                           abp.notify.success(this.l('SuccessfullyDeleted'));
+                                           this.{{property_Name_Here}}FileName = null;
+                                       });
+                                   }
+                               }
+                           );
+                       }                     
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Save_Set_File_Prop_Here}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                       this.{{entity_Name_Here}}.{{property_Name_Here}}Token = this.{{property_Name_Here}}FileToken;    
+                    "
+                }
+            ]
+		},
+		{
+			"placeholder" : "{{Get_File_Prop_Accepted_Types_On_Init}}",
+			"templates" : [
+                {
+                    "type" : "file",
+                    "content" : "
+                    
+                        this._http.get(AppConsts.remoteServiceBaseUrl + '/{{entity_Name_Plural_Here}}/Get{{Property_Name_Here}}FileAllowedTypes')
+                            .subscribe((data: any) => {
+                                if (!data || !data.result) {
+                                    return;
+                                }
+                
+                                let list = data.result as string[];
+                                if (list.length == 0) {
+                                    return;
+                                }
+                
+                                for (let i = 0; i < list.length; i++) {
+                                    this.{{property_Name_Here}}FileAcceptedTypes += '.' + list[i] + ',';
+                                }
+                            });                     
+                    "
+                }
+            ]
+		},
 	],
 "navigationPropertyTemplates":[
 		{
@@ -118,7 +244,7 @@
 					"viewType": "LookupTable",
 					"preventDuplicate":true,
 					"content" : "
-import { {{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComponent } from './{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component';"
+import { {{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComponent } from './{{master_Detail_Child_Prefix_Here}}{{entity_Name_Here}}-{{nP_Foreign_Entity_Name_Here}}-lookup-table-modal.component';"
 					}
 				]
 		},
@@ -128,7 +254,7 @@ import { {{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComp
 					{
 					"relation" : "single",
 					"viewType": "LookupTable",
-					"content" : "    @ViewChild('{{entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModal{{NP_Duplication_Number_Here}}', { static: true }) {{entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModal{{NP_Duplication_Number_Here}}: {{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComponent;
+					"content" : "    @ViewChild('{{entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModal{{NP_Duplication_Number_Here}}', { static: true }) {{entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModal{{NP_Duplication_Number_Here}}: {{Master_Detail_Child_Prefix_Here}}{{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComponent;
 "
 					}
 				]
@@ -319,6 +445,69 @@ import { {{Entity_Name_Here}}{{NP_Foreign_Entity_Name_Here}}LookupTableModalComp
              "placeholder" : "{{DateTime_Start_Of_Day_From_Property_Here}}",
              "condition": "{{Project_Version_Here}} >= 100000",
              "content" : "this._dateTimeService.getStartOfDayForDate(this.{{property_Name_Here}})"
-        }
+        },
+        {
+             "placeholder" : "{{File_Upload_Initializer_Func_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "
+                     initializeUploader(url: string, onSuccess: (fileToken: string) => void): FileUploader {
+                         let uploader = new FileUploader({url: url});
+                 
+                         let _uploaderOptions: FileUploaderOptions = {};
+                         _uploaderOptions.autoUpload = false;
+                         _uploaderOptions.authToken = 'Bearer ' + this._tokenService.getToken();
+                         _uploaderOptions.removeAfterUpload = true;
+                 
+                         uploader.onAfterAddingFile = (file) => {
+                             file.withCredentials = false;
+                         };
+                 
+                         uploader.onSuccessItem = (item, response, status) => {
+                             const resp = <IAjaxResponse>JSON.parse(response);
+                             if (resp.success && resp.result.fileToken) {
+                                 onSuccess(resp.result.fileToken);
+                             } else {
+                                 this.message.error(resp.result.message);
+                             }
+                         };
+                 
+                         uploader.setOptions(_uploaderOptions);
+                         return uploader;
+                     }
+             "
+        },
+        {
+             "placeholder" : "{{Import_File_Uploader_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "import {FileUploader, FileUploaderOptions} from \"@node_modules/ng2-file-upload\";
+                          import {IAjaxResponse, TokenService} from \"@node_modules/abp-ng2-module\";
+                          import {AppConsts} from \"@shared/AppConsts\"; 
+             "
+        },
+        {
+             "placeholder" : "{{Add_Token_Service_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : ", private _tokenService: TokenService  
+             "
+        },
+        {
+             "placeholder" : "{{Get_Download_Url_Here}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "
+                 getDownloadUrl(id: string): string {
+                     return AppConsts.remoteServiceBaseUrl + '/File/DownloadBinaryFile?id=' + id;
+                 }
+             "
+        },
+        {
+             "placeholder" : "{{Import_HttpClient}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : "import {HttpClient} from '@angular/common/http';"
+        },
+        {
+             "placeholder" : "{{Define_HttpClient_In_Constructor}}",
+             "condition": "{{Has_File_Prop}} == true && {{Project_Version_Here}} >= 100300",
+             "content" : ",private _http: HttpClient"
+        },
 	]
 }

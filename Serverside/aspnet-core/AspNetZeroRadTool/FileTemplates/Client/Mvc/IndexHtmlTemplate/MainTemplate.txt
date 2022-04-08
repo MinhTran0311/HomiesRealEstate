@@ -17,23 +17,20 @@
         <div class="{{Portlet_Body_Class_Here}}{{Card_Body_Class_Here}}">
             <div class="{{Form_Class_Here}}">
                 <div class="row align-items-center mb-4">
-                    <div class="col-xl-12">
-                        <div class="form-group align-items-center">
-                            <div class="input-group">
-                                <input type="text" id="{{Entity_Name_Plural_Here}}TableFilter" class="form-control m-input" placeholder="@L("SearchWithThreeDot")" value="@Model.FilterText">
-                                <span class="input-group-btn">
-                                    <button id="Get{{Entity_Name_Plural_Here}}Button" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
-                                </span>
-                            </div>
-                        </div>
+                    <div class="col-xl-12">                        
+                        {{Filter_Form_Group_Before_V110000_Here}}
+                        {{Filter_Form_Group_After_V110000_Here}}
                     </div>
                 </div>
 			</div>
                 <div id="AdvacedAuditFiltersArea" style="display: none" class="row mb-4">
                     <div class="col-md-12">
-						<div class="kt-separator kt-separator--border-dashed"></div>
+						{{Seperator_Div_Here}}
 					</div>
-{{Property_Filter_Template_Here}}{{NP_Filter_Template_Here}}
+{{Property_Filter_Template_Before_V110000_Here}}
+{{Property_Filter_Template_After_V110000_Here}}
+{{NP_Filter_Template_Before_V110000_Here}}
+{{NP_Filter_Template_After_V110000_Here}}
                 </div>
                 <div class="row mb-4">
                     <div class="col-xl-12">
@@ -46,9 +43,9 @@
                     <thead>
                         <tr>
                             <th></th>
-                            
-                            <th>@L("Actions")</th>{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}
                             {{NP_OneToMany_Looped_Table_Header_Here}}
+                            <th>@L("Actions")</th>{{Property_Looped_Template_Here}}{{NP_Looped_Template_Here}}
+                            
                         </tr>
                     </thead>
                 </table>

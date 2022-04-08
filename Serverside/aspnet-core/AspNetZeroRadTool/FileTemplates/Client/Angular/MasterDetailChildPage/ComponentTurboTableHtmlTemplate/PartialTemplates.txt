@@ -21,7 +21,7 @@
 					{
 					"type" : "enum",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
 										{{l({{Enum_Localization_Before_060600}} {{property_Type_Here}}[record.{{entity_Name_Here}}.{{property_Name_Here}}])}}
                                     </td>
 "
@@ -29,7 +29,7 @@
 					{
 					"type" : "bool",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
                                         <div *ngIf=\"record.{{entity_Name_Here}}.{{property_Name_Here}}\" class=\"text-center\"><i class=\"fa fa-check-circle {{Font_Success_Class_Here}}\" title=\"True\"></i></div>
 										<div *ngIf=\"!record.{{entity_Name_Here}}.{{property_Name_Here}}\" class=\"text-center\"><i class=\"fa fa-times-circle\" title=\"False\"></i></div>
                                     </td>
@@ -38,7 +38,7 @@
 					{
 					"type" : "DateTime",
 					"content" : "                                    <td style=\"width:150px\">
-										<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
+										<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
                                         <span *ngIf=\"record.{{entity_Name_Here}}.{{property_Name_Here}}\">
 											{{record.{{entity_Name_Here}}.{{property_Name_Here}} | {{Datetime_Format_Pipe_Here}} }}
                                         </span>
@@ -47,9 +47,17 @@
 "
 					},
 					{
+					"type" : "file",
+					"content" : "                                    <td style=\"width:150px\">
+											<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
+											<a href=\"{{getDownloadUrl(record.{{entity_Name_Here}}.{{property_Name_Here}})}}\" target=\"_blank\">{{record.{{entity_Name_Here}}.{{property_Name_Here}}FileName}}</a>
+										</td>
+"
+					},
+					{
 					"type" : "default",
 					"content" : "                                    <td style=\"width:150px\">
-											<span class=\"ui-column-title\"> {{l('{{Property_Name_Here}}')}}</span>
+											<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{Property_Name_Here}}')}}</span>
 											{{record.{{entity_Name_Here}}.{{property_Name_Here}}}}
 										</td>
 "
@@ -57,8 +65,8 @@
 				]
 		},
 		{
-			"placeholder" : "{{Property_Filter_Template_Here}}",
-			"condition" : "{{Property_Advanced_Filter_Here}} == true",
+			"placeholder" : "{{Property_Filter_Template_Before_V110000_Here}}",
+			"condition" : "{{Property_Advanced_Filter_Here}} == true && {{Project_Version_Here}} < 110000",
 			"templates" : [
 					{
 					"type" : "enum",
@@ -109,10 +117,82 @@
                             </div>"
 					},
 					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
 					"type" : "default",
 					"content" : "
 							<div class=\"col-md-3\">
 								<div class=\"form-group\">
+									<label for=\"{{Property_Name_Here}}Filter\">{{l(\"{{Property_Name_Here}}\")}}</label>
+									<input type=\"text\" class=\"form-control\" id=\"{{Property_Name_Here}}Filter\" name=\"{{property_Name_Here}}Filter\" [(ngModel)]=\"{{property_Name_Here}}Filter\">
+								</div>
+                            </div>"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{Property_Filter_Template_After_V110000_Here}}",
+			"condition" : "{{Property_Advanced_Filter_Here}} == true && {{Project_Version_Here}} >= 110000",
+			"templates" : [
+					{
+					"type" : "enum",
+					"content" : "
+							<div class=\"col-md-3\">
+								<label for=\"{{Property_Name_Here}}FilterSelect\">{{l(\"{{Property_Name_Here}}\")}}</label>
+								<select class=\"form-control\" name=\"{{Property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterSelect\" [(ngModel)]=\"{{property_Name_Here}}Filter\">
+								<option value=\"-1\">{{l(\"All\")}}</option>
+									{{Enum_Option_Looped_Template_Here}}
+								</select>
+                            </div>"
+					},
+					{
+					"type" : "bool",
+					"content" : "	
+							<div class=\"col-md-3\">
+								<label for=\"{{Property_Name_Here}}FilterSelect\">{{l(\"{{Property_Name_Here}}\")}}</label>
+								<select class=\"form-control\" name=\"{{Property_Name_Here}}Filter\" id=\"{{Property_Name_Here}}FilterSelect\" [(ngModel)]=\"{{property_Name_Here}}Filter\">
+								<option value=\"-1\">{{l(\"All\")}}</option>
+								<option value=\"0\">{{l(\"False\")}}</option>
+								<option value=\"1\">{{l(\"True\")}}</option>
+								</select>
+                            </div>"
+					},
+					{
+					"type" : "DateTime",
+					"content" : "
+                            <div class=\"col-md-3\">
+                                <div class=\"my-3\">
+									<label  for=\"Min{{Property_Name_Here}}Filter\">{{l(\"{{Property_Name_Here}}Range\")}}</label>
+									<div class=\"input-group\">
+                                        {{DateTimePicker_Before_V6}}{{DateTimePicker_After_V6}}
+									</div>
+                                </div>
+                            </div>"
+					},
+					{
+					"type" : "numeric",
+					"content" : "
+                            <div class=\"col-md-3\">
+                                <div class=\"my-3\">
+									<label for=\"Min{{Property_Name_Here}}Filter\">{{l(\"MinMax\")}} {{l(\"{{Property_Name_Here}}\")}}</label>
+									<div class=\"input-group\">
+                                        <input type=\"number\" class=\"form-control\" id=\"Min{{Property_Name_Here}}Filter\" [(ngModel)]=\"min{{Property_Name_Here}}Filter\" placeholder=\"{{l('MinValue')}}\" name=\"min{{Property_Name_Here}}Filter\" />
+                                        <input type=\"number\" class=\"form-control\" [(ngModel)]=\"max{{Property_Name_Here}}Filter\" placeholder=\"{{l('MaxValue')}}\" name=\"max{{Property_Name_Here}}Filter\" />
+									</div>
+                                </div>
+                            </div>"
+					},
+					{
+					"type" : "file",
+					"content" : ""
+					},
+					{
+					"type" : "default",
+					"content" : "
+							<div class=\"col-md-3\">
+								<div class=\"my-3\">
 									<label for=\"{{Property_Name_Here}}Filter\">{{l(\"{{Property_Name_Here}}\")}}</label>
 									<input type=\"text\" class=\"form-control\" id=\"{{Property_Name_Here}}Filter\" name=\"{{property_Name_Here}}Filter\" [(ngModel)]=\"{{property_Name_Here}}Filter\">
 								</div>
@@ -141,7 +221,7 @@
 					{
 					"relation" : "single",
 					"content" : "                                    <td style=\"width:150px\">
-												<span class=\"ui-column-title\"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
+												<span class=\"{{PrimeNG_Column_Title_Class_Here}}\"> {{l('{{NP_Display_Property_Name_Here}}')}}</span>
 												{{record.{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}}}
 											</td>
 "
@@ -149,13 +229,30 @@
 				]
 		},
 		{
-			"placeholder" : "{{NP_Filter_Template_Here}}",
+			"placeholder" : "{{NP_Filter_Template_Before_V110000_Here}}",
+			"condition" : "{{Project_Version_Here}} < 110000"
 			"templates" : [
 					{
 					"relation" : "single",
 					"content" : "
 							<div class=\"col-md-3\">
 								<div class=\"form-group\">
+									<label for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\">({{l(\"{{NP_Foreign_Entity_Name_Here}}{{NP_Duplication_Number_Here}}\")}}) {{l(\"{{NP_Display_Property_Name_Here}}\")}}</label>
+									<input type=\"text\" class=\"form-control\" id=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" name=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" [(ngModel)]=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\">
+                                </div>
+                            </div>"
+					}
+				]
+		},
+		{
+			"placeholder" : "{{NP_Filter_Template_After_V110000_Here}}",
+			"condition" : "{{Project_Version_Here}} >= 110000"
+			"templates" : [
+					{
+					"relation" : "single",
+					"content" : "
+							<div class=\"col-md-3\">
+								<div class=\"my-3\">
 									<label for=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\">({{l(\"{{NP_Foreign_Entity_Name_Here}}{{NP_Duplication_Number_Here}}\")}}) {{l(\"{{NP_Display_Property_Name_Here}}\")}}</label>
 									<input type=\"text\" class=\"form-control\" id=\"{{NP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" name=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\" [(ngModel)]=\"{{nP_Foreign_Entity_Name_Here}}{{NP_Display_Property_Name_Here}}{{NP_Duplication_Number_Here}}Filter\">
                                 </div>
@@ -399,6 +496,52 @@
              "placeholder": "{{Datetime_Format_Pipe_Here}}",
              "condition": "{{Project_Version_Here}} < 100000",
              "content": " momentFormat:\'L\'"
-        }
+        },
+        {
+        	"placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
+        	"condition": "{{Project_Version_Here}} < 100100",
+        	"content": "ui-column-title"
+        },
+        {
+        	"placeholder": "{{PrimeNG_Column_Title_Class_Here}}",
+        	"condition": "{{Project_Version_Here}} >= 100100",
+        	"content": "p-column-title"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} < 090000",
+            "content": "<div class=\"kt-separator kt-separator--border-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Seperator_Div_Here}}",
+            "condition": "{{Project_Version_Here}} >= 090000",
+            "content": "<div class=\"separator separator-dashed\"></div>"
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_Before_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} < 110000",
+            "content": "
+                    <div class=\"form-group m-form__group align-items-center\">
+                        <div class=\"input-group\">
+                            <input [(ngModel)]=\"filterText\" name=\"filterText\" autoFocus class=\"form-control m-input\" [placeholder]=\"l('SearchWithThreeDot')\" type=\"text\">
+                            <span class=\"input-group-btn\">
+                                <button (click)=\"get{{Entity_Name_Plural_Here}}()\" class=\"btn btn-primary\" type=\"submit\"><i class=\"flaticon-search-1\"></i></button>
+                            </span>
+                        </div>
+                    </div>
+            "
+        },
+        {
+            "placeholder": "{{Filter_Form_Group_After_V110000_Here}}",
+            "condition": "{{Project_Version_Here}} >= 110000",
+            "content": "
+                    <div class=\"my-3\">
+                        <div class=\"input-group\">
+                            <input [(ngModel)]=\"filterText\" name=\"filterText\" autoFocus class=\"form-control m-input\" [placeholder]=\"l('SearchWithThreeDot')\" type=\"text\">
+                            <button (click)=\"get{{Entity_Name_Plural_Here}}()\" class=\"btn btn-primary\" type=\"submit\"><i class=\"flaticon-search-1\"></i></button>                            
+                        </div>
+                    </div>
+            "
+        },
 	]
 }
